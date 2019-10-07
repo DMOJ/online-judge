@@ -75,7 +75,7 @@ class PostList(ListView):
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
 
         if self.request.user.is_authenticated:
-            context['own_open_tickets'] = Ticket.tickets_list(self.request.user, author=self.request.user)
+            context['own_open_tickets'] = Ticket.tickets_list(self.request.user).filter(user=self.request.profile)
         else:
             context['own_open_tickets'] = []
 

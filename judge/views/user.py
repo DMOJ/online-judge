@@ -26,7 +26,7 @@ from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
 from judge.forms import ProfileForm, newsletter_id
-from judge.models import Comment, Profile, Rating, Submission
+from judge.models import Comment, Profile, Rating, Submission, Ticket
 from judge.performance_points import PP_ENTRIES, get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
 from judge.utils.cachedict import CacheDict
@@ -37,7 +37,7 @@ from judge.utils.unicode import utf8text
 from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, TitleMixin, generic_message
 from .contests import ContestRanking
 
-__all__ = ['UserPage', 'UserAboutPage', 'UserList', 'UserProblemsPage', 'users', 'edit_profile', 'generate_api_token']
+__all__ = ['UserPage', 'UserAboutPage', 'UserList', 'UserDashboard', 'UserProblemsPage', 'users', 'edit_profile', 'generate_api_token']
 
 
 def remap_keys(iterable, mapping):
@@ -141,8 +141,9 @@ class UserDashboard(UserPage):
                                                   .exclude(problem__id__in=user_completed_ids(profile))
                                                   .values_list('problem__code', 'problem__name', 'problem__points')
                                                   .annotate(points=Max('points'), latest=Max('date'))
-                                                  .order_by('-latest'))[:7]
-        context['own_comments'] = Comment.most_recent(user, 10, author=user)
+                                                  .order_by('-latest'))[:10]
+        context['own_comments'] = Comment.most_recent(user, 10, queryset=Comment.objects.filter(author=profile))
+        context['own_tickets'] = Ticket.tickets_list(user).filter(user=profile)[:10]
         context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
 
         return context

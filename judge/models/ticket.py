@@ -22,11 +22,9 @@ class Ticket(models.Model):
     is_open = models.BooleanField(verbose_name=_('is ticket open?'), default=True)
 
     @classmethod
-    def tickets_list(cls, user, author=None):
+    def tickets_list(cls, user):
         queryset = cls.objects.filter(is_open=True).order_by('-id') \
                               .prefetch_related('linked_item').select_related('user__user')
-        if author is not None:
-            queryset = queryset.filter(user=author.profile)
 
         return filter_visible_tickets(queryset, user)
 

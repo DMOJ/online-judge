@@ -84,7 +84,16 @@
             <div class="dashboard-box sidebox">
                 <h3>{{  _('My open tickets') }} <i class="fa fa-exclamation-circle"></i></h3>
                 <div class="sidebox-content dashboard-content">
-                    <i>Coming soon.</i>
+                    <ul>
+                        {% for ticket in own_tickets %}
+                            <li>
+                                <a href="{{ url('ticket', ticket.id) }}">{{ ticket.title }}</a>
+                                {{ format_datetime(ticket.time) }}
+                            </li>
+                        {% else %}
+                            <i>{{ _('You do not have any open tickets.') }}</i>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
