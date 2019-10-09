@@ -195,6 +195,7 @@ class Contest(models.Model):
                 filter &= Q(is_external=True)
             if user.is_authenticated:
                 filter |= Q(is_organization_private=True, organizations__in=profile.organizations.all())
+                filter |= Q(is_private_viewable=True, organizations__in=profile.organizations.all())
                 filter |= Q(is_private=True, private_contestants=profile)
             queryset = queryset.filter(filter)
         return queryset.distinct()
@@ -283,7 +284,7 @@ class Contest(models.Model):
         # Contest is publicly visible
         if self.is_visible:
             # Contest is not private
-            if not self.is_private and not self.is_organization_private:
+            if not self.is_private and not self.is_organization_private and not self.is_private_viewable:
                 if self.is_external:
                     return True
                 if user.is_authenticated and not user.profile.is_external_user:
@@ -292,10 +293,11 @@ class Contest(models.Model):
 
             if user.is_authenticated:
                 # User is in the organizations it is private to
-                if self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+                if (self.is_organization_private or self.is_private_viewable) and \
+                        self.organizations.filter(id__in=user.profile.organizations.all()).exists():
                     return True
                 # User is in the group of private contestants
-                if self.private_contestants.filter(id=user.profile.id).exists():
+                if self.is_private and self.private_contestants.filter(id=user.profile.id).exists():
                     return True
 
         # If the user can view all contests
