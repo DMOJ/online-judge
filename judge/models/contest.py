@@ -184,9 +184,6 @@ class Contest(models.Model):
         profile = user.profile if user.is_authenticated else None
         queryset = cls.objects.all().defer('description', 'registration_page')
 
-        if not user.is_authenticated or profile.is_external_user:
-            queryset = queryset.filter(is_external=True)
-
         if not user.has_perm('judge.see_private_contest'):
             filter = Q(is_visible=True)
             if user.is_authenticated:
@@ -194,6 +191,8 @@ class Contest(models.Model):
             queryset = queryset.filter(filter)
         if not user.has_perm('judge.edit_all_contest'):
             filter = Q(is_private=False, is_organization_private=False)
+            if not user.is_authenticated or profile.is_external_user:
+                filter &= Q(is_external=True)
             if user.is_authenticated:
                 filter |= Q(is_organization_private=True, organizations__in=profile.organizations.all())
                 filter |= Q(is_private=True, private_contestants=profile)
@@ -281,14 +280,16 @@ class Contest(models.Model):
         return True
 
     def is_accessible_by(self, user):
-        if not self.is_external and (not user.is_authenticated or user.profile.is_external_user):
-            return False
-
         # Contest is publicly visible
         if self.is_visible:
             # Contest is not private
             if not self.is_private and not self.is_organization_private:
-                return True
+                if self.is_external:
+                    return True
+                if user.is_authenticated and not user.profile.is_external_user:
+                    return True
+                return False
+
             if user.is_authenticated:
                 # User is in the organizations it is private to
                 if self.organizations.filter(id__in=user.profile.organizations.all()).exists():
