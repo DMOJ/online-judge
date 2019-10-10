@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-03 20:39+0000\n"
-"PO-Revision-Date: 2019-10-03 21:02\n"
+"POT-Creation-Date: 2019-10-10 16:54+0000\n"
+"PO-Revision-Date: 2019-10-10 17:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
@@ -474,27 +474,27 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: judge/forms.py:131
+#: judge/forms.py:130
 msgid "Two Factor Authentication tokens must be 6 decimal digits."
 msgstr ""
 
-#: judge/forms.py:140 templates/registration/totp_auth.html:32
+#: judge/forms.py:139 templates/registration/totp_auth.html:32
 msgid "Invalid Two Factor Authentication token."
 msgstr ""
 
-#: judge/forms.py:144 judge/models/problem.py:97
+#: judge/forms.py:143 judge/models/problem.py:97
 msgid "Problem code must be ^[a-z0-9]+$"
 msgstr ""
 
-#: judge/forms.py:149
+#: judge/forms.py:148
 msgid "Problem with code already exists."
 msgstr ""
 
-#: judge/forms.py:154 judge/models/contest.py:50
+#: judge/forms.py:153 judge/models/contest.py:50
 msgid "Contest id must be ^[a-z0-9]+$"
 msgstr ""
 
-#: judge/forms.py:159
+#: judge/forms.py:158
 msgid "Contest with key already exists."
 msgstr ""
 
@@ -3820,20 +3820,20 @@ msgstr ""
 msgid "Your account has been successfully activated."
 msgstr ""
 
-#: templates/registration/login.html:46
+#: templates/registration/login.html:42
 msgid "Invalid username or password."
 msgstr ""
 
-#: templates/registration/login.html:64
+#: templates/registration/login.html:60
 #: templates/registration/totp_auth.html:39
 msgid "Login!"
 msgstr ""
 
-#: templates/registration/login.html:67
+#: templates/registration/login.html:63
 msgid "Forgot your password?"
 msgstr ""
 
-#: templates/registration/login.html:70
+#: templates/registration/login.html:66
 msgid "Or log in with..."
 msgstr ""
 
