@@ -284,7 +284,7 @@ class Contest(models.Model):
         # Contest is publicly visible
         if self.is_visible:
             # Contest is not private
-            if not self.is_private and not self.is_organization_private and not self.is_private_viewable:
+            if not self.is_private and not self.is_organization_private:
                 if self.is_external:
                     return True
                 if user.is_authenticated and not user.profile.is_external_user:
@@ -293,7 +293,7 @@ class Contest(models.Model):
 
             if user.is_authenticated:
                 # User is in the organizations it is private to
-                if (self.is_organization_private or self.is_private_viewable) and \
+                if self.is_organization_private and \
                         self.organizations.filter(id__in=user.profile.organizations.all()).exists():
                     return True
                 # User is in the group of private contestants
