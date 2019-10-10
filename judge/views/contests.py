@@ -216,11 +216,6 @@ class ContestMixin(object):
                 ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
             return contest
 
-        if not contest.is_visible and not user.has_perm('judge.see_private_contest') and (
-                not user.has_perm('judge.edit_own_contest') or
-                not self.check_organizer(contest, profile)):
-            raise Http404()
-
         if contest.is_private or contest.is_organization_private:
             private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(),
                                                         contest.organizations.all())
@@ -232,6 +227,9 @@ class ContestMixin(object):
                     contest.organizations.filter(id__in=profile.organizations.all()).exists()) and \
                     not (contest.is_private and contest.private_contestants.filter(id=profile.id).exists()):
                 raise private_contest_error
+
+        if not contest.is_accessible_by(user):
+            raise Http404()
 
         return contest
 
