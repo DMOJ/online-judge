@@ -273,10 +273,10 @@ class Contest(models.Model):
         if check_registered and not self.is_registered(user):
             return False
 
-        if not self.is_private and not self.is_organization_private:
+        if not self.is_private and not self.is_organization_private and not self.is_private_viewable:
             return True
 
-        if self.is_organization_private and \
+        if (self.is_private_viewable or self.is_organization_private) and \
                 self.organizations.filter(id__in=user.profile.organizations.all()).exists():
             return True
         if self.is_private and self.private_contestants.filter(id=user.profile.id).exists():
