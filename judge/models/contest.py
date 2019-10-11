@@ -286,6 +286,15 @@ class Contest(models.Model):
     def is_accessible_by(self, user):
         # Contest is publicly visible
         if self.is_visible:
+            if user.is_authenticated:
+                # User is in the organizations it is private to
+                if (self.is_private_viewable or self.is_organization_private) and \
+                        self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+                    return True
+                # User is in the group of private contestants
+                if self.is_private and self.private_contestants.filter(id=user.profile.id).exists():
+                    return True
+
             # Contest is not private
             if not self.is_private and not self.is_organization_private:
                 if self.is_external:
@@ -293,15 +302,6 @@ class Contest(models.Model):
                 if user.is_authenticated and not user.profile.is_external_user:
                     return True
                 return False
-
-            if user.is_authenticated:
-                # User is in the organizations it is private to
-                if self.is_organization_private and \
-                        self.organizations.filter(id__in=user.profile.organizations.all()).exists():
-                    return True
-                # User is in the group of private contestants
-                if self.is_private and self.private_contestants.filter(id=user.profile.id).exists():
-                    return True
 
         # If the user can view all contests
         if user.has_perm('judge.see_private_contest'):
