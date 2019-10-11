@@ -301,7 +301,6 @@ class Contest(models.Model):
                     return True
                 if user.is_authenticated and not user.profile.is_external_user:
                     return True
-                return False
 
         # If the user can view all contests
         if user.has_perm('judge.see_private_contest'):
