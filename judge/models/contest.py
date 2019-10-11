@@ -278,7 +278,7 @@ class Contest(models.Model):
             return True
         if self.is_private and self.private_contestants.filter(id=user.profile.id).exists():
             return True
-        return True
+        return False
 
     def is_accessible_by(self, user):
         # Contest is publicly visible
