@@ -48,6 +48,6 @@ class Command(BaseCommand):
                     if username in users:
                         continue
                     users.add(username)
-                    moss_call.add_file_from_memory(username, source.encode('utf-8'))
+                    moss_call.add_file_from_memory(username, source)
 
                 print('(%d): %s' % (subs.count(), moss_call.process()))
