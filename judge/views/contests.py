@@ -4,7 +4,7 @@ from calendar import Calendar, SUNDAY
 from collections import defaultdict, namedtuple
 from datetime import date, datetime, time, timedelta
 from functools import partial
-from itertools import chain, count
+from itertools import chain
 from operator import attrgetter
 
 from django import forms
@@ -24,7 +24,6 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
-from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView
 
@@ -38,7 +37,8 @@ from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import _get_result_data
 from judge.utils.ranker import ranker
 from judge.utils.strings import safe_int_or_none
-from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView,TitleMixin, generic_message, paginate_query_context
+from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMixin, generic_message, \
+    paginate_query_context
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'ContestClone', 'ContestStats', 'contest_ranking_ajax', 'ContestParticipationList',
@@ -681,9 +681,14 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
-    if contest.hide_scoreboard and contest.is_in_contest(request.user):
-        return ([(_('???'), make_contest_ranking_profile(contest, request.profile.current_contest, problems))],
-                problems)
+    if not contest.can_see_full_scoreboard(request.user):
+        try:
+            participation = contest.users.get(virtual=ContestParticipation.LIVE, user=request.profile)
+        except ContestParticipation.DoesNotExist:
+            return ([], problems)
+        else:
+            return ([(_('???'), make_contest_ranking_profile(contest, participation, problems))],
+                    problems)
 
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 

@@ -54,9 +54,7 @@ def api_v1_contest_detail(request, contest):
         raise Http404()
 
     in_contest = contest.is_in_contest(user)
-    can_see_rankings = contest.can_see_scoreboard(user)
-    if contest.hide_scoreboard and in_contest:
-        can_see_rankings = False
+    can_see_rankings = contest.can_see_full_scoreboard(user)
 
     problems = list(contest.contest_problems.select_related('problem')
                     .defer('problem__description').order_by('order'))

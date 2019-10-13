@@ -83,6 +83,10 @@ class Contest(models.Model):
                                           help_text=_('Whether the scoreboard should remain hidden for the duration '
                                                       'of the contest.'),
                                           default=False)
+    permanently_hide_scoreboard = models.BooleanField(verbose_name=_('permanently hide scoreboard'),
+                                                      help_text=('Whether the scoreboard should remain hidden permanently. '
+                                                                 'Requires "hide scoreboard" to be set as well to have any effect.'),
+                                                      default=False)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -167,15 +171,22 @@ class Contest(models.Model):
         return False
 
     def can_see_scoreboard(self, user):
-        if user.has_perm('judge.see_private_contest'):
+        if self.can_see_full_scoreboard(user):
             return True
-        if user.is_authenticated and self.organizers.filter(id=user.profile.id).exists():
+        if not self.is_accessible_by(user):
+            return False
+        if not self.can_join:
+            return False
+        if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > self._now:
+            return False
+        return True
+
+    def can_see_full_scoreboard(self, user):
+        if self.is_editable_by(user):
             return True
-        if not self.is_visible:
+        if not self.is_accessible_by(user):
             return False
-        if self.start_time is not None and self.start_time > timezone.now():
-            return False
-        if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > timezone.now():
+        if not self.show_scoreboard:
             return False
         return True
 
@@ -243,7 +254,11 @@ class Contest(models.Model):
 
     @cached_property
     def show_scoreboard(self):
+        if not self.can_join:
+            return False
         if self.hide_scoreboard and not self.ended:
+            return False
+        if self.hide_scoreboard and self.permanently_hide_scoreboard:
             return False
         return True
 
@@ -302,6 +317,9 @@ class Contest(models.Model):
                 if user.is_authenticated and not user.profile.is_external_user:
                     return True
 
+        return self.is_editable_by(user)
+
+    def is_editable_by(self, user):
         # If the user can view all contests
         if user.has_perm('judge.see_private_contest'):
             return True
