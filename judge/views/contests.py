@@ -747,7 +747,7 @@ class ContestRanking(ContestRankingBase):
 
     def get_ranking_list(self):
         if not self.object.can_see_full_scoreboard(self.request.user):
-            queryset = self.object.users.filter(user=self.profile, virtual=ContestParticipation.LIVE)
+            queryset = self.object.users.filter(user=self.request.profile, virtual=ContestParticipation.LIVE)
             return get_contest_ranking_list(
                 self.request, self.object,
                 ranking_list=partial(base_contest_ranking_list, queryset=queryset),
