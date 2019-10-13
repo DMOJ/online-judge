@@ -681,15 +681,6 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
                              show_current_virtual=True, ranker=ranker):
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
-    if not contest.can_see_full_scoreboard(request.user):
-        try:
-            participation = contest.users.get(virtual=ContestParticipation.LIVE, user=request.profile)
-        except ContestParticipation.DoesNotExist:
-            return ([], problems)
-        else:
-            return ([(_('???'), make_contest_ranking_profile(contest, participation, problems))],
-                    problems)
-
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
     if show_current_virtual:
@@ -755,6 +746,14 @@ class ContestRanking(ContestRankingBase):
         return _('%s Rankings') % self.object.name
 
     def get_ranking_list(self):
+        if not self.object.can_see_full_scoreboard(self.request.user):
+            queryset = self.object.users.filter(user=self.profile, virtual=ContestParticipation.LIVE)
+            return get_contest_ranking_list(
+                self.request, self.object,
+                ranking_list=partial(base_contest_ranking_list, queryset=queryset),
+                ranker=lambda users, key: ((_('???'), user) for user in users)
+            )
+
         return get_contest_ranking_list(self.request, self.object)
 
     def get_context_data(self, **kwargs):
@@ -772,6 +771,9 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         return _("%s's participation in %s") % (self.profile.username, self.object.name)
 
     def get_ranking_list(self):
+        if not self.object.can_see_full_scoreboard(self.request.user) and self.profile != self.request.profile:
+            raise Http404()
+
         queryset = self.object.users.filter(user=self.profile, virtual__gte=0).order_by('-virtual')
         live_link = format_html('<a href="{2}#!{1}">{0}</a>', _('Live'), self.profile.username,
                                 reverse('contest_ranking', args=[self.object.key]))
@@ -779,7 +781,8 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         return get_contest_ranking_list(
             self.request, self.object, show_current_virtual=False,
             ranking_list=partial(base_contest_ranking_list, queryset=queryset),
-            ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
+            ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users)
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
