@@ -165,8 +165,12 @@ class Submission(models.Model):
         profile = user.profile
         problem = self.problem
 
-        if self.user_id == profile.id and problem.is_accessible_by(user):
-            return True
+        if self.user_id == profile.id:
+            if problem.is_accessible_by(user):
+                return True
+            if self.contest_object is not None and self.contest_object.ended:
+                return True
+
         if problem.is_editable_by(user):
             return True
 
