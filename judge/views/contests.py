@@ -24,6 +24,7 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView
 
@@ -807,14 +808,17 @@ class ContestMossView(ContestMixin, TitleMixin, DetailView):
     def get_title(self):
         return _('%s Moss Results') % self.object.name
 
+    def get_object(self, queryset=None):
+        contest = super().get_object(queryset)
+        if not contest.is_editable_by(self.request.user):
+            raise Http404()
+        return contest
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if not self.object.is_editable_by(self.request.user):
-            raise Http404()
-
         problems = list(map(attrgetter('problem'), self.object.contest_problems.order_by('order')
-                                                              .selected_related('problem')))
+                                                              .select_related('problem')))
         languages = list(map(itemgetter(0), ContestMoss.LANG_MAPPING))
 
         results = ContestMoss.objects.filter(contest=self.object)
@@ -838,6 +842,15 @@ class ContestMossView(ContestMixin, TitleMixin, DetailView):
             status, message=_('Running moss for %s...') % (self.object.name,),
             redirect=reverse('contest_moss', args=(self.object.key,)),
         )
+
+
+@require_POST
+def contest_moss_delete(request, contest):
+    contest = get_object_or_404(Contest, key=contest)
+    if not contest.is_editable_by(request.user):
+        raise Http404()
+    ContestMoss.objects.filter(contest=contest).delete()
+    return HttpResponseRedirect(reverse('contest_moss', args=(contest.key,)))
 
 
 class ContestTagDetailAjax(DetailView):

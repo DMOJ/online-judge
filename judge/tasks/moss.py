@@ -1,6 +1,6 @@
 from celery import shared_task
 from django.conf import settings
-from django.core import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext as _
 from moss import *
 
@@ -47,11 +47,10 @@ def run_moss(self, contest_key):
                         moss_call.add_file_from_memory(username, source.encode('utf-8'))
 
                     result.url = moss_call.process().decode('utf-8')
-                    result.submission_count = subs.count()
+                    result.submission_count = len(users)
 
                 moss_results.append(result)
-
-            p.done = len(moss_results)
+                p.did(1)
 
     ContestMoss.objects.bulk_create(moss_results)
 

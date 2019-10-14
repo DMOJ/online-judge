@@ -494,12 +494,12 @@ class Rating(models.Model):
 
 
 class ContestMoss(models.Model):
-    LANG_MAPPING = {
+    LANG_MAPPING = [
         ('C++', MOSS_LANG_CC),
         ('C', MOSS_LANG_C),
         ('Java', MOSS_LANG_JAVA),
         ('Python', MOSS_LANG_PYTHON),
-    }
+    ]
 
     contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='moss', on_delete=CASCADE)
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='moss', on_delete=CASCADE)
@@ -508,6 +508,6 @@ class ContestMoss(models.Model):
     url = models.URLField(null=True, blank=True)
 
     class Meta:
-        unique_together = ('contest', 'language')
+        unique_together = ('contest', 'problem', 'language')
         verbose_name = _('contest moss result')
         verbose_name_plural = _('contest moss results')
