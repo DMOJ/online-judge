@@ -51,4 +51,4 @@ class Command(BaseCommand):
                     users.add(username)
                     moss_call.add_file_from_memory(username, source.encode('utf-8'))
 
-                print('(%d): %s' % (subs.count(), utf8text(moss_call.process())))
+                print('(%d): %s' % (subs.count(), moss_call.process()))
