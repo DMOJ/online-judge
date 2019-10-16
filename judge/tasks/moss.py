@@ -46,7 +46,7 @@ def run_moss(self, contest_key):
                         users.add(username)
                         moss_call.add_file_from_memory(username, source.encode('utf-8'))
 
-                    result.url = moss_call.process().decode('utf-8')
+                    result.url = moss_call.process()
                     result.submission_count = len(users)
 
                 moss_results.append(result)
