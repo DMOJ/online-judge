@@ -14,8 +14,8 @@
         {% endif %}
     {% endif %}
     {% if contest.is_editable_by(request.user) %}
-        {% if perms.judge.moss_contest %}
-            {{ make_tab('moss', 'fa-gavel', url('contest_moss', contest.key), _('Moss')) }}
+        {% if perms.judge.moss_contest and has_moss_api_key %}
+            {{ make_tab('moss', 'fa-gavel', url('contest_moss', contest.key), _('MOSS')) }}
         {% endif %}
         {{ make_tab('edit', 'fa-edit', url('admin:judge_contest_change', contest.id), _('Edit')) }}
     {% endif %}

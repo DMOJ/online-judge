@@ -6,6 +6,7 @@ from itertools import chain
 from operator import attrgetter, itemgetter
 
 from django import forms
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
@@ -165,6 +166,7 @@ class ContestMixin(object):
                                           self.object.description, 'contest')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+        context['has_moss_api_key'] = settings.MOSS_API_KEY is not None
 
         return context
 
@@ -634,6 +636,8 @@ class ContestMossMixin(ContestMixin, PermissionRequiredMixin):
 
     def get_object(self, queryset=None):
         contest = super().get_object(queryset)
+        if settings.MOSS_API_KEY is None:
+            raise Http404()
         if not contest.is_editable_by(self.request.user):
             raise Http404()
         return contest
@@ -643,7 +647,7 @@ class ContestMossView(ContestMossMixin, TitleMixin, DetailView):
     template_name = 'contest/moss.html'
 
     def get_title(self):
-        return _('%s Moss Results') % self.object.name
+        return _('%s MOSS Results') % self.object.name
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -670,7 +674,7 @@ class ContestMossView(ContestMossMixin, TitleMixin, DetailView):
         self.object = self.get_object()
         status = run_moss.delay(self.object.key)
         return redirect_to_task_status(
-            status, message=_('Running moss for %s...') % (self.object.name,),
+            status, message=_('Running MOSS for %s...') % (self.object.name,),
             redirect=reverse('contest_moss', args=(self.object.key,)),
         )
 
