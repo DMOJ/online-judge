@@ -2,18 +2,16 @@
 
 {% block tabs %}
     {{ make_tab('detail', 'fa-info-circle', url('contest_view', contest.key), _('Info')) }}
-    {% if contest.ended %}
+    {% if contest.ended and contest.can_see_full_scoreboard(request.user) %}
         {{ make_tab('stats', 'fa-pie-chart', url('contest_stats', contest.key), _('Statistics')) }}
     {% endif %}
 
     {% if contest.start_time <= now or perms.judge.see_private_contest %}
         {% if contest.can_see_scoreboard(request.user) %}
             {{ make_tab('ranking', 'fa-bar-chart', url('contest_ranking', contest.key), _('Rankings')) }}
+            {{ make_tab('participation', 'fa-users', url('contest_participation_own', contest.key), _('Participation')) }}
         {% else %}
             {{ make_tab('ranking', 'fa-bar-chart', None, _('Hidden Rankings')) }}
-        {% endif %}
-        {% if contest.can_see_scoreboard(request.user) %}
-            {{ make_tab('participation', 'fa-users', url('contest_participation_own', contest.key), _('Participation')) }}
         {% endif %}
     {% endif %}
     {% if contest.is_editable_by(request.user) %}

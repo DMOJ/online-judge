@@ -576,7 +576,7 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if not self.object.ended:
+        if not self.object.ended or not self.object.can_see_full_scoreboard(self.request.user):
             raise Http404()
 
         queryset = Submission.objects.filter(contest_object=self.object)
