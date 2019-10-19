@@ -100,14 +100,13 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context['hide_solved'] = int(self.hide_solved)
         context['authored'] = self.object.authored_problems.filter(is_public=True, is_organization_private=False) \
                                   .order_by('code')
-        context['rank'] = Profile.objects.filter(is_external_user=False, is_unlisted=False,
-                                                 performance_points__gt=self.object.performance_points).count() + 1
-
-        if not self.request.user.is_authenticated:
-            return context
 
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
+
+        context['rank'] = Profile.objects.filter(
+            is_unlisted=False, performance_points__gt=self.object.performance_points,
+        ).count() + 1
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(is_external_user=False, is_unlisted=False,
@@ -155,9 +154,6 @@ class UserAboutPage(UserPage):
 
     def get_context_data(self, **kwargs):
         context = super(UserAboutPage, self).get_context_data(**kwargs)
-        if not self.request.user.is_authenticated:
-            return context
-
         ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
             .defer('contest__description')
 
@@ -285,7 +281,6 @@ def edit_profile(request):
     tzmap = getattr(settings, 'TIMEZONE_MAP', None)
     return render(request, 'user/edit-profile.html', {
         'form': form, 'title': _('Edit profile'), 'profile': profile,
-        'enforce_staff_2fa': getattr(settings, 'ENFORCE_STAFF_2FA', True),
         'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
@@ -332,7 +327,6 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
 
 
 user_list_view = UserList.as_view()
-contest_ranking_view = ContestRanking.as_view()
 
 
 class FixedContestRanking(ContestRanking):

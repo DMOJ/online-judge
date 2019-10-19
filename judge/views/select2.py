@@ -103,9 +103,6 @@ class UserSearchSelect2View(BaseListView):
 
 class ContestUserSearchSelect2View(UserSearchSelect2View):
     def get_queryset(self):
-        if not self.request.user.is_authenticated:
-            raise Http404()
-
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
         if not contest.can_see_full_scoreboard(self.request.user):
             raise Http404()
