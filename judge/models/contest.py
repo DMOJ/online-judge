@@ -63,17 +63,17 @@ class Contest(models.Model):
                                                  'specified organizations.'))
     is_external = models.BooleanField(verbose_name=_('external contest'), default=False,
                                       help_text=_('Whether this contest is visible to external users.'))
-    is_virtualable = models.BooleanField(verbose_name=_('virtualable'),
-                                         help_text=_('Whether a user can virtually participate in this contest or not.'),
-                                         default=True)
+    is_virtualable = models.BooleanField(verbose_name=_('virtualable'), default=True,
+                                         help_text=_('Whether a user can virtually participate '
+                                                     'in this contest or not.'))
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
-    require_registration = models.BooleanField(verbose_name=_('require registration'),
-                                               help_text=_('Whether the user must be registered before being able to join the contest.'),
-                                               default=False)
-    registration_page = models.TextField(verbose_name=_('registration page'),
-                                         help_text=_('Flatpage to display when registering. Use name="" for form identifiers that will be stored in the registrations.'),
-                                         blank=True, null=True)
+    require_registration = models.BooleanField(verbose_name=_('require registration'), default=False,
+                                               help_text=_('Whether the user must be registered before being '
+                                                           'able to join the contest.'))
+    registration_page = models.TextField(verbose_name=_('registration page'), blank=True, null=True,
+                                         help_text=_('Flatpage to display when registering. Use name="" for form '
+                                                     'identifiers that will be stored in the registrations.'))
     registration_start_time = models.DateTimeField(verbose_name=_('registration start time'),
                                                    help_text=_('Allow registration starting at the specified time.'),
                                                    blank=True, null=True)
@@ -84,10 +84,10 @@ class Contest(models.Model):
                                           help_text=_('Whether the scoreboard should remain hidden for the duration '
                                                       'of the contest.'),
                                           default=False)
-    permanently_hide_scoreboard = models.BooleanField(verbose_name=_('permanently hide scoreboard'),
-                                                      help_text=('Whether the scoreboard should remain hidden permanently. '
-                                                                 'Requires "hide scoreboard" to be set as well to have any effect.'),
-                                                      default=False)
+    permanently_hide_scoreboard = models.BooleanField(verbose_name=_('permanently hide scoreboard'), default=False,
+                                                      help_text=('Whether the scoreboard should remain hidden '
+                                                                 'permanently. Requires "hide scoreboard" to be '
+                                                                 'set as well to have any effect.'))
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -99,10 +99,12 @@ class Contest(models.Model):
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
     is_organization_private = models.BooleanField(verbose_name=_('completely private to organizations'),
-                                                  help_text=_('Whether only specified organizations can view and join this contest.'),
+                                                  help_text=_('Whether only specified organizations can view '
+                                                              'and join this contest.'),
                                                   default=False)
     is_private_viewable = models.BooleanField(verbose_name=_('viewable but private to organizations'),
-                                              help_text=_('Whether only specified organizations can join the contest, but everyone can view.'),
+                                              help_text=_('Whether only specified organizations can join the '
+                                                          'contest, but everyone can view.'),
                                               default=False)
     is_private = models.BooleanField(verbose_name=_('private to specific users'), default=False)
     private_contestants = models.ManyToManyField(Profile, blank=True, verbose_name=_('private contestants'),
@@ -116,11 +118,10 @@ class Contest(models.Model):
                                                         'testcases. Commonly set during a contest, then unset '
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
-    freeze_submissions = models.BooleanField(verbose_name=_('freeze submissions'),
-                                             help_text=_('Whether submission updates should be frozen. If frozen, rejudging/rescoring '
-                                                         'will not propagate to related contest submissions until after this is '
-                                                         'unchecked.'),
-                                             default=False)
+    freeze_submissions = models.BooleanField(verbose_name=_('freeze submissions'), default=False,
+                                             help_text=_('Whether submission updates should be frozen. If frozen, '
+                                                         'rejudging/rescoring will not propagate to related contest '
+                                                         'submissions until after this is unchecked.'))
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may join the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
@@ -469,7 +470,8 @@ class ContestSubmission(models.Model):
                                      default=False)
     bonus = models.IntegerField(default=0, verbose_name=_('bonus'))
     updated_frozen = models.BooleanField(verbose_name=_('updated while frozen'),
-                                         help_text=_('Whether this submission was rejudged/rescored while the contest was frozen.'),
+                                         help_text=_('Whether this submission was rejudged/rescored '
+                                                     'while the contest was frozen.'),
                                          default=False)
 
     class Meta:

@@ -37,7 +37,8 @@ from judge.utils.unicode import utf8text
 from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, TitleMixin, generic_message
 from .contests import ContestRanking
 
-__all__ = ['UserPage', 'UserAboutPage', 'UserList', 'UserDashboard', 'UserProblemsPage', 'users', 'edit_profile', 'generate_api_token']
+__all__ = ['UserPage', 'UserAboutPage', 'UserList', 'UserDashboard', 'UserProblemsPage', 'users',
+           'edit_profile', 'generate_api_token']
 
 
 def remap_keys(iterable, mapping):

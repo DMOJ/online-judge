@@ -7,15 +7,21 @@ chart_colors = [0x3366CC, 0xDC3912, 0xFF9900, 0x109618, 0x990099, 0x3B3EAC, 0x00
 
 
 highlight_colors = []
+
+
 def _highlight_colors():
     for color in chart_colors:
         r, g, b = color >> 16, (color >> 8) & 0xFF, color & 0xFF
         highlight_colors.append('#%02X%02X%02X' % (min(int(r * 1.2), 255),
                                                    min(int(g * 1.2), 255),
                                                    min(int(b * 1.2), 255)))
+
+
 _highlight_colors()
 
+
 chart_colors = list(map('#%06X'.__mod__, chart_colors))
+
 
 def get_pie_chart(data):
     return {
@@ -28,6 +34,7 @@ def get_pie_chart(data):
             },
         ],
     }
+
 
 def get_bar_chart(data, **kwargs):
     return {

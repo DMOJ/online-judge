@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext as _
 
 from judge.models import Language, Submission
-from judge.utils.chart import chart_colors, highlight_colors, get_pie_chart
+from judge.utils.chart import chart_colors, highlight_colors
 
 
 ac_count = Count(Case(When(submission__result='AC', then=Value(1)), output_field=IntegerField()))

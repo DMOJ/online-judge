@@ -90,8 +90,8 @@ class OrganizationHome(OrganizationDetailView):
                                            .prefetch_related('authors__user', 'organizations')
         context['post_comment_counts'] = {
             int(page[2:]): count for page, count in
-                Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']], hidden=False)
-                               .values_list('page').annotate(count=Count('page')).order_by()
+            Comment.objects.filter(page__in=['b:%d' % post.id for post in context['posts']], hidden=False)
+                           .values_list('page').annotate(count=Count('page')).order_by()
         }
         return context
 

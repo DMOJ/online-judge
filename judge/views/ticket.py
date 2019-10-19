@@ -82,9 +82,8 @@ class NewTicketView(LoginRequiredMixin, SingleObjectFormView):
             })
         if isinstance(ticket.linked_item, Problem):
             logger.info('New ticket for %s: %s',
-                ticket.linked_item.code,
-                self.request.build_absolute_uri(reverse('ticket', args=[ticket.id]))
-            )
+                        ticket.linked_item.code,
+                        self.request.build_absolute_uri(reverse('ticket', args=[ticket.id])))
 
         return HttpResponseRedirect(reverse('ticket', args=[ticket.id]))
 
