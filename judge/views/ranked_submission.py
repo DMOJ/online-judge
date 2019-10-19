@@ -84,6 +84,5 @@ class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
                            self.get_problem_number(self.problem), self.contest.name,
                            reverse('contest_view', args=[self.contest.key]))
 
-    def _get_result_data(self):
-        return get_result_data(Submission.objects.filter(
-            problem_id=self.problem.id, contest__participation__contest_id=self.contest.id))
+    def _get_queryset(self):
+        return super()._get_queryset().filter(contest_object=self.contest)
