@@ -9,7 +9,7 @@ from django.conf import settings
 from django.forms.utils import flatatt
 from django.utils.safestring import mark_safe
 
-ACE_URL = getattr(settings, 'ACE_URL', '//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-split.js')
+ACE_URL = getattr(settings, 'ACE_URL', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3')
 
 
 class AceWidget(forms.Textarea):
