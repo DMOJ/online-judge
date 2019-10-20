@@ -27,7 +27,7 @@ from reversion import revisions
 
 from judge.forms import ProfileForm, newsletter_id
 from judge.models import Comment, Profile, Rating, Submission, Ticket
-from judge.performance_points import PP_ENTRIES, get_pp_breakdown
+from judge.performance_points import get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
 from judge.utils.cachedict import CacheDict
 from judge.utils.problems import contest_completed_ids, user_completed_ids
@@ -141,7 +141,8 @@ class UserDashboard(UserPage):
                                                   .exclude(problem__id__in=user_completed_ids(profile))
                                                   .values_list('problem__code', 'problem__name', 'problem__points')
                                                   .annotate(points=Max('points'), latest=Max('date'))
-                                                  .order_by('-latest'))[:10]
+                                                  .order_by('-latest')
+                                                  [:settings.DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT])
         context['own_comments'] = Comment.most_recent(user, 10, queryset=Comment.objects.filter(author=profile))
         context['own_tickets'] = Ticket.tickets_list(user).filter(user=profile)[:10]
         context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
@@ -218,7 +219,7 @@ class UserPerformancePointsAjax(UserProblemsPage):
         context = super(UserPerformancePointsAjax, self).get_context_data(**kwargs)
         try:
             start = int(self.request.GET.get('start', 0))
-            end = int(self.request.GET.get('end', PP_ENTRIES))
+            end = int(self.request.GET.get('end', settings.DMOJ_PP_ENTRIES))
             if start < 0 or end < 0 or start > end:
                 raise ValueError
         except ValueError:
@@ -278,12 +279,12 @@ def edit_profile(request):
                 form.fields['newsletter'].initial = subscription.subscribed
         form.fields['test_site'].initial = request.user.has_perm('judge.test_site')
 
-    tzmap = getattr(settings, 'TIMEZONE_MAP', None)
+    tzmap = settings.TIMEZONE_MAP
     return render(request, 'user/edit-profile.html', {
         'form': form, 'title': _('Edit profile'), 'profile': profile,
-        'has_math_config': bool(getattr(settings, 'MATHOID_URL', False)),
+        'has_math_config': bool(settings.MATHOID_URL),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
-        'TIMEZONE_BG': getattr(settings, 'TIMEZONE_BG', None if tzmap else '#4E7CAD'),
+        'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',
     })
 
 

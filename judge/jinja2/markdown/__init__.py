@@ -18,7 +18,7 @@ from .. import registry
 
 logger = logging.getLogger('judge.html')
 
-NOFOLLOW_WHITELIST = getattr(settings, 'NOFOLLOW_EXCLUDED', set())
+NOFOLLOW_WHITELIST = settings.NOFOLLOW_EXCLUDED
 
 
 class CodeSafeInlineGrammar(mistune.InlineGrammar):
@@ -105,7 +105,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
 
 @registry.filter
 def markdown(value, style, math_engine=None, lazy_load=False):
-    styles = getattr(settings, 'MARKDOWN_STYLES', {}).get(style, getattr(settings, 'MARKDOWN_DEFAULT_STYLE', {}))
+    styles = settings.MARKDOWN_STYLES.get(style, settings.MARKDOWN_DEFAULT_STYLE)
     escape = styles.get('safe_mode', True)
     nofollow = styles.get('nofollow', True)
     texoid = TEXOID_ENABLED and styles.get('texoid', False)

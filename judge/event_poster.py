@@ -2,7 +2,7 @@ from django.conf import settings
 
 __all__ = ['last', 'post']
 
-if not getattr(settings, 'EVENT_DAEMON_USE', False):
+if not settings.EVENT_DAEMON_USE:
     real = False
 
     def post(channel, message):

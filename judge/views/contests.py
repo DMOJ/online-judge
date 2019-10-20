@@ -8,6 +8,7 @@ from itertools import chain
 from operator import attrgetter, itemgetter
 
 from django import forms
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
@@ -24,9 +25,8 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
-from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import BaseDetailView, DetailView
+from django.views.generic.detail import BaseDetailView, DetailView, SingleObjectMixin, View
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
@@ -44,8 +44,8 @@ from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMix
     paginate_query_context
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
-           'ContestClone', 'ContestStats', 'contest_ranking_ajax', 'ContestParticipationList',
-           'get_contest_ranking_list', 'base_contest_ranking_list']
+           'ContestClone', 'ContestStats', 'ContestMossView', 'ContestMossDelete', 'contest_ranking_ajax',
+           'ContestParticipationList', 'get_contest_ranking_list', 'base_contest_ranking_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -207,6 +207,7 @@ class ContestMixin(object):
                                           self.object.description, 'contest')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+        context['has_moss_api_key'] = settings.MOSS_API_KEY is not None
 
         return context
 
@@ -802,17 +803,23 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         return super().get(request, *args, **kwargs)
 
 
-class ContestMossView(ContestMixin, TitleMixin, DetailView):
-    template_name = 'contest/moss.html'
-
-    def get_title(self):
-        return _('%s Moss Results') % self.object.name
+class ContestMossMixin(ContestMixin, PermissionRequiredMixin):
+    permission_required = 'judge.moss_contest'
 
     def get_object(self, queryset=None):
         contest = super().get_object(queryset)
+        if settings.MOSS_API_KEY is None:
+            raise Http404()
         if not contest.is_editable_by(self.request.user):
             raise Http404()
         return contest
+
+
+class ContestMossView(ContestMossMixin, TitleMixin, DetailView):
+    template_name = 'contest/moss.html'
+
+    def get_title(self):
+        return _('%s MOSS Results') % self.object.name
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -839,18 +846,16 @@ class ContestMossView(ContestMixin, TitleMixin, DetailView):
         self.object = self.get_object()
         status = run_moss.delay(self.object.key)
         return redirect_to_task_status(
-            status, message=_('Running moss for %s...') % (self.object.name,),
+            status, message=_('Running MOSS for %s...') % (self.object.name,),
             redirect=reverse('contest_moss', args=(self.object.key,)),
         )
 
 
-@require_POST
-def contest_moss_delete(request, contest):
-    contest = get_object_or_404(Contest, key=contest)
-    if not contest.is_editable_by(request.user):
-        raise Http404()
-    ContestMoss.objects.filter(contest=contest).delete()
-    return HttpResponseRedirect(reverse('contest_moss', args=(contest.key,)))
+class ContestMossDelete(ContestMossMixin, SingleObjectMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        ContestMoss.objects.filter(contest=self.object).delete()
+        return HttpResponseRedirect(reverse('contest_moss', args=(self.object.key,)))
 
 
 class ContestTagDetailAjax(DetailView):

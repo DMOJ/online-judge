@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
-from moss import MOSS_LANG_CC, MOSS_LANG_C, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
+from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge import contest_format
 from judge.models.problem import Problem
@@ -254,6 +254,8 @@ class Contest(models.Model):
         self.user_count = self.users.filter(virtual=0).count()
         self.save()
 
+    update_user_count.alters_data = True
+
     @cached_property
     def show_scoreboard(self):
         if not self.can_join:
@@ -322,8 +324,8 @@ class Contest(models.Model):
         return self.is_editable_by(user)
 
     def is_editable_by(self, user):
-        # If the user can view all contests
-        if user.has_perm('judge.see_private_contest'):
+        # If the user can edit all contests
+        if user.has_perm('judge.edit_all_contest'):
             return True
 
         # If the user is a contest organizer
@@ -333,8 +335,6 @@ class Contest(models.Model):
 
         return False
 
-    update_user_count.alters_data = True
-
     class Meta:
         permissions = (
             ('see_private_contest', _('See private contests')),
@@ -343,6 +343,7 @@ class Contest(models.Model):
             ('edit_all_contest', _('Edit all contests')),
             ('clone_contest', _('Clone contest')),
             ('contest_frozen_state', _('Change contest frozen state')),
+            ('moss_contest', _('MOSS contest')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),
@@ -497,8 +498,8 @@ class Rating(models.Model):
 
 class ContestMoss(models.Model):
     LANG_MAPPING = [
-        ('C++', MOSS_LANG_CC),
         ('C', MOSS_LANG_C),
+        ('C++', MOSS_LANG_CC),
         ('Java', MOSS_LANG_JAVA),
         ('Python', MOSS_LANG_PYTHON),
     ]

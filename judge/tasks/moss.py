@@ -2,7 +2,7 @@ from celery import shared_task
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext as _
-from moss import *
+from moss import MOSS
 
 from judge.models import Contest, ContestMoss, ContestParticipation, Submission
 from judge.utils.celery import Progress
@@ -22,7 +22,7 @@ def run_moss(self, contest_key):
     length = len(ContestMoss.LANG_MAPPING) * contest.problems.count()
     moss_results = []
 
-    with Progress(self, length, stage=_('Running moss')) as p:
+    with Progress(self, length, stage=_('Running MOSS')) as p:
         for problem in contest.problems.all():
             for dmoj_lang, moss_lang in ContestMoss.LANG_MAPPING:
                 result = ContestMoss(contest=contest, problem=problem, language=dmoj_lang)

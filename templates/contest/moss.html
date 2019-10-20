@@ -15,7 +15,6 @@
             flex-wrap: wrap;
             justify-content: center;
         }
-
         .pane {
             padding: 20px;
         }
@@ -26,17 +25,16 @@
     <script type="text/javascript">
         $(function () {
             $('.contest-moss').click(function () {
-                return confirm('{{ _('Are you sure you want Moss the contest?') }}');
+                return confirm('{{ _('Are you sure you want MOSS the contest?') }}');
             });
         });
         $(function () {
             $('.contest-moss-delete').click(function () {
-                return confirm('{{ _('Are you sure you want to delete the Moss results?') }}');
+                return confirm('{{ _('Are you sure you want to delete the MOSS results?') }}');
             });
         });
     </script>
 {% endblock %}
-
 {% block body %}
     {% if has_results %}
         <table class="table">
@@ -48,7 +46,6 @@
                 {% endfor %}
             </tr>
             </thead>
-
             <tbody>
                 {% for problem, results in moss_results %}
                     <tr id="problem-{{ problem.code }}">
@@ -74,16 +71,15 @@
             <form method="post" action="{{ url('contest_moss', contest.key) }}">
                 {% csrf_token %}
                 <input type="submit" class="unselectable button full contest-moss" style="padding: 10px;"
-                       value="{% if has_results %} {{ _('Re-Moss contest') }} {% else %} {{ _('Moss contest') }} {% endif %}">
+                       value="{% if has_results %} {{ _('Re-MOSS contest') }} {% else %} {{ _('MOSS contest') }} {% endif %}">
             </form>
         </div>
-
         {% if has_results %}
             <div class="pane">
                 <form method="post" action="{{ url('contest_moss_delete', contest.key) }}">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full contest-moss-delete" style="padding: 10px;"
-                           value="{{ _('Delete Moss results') }}">
+                           value="{{ _('Delete MOSS results') }}">
                 </form>
             </div>
         {% endif %}
