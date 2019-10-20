@@ -60,10 +60,28 @@
                     info_float.width(container.width());
                 }
 
-                $('#status').select2({multiple: 1, placeholder: '{{ _('Filter by status...') }}'})
-                    .css({'visibility': 'visible'});
-                $('#language').select2({multiple: 1, placeholder: '{{ _('Filter by language...') }}'})
-                    .css({'visibility': 'visible'});
+                function escapeRegExp(string) {
+                    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+                }
+
+                function idAndTextMatcher(params, data) {
+                    if ($.trim(params.term) === '')
+                        return data;
+                    var regex = new RegExp(escapeRegExp(params.term), 'i');
+                    return data.text.search(regex) >= 0 || data.id.search(regex) >= 0 ? data : null;
+                }
+
+                $('#status').select2({
+                    multiple: 1,
+                    placeholder: '{{ _('Filter by status...') }}',
+                    matcher: idAndTextMatcher,
+                }).css({'visibility': 'visible'});
+
+                $('#language').select2({
+                    multiple: 1,
+                    placeholder: '{{ _('Filter by language...') }}',
+                    matcher: idAndTextMatcher,
+                }).css({'visibility': 'visible'});
             });
 
             // Draw the statistics graph.
