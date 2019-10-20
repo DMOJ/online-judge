@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
+from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge import contest_format
 from judge.models.problem import Problem
@@ -186,6 +187,8 @@ class Contest(models.Model):
         self.user_count = self.users.filter(virtual=0).count()
         self.save()
 
+    update_user_count.alters_data = True
+
     @cached_property
     def show_scoreboard(self):
         if self.hide_scoreboard and not self.ended:
@@ -210,6 +213,14 @@ class Contest(models.Model):
         if user.has_perm('judge.see_private_contest'):
             return True
 
+        # User can edit the contest
+        return self.is_editable_by(user)
+
+    def is_editable_by(self, user):
+        # If the user can edit all contests
+        if user.has_perm('judge.edit_all_contest'):
+            return True
+
         # If the user is a contest organizer
         if user.has_perm('judge.edit_own_contest') and \
                 self.organizers.filter(id=user.profile.id).exists():
@@ -217,14 +228,13 @@ class Contest(models.Model):
 
         return False
 
-    update_user_count.alters_data = True
-
     class Meta:
         permissions = (
             ('see_private_contest', _('See private contests')),
             ('edit_own_contest', _('Edit own contests')),
             ('edit_all_contest', _('Edit all contests')),
             ('clone_contest', _('Clone contest')),
+            ('moss_contest', _('MOSS contest')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),
@@ -355,3 +365,23 @@ class Rating(models.Model):
         unique_together = ('user', 'contest')
         verbose_name = _('contest rating')
         verbose_name_plural = _('contest ratings')
+
+
+class ContestMoss(models.Model):
+    LANG_MAPPING = [
+        ('C', MOSS_LANG_C),
+        ('C++', MOSS_LANG_CC),
+        ('Java', MOSS_LANG_JAVA),
+        ('Python', MOSS_LANG_PYTHON),
+    ]
+
+    contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='moss', on_delete=CASCADE)
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='moss', on_delete=CASCADE)
+    language = models.CharField(max_length=10)
+    submission_count = models.PositiveIntegerField(default=0)
+    url = models.URLField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('contest', 'problem', 'language')
+        verbose_name = _('contest moss result')
+        verbose_name_plural = _('contest moss results')

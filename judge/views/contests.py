@@ -3,9 +3,10 @@ from collections import defaultdict, namedtuple
 from datetime import date, datetime, time, timedelta
 from functools import partial
 from itertools import chain
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 
 from django import forms
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
@@ -21,19 +22,22 @@ from django.utils.html import escape, format_html
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import BaseDetailView, DetailView
+from django.views.generic.detail import BaseDetailView, DetailView, SingleObjectMixin, View
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
 from judge.forms import ContestCloneForm
-from judge.models import Contest, ContestParticipation, ContestProblem, ContestTag, Problem, Profile
+from judge.models import Contest, ContestMoss, ContestParticipation, ContestProblem, ContestTag, \
+    Problem, Profile
+from judge.tasks import run_moss
+from judge.utils.celery import redirect_to_task_status
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
 from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
-           'ContestClone', 'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
-           'base_contest_ranking_list']
+           'ContestClone', 'ContestMossView', 'ContestMossDelete', 'contest_ranking_ajax', 'ContestParticipationList',
+           'get_contest_ranking_list', 'base_contest_ranking_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -162,6 +166,7 @@ class ContestMixin(object):
                                           self.object.description, 'contest')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+        context['has_moss_api_key'] = settings.MOSS_API_KEY is not None
 
         return context
 
@@ -624,6 +629,61 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         else:
             self.profile = self.request.profile
         return super().get(request, *args, **kwargs)
+
+
+class ContestMossMixin(ContestMixin, PermissionRequiredMixin):
+    permission_required = 'judge.moss_contest'
+
+    def get_object(self, queryset=None):
+        contest = super().get_object(queryset)
+        if settings.MOSS_API_KEY is None:
+            raise Http404()
+        if not contest.is_editable_by(self.request.user):
+            raise Http404()
+        return contest
+
+
+class ContestMossView(ContestMossMixin, TitleMixin, DetailView):
+    template_name = 'contest/moss.html'
+
+    def get_title(self):
+        return _('%s MOSS Results') % self.object.name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        problems = list(map(attrgetter('problem'), self.object.contest_problems.order_by('order')
+                                                              .select_related('problem')))
+        languages = list(map(itemgetter(0), ContestMoss.LANG_MAPPING))
+
+        results = ContestMoss.objects.filter(contest=self.object)
+        moss_results = defaultdict(list)
+        for result in results:
+            moss_results[result.problem].append(result)
+
+        for result_list in moss_results.values():
+            result_list.sort(key=lambda x: languages.index(x.language))
+
+        context['languages'] = languages
+        context['has_results'] = results.exists()
+        context['moss_results'] = [(problem, moss_results[problem]) for problem in problems]
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        status = run_moss.delay(self.object.key)
+        return redirect_to_task_status(
+            status, message=_('Running MOSS for %s...') % (self.object.name,),
+            redirect=reverse('contest_moss', args=(self.object.key,)),
+        )
+
+
+class ContestMossDelete(ContestMossMixin, SingleObjectMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        ContestMoss.objects.filter(contest=self.object).delete()
+        return HttpResponseRedirect(reverse('contest_moss', args=(self.object.key,)))
 
 
 class ContestTagDetailAjax(DetailView):

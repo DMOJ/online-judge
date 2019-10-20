@@ -201,6 +201,8 @@ urlpatterns = [
 
     url(r'^contest/(?P<contest>\w+)', include([
         url(r'^$', contests.ContestDetail.as_view(), name='contest_view'),
+        url(r'^/moss$', contests.ContestMossView.as_view(), name='contest_moss'),
+        url(r'^/moss/delete$', contests.ContestMossDelete.as_view(), name='contest_moss_delete'),
         url(r'^/clone$', contests.ContestClone.as_view(), name='contest_clone'),
         url(r'^/ranking/$', contests.ContestRanking.as_view(), name='contest_ranking'),
         url(r'^/ranking/ajax$', contests.contest_ranking_ajax, name='contest_ranking_ajax'),
