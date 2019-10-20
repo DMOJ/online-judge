@@ -76,7 +76,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user associated'), on_delete=models.CASCADE)
     about = models.TextField(verbose_name=_('self-description'), null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name=_('location'), choices=TIMEZONE,
-                                default=getattr(settings, 'DEFAULT_USER_TIME_ZONE', 'America/Toronto'))
+                                default=settings.DEFAULT_USER_TIME_ZONE)
     language = models.ForeignKey('Language', verbose_name=_('preferred language'), on_delete=models.CASCADE)
     points = models.FloatField(default=0, db_index=True)
     performance_points = models.FloatField(default=0, db_index=True)
@@ -98,7 +98,7 @@ class Profile(models.Model):
     current_contest = models.OneToOneField('ContestParticipation', verbose_name=_('current contest'),
                                            null=True, blank=True, related_name='+', on_delete=models.SET_NULL)
     math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES_CHOICES, max_length=4,
-                                   default=getattr(settings, 'MATHOID_DEFAULT_TYPE', 'auto'),
+                                   default=settings.MATHOID_DEFAULT_TYPE,
                                    help_text=_('the rendering engine used to render math'))
     is_totp_enabled = models.BooleanField(verbose_name=_('2FA enabled'), default=False,
                                           help_text=_('check to enable TOTP-based two factor authentication'))
@@ -119,8 +119,7 @@ class Profile(models.Model):
     def username(self):
         return self.user.username
 
-    _pp_table = [pow(getattr(settings, 'DMOJ_PP_STEP', 0.95), i)
-                 for i in range(getattr(settings, 'DMOJ_PP_ENTRIES', 100))]
+    _pp_table = [pow(settings.DMOJ_PP_STEP, i) for i in range(settings.DMOJ_PP_ENTRIES)]
 
     def calculate_points(self, table=_pp_table):
         from judge.models import Problem
@@ -130,7 +129,7 @@ class Profile(models.Model):
                        .values_list('max_points', flat=True).filter(max_points__gt=0))
         extradata = Problem.objects.filter(submission__user=self, submission__result='AC', is_public=True) \
                            .values('id').distinct().count()
-        bonus_function = getattr(settings, 'DMOJ_PP_BONUS_FUNCTION', lambda n: 300 * (1 - 0.997 ** n))
+        bonus_function = settings.DMOJ_PP_BONUS_FUNCTION
         points = sum(data)
         problems = len(data)
         entries = min(len(data), len(table))
@@ -164,7 +163,7 @@ class Profile(models.Model):
         return self.user.username
 
     @classmethod
-    def get_user_css_class(cls, display_rank, rating, rating_colors=getattr(settings, 'DMOJ_RATING_COLORS', False)):
+    def get_user_css_class(cls, display_rank, rating, rating_colors=settings.DMOJ_RATING_COLORS):
         if rating_colors:
             return 'rating %s %s' % (rating_class(rating) if rating is not None else 'rate-none', display_rank)
         return display_rank

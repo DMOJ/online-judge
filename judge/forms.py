@@ -37,7 +37,7 @@ class ProfileForm(ModelForm):
             'ace_theme': Select2Widget(attrs={'style': 'width:200px'}),
         }
 
-        has_math_config = bool(getattr(settings, 'MATHOID_URL', False))
+        has_math_config = bool(settings.MATHOID_URL)
         if has_math_config:
             fields.append('math_engine')
             widgets['math_engine'] = Select2Widget(attrs={'style': 'width:200px'})
@@ -50,7 +50,7 @@ class ProfileForm(ModelForm):
 
     def clean(self):
         organizations = self.cleaned_data.get('organizations') or []
-        max_orgs = getattr(settings, 'DMOJ_USER_MAX_ORGANIZATION_COUNT', 3)
+        max_orgs = settings.DMOJ_USER_MAX_ORGANIZATION_COUNT
 
         if sum(org.is_open for org in organizations) > max_orgs:
             raise ValidationError(
@@ -124,7 +124,7 @@ class NoAutoCompleteCharField(forms.CharField):
 
 
 class TOTPForm(Form):
-    TOLERANCE = getattr(settings, 'DMOJ_TOTP_TOLERANCE_HALF_MINUTES', 1)
+    TOLERANCE = settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES
 
     totp_token = NoAutoCompleteCharField(validators=[
         RegexValidator('^[0-9]{6}$', _('Two Factor Authentication tokens must be 6 decimal digits.')),
