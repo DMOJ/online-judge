@@ -361,7 +361,7 @@
             <section class="message new-message">
                 <div class="info">
                     <a href="{{ url('user_page') }}" class="user">
-                        <img src="{{ gravatar(request.user) }}" class="gravatar">
+                        <img src="{{ gravatar(request.user, 135) }}" class="gravatar">
                         <div class="username {{ request.profile.css_class }}">{{ request.user.username }}</div>
                     </a>
                 </div>
