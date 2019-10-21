@@ -41,6 +41,7 @@ class Submission(models.Model):
         ('CE', _('Compile Error')),
         ('AB', _('Aborted')),
     )
+    IN_PROGRESS_GRADING_STATUS = ('QU', 'P', 'G')
     RESULT = SUBMISSION_RESULT
     USER_DISPLAY_CODES = {
         'AC': _('Accepted'),
