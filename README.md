@@ -41,14 +41,14 @@ Submission pages feature live updates, and submissions may be aborted by both su
 Global, per-problem, and per-contest submission lists are live-updating, and can be filtered by status and language.
 
 
-![](https://i.imgur.com/ouErkPY.png)
+![](https://i.imgur.com/rc7orzj.png)
 
 
-### Configurable contest system
-Contests feature an optional rating system, and can be configured to run in any timeframe. Users are also able to participate virtually after the contest ends. ACM-ICPC, IOI, and AtCoder formats are supported out-of-the-box.
+### Extensible contest system
+Contests feature an optional rating system, and can be configured to run in any timeframe. Users are also able to participate virtually after the contest ends. IOI, AtCoder, and ECOO contest formats are supported out-of-the-box, and new formats can be added with custom code.
 
 
-![](https://i.imgur.com/qcnmVeI.png)
+![](https://i.imgur.com/0V1fzZi.png)
 
 
 Contests may be limited to particular organizations, or require access codes to join. Hidden scoreboards are supported. The contest system integrates with [Stanford MOSS](https://theory.stanford.edu/~aiken/moss/) to provide plagiarism checking. 
