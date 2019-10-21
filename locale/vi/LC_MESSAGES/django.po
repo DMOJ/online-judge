@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 17:29+0000\n"
-"PO-Revision-Date: 2019-10-21 18:07\n"
+"POT-Creation-Date: 2019-10-21 21:34+0000\n"
+"PO-Revision-Date: 2019-10-21 22:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -833,7 +833,7 @@ msgstr ""
 
 #: judge/models/contest.py:242 judge/models/contest.py:320
 #: judge/models/contest.py:356 judge/models/contest.py:378
-#: judge/models/submission.py:82
+#: judge/models/submission.py:83
 msgid "contest"
 msgstr "cuộc thi"
 
@@ -932,7 +932,7 @@ msgstr "đề bài của cuộc thi"
 msgid "contest problems"
 msgstr "đề bài của cuộc thi"
 
-#: judge/models/contest.py:338 judge/models/submission.py:180
+#: judge/models/contest.py:338 judge/models/submission.py:181
 msgid "submission"
 msgstr "nộp bài"
 
@@ -1795,37 +1795,37 @@ msgstr "chấm điểm"
 msgid "judge"
 msgstr "máy chấm"
 
-#: judge/models/submission.py:20 judge/models/submission.py:46
+#: judge/models/submission.py:20 judge/models/submission.py:47
 #: judge/utils/problems.py:86
 msgid "Accepted"
 msgstr "Chấp nhận (AC)"
 
-#: judge/models/submission.py:21 judge/models/submission.py:47
+#: judge/models/submission.py:21 judge/models/submission.py:48
 msgid "Wrong Answer"
 msgstr "Kết quả sai (WA)"
 
-#: judge/models/submission.py:22 judge/models/submission.py:49
+#: judge/models/submission.py:22 judge/models/submission.py:50
 msgid "Time Limit Exceeded"
 msgstr "Quá thời gian (TLE)"
 
-#: judge/models/submission.py:23 judge/models/submission.py:50
+#: judge/models/submission.py:23 judge/models/submission.py:51
 msgid "Memory Limit Exceeded"
 msgstr "Tràn bộ nhớ (MLE)"
 
-#: judge/models/submission.py:24 judge/models/submission.py:51
+#: judge/models/submission.py:24 judge/models/submission.py:52
 msgid "Output Limit Exceeded"
 msgstr "Kết xuất dữ liệu ra quá nhiều"
 
-#: judge/models/submission.py:25 judge/models/submission.py:52
+#: judge/models/submission.py:25 judge/models/submission.py:53
 msgid "Invalid Return"
 msgstr "Lỗi khi chạy chương trình (IR)"
 
-#: judge/models/submission.py:26 judge/models/submission.py:53
+#: judge/models/submission.py:26 judge/models/submission.py:54
 msgid "Runtime Error"
 msgstr "Lỗi Runtime"
 
 #: judge/models/submission.py:27 judge/models/submission.py:41
-#: judge/models/submission.py:54 judge/utils/problems.py:88
+#: judge/models/submission.py:55 judge/utils/problems.py:88
 msgid "Compile Error"
 msgstr "Lỗi dịch (CE)"
 
@@ -1838,131 +1838,131 @@ msgid "Short circuit"
 msgstr "Ngắn mạch"
 
 #: judge/models/submission.py:30 judge/models/submission.py:42
-#: judge/models/submission.py:60
+#: judge/models/submission.py:61
 msgid "Aborted"
 msgstr "Bị hủy bỏ"
 
-#: judge/models/submission.py:36 judge/models/submission.py:56
+#: judge/models/submission.py:36 judge/models/submission.py:57
 msgid "Queued"
 msgstr "Đang chờ"
 
-#: judge/models/submission.py:37 judge/models/submission.py:57
+#: judge/models/submission.py:37 judge/models/submission.py:58
 msgid "Processing"
 msgstr "Đang xử lý"
 
-#: judge/models/submission.py:38 judge/models/submission.py:58
+#: judge/models/submission.py:38 judge/models/submission.py:59
 msgid "Grading"
 msgstr "Chấm điểm"
 
-#: judge/models/submission.py:39 judge/models/submission.py:59
+#: judge/models/submission.py:39 judge/models/submission.py:60
 msgid "Completed"
 msgstr "Đã Hoàn Thành"
 
-#: judge/models/submission.py:55
+#: judge/models/submission.py:56
 msgid "Internal Error (judging server error)"
 msgstr "Lỗi nội bộ (máy chủ chấm bài lỗi)"
 
-#: judge/models/submission.py:65
+#: judge/models/submission.py:66
 msgid "submission time"
 msgstr "ngày nộp bài"
 
-#: judge/models/submission.py:66 judge/models/submission.py:200
+#: judge/models/submission.py:67 judge/models/submission.py:201
 msgid "execution time"
 msgstr "thời gian thực hiện tối đa"
 
-#: judge/models/submission.py:67 judge/models/submission.py:201
+#: judge/models/submission.py:68 judge/models/submission.py:202
 msgid "memory usage"
 msgstr "bộ nhớ sử dụng"
 
-#: judge/models/submission.py:68 judge/models/submission.py:202
+#: judge/models/submission.py:69 judge/models/submission.py:203
 msgid "points granted"
 msgstr "điểm được cho"
 
-#: judge/models/submission.py:69
+#: judge/models/submission.py:70
 msgid "submission language"
 msgstr "ngôn ngữ lập trình"
 
-#: judge/models/submission.py:70
+#: judge/models/submission.py:71
 msgid "status"
 msgstr "trạng thái"
 
-#: judge/models/submission.py:71
+#: judge/models/submission.py:72
 msgid "result"
 msgstr "kết quả"
 
-#: judge/models/submission.py:73
+#: judge/models/submission.py:74
 msgid "compile errors"
 msgstr "lỗi dịch"
 
-#: judge/models/submission.py:75
+#: judge/models/submission.py:76
 msgid "batched cases"
 msgstr "nhóm test"
 
-#: judge/models/submission.py:76
+#: judge/models/submission.py:77
 msgid "test case points"
 msgstr "điểm cho testcase"
 
-#: judge/models/submission.py:77
+#: judge/models/submission.py:78
 msgid "test case total points"
 msgstr "tổng điểm test case"
 
-#: judge/models/submission.py:78
+#: judge/models/submission.py:79
 msgid "judged on"
 msgstr "đánh giá trên"
 
-#: judge/models/submission.py:80
+#: judge/models/submission.py:81
 msgid "was rejudged by admin"
 msgstr "được chấm lại bởi admin"
 
-#: judge/models/submission.py:81
+#: judge/models/submission.py:82
 msgid "was ran on pretests only"
 msgstr "chỉ được chạy bởi test sơ bộ"
 
-#: judge/models/submission.py:181 templates/contest/moss.html:58
+#: judge/models/submission.py:182 templates/contest/moss.html:58
 msgid "submissions"
 msgstr "nộp bài"
 
-#: judge/models/submission.py:185 judge/models/submission.py:196
+#: judge/models/submission.py:186 judge/models/submission.py:197
 msgid "associated submission"
 msgstr "bài nộp liên quan"
 
-#: judge/models/submission.py:187
+#: judge/models/submission.py:188
 msgid "source code"
 msgstr "mã nguồn"
 
-#: judge/models/submission.py:198
+#: judge/models/submission.py:199
 msgid "test case ID"
 msgstr "mã testcase"
 
-#: judge/models/submission.py:199
+#: judge/models/submission.py:200
 msgid "status flag"
 msgstr "cờ trạng thái"
 
-#: judge/models/submission.py:203
+#: judge/models/submission.py:204
 msgid "points possible"
 msgstr "khả năng điểm"
 
-#: judge/models/submission.py:204
+#: judge/models/submission.py:205
 msgid "batch number"
 msgstr "lô số"
 
-#: judge/models/submission.py:205
+#: judge/models/submission.py:206
 msgid "judging feedback"
 msgstr "phản hồi chấm thi"
 
-#: judge/models/submission.py:206
+#: judge/models/submission.py:207
 msgid "extended judging feedback"
 msgstr ""
 
-#: judge/models/submission.py:207
+#: judge/models/submission.py:208
 msgid "program output"
 msgstr "lập trình đầu ra"
 
-#: judge/models/submission.py:214
+#: judge/models/submission.py:215
 msgid "submission test case"
 msgstr "test case của bài"
 
-#: judge/models/submission.py:215
+#: judge/models/submission.py:216
 msgid "submission test cases"
 msgstr "các test case của bài"
 
@@ -2023,11 +2023,11 @@ msgstr "Trang [page] /[topage]"
 msgid "Running MOSS"
 msgstr ""
 
-#: judge/tasks/submission.py:42
+#: judge/tasks/submission.py:43
 msgid "Modifying submissions"
 msgstr ""
 
-#: judge/tasks/submission.py:55
+#: judge/tasks/submission.py:56
 msgid "Recalculating user points"
 msgstr ""
 

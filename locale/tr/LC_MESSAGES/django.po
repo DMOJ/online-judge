@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 17:29+0000\n"
-"PO-Revision-Date: 2019-10-21 18:07\n"
+"POT-Creation-Date: 2019-10-21 21:34+0000\n"
+"PO-Revision-Date: 2019-10-21 22:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -843,7 +843,7 @@ msgstr ""
 
 #: judge/models/contest.py:242 judge/models/contest.py:320
 #: judge/models/contest.py:356 judge/models/contest.py:378
-#: judge/models/submission.py:82
+#: judge/models/submission.py:83
 msgid "contest"
 msgstr "yarışma"
 
@@ -942,7 +942,7 @@ msgstr "yarışma problemi"
 msgid "contest problems"
 msgstr "yarışma problemleri"
 
-#: judge/models/contest.py:338 judge/models/submission.py:180
+#: judge/models/contest.py:338 judge/models/submission.py:181
 msgid "submission"
 msgstr "çözüm"
 
@@ -1805,37 +1805,37 @@ msgstr "judge'lar"
 msgid "judge"
 msgstr ""
 
-#: judge/models/submission.py:20 judge/models/submission.py:46
+#: judge/models/submission.py:20 judge/models/submission.py:47
 #: judge/utils/problems.py:86
 msgid "Accepted"
 msgstr "Kabul edildi"
 
-#: judge/models/submission.py:21 judge/models/submission.py:47
+#: judge/models/submission.py:21 judge/models/submission.py:48
 msgid "Wrong Answer"
 msgstr "Yanlış cevap"
 
-#: judge/models/submission.py:22 judge/models/submission.py:49
+#: judge/models/submission.py:22 judge/models/submission.py:50
 msgid "Time Limit Exceeded"
 msgstr "Zaman Sınırı Aşıldı"
 
-#: judge/models/submission.py:23 judge/models/submission.py:50
+#: judge/models/submission.py:23 judge/models/submission.py:51
 msgid "Memory Limit Exceeded"
 msgstr "Bellek Sınırı Aşıldı"
 
-#: judge/models/submission.py:24 judge/models/submission.py:51
+#: judge/models/submission.py:24 judge/models/submission.py:52
 msgid "Output Limit Exceeded"
 msgstr "Çıktı Limiti Aşıldı"
 
-#: judge/models/submission.py:25 judge/models/submission.py:52
+#: judge/models/submission.py:25 judge/models/submission.py:53
 msgid "Invalid Return"
 msgstr "Geçersiz Dönüş Kodu"
 
-#: judge/models/submission.py:26 judge/models/submission.py:53
+#: judge/models/submission.py:26 judge/models/submission.py:54
 msgid "Runtime Error"
 msgstr "Çalışma Hatası"
 
 #: judge/models/submission.py:27 judge/models/submission.py:41
-#: judge/models/submission.py:54 judge/utils/problems.py:88
+#: judge/models/submission.py:55 judge/utils/problems.py:88
 msgid "Compile Error"
 msgstr "Derleme Hatası"
 
@@ -1848,131 +1848,131 @@ msgid "Short circuit"
 msgstr "Kısa devre"
 
 #: judge/models/submission.py:30 judge/models/submission.py:42
-#: judge/models/submission.py:60
+#: judge/models/submission.py:61
 msgid "Aborted"
 msgstr "İptal edildi"
 
-#: judge/models/submission.py:36 judge/models/submission.py:56
+#: judge/models/submission.py:36 judge/models/submission.py:57
 msgid "Queued"
 msgstr "Sıraya Alındı"
 
-#: judge/models/submission.py:37 judge/models/submission.py:57
+#: judge/models/submission.py:37 judge/models/submission.py:58
 msgid "Processing"
 msgstr "İşleniyor"
 
-#: judge/models/submission.py:38 judge/models/submission.py:58
+#: judge/models/submission.py:38 judge/models/submission.py:59
 msgid "Grading"
 msgstr "Puanlanıyor"
 
-#: judge/models/submission.py:39 judge/models/submission.py:59
+#: judge/models/submission.py:39 judge/models/submission.py:60
 msgid "Completed"
 msgstr "Tamamlandı"
 
-#: judge/models/submission.py:55
+#: judge/models/submission.py:56
 msgid "Internal Error (judging server error)"
 msgstr "İç Hata (judge sunucusu hatası)"
 
-#: judge/models/submission.py:65
+#: judge/models/submission.py:66
 msgid "submission time"
 msgstr "çözüm süresi"
 
-#: judge/models/submission.py:66 judge/models/submission.py:200
+#: judge/models/submission.py:67 judge/models/submission.py:201
 msgid "execution time"
 msgstr "çalışma süresi"
 
-#: judge/models/submission.py:67 judge/models/submission.py:201
+#: judge/models/submission.py:68 judge/models/submission.py:202
 msgid "memory usage"
 msgstr "bellek kullanımı"
 
-#: judge/models/submission.py:68 judge/models/submission.py:202
+#: judge/models/submission.py:69 judge/models/submission.py:203
 msgid "points granted"
 msgstr "verilen puan"
 
-#: judge/models/submission.py:69
+#: judge/models/submission.py:70
 msgid "submission language"
 msgstr "çözüm dili"
 
-#: judge/models/submission.py:70
+#: judge/models/submission.py:71
 msgid "status"
 msgstr "statü"
 
-#: judge/models/submission.py:71
+#: judge/models/submission.py:72
 msgid "result"
 msgstr "sonuç"
 
-#: judge/models/submission.py:73
+#: judge/models/submission.py:74
 msgid "compile errors"
 msgstr "derleme hataları"
 
-#: judge/models/submission.py:75
+#: judge/models/submission.py:76
 msgid "batched cases"
 msgstr "kümelenmiş testler"
 
-#: judge/models/submission.py:76
+#: judge/models/submission.py:77
 msgid "test case points"
 msgstr "test puanı"
 
-#: judge/models/submission.py:77
+#: judge/models/submission.py:78
 msgid "test case total points"
 msgstr "toplam test puanı"
 
-#: judge/models/submission.py:78
+#: judge/models/submission.py:79
 msgid "judged on"
 msgstr "değerlendirildiği sunucu"
 
-#: judge/models/submission.py:80
+#: judge/models/submission.py:81
 msgid "was rejudged by admin"
 msgstr "admin tarafından yeniden değerlendirildi"
 
-#: judge/models/submission.py:81
+#: judge/models/submission.py:82
 msgid "was ran on pretests only"
 msgstr "sadece ön testlerde çalıştı"
 
-#: judge/models/submission.py:181 templates/contest/moss.html:58
+#: judge/models/submission.py:182 templates/contest/moss.html:58
 msgid "submissions"
 msgstr "çözümler"
 
-#: judge/models/submission.py:185 judge/models/submission.py:196
+#: judge/models/submission.py:186 judge/models/submission.py:197
 msgid "associated submission"
 msgstr "ilişkili çözüm gönderisi"
 
-#: judge/models/submission.py:187
+#: judge/models/submission.py:188
 msgid "source code"
 msgstr "kaynak kodu"
 
-#: judge/models/submission.py:198
+#: judge/models/submission.py:199
 msgid "test case ID"
 msgstr "test ID"
 
-#: judge/models/submission.py:199
+#: judge/models/submission.py:200
 msgid "status flag"
 msgstr "durum kodu"
 
-#: judge/models/submission.py:203
+#: judge/models/submission.py:204
 msgid "points possible"
 msgstr "alınabilecek puan"
 
-#: judge/models/submission.py:204
+#: judge/models/submission.py:205
 msgid "batch number"
 msgstr "küme #"
 
-#: judge/models/submission.py:205
+#: judge/models/submission.py:206
 msgid "judging feedback"
 msgstr ""
 
-#: judge/models/submission.py:206
+#: judge/models/submission.py:207
 msgid "extended judging feedback"
 msgstr ""
 
-#: judge/models/submission.py:207
+#: judge/models/submission.py:208
 msgid "program output"
 msgstr "program çıktısı"
 
-#: judge/models/submission.py:214
+#: judge/models/submission.py:215
 msgid "submission test case"
 msgstr "çözüm testi"
 
-#: judge/models/submission.py:215
+#: judge/models/submission.py:216
 msgid "submission test cases"
 msgstr "çözüm testleri"
 
@@ -2033,11 +2033,11 @@ msgstr "[page]/[topage]"
 msgid "Running MOSS"
 msgstr ""
 
-#: judge/tasks/submission.py:42
+#: judge/tasks/submission.py:43
 msgid "Modifying submissions"
 msgstr ""
 
-#: judge/tasks/submission.py:55
+#: judge/tasks/submission.py:56
 msgid "Recalculating user points"
 msgstr ""
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 17:29+0000\n"
-"PO-Revision-Date: 2019-10-21 18:06\n"
+"POT-Creation-Date: 2019-10-21 21:34+0000\n"
+"PO-Revision-Date: 2019-10-21 22:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -833,7 +833,7 @@ msgstr ""
 
 #: judge/models/contest.py:242 judge/models/contest.py:320
 #: judge/models/contest.py:356 judge/models/contest.py:378
-#: judge/models/submission.py:82
+#: judge/models/submission.py:83
 msgid "contest"
 msgstr "竞赛"
 
@@ -932,7 +932,7 @@ msgstr "竞赛题目"
 msgid "contest problems"
 msgstr "竞赛题目"
 
-#: judge/models/contest.py:338 judge/models/submission.py:180
+#: judge/models/contest.py:338 judge/models/submission.py:181
 msgid "submission"
 msgstr "提交信息"
 
@@ -1795,37 +1795,37 @@ msgstr "裁判服务器"
 msgid "judge"
 msgstr "裁判服务器"
 
-#: judge/models/submission.py:20 judge/models/submission.py:46
+#: judge/models/submission.py:20 judge/models/submission.py:47
 #: judge/utils/problems.py:86
 msgid "Accepted"
 msgstr "接受"
 
-#: judge/models/submission.py:21 judge/models/submission.py:47
+#: judge/models/submission.py:21 judge/models/submission.py:48
 msgid "Wrong Answer"
 msgstr "答案错误"
 
-#: judge/models/submission.py:22 judge/models/submission.py:49
+#: judge/models/submission.py:22 judge/models/submission.py:50
 msgid "Time Limit Exceeded"
 msgstr "超出时间限制"
 
-#: judge/models/submission.py:23 judge/models/submission.py:50
+#: judge/models/submission.py:23 judge/models/submission.py:51
 msgid "Memory Limit Exceeded"
 msgstr "超出内存限制"
 
-#: judge/models/submission.py:24 judge/models/submission.py:51
+#: judge/models/submission.py:24 judge/models/submission.py:52
 msgid "Output Limit Exceeded"
 msgstr "超出输出限制"
 
-#: judge/models/submission.py:25 judge/models/submission.py:52
+#: judge/models/submission.py:25 judge/models/submission.py:53
 msgid "Invalid Return"
 msgstr "错误退出代码"
 
-#: judge/models/submission.py:26 judge/models/submission.py:53
+#: judge/models/submission.py:26 judge/models/submission.py:54
 msgid "Runtime Error"
 msgstr "运行错误"
 
 #: judge/models/submission.py:27 judge/models/submission.py:41
-#: judge/models/submission.py:54 judge/utils/problems.py:88
+#: judge/models/submission.py:55 judge/utils/problems.py:88
 msgid "Compile Error"
 msgstr "编译错误"
 
@@ -1838,131 +1838,131 @@ msgid "Short circuit"
 msgstr "跳过"
 
 #: judge/models/submission.py:30 judge/models/submission.py:42
-#: judge/models/submission.py:60
+#: judge/models/submission.py:61
 msgid "Aborted"
 msgstr "中止"
 
-#: judge/models/submission.py:36 judge/models/submission.py:56
+#: judge/models/submission.py:36 judge/models/submission.py:57
 msgid "Queued"
 msgstr "等待中"
 
-#: judge/models/submission.py:37 judge/models/submission.py:57
+#: judge/models/submission.py:37 judge/models/submission.py:58
 msgid "Processing"
 msgstr "处理中"
 
-#: judge/models/submission.py:38 judge/models/submission.py:58
+#: judge/models/submission.py:38 judge/models/submission.py:59
 msgid "Grading"
 msgstr "评分中"
 
-#: judge/models/submission.py:39 judge/models/submission.py:59
+#: judge/models/submission.py:39 judge/models/submission.py:60
 msgid "Completed"
 msgstr "完成"
 
-#: judge/models/submission.py:55
+#: judge/models/submission.py:56
 msgid "Internal Error (judging server error)"
 msgstr "内部错误 (裁判服务器错误)"
 
-#: judge/models/submission.py:65
+#: judge/models/submission.py:66
 msgid "submission time"
 msgstr "提交时间"
 
-#: judge/models/submission.py:66 judge/models/submission.py:200
+#: judge/models/submission.py:67 judge/models/submission.py:201
 msgid "execution time"
 msgstr "执行时间"
 
-#: judge/models/submission.py:67 judge/models/submission.py:201
+#: judge/models/submission.py:68 judge/models/submission.py:202
 msgid "memory usage"
 msgstr "内存使用"
 
-#: judge/models/submission.py:68 judge/models/submission.py:202
+#: judge/models/submission.py:69 judge/models/submission.py:203
 msgid "points granted"
 msgstr "获得分数"
 
-#: judge/models/submission.py:69
+#: judge/models/submission.py:70
 msgid "submission language"
 msgstr "提交语言"
 
-#: judge/models/submission.py:70
+#: judge/models/submission.py:71
 msgid "status"
 msgstr "状态"
 
-#: judge/models/submission.py:71
+#: judge/models/submission.py:72
 msgid "result"
 msgstr "结果"
 
-#: judge/models/submission.py:73
+#: judge/models/submission.py:74
 msgid "compile errors"
 msgstr "编译错误"
 
-#: judge/models/submission.py:75
+#: judge/models/submission.py:76
 msgid "batched cases"
 msgstr "测试组"
 
-#: judge/models/submission.py:76
+#: judge/models/submission.py:77
 msgid "test case points"
 msgstr "测试点分值"
 
-#: judge/models/submission.py:77
+#: judge/models/submission.py:78
 msgid "test case total points"
 msgstr "测试用例总分"
 
-#: judge/models/submission.py:78
+#: judge/models/submission.py:79
 msgid "judged on"
 msgstr "裁判服务器"
 
-#: judge/models/submission.py:80
+#: judge/models/submission.py:81
 msgid "was rejudged by admin"
 msgstr "被管理员重新评分"
 
-#: judge/models/submission.py:81
+#: judge/models/submission.py:82
 msgid "was ran on pretests only"
 msgstr "只进行过预测试"
 
-#: judge/models/submission.py:181 templates/contest/moss.html:58
+#: judge/models/submission.py:182 templates/contest/moss.html:58
 msgid "submissions"
 msgstr "提交历史"
 
-#: judge/models/submission.py:185 judge/models/submission.py:196
+#: judge/models/submission.py:186 judge/models/submission.py:197
 msgid "associated submission"
 msgstr "相关提交"
 
-#: judge/models/submission.py:187
+#: judge/models/submission.py:188
 msgid "source code"
 msgstr "源码"
 
-#: judge/models/submission.py:198
+#: judge/models/submission.py:199
 msgid "test case ID"
 msgstr "测试编号"
 
-#: judge/models/submission.py:199
+#: judge/models/submission.py:200
 msgid "status flag"
 msgstr "状态标志"
 
-#: judge/models/submission.py:203
+#: judge/models/submission.py:204
 msgid "points possible"
 msgstr "满分"
 
-#: judge/models/submission.py:204
+#: judge/models/submission.py:205
 msgid "batch number"
 msgstr "批号"
 
-#: judge/models/submission.py:205
+#: judge/models/submission.py:206
 msgid "judging feedback"
 msgstr "评测反馈"
 
-#: judge/models/submission.py:206
+#: judge/models/submission.py:207
 msgid "extended judging feedback"
 msgstr ""
 
-#: judge/models/submission.py:207
+#: judge/models/submission.py:208
 msgid "program output"
 msgstr "程序输出"
 
-#: judge/models/submission.py:214
+#: judge/models/submission.py:215
 msgid "submission test case"
 msgstr "程序测试"
 
-#: judge/models/submission.py:215
+#: judge/models/submission.py:216
 msgid "submission test cases"
 msgstr "程序测试"
 
@@ -2023,11 +2023,11 @@ msgstr "第[page]页，共[topage]页"
 msgid "Running MOSS"
 msgstr ""
 
-#: judge/tasks/submission.py:42
+#: judge/tasks/submission.py:43
 msgid "Modifying submissions"
 msgstr ""
 
-#: judge/tasks/submission.py:55
+#: judge/tasks/submission.py:56
 msgid "Recalculating user points"
 msgstr ""
 
