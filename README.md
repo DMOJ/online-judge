@@ -45,7 +45,7 @@ Global, per-problem, and per-contest submission lists are live-updating, and can
 
 
 ### Configurable contest system
-Contests feature an optional rating system, and can be configured to run in any timeframe. Users are also able to participate virtually after the contest ends. ACM-ICPC, IOI, and AtCoder formats are supported out-of-the-box.
+Contests feature an optional rating system, and can be configured to run in any timeframe. Users are also able to participate virtually after the contest ends. The AtCoder, ECOO, and IOI contest formats are supported out-of-the-box.
 
 
 ![](https://i.imgur.com/qcnmVeI.png)
