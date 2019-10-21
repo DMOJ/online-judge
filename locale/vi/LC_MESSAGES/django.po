@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-20 17:54+0000\n"
-"PO-Revision-Date: 2019-10-20 18:05\n"
+"POT-Creation-Date: 2019-10-21 17:29+0000\n"
+"PO-Revision-Date: 2019-10-21 18:07\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -356,7 +356,7 @@ msgstr "%(problem)s trong %(contest)s"
 msgid "Rejudge the selected submissions"
 msgstr "Chấm lại các bài đã chọn"
 
-#: judge/admin/submission.py:193 judge/views/problem_manage.py:125
+#: judge/admin/submission.py:193 judge/views/problem_manage.py:128
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
@@ -2412,33 +2412,33 @@ msgstr "Hướng giải của {0}"
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
 msgstr "Hướng giải của <a href=\"{1}\">{0}</a>"
 
-#: judge/views/problem.py:290 templates/contest/contest.html:79
+#: judge/views/problem.py:292 templates/contest/contest.html:79
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
 msgstr "Đề bài"
 
-#: judge/views/problem.py:551
+#: judge/views/problem.py:553
 msgid "Banned from submitting"
 msgstr ""
 
-#: judge/views/problem.py:552
+#: judge/views/problem.py:554
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
 msgstr "Bạn đã được coi là cá nhận không tính điểm cho đề này. Bạn không thể nộp bài."
 
-#: judge/views/problem.py:565
+#: judge/views/problem.py:567
 msgid "Too many submissions"
 msgstr "Quá nhiều bài nộp"
 
-#: judge/views/problem.py:566
+#: judge/views/problem.py:568
 msgid "You have exceeded the submission limit for this problem."
 msgstr "Bạn đã vượt quá giới hạn lần nộp của bài này."
 
-#: judge/views/problem.py:632 judge/views/problem.py:635
+#: judge/views/problem.py:634 judge/views/problem.py:637
 #, python-format
 msgid "Submit to %(problem)s"
 msgstr "Nộp lời giải cho %(problem)s"
 
-#: judge/views/problem.py:651
+#: judge/views/problem.py:653
 msgid "Clone Problem"
 msgstr ""
 
@@ -2479,22 +2479,22 @@ msgstr "Chỉnh sửa các dữ liệu cho %s"
 msgid "Generated init.yml for %s"
 msgstr "Tạo file Init.yml cho %s"
 
-#: judge/views/problem_manage.py:49 judge/views/problem_manage.py:52
+#: judge/views/problem_manage.py:50 judge/views/problem_manage.py:53
 #, python-format
 msgid "Managing submissions for %s"
 msgstr ""
 
-#: judge/views/problem_manage.py:92
+#: judge/views/problem_manage.py:95
 #, python-format
 msgid "Rejudging selected submissions for %s..."
 msgstr ""
 
-#: judge/views/problem_manage.py:107
+#: judge/views/problem_manage.py:110
 #, python-format
 msgid "Rescoring all submissions for %s..."
 msgstr ""
 
-#: judge/views/problem_manage.py:116
+#: judge/views/problem_manage.py:119
 #, python-format
 msgid "Successfully scheduled %d submission for rejudging."
 msgid_plural "Successfully scheduled %d submissions for rejudging."
@@ -2971,11 +2971,11 @@ msgstr "Tin tức"
 msgid "posted on {time}"
 msgstr ""
 
-#: templates/blog/list.html:130 templates/problem/problem.html:309
+#: templates/blog/list.html:130 templates/problem/problem.html:310
 msgid "Clarifications"
 msgstr "Làm rõ"
 
-#: templates/blog/list.html:146 templates/problem/problem.html:320
+#: templates/blog/list.html:146 templates/problem/problem.html:321
 msgid "No clarifications have been made at this time."
 msgstr "Chưa có lời làm rõ nào được đưa ra ở thời điểm này."
 
@@ -3613,53 +3613,53 @@ msgstr ""
 msgid "You are about to rejudge a few submissions. Are you sure you want to do this?"
 msgstr ""
 
-#: templates/problem/manage_submission.html:114
+#: templates/problem/manage_submission.html:115
 msgid "Rejudge Submissions"
 msgstr ""
 
-#: templates/problem/manage_submission.html:119
+#: templates/problem/manage_submission.html:120
 msgid "Filter by ID:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:122
+#: templates/problem/manage_submission.html:123
 msgid "Starting ID:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:126
+#: templates/problem/manage_submission.html:127
 msgid "Ending ID:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:130
+#: templates/problem/manage_submission.html:131
 msgid "This range includes both endpoints."
 msgstr ""
 
-#: templates/problem/manage_submission.html:133
+#: templates/problem/manage_submission.html:134
 msgid "Filter by language:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:141
+#: templates/problem/manage_submission.html:142
 msgid "Filter by result:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:149
+#: templates/problem/manage_submission.html:150
 msgid "Rejudge selected submissions"
 msgstr ""
 
-#: templates/problem/manage_submission.html:155
+#: templates/problem/manage_submission.html:157
 msgid "Rescore Everything"
 msgstr ""
 
-#: templates/problem/manage_submission.html:156
+#: templates/problem/manage_submission.html:158
 #, python-format
 msgid "This will rescore %(count)d submissions."
 msgstr ""
 
-#: templates/problem/manage_submission.html:160
+#: templates/problem/manage_submission.html:162
 #, python-format
 msgid "Are you sure you want to rescore %(count)d submissions?"
 msgstr ""
 
-#: templates/problem/manage_submission.html:161
+#: templates/problem/manage_submission.html:163
 msgid "Rescore all submissions"
 msgstr ""
 
@@ -3690,83 +3690,83 @@ msgstr "Lời giải của tôi"
 msgid "Best submissions"
 msgstr "Lời giải tốt nhất"
 
-#: templates/problem/problem.html:131
+#: templates/problem/problem.html:132
 msgid "Read editorial"
 msgstr ""
 
-#: templates/problem/problem.html:136
+#: templates/problem/problem.html:137
 msgid "Manage tickets"
 msgstr "Quản lý thẻ"
 
-#: templates/problem/problem.html:140
+#: templates/problem/problem.html:141
 msgid "Edit problem"
 msgstr "Sửa đề bài"
 
-#: templates/problem/problem.html:142
+#: templates/problem/problem.html:143
 msgid "Edit test data"
 msgstr "Sửa đổi test"
 
-#: templates/problem/problem.html:147
+#: templates/problem/problem.html:148
 msgid "My tickets"
 msgstr ""
 
-#: templates/problem/problem.html:155
+#: templates/problem/problem.html:156
 msgid "Manage submissions"
 msgstr ""
 
-#: templates/problem/problem.html:161
+#: templates/problem/problem.html:162
 msgid "Clone problem"
 msgstr "Copy sang bài mới"
 
-#: templates/problem/problem.html:168
+#: templates/problem/problem.html:169
 msgid "Points:"
 msgstr "Điểm:"
 
-#: templates/problem/problem.html:171 templates/problem/problem.html:173
+#: templates/problem/problem.html:172 templates/problem/problem.html:174
 msgid "(partial)"
 msgstr "(một phần)"
 
-#: templates/problem/problem.html:178
+#: templates/problem/problem.html:179
 msgid "Time limit:"
 msgstr "Giới hạn thời gian:"
 
-#: templates/problem/problem.html:190
+#: templates/problem/problem.html:191
 msgid "Memory limit:"
 msgstr "Giới hạn bộ nhớ:"
 
-#: templates/problem/problem.html:209
+#: templates/problem/problem.html:210
 msgid "Author:"
 msgid_plural "Authors:"
 msgstr[0] "Tác giả:"
 
-#: templates/problem/problem.html:224
+#: templates/problem/problem.html:225
 msgid "Problem type"
 msgid_plural "Problem types"
 msgstr[0] "Loại đề bài"
 
-#: templates/problem/problem.html:237
+#: templates/problem/problem.html:238
 msgid "Allowed languages"
 msgstr "Ngôn ngữ cho phép"
 
-#: templates/problem/problem.html:245
+#: templates/problem/problem.html:246
 #, python-format
 msgid "No %(lang)s judge online"
 msgstr "Không có máy chấm %(lang)s đang online"
 
-#: templates/problem/problem.html:256
+#: templates/problem/problem.html:257
 msgid "Judge:"
 msgid_plural "Judges:"
 msgstr[0] ""
 
-#: templates/problem/problem.html:273
+#: templates/problem/problem.html:274
 msgid "none available"
 msgstr ""
 
-#: templates/problem/problem.html:298
+#: templates/problem/problem.html:299
 msgid "Request clarification"
 msgstr "Gửi thắc mắc"
 
-#: templates/problem/problem.html:300
+#: templates/problem/problem.html:301
 msgid "Report an issue"
 msgstr "Báo cáo vấn đề"
 
