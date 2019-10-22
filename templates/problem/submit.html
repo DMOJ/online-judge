@@ -3,7 +3,6 @@
 {% block js_media %}
     <script type="text/javascript" src="{{ ACE_URL }}/ace.js"></script>
     {% compress js %}
-        {{ form.media.js }}
         <script type="text/javascript">
             $(function () {
                 function format(state) {
@@ -110,6 +109,7 @@
                 }).resize();
             });
         </script>
+        {{ form.media.js }}
     {% endcompress %}
 {% endblock %}
 
