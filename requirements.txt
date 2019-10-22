@@ -29,3 +29,4 @@ pymoss
 packaging
 celery
 ansi2html
+sqlparse

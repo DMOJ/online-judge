@@ -99,12 +99,14 @@ class JudgeList(object):
     def judge(self, id, problem, language, source, priority):
         with self.lock:
             if id in self.submission_map or id in self.node_map:
-                logger.warning('Already judging? %d', id)
+                # Already judging, don't queue again. This can happen during batch rejudges, rejudges should be
+                # idempotent.
                 return
 
             candidates = [judge for judge in self.judges if not judge.working and judge.can_judge(problem, language)]
             logger.info('Free judges: %d', len(candidates))
             if candidates:
+                # Schedule the submission on the judge reporting least load.
                 judge = min(candidates, key=attrgetter('load'))
                 logger.info('Dispatched submission %d to: %s', id, judge.name)
                 self.submission_map[id] = judge

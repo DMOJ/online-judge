@@ -32,8 +32,9 @@ class CamoClient(object):
 
     def update_tree(self, doc):
         for img in doc.xpath('.//img'):
-            if img.get('src'):
-                img.set('src', self.rewrite_url(img.get('src')))
+            for attr in ('src', 'data-src'):
+                if img.get(attr):
+                    img.set(attr, self.rewrite_url(img.get(attr)))
         for obj in doc.xpath('.//object'):
             if obj.get('data'):
                 obj.set('data', self.rewrite_url(obj.get('data')))

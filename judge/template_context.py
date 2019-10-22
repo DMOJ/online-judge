@@ -42,8 +42,8 @@ def get_profile(request):
 
 def comet_location(request):
     if request.is_secure():
-        websocket = settings.EVENT_DAEMON_GET
-        poll = settings.EVENT_DAEMON_POLL
+        websocket = getattr(settings, 'EVENT_DAEMON_GET_SSL', settings.EVENT_DAEMON_GET)
+        poll = getattr(settings, 'EVENT_DAEMON_POLL_SSL', settings.EVENT_DAEMON_POLL)
     else:
         websocket = settings.EVENT_DAEMON_GET
         poll = settings.EVENT_DAEMON_POLL
