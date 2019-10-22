@@ -337,7 +337,7 @@ LANGUAGES = [
     ('hu', _('Hungarian')),
     ('ja', _('Japanese')),
     ('ko', _('Korean')),
-    ('pt-BR', _('Brazilian Portuguese')),
+    ('pt', _('Brazilian Portuguese')),
     ('ro', _('Romanian')),
     ('ru', _('Russian')),
     ('sr-latn', _('Serbian (Latin)')),
