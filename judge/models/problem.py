@@ -118,14 +118,18 @@ class Problem(models.Model):
     time_limit = models.FloatField(verbose_name=_('time limit'),
                                    help_text=_('The time limit for this problem, in seconds. '
                                                'Fractional seconds (e.g. 1.5) are supported.'),
-                                   validators=[MinValueValidator(0), MaxValueValidator(2000)])
+                                   validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_TIME_LIMIT),
+                                               MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT)])
     memory_limit = models.PositiveIntegerField(verbose_name=_('memory limit'),
                                                help_text=_('The memory limit for this problem, in kilobytes '
-                                                           '(e.g. 64mb = 65536 kilobytes).'))
+                                                           '(e.g. 64mb = 65536 kilobytes).'),
+                                               validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
+                                                           MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name=_('points'),
                                help_text=_('Points awarded for problem completion. '
-                                           "Points are displayed with a 'p' suffix if partial."))
+                                           "Points are displayed with a 'p' suffix if partial."),
+                               validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS)])
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
     allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'),
                                                help_text=_('List of allowed submission languages.'))
@@ -370,8 +374,12 @@ class ProblemClarification(models.Model):
 class LanguageLimit(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits', on_delete=CASCADE)
     language = models.ForeignKey(Language, verbose_name=_('language'), on_delete=CASCADE)
-    time_limit = models.FloatField(verbose_name=_('time limit'))
-    memory_limit = models.IntegerField(verbose_name=_('memory limit'))
+    time_limit = models.FloatField(verbose_name=_('time limit'),
+                                   validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_TIME_LIMIT),
+                                               MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT)])
+    memory_limit = models.IntegerField(verbose_name=_('memory limit'),
+                                       validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
+                                                   MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
 
     class Meta:
         unique_together = ('problem', 'language')
