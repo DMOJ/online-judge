@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 21:34+0000\n"
-"PO-Revision-Date: 2019-10-21 22:05\n"
+"POT-Creation-Date: 2019-10-22 20:31+0000\n"
+"PO-Revision-Date: 2019-10-22 21:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -41,30 +41,38 @@ msgid "Hungarian"
 msgstr ""
 
 #: dmoj/settings.py:338
-msgid "Korean"
+msgid "Japanese"
 msgstr ""
 
 #: dmoj/settings.py:339
+msgid "Korean"
+msgstr ""
+
+#: dmoj/settings.py:340
+msgid "Brazilian Portuguese"
+msgstr ""
+
+#: dmoj/settings.py:341
 msgid "Romanian"
 msgstr "Tiếng Romania"
 
-#: dmoj/settings.py:340
+#: dmoj/settings.py:342
 msgid "Russian"
 msgstr "Tiếng Nga"
 
-#: dmoj/settings.py:341
+#: dmoj/settings.py:343
 msgid "Serbian (Latin)"
 msgstr "Tiếng Séc-bi (Latin)"
 
-#: dmoj/settings.py:342
+#: dmoj/settings.py:344
 msgid "Turkish"
 msgstr ""
 
-#: dmoj/settings.py:343
+#: dmoj/settings.py:345
 msgid "Vietnamese"
 msgstr "Tiếng Việt"
 
-#: dmoj/settings.py:344
+#: dmoj/settings.py:346
 msgid "Simplified Chinese"
 msgstr "Tiếng Trung (Giản thể)"
 
