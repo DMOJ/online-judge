@@ -58,6 +58,12 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
             link = 'mailto:%s' % link
         return '<a href="%s"%s>%s</a>' % (link, self._link_rel(link), text)
 
+    def table(self, header, body):
+        return (
+            '<table class="table">\n<thead>%s</thead>\n'
+            '<tbody>\n%s</tbody>\n</table>\n'
+        ) % (header, body)
+
     def link(self, link, title, text):
         link = mistune.escape_link(link)
         if not title:
