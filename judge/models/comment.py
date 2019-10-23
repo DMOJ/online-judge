@@ -63,6 +63,7 @@ class Comment(MPTTModel):
 
         problem_access = CacheDict(lambda code: Problem.objects.get(code=code).is_accessible_by(user))
         contest_access = CacheDict(lambda key: Contest.objects.get(key=key).is_accessible_by(user))
+        blog_access = CacheDict(lambda id: BlogPost.objects.get(id=id).can_see(user))
 
         if user.is_superuser:
             return queryset[:n]
@@ -74,7 +75,7 @@ class Comment(MPTTModel):
             if not slice:
                 break
             for comment in slice:
-                if comment.page.startswith('p:'):
+                if comment.page.startswith('p:') or comment.page.startswith('s:'):
                     try:
                         if problem_access[comment.page[2:]]:
                             output.append(comment)
@@ -85,6 +86,12 @@ class Comment(MPTTModel):
                         if contest_access[comment.page[2:]]:
                             output.append(comment)
                     except Contest.DoesNotExist:
+                        pass
+                elif comment.page.startswith('b:'):
+                    try:
+                        if blog_access[comment.page[2:]]:
+                            output.append(comment)
+                    except BlogPost.DoesNotExist:
                         pass
                 else:
                     output.append(comment)
