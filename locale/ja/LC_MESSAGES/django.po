@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 20:31+0000\n"
-"PO-Revision-Date: 2019-10-22 21:04\n"
+"POT-Creation-Date: 2019-10-23 00:54+0000\n"
+"PO-Revision-Date: 2019-10-23 01:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -16,63 +16,63 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: django.po\n"
 
-#: dmoj/settings.py:332
+#: dmoj/settings.py:337
 msgid "German"
 msgstr "ドイツ語"
 
-#: dmoj/settings.py:333
+#: dmoj/settings.py:338
 msgid "English"
 msgstr "英語"
 
-#: dmoj/settings.py:334
+#: dmoj/settings.py:339
 msgid "Spanish"
 msgstr "スペイン語"
 
-#: dmoj/settings.py:335
+#: dmoj/settings.py:340
 msgid "French"
 msgstr "フランス語"
 
-#: dmoj/settings.py:336
+#: dmoj/settings.py:341
 msgid "Croatian"
 msgstr "クロアチア語"
 
-#: dmoj/settings.py:337
+#: dmoj/settings.py:342
 msgid "Hungarian"
 msgstr "ハンガリー語"
 
-#: dmoj/settings.py:338
+#: dmoj/settings.py:343
 msgid "Japanese"
 msgstr ""
 
-#: dmoj/settings.py:339
+#: dmoj/settings.py:344
 msgid "Korean"
 msgstr "韓国語"
 
-#: dmoj/settings.py:340
+#: dmoj/settings.py:345
 msgid "Brazilian Portuguese"
 msgstr ""
 
-#: dmoj/settings.py:341
+#: dmoj/settings.py:346
 msgid "Romanian"
 msgstr "ルーマニア語"
 
-#: dmoj/settings.py:342
+#: dmoj/settings.py:347
 msgid "Russian"
 msgstr "ロシア語"
 
-#: dmoj/settings.py:343
+#: dmoj/settings.py:348
 msgid "Serbian (Latin)"
 msgstr "セルビア語（ラテン）"
 
-#: dmoj/settings.py:344
+#: dmoj/settings.py:349
 msgid "Turkish"
 msgstr "トルコ語"
 
-#: dmoj/settings.py:345
+#: dmoj/settings.py:350
 msgid "Vietnamese"
 msgstr "ベトナム語"
 
-#: dmoj/settings.py:346
+#: dmoj/settings.py:351
 msgid "Simplified Chinese"
 msgstr "簡体字中国語"
 
@@ -544,7 +544,7 @@ msgstr "コメンター"
 msgid "posted time"
 msgstr "投稿時刻"
 
-#: judge/models/comment.py:43 judge/models/comment.py:169
+#: judge/models/comment.py:43 judge/models/comment.py:176
 msgid "associated page"
 msgstr ""
 
@@ -572,20 +572,20 @@ msgstr "コメント"
 msgid "comments"
 msgstr "コメント"
 
-#: judge/models/comment.py:129 judge/models/problem.py:398
+#: judge/models/comment.py:136 judge/models/problem.py:406
 #, python-format
 msgid "Editorial for %s"
 msgstr "%s の論説"
 
-#: judge/models/comment.py:164
+#: judge/models/comment.py:171
 msgid "comment vote"
 msgstr "コメント投票"
 
-#: judge/models/comment.py:165
+#: judge/models/comment.py:172
 msgid "comment votes"
 msgstr "コメント投票"
 
-#: judge/models/comment.py:174
+#: judge/models/comment.py:181
 msgid "Override comment lock"
 msgstr ""
 
@@ -640,7 +640,7 @@ msgstr "これらの人々 は、コンテストを編集することができ�
 msgid "description"
 msgstr "説明"
 
-#: judge/models/contest.py:56 judge/models/problem.py:349
+#: judge/models/contest.py:56 judge/models/problem.py:353
 #: judge/models/runtime.py:126
 msgid "problems"
 msgstr "課題"
@@ -654,11 +654,11 @@ msgid "end time"
 msgstr "終了時刻"
 
 #: judge/models/contest.py:59 judge/models/problem.py:118
-#: judge/models/problem.py:373
+#: judge/models/problem.py:377
 msgid "time limit"
 msgstr "時間制限"
 
-#: judge/models/contest.py:60 judge/models/problem.py:132
+#: judge/models/contest.py:60 judge/models/problem.py:136
 msgid "publicly visible"
 msgstr "公開されています"
 
@@ -738,11 +738,11 @@ msgstr "予備テストのみ実行する"
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
 msgstr "判定器が予備テストだけを採点するか、全てのテストケースを行なうか。一般的にはコンテスト中に設定し、コンテストが終了して利用者の提出物を再判定する前に解除する。"
 
-#: judge/models/contest.py:92 judge/models/problem.py:153
+#: judge/models/contest.py:92 judge/models/problem.py:157
 msgid "private to organizations"
 msgstr "組織へプライベートにする"
 
-#: judge/models/contest.py:93 judge/models/problem.py:151
+#: judge/models/contest.py:93 judge/models/problem.py:155
 #: judge/models/profile.py:72
 msgid "organizations"
 msgstr "組織"
@@ -751,7 +751,7 @@ msgstr "組織"
 msgid "If private, only these organizations may see the contest"
 msgstr "もしプライベートであれば、組織の者だけがコンテストを見ることができます"
 
-#: judge/models/contest.py:95 judge/models/problem.py:141
+#: judge/models/contest.py:95 judge/models/problem.py:145
 msgid "OpenGraph image"
 msgstr "OpenGraph 画像"
 
@@ -771,7 +771,7 @@ msgstr "ライブ参加者の人数"
 msgid "contest summary"
 msgstr "コンテスト概要"
 
-#: judge/models/contest.py:103 judge/models/problem.py:143
+#: judge/models/contest.py:103 judge/models/problem.py:147
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr "ソーシャルメディアなどのメタ説明タグに表示されるプレーンテキスト。"
 
@@ -783,7 +783,7 @@ msgstr "アクセスコード"
 msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
 msgstr "コンテストへの参加が許可される前に競技者に提示するオプションのコード。無効にするには空白のままにします。"
 
-#: judge/models/contest.py:107 judge/models/problem.py:137
+#: judge/models/contest.py:107 judge/models/problem.py:141
 msgid "personae non gratae"
 msgstr "感謝しない人"
 
@@ -897,14 +897,14 @@ msgid "contest participations"
 msgstr "コンテスト参加者"
 
 #: judge/models/contest.py:319 judge/models/contest.py:340
-#: judge/models/contest.py:379 judge/models/problem.py:348
-#: judge/models/problem.py:353 judge/models/problem.py:371
+#: judge/models/contest.py:379 judge/models/problem.py:352
+#: judge/models/problem.py:357 judge/models/problem.py:375
 #: judge/models/problem_data.py:35
 msgid "problem"
 msgstr "課題"
 
 #: judge/models/contest.py:321 judge/models/contest.py:344
-#: judge/models/problem.py:126
+#: judge/models/problem.py:129
 msgid "points"
 msgstr "点数"
 
@@ -1028,7 +1028,7 @@ msgstr "親項目"
 msgid "post title"
 msgstr "投稿の題目"
 
-#: judge/models/interface.py:67 judge/models/problem.py:387
+#: judge/models/interface.py:67 judge/models/problem.py:395
 msgid "authors"
 msgstr "著者"
 
@@ -1036,7 +1036,7 @@ msgstr "著者"
 msgid "slug"
 msgstr "スラグ"
 
-#: judge/models/interface.py:69 judge/models/problem.py:385
+#: judge/models/interface.py:69 judge/models/problem.py:393
 msgid "public visibility"
 msgstr "一般公開"
 
@@ -1229,132 +1229,132 @@ msgstr ""
 msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
 msgstr "この課題の秒単位での制限時間。小数秒（例えば1.5）はサポートされています。"
 
-#: judge/models/problem.py:122 judge/models/problem.py:374
+#: judge/models/problem.py:123 judge/models/problem.py:380
 msgid "memory limit"
 msgstr "メモリ制限"
 
-#: judge/models/problem.py:123
+#: judge/models/problem.py:124
 msgid "The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes)."
 msgstr "この課題のメモリ制限、キロバイト単位（例えば 64 mb = 65536 キロバイト）。"
 
-#: judge/models/problem.py:127
+#: judge/models/problem.py:130
 msgid "Points awarded for problem completion. Points are displayed with a 'p' suffix if partial."
 msgstr ""
 
-#: judge/models/problem.py:129
+#: judge/models/problem.py:133
 msgid "allows partial points"
 msgstr "部分点を許す"
 
-#: judge/models/problem.py:130
+#: judge/models/problem.py:134
 msgid "allowed languages"
 msgstr "許可されている言語"
 
-#: judge/models/problem.py:131
+#: judge/models/problem.py:135
 msgid "List of allowed submission languages."
 msgstr ""
 
-#: judge/models/problem.py:133
+#: judge/models/problem.py:137
 msgid "manually managed"
 msgstr "手動で管理されている"
 
-#: judge/models/problem.py:134
+#: judge/models/problem.py:138
 msgid "Whether judges should be allowed to manage data or not."
 msgstr ""
 
-#: judge/models/problem.py:135
+#: judge/models/problem.py:139
 msgid "date of publishing"
 msgstr "発行年月日"
 
-#: judge/models/problem.py:136
+#: judge/models/problem.py:140
 msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
 msgstr "下位互換性を保つのために自動発行する魔法のような能力は持ちません。"
 
-#: judge/models/problem.py:138
+#: judge/models/problem.py:142
 msgid "Bans the selected users from submitting to this problem."
 msgstr ""
 
-#: judge/models/problem.py:140
+#: judge/models/problem.py:144
 msgid "The license under which this problem is published."
 msgstr ""
 
-#: judge/models/problem.py:142
+#: judge/models/problem.py:146
 msgid "problem summary"
 msgstr "課題の概要"
 
-#: judge/models/problem.py:144
+#: judge/models/problem.py:148
 msgid "number of users"
 msgstr ""
 
-#: judge/models/problem.py:145
+#: judge/models/problem.py:149
 msgid "The number of users who solved the problem."
 msgstr ""
 
-#: judge/models/problem.py:146
+#: judge/models/problem.py:150
 msgid "solve rate"
 msgstr ""
 
-#: judge/models/problem.py:152
+#: judge/models/problem.py:156
 msgid "If private, only these organizations may see the problem."
 msgstr ""
 
-#: judge/models/problem.py:354 judge/models/problem.py:372
+#: judge/models/problem.py:358 judge/models/problem.py:376
 #: judge/models/runtime.py:99
 msgid "language"
 msgstr "言語"
 
-#: judge/models/problem.py:355
+#: judge/models/problem.py:359
 msgid "translated name"
 msgstr "翻訳された名前"
 
-#: judge/models/problem.py:356
+#: judge/models/problem.py:360
 msgid "translated description"
 msgstr "翻訳された説明"
 
-#: judge/models/problem.py:360
+#: judge/models/problem.py:364
 msgid "problem translation"
 msgstr "翻訳された課題"
 
-#: judge/models/problem.py:361
+#: judge/models/problem.py:365
 msgid "problem translations"
 msgstr "翻訳された課題"
 
-#: judge/models/problem.py:365
+#: judge/models/problem.py:369
 msgid "clarified problem"
 msgstr "解説された課題"
 
-#: judge/models/problem.py:366
+#: judge/models/problem.py:370
 msgid "clarification body"
 msgstr "解説本文"
 
-#: judge/models/problem.py:367
+#: judge/models/problem.py:371
 msgid "clarification timestamp"
 msgstr "解説のタイムスタンプ"
 
-#: judge/models/problem.py:378
+#: judge/models/problem.py:386
 msgid "language-specific resource limit"
 msgstr "言語固有のリソース制限"
 
-#: judge/models/problem.py:379
+#: judge/models/problem.py:387
 msgid "language-specific resource limits"
 msgstr "言語固有のリソース制限"
 
-#: judge/models/problem.py:383
+#: judge/models/problem.py:391
 msgid "associated problem"
 msgstr "関連する課題"
 
-#: judge/models/problem.py:386
+#: judge/models/problem.py:394
 msgid "publish date"
 msgstr "発行日"
 
-#: judge/models/problem.py:388
+#: judge/models/problem.py:396
 msgid "editorial content"
 msgstr "編集内容"
 
-#: judge/models/problem.py:404
+#: judge/models/problem.py:412
 msgid "solution"
 msgstr "解答"
 
-#: judge/models/problem.py:405
+#: judge/models/problem.py:413
 msgid "solutions"
 msgstr "解答"
 

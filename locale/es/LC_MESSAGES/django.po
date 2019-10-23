@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 20:31+0000\n"
-"PO-Revision-Date: 2019-10-22 21:05\n"
+"POT-Creation-Date: 2019-10-23 00:54+0000\n"
+"PO-Revision-Date: 2019-10-23 01:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -16,63 +16,63 @@ msgstr ""
 "X-Crowdin-Language: es-ES\n"
 "X-Crowdin-File: django.po\n"
 
-#: dmoj/settings.py:332
+#: dmoj/settings.py:337
 msgid "German"
 msgstr "Alemán"
 
-#: dmoj/settings.py:333
+#: dmoj/settings.py:338
 msgid "English"
 msgstr "Inglés"
 
-#: dmoj/settings.py:334
+#: dmoj/settings.py:339
 msgid "Spanish"
 msgstr "Español"
 
-#: dmoj/settings.py:335
+#: dmoj/settings.py:340
 msgid "French"
 msgstr "Francés"
 
-#: dmoj/settings.py:336
+#: dmoj/settings.py:341
 msgid "Croatian"
 msgstr "Croata"
 
-#: dmoj/settings.py:337
+#: dmoj/settings.py:342
 msgid "Hungarian"
 msgstr "Húngaro"
 
-#: dmoj/settings.py:338
+#: dmoj/settings.py:343
 msgid "Japanese"
 msgstr ""
 
-#: dmoj/settings.py:339
+#: dmoj/settings.py:344
 msgid "Korean"
 msgstr "Coreano"
 
-#: dmoj/settings.py:340
+#: dmoj/settings.py:345
 msgid "Brazilian Portuguese"
 msgstr ""
 
-#: dmoj/settings.py:341
+#: dmoj/settings.py:346
 msgid "Romanian"
 msgstr "Rumano"
 
-#: dmoj/settings.py:342
+#: dmoj/settings.py:347
 msgid "Russian"
 msgstr "Ruso"
 
-#: dmoj/settings.py:343
+#: dmoj/settings.py:348
 msgid "Serbian (Latin)"
 msgstr "Serbio (Latino)"
 
-#: dmoj/settings.py:344
+#: dmoj/settings.py:349
 msgid "Turkish"
 msgstr "Turco"
 
-#: dmoj/settings.py:345
+#: dmoj/settings.py:350
 msgid "Vietnamese"
 msgstr "Vietnamita"
 
-#: dmoj/settings.py:346
+#: dmoj/settings.py:351
 msgid "Simplified Chinese"
 msgstr "Chino simplificado"
 
@@ -554,7 +554,7 @@ msgstr "comentador"
 msgid "posted time"
 msgstr "hora de publicación"
 
-#: judge/models/comment.py:43 judge/models/comment.py:169
+#: judge/models/comment.py:43 judge/models/comment.py:176
 msgid "associated page"
 msgstr ""
 
@@ -582,20 +582,20 @@ msgstr "comentario"
 msgid "comments"
 msgstr "comentarios"
 
-#: judge/models/comment.py:129 judge/models/problem.py:398
+#: judge/models/comment.py:136 judge/models/problem.py:406
 #, python-format
 msgid "Editorial for %s"
 msgstr "Editorial de %s"
 
-#: judge/models/comment.py:164
+#: judge/models/comment.py:171
 msgid "comment vote"
 msgstr "voto del comentario"
 
-#: judge/models/comment.py:165
+#: judge/models/comment.py:172
 msgid "comment votes"
 msgstr "votos del comentario"
 
-#: judge/models/comment.py:174
+#: judge/models/comment.py:181
 msgid "Override comment lock"
 msgstr ""
 
@@ -650,7 +650,7 @@ msgstr "Estas personas serán capaces de editar el concurso."
 msgid "description"
 msgstr "descripción"
 
-#: judge/models/contest.py:56 judge/models/problem.py:349
+#: judge/models/contest.py:56 judge/models/problem.py:353
 #: judge/models/runtime.py:126
 msgid "problems"
 msgstr "problemas"
@@ -664,11 +664,11 @@ msgid "end time"
 msgstr "hora final"
 
 #: judge/models/contest.py:59 judge/models/problem.py:118
-#: judge/models/problem.py:373
+#: judge/models/problem.py:377
 msgid "time limit"
 msgstr "tiempo límite"
 
-#: judge/models/contest.py:60 judge/models/problem.py:132
+#: judge/models/contest.py:60 judge/models/problem.py:136
 msgid "publicly visible"
 msgstr "publicidad visible"
 
@@ -748,11 +748,11 @@ msgstr "ejecutar exámenes solamente"
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
 msgstr "Si los jueces solo deben calificar los exámenes previos, versus todos los casos de prueba. Se establece normalmente durante una presentación, luego desarmado antes de volver a juzgar las presentaciones de los usuarios cuando finaliza el concurso."
 
-#: judge/models/contest.py:92 judge/models/problem.py:153
+#: judge/models/contest.py:92 judge/models/problem.py:157
 msgid "private to organizations"
 msgstr "privado para organizaciones"
 
-#: judge/models/contest.py:93 judge/models/problem.py:151
+#: judge/models/contest.py:93 judge/models/problem.py:155
 #: judge/models/profile.py:72
 msgid "organizations"
 msgstr "organizaciones"
@@ -761,7 +761,7 @@ msgstr "organizaciones"
 msgid "If private, only these organizations may see the contest"
 msgstr "Es privado, sólo estas organizaciones deben ser el concurso"
 
-#: judge/models/contest.py:95 judge/models/problem.py:141
+#: judge/models/contest.py:95 judge/models/problem.py:145
 msgid "OpenGraph image"
 msgstr "Imagen de OpenGraph"
 
@@ -781,7 +781,7 @@ msgstr "la cantidad de participantes en vivo"
 msgid "contest summary"
 msgstr "resumen del concurso"
 
-#: judge/models/contest.py:103 judge/models/problem.py:143
+#: judge/models/contest.py:103 judge/models/problem.py:147
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr "Texto sin formato, que se muestra en la etiqueta de metadescripción, por ejemplo, para las redes sociales."
 
@@ -793,7 +793,7 @@ msgstr "código de acceso"
 msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
 msgstr "Un código opcional para incitar a los concursantes antes de que se les permita unirse al concurso. Déjelo en blanco para desactivar."
 
-#: judge/models/contest.py:107 judge/models/problem.py:137
+#: judge/models/contest.py:107 judge/models/problem.py:141
 msgid "personae non gratae"
 msgstr "persona no grata"
 
@@ -907,14 +907,14 @@ msgid "contest participations"
 msgstr "participaciones del concurso"
 
 #: judge/models/contest.py:319 judge/models/contest.py:340
-#: judge/models/contest.py:379 judge/models/problem.py:348
-#: judge/models/problem.py:353 judge/models/problem.py:371
+#: judge/models/contest.py:379 judge/models/problem.py:352
+#: judge/models/problem.py:357 judge/models/problem.py:375
 #: judge/models/problem_data.py:35
 msgid "problem"
 msgstr "problema"
 
 #: judge/models/contest.py:321 judge/models/contest.py:344
-#: judge/models/problem.py:126
+#: judge/models/problem.py:129
 msgid "points"
 msgstr "puntos"
 
@@ -1038,7 +1038,7 @@ msgstr "elementos paternales"
 msgid "post title"
 msgstr "título de la publicación"
 
-#: judge/models/interface.py:67 judge/models/problem.py:387
+#: judge/models/interface.py:67 judge/models/problem.py:395
 msgid "authors"
 msgstr "autores"
 
@@ -1046,7 +1046,7 @@ msgstr "autores"
 msgid "slug"
 msgstr "babosa"
 
-#: judge/models/interface.py:69 judge/models/problem.py:385
+#: judge/models/interface.py:69 judge/models/problem.py:393
 msgid "public visibility"
 msgstr "visibilidad pública"
 
@@ -1239,132 +1239,132 @@ msgstr ""
 msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
 msgstr "El límite de tiempo para este problema, en segundos. Los segundos fraccionarios (por ejemplo, 1.5) serán permitidos."
 
-#: judge/models/problem.py:122 judge/models/problem.py:374
+#: judge/models/problem.py:123 judge/models/problem.py:380
 msgid "memory limit"
 msgstr "límite de memoria"
 
-#: judge/models/problem.py:123
+#: judge/models/problem.py:124
 msgid "The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes)."
 msgstr "La memoria límite para este problema, en kilobytes (e.g. 64mb = 65536 kilobytes)."
 
-#: judge/models/problem.py:127
+#: judge/models/problem.py:130
 msgid "Points awarded for problem completion. Points are displayed with a 'p' suffix if partial."
 msgstr ""
 
-#: judge/models/problem.py:129
+#: judge/models/problem.py:133
 msgid "allows partial points"
 msgstr "permitir puntos parciales"
 
-#: judge/models/problem.py:130
+#: judge/models/problem.py:134
 msgid "allowed languages"
 msgstr "idiomas permitidos"
 
-#: judge/models/problem.py:131
+#: judge/models/problem.py:135
 msgid "List of allowed submission languages."
 msgstr ""
 
-#: judge/models/problem.py:133
+#: judge/models/problem.py:137
 msgid "manually managed"
 msgstr "manejado manualmente"
 
-#: judge/models/problem.py:134
+#: judge/models/problem.py:138
 msgid "Whether judges should be allowed to manage data or not."
 msgstr ""
 
-#: judge/models/problem.py:135
+#: judge/models/problem.py:139
 msgid "date of publishing"
 msgstr "fecha de publicación"
 
-#: judge/models/problem.py:136
+#: judge/models/problem.py:140
 msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
 msgstr "No tiene la habilidad mágica para publicar automáticamente debido a la compatibilidad con versiones anteriores"
 
-#: judge/models/problem.py:138
+#: judge/models/problem.py:142
 msgid "Bans the selected users from submitting to this problem."
 msgstr ""
 
-#: judge/models/problem.py:140
+#: judge/models/problem.py:144
 msgid "The license under which this problem is published."
 msgstr ""
 
-#: judge/models/problem.py:142
+#: judge/models/problem.py:146
 msgid "problem summary"
 msgstr "problemas de envío"
 
-#: judge/models/problem.py:144
+#: judge/models/problem.py:148
 msgid "number of users"
 msgstr ""
 
-#: judge/models/problem.py:145
+#: judge/models/problem.py:149
 msgid "The number of users who solved the problem."
 msgstr ""
 
-#: judge/models/problem.py:146
+#: judge/models/problem.py:150
 msgid "solve rate"
 msgstr ""
 
-#: judge/models/problem.py:152
+#: judge/models/problem.py:156
 msgid "If private, only these organizations may see the problem."
 msgstr ""
 
-#: judge/models/problem.py:354 judge/models/problem.py:372
+#: judge/models/problem.py:358 judge/models/problem.py:376
 #: judge/models/runtime.py:99
 msgid "language"
 msgstr "idioma"
 
-#: judge/models/problem.py:355
+#: judge/models/problem.py:359
 msgid "translated name"
 msgstr "nombre traducido"
 
-#: judge/models/problem.py:356
+#: judge/models/problem.py:360
 msgid "translated description"
 msgstr "descripción traducida"
 
-#: judge/models/problem.py:360
+#: judge/models/problem.py:364
 msgid "problem translation"
 msgstr "problemas de traducción"
 
-#: judge/models/problem.py:361
+#: judge/models/problem.py:365
 msgid "problem translations"
 msgstr "problemas de traducciones"
 
-#: judge/models/problem.py:365
+#: judge/models/problem.py:369
 msgid "clarified problem"
 msgstr "problema calificado"
 
-#: judge/models/problem.py:366
+#: judge/models/problem.py:370
 msgid "clarification body"
 msgstr "calificación del cuerpo"
 
-#: judge/models/problem.py:367
+#: judge/models/problem.py:371
 msgid "clarification timestamp"
 msgstr "marca de tiempo de aclaración"
 
-#: judge/models/problem.py:378
+#: judge/models/problem.py:386
 msgid "language-specific resource limit"
 msgstr "límite de recursos específicos del idioma"
 
-#: judge/models/problem.py:379
+#: judge/models/problem.py:387
 msgid "language-specific resource limits"
 msgstr "límites de recursos específicos del idioma"
 
-#: judge/models/problem.py:383
+#: judge/models/problem.py:391
 msgid "associated problem"
 msgstr "problema asociado"
 
-#: judge/models/problem.py:386
+#: judge/models/problem.py:394
 msgid "publish date"
 msgstr "fecha de publicación"
 
-#: judge/models/problem.py:388
+#: judge/models/problem.py:396
 msgid "editorial content"
 msgstr "contenido editorial"
 
-#: judge/models/problem.py:404
+#: judge/models/problem.py:412
 msgid "solution"
 msgstr "solución"
 
-#: judge/models/problem.py:405
+#: judge/models/problem.py:413
 msgid "solutions"
 msgstr "soluciones"
 

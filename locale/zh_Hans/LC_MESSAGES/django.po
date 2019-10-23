@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-22 20:31+0000\n"
-"PO-Revision-Date: 2019-10-22 21:04\n"
+"POT-Creation-Date: 2019-10-23 00:54+0000\n"
+"PO-Revision-Date: 2019-10-23 01:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -16,63 +16,63 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: django.po\n"
 
-#: dmoj/settings.py:332
+#: dmoj/settings.py:337
 msgid "German"
 msgstr "德语"
 
-#: dmoj/settings.py:333
+#: dmoj/settings.py:338
 msgid "English"
 msgstr "英语"
 
-#: dmoj/settings.py:334
+#: dmoj/settings.py:339
 msgid "Spanish"
 msgstr "西班牙语"
 
-#: dmoj/settings.py:335
+#: dmoj/settings.py:340
 msgid "French"
 msgstr "法语"
 
-#: dmoj/settings.py:336
+#: dmoj/settings.py:341
 msgid "Croatian"
 msgstr "克罗地亚语"
 
-#: dmoj/settings.py:337
+#: dmoj/settings.py:342
 msgid "Hungarian"
 msgstr "匈牙利语"
 
-#: dmoj/settings.py:338
+#: dmoj/settings.py:343
 msgid "Japanese"
 msgstr ""
 
-#: dmoj/settings.py:339
+#: dmoj/settings.py:344
 msgid "Korean"
 msgstr "韩语"
 
-#: dmoj/settings.py:340
+#: dmoj/settings.py:345
 msgid "Brazilian Portuguese"
 msgstr ""
 
-#: dmoj/settings.py:341
+#: dmoj/settings.py:346
 msgid "Romanian"
 msgstr "罗马尼亚语"
 
-#: dmoj/settings.py:342
+#: dmoj/settings.py:347
 msgid "Russian"
 msgstr "俄语"
 
-#: dmoj/settings.py:343
+#: dmoj/settings.py:348
 msgid "Serbian (Latin)"
 msgstr "塞尔维亚文（拉丁字母）"
 
-#: dmoj/settings.py:344
+#: dmoj/settings.py:349
 msgid "Turkish"
 msgstr "土耳其语"
 
-#: dmoj/settings.py:345
+#: dmoj/settings.py:350
 msgid "Vietnamese"
 msgstr "越南语"
 
-#: dmoj/settings.py:346
+#: dmoj/settings.py:351
 msgid "Simplified Chinese"
 msgstr "简体中文"
 
@@ -544,7 +544,7 @@ msgstr "评论者"
 msgid "posted time"
 msgstr "发布时间"
 
-#: judge/models/comment.py:43 judge/models/comment.py:169
+#: judge/models/comment.py:43 judge/models/comment.py:176
 msgid "associated page"
 msgstr ""
 
@@ -572,20 +572,20 @@ msgstr "评论"
 msgid "comments"
 msgstr "评论"
 
-#: judge/models/comment.py:129 judge/models/problem.py:398
+#: judge/models/comment.py:136 judge/models/problem.py:406
 #, python-format
 msgid "Editorial for %s"
 msgstr "%s 的题解"
 
-#: judge/models/comment.py:164
+#: judge/models/comment.py:171
 msgid "comment vote"
 msgstr "评论投票"
 
-#: judge/models/comment.py:165
+#: judge/models/comment.py:172
 msgid "comment votes"
 msgstr "评论投票"
 
-#: judge/models/comment.py:174
+#: judge/models/comment.py:181
 msgid "Override comment lock"
 msgstr ""
 
@@ -640,7 +640,7 @@ msgstr "这些人将可以编辑竞赛。"
 msgid "description"
 msgstr "描述"
 
-#: judge/models/contest.py:56 judge/models/problem.py:349
+#: judge/models/contest.py:56 judge/models/problem.py:353
 #: judge/models/runtime.py:126
 msgid "problems"
 msgstr "题目"
@@ -654,11 +654,11 @@ msgid "end time"
 msgstr "结束时间"
 
 #: judge/models/contest.py:59 judge/models/problem.py:118
-#: judge/models/problem.py:373
+#: judge/models/problem.py:377
 msgid "time limit"
 msgstr "时间限制"
 
-#: judge/models/contest.py:60 judge/models/problem.py:132
+#: judge/models/contest.py:60 judge/models/problem.py:136
 msgid "publicly visible"
 msgstr "公开"
 
@@ -738,11 +738,11 @@ msgstr "只运行预测试"
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
 msgstr "设置裁判服务器是否只运行预测试而不是所有测试。通常在竞赛进行时启动，然后在竞赛结束后重新评分前关闭。"
 
-#: judge/models/contest.py:92 judge/models/problem.py:153
+#: judge/models/contest.py:92 judge/models/problem.py:157
 msgid "private to organizations"
 msgstr "只对组织可见"
 
-#: judge/models/contest.py:93 judge/models/problem.py:151
+#: judge/models/contest.py:93 judge/models/problem.py:155
 #: judge/models/profile.py:72
 msgid "organizations"
 msgstr "组织"
@@ -751,7 +751,7 @@ msgstr "组织"
 msgid "If private, only these organizations may see the contest"
 msgstr "选中时，只对选择的组织才可见"
 
-#: judge/models/contest.py:95 judge/models/problem.py:141
+#: judge/models/contest.py:95 judge/models/problem.py:145
 msgid "OpenGraph image"
 msgstr "OpenGraph 图像"
 
@@ -771,7 +771,7 @@ msgstr "实时参与者数"
 msgid "contest summary"
 msgstr "竞赛简介"
 
-#: judge/models/contest.py:103 judge/models/problem.py:143
+#: judge/models/contest.py:103 judge/models/problem.py:147
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr "在meta description标签内显示的纯文本介绍。"
 
@@ -783,7 +783,7 @@ msgstr "访问码"
 msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
 msgstr "在参赛者被允许参加比赛之前的一个可选代码。如无需要请留空白禁用。"
 
-#: judge/models/contest.py:107 judge/models/problem.py:137
+#: judge/models/contest.py:107 judge/models/problem.py:141
 msgid "personae non gratae"
 msgstr "不受欢迎人物"
 
@@ -897,14 +897,14 @@ msgid "contest participations"
 msgstr "竞赛参与信息"
 
 #: judge/models/contest.py:319 judge/models/contest.py:340
-#: judge/models/contest.py:379 judge/models/problem.py:348
-#: judge/models/problem.py:353 judge/models/problem.py:371
+#: judge/models/contest.py:379 judge/models/problem.py:352
+#: judge/models/problem.py:357 judge/models/problem.py:375
 #: judge/models/problem_data.py:35
 msgid "problem"
 msgstr "题目"
 
 #: judge/models/contest.py:321 judge/models/contest.py:344
-#: judge/models/problem.py:126
+#: judge/models/problem.py:129
 msgid "points"
 msgstr "分"
 
@@ -1028,7 +1028,7 @@ msgstr "父项"
 msgid "post title"
 msgstr "文章标题"
 
-#: judge/models/interface.py:67 judge/models/problem.py:387
+#: judge/models/interface.py:67 judge/models/problem.py:395
 msgid "authors"
 msgstr "作者"
 
@@ -1036,7 +1036,7 @@ msgstr "作者"
 msgid "slug"
 msgstr "网址标识"
 
-#: judge/models/interface.py:69 judge/models/problem.py:385
+#: judge/models/interface.py:69 judge/models/problem.py:393
 msgid "public visibility"
 msgstr "公共可见性"
 
@@ -1229,132 +1229,132 @@ msgstr ""
 msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
 msgstr "这个问题的时间限制（以秒为单位。支持小数秒计时方式（例如1.5）。"
 
-#: judge/models/problem.py:122 judge/models/problem.py:374
+#: judge/models/problem.py:123 judge/models/problem.py:380
 msgid "memory limit"
 msgstr "内存限制"
 
-#: judge/models/problem.py:123
+#: judge/models/problem.py:124
 msgid "The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes)."
 msgstr "此问题的存储限制，以kb为单位（例如 64mb = 65536 kb）"
 
-#: judge/models/problem.py:127
+#: judge/models/problem.py:130
 msgid "Points awarded for problem completion. Points are displayed with a 'p' suffix if partial."
 msgstr ""
 
-#: judge/models/problem.py:129
+#: judge/models/problem.py:133
 msgid "allows partial points"
 msgstr "允许部分分数"
 
-#: judge/models/problem.py:130
+#: judge/models/problem.py:134
 msgid "allowed languages"
 msgstr "允许的语言"
 
-#: judge/models/problem.py:131
+#: judge/models/problem.py:135
 msgid "List of allowed submission languages."
 msgstr ""
 
-#: judge/models/problem.py:133
+#: judge/models/problem.py:137
 msgid "manually managed"
 msgstr "手动管理"
 
-#: judge/models/problem.py:134
+#: judge/models/problem.py:138
 msgid "Whether judges should be allowed to manage data or not."
 msgstr ""
 
-#: judge/models/problem.py:135
+#: judge/models/problem.py:139
 msgid "date of publishing"
 msgstr "公开日期"
 
-#: judge/models/problem.py:136
+#: judge/models/problem.py:140
 msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
 msgstr "无法自动在时间后公开题目"
 
-#: judge/models/problem.py:138
+#: judge/models/problem.py:142
 msgid "Bans the selected users from submitting to this problem."
 msgstr ""
 
-#: judge/models/problem.py:140
+#: judge/models/problem.py:144
 msgid "The license under which this problem is published."
 msgstr ""
 
-#: judge/models/problem.py:142
+#: judge/models/problem.py:146
 msgid "problem summary"
 msgstr "问题摘要"
 
-#: judge/models/problem.py:144
+#: judge/models/problem.py:148
 msgid "number of users"
 msgstr ""
 
-#: judge/models/problem.py:145
+#: judge/models/problem.py:149
 msgid "The number of users who solved the problem."
 msgstr ""
 
-#: judge/models/problem.py:146
+#: judge/models/problem.py:150
 msgid "solve rate"
 msgstr ""
 
-#: judge/models/problem.py:152
+#: judge/models/problem.py:156
 msgid "If private, only these organizations may see the problem."
 msgstr ""
 
-#: judge/models/problem.py:354 judge/models/problem.py:372
+#: judge/models/problem.py:358 judge/models/problem.py:376
 #: judge/models/runtime.py:99
 msgid "language"
 msgstr "语言"
 
-#: judge/models/problem.py:355
+#: judge/models/problem.py:359
 msgid "translated name"
 msgstr "翻译题目名"
 
-#: judge/models/problem.py:356
+#: judge/models/problem.py:360
 msgid "translated description"
 msgstr "翻译题目正文"
 
-#: judge/models/problem.py:360
+#: judge/models/problem.py:364
 msgid "problem translation"
 msgstr "题目翻译"
 
-#: judge/models/problem.py:361
+#: judge/models/problem.py:365
 msgid "problem translations"
 msgstr "题目翻译"
 
-#: judge/models/problem.py:365
+#: judge/models/problem.py:369
 msgid "clarified problem"
 msgstr "已澄清的问题"
 
-#: judge/models/problem.py:366
+#: judge/models/problem.py:370
 msgid "clarification body"
 msgstr "澄清的身体"
 
-#: judge/models/problem.py:367
+#: judge/models/problem.py:371
 msgid "clarification timestamp"
 msgstr "澄清时间戳"
 
-#: judge/models/problem.py:378
+#: judge/models/problem.py:386
 msgid "language-specific resource limit"
 msgstr "语言特定资源限制"
 
-#: judge/models/problem.py:379
+#: judge/models/problem.py:387
 msgid "language-specific resource limits"
 msgstr "语言特定资源限制"
 
-#: judge/models/problem.py:383
+#: judge/models/problem.py:391
 msgid "associated problem"
 msgstr "关联的题目"
 
-#: judge/models/problem.py:386
+#: judge/models/problem.py:394
 msgid "publish date"
 msgstr "发布日期"
 
-#: judge/models/problem.py:388
+#: judge/models/problem.py:396
 msgid "editorial content"
 msgstr "可编辑的内容"
 
-#: judge/models/problem.py:404
+#: judge/models/problem.py:412
 msgid "solution"
 msgstr "题目讲解"
 
-#: judge/models/problem.py:405
+#: judge/models/problem.py:413
 msgid "solutions"
 msgstr "题目讲解"
 
