@@ -161,6 +161,10 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
+    def is_comment_locked(self):
+        return ((super().is_comment_locked() or not self.object.is_public) and
+                not self.request.user.has_perm('judge.override_comment_lock'))
+
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
