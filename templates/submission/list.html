@@ -145,7 +145,7 @@
                 var table = $('#submissions-table');
                 var statistics = $("#statistics-table");
                 var doing_ajax = false;
-                var first = parseInt(table.find('tr:first-child').attr('id'));
+                var first = parseInt(table.find('>div:first-child').attr('id'));
 
                 var update_submission = function (message, force) {
                     if (language_filter.length && 'language' in message &&
