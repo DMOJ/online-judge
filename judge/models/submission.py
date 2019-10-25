@@ -212,5 +212,6 @@ class SubmissionTestCase(models.Model):
         return Submission.USER_DISPLAY_CODES.get(self.status, '')
 
     class Meta:
+        unique_together = ('submission', 'case')
         verbose_name = _('submission test case')
         verbose_name_plural = _('submission test cases')
