@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-23 00:54+0000\n"
-"PO-Revision-Date: 2019-10-23 01:05\n"
+"POT-Creation-Date: 2019-10-25 04:51+0000\n"
+"PO-Revision-Date: 2019-10-25 05:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -1976,11 +1976,11 @@ msgstr ""
 msgid "program output"
 msgstr "program çıktısı"
 
-#: judge/models/submission.py:215
+#: judge/models/submission.py:216
 msgid "submission test case"
 msgstr "çözüm testi"
 
-#: judge/models/submission.py:216
+#: judge/models/submission.py:217
 msgid "submission test cases"
 msgstr "çözüm testleri"
 
