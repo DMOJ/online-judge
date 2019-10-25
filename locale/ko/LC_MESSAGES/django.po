@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-01 23:12+0000\n"
-"PO-Revision-Date: 2019-10-02 17:03\n"
+"POT-Creation-Date: 2019-10-22 20:31+0000\n"
+"PO-Revision-Date: 2019-10-22 21:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -16,55 +16,63 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: django.po\n"
 
-#: dmoj/settings.py:250
+#: dmoj/settings.py:332
 msgid "German"
 msgstr "독일어"
 
-#: dmoj/settings.py:251
+#: dmoj/settings.py:333
 msgid "English"
 msgstr "영어"
 
-#: dmoj/settings.py:252
+#: dmoj/settings.py:334
 msgid "Spanish"
 msgstr "스페인어"
 
-#: dmoj/settings.py:253
+#: dmoj/settings.py:335
 msgid "French"
 msgstr "프랑스어"
 
-#: dmoj/settings.py:254
+#: dmoj/settings.py:336
 msgid "Croatian"
 msgstr "크로아티아어"
 
-#: dmoj/settings.py:255
+#: dmoj/settings.py:337
 msgid "Hungarian"
 msgstr "헝가리어"
 
-#: dmoj/settings.py:256
+#: dmoj/settings.py:338
+msgid "Japanese"
+msgstr ""
+
+#: dmoj/settings.py:339
 msgid "Korean"
 msgstr "한국어"
 
-#: dmoj/settings.py:257
+#: dmoj/settings.py:340
+msgid "Brazilian Portuguese"
+msgstr ""
+
+#: dmoj/settings.py:341
 msgid "Romanian"
 msgstr "루마니아어"
 
-#: dmoj/settings.py:258
+#: dmoj/settings.py:342
 msgid "Russian"
 msgstr "러시아어"
 
-#: dmoj/settings.py:259
+#: dmoj/settings.py:343
 msgid "Serbian (Latin)"
 msgstr "세르비아어(라틴문자)"
 
-#: dmoj/settings.py:260
+#: dmoj/settings.py:344
 msgid "Turkish"
 msgstr "터키어"
 
-#: dmoj/settings.py:261
+#: dmoj/settings.py:345
 msgid "Vietnamese"
 msgstr "베트남어"
 
-#: dmoj/settings.py:262
+#: dmoj/settings.py:346
 msgid "Simplified Chinese"
 msgstr "중국어(간체)"
 
@@ -105,8 +113,9 @@ msgid "Included contests"
 msgstr "포함된 대회"
 
 #: judge/admin/contest.py:65 templates/contest/contest.html:83
-#: templates/problem/list.html:206 templates/problem/list.html:221
-#: templates/user/user-problems.html:56 templates/user/user-problems.html:98
+#: templates/contest/moss.html:43 templates/problem/list.html:206
+#: templates/problem/list.html:221 templates/user/user-problems.html:56
+#: templates/user/user-problems.html:98
 msgid "Problem"
 msgstr "문제"
 
@@ -203,8 +212,8 @@ msgstr "내용"
 msgid "Summary"
 msgstr "요약"
 
-#: judge/admin/interface.py:107 judge/models/contest.py:240
-#: judge/models/contest.py:344 judge/models/profile.py:186
+#: judge/admin/interface.py:107 judge/models/contest.py:251
+#: judge/models/contest.py:355 judge/models/profile.py:185
 msgid "user"
 msgstr "사용자"
 
@@ -241,7 +250,7 @@ msgid "Limits"
 msgstr "제한"
 
 #: judge/admin/problem.py:129 judge/admin/submission.py:232
-#: templates/stats/base.html:14 templates/submission/list.html:310
+#: templates/stats/base.html:14 templates/submission/list.html:328
 msgid "Language"
 msgstr "언어"
 
@@ -355,7 +364,7 @@ msgstr "%(problem)s 대회의 문제 %(contest)s"
 msgid "Rejudge the selected submissions"
 msgstr "선택한 제출 재채점"
 
-#: judge/admin/submission.py:193 judge/views/problem_manage.py:125
+#: judge/admin/submission.py:193 judge/views/problem_manage.py:128
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
@@ -464,20 +473,28 @@ msgstr "사용자 이름"
 msgid "Password"
 msgstr "비밀번호"
 
-#: judge/forms.py:131
+#: judge/forms.py:130
 msgid "Two Factor Authentication tokens must be 6 decimal digits."
 msgstr ""
 
-#: judge/forms.py:140 templates/registration/totp_auth.html:32
+#: judge/forms.py:139 templates/registration/totp_auth.html:32
 msgid "Invalid Two Factor Authentication token."
 msgstr ""
 
-#: judge/forms.py:144 judge/models/problem.py:97
+#: judge/forms.py:143 judge/models/problem.py:97
 msgid "Problem code must be ^[a-z0-9]+$"
 msgstr ""
 
-#: judge/forms.py:149
+#: judge/forms.py:148
 msgid "Problem with code already exists."
+msgstr ""
+
+#: judge/forms.py:153 judge/models/contest.py:51
+msgid "Contest id must be ^[a-z0-9]+$"
+msgstr "Contest id must be ^[a-z0-9]+$"
+
+#: judge/forms.py:158
+msgid "Contest with key already exists."
 msgstr ""
 
 #: judge/jinja2/datetime.py:26 templates/blog/content.html:27
@@ -572,51 +589,47 @@ msgstr "코멘트 투표"
 msgid "Override comment lock"
 msgstr ""
 
-#: judge/models/contest.py:20
+#: judge/models/contest.py:21
 msgid "Invalid colour."
 msgstr "잘못된 색상"
 
-#: judge/models/contest.py:22
+#: judge/models/contest.py:23
 msgid "tag name"
 msgstr "태그 이름"
 
-#: judge/models/contest.py:23
+#: judge/models/contest.py:24
 msgid "Lowercase letters and hyphens only."
 msgstr "소문자와 하이픈만 사용가능합니다."
 
-#: judge/models/contest.py:24
+#: judge/models/contest.py:25
 msgid "tag colour"
 msgstr "태그 색상"
 
-#: judge/models/contest.py:25
+#: judge/models/contest.py:26
 msgid "tag description"
 msgstr "태그 설명"
 
-#: judge/models/contest.py:44
+#: judge/models/contest.py:45
 msgid "contest tag"
 msgstr "대회 태그"
 
-#: judge/models/contest.py:45 judge/models/contest.py:99
+#: judge/models/contest.py:46 judge/models/contest.py:100
 msgid "contest tags"
 msgstr "대회 태그"
 
-#: judge/models/contest.py:49
+#: judge/models/contest.py:50
 msgid "contest id"
 msgstr "대회 id"
 
-#: judge/models/contest.py:50
-msgid "Contest id must be ^[a-z0-9]+$"
-msgstr "Contest id must be ^[a-z0-9]+$"
-
-#: judge/models/contest.py:51
+#: judge/models/contest.py:52
 msgid "contest name"
 msgstr "대회 이름"
 
-#: judge/models/contest.py:52
+#: judge/models/contest.py:53
 msgid "These people will be able to edit the contest."
 msgstr "이 사람들은 대회를 편집할 권한이 있습니다."
 
-#: judge/models/contest.py:54 judge/models/runtime.py:124
+#: judge/models/contest.py:55 judge/models/runtime.py:124
 #: src/dmoj-wpadmin/test_project/apps/books/admin.py:20
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:13
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:27
@@ -627,339 +640,357 @@ msgstr "이 사람들은 대회를 편집할 권한이 있습니다."
 msgid "description"
 msgstr "설명"
 
-#: judge/models/contest.py:55 judge/models/problem.py:349
+#: judge/models/contest.py:56 judge/models/problem.py:349
 #: judge/models/runtime.py:126
 msgid "problems"
 msgstr "문제"
 
-#: judge/models/contest.py:56 judge/models/contest.py:241
+#: judge/models/contest.py:57 judge/models/contest.py:252
 msgid "start time"
 msgstr "시작 시각"
 
-#: judge/models/contest.py:57
+#: judge/models/contest.py:58
 msgid "end time"
 msgstr "종료 시각"
 
-#: judge/models/contest.py:58 judge/models/problem.py:118
+#: judge/models/contest.py:59 judge/models/problem.py:118
 #: judge/models/problem.py:373
 msgid "time limit"
 msgstr "시간 제한"
 
-#: judge/models/contest.py:59 judge/models/problem.py:132
+#: judge/models/contest.py:60 judge/models/problem.py:132
 msgid "publicly visible"
 msgstr "공개"
 
-#: judge/models/contest.py:60
+#: judge/models/contest.py:61
 msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
 msgstr ""
 
-#: judge/models/contest.py:63
+#: judge/models/contest.py:64
 msgid "contest rated"
 msgstr "대회 순위"
 
-#: judge/models/contest.py:63
+#: judge/models/contest.py:64
 msgid "Whether this contest can be rated."
 msgstr "대회 순위 표시 여부"
 
-#: judge/models/contest.py:65
+#: judge/models/contest.py:66
 msgid "hide scoreboard"
 msgstr ""
 
-#: judge/models/contest.py:66
+#: judge/models/contest.py:67
 msgid "Whether the scoreboard should remain hidden for the duration of the contest."
 msgstr ""
 
-#: judge/models/contest.py:69
+#: judge/models/contest.py:70
 msgid "no comments"
 msgstr "코멘트 없음"
 
-#: judge/models/contest.py:70
+#: judge/models/contest.py:71
 msgid "Use clarification system instead of comments."
 msgstr "코멘트 대신 수정 시스템을 사용하세요."
 
-#: judge/models/contest.py:72
+#: judge/models/contest.py:73
 msgid "Rating floor for contest"
 msgstr ""
 
-#: judge/models/contest.py:74
+#: judge/models/contest.py:75
 msgid "Rating ceiling for contest"
 msgstr ""
 
-#: judge/models/contest.py:76
+#: judge/models/contest.py:77
 msgid "rate all"
 msgstr "모든 순위"
 
-#: judge/models/contest.py:76
+#: judge/models/contest.py:77
 msgid "Rate all users who joined."
 msgstr "참가한 모든 사용자에 대한 순위"
 
-#: judge/models/contest.py:77
+#: judge/models/contest.py:78
 msgid "exclude from ratings"
 msgstr "순위에서 제외"
 
-#: judge/models/contest.py:79
+#: judge/models/contest.py:80
 msgid "private to specific users"
 msgstr ""
 
-#: judge/models/contest.py:80
+#: judge/models/contest.py:81
 msgid "private contestants"
 msgstr ""
 
-#: judge/models/contest.py:81
+#: judge/models/contest.py:82
 msgid "If private, only these users may see the contest"
 msgstr ""
 
-#: judge/models/contest.py:83
+#: judge/models/contest.py:84
 msgid "hide problem tags"
 msgstr "문제 태그 숨기기"
 
-#: judge/models/contest.py:84
+#: judge/models/contest.py:85
 msgid "Whether problem tags should be hidden by default."
 msgstr "문제 태그 공개 여부 기본값"
 
-#: judge/models/contest.py:86
+#: judge/models/contest.py:87
 msgid "run pretests only"
 msgstr "pretests만 실행"
 
-#: judge/models/contest.py:87
+#: judge/models/contest.py:88
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
 msgstr "judge가 pretests만 채점할지, 모든 테스트 데이터를 채점할지 여부. 일반적으로 대회 종료전까지 설정 후 대회 종료 후 해제하여 모든 테스트 케이스 채점 진행"
 
-#: judge/models/contest.py:91 judge/models/problem.py:153
+#: judge/models/contest.py:92 judge/models/problem.py:153
 msgid "private to organizations"
 msgstr "조직에 비공개"
 
-#: judge/models/contest.py:92 judge/models/problem.py:151
+#: judge/models/contest.py:93 judge/models/problem.py:151
 #: judge/models/profile.py:72
 msgid "organizations"
 msgstr "조직"
 
-#: judge/models/contest.py:93
+#: judge/models/contest.py:94
 msgid "If private, only these organizations may see the contest"
 msgstr "비공개로 설정 시, 이 조직만 대회를 볼 수 있습니다."
 
-#: judge/models/contest.py:94 judge/models/problem.py:141
+#: judge/models/contest.py:95 judge/models/problem.py:141
 msgid "OpenGraph image"
 msgstr "OpenGraph 이미지"
 
-#: judge/models/contest.py:95
+#: judge/models/contest.py:96
 msgid "Logo override image"
 msgstr ""
 
-#: judge/models/contest.py:97
+#: judge/models/contest.py:98
 msgid "This image will replace the default site logo for users inside the contest."
 msgstr ""
 
-#: judge/models/contest.py:100
+#: judge/models/contest.py:101
 msgid "the amount of live participants"
 msgstr "현재 접속되어 있는 참가자 수"
 
-#: judge/models/contest.py:101
+#: judge/models/contest.py:102
 msgid "contest summary"
 msgstr "대회 요약"
 
-#: judge/models/contest.py:102 judge/models/problem.py:143
+#: judge/models/contest.py:103 judge/models/problem.py:143
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr ""
 
-#: judge/models/contest.py:103 judge/models/profile.py:46
+#: judge/models/contest.py:104 judge/models/profile.py:46
 msgid "access code"
 msgstr "액세스 코드"
 
-#: judge/models/contest.py:104
+#: judge/models/contest.py:105
 msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
 msgstr ""
 
-#: judge/models/contest.py:106 judge/models/problem.py:137
+#: judge/models/contest.py:107 judge/models/problem.py:137
 msgid "personae non gratae"
 msgstr ""
 
-#: judge/models/contest.py:107
+#: judge/models/contest.py:108
 msgid "Bans the selected users from joining this contest."
 msgstr ""
 
-#: judge/models/contest.py:108
+#: judge/models/contest.py:109
 msgid "contest format"
 msgstr ""
 
-#: judge/models/contest.py:109
+#: judge/models/contest.py:110
 msgid "The contest format module to use."
 msgstr ""
 
-#: judge/models/contest.py:110
+#: judge/models/contest.py:111
 msgid "contest format configuration"
 msgstr ""
 
-#: judge/models/contest.py:111
+#: judge/models/contest.py:112
 msgid "A JSON object to serve as the configuration for the chosen contest format module. Leave empty to use None. Exact format depends on the contest format selected."
 msgstr ""
 
-#: judge/models/contest.py:224
+#: judge/models/contest.py:233
 msgid "See private contests"
 msgstr ""
 
-#: judge/models/contest.py:225
+#: judge/models/contest.py:234
 msgid "Edit own contests"
 msgstr ""
 
-#: judge/models/contest.py:226
+#: judge/models/contest.py:235
 msgid "Edit all contests"
 msgstr ""
 
-#: judge/models/contest.py:227
+#: judge/models/contest.py:236
+msgid "Clone contest"
+msgstr ""
+
+#: judge/models/contest.py:237 templates/contest/moss.html:74
+msgid "MOSS contest"
+msgstr ""
+
+#: judge/models/contest.py:238
 msgid "Rate contests"
 msgstr ""
 
-#: judge/models/contest.py:228
+#: judge/models/contest.py:239
 msgid "Contest access codes"
 msgstr ""
 
-#: judge/models/contest.py:229
+#: judge/models/contest.py:240
 msgid "Create private contests"
 msgstr ""
 
-#: judge/models/contest.py:231 judge/models/contest.py:309
-#: judge/models/contest.py:345 judge/models/submission.py:82
+#: judge/models/contest.py:242 judge/models/contest.py:320
+#: judge/models/contest.py:356 judge/models/contest.py:378
+#: judge/models/submission.py:83
 msgid "contest"
 msgstr "대회"
 
-#: judge/models/contest.py:232
+#: judge/models/contest.py:243
 msgid "contests"
 msgstr "대회"
 
-#: judge/models/contest.py:239
+#: judge/models/contest.py:250
 msgid "associated contest"
 msgstr "관련된 대회"
 
-#: judge/models/contest.py:242
+#: judge/models/contest.py:253
 msgid "score"
 msgstr "점수"
 
-#: judge/models/contest.py:243
+#: judge/models/contest.py:254
 msgid "cumulative time"
 msgstr "누적 시간"
 
-#: judge/models/contest.py:244
+#: judge/models/contest.py:255
 msgid "virtual participation id"
 msgstr "가상 참여 id"
 
-#: judge/models/contest.py:245
+#: judge/models/contest.py:256
 msgid "0 means non-virtual, otherwise the n-th virtual participation"
 msgstr ""
 
-#: judge/models/contest.py:246
+#: judge/models/contest.py:257
 msgid "contest format specific data"
 msgstr ""
 
-#: judge/models/contest.py:295
+#: judge/models/contest.py:306
 #, python-format
 msgid "%s spectating in %s"
 msgstr ""
 
-#: judge/models/contest.py:297
+#: judge/models/contest.py:308
 #, python-format
 msgid "%s in %s, v%d"
 msgstr ""
 
-#: judge/models/contest.py:298
+#: judge/models/contest.py:309
 #, python-format
 msgid "%s in %s"
 msgstr "%s에서 %s"
 
-#: judge/models/contest.py:301
+#: judge/models/contest.py:312
 msgid "contest participation"
 msgstr "대회 참가"
 
-#: judge/models/contest.py:302
+#: judge/models/contest.py:313
 msgid "contest participations"
 msgstr "대회 참가자"
 
-#: judge/models/contest.py:308 judge/models/contest.py:329
-#: judge/models/problem.py:348 judge/models/problem.py:353
-#: judge/models/problem.py:371 judge/models/problem_data.py:35
+#: judge/models/contest.py:319 judge/models/contest.py:340
+#: judge/models/contest.py:379 judge/models/problem.py:348
+#: judge/models/problem.py:353 judge/models/problem.py:371
+#: judge/models/problem_data.py:35
 msgid "problem"
 msgstr "문제"
 
-#: judge/models/contest.py:310 judge/models/contest.py:333
+#: judge/models/contest.py:321 judge/models/contest.py:344
 #: judge/models/problem.py:126
 msgid "points"
 msgstr "점수"
 
-#: judge/models/contest.py:311
+#: judge/models/contest.py:322
 msgid "partial"
 msgstr "부분"
 
-#: judge/models/contest.py:312 judge/models/contest.py:334
+#: judge/models/contest.py:323 judge/models/contest.py:345
 msgid "is pretested"
 msgstr "pretested 됨"
 
-#: judge/models/contest.py:313 judge/models/interface.py:43
+#: judge/models/contest.py:324 judge/models/interface.py:43
 msgid "order"
 msgstr "순서"
 
-#: judge/models/contest.py:314
+#: judge/models/contest.py:325
 msgid "output prefix length override"
 msgstr "출력 접두사 길이 재정의"
 
-#: judge/models/contest.py:315
+#: judge/models/contest.py:326
 msgid "Maximum number of submissions for this problem, or 0 for no limit."
 msgstr ""
 
-#: judge/models/contest.py:317
+#: judge/models/contest.py:328
 msgid "Why include a problem you can't submit to?"
 msgstr ""
 
-#: judge/models/contest.py:322
+#: judge/models/contest.py:333
 msgid "contest problem"
 msgstr "대회 문제"
 
-#: judge/models/contest.py:323
+#: judge/models/contest.py:334
 msgid "contest problems"
 msgstr "대회 문제"
 
-#: judge/models/contest.py:327 judge/models/submission.py:180
+#: judge/models/contest.py:338 judge/models/submission.py:181
 msgid "submission"
 msgstr "제출"
 
-#: judge/models/contest.py:331 judge/models/contest.py:346
+#: judge/models/contest.py:342 judge/models/contest.py:357
 msgid "participation"
 msgstr "참가 여부"
 
-#: judge/models/contest.py:335
+#: judge/models/contest.py:346
 msgid "Whether this submission was ran only on pretests."
 msgstr "Pretests에서만 이 제출이 실행되었는지 여부"
 
-#: judge/models/contest.py:339
+#: judge/models/contest.py:350
 msgid "contest submission"
 msgstr "대회 제출"
 
-#: judge/models/contest.py:340
+#: judge/models/contest.py:351
 msgid "contest submissions"
 msgstr "대회 제출"
 
-#: judge/models/contest.py:348
+#: judge/models/contest.py:359
 msgid "rank"
 msgstr "등수"
 
-#: judge/models/contest.py:349
+#: judge/models/contest.py:360
 msgid "rating"
 msgstr "순위"
 
-#: judge/models/contest.py:350
+#: judge/models/contest.py:361
 msgid "volatility"
 msgstr "변동"
 
-#: judge/models/contest.py:351
+#: judge/models/contest.py:362
 msgid "last rated"
 msgstr "최근 순위"
 
-#: judge/models/contest.py:355
+#: judge/models/contest.py:366
 msgid "contest rating"
 msgstr "대회 순위"
 
-#: judge/models/contest.py:356
+#: judge/models/contest.py:367
 msgid "contest ratings"
 msgstr "대회 순위"
+
+#: judge/models/contest.py:386
+msgid "contest moss result"
+msgstr ""
+
+#: judge/models/contest.py:387
+msgid "contest moss results"
+msgstr ""
 
 #: judge/models/interface.py:24
 msgid "configuration item"
@@ -1496,7 +1527,7 @@ msgid "Student access code"
 msgstr "학생 엑세스 코드"
 
 #: judge/models/profile.py:71 judge/models/profile.py:87
-#: judge/models/profile.py:187
+#: judge/models/profile.py:186
 msgid "organization"
 msgstr "조직"
 
@@ -1592,31 +1623,31 @@ msgstr ""
 msgid "Notes for administrators regarding this user."
 msgstr ""
 
-#: judge/models/profile.py:181
+#: judge/models/profile.py:180
 msgid "user profile"
 msgstr "사용자 프로파일"
 
-#: judge/models/profile.py:182
+#: judge/models/profile.py:181
 msgid "user profiles"
 msgstr "사용자 프로파일"
 
-#: judge/models/profile.py:189
+#: judge/models/profile.py:188
 msgid "request time"
 msgstr "요청 시간"
 
-#: judge/models/profile.py:190
+#: judge/models/profile.py:189
 msgid "state"
 msgstr "상태"
 
-#: judge/models/profile.py:195
+#: judge/models/profile.py:194
 msgid "reason"
 msgstr "이유"
 
-#: judge/models/profile.py:198
+#: judge/models/profile.py:197
 msgid "organization join request"
 msgstr "조직 가입 요청"
 
-#: judge/models/profile.py:199
+#: judge/models/profile.py:198
 msgid "organization join requests"
 msgstr "조직 가입 요청"
 
@@ -1772,37 +1803,37 @@ msgstr "채점기"
 msgid "judge"
 msgstr "채점"
 
-#: judge/models/submission.py:20 judge/models/submission.py:46
+#: judge/models/submission.py:20 judge/models/submission.py:47
 #: judge/utils/problems.py:86
 msgid "Accepted"
 msgstr "통과"
 
-#: judge/models/submission.py:21 judge/models/submission.py:47
+#: judge/models/submission.py:21 judge/models/submission.py:48
 msgid "Wrong Answer"
 msgstr "오답"
 
-#: judge/models/submission.py:22 judge/models/submission.py:49
+#: judge/models/submission.py:22 judge/models/submission.py:50
 msgid "Time Limit Exceeded"
 msgstr "시간 제한 초과"
 
-#: judge/models/submission.py:23 judge/models/submission.py:50
+#: judge/models/submission.py:23 judge/models/submission.py:51
 msgid "Memory Limit Exceeded"
 msgstr "메모리 제한 초과"
 
-#: judge/models/submission.py:24 judge/models/submission.py:51
+#: judge/models/submission.py:24 judge/models/submission.py:52
 msgid "Output Limit Exceeded"
 msgstr "출력 제한 초과"
 
-#: judge/models/submission.py:25 judge/models/submission.py:52
+#: judge/models/submission.py:25 judge/models/submission.py:53
 msgid "Invalid Return"
 msgstr "잘못된 반환"
 
-#: judge/models/submission.py:26 judge/models/submission.py:53
+#: judge/models/submission.py:26 judge/models/submission.py:54
 msgid "Runtime Error"
 msgstr "런타임 에러"
 
 #: judge/models/submission.py:27 judge/models/submission.py:41
-#: judge/models/submission.py:54 judge/utils/problems.py:88
+#: judge/models/submission.py:55 judge/utils/problems.py:88
 msgid "Compile Error"
 msgstr "컴파일 에러"
 
@@ -1815,131 +1846,131 @@ msgid "Short circuit"
 msgstr "Short circuit"
 
 #: judge/models/submission.py:30 judge/models/submission.py:42
-#: judge/models/submission.py:60
+#: judge/models/submission.py:61
 msgid "Aborted"
 msgstr "취소됨"
 
-#: judge/models/submission.py:36 judge/models/submission.py:56
+#: judge/models/submission.py:36 judge/models/submission.py:57
 msgid "Queued"
 msgstr "대기열에 있음"
 
-#: judge/models/submission.py:37 judge/models/submission.py:57
+#: judge/models/submission.py:37 judge/models/submission.py:58
 msgid "Processing"
 msgstr "처리중"
 
-#: judge/models/submission.py:38 judge/models/submission.py:58
+#: judge/models/submission.py:38 judge/models/submission.py:59
 msgid "Grading"
 msgstr "채점중"
 
-#: judge/models/submission.py:39 judge/models/submission.py:59
+#: judge/models/submission.py:39 judge/models/submission.py:60
 msgid "Completed"
 msgstr "완료"
 
-#: judge/models/submission.py:55
+#: judge/models/submission.py:56
 msgid "Internal Error (judging server error)"
 msgstr ""
 
-#: judge/models/submission.py:65
+#: judge/models/submission.py:66
 msgid "submission time"
 msgstr "제출 시간"
 
-#: judge/models/submission.py:66 judge/models/submission.py:200
+#: judge/models/submission.py:67 judge/models/submission.py:201
 msgid "execution time"
 msgstr "실행 시간"
 
-#: judge/models/submission.py:67 judge/models/submission.py:201
+#: judge/models/submission.py:68 judge/models/submission.py:202
 msgid "memory usage"
 msgstr "메모리 사용량"
 
-#: judge/models/submission.py:68 judge/models/submission.py:202
+#: judge/models/submission.py:69 judge/models/submission.py:203
 msgid "points granted"
 msgstr "획득 포인트"
 
-#: judge/models/submission.py:69
+#: judge/models/submission.py:70
 msgid "submission language"
 msgstr "제출 언어"
 
-#: judge/models/submission.py:70
+#: judge/models/submission.py:71
 msgid "status"
 msgstr "상태"
 
-#: judge/models/submission.py:71
+#: judge/models/submission.py:72
 msgid "result"
 msgstr "결과"
 
-#: judge/models/submission.py:73
+#: judge/models/submission.py:74
 msgid "compile errors"
 msgstr "컴파일 에러"
 
-#: judge/models/submission.py:75
+#: judge/models/submission.py:76
 msgid "batched cases"
 msgstr "batched 테스트 케이스"
 
-#: judge/models/submission.py:76
+#: judge/models/submission.py:77
 msgid "test case points"
 msgstr "테스크 케이스 점수"
 
-#: judge/models/submission.py:77
+#: judge/models/submission.py:78
 msgid "test case total points"
 msgstr "테스트 케이스 총 점수"
 
-#: judge/models/submission.py:78
+#: judge/models/submission.py:79
 msgid "judged on"
 msgstr ""
 
-#: judge/models/submission.py:80
+#: judge/models/submission.py:81
 msgid "was rejudged by admin"
 msgstr "관리자에 의해 재채점"
 
-#: judge/models/submission.py:81
+#: judge/models/submission.py:82
 msgid "was ran on pretests only"
 msgstr "pretest에서만 채점됨"
 
-#: judge/models/submission.py:181
+#: judge/models/submission.py:182 templates/contest/moss.html:58
 msgid "submissions"
 msgstr "제출"
 
-#: judge/models/submission.py:185 judge/models/submission.py:196
+#: judge/models/submission.py:186 judge/models/submission.py:197
 msgid "associated submission"
 msgstr "관련된 제출"
 
-#: judge/models/submission.py:187
+#: judge/models/submission.py:188
 msgid "source code"
 msgstr "소스 코드"
 
-#: judge/models/submission.py:198
+#: judge/models/submission.py:199
 msgid "test case ID"
 msgstr "test case ID"
 
-#: judge/models/submission.py:199
+#: judge/models/submission.py:200
 msgid "status flag"
 msgstr "상태 flag"
 
-#: judge/models/submission.py:203
+#: judge/models/submission.py:204
 msgid "points possible"
 msgstr "획득 가능한 포인트"
 
-#: judge/models/submission.py:204
+#: judge/models/submission.py:205
 msgid "batch number"
 msgstr "batch number"
 
-#: judge/models/submission.py:205
+#: judge/models/submission.py:206
 msgid "judging feedback"
 msgstr "채점 피드백"
 
-#: judge/models/submission.py:206
+#: judge/models/submission.py:207
 msgid "extended judging feedback"
 msgstr ""
 
-#: judge/models/submission.py:207
+#: judge/models/submission.py:208
 msgid "program output"
 msgstr "프로그램 출력"
 
-#: judge/models/submission.py:214
+#: judge/models/submission.py:215
 msgid "submission test case"
 msgstr "제출 테스트 케이스"
 
-#: judge/models/submission.py:215
+#: judge/models/submission.py:216
 msgid "submission test cases"
 msgstr "제출 테스트 케이스"
 
@@ -1991,16 +2022,20 @@ msgstr "포스터"
 msgid "message time"
 msgstr "메시지 시간"
 
-#: judge/pdf_problems.py:136 judge/pdf_problems.py:188
-#: judge/pdf_problems.py:248
+#: judge/pdf_problems.py:134 judge/pdf_problems.py:186
+#: judge/pdf_problems.py:246
 msgid "Page [page] of [topage]"
 msgstr "[topage]의 페이지 [page]"
 
-#: judge/tasks/submission.py:42
+#: judge/tasks/moss.py:25
+msgid "Running MOSS"
+msgstr ""
+
+#: judge/tasks/submission.py:43
 msgid "Modifying submissions"
 msgstr ""
 
-#: judge/tasks/submission.py:55
+#: judge/tasks/submission.py:56
 msgid "Recalculating user points"
 msgstr ""
 
@@ -2093,7 +2128,7 @@ msgctxt "hours and minutes"
 msgid "%h:%m"
 msgstr "%h:%m"
 
-#: judge/views/blog.py:37
+#: judge/views/blog.py:38
 #, python-format
 msgid "Page %d of Posts"
 msgstr "게시물 %d 페이지"
@@ -2110,7 +2145,7 @@ msgstr ""
 msgid "You already voted."
 msgstr "이미 투표하셨습니다."
 
-#: judge/views/comment.py:120 judge/views/organization.py:288
+#: judge/views/comment.py:120 judge/views/organization.py:289
 msgid "Edited from site"
 msgstr "사이트에서 편집"
 
@@ -2118,106 +2153,120 @@ msgstr "사이트에서 편집"
 msgid "Editing comment"
 msgstr ""
 
-#: judge/views/contests.py:44 judge/views/contests.py:201
-#: judge/views/contests.py:204 judge/views/contests.py:342
+#: judge/views/contests.py:49 judge/views/contests.py:207
+#: judge/views/contests.py:210 judge/views/contests.py:381
 msgid "No such contest"
 msgstr "그런 대회는 존재하지 않습니다."
 
-#: judge/views/contests.py:45 judge/views/contests.py:202
+#: judge/views/contests.py:50 judge/views/contests.py:208
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "키 %s로는 대회를 찾을 수 없습니다."
 
-#: judge/views/contests.py:70
+#: judge/views/contests.py:75
 msgid "Contests"
 msgstr "대회"
 
-#: judge/views/contests.py:205
+#: judge/views/contests.py:211
 msgid "Could not find such contest."
 msgstr "그런 대회를 찾을 수 있습니다."
 
-#: judge/views/contests.py:208
+#: judge/views/contests.py:214
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr "%s 대회 접근이 거부되었습니다."
 
-#: judge/views/contests.py:262
+#: judge/views/contests.py:238
+msgid "Clone Contest"
+msgstr ""
+
+#: judge/views/contests.py:301
 msgid "Contest not ongoing"
 msgstr "현재 진행중인 대회가 아닙니다."
 
-#: judge/views/contests.py:263
+#: judge/views/contests.py:302
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "%s는 현재 진행중이 아닙니다."
 
-#: judge/views/contests.py:267
+#: judge/views/contests.py:306
 msgid "Already in contest"
 msgstr "대회에 이미 있습니다."
 
-#: judge/views/contests.py:268
+#: judge/views/contests.py:307
 #, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr "현재 대회 %s에 이미 참가해 있습니다."
 
-#: judge/views/contests.py:271
+#: judge/views/contests.py:310
 msgid "Banned from joining"
 msgstr ""
 
-#: judge/views/contests.py:272
+#: judge/views/contests.py:311
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr ""
 
-#: judge/views/contests.py:332
+#: judge/views/contests.py:371
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr ""
 
-#: judge/views/contests.py:343
+#: judge/views/contests.py:382
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "현재 대회 %s에 참가중이 아닙니다."
 
-#: judge/views/contests.py:362
+#: judge/views/contests.py:401
 msgid "ContestCalendar requires integer year and month"
 msgstr ""
 
-#: judge/views/contests.py:402
+#: judge/views/contests.py:441
 #, python-format
 msgid "Contests in %(month)s"
 msgstr ""
 
-#: judge/views/contests.py:402
+#: judge/views/contests.py:441
 msgid "F Y"
 msgstr ""
 
-#: judge/views/contests.py:488
+#: judge/views/contests.py:527
 msgid "???"
 msgstr ""
 
-#: judge/views/contests.py:551
+#: judge/views/contests.py:590
 #, python-format
 msgid "%s Rankings"
 msgstr "%s 순위"
 
-#: judge/views/contests.py:567
+#: judge/views/contests.py:606
 #, python-format
 msgid "Your participation in %s"
 msgstr "%s에 대한 당신의 참가"
 
-#: judge/views/contests.py:568
+#: judge/views/contests.py:607
 #, python-format
 msgid "%s's participation in %s"
 msgstr "%s's %s에 대한 참가"
 
-#: judge/views/contests.py:572
+#: judge/views/contests.py:611
 msgid "Live"
 msgstr "실시간"
 
-#: judge/views/contests.py:584 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:623 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr "참여"
 
-#: judge/views/contests.py:606
+#: judge/views/contests.py:650
+#, python-format
+msgid "%s MOSS Results"
+msgstr ""
+
+#: judge/views/contests.py:677
+#, python-format
+msgid "Running MOSS for %s..."
+msgstr ""
+
+#: judge/views/contests.py:700
 #, python-format
 msgid "Contest tag: %s"
 msgstr "대회 태그: %s"
@@ -2300,104 +2349,104 @@ msgstr "%s 가입 신청"
 msgid "Join request detail"
 msgstr "가입 신청 세부 사항"
 
-#: judge/views/organization.py:203
+#: judge/views/organization.py:204
 #, python-format
 msgid "Managing join requests for %s"
 msgstr "%s 가입 신청 가입"
 
-#: judge/views/organization.py:234
+#: judge/views/organization.py:235
 #, python-format
 msgid "Your organization can only receive %d more members. You cannot approve %d users."
 msgstr "당신의 조직은 %d명의 회원만 더 가입이 가능합니다. %d명의 사용자 가입 승인이 불가합니다."
 
-#: judge/views/organization.py:246
+#: judge/views/organization.py:247
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] "%d명 사용자 승인"
 
-#: judge/views/organization.py:247
+#: judge/views/organization.py:248
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] "%d명 거부"
 
-#: judge/views/organization.py:272
+#: judge/views/organization.py:273
 #, python-format
 msgid "Editing %s"
 msgstr "%s 편집중"
 
-#: judge/views/organization.py:296 judge/views/organization.py:304
+#: judge/views/organization.py:297 judge/views/organization.py:305
 msgid "Can't edit organization"
 msgstr "조직 편집이 불가합니다."
 
-#: judge/views/organization.py:297
+#: judge/views/organization.py:298
 msgid "You are not allowed to edit this organization."
 msgstr "조직을 편집할 권한이 없습니다."
 
-#: judge/views/organization.py:305
+#: judge/views/organization.py:306
 msgid "You are not allowed to kick people from this organization."
 msgstr "조직 사용자를 탈퇴시킬 권한이 없습니다."
 
-#: judge/views/organization.py:310 judge/views/organization.py:314
+#: judge/views/organization.py:311 judge/views/organization.py:315
 msgid "Can't kick user"
 msgstr "이 사용자를 탈퇴시킬 수 없습니다."
 
-#: judge/views/organization.py:311
+#: judge/views/organization.py:312
 msgid "The user you are trying to kick does not exist!"
 msgstr "탈퇴시키려는 사용자가 존재하지 않습니다."
 
-#: judge/views/organization.py:315
+#: judge/views/organization.py:316
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
 msgstr ""
 
-#: judge/views/problem.py:69
+#: judge/views/problem.py:68
 msgid "No such problem"
 msgstr "존재하지 않는 문제"
 
-#: judge/views/problem.py:70
+#: judge/views/problem.py:69
 #, python-format
 msgid "Could not find a problem with the code \"%s\"."
 msgstr "%s 문제를 찾을 수 없습니다."
 
-#: judge/views/problem.py:112
+#: judge/views/problem.py:111
 #, python-brace-format
 msgid "Editorial for {0}"
 msgstr ""
 
-#: judge/views/problem.py:115
+#: judge/views/problem.py:114
 #, python-brace-format
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
 msgstr ""
 
-#: judge/views/problem.py:291 templates/contest/contest.html:79
+#: judge/views/problem.py:292 templates/contest/contest.html:79
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
 msgstr "문제"
 
-#: judge/views/problem.py:552
+#: judge/views/problem.py:553
 msgid "Banned from submitting"
 msgstr ""
 
-#: judge/views/problem.py:553
+#: judge/views/problem.py:554
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
 msgstr ""
 
-#: judge/views/problem.py:566
+#: judge/views/problem.py:567
 msgid "Too many submissions"
 msgstr ""
 
-#: judge/views/problem.py:567
+#: judge/views/problem.py:568
 msgid "You have exceeded the submission limit for this problem."
 msgstr ""
 
-#: judge/views/problem.py:633 judge/views/problem.py:636
+#: judge/views/problem.py:634 judge/views/problem.py:637
 #, python-format
 msgid "Submit to %(problem)s"
 msgstr ""
 
-#: judge/views/problem.py:652
+#: judge/views/problem.py:653
 msgid "Clone Problem"
 msgstr ""
 
@@ -2438,22 +2487,22 @@ msgstr ""
 msgid "Generated init.yml for %s"
 msgstr ""
 
-#: judge/views/problem_manage.py:49 judge/views/problem_manage.py:52
+#: judge/views/problem_manage.py:50 judge/views/problem_manage.py:53
 #, python-format
 msgid "Managing submissions for %s"
 msgstr ""
 
-#: judge/views/problem_manage.py:92
+#: judge/views/problem_manage.py:95
 #, python-format
 msgid "Rejudging selected submissions for %s..."
 msgstr ""
 
-#: judge/views/problem_manage.py:107
+#: judge/views/problem_manage.py:110
 #, python-format
 msgid "Rescoring all submissions for %s..."
 msgstr ""
 
-#: judge/views/problem_manage.py:116
+#: judge/views/problem_manage.py:119
 #, python-format
 msgid "Successfully scheduled %d submission for rejudging."
 msgid_plural "Successfully scheduled %d submissions for rejudging."
@@ -2522,7 +2571,7 @@ msgstr "인증 실패"
 msgid "Language statistics"
 msgstr "언어 통계"
 
-#: judge/views/status.py:24 templates/submission/list.html:301
+#: judge/views/status.py:24 templates/submission/list.html:319
 msgid "Status"
 msgstr "현재 상태"
 
@@ -2892,7 +2941,7 @@ msgid "This site works best with JavaScript enabled."
 msgstr "이 사이트는 자바 스크립트를 활성화시켜야 정상적으로 작동합니다."
 
 #: templates/blog/content.html:13 templates/comments/list.html:68
-#: templates/comments/list.html:83 templates/contest/contest-tabs.html:17
+#: templates/comments/list.html:83 templates/contest/contest-tabs.html:20
 #: templates/contest/tag-title.html:9 templates/flatpages/admin_link.html:3
 #: templates/license.html:10 templates/problem/data.html:437
 #: templates/problem/editorial.html:14
@@ -2930,11 +2979,11 @@ msgstr ""
 msgid "posted on {time}"
 msgstr ""
 
-#: templates/blog/list.html:130 templates/problem/problem.html:309
+#: templates/blog/list.html:130 templates/problem/problem.html:310
 msgid "Clarifications"
 msgstr ""
 
-#: templates/blog/list.html:146 templates/problem/problem.html:320
+#: templates/blog/list.html:146 templates/problem/problem.html:321
 msgid "No clarifications have been made at this time."
 msgstr ""
 
@@ -3073,6 +3122,14 @@ msgstr ""
 msgid "Saturday"
 msgstr ""
 
+#: templates/contest/clone.html:37
+msgid "Enter a new key for the cloned contest:"
+msgstr ""
+
+#: templates/contest/clone.html:40 templates/problem/clone.html:40
+msgid "Clone!"
+msgstr ""
+
 #: templates/contest/contest-list-tabs.html:7
 msgid "Prev"
 msgstr ""
@@ -3106,29 +3163,37 @@ msgstr ""
 msgid "Hidden Rankings"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:28
-#: templates/contest/contest-tabs.html:48
+#: templates/contest/contest-tabs.html:18
+msgid "MOSS"
+msgstr ""
+
+#: templates/contest/contest-tabs.html:23
+msgid "Clone"
+msgstr ""
+
+#: templates/contest/contest-tabs.html:34
+#: templates/contest/contest-tabs.html:54
 msgid "Leave contest"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:35 templates/contest/list.html:293
+#: templates/contest/contest-tabs.html:41 templates/contest/list.html:293
 msgid "Virtual join"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:46
+#: templates/contest/contest-tabs.html:52
 msgid "Stop spectating"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:55
+#: templates/contest/contest-tabs.html:61
 msgid "Spectate contest"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:61
 #: templates/contest/contest-tabs.html:67
+#: templates/contest/contest-tabs.html:73
 msgid "Join contest"
 msgstr ""
 
-#: templates/contest/contest-tabs.html:76
+#: templates/contest/contest-tabs.html:82
 msgid "Login to participate"
 msgstr ""
 
@@ -3231,6 +3296,26 @@ msgstr ""
 
 #: templates/contest/media-js.html:10
 msgid "Joining a contest starts your timer, after which it becomes unstoppable."
+msgstr ""
+
+#: templates/contest/moss.html:28
+msgid "Are you sure you want MOSS the contest?"
+msgstr ""
+
+#: templates/contest/moss.html:33
+msgid "Are you sure you want to delete the MOSS results?"
+msgstr ""
+
+#: templates/contest/moss.html:60
+msgid "No submissions"
+msgstr ""
+
+#: templates/contest/moss.html:74
+msgid "Re-MOSS contest"
+msgstr ""
+
+#: templates/contest/moss.html:82
+msgid "Delete MOSS results"
 msgstr ""
 
 #: templates/contest/private.html:4
@@ -3437,10 +3522,6 @@ msgstr ""
 msgid "Enter a new code for the cloned problem:"
 msgstr ""
 
-#: templates/problem/clone.html:40
-msgid "Clone!"
-msgstr ""
-
 #: templates/problem/data.html:353
 msgid "View YAML"
 msgstr ""
@@ -3540,53 +3621,53 @@ msgstr ""
 msgid "You are about to rejudge a few submissions. Are you sure you want to do this?"
 msgstr ""
 
-#: templates/problem/manage_submission.html:114
+#: templates/problem/manage_submission.html:115
 msgid "Rejudge Submissions"
 msgstr ""
 
-#: templates/problem/manage_submission.html:119
+#: templates/problem/manage_submission.html:120
 msgid "Filter by ID:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:122
+#: templates/problem/manage_submission.html:123
 msgid "Starting ID:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:126
+#: templates/problem/manage_submission.html:127
 msgid "Ending ID:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:130
+#: templates/problem/manage_submission.html:131
 msgid "This range includes both endpoints."
 msgstr ""
 
-#: templates/problem/manage_submission.html:133
+#: templates/problem/manage_submission.html:134
 msgid "Filter by language:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:141
+#: templates/problem/manage_submission.html:142
 msgid "Filter by result:"
 msgstr ""
 
-#: templates/problem/manage_submission.html:149
+#: templates/problem/manage_submission.html:150
 msgid "Rejudge selected submissions"
 msgstr ""
 
-#: templates/problem/manage_submission.html:155
+#: templates/problem/manage_submission.html:157
 msgid "Rescore Everything"
 msgstr ""
 
-#: templates/problem/manage_submission.html:156
+#: templates/problem/manage_submission.html:158
 #, python-format
 msgid "This will rescore %(count)d submissions."
 msgstr ""
 
-#: templates/problem/manage_submission.html:160
+#: templates/problem/manage_submission.html:162
 #, python-format
 msgid "Are you sure you want to rescore %(count)d submissions?"
 msgstr ""
 
-#: templates/problem/manage_submission.html:161
+#: templates/problem/manage_submission.html:163
 msgid "Rescore all submissions"
 msgstr ""
 
@@ -3617,83 +3698,83 @@ msgstr ""
 msgid "Best submissions"
 msgstr ""
 
-#: templates/problem/problem.html:131
+#: templates/problem/problem.html:132
 msgid "Read editorial"
 msgstr ""
 
-#: templates/problem/problem.html:136
+#: templates/problem/problem.html:137
 msgid "Manage tickets"
 msgstr ""
 
-#: templates/problem/problem.html:140
+#: templates/problem/problem.html:141
 msgid "Edit problem"
 msgstr ""
 
-#: templates/problem/problem.html:142
+#: templates/problem/problem.html:143
 msgid "Edit test data"
 msgstr ""
 
-#: templates/problem/problem.html:147
+#: templates/problem/problem.html:148
 msgid "My tickets"
 msgstr ""
 
-#: templates/problem/problem.html:155
+#: templates/problem/problem.html:156
 msgid "Manage submissions"
 msgstr ""
 
-#: templates/problem/problem.html:161
+#: templates/problem/problem.html:162
 msgid "Clone problem"
 msgstr ""
 
-#: templates/problem/problem.html:168
+#: templates/problem/problem.html:169
 msgid "Points:"
 msgstr ""
 
-#: templates/problem/problem.html:171 templates/problem/problem.html:173
+#: templates/problem/problem.html:172 templates/problem/problem.html:174
 msgid "(partial)"
 msgstr ""
 
-#: templates/problem/problem.html:178
+#: templates/problem/problem.html:179
 msgid "Time limit:"
 msgstr ""
 
-#: templates/problem/problem.html:190
+#: templates/problem/problem.html:191
 msgid "Memory limit:"
 msgstr ""
 
-#: templates/problem/problem.html:209
+#: templates/problem/problem.html:210
 msgid "Author:"
 msgid_plural "Authors:"
 msgstr[0] ""
 
-#: templates/problem/problem.html:224
+#: templates/problem/problem.html:225
 msgid "Problem type"
 msgid_plural "Problem types"
 msgstr[0] ""
 
-#: templates/problem/problem.html:237
+#: templates/problem/problem.html:238
 msgid "Allowed languages"
 msgstr ""
 
-#: templates/problem/problem.html:245
+#: templates/problem/problem.html:246
 #, python-format
 msgid "No %(lang)s judge online"
 msgstr ""
 
-#: templates/problem/problem.html:256
+#: templates/problem/problem.html:257
 msgid "Judge:"
 msgid_plural "Judges:"
 msgstr[0] ""
 
-#: templates/problem/problem.html:273
+#: templates/problem/problem.html:274
 msgid "none available"
 msgstr ""
 
-#: templates/problem/problem.html:298
+#: templates/problem/problem.html:299
 msgid "Request clarification"
 msgstr ""
 
-#: templates/problem/problem.html:300
+#: templates/problem/problem.html:301
 msgid "Report an issue"
 msgstr ""
 
@@ -3738,7 +3819,7 @@ msgstr ""
 msgid "Point range"
 msgstr ""
 
-#: templates/problem/search-form.html:63 templates/submission/list.html:319
+#: templates/problem/search-form.html:63 templates/submission/list.html:337
 #: templates/ticket/list.html:248
 msgid "Go"
 msgstr ""
@@ -3779,20 +3860,20 @@ msgstr ""
 msgid "Your account has been successfully activated."
 msgstr ""
 
-#: templates/registration/login.html:46
+#: templates/registration/login.html:42
 msgid "Invalid username or password."
 msgstr ""
 
-#: templates/registration/login.html:64
+#: templates/registration/login.html:60
 #: templates/registration/totp_auth.html:39
 msgid "Login!"
 msgstr ""
 
-#: templates/registration/login.html:67
+#: templates/registration/login.html:63
 msgid "Forgot your password?"
 msgstr ""
 
-#: templates/registration/login.html:70
+#: templates/registration/login.html:66
 msgid "Or log in with..."
 msgstr ""
 
@@ -3941,7 +4022,7 @@ msgstr ""
 msgid "Or enter this code manually:"
 msgstr ""
 
-#: templates/stats/base.html:9 templates/submission/list.html:327
+#: templates/stats/base.html:9 templates/submission/list.html:345
 msgid "Statistics"
 msgstr ""
 
@@ -4016,23 +4097,23 @@ msgstr ""
 msgid "Error information"
 msgstr ""
 
-#: templates/submission/list.html:63
+#: templates/submission/list.html:76
 msgid "Filter by status..."
 msgstr ""
 
-#: templates/submission/list.html:65
+#: templates/submission/list.html:82
 msgid "Filter by language..."
 msgstr ""
 
-#: templates/submission/list.html:297
+#: templates/submission/list.html:315
 msgid "Filter submissions"
 msgstr ""
 
-#: templates/submission/list.html:333
+#: templates/submission/list.html:351
 msgid "Total:"
 msgstr ""
 
-#: templates/submission/list.html:343
+#: templates/submission/list.html:361
 msgid "You were disconnected. Refresh to show latest updates."
 msgstr ""
 

@@ -78,7 +78,7 @@ class Comment(MPTTModel):
             if not slice:
                 break
             for comment in slice:
-                if comment.page.startswith('p:'):
+                if comment.page.startswith('p:') or comment.page.startswith('s:'):
                     try:
                         if problem_access[comment.page[2:]]:
                             output.append(comment)
