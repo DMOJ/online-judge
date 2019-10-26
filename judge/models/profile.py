@@ -44,6 +44,10 @@ class Organization(models.Model):
                                             'only applicable to private organizations'))
     access_code = models.CharField(max_length=7, help_text=_('Student access code'),
                                    verbose_name=_('access code'), null=True, blank=True)
+    logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150,
+                                           blank=True,
+                                           help_text=_('This image will replace the default site logo for users '
+                                                       'viewing the organization.'))
 
     def __contains__(self, item):
         if isinstance(item, int):
