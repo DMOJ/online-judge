@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-25 04:51+0000\n"
-"PO-Revision-Date: 2019-10-25 05:05\n"
+"POT-Creation-Date: 2019-10-26 16:36+0000\n"
+"PO-Revision-Date: 2019-10-26 17:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -198,7 +198,7 @@ msgstr[1] ""
 msgid "Recalculate results"
 msgstr ""
 
-#: judge/admin/contest.py:271 judge/admin/organization.py:64
+#: judge/admin/contest.py:271 judge/admin/organization.py:65
 msgid "username"
 msgstr "nombre de usuario"
 
@@ -219,7 +219,7 @@ msgid "Summary"
 msgstr "Resumen"
 
 #: judge/admin/interface.py:107 judge/models/contest.py:251
-#: judge/models/contest.py:355 judge/models/profile.py:185
+#: judge/models/contest.py:355 judge/models/profile.py:189
 msgid "user"
 msgstr "usuario"
 
@@ -227,7 +227,7 @@ msgstr "usuario"
 msgid "object"
 msgstr ""
 
-#: judge/admin/organization.py:33 judge/admin/problem.py:170
+#: judge/admin/organization.py:34 judge/admin/problem.py:170
 #: judge/admin/profile.py:78
 msgid "View on site"
 msgstr "Ver en el sitio web"
@@ -467,7 +467,7 @@ msgstr "Subscribirse en las actualizaciones de los concursos"
 msgid "Enable experimental features"
 msgstr "Habilitar las actualizaciones experimentales"
 
-#: judge/forms.py:57 judge/views/organization.py:122
+#: judge/forms.py:57 judge/views/organization.py:127
 #, python-brace-format
 msgid "You may not be part of more than {count} public organizations."
 msgstr "Tu no deberías formar parte de más de {count} organizaciones públicas."
@@ -753,7 +753,7 @@ msgid "private to organizations"
 msgstr "privado para organizaciones"
 
 #: judge/models/contest.py:93 judge/models/problem.py:155
-#: judge/models/profile.py:72
+#: judge/models/profile.py:76
 msgid "organizations"
 msgstr "organizaciones"
 
@@ -765,7 +765,7 @@ msgstr "Es privado, sólo estas organizaciones deben ser el concurso"
 msgid "OpenGraph image"
 msgstr "Imagen de OpenGraph"
 
-#: judge/models/contest.py:96
+#: judge/models/contest.py:96 judge/models/profile.py:47
 msgid "Logo override image"
 msgstr ""
 
@@ -1536,128 +1536,132 @@ msgstr "Máxima cantidad de usuarios en esta organización, solo aplicable para 
 msgid "Student access code"
 msgstr "Código de acceso para estudiantes"
 
-#: judge/models/profile.py:71 judge/models/profile.py:87
-#: judge/models/profile.py:186
+#: judge/models/profile.py:49
+msgid "This image will replace the default site logo for users viewing the organization."
+msgstr ""
+
+#: judge/models/profile.py:75 judge/models/profile.py:91
+#: judge/models/profile.py:190
 msgid "organization"
 msgstr "onganización"
 
-#: judge/models/profile.py:76
+#: judge/models/profile.py:80
 msgid "user associated"
 msgstr "usuario asociado"
 
-#: judge/models/profile.py:77
+#: judge/models/profile.py:81
 msgid "self-description"
 msgstr "descripción propia"
 
-#: judge/models/profile.py:78
+#: judge/models/profile.py:82
 msgid "location"
 msgstr "ubicación"
 
-#: judge/models/profile.py:80
+#: judge/models/profile.py:84
 msgid "preferred language"
 msgstr "idioma preferido"
 
-#: judge/models/profile.py:85
+#: judge/models/profile.py:89
 msgid "last access time"
 msgstr "último tiempo de acceso"
 
-#: judge/models/profile.py:86
+#: judge/models/profile.py:90
 msgid "last IP"
 msgstr "último IP"
 
-#: judge/models/profile.py:89
+#: judge/models/profile.py:93
 msgid "display rank"
 msgstr "mostrar rango"
 
-#: judge/models/profile.py:91
+#: judge/models/profile.py:95
 msgid "comment mute"
 msgstr "comentario en silencio"
 
-#: judge/models/profile.py:91
+#: judge/models/profile.py:95
 msgid "Some users are at their best when silent."
 msgstr "Algunos usuarios están en su mejor momento cuando están en silencio."
 
-#: judge/models/profile.py:93
+#: judge/models/profile.py:97
 msgid "unlisted user"
 msgstr ""
 
-#: judge/models/profile.py:93
+#: judge/models/profile.py:97
 msgid "User will not be ranked."
 msgstr ""
 
-#: judge/models/profile.py:96
+#: judge/models/profile.py:100
 msgid "user script"
 msgstr "scrip de usuario"
 
-#: judge/models/profile.py:97
+#: judge/models/profile.py:101
 msgid "User-defined JavaScript for site customization."
 msgstr "JavaScript definido por el usuario para la personalización del sitio."
 
-#: judge/models/profile.py:98
+#: judge/models/profile.py:102
 msgid "current contest"
 msgstr "concurso actual"
 
-#: judge/models/profile.py:100
+#: judge/models/profile.py:104
 msgid "math engine"
 msgstr "motor matemático"
 
-#: judge/models/profile.py:102
+#: judge/models/profile.py:106
 msgid "the rendering engine used to render math"
 msgstr "el motor de renderizado utilizado para representar las matemáticas"
 
-#: judge/models/profile.py:103
+#: judge/models/profile.py:107
 msgid "2FA enabled"
 msgstr ""
 
-#: judge/models/profile.py:104
+#: judge/models/profile.py:108
 msgid "check to enable TOTP-based two factor authentication"
 msgstr ""
 
-#: judge/models/profile.py:105
+#: judge/models/profile.py:109
 msgid "TOTP key"
 msgstr ""
 
-#: judge/models/profile.py:106
+#: judge/models/profile.py:110
 msgid "32 character base32-encoded key for TOTP"
 msgstr ""
 
-#: judge/models/profile.py:108
+#: judge/models/profile.py:112
 msgid "TOTP key must be empty or base32"
 msgstr ""
 
-#: judge/models/profile.py:109
+#: judge/models/profile.py:113
 msgid "internal notes"
 msgstr ""
 
-#: judge/models/profile.py:110
+#: judge/models/profile.py:114
 msgid "Notes for administrators regarding this user."
 msgstr ""
 
-#: judge/models/profile.py:180
+#: judge/models/profile.py:184
 msgid "user profile"
 msgstr "perfil del usuario"
 
-#: judge/models/profile.py:181
+#: judge/models/profile.py:185
 msgid "user profiles"
 msgstr "perfiles de usuarios"
 
-#: judge/models/profile.py:188
+#: judge/models/profile.py:192
 msgid "request time"
 msgstr "tiempo requerido"
 
-#: judge/models/profile.py:189
+#: judge/models/profile.py:193
 msgid "state"
 msgstr "estado"
 
-#: judge/models/profile.py:194
+#: judge/models/profile.py:198
 msgid "reason"
 msgstr "razón"
 
-#: judge/models/profile.py:197
+#: judge/models/profile.py:201
 msgid "organization join request"
 msgstr "solicitud para asociarse a la organización"
 
-#: judge/models/profile.py:198
+#: judge/models/profile.py:202
 msgid "organization join requests"
 msgstr "peticiones para unirse a la organización"
 
@@ -2158,7 +2162,7 @@ msgstr ""
 msgid "You already voted."
 msgstr "Tu ya votaste."
 
-#: judge/views/comment.py:120 judge/views/organization.py:289
+#: judge/views/comment.py:120 judge/views/organization.py:294
 msgid "Edited from site"
 msgstr "Editado desde sitio"
 
@@ -2166,12 +2170,12 @@ msgstr "Editado desde sitio"
 msgid "Editing comment"
 msgstr "Comentario editado"
 
-#: judge/views/contests.py:49 judge/views/contests.py:207
-#: judge/views/contests.py:210 judge/views/contests.py:381
+#: judge/views/contests.py:49 judge/views/contests.py:210
+#: judge/views/contests.py:213 judge/views/contests.py:384
 msgid "No such contest"
 msgstr "No hay tal concurso"
 
-#: judge/views/contests.py:50 judge/views/contests.py:208
+#: judge/views/contests.py:50 judge/views/contests.py:211
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "No se pudo encontrar una publicación con la clave \"%s\"."
@@ -2180,106 +2184,106 @@ msgstr "No se pudo encontrar una publicación con la clave \"%s\"."
 msgid "Contests"
 msgstr "Concursos"
 
-#: judge/views/contests.py:211
+#: judge/views/contests.py:214
 msgid "Could not find such contest."
 msgstr "No se pudo encontrar dicho concurso."
 
-#: judge/views/contests.py:214
+#: judge/views/contests.py:217
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr "Acceso al concurso \"%s\" denegado"
 
-#: judge/views/contests.py:238
+#: judge/views/contests.py:241
 msgid "Clone Contest"
 msgstr ""
 
-#: judge/views/contests.py:301
+#: judge/views/contests.py:304
 msgid "Contest not ongoing"
 msgstr "Concurso no permanente"
 
-#: judge/views/contests.py:302
+#: judge/views/contests.py:305
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "\"%s\" no esta actualmente en curso."
 
-#: judge/views/contests.py:306
+#: judge/views/contests.py:309
 msgid "Already in contest"
 msgstr "Ya en el concurso"
 
-#: judge/views/contests.py:307
+#: judge/views/contests.py:310
 #, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr "Ya estas en el concurso: \"%s\"."
 
-#: judge/views/contests.py:310
+#: judge/views/contests.py:313
 msgid "Banned from joining"
 msgstr ""
 
-#: judge/views/contests.py:311
+#: judge/views/contests.py:314
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr ""
 
-#: judge/views/contests.py:371
+#: judge/views/contests.py:374
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr "Ingrese el código de acceso para \"%s\""
 
-#: judge/views/contests.py:382
+#: judge/views/contests.py:385
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "Tu no estas concursando \"%s\"."
 
-#: judge/views/contests.py:401
+#: judge/views/contests.py:404
 msgid "ContestCalendar requires integer year and month"
 msgstr ""
 
-#: judge/views/contests.py:441
+#: judge/views/contests.py:444
 #, python-format
 msgid "Contests in %(month)s"
 msgstr "Concursos en %(month)s"
 
-#: judge/views/contests.py:441
+#: judge/views/contests.py:444
 msgid "F Y"
 msgstr ""
 
-#: judge/views/contests.py:527
+#: judge/views/contests.py:530
 msgid "???"
 msgstr ""
 
-#: judge/views/contests.py:590
+#: judge/views/contests.py:593
 #, python-format
 msgid "%s Rankings"
 msgstr "%s Clasificaciones"
 
-#: judge/views/contests.py:606
+#: judge/views/contests.py:609
 #, python-format
 msgid "Your participation in %s"
 msgstr "Su participación en %s"
 
-#: judge/views/contests.py:607
+#: judge/views/contests.py:610
 #, python-format
 msgid "%s's participation in %s"
 msgstr "participación de %s en %s"
 
-#: judge/views/contests.py:611
+#: judge/views/contests.py:614
 msgid "Live"
 msgstr "En Vivo"
 
-#: judge/views/contests.py:623 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:626 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr "Participación"
 
-#: judge/views/contests.py:650
+#: judge/views/contests.py:653
 #, python-format
 msgid "%s MOSS Results"
 msgstr ""
 
-#: judge/views/contests.py:677
+#: judge/views/contests.py:680
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr ""
 
-#: judge/views/contests.py:700
+#: judge/views/contests.py:703
 #, python-format
 msgid "Contest tag: %s"
 msgstr "Concurso etiqueta: %s"
@@ -2308,110 +2312,110 @@ msgstr "página corrupta %s"
 msgid "Runtimes"
 msgstr "Duración"
 
-#: judge/views/organization.py:39 judge/views/organization.py:42
+#: judge/views/organization.py:44 judge/views/organization.py:47
 msgid "No such organization"
 msgstr "Ninguna organización"
 
-#: judge/views/organization.py:40
+#: judge/views/organization.py:45
 #, python-format
 msgid "Could not find an organization with the key \"%s\"."
 msgstr "No se encontró una organización con la clave \"%s\"."
 
-#: judge/views/organization.py:43
+#: judge/views/organization.py:48
 msgid "Could not find such organization."
 msgstr "No se pudo encontrar tal organización."
 
-#: judge/views/organization.py:67 judge/views/register.py:34
+#: judge/views/organization.py:72 judge/views/register.py:34
 #: templates/organization/list.html:15 templates/user/user-list-tabs.html:5
 msgid "Organizations"
 msgstr "Organizaciones"
 
-#: judge/views/organization.py:88
+#: judge/views/organization.py:93
 #, python-format
 msgid "%s Members"
 msgstr "%s miembros"
 
-#: judge/views/organization.py:113 judge/views/organization.py:116
-#: judge/views/organization.py:121
+#: judge/views/organization.py:118 judge/views/organization.py:121
+#: judge/views/organization.py:126
 msgid "Joining organization"
 msgstr "Unirse a la organización"
 
-#: judge/views/organization.py:113
+#: judge/views/organization.py:118
 msgid "You are already in the organization."
 msgstr "Ya estas en esta organización."
 
-#: judge/views/organization.py:116
+#: judge/views/organization.py:121
 msgid "This organization is not open."
 msgstr "Esta organización no está abierta."
 
-#: judge/views/organization.py:133
+#: judge/views/organization.py:138
 msgid "Leaving organization"
 msgstr "Abandonar organización"
 
-#: judge/views/organization.py:133
+#: judge/views/organization.py:138
 #, python-format
 msgid "You are not in \"%s\"."
 msgstr "No estás en \"%s\"."
 
-#: judge/views/organization.py:157
+#: judge/views/organization.py:162
 #, python-format
 msgid "Request to join %s"
 msgstr "Solicitar para unirse %s"
 
-#: judge/views/organization.py:175
+#: judge/views/organization.py:180
 msgid "Join request detail"
 msgstr "Únete a detalle de la solicitud"
 
-#: judge/views/organization.py:204
+#: judge/views/organization.py:209
 #, python-format
 msgid "Managing join requests for %s"
 msgstr "Gestionar solicitudes de unirse para %s"
 
-#: judge/views/organization.py:235
+#: judge/views/organization.py:240
 #, python-format
 msgid "Your organization can only receive %d more members. You cannot approve %d users."
 msgstr "Su organización solo puede recibir %d miembros más. No puede aprobar %d usuarios."
 
-#: judge/views/organization.py:247
+#: judge/views/organization.py:252
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] "%d usuarios aprobados."
 msgstr[1] "Usuarios aprobados \"%d\"."
 
-#: judge/views/organization.py:248
+#: judge/views/organization.py:253
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] "%d usuarios rechazados."
 msgstr[1] "Usuarios rechazados \"%d\"."
 
-#: judge/views/organization.py:273
+#: judge/views/organization.py:278
 #, python-format
 msgid "Editing %s"
 msgstr "Editando %s"
 
-#: judge/views/organization.py:297 judge/views/organization.py:305
+#: judge/views/organization.py:302 judge/views/organization.py:310
 msgid "Can't edit organization"
 msgstr "No se puede editar la organización"
 
-#: judge/views/organization.py:298
+#: judge/views/organization.py:303
 msgid "You are not allowed to edit this organization."
 msgstr "No tiene permitido editar esta organización."
 
-#: judge/views/organization.py:306
+#: judge/views/organization.py:311
 msgid "You are not allowed to kick people from this organization."
 msgstr "No tiene permitido expulsar a personas de esta organización."
 
-#: judge/views/organization.py:311 judge/views/organization.py:315
+#: judge/views/organization.py:316 judge/views/organization.py:320
 msgid "Can't kick user"
 msgstr "No se puede reaccionar en contra del usuario"
 
-#: judge/views/organization.py:312
+#: judge/views/organization.py:317
 msgid "The user you are trying to kick does not exist!"
 msgstr "¡El usuario que estás tratando de poner no existe!"
 
-#: judge/views/organization.py:316
+#: judge/views/organization.py:321
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
 msgstr "El usuario que estás tratando poner no está en la organización: %s."

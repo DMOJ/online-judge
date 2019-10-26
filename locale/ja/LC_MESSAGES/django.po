@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-25 04:51+0000\n"
-"PO-Revision-Date: 2019-10-25 05:04\n"
+"POT-Creation-Date: 2019-10-26 16:36+0000\n"
+"PO-Revision-Date: 2019-10-26 17:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -192,7 +192,7 @@ msgstr[0] ""
 msgid "Recalculate results"
 msgstr ""
 
-#: judge/admin/contest.py:271 judge/admin/organization.py:64
+#: judge/admin/contest.py:271 judge/admin/organization.py:65
 msgid "username"
 msgstr "利用者名"
 
@@ -213,7 +213,7 @@ msgid "Summary"
 msgstr "概要"
 
 #: judge/admin/interface.py:107 judge/models/contest.py:251
-#: judge/models/contest.py:355 judge/models/profile.py:185
+#: judge/models/contest.py:355 judge/models/profile.py:189
 msgid "user"
 msgstr "利用者"
 
@@ -221,7 +221,7 @@ msgstr "利用者"
 msgid "object"
 msgstr ""
 
-#: judge/admin/organization.py:33 judge/admin/problem.py:170
+#: judge/admin/organization.py:34 judge/admin/problem.py:170
 #: judge/admin/profile.py:78
 msgid "View on site"
 msgstr "サイト上で表示する"
@@ -457,7 +457,7 @@ msgstr "コンテストの更新を購読する"
 msgid "Enable experimental features"
 msgstr "実験的な機能を有効化する"
 
-#: judge/forms.py:57 judge/views/organization.py:122
+#: judge/forms.py:57 judge/views/organization.py:127
 #, python-brace-format
 msgid "You may not be part of more than {count} public organizations."
 msgstr "あなたは {count} 個以上の公開組織に参加できない場合があります。"
@@ -743,7 +743,7 @@ msgid "private to organizations"
 msgstr "組織へプライベートにする"
 
 #: judge/models/contest.py:93 judge/models/problem.py:155
-#: judge/models/profile.py:72
+#: judge/models/profile.py:76
 msgid "organizations"
 msgstr "組織"
 
@@ -755,7 +755,7 @@ msgstr "もしプライベートであれば、組織の者だけがコンテス
 msgid "OpenGraph image"
 msgstr "OpenGraph 画像"
 
-#: judge/models/contest.py:96
+#: judge/models/contest.py:96 judge/models/profile.py:47
 msgid "Logo override image"
 msgstr ""
 
@@ -1526,128 +1526,132 @@ msgstr "この組織の最大利用者数、プライベートな組織にのみ
 msgid "Student access code"
 msgstr "学生のアクセスコード"
 
-#: judge/models/profile.py:71 judge/models/profile.py:87
-#: judge/models/profile.py:186
+#: judge/models/profile.py:49
+msgid "This image will replace the default site logo for users viewing the organization."
+msgstr ""
+
+#: judge/models/profile.py:75 judge/models/profile.py:91
+#: judge/models/profile.py:190
 msgid "organization"
 msgstr "組織"
 
-#: judge/models/profile.py:76
+#: judge/models/profile.py:80
 msgid "user associated"
 msgstr "関連する利用者"
 
-#: judge/models/profile.py:77
+#: judge/models/profile.py:81
 msgid "self-description"
 msgstr "自己紹介"
 
-#: judge/models/profile.py:78
+#: judge/models/profile.py:82
 msgid "location"
 msgstr "位置"
 
-#: judge/models/profile.py:80
+#: judge/models/profile.py:84
 msgid "preferred language"
 msgstr "好みの言語"
 
-#: judge/models/profile.py:85
+#: judge/models/profile.py:89
 msgid "last access time"
 msgstr "最終アクセス時刻"
 
-#: judge/models/profile.py:86
+#: judge/models/profile.py:90
 msgid "last IP"
 msgstr "最終 IP アドレス"
 
-#: judge/models/profile.py:89
+#: judge/models/profile.py:93
 msgid "display rank"
 msgstr "順位を表示する"
 
-#: judge/models/profile.py:91
+#: judge/models/profile.py:95
 msgid "comment mute"
 msgstr "コメントミュート"
 
-#: judge/models/profile.py:91
+#: judge/models/profile.py:95
 msgid "Some users are at their best when silent."
 msgstr "ある利用者は沈黙の時に能力を発揮する"
 
-#: judge/models/profile.py:93
+#: judge/models/profile.py:97
 msgid "unlisted user"
 msgstr ""
 
-#: judge/models/profile.py:93
+#: judge/models/profile.py:97
 msgid "User will not be ranked."
 msgstr ""
 
-#: judge/models/profile.py:96
+#: judge/models/profile.py:100
 msgid "user script"
 msgstr "利用者スクリプト"
 
-#: judge/models/profile.py:97
+#: judge/models/profile.py:101
 msgid "User-defined JavaScript for site customization."
 msgstr "サイトのカスタマイズするためのユーザー定義 JavaScript。"
 
-#: judge/models/profile.py:98
+#: judge/models/profile.py:102
 msgid "current contest"
 msgstr "現在のコンテスト"
 
-#: judge/models/profile.py:100
+#: judge/models/profile.py:104
 msgid "math engine"
 msgstr "数式エンジン"
 
-#: judge/models/profile.py:102
+#: judge/models/profile.py:106
 msgid "the rendering engine used to render math"
 msgstr "数式の表示に使用されるレンダリングエンジン"
 
-#: judge/models/profile.py:103
+#: judge/models/profile.py:107
 msgid "2FA enabled"
 msgstr ""
 
-#: judge/models/profile.py:104
+#: judge/models/profile.py:108
 msgid "check to enable TOTP-based two factor authentication"
 msgstr ""
 
-#: judge/models/profile.py:105
+#: judge/models/profile.py:109
 msgid "TOTP key"
 msgstr ""
 
-#: judge/models/profile.py:106
+#: judge/models/profile.py:110
 msgid "32 character base32-encoded key for TOTP"
 msgstr ""
 
-#: judge/models/profile.py:108
+#: judge/models/profile.py:112
 msgid "TOTP key must be empty or base32"
 msgstr ""
 
-#: judge/models/profile.py:109
+#: judge/models/profile.py:113
 msgid "internal notes"
 msgstr ""
 
-#: judge/models/profile.py:110
+#: judge/models/profile.py:114
 msgid "Notes for administrators regarding this user."
 msgstr ""
 
-#: judge/models/profile.py:180
+#: judge/models/profile.py:184
 msgid "user profile"
 msgstr "ユーザープロフィール"
 
-#: judge/models/profile.py:181
+#: judge/models/profile.py:185
 msgid "user profiles"
 msgstr "ユーザープロフィール"
 
-#: judge/models/profile.py:188
+#: judge/models/profile.py:192
 msgid "request time"
 msgstr "要求時刻"
 
-#: judge/models/profile.py:189
+#: judge/models/profile.py:193
 msgid "state"
 msgstr "状態"
 
-#: judge/models/profile.py:194
+#: judge/models/profile.py:198
 msgid "reason"
 msgstr "理由"
 
-#: judge/models/profile.py:197
+#: judge/models/profile.py:201
 msgid "organization join request"
 msgstr "組織への参加要求"
 
-#: judge/models/profile.py:198
+#: judge/models/profile.py:202
 msgid "organization join requests"
 msgstr "組織への参加要求"
 
@@ -2145,7 +2149,7 @@ msgstr ""
 msgid "You already voted."
 msgstr "あなたは既に投票しました。"
 
-#: judge/views/comment.py:120 judge/views/organization.py:289
+#: judge/views/comment.py:120 judge/views/organization.py:294
 msgid "Edited from site"
 msgstr "サイトから編集された"
 
@@ -2153,12 +2157,12 @@ msgstr "サイトから編集された"
 msgid "Editing comment"
 msgstr "コメントの編集"
 
-#: judge/views/contests.py:49 judge/views/contests.py:207
-#: judge/views/contests.py:210 judge/views/contests.py:381
+#: judge/views/contests.py:49 judge/views/contests.py:210
+#: judge/views/contests.py:213 judge/views/contests.py:384
 msgid "No such contest"
 msgstr "そのようなコンテストはありません"
 
-#: judge/views/contests.py:50 judge/views/contests.py:208
+#: judge/views/contests.py:50 judge/views/contests.py:211
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "鍵 \"%s\" を持つコンテストは見つかりませんでした。"
@@ -2167,106 +2171,106 @@ msgstr "鍵 \"%s\" を持つコンテストは見つかりませんでした。"
 msgid "Contests"
 msgstr "コンテスト"
 
-#: judge/views/contests.py:211
+#: judge/views/contests.py:214
 msgid "Could not find such contest."
 msgstr "このようなコンテストは見つかりませんでした。"
 
-#: judge/views/contests.py:214
+#: judge/views/contests.py:217
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr "コンテスト \"%s\" へのアクセスは拒否されました"
 
-#: judge/views/contests.py:238
+#: judge/views/contests.py:241
 msgid "Clone Contest"
 msgstr ""
 
-#: judge/views/contests.py:301
+#: judge/views/contests.py:304
 msgid "Contest not ongoing"
 msgstr "開催中ではないコンテスト"
 
-#: judge/views/contests.py:302
+#: judge/views/contests.py:305
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "\"%s\" は現在開催中ではありません。"
 
-#: judge/views/contests.py:306
+#: judge/views/contests.py:309
 msgid "Already in contest"
 msgstr "既にコンテストに参加しています"
 
-#: judge/views/contests.py:307
+#: judge/views/contests.py:310
 #, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr "あなたは既にコンテストに参加しています: \"%s\"。"
 
-#: judge/views/contests.py:310
+#: judge/views/contests.py:313
 msgid "Banned from joining"
 msgstr ""
 
-#: judge/views/contests.py:311
+#: judge/views/contests.py:314
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr ""
 
-#: judge/views/contests.py:371
+#: judge/views/contests.py:374
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr "\"%s\" のアクセスコードを入力してください"
 
-#: judge/views/contests.py:382
+#: judge/views/contests.py:385
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "あなたはコンテストに参加していません: \"%s\"。"
 
-#: judge/views/contests.py:401
+#: judge/views/contests.py:404
 msgid "ContestCalendar requires integer year and month"
 msgstr ""
 
-#: judge/views/contests.py:441
+#: judge/views/contests.py:444
 #, python-format
 msgid "Contests in %(month)s"
 msgstr "%(month)s 年のコンテスト"
 
-#: judge/views/contests.py:441
+#: judge/views/contests.py:444
 msgid "F Y"
 msgstr ""
 
-#: judge/views/contests.py:527
+#: judge/views/contests.py:530
 msgid "???"
 msgstr "???"
 
-#: judge/views/contests.py:590
+#: judge/views/contests.py:593
 #, python-format
 msgid "%s Rankings"
 msgstr "%s 順位表"
 
-#: judge/views/contests.py:606
+#: judge/views/contests.py:609
 #, python-format
 msgid "Your participation in %s"
 msgstr "あなたの %s への参加"
 
-#: judge/views/contests.py:607
+#: judge/views/contests.py:610
 #, python-format
 msgid "%s's participation in %s"
 msgstr "%s の %s への参加"
 
-#: judge/views/contests.py:611
+#: judge/views/contests.py:614
 msgid "Live"
 msgstr "ライブ"
 
-#: judge/views/contests.py:623 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:626 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr "参加"
 
-#: judge/views/contests.py:650
+#: judge/views/contests.py:653
 #, python-format
 msgid "%s MOSS Results"
 msgstr ""
 
-#: judge/views/contests.py:677
+#: judge/views/contests.py:680
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr ""
 
-#: judge/views/contests.py:700
+#: judge/views/contests.py:703
 #, python-format
 msgid "Contest tag: %s"
 msgstr "コンテストタグ: %s"
@@ -2295,108 +2299,108 @@ msgstr "破損ページ %s"
 msgid "Runtimes"
 msgstr "ランタイム"
 
-#: judge/views/organization.py:39 judge/views/organization.py:42
+#: judge/views/organization.py:44 judge/views/organization.py:47
 msgid "No such organization"
 msgstr "このような組織はありません"
 
-#: judge/views/organization.py:40
+#: judge/views/organization.py:45
 #, python-format
 msgid "Could not find an organization with the key \"%s\"."
 msgstr "鍵 \"%s\" を持つ組織は見つかりませんでした。"
 
-#: judge/views/organization.py:43
+#: judge/views/organization.py:48
 msgid "Could not find such organization."
 msgstr "このような組織を見つけることができませんでした。"
 
-#: judge/views/organization.py:67 judge/views/register.py:34
+#: judge/views/organization.py:72 judge/views/register.py:34
 #: templates/organization/list.html:15 templates/user/user-list-tabs.html:5
 msgid "Organizations"
 msgstr "組織"
 
-#: judge/views/organization.py:88
+#: judge/views/organization.py:93
 #, python-format
 msgid "%s Members"
 msgstr "%s のメンバー"
 
-#: judge/views/organization.py:113 judge/views/organization.py:116
-#: judge/views/organization.py:121
+#: judge/views/organization.py:118 judge/views/organization.py:121
+#: judge/views/organization.py:126
 msgid "Joining organization"
 msgstr "所属している組織"
 
-#: judge/views/organization.py:113
+#: judge/views/organization.py:118
 msgid "You are already in the organization."
 msgstr "あなたは、既にこの組織にしょぞくしています。"
 
-#: judge/views/organization.py:116
+#: judge/views/organization.py:121
 msgid "This organization is not open."
 msgstr "この組織は公開ではありません。"
 
-#: judge/views/organization.py:133
+#: judge/views/organization.py:138
 msgid "Leaving organization"
 msgstr "組織から脱退する"
 
-#: judge/views/organization.py:133
+#: judge/views/organization.py:138
 #, python-format
 msgid "You are not in \"%s\"."
 msgstr "あなたは \"%s\" に所属していません。"
 
-#: judge/views/organization.py:157
+#: judge/views/organization.py:162
 #, python-format
 msgid "Request to join %s"
 msgstr "%s への参加を申し込む"
 
-#: judge/views/organization.py:175
+#: judge/views/organization.py:180
 msgid "Join request detail"
 msgstr "参加申込みの詳細"
 
-#: judge/views/organization.py:204
+#: judge/views/organization.py:209
 #, python-format
 msgid "Managing join requests for %s"
 msgstr "%s への参加申込みを管理する"
 
-#: judge/views/organization.py:235
+#: judge/views/organization.py:240
 #, python-format
 msgid "Your organization can only receive %d more members. You cannot approve %d users."
 msgstr "あなたの組織はあと %d 人のメンバーしか受け入れられません。あなたは %d 人の利用者を承認できません。"
 
-#: judge/views/organization.py:247
+#: judge/views/organization.py:252
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
 msgstr[0] "%d 人の利用者を承認しました。"
 
-#: judge/views/organization.py:248
+#: judge/views/organization.py:253
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] "%d 人の利用者を拒否しました。"
 
-#: judge/views/organization.py:273
+#: judge/views/organization.py:278
 #, python-format
 msgid "Editing %s"
 msgstr "%s を編集"
 
-#: judge/views/organization.py:297 judge/views/organization.py:305
+#: judge/views/organization.py:302 judge/views/organization.py:310
 msgid "Can't edit organization"
 msgstr "組織を編集できません"
 
-#: judge/views/organization.py:298
+#: judge/views/organization.py:303
 msgid "You are not allowed to edit this organization."
 msgstr "あなたは、この組織を編集することは許可されていません。"
 
-#: judge/views/organization.py:306
+#: judge/views/organization.py:311
 msgid "You are not allowed to kick people from this organization."
 msgstr "あなたはこの組織から人を追い出すことを許可されていません。"
 
-#: judge/views/organization.py:311 judge/views/organization.py:315
+#: judge/views/organization.py:316 judge/views/organization.py:320
 msgid "Can't kick user"
 msgstr "利用者を追い出せません"
 
-#: judge/views/organization.py:312
+#: judge/views/organization.py:317
 msgid "The user you are trying to kick does not exist!"
 msgstr "あなたが追い出そうとしている利用者は存在しません！"
 
-#: judge/views/organization.py:316
+#: judge/views/organization.py:321
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
 msgstr "あなたが追い出そうとしているユーザは組織内にいません: %s 。"
