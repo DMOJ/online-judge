@@ -241,12 +241,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         except ProblemTranslation.DoesNotExist:
             trans = None
 
-        error_cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.log' % (problem.code, language))
         cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.pdf' % (problem.code, language))
-
-        if os.path.exists(error_cache):
-            with open(error_cache) as f:
-                return HttpResponse(f.read(), status=500, content_type='text/plain')
 
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.%s.pdf', problem.code, language)
@@ -268,8 +263,6 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                 maker.make()
                 if not maker.success:
-                    with open(error_cache, 'wb') as f:
-                        f.write(maker.log)
                     self.logger.error('Failed to render PDF for %s', problem.code)
                     return HttpResponse(maker.log, status=500, content_type='text/plain')
                 shutil.move(maker.pdffile, cache)
