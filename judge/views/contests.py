@@ -167,6 +167,9 @@ class ContestMixin(object):
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
         context['has_moss_api_key'] = settings.MOSS_API_KEY is not None
+        context['logo_override_image'] = self.object.logo_override_image
+        if not context['logo_override_image'] and self.object.organizations.count() == 1:
+            context['logo_override_image'] = self.object.organizations.first().logo_override_image
 
         return context
 
