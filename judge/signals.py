@@ -41,10 +41,8 @@ def problem_update(sender, instance, **kwargs):
                        for lang, _ in settings.LANGUAGES])
     cache.delete_many(['generated-meta-problem:%s:%d' % (lang, instance.id) for lang, _ in settings.LANGUAGES])
 
-    if hasattr(settings, 'DMOJ_PDF_PROBLEM_CACHE'):
-        for lang, _ in settings.LANGUAGES:
-            unlink_if_exists(get_pdf_path('%s.%s.pdf' % (instance.code, lang)))
-            unlink_if_exists(get_pdf_path('%s.%s.log' % (instance.code, lang)))
+    for lang, _ in settings.LANGUAGES:
+        unlink_if_exists(get_pdf_path('%s.%s.pdf' % (instance.code, lang)))
 
 
 @receiver(post_save, sender=Profile)
