@@ -40,6 +40,14 @@ def paginate_query_context(request):
                 'first_page_href': request.path}
 
 
+class NoBatchDeleteMixin(object):
+    def get_actions(self, request):
+        actions = super(NoBatchDeleteMixin, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
+
 class TitleMixin(object):
     title = '(untitled)'
     content_title = None
