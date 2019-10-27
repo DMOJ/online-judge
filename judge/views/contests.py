@@ -114,9 +114,10 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
 
 
 class PrivateContestError(Exception):
-    def __init__(self, name, private_users, orgs):
+    def __init__(self, name, is_private, is_organization_private, orgs):
         self.name = name
-        self.private_users = private_users
+        self.is_private = is_private
+        self.is_organization_private = is_organization_private
         self.orgs = orgs
 
 
@@ -188,8 +189,8 @@ class ContestMixin(object):
             raise Http404()
 
         if contest.is_private or contest.is_organization_private:
-            private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(),
-                                                        contest.organizations.all())
+            private_contest_error = PrivateContestError(contest.name, contest.is_private,
+                                                        contest.is_organization_private, contest.organizations.all())
             if profile is None:
                 raise private_contest_error
             if user.has_perm('judge.edit_all_contest'):
@@ -214,7 +215,7 @@ class ContestMixin(object):
                                        _('Could not find such contest.'))
         except PrivateContestError as e:
             return render(request, 'contest/private.html', {
-                'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name),
+                'error': e, 'title': _('Access to contest "%s" denied') % escape(e.name),
             }, status=403)
 
 
