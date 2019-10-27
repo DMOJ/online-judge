@@ -687,6 +687,12 @@ class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObje
     form_class = ProblemCloneForm
     permission_required = 'judge.clone_problem'
 
+    def get_object(self, queryset=None):
+        problem = super().get_object(queryset)
+        if not problem.is_editable_by(self.request.user):
+            raise Http404()
+        return problem
+
     def form_valid(self, form):
         problem = self.object
 

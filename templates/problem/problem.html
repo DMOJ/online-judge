@@ -144,24 +144,24 @@
         {% if not problem.is_manually_managed %}
             <div><a href="{{ url('problem_data', problem.code) }}">{{ _('Edit test data') }}</a></div>
         {% endif %}
+
+        {% if problem.is_subs_manageable_by(request.user) %}
+            <div>
+                <a href="{{ url('problem_manage_submissions', problem.code) }}">{{ _('Manage submissions') }}</a>
+            </div>
+        {% endif %}
+
+        {% if perms.judge.clone_problem %}
+            <div>
+                <a href="{{ url('problem_clone', problem.code) }}">{{ _('Clone problem') }}</a>
+            </div>
+        {% endif %}
     {% elif request.user.is_authenticated and has_tickets %}
         <hr>
         <div>
             <a href="{{ url('problem_ticket_list', problem.code) }}">{{ _('My tickets') }}
                 {% if num_open_tickets %}<span class="badge">{{ num_open_tickets }}</span>{% endif %}
             </a>
-        </div>
-    {% endif %}
-
-    {% if problem.is_subs_manageable_by(request.user) %}
-        <div>
-            <a href="{{ url('problem_manage_submissions', problem.code) }}">{{ _('Manage submissions') }}</a>
-        </div>
-    {% endif %}
-
-    {% if perms.judge.clone_problem %}
-        <div>
-            <a href="{{ url('problem_clone', problem.code) }}">{{ _('Clone problem') }}</a>
         </div>
     {% endif %}
 
