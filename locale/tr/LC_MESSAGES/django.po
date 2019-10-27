@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 16:36+0000\n"
-"PO-Revision-Date: 2019-10-26 17:04\n"
+"POT-Creation-Date: 2019-10-27 00:57+0000\n"
+"PO-Revision-Date: 2019-10-27 01:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Simplified Chinese"
 msgstr ""
 
-#: dmoj/urls.py:54 templates/base.html:239
+#: dmoj/urls.py:54
 msgid "Login"
 msgstr "Giriş"
 
@@ -2439,33 +2439,33 @@ msgstr " {0} - Problem analizi"
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
 msgstr "<a href=\"{1}\">{0}</a> için problem analizi"
 
-#: judge/views/problem.py:292 templates/contest/contest.html:79
+#: judge/views/problem.py:285 templates/contest/contest.html:79
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
 msgstr "Problemler"
 
-#: judge/views/problem.py:553
+#: judge/views/problem.py:546
 msgid "Banned from submitting"
 msgstr "Çözüm gönderme engellendi"
 
-#: judge/views/problem.py:554
+#: judge/views/problem.py:547
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
 msgstr "Bu problem için istenmeyen adam olarak işaretlendin. Çözüm gönderemezsin."
 
-#: judge/views/problem.py:567
+#: judge/views/problem.py:560
 msgid "Too many submissions"
 msgstr "Çok fazla çözüm gönderisi"
 
-#: judge/views/problem.py:568
+#: judge/views/problem.py:561
 msgid "You have exceeded the submission limit for this problem."
 msgstr "Bu soru için çözüm gönderi sınırını geçtin."
 
-#: judge/views/problem.py:634 judge/views/problem.py:637
+#: judge/views/problem.py:627 judge/views/problem.py:630
 #, python-format
 msgid "Submit to %(problem)s"
 msgstr "Çözüm gönder -%(problem)s"
 
-#: judge/views/problem.py:653
+#: judge/views/problem.py:646
 msgid "Clone Problem"
 msgstr ""
 
@@ -2948,9 +2948,18 @@ msgstr "Yönetici"
 msgid "Log out"
 msgstr "Çıkış yap"
 
+#: templates/base.html:238
+#: templates/registration/password_reset_complete.html:4
+msgid "Log in"
+msgstr "Giriş yap"
+
+#: templates/base.html:239 templates/registration/registration_form.html:177
+msgid "or"
+msgstr "ya da"
+
 #: templates/base.html:240
-msgid "Register"
-msgstr "Kayıt"
+msgid "Sign up"
+msgstr ""
 
 #: templates/base.html:252
 msgid "spectating"
@@ -3926,10 +3935,6 @@ msgstr "Sıfırlama E-postası Gönder"
 msgid "Your password has been set.  You may go ahead and log in now"
 msgstr "Şifren oluşturuldu. Şimdi giriş yapabilirsin."
 
-#: templates/registration/password_reset_complete.html:4
-msgid "Log in"
-msgstr "Giriş yap"
-
 #: templates/registration/password_reset_confirm.html:9
 msgid "Reset Password"
 msgstr "Şifreyi sıfırla"
@@ -3989,10 +3994,6 @@ msgstr "(onaylamak için lütfen tekrar gir)"
 #: templates/registration/registration_form.html:173
 msgid "(select your closest major city)"
 msgstr "(sana en yakın büyük şehri seç)"
-
-#: templates/registration/registration_form.html:177
-msgid "or"
-msgstr "ya da"
 
 #: templates/registration/registration_form.html:178
 msgid "pick from map"

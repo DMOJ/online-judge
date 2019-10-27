@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 16:36+0000\n"
-"PO-Revision-Date: 2019-10-26 17:04\n"
+"POT-Creation-Date: 2019-10-27 00:57+0000\n"
+"PO-Revision-Date: 2019-10-27 01:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -76,7 +76,7 @@ msgstr "ベトナム語"
 msgid "Simplified Chinese"
 msgstr "簡体字中国語"
 
-#: dmoj/urls.py:54 templates/base.html:239
+#: dmoj/urls.py:54
 msgid "Login"
 msgstr "ログイン"
 
@@ -2424,33 +2424,33 @@ msgstr "{0} の論説"
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
 msgstr "<a href=\"{1}\">{0}</a> の論説"
 
-#: judge/views/problem.py:292 templates/contest/contest.html:79
+#: judge/views/problem.py:285 templates/contest/contest.html:79
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
 msgstr "課題"
 
-#: judge/views/problem.py:553
+#: judge/views/problem.py:546
 msgid "Banned from submitting"
 msgstr "提出が禁止された"
 
-#: judge/views/problem.py:554
+#: judge/views/problem.py:547
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
 msgstr "あなたはこの課題に感謝しない人として宣言されている。あなたはこの課題に提出することを永続的に禁止されている。"
 
-#: judge/views/problem.py:567
+#: judge/views/problem.py:560
 msgid "Too many submissions"
 msgstr "提出物が多過ぎます"
 
-#: judge/views/problem.py:568
+#: judge/views/problem.py:561
 msgid "You have exceeded the submission limit for this problem."
 msgstr "あなたは、この課題の提出制限を超えました"
 
-#: judge/views/problem.py:634 judge/views/problem.py:637
+#: judge/views/problem.py:627 judge/views/problem.py:630
 #, python-format
 msgid "Submit to %(problem)s"
 msgstr "%(problem)s に提出する"
 
-#: judge/views/problem.py:653
+#: judge/views/problem.py:646
 msgid "Clone Problem"
 msgstr ""
 
@@ -2932,9 +2932,18 @@ msgstr "管理"
 msgid "Log out"
 msgstr "ログアウト"
 
+#: templates/base.html:238
+#: templates/registration/password_reset_complete.html:4
+msgid "Log in"
+msgstr "ログイン"
+
+#: templates/base.html:239 templates/registration/registration_form.html:177
+msgid "or"
+msgstr "または"
+
 #: templates/base.html:240
-msgid "Register"
-msgstr "登録"
+msgid "Sign up"
+msgstr ""
 
 #: templates/base.html:252
 msgid "spectating"
@@ -3907,10 +3916,6 @@ msgstr "リセットの電子メールを送信する"
 msgid "Your password has been set.  You may go ahead and log in now"
 msgstr "あなたのパスワードが設定されています。先に進んで今すぐログイン"
 
-#: templates/registration/password_reset_complete.html:4
-msgid "Log in"
-msgstr "ログイン"
-
 #: templates/registration/password_reset_confirm.html:9
 msgid "Reset Password"
 msgstr "パスワードをリセットする"
@@ -3970,10 +3975,6 @@ msgstr "（もう1度、確認のため）"
 #: templates/registration/registration_form.html:173
 msgid "(select your closest major city)"
 msgstr "（最寄りの大都市を選択してください）"
-
-#: templates/registration/registration_form.html:177
-msgid "or"
-msgstr "または"
 
 #: templates/registration/registration_form.html:178
 msgid "pick from map"

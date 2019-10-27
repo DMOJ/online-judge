@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 16:36+0000\n"
-"PO-Revision-Date: 2019-10-26 17:04\n"
+"POT-Creation-Date: 2019-10-27 00:57+0000\n"
+"PO-Revision-Date: 2019-10-27 01:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -76,7 +76,7 @@ msgstr "Vietnamita"
 msgid "Simplified Chinese"
 msgstr "Chino simplificado"
 
-#: dmoj/urls.py:54 templates/base.html:239
+#: dmoj/urls.py:54
 msgid "Login"
 msgstr "Iniciar sesión"
 
@@ -2439,33 +2439,33 @@ msgstr "Editorial de{0}"
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
 msgstr "Editorial de <a href=\"{1}\"><a href=\"{1}\"><a href=\"{1}\">{0}</a>"
 
-#: judge/views/problem.py:292 templates/contest/contest.html:79
+#: judge/views/problem.py:285 templates/contest/contest.html:79
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
 msgstr "Problemas"
 
-#: judge/views/problem.py:553
+#: judge/views/problem.py:546
 msgid "Banned from submitting"
 msgstr "Esta prohibido enviarlo"
 
-#: judge/views/problem.py:554
+#: judge/views/problem.py:547
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
 msgstr "Usted ha sido declarado persona no grata por este problema. Usted está permanentemente impedido en presentar este problema."
 
-#: judge/views/problem.py:567
+#: judge/views/problem.py:560
 msgid "Too many submissions"
 msgstr "Muchos envíos"
 
-#: judge/views/problem.py:568
+#: judge/views/problem.py:561
 msgid "You have exceeded the submission limit for this problem."
 msgstr "Usted ha excedido el límite de presentaciones de este problema."
 
-#: judge/views/problem.py:634 judge/views/problem.py:637
+#: judge/views/problem.py:627 judge/views/problem.py:630
 #, python-format
 msgid "Submit to %(problem)s"
 msgstr "Enviar a %(problem)s"
 
-#: judge/views/problem.py:653
+#: judge/views/problem.py:646
 msgid "Clone Problem"
 msgstr ""
 
@@ -2948,9 +2948,18 @@ msgstr "Administrador"
 msgid "Log out"
 msgstr "Cerrar Sesión"
 
+#: templates/base.html:238
+#: templates/registration/password_reset_complete.html:4
+msgid "Log in"
+msgstr "Iniciar sesión"
+
+#: templates/base.html:239 templates/registration/registration_form.html:177
+msgid "or"
+msgstr "o"
+
 #: templates/base.html:240
-msgid "Register"
-msgstr "Registrarse"
+msgid "Sign up"
+msgstr ""
 
 #: templates/base.html:252
 msgid "spectating"
@@ -3930,10 +3939,6 @@ msgstr "Envía un correo de restablecimiento"
 msgid "Your password has been set.  You may go ahead and log in now"
 msgstr "Su contraseña ha sido establecida. Usted puede continuar e iniciar sesión ahora"
 
-#: templates/registration/password_reset_complete.html:4
-msgid "Log in"
-msgstr "Iniciar sesión"
-
 #: templates/registration/password_reset_confirm.html:9
 msgid "Reset Password"
 msgstr "Restablecer contraseña"
@@ -3993,10 +3998,6 @@ msgstr "(de nuevo, por confirmación)"
 #: templates/registration/registration_form.html:173
 msgid "(select your closest major city)"
 msgstr "(Seleccione la ciudad importante más cercana)"
-
-#: templates/registration/registration_form.html:177
-msgid "or"
-msgstr "o"
 
 #: templates/registration/registration_form.html:178
 msgid "pick from map"

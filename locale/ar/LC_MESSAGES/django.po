@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-26 16:36+0000\n"
-"PO-Revision-Date: 2019-10-26 17:03\n"
+"POT-Creation-Date: 2019-10-27 00:57+0000\n"
+"PO-Revision-Date: 2019-10-27 01:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Arabic, Saudi Arabia\n"
 "Language: ar_SA\n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Simplified Chinese"
 msgstr ""
 
-#: dmoj/urls.py:54 templates/base.html:239
+#: dmoj/urls.py:54
 msgid "Login"
 msgstr ""
 
@@ -2499,33 +2499,33 @@ msgstr ""
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
 msgstr ""
 
-#: judge/views/problem.py:292 templates/contest/contest.html:79
+#: judge/views/problem.py:285 templates/contest/contest.html:79
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
 msgstr ""
 
-#: judge/views/problem.py:553
+#: judge/views/problem.py:546
 msgid "Banned from submitting"
 msgstr ""
 
-#: judge/views/problem.py:554
+#: judge/views/problem.py:547
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
 msgstr ""
 
-#: judge/views/problem.py:567
+#: judge/views/problem.py:560
 msgid "Too many submissions"
 msgstr ""
 
-#: judge/views/problem.py:568
+#: judge/views/problem.py:561
 msgid "You have exceeded the submission limit for this problem."
 msgstr ""
 
-#: judge/views/problem.py:634 judge/views/problem.py:637
+#: judge/views/problem.py:627 judge/views/problem.py:630
 #, python-format
 msgid "Submit to %(problem)s"
 msgstr ""
 
-#: judge/views/problem.py:653
+#: judge/views/problem.py:646
 msgid "Clone Problem"
 msgstr ""
 
@@ -3012,8 +3012,17 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
+#: templates/base.html:238
+#: templates/registration/password_reset_complete.html:4
+msgid "Log in"
+msgstr ""
+
+#: templates/base.html:239 templates/registration/registration_form.html:177
+msgid "or"
+msgstr ""
+
 #: templates/base.html:240
-msgid "Register"
+msgid "Sign up"
 msgstr ""
 
 #: templates/base.html:252
@@ -4006,10 +4015,6 @@ msgstr ""
 msgid "Your password has been set.  You may go ahead and log in now"
 msgstr ""
 
-#: templates/registration/password_reset_complete.html:4
-msgid "Log in"
-msgstr ""
-
 #: templates/registration/password_reset_confirm.html:9
 msgid "Reset Password"
 msgstr ""
@@ -4068,10 +4073,6 @@ msgstr ""
 
 #: templates/registration/registration_form.html:173
 msgid "(select your closest major city)"
-msgstr ""
-
-#: templates/registration/registration_form.html:177
-msgid "or"
 msgstr ""
 
 #: templates/registration/registration_form.html:178
