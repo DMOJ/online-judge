@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-27 15:56+0000\n"
-"PO-Revision-Date: 2019-10-27 16:04\n"
+"POT-Creation-Date: 2019-10-27 18:02+0000\n"
+"PO-Revision-Date: 2019-10-27 18:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2149,7 +2149,7 @@ msgstr ""
 msgid "You already voted."
 msgstr "你已经投了票。"
 
-#: judge/views/comment.py:120 judge/views/organization.py:294
+#: judge/views/comment.py:120 judge/views/organization.py:299
 msgid "Edited from site"
 msgstr "从网站中上编辑"
 
@@ -2375,32 +2375,32 @@ msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
 msgstr[0] "拒绝了%d个用户。"
 
-#: judge/views/organization.py:278
+#: judge/views/organization.py:283
 #, python-format
 msgid "Editing %s"
 msgstr "编辑 %s"
 
-#: judge/views/organization.py:302 judge/views/organization.py:310
+#: judge/views/organization.py:307 judge/views/organization.py:315
 msgid "Can't edit organization"
 msgstr "无法编辑组织"
 
-#: judge/views/organization.py:303
+#: judge/views/organization.py:308
 msgid "You are not allowed to edit this organization."
 msgstr "您没有编辑该组织的权利。"
 
-#: judge/views/organization.py:311
+#: judge/views/organization.py:316
 msgid "You are not allowed to kick people from this organization."
 msgstr "你没有踢组织成员的权利。"
 
-#: judge/views/organization.py:316 judge/views/organization.py:320
+#: judge/views/organization.py:321 judge/views/organization.py:325
 msgid "Can't kick user"
 msgstr "无法踢用户"
 
-#: judge/views/organization.py:317
+#: judge/views/organization.py:322
 msgid "The user you are trying to kick does not exist!"
 msgstr "你想踢的用户不存在！"
 
-#: judge/views/organization.py:321
+#: judge/views/organization.py:326
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
 msgstr "你想踢的用户不是组织成员：%s"

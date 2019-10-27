@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-27 15:56+0000\n"
-"PO-Revision-Date: 2019-10-27 16:05\n"
+"POT-Creation-Date: 2019-10-27 18:02+0000\n"
+"PO-Revision-Date: 2019-10-27 18:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -2162,7 +2162,7 @@ msgstr ""
 msgid "You already voted."
 msgstr "Zaten oy verdin."
 
-#: judge/views/comment.py:120 judge/views/organization.py:294
+#: judge/views/comment.py:120 judge/views/organization.py:299
 msgid "Edited from site"
 msgstr "Site aracılığıyla düzenlendi"
 
@@ -2390,32 +2390,32 @@ msgid_plural "Rejected %d users."
 msgstr[0] "%d kullanıcı onaylandı"
 msgstr[1] "%d kullanıcı onaylandı"
 
-#: judge/views/organization.py:278
+#: judge/views/organization.py:283
 #, python-format
 msgid "Editing %s"
 msgstr "%s düzenleniyor"
 
-#: judge/views/organization.py:302 judge/views/organization.py:310
+#: judge/views/organization.py:307 judge/views/organization.py:315
 msgid "Can't edit organization"
 msgstr "Bu organizasyon düzenlenemiyor"
 
-#: judge/views/organization.py:303
+#: judge/views/organization.py:308
 msgid "You are not allowed to edit this organization."
 msgstr "Bu organizasyonu düzenleme yetkisine sahip değilsin."
 
-#: judge/views/organization.py:311
+#: judge/views/organization.py:316
 msgid "You are not allowed to kick people from this organization."
 msgstr "Üyeleri bu organizasyondan atma yetkisine sahip değilsin."
 
-#: judge/views/organization.py:316 judge/views/organization.py:320
+#: judge/views/organization.py:321 judge/views/organization.py:325
 msgid "Can't kick user"
 msgstr "Bu üyeyi atamazsın."
 
-#: judge/views/organization.py:317
+#: judge/views/organization.py:322
 msgid "The user you are trying to kick does not exist!"
 msgstr "Atmaya çalıştığın üye bulunamıyor!"
 
-#: judge/views/organization.py:321
+#: judge/views/organization.py:326
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
 msgstr "Atmaya çalıştığın üye \"%s\" organizasyonunda değil."
