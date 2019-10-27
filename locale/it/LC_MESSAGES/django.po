@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-27 00:57+0000\n"
-"PO-Revision-Date: 2019-10-27 01:04\n"
+"POT-Creation-Date: 2019-10-27 15:56+0000\n"
+"PO-Revision-Date: 2019-10-27 16:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -2170,12 +2170,12 @@ msgstr ""
 msgid "Editing comment"
 msgstr ""
 
-#: judge/views/contests.py:49 judge/views/contests.py:210
-#: judge/views/contests.py:213 judge/views/contests.py:384
+#: judge/views/contests.py:49 judge/views/contests.py:211
+#: judge/views/contests.py:214 judge/views/contests.py:385
 msgid "No such contest"
 msgstr ""
 
-#: judge/views/contests.py:50 judge/views/contests.py:211
+#: judge/views/contests.py:50 judge/views/contests.py:212
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr ""
@@ -2184,106 +2184,106 @@ msgstr ""
 msgid "Contests"
 msgstr ""
 
-#: judge/views/contests.py:214
+#: judge/views/contests.py:215
 msgid "Could not find such contest."
 msgstr ""
 
-#: judge/views/contests.py:217
+#: judge/views/contests.py:218
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr ""
 
-#: judge/views/contests.py:241
+#: judge/views/contests.py:242
 msgid "Clone Contest"
 msgstr ""
 
-#: judge/views/contests.py:304
+#: judge/views/contests.py:305
 msgid "Contest not ongoing"
 msgstr ""
 
-#: judge/views/contests.py:305
+#: judge/views/contests.py:306
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr ""
 
-#: judge/views/contests.py:309
+#: judge/views/contests.py:310
 msgid "Already in contest"
 msgstr ""
 
-#: judge/views/contests.py:310
+#: judge/views/contests.py:311
 #, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr ""
 
-#: judge/views/contests.py:313
+#: judge/views/contests.py:314
 msgid "Banned from joining"
 msgstr ""
 
-#: judge/views/contests.py:314
+#: judge/views/contests.py:315
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr ""
 
-#: judge/views/contests.py:374
+#: judge/views/contests.py:375
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr ""
 
-#: judge/views/contests.py:385
+#: judge/views/contests.py:386
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr ""
 
-#: judge/views/contests.py:404
+#: judge/views/contests.py:405
 msgid "ContestCalendar requires integer year and month"
 msgstr ""
 
-#: judge/views/contests.py:444
+#: judge/views/contests.py:445
 #, python-format
 msgid "Contests in %(month)s"
 msgstr ""
 
-#: judge/views/contests.py:444
+#: judge/views/contests.py:445
 msgid "F Y"
 msgstr ""
 
-#: judge/views/contests.py:530
+#: judge/views/contests.py:531
 msgid "???"
 msgstr ""
 
-#: judge/views/contests.py:593
+#: judge/views/contests.py:594
 #, python-format
 msgid "%s Rankings"
 msgstr ""
 
-#: judge/views/contests.py:609
+#: judge/views/contests.py:610
 #, python-format
 msgid "Your participation in %s"
 msgstr ""
 
-#: judge/views/contests.py:610
+#: judge/views/contests.py:611
 #, python-format
 msgid "%s's participation in %s"
 msgstr ""
 
-#: judge/views/contests.py:614
+#: judge/views/contests.py:615
 msgid "Live"
 msgstr ""
 
-#: judge/views/contests.py:626 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:627 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr ""
 
-#: judge/views/contests.py:653
+#: judge/views/contests.py:654
 #, python-format
 msgid "%s MOSS Results"
 msgstr ""
 
-#: judge/views/contests.py:680
+#: judge/views/contests.py:681
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr ""
 
-#: judge/views/contests.py:703
+#: judge/views/contests.py:704
 #, python-format
 msgid "Contest tag: %s"
 msgstr ""
@@ -3347,7 +3347,15 @@ msgstr ""
 msgid "Delete MOSS results"
 msgstr ""
 
-#: templates/contest/private.html:4
+#: templates/contest/private.html:5
+msgid "This contest is private to specific users."
+msgstr ""
+
+#: templates/contest/private.html:10
+msgid "Additionally, only the following organizations may access this contest:"
+msgstr ""
+
+#: templates/contest/private.html:12
 msgid "Only the following organizations may access this contest:"
 msgstr ""
 
