@@ -249,7 +249,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
         logger.info('%s: Batch ended on: %s', self.name, packet['submission-id'])
 
     def on_test_case(self, packet):
-        logger.info('%s: Test case completed on: %s', self.name, packet['submission-id'])
+        logger.info('%s: %d test case(s) completed on: %s', self.name, len(packet['cases']), packet['submission-id'])
 
     def on_malformed(self, packet):
         logger.error('%s: Malformed packet: %s', self.name, packet)

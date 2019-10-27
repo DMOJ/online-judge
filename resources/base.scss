@@ -172,9 +172,10 @@ header {
     color: #5c5954;
 
     .anon {
-        position: absolute;
-        bottom: 6px;
-        right: 5px;
+        padding-right: 10px;
+        display: inline-flex;
+        min-height: 100%;
+        align-items: center;
         white-space: nowrap;
     }
 

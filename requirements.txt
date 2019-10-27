@@ -5,7 +5,7 @@ django-pagedown<2
 django-registration-redux
 django-reversion
 django-social-share
-django-sortedm2m
+-e git://github.com/DMOJ/django-sortedm2m.git#egg=django-sortedm2m
 django-impersonate
 -e git://github.com/DMOJ/dmoj-wpadmin.git#egg=dmoj-wpadmin
 lxml
