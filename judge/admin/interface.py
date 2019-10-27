@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from django.contrib.flatpages.admin import FlatPageAdmin
+from django.contrib.flatpages.admin import FlatPageAdmin, FlatpageForm
 from django.forms import ModelForm
 from django.urls import NoReverseMatch, reverse, reverse_lazy
 from django.utils.html import format_html
@@ -42,10 +42,7 @@ class NavigationBarAdmin(DraggableMPTTAdmin):
         return result
 
 
-class FlatPageForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(FlatPageForm, self).__init__(*args, **kwargs)
-
+class FlatPageForm(FlatpageForm):
     class Meta:
         widgets = {}
         if HeavyPreviewAdminPageDownWidget is not None:
@@ -53,16 +50,6 @@ class FlatPageForm(ModelForm):
 
 
 class FlatPageAdmin(VersionAdmin, FlatPageAdmin):
-    fieldsets = (
-        (None, {'fields': ('url', 'title', 'content')}),
-        (_('Advanced options'), {
-            'classes': ('collapse',),
-            'fields': (
-                'template_name',
-                'sites',
-            ),
-        }),
-    )
     form = FlatPageForm
 
 
