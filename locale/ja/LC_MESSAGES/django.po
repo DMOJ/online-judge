@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-27 18:02+0000\n"
-"PO-Revision-Date: 2019-10-27 18:04\n"
+"PO-Revision-Date: 2019-10-28 03:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -151,21 +151,21 @@ msgstr "正義"
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
-msgstr[0] ""
+msgstr[0] "%d 個の課題を公開しました。"
 
 #: judge/admin/contest.py:161
 msgid "Mark contests as visible"
-msgstr ""
+msgstr "課題を公開する"
 
 #: judge/admin/contest.py:165
 #, python-format
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
-msgstr[0] ""
+msgstr[0] "%d 個の課題を非公開としました。"
 
 #: judge/admin/contest.py:168
 msgid "Mark contests as hidden"
-msgstr ""
+msgstr "課題を非公開にする"
 
 #: judge/admin/contest.py:179 judge/admin/submission.py:149
 #: judge/admin/submission.py:171
@@ -180,17 +180,17 @@ msgstr "あなたには、それら多くの提出物を再判定する権限が
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
-msgstr[0] ""
+msgstr[0] "%d 個の提出を再判定するよう設定しました。"
 
 #: judge/admin/contest.py:264
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
-msgstr[0] ""
+msgstr[0] "%d 人の参加者を再計算。"
 
 #: judge/admin/contest.py:267
 msgid "Recalculate results"
-msgstr ""
+msgstr "再計算の結果"
 
 #: judge/admin/contest.py:271 judge/admin/organization.py:65
 msgid "username"
@@ -439,7 +439,7 @@ msgstr ""
 
 #: judge/contest_format/default.py:18
 msgid "Default"
-msgstr ""
+msgstr "既定値"
 
 #: judge/contest_format/ecoo.py:19
 msgid "ECOO"
@@ -475,11 +475,11 @@ msgstr "パスワード"
 
 #: judge/forms.py:130
 msgid "Two Factor Authentication tokens must be 6 decimal digits."
-msgstr ""
+msgstr "二要素認証のトークンは6桁の数字でなければなりません。"
 
 #: judge/forms.py:139 templates/registration/totp_auth.html:32
 msgid "Invalid Two Factor Authentication token."
-msgstr ""
+msgstr "無効な二要素認証トークンです。"
 
 #: judge/forms.py:143 judge/models/problem.py:97
 msgid "Problem code must be ^[a-z0-9]+$"
@@ -487,7 +487,7 @@ msgstr "課題のコードは ^[a-z0-9]+$ でなければなりません"
 
 #: judge/forms.py:148
 msgid "Problem with code already exists."
-msgstr ""
+msgstr "このコードを使用している問題はすでに存在しています。"
 
 #: judge/forms.py:153 judge/models/contest.py:51
 msgid "Contest id must be ^[a-z0-9]+$"
@@ -495,7 +495,7 @@ msgstr "コンテスト id は  ^[a-z0-9]+$ でなければなりません"
 
 #: judge/forms.py:158
 msgid "Contest with key already exists."
-msgstr ""
+msgstr "同じキーを持つコンテストはすでに存在しています。"
 
 #: judge/jinja2/datetime.py:26 templates/blog/content.html:27
 #: templates/blog/dashboard.html:21
@@ -534,7 +534,7 @@ msgstr "最高品質を検出する"
 
 #: judge/models/comment.py:25
 msgid "Page code must be ^[pcs]:[a-z0-9]+$|^b:\\d+$"
-msgstr ""
+msgstr "ページコードは ^[pcs]:[a-z0-9]+$|^b:\\d+$ でなければなりません。"
 
 #: judge/models/comment.py:41
 msgid "commenter"
@@ -546,7 +546,7 @@ msgstr "投稿時刻"
 
 #: judge/models/comment.py:43 judge/models/comment.py:176
 msgid "associated page"
-msgstr ""
+msgstr "関連するページ"
 
 #: judge/models/comment.py:45
 msgid "votes"
@@ -716,11 +716,11 @@ msgstr ""
 
 #: judge/models/contest.py:81
 msgid "private contestants"
-msgstr ""
+msgstr "プライベートな参加者"
 
 #: judge/models/contest.py:82
 msgid "If private, only these users may see the contest"
-msgstr ""
+msgstr "もしプライベートであれば、その参加者のみがコンテストを見ることができます。"
 
 #: judge/models/contest.py:84
 msgid "hide problem tags"
@@ -789,7 +789,7 @@ msgstr "感謝しない人"
 
 #: judge/models/contest.py:108
 msgid "Bans the selected users from joining this contest."
-msgstr ""
+msgstr "選択した利用者の、このコンテストへの参加を禁止する。"
 
 #: judge/models/contest.py:109
 msgid "contest format"
@@ -837,7 +837,7 @@ msgstr "コンテストのアクセス コード"
 
 #: judge/models/contest.py:240
 msgid "Create private contests"
-msgstr ""
+msgstr "プライベートなコンテストの生成"
 
 #: judge/models/contest.py:242 judge/models/contest.py:320
 #: judge/models/contest.py:356 judge/models/contest.py:378
@@ -1179,7 +1179,7 @@ msgstr "課題のコード"
 
 #: judge/models/problem.py:98
 msgid "A short, unique code for the problem, used in the url after /problem/"
-msgstr ""
+msgstr "問題に対する短くて唯一なコード、URL で /problem/ の後に使用される"
 
 #: judge/models/problem.py:100
 msgid "problem name"
@@ -1621,7 +1621,7 @@ msgstr ""
 
 #: judge/models/profile.py:113
 msgid "internal notes"
-msgstr ""
+msgstr "内部メモ"
 
 #: judge/models/profile.py:114
 msgid "Notes for administrators regarding this user."
