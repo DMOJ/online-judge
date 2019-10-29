@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
-from django.db.models import Min, OuterRef, Subquery
+from django.db.models import Max
 from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
@@ -27,44 +27,30 @@ class DefaultContestFormat(BaseContestFormat):
 
     def update_participation(self, participation):
         cumtime = 0
-        score = 0
+        points = 0
         format_data = {}
 
-        queryset = (participation.submissions.values('problem_id', 'problem__points')
-                                             .filter(points=Subquery(
-                                                 participation.submissions.filter(problem_id=OuterRef('problem_id'))
-                                                                          .order_by('-points').values('points')[:1]
-                                             ))
-                                             .annotate(time=Min('submission__date'))
-                                             .values_list('problem_id', 'time', 'points', 'problem__points'))
-
-        for problem_id, time, points, problem_points in queryset:
-            dt = (time - participation.start).total_seconds()
-            if points:
-                score += points
+        for result in participation.submissions.values('problem_id').annotate(
+                time=Max('submission__date'), points=Max('points'),
+        ):
+            dt = (result['time'] - participation.start).total_seconds()
+            if result['points']:
                 cumtime += dt
-
-            format_data[str(problem_id)] = {
-                'points': points,
-                'time': dt,
-                'first_solve': participation.submissions.filter(problem_id=problem_id)
-                                                        .order_by('submission__date').first().points == problem_points,
-            }
+            format_data[str(result['problem_id'])] = {'time': dt, 'points': result['points']}
+            points += result['points']
 
         participation.cumtime = max(cumtime, 0)
-        participation.score = score
+        participation.score = points
         participation.format_data = format_data
         participation.save()
 
     def display_user_problem(self, participation, contest_problem):
         format_data = (participation.format_data or {}).get(str(contest_problem.id))
         if format_data:
-            pretest = ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
-            first_solve = (' first-solve' if format_data['first_solve'] else '')
-
             return format_html(
                 u'<td class="{state}"><a href="{url}">{points}<div class="solving-time">{time}</div></a></td>',
-                state=pretest + self.best_solution_state(format_data['points'], contest_problem.points) + first_solve,
+                state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
+                       self.best_solution_state(format_data['points'], contest_problem.points)),
                 url=reverse('contest_user_submissions',
                             args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
                 points=floatformat(format_data['points']),

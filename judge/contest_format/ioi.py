@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
-from django.db import connection
+from django.db.models import Max, Min, OuterRef, Subquery
 from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
@@ -10,7 +10,6 @@ from django.utils.translation import gettext_lazy
 
 from judge.contest_format.default import DefaultContestFormat
 from judge.contest_format.registry import register_contest_format
-from judge.timezone import from_database_time
 from judge.utils.timedelta import nice_repr
 
 
@@ -43,46 +42,57 @@ class IOIContestFormat(DefaultContestFormat):
 
     def update_participation(self, participation):
         cumtime = 0
-        points = 0
+        score = 0
         format_data = {}
 
-        with connection.cursor() as cursor:
-            cursor.execute('''
-            SELECT MAX(cs.points) as `score`, (
-                SELECT MIN(csub.date)
-                    FROM judge_contestsubmission ccs LEFT OUTER JOIN
-                         judge_submission csub ON (csub.id = ccs.submission_id)
-                    WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s AND ccs.points = MAX(cs.points)
-            ) AS `time`, cp.id AS `prob`
-            FROM judge_contestproblem cp INNER JOIN
-                 judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
-                 judge_submission sub ON (sub.id = cs.submission_id)
-            GROUP BY cp.id
-            ''', (participation.id, participation.id))
+        queryset = (participation.submissions.values('problem_id', 'problem__points')
+                                             .filter(points=Subquery(
+                                                 participation.submissions.filter(problem_id=OuterRef('problem_id'))
+                                                                          .order_by('-points').values('points')[:1]))
+                                             .annotate(time=Min('submission__date'))
+                                             .values_list('problem_id', 'time', 'points', 'problem__points'))
 
-            for score, time, prob in cursor.fetchall():
-                if self.config['cumtime']:
-                    dt = (from_database_time(time) - participation.start).total_seconds()
-                    if score:
-                        cumtime += dt
-                else:
-                    dt = 0
+        for problem_id, time, points, problem_points in queryset:
+            if self.config['cumtime']:
+                dt = (time - participation.start).total_seconds()
+                if points:
+                    cumtime += dt
+            else:
+                dt = 0
 
-                format_data[str(prob)] = {'time': dt, 'points': score}
-                points += score
+            format_data[str(problem_id)] = {
+                'points': points,
+                'time': dt,
+            }
+            score += points
+
+        queryset = (participation.submissions.values('problem_id', 'problem__points')
+                                      .filter(submission__date=Subquery(
+                                          participation.submissions.filter(problem_id=OuterRef('problem_id'))
+                                                                   .order_by('submission__date')
+                                                                   .values('submission__date')[:1]))
+                                      .annotate(points=Max('points'))
+                                      .values_list('problem_id', 'points', 'problem__points'))
+
+        for problem_id, points, problem_points in queryset:
+            format_data[str(problem_id)].update({
+                'first_solve': points == problem_points,
+            })
 
         participation.cumtime = max(cumtime, 0)
-        participation.score = points
+        participation.score = score
         participation.format_data = format_data
         participation.save()
 
     def display_user_problem(self, participation, contest_problem):
         format_data = (participation.format_data or {}).get(str(contest_problem.id))
         if format_data:
+            pretest = ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
+            first_solve = (' first-solve' if format_data['first_solve'] else '')
+
             return format_html(
                 '<td class="{state}"><a href="{url}">{points}<div class="solving-time">{time}</div></a></td>',
-                state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                       self.best_solution_state(format_data['points'], contest_problem.points)),
+                state=pretest + self.best_solution_state(format_data['points'], contest_problem.points) + first_solve,
                 url=reverse('contest_user_submissions',
                             args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
                 points=floatformat(format_data['points']),
