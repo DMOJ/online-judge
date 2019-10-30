@@ -133,7 +133,7 @@ def api_v1_problem_info(request, problem):
         'languages': list(p.allowed_languages.values_list('key', flat=True)),
     }
 
-    if user.profile.current_contest is not None:
+    if user.profile.current_contest is None:
         resp['types'] = list(p.types.values_list('full_name', flat=True))
         resp['points'] = p.points
         resp['partial'] = p.partial
