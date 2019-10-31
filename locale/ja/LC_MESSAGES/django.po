@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-27 18:02+0000\n"
-"PO-Revision-Date: 2019-10-28 03:05\n"
+"PO-Revision-Date: 2019-10-31 06:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -42,7 +42,7 @@ msgstr "ハンガリー語"
 
 #: dmoj/settings.py:343
 msgid "Japanese"
-msgstr ""
+msgstr "日本語"
 
 #: dmoj/settings.py:344
 msgid "Korean"
@@ -121,7 +121,7 @@ msgstr "課題"
 
 #: judge/admin/contest.py:112
 msgid "Settings"
-msgstr ""
+msgstr "設定"
 
 #: judge/admin/contest.py:114
 msgid "Scheduling"
@@ -133,7 +133,7 @@ msgstr "詳細"
 
 #: judge/admin/contest.py:116
 msgid "Format"
-msgstr ""
+msgstr "フォーマット"
 
 #: judge/admin/contest.py:117 templates/contest/ranking-table.html:5
 msgid "Rating"
@@ -141,7 +141,7 @@ msgstr "評価"
 
 #: judge/admin/contest.py:118
 msgid "Access"
-msgstr ""
+msgstr "アクセス"
 
 #: judge/admin/contest.py:120 judge/admin/problem.py:130
 msgid "Justice"
