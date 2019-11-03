@@ -12,7 +12,7 @@ from django.views.generic import DetailView
 from django.views.generic.detail import BaseDetailView
 
 from judge.models import Language, Submission
-from judge.tasks import apply_submission_filter, rejudge_problem_filter, rescore_problem
+from judge.tasks import apply_submission_filter, rejudge_problem_filter
 from judge.utils.celery import redirect_to_task_status
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
@@ -101,15 +101,6 @@ class PreviewRejudgeSubmissionsView(BaseRejudgeSubmissionsView):
     def generate_response(self, id_range, languages, results):
         queryset = apply_submission_filter(self.object.submission_set.all(), id_range, languages, results)
         return HttpResponse(str(queryset.count()))
-
-
-class RescoreAllSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):
-    def perform_action(self):
-        status = rescore_problem.delay(self.object.id)
-        return redirect_to_task_status(
-            status, message=_('Rescoring all submissions for %s...') % (self.object.name,),
-            redirect=reverse('problem_submissions_rescore_success', args=[self.object.code, status.id]),
-        )
 
 
 def rejudge_success(request, problem, task_id):
