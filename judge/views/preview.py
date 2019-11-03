@@ -5,7 +5,7 @@ from django.views.generic.base import ContextMixin, TemplateResponseMixin, View
 class MarkdownPreviewView(TemplateResponseMixin, ContextMixin, View):
     def post(self, request, *args, **kwargs):
         try:
-            self.preview_data = data = request.POST['preview']
+            self.preview_data = data = request.POST['content']
         except KeyError:
             return HttpResponseBadRequest('No preview data specified.')
 
