@@ -2,7 +2,7 @@ from operator import attrgetter
 
 from django import forms
 from django.contrib import admin
-from django.db import connection
+from django.db import transaction
 from django.db.models import Q
 from django.forms import ModelForm
 from django.urls import reverse_lazy
@@ -172,37 +172,14 @@ class ProblemAdmin(VersionAdmin):
 
     show_public.short_description = ''
 
-    def _update_points(self, problem_id, sign):
-        with connection.cursor() as c:
-            c.execute('''
-                UPDATE judge_profile prof INNER JOIN (
-                    SELECT sub.user_id AS user_id, MAX(sub.points) AS delta
-                    FROM judge_submission sub
-                    WHERE sub.problem_id = %s
-                    GROUP BY sub.user_id
-                ) `data` ON (`data`.user_id = prof.id)
-                SET prof.points = prof.points {} `data`.delta
-                WHERE `data`.delta IS NOT NULL
-            '''.format(sign), (problem_id,))
-
-    def _update_points_many(self, ids, sign):
-        with connection.cursor() as c:
-            c.execute('''
-                UPDATE judge_profile prof INNER JOIN (
-                    SELECT deltas.id, SUM(deltas) AS delta FROM (
-                        SELECT sub.user_id AS id, MAX(sub.points) AS deltas
-                             FROM judge_submission sub
-                             WHERE sub.problem_id IN ({})
-                             GROUP BY sub.user_id, sub.problem_id
-                    ) deltas GROUP BY id
-                ) `data` ON (`data`.id = prof.id)
-                SET prof.points = prof.points {} `data`.delta
-                WHERE `data`.delta IS NOT NULL
-            '''.format(', '.join(['%s'] * len(ids)), sign), list(ids))
+    def _rescore(self, request, problem_id):
+        from judge.tasks import rescore_problem
+        transaction.on_commit(rescore_problem.s(problem_id).delay)
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
-        self._update_points_many(queryset.values_list('id', flat=True), '+')
+        for problem_id in queryset.values_list('id', flat=True):
+            self._rescore(request, problem_id)
         self.message_user(request, ungettext('%d problem successfully marked as public.',
                                              '%d problems successfully marked as public.',
                                              count) % count)
@@ -211,7 +188,8 @@ class ProblemAdmin(VersionAdmin):
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
-        self._update_points_many(queryset.values_list('id', flat=True), '-')
+        for problem_id in queryset.values_list('id', flat=True):
+            self._rescore(request, problem_id)
         self.message_user(request, ungettext('%d problem successfully marked as private.',
                                              '%d problems successfully marked as private.',
                                              count) % count)
@@ -251,8 +229,8 @@ class ProblemAdmin(VersionAdmin):
 
     def save_model(self, request, obj, form, change):
         super(ProblemAdmin, self).save_model(request, obj, form, change)
-        if form.changed_data and 'is_public' in form.changed_data:
-            self._update_points(obj.id, '+' if obj.is_public else '-')
+        if form.changed_data and any(f in form.changed_data for f in ('is_public', 'points', 'partial')):
+            self._rescore(request, obj.id)
 
     def construct_change_message(self, request, form, *args, **kwargs):
         if form.cleaned_data.get('change_message'):
