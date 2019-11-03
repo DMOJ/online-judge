@@ -226,6 +226,7 @@ INSTALLED_APPS += (
     'statici18n',
     'impersonate',
     'django_jinja',
+    'martor',
 )
 
 MIDDLEWARE = (
@@ -386,6 +387,8 @@ MARKDOWN_STYLES = {
     'organization-about': MARKDOWN_USER_LARGE_STYLE,
     'ticket': MARKDOWN_USER_LARGE_STYLE,
 }
+
+MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

@@ -30,3 +30,4 @@ packaging
 celery
 ansi2html
 sqlparse
+martor
