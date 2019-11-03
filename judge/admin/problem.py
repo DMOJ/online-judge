@@ -2,7 +2,7 @@ from operator import attrgetter
 
 from django import forms
 from django.contrib import admin
-from django.db import connection, transaction
+from django.db import transaction
 from django.db.models import Q
 from django.forms import ModelForm
 from django.urls import reverse_lazy
