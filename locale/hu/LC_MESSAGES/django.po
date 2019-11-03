@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-03 03:00+0000\n"
-"PO-Revision-Date: 2019-11-03 17:04\n"
+"POT-Creation-Date: 2019-11-03 20:11+0000\n"
+"PO-Revision-Date: 2019-11-03 21:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Hungarian\n"
 "Language: hu_HU\n"
@@ -2501,7 +2501,7 @@ msgstr ""
 msgid "Editing data for %s"
 msgstr ""
 
-#: judge/views/problem_data.py:240 judge/views/problem_data.py:241
+#: judge/views/problem_data.py:237 judge/views/problem_data.py:238
 #, python-format
 msgid "Generated init.yml for %s"
 msgstr "init.yml generálva %s-hez"
