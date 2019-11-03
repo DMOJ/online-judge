@@ -9,7 +9,7 @@ from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import NavigationBar
-from judge.widgets import HeavyPreviewAdminPageDownWidget, AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class NavigationBarAdmin(DraggableMPTTAdmin):

@@ -11,7 +11,7 @@ from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Judge, Problem
-from judge.widgets import AdminPagedownWidget, AdminHeavySelect2MultipleWidget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminPagedownWidget
 
 
 class LanguageForm(ModelForm):

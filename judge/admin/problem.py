@@ -11,8 +11,8 @@ from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
-from judge.widgets import CheckboxSelectMultipleWithSelectAll, HeavyPreviewAdminPageDownWidget, \
-    HeavyPreviewPageDownWidget, AdminHeavySelect2MultipleWidget, AdminSelect2MultipleWidget, AdminSelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminSelect2MultipleWidget, AdminSelect2Widget, \
+    CheckboxSelectMultipleWithSelectAll, HeavyPreviewAdminPageDownWidget, HeavyPreviewPageDownWidget
 
 
 class ProblemForm(ModelForm):
@@ -33,9 +33,10 @@ class ProblemForm(ModelForm):
             'authors': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'curators': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'testers': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                            attrs={'style': 'width: 100%'}),
             'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2',
-                                                        attrs={'style': 'width: 100%'}),
+                                                             attrs={'style': 'width: 100%'}),
             'types': AdminSelect2MultipleWidget,
             'group': AdminSelect2Widget,
         }

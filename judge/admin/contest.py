@@ -14,8 +14,8 @@ from reversion.admin import VersionAdmin
 
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
-from judge.widgets import AdminPagedownWidget, HeavyPreviewAdminPageDownWidget, AdminHeavySelect2MultipleWidget, \
-    AdminHeavySelect2Widget, AdminSelect2MultipleWidget, AdminSelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminPagedownWidget, \
+    AdminSelect2MultipleWidget, AdminSelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class AdminHeavySelect2Widget(AdminHeavySelect2Widget):
@@ -96,10 +96,11 @@ class ContestForm(ModelForm):
         widgets = {
             'organizers': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'private_contestants': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                              attrs={'style': 'width: 100%'}),
+                                                                   attrs={'style': 'width: 100%'}),
             'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
             'tags': AdminSelect2MultipleWidget,
-            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                            attrs={'style': 'width: 100%'}),
         }
 
         if HeavyPreviewAdminPageDownWidget is not None:

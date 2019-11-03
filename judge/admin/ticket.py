@@ -4,7 +4,7 @@ from django.forms import ModelForm
 from django.urls import reverse_lazy
 
 from judge.models import TicketMessage
-from judge.widgets import HeavyPreviewAdminPageDownWidget, AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class TicketMessageForm(ModelForm):

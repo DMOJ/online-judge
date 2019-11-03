@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import Comment
-from judge.widgets import HeavyPreviewAdminPageDownWidget, AdminHeavySelect2Widget
+from judge.widgets import AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class CommentForm(ModelForm):

@@ -6,7 +6,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from judge.models import Organization
-from judge.widgets import HeavyPreviewAdminPageDownWidget, AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class OrganizationForm(ModelForm):
