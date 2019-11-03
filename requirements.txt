@@ -30,4 +30,4 @@ packaging
 celery
 ansi2html
 sqlparse
-martor
+-e git://github.com/DMOJ/martor.git#egg=martor
