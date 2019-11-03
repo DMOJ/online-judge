@@ -203,9 +203,9 @@ class ProblemAdmin(VersionAdmin):
     def _rescore(self, request, problem_id):
         status = rescore_problem.delay(problem_id)
         task_status_url = reverse('problem_submissions_rescore_success', args=[problem_id, status.id])
-        self.message_user(request, ungettext('A rescoring task has been kicked off since points changed. '
-                                             'Track its progress <a href="{}">here</a>.').format(task_status_url),
-                          extra_tags='safe')
+        message = ungettext('A background task has been started to rescore submissions since points changed. '
+                            'View its progress <a href="{}">here</a>.')
+        self.message_user(request, format_html(message, task_status_url), extra_tags='safe')
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
