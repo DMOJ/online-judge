@@ -10,6 +10,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dmoj.settings')
 
 app = Celery('dmoj')
 
+# noinspection PyUnresolvedReferences
+import django_2_2_pymysql_patch  # noqa: I100, F401, I202, imported for side effect
 from django.conf import settings  # noqa: E402, I202, django must be imported here
 app.config_from_object(settings, namespace='CELERY')
 
