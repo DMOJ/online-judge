@@ -5,12 +5,13 @@ from django.contrib import admin
 from django.db import connection
 from django.db.models import Q
 from django.forms import ModelForm
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
+from judge.tasks import rescore_problem
 from judge.widgets import CheckboxSelectMultipleWithSelectAll, HeavyPreviewAdminPageDownWidget, \
     HeavyPreviewPageDownWidget, HeavySelect2MultipleWidget, Select2MultipleWidget, Select2Widget
 
@@ -199,6 +200,13 @@ class ProblemAdmin(VersionAdmin):
                 WHERE `data`.delta IS NOT NULL
             '''.format(', '.join(['%s'] * len(ids)), sign), list(ids))
 
+    def _rescore(self, problem_id):
+        status = rescore_problem.delay(problem_id)
+        task_status_url = reverse('problem_submissions_rescore_success', args=[problem_id, status.id])
+        self.message_user(request, ungettext('A rescoring task has been kicked off since points changed. '
+                                             'Track its progress <a href="{}">here</a>.').format(task_status_url),
+                          extra_tags='safe')
+
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         self._update_points_many(queryset.values_list('id', flat=True), '+')
@@ -250,8 +258,11 @@ class ProblemAdmin(VersionAdmin):
 
     def save_model(self, request, obj, form, change):
         super(ProblemAdmin, self).save_model(request, obj, form, change)
-        if form.changed_data and 'is_public' in form.changed_data:
-            self._update_points(obj.id, '+' if obj.is_public else '-')
+        if form.changed_data:
+            if 'is_public' in form.changed_data:
+                self._update_points(obj.id, '+' if obj.is_public else '-')
+            elif 'points' in form.changed_data:
+                self._rescore(obj.id)
 
     def construct_change_message(self, request, form, *args, **kwargs):
         if form.cleaned_data.get('change_message'):
