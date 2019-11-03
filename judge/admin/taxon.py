@@ -3,7 +3,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField
 from django.utils.translation import gettext_lazy as _
 
 from judge.models import Problem
-from judge.widgets import HeavySelect2MultipleWidget
+from judge.widgets import AdminHeavySelect2MultipleWidget
 
 
 class ProblemGroupForm(ModelForm):
@@ -12,7 +12,7 @@ class ProblemGroupForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are included in this group of problems'),
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
 
 
 class ProblemGroupAdmin(admin.ModelAdmin):
@@ -35,7 +35,7 @@ class ProblemTypeForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are included in this type of problems'),
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
 
 
 class ProblemTypeAdmin(admin.ModelAdmin):
