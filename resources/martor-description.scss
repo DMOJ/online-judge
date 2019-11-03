@@ -3,3 +3,25 @@
 form .martor-preview {
     @include content-description;
 }
+
+.main-martor-fullscreen {
+    z-index: 99999 !important;
+}
+
+.section-martor {
+    div[data-tab="editor-tab-description"] {
+        padding: 0;
+    }
+
+    .markdown-selector.markdown-emoji {
+        display: none !important;
+    }
+
+    .tab-martor-menu a.item {
+        font-size: 0.8rem;
+    }
+
+    .martor-field {
+        height: 400px;
+    }
+}
