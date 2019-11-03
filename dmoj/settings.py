@@ -389,6 +389,13 @@ MARKDOWN_STYLES = {
     'ticket': MARKDOWN_USER_LARGE_STYLE,
 }
 
+MARTOR_ENABLE_CONFIGS = {
+    'imgur': 'true',
+    'mention': 'false',
+    'jquery': 'true',
+    'living': 'false',
+    'spellcheck': 'false',
+}
 MARTOR_MARKDOWNIFY_URL = '/widgets/preview/default'
 MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user'
 MARTOR_UPLOAD_URL = '/widgets/martor/upload-image'
