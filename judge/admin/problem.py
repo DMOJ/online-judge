@@ -8,12 +8,11 @@ from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _, ungettext
-from martor.widgets import AdminMartorWidget
 from reversion.admin import VersionAdmin
 
 from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminSelect2MultipleWidget, AdminSelect2Widget, \
-    CheckboxSelectMultipleWithSelectAll
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget, AdminSelect2MultipleWidget, \
+    AdminSelect2Widget, CheckboxSelectMultipleWithSelectAll
 
 
 class ProblemForm(ModelForm):

@@ -3,11 +3,10 @@ from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _
-from martor.widgets import AdminMartorWidget
 from reversion.admin import VersionAdmin
 
 from judge.models import Organization
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget
 
 
 class OrganizationForm(ModelForm):

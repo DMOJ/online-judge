@@ -7,12 +7,11 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from martor.widgets import AdminMartorWidget
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Judge, Problem
-from judge.widgets import AdminHeavySelect2MultipleWidget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget
 
 
 class LanguageForm(ModelForm):
