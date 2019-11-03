@@ -3,10 +3,11 @@ from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _
+from martor.widgets import AdminMartorWidget
 from reversion.admin import VersionAdmin
 
 from judge.models import Organization
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget
 
 
 class OrganizationForm(ModelForm):
@@ -14,9 +15,8 @@ class OrganizationForm(ModelForm):
         widgets = {
             'admins': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'registrant': AdminHeavySelect2Widget(data_view='profile_select2'),
+            'about': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('organization_preview')}),
         }
-        if HeavyPreviewAdminPageDownWidget is not None:
-            widgets['about'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('organization_preview'))
 
 
 class OrganizationAdmin(VersionAdmin):

@@ -374,6 +374,7 @@ MARKDOWN_USER_LARGE_STYLE = {
 }
 
 MARKDOWN_STYLES = {
+    'default': MARKDOWN_DEFAULT_STYLE,
     'comment': MARKDOWN_DEFAULT_STYLE,
     'self-description': MARKDOWN_USER_LARGE_STYLE,
     'problem': MARKDOWN_ADMIN_EDITABLE_STYLE,
@@ -388,6 +389,7 @@ MARKDOWN_STYLES = {
     'ticket': MARKDOWN_USER_LARGE_STYLE,
 }
 
+MARTOR_MARKDOWNIFY_URL = '/widgets/preview/default'
 MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user'
 
 # Database

@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.templatetags.static import static
-from django.urls import reverse, path
+from django.urls import path, reverse
 from django.utils.functional import lazystr
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
@@ -286,6 +286,7 @@ urlpatterns = [
         ])),
 
         url(r'^preview/', include([
+            url(r'^default$', preview.DefaultMarkdownPreviewView.as_view(), name='default_preview'),
             url(r'^problem$', preview.ProblemMarkdownPreviewView.as_view(), name='problem_preview'),
             url(r'^blog$', preview.BlogMarkdownPreviewView.as_view(), name='blog_preview'),
             url(r'^contest$', preview.ContestMarkdownPreviewView.as_view(), name='contest_preview'),

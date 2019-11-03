@@ -2,18 +2,18 @@ from django.contrib.admin import ModelAdmin
 from django.contrib.admin.options import StackedInline
 from django.forms import ModelForm
 from django.urls import reverse_lazy
+from martor.widgets import AdminMartorWidget
 
 from judge.models import TicketMessage
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget
 
 
 class TicketMessageForm(ModelForm):
     class Meta:
         widgets = {
             'user': AdminHeavySelect2Widget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'body': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('ticket_preview')}),
         }
-        if HeavyPreviewAdminPageDownWidget is not None:
-            widgets['body'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('ticket_preview'))
 
 
 class TicketMessageInline(StackedInline):

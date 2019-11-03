@@ -48,3 +48,7 @@ class LicenseMarkdownPreviewView(MarkdownPreviewView):
 
 class TicketMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'ticket/preview.html'
+
+
+class DefaultMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'default-preview.html'
