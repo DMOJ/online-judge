@@ -6,14 +6,14 @@ from django.utils.translation import gettext, gettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from judge.models import Organization
-from judge.widgets import HeavyPreviewAdminPageDownWidget, HeavySelect2MultipleWidget, HeavySelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class OrganizationForm(ModelForm):
     class Meta:
         widgets = {
-            'admins': HeavySelect2MultipleWidget(data_view='profile_select2'),
-            'registrant': HeavySelect2Widget(data_view='profile_select2'),
+            'admins': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'registrant': AdminHeavySelect2Widget(data_view='profile_select2'),
         }
         if HeavyPreviewAdminPageDownWidget is not None:
             widgets['about'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('organization_preview'))

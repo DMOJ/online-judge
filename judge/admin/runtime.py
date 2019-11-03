@@ -11,7 +11,7 @@ from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Judge, Problem
-from judge.widgets import AdminPagedownWidget, HeavySelect2MultipleWidget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminPagedownWidget
 
 
 class LanguageForm(ModelForm):
@@ -20,7 +20,7 @@ class LanguageForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are NOT allowed to be submitted in this language'),
-        widget=HeavySelect2MultipleWidget(data_view='problem_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
 
     class Meta:
         if AdminPagedownWidget is not None:

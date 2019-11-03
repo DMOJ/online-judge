@@ -14,11 +14,11 @@ from reversion.admin import VersionAdmin
 
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
-from judge.widgets import AdminPagedownWidget, HeavyPreviewAdminPageDownWidget, HeavySelect2MultipleWidget, \
-    HeavySelect2Widget, Select2MultipleWidget, Select2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminPagedownWidget, \
+    AdminSelect2MultipleWidget, AdminSelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
-class HeavySelect2Widget(HeavySelect2Widget):
+class AdminHeavySelect2Widget(AdminHeavySelect2Widget):
     @property
     def is_hidden(self):
         return False
@@ -29,7 +29,7 @@ class ContestTagForm(ModelForm):
         label=_('Included contests'),
         queryset=Contest.objects.all(),
         required=False,
-        widget=HeavySelect2MultipleWidget(data_view='contest_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='contest_select2'))
 
 
 class ContestTagAdmin(admin.ModelAdmin):
@@ -57,7 +57,7 @@ class ContestTagAdmin(admin.ModelAdmin):
 
 class ContestProblemInlineForm(ModelForm):
     class Meta:
-        widgets = {'problem': HeavySelect2Widget(data_view='problem_select2')}
+        widgets = {'problem': AdminHeavySelect2Widget(data_view='problem_select2')}
 
 
 class ContestProblemInline(admin.TabularInline):
@@ -94,12 +94,13 @@ class ContestForm(ModelForm):
 
     class Meta:
         widgets = {
-            'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
-            'private_contestants': HeavySelect2MultipleWidget(data_view='profile_select2',
-                                                              attrs={'style': 'width: 100%'}),
-            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
-            'tags': Select2MultipleWidget,
-            'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'organizers': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'private_contestants': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                                   attrs={'style': 'width: 100%'}),
+            'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
+            'tags': AdminSelect2MultipleWidget,
+            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                            attrs={'style': 'width: 100%'}),
         }
 
         if HeavyPreviewAdminPageDownWidget is not None:
@@ -236,8 +237,8 @@ class ContestAdmin(VersionAdmin):
 class ContestParticipationForm(ModelForm):
     class Meta:
         widgets = {
-            'contest': Select2Widget(),
-            'user': HeavySelect2Widget(data_view='profile_select2'),
+            'contest': AdminSelect2Widget(),
+            'user': AdminHeavySelect2Widget(data_view='profile_select2'),
         }
 
 
