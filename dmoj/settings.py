@@ -391,6 +391,11 @@ MARKDOWN_STYLES = {
 
 MARTOR_MARKDOWNIFY_URL = '/widgets/preview/default'
 MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user'
+MARTOR_UPLOAD_URL = '/widgets/martor/upload-image'
+
+# Directory under MEDIA_ROOT to use to store image uploaded through martor.
+MARTOR_UPLOAD_MEDIA_DIR = 'martor'
+MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.png', '.gif'}
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases

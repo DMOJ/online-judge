@@ -24,6 +24,7 @@ from judge.views.register import ActivationView, RegistrationView
 from judge.views.select2 import AssigneeSelect2View, CommentSelect2View, ContestSelect2View, \
     ContestUserSearchSelect2View, OrganizationSelect2View, ProblemSelect2View, TicketUserSelect2View, \
     UserSearchSelect2View, UserSelect2View
+from judge.views.widgets import martor_image_uploader
 
 admin.autodiscover()
 
@@ -299,6 +300,7 @@ urlpatterns = [
         ])),
 
         path('martor/', include([
+            path('upload-image', martor_image_uploader, name='martor_image_uploader'),
             path('search-user', markdown_search_user, name='martor_search_user'),
         ])),
     ])),
