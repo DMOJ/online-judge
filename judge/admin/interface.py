@@ -10,7 +10,7 @@ from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import NavigationBar
-from judge.widgets import HeavyPreviewAdminPageDownWidget, HeavySelect2MultipleWidget, HeavySelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class NavigationBarAdmin(DraggableMPTTAdmin):
@@ -60,8 +60,8 @@ class BlogPostForm(ModelForm):
 
     class Meta:
         widgets = {
-            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2',
+            'authors': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2',
                                                         attrs={'style': 'width: 100%'}),
         }
 
@@ -98,8 +98,8 @@ class SolutionForm(ModelForm):
 
     class Meta:
         widgets = {
-            'authors': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-            'problem': HeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'}),
+            'authors': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'problem': AdminHeavySelect2Widget(data_view='problem_select2', attrs={'style': 'width: 250px'}),
         }
 
         if HeavyPreviewAdminPageDownWidget is not None:

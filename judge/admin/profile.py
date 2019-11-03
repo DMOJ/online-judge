@@ -6,7 +6,7 @@ from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Profile
-from judge.widgets import AdminPagedownWidget, GenerateKeyTextInputButton, Select2Widget
+from judge.widgets import AdminPagedownWidget, GenerateKeyTextInputButton, AdminSelect2Widget
 
 
 class ProfileForm(ModelForm):
@@ -19,10 +19,10 @@ class ProfileForm(ModelForm):
 
     class Meta:
         widgets = {
-            'timezone': Select2Widget,
-            'language': Select2Widget,
-            'ace_theme': Select2Widget,
-            'current_contest': Select2Widget,
+            'timezone': AdminSelect2Widget,
+            'language': AdminSelect2Widget,
+            'ace_theme': AdminSelect2Widget,
+            'current_contest': AdminSelect2Widget,
             'api_token': GenerateKeyTextInputButton(charset="ABCDEFGHIJKLMNOPQRSTUVWXYZ234567", length=32),
         }
         if AdminPagedownWidget is not None:

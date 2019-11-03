@@ -250,12 +250,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         except ProblemTranslation.DoesNotExist:
             trans = None
 
-        error_cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.log' % (problem.code, language))
         cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.pdf' % (problem.code, language))
-
-        if os.path.exists(error_cache):
-            with open(error_cache) as f:
-                return HttpResponse(f.read(), status=500, content_type='text/plain')
 
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.%s.pdf', problem.code, language)
@@ -277,8 +272,6 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                 maker.make()
                 if not maker.success:
-                    with open(error_cache, 'wb') as f:
-                        f.write(maker.log)
                     self.logger.error('Failed to render PDF for %s', problem.code)
                     return HttpResponse(maker.log, status=500, content_type='text/plain')
                 shutil.move(maker.pdffile, cache)
@@ -484,7 +477,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             return request.session.get(key, False)
         return request.GET.get(key, None) == '1'
 
-    def setup(self, request):
+    def setup_problem_list(self, request):
         self.hide_solved = self.GET_with_session(request, 'hide_solved')
         self.show_types = self.GET_with_session(request, 'show_types')
         self.full_text = self.GET_with_session(request, 'full_text')
@@ -511,7 +504,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         self.point_end = safe_float_or_none(request.GET.get('point_end'))
 
     def get(self, request, *args, **kwargs):
-        self.setup(request)
+        self.setup_problem_list(request)
 
         try:
             return super(ProblemList, self).get(request, *args, **kwargs)
@@ -540,7 +533,7 @@ class LanguageTemplateAjax(View):
 
 class RandomProblem(ProblemList):
     def get(self, request, *args, **kwargs):
-        self.setup(request)
+        self.setup_problem_list(request)
         if self.in_contest:
             raise Http404()
 

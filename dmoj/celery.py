@@ -1,12 +1,8 @@
 import logging
-import os
 import socket
 
 from celery import Celery
 from celery.signals import task_failure
-
-# set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dmoj.settings')
 
 app = Celery('dmoj')
 

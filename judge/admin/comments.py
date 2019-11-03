@@ -5,14 +5,14 @@ from django.utils.translation import gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import Comment
-from judge.widgets import HeavyPreviewAdminPageDownWidget, HeavySelect2Widget
+from judge.widgets import AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class CommentForm(ModelForm):
     class Meta:
         widgets = {
-            'author': HeavySelect2Widget(data_view='profile_select2'),
-            'parent': HeavySelect2Widget(data_view='comment_select2'),
+            'author': AdminHeavySelect2Widget(data_view='profile_select2'),
+            'parent': AdminHeavySelect2Widget(data_view='comment_select2'),
         }
         if HeavyPreviewAdminPageDownWidget is not None:
             widgets['body'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('comment_preview'))

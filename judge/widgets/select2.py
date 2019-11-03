@@ -50,7 +50,9 @@ DEFAULT_SELECT2_JS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.
 DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
 
 __all__ = ['Select2Widget', 'Select2MultipleWidget', 'Select2TagWidget',
-           'HeavySelect2Widget', 'HeavySelect2MultipleWidget', 'HeavySelect2TagWidget']
+           'HeavySelect2Widget', 'HeavySelect2MultipleWidget', 'HeavySelect2TagWidget',
+           'AdminSelect2Widget', 'AdminSelect2MultipleWidget', 'AdminHeavySelect2Widget',
+           'AdminHeavySelect2MultipleWidget']
 
 
 class Select2Mixin(object):
@@ -84,7 +86,8 @@ class Select2Mixin(object):
             self.choices = list(chain([('', '')], self.choices))
         return super(Select2Mixin, self).optgroups(name, value, attrs=attrs)
 
-    def _get_media(self):
+    @property
+    def media(self):
         """
         Construct Media as a dynamic property.
 
@@ -92,11 +95,18 @@ class Select2Mixin(object):
             https://docs.djangoproject.com/en/1.8/topics/forms/media/#media-as-a-dynamic-property
         """
         return forms.Media(
-            js=(settings.SELECT2_JS_URL, 'django_select2.js'),
-            css={'screen': (settings.SELECT2_CSS_URL,)},
+            js=[settings.SELECT2_JS_URL, 'django_select2.js'],
+            css={'screen': [settings.SELECT2_CSS_URL]},
         )
 
-    media = property(_get_media)
+
+class AdminSelect2Mixin(Select2Mixin):
+    @property
+    def media(self):
+        return forms.Media(
+            js=['admin/js/jquery.init.js', settings.SELECT2_JS_URL, 'django_select2.js'],
+            css={'screen': [settings.SELECT2_CSS_URL]},
+        )
 
 
 class Select2TagMixin(object):
@@ -243,4 +253,20 @@ class HeavySelect2MultipleWidget(HeavySelect2Mixin, forms.SelectMultiple):
 class HeavySelect2TagWidget(Select2TagMixin, HeavySelect2MultipleWidget):
     """Select2 tag widget."""
 
+    pass
+
+
+class AdminSelect2Widget(AdminSelect2Mixin, Select2Widget):
+    pass
+
+
+class AdminSelect2MultipleWidget(AdminSelect2Mixin, Select2MultipleWidget):
+    pass
+
+
+class AdminHeavySelect2Widget(AdminSelect2Mixin, HeavySelect2Widget):
+    pass
+
+
+class AdminHeavySelect2MultipleWidget(AdminSelect2Mixin, HeavySelect2MultipleWidget):
     pass
