@@ -200,16 +200,18 @@ class ProblemAdmin(VersionAdmin):
                 WHERE `data`.delta IS NOT NULL
             '''.format(', '.join(['%s'] * len(ids)), sign), list(ids))
 
-    def _rescore(self, request, problem_id):
+    def _rescore(self, request, problem_id, show_message=True):
         status = rescore_problem.delay(problem_id)
-        task_status_url = reverse('problem_submissions_rescore_success', args=[problem_id, status.id])
-        message = ungettext('A background task has been started to rescore submissions since points changed. '
-                            'View its progress <a href="{}">here</a>.')
-        self.message_user(request, format_html(message, task_status_url), extra_tags='safe')
+        if show_message:
+            task_status_url = reverse('problem_submissions_rescore_success', args=[problem_id, status.id])
+            message = ungettext('A background task has been started to rescore submissions. '
+                                'You may view its progress <a href="{}">here</a>.')
+            self.message_user(request, format_html(message, task_status_url), extra_tags='safe')
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
-        self._update_points_many(queryset.values_list('id', flat=True), '+')
+        for problem_id in queryset.values_list('id', flat=True):
+            self._rescore(request, problem_id, show_message=False)
         self.message_user(request, ungettext('%d problem successfully marked as public.',
                                              '%d problems successfully marked as public.',
                                              count) % count)
@@ -218,7 +220,8 @@ class ProblemAdmin(VersionAdmin):
 
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
-        self._update_points_many(queryset.values_list('id', flat=True), '-')
+        for problem_id in queryset.values_list('id', flat=True):
+            self._rescore(request, problem_id, show_message=False)
         self.message_user(request, ungettext('%d problem successfully marked as private.',
                                              '%d problems successfully marked as private.',
                                              count) % count)
@@ -258,11 +261,8 @@ class ProblemAdmin(VersionAdmin):
 
     def save_model(self, request, obj, form, change):
         super(ProblemAdmin, self).save_model(request, obj, form, change)
-        if form.changed_data:
-            if 'is_public' in form.changed_data:
-                self._update_points(obj.id, '+' if obj.is_public else '-')
-            elif 'points' in form.changed_data:
-                self._rescore(request, obj.id)
+        if form.changed_data and ('points' in form.changed_data or 'is_public' in form.changed_data):
+            self._rescore(request, obj.id)
 
     def construct_change_message(self, request, form, *args, **kwargs):
         if form.cleaned_data.get('change_message'):
