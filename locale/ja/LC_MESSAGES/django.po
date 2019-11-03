@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-27 18:02+0000\n"
-"PO-Revision-Date: 2019-10-31 06:04\n"
+"POT-Creation-Date: 2019-11-03 00:44+0000\n"
+"PO-Revision-Date: 2019-11-03 01:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -2732,6 +2732,16 @@ msgstr "不正な上流データ: %s"
 #: judge/views/widgets.py:68
 msgid "Bad latitude or longitude"
 msgstr "悪い緯度または経度です"
+
+#: src/django-sortedm2m/sortedm2m_tests/migrations_tests/models.py:13
+#: src/django-sortedm2m/sortedm2m_tests/migrations_tests/models.py:27
+msgid "Photo"
+msgstr ""
+
+#: src/django-sortedm2m/sortedm2m_tests/migrations_tests/models.py:14
+#: src/django-sortedm2m/sortedm2m_tests/migrations_tests/models.py:28
+msgid "Photos"
+msgstr ""
 
 #: src/dmoj-wpadmin/test_project/apps/authors/models.py:9
 msgid "first name"
