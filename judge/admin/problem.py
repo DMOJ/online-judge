@@ -200,7 +200,7 @@ class ProblemAdmin(VersionAdmin):
                 WHERE `data`.delta IS NOT NULL
             '''.format(', '.join(['%s'] * len(ids)), sign), list(ids))
 
-    def _rescore(self, problem_id):
+    def _rescore(self, request, problem_id):
         status = rescore_problem.delay(problem_id)
         task_status_url = reverse('problem_submissions_rescore_success', args=[problem_id, status.id])
         self.message_user(request, ungettext('A rescoring task has been kicked off since points changed. '
@@ -262,7 +262,7 @@ class ProblemAdmin(VersionAdmin):
             if 'is_public' in form.changed_data:
                 self._update_points(obj.id, '+' if obj.is_public else '-')
             elif 'points' in form.changed_data:
-                self._rescore(obj.id)
+                self._rescore(request, obj.id)
 
     def construct_change_message(self, request, form, *args, **kwargs):
         if form.cleaned_data.get('change_message'):
