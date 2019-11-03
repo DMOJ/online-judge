@@ -136,7 +136,7 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context.update(paginate_query_context(self.request))
         return context
 
-    def setup(self, request):
+    def setup_contest_list(self, request):
         self.search_query = None
         self.selected_tags = []
         self.rated_state = safe_int_or_none(request.GET.get('rated_state'))
@@ -150,7 +150,7 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
                 pass
 
     def get(self, request, *args, **kwargs):
-        self.setup(request)
+        self.setup_contest_list(request)
         return super(ContestList, self).get(request, *args, **kwargs)
 
 
