@@ -110,12 +110,3 @@ def rejudge_success(request, problem, task_id):
     messages.success(request, ngettext('Successfully scheduled %d submission for rejudging.',
                                        'Successfully scheduled %d submissions for rejudging.', count) % (count,))
     return HttpResponseRedirect(reverse('problem_manage_submissions', args=[problem]))
-
-
-def rescore_success(request, problem, task_id):
-    count = AsyncResult(task_id).result
-    if not isinstance(count, int):
-        raise Http404()
-    messages.success(request, ngettext('%d submission were successfully rescored.',
-                                       '%d submissions were successfully rescored.', count) % (count,))
-    return HttpResponseRedirect(reverse('problem_manage_submissions', args=[problem]))
