@@ -17,7 +17,12 @@ A modern online judge and contest platform system, supporting <b>IO-based</b>, <
 
 ## Features
 
-* [Support for over **60 runtimes**](https://github.com/DMOJ/online-judge#supported-languages)
+* [Support for over **60 language runtimes**](https://github.com/DMOJ/online-judge#supported-languages)
+* Highly robust judging system:
+   * Supports **interactive** and **signature-graded** tasks
+   * Supports **runtime data generators** and **custom output validators** 
+   * Specifying **per-language resource limits**
+   * Capable of scaling to hundreds of judging servers
 * Extremely configurable contest system:
    * Supports IOI/AtCoder/ECOO formats out-of-the box
    * **System testing** supported
@@ -25,12 +30,12 @@ A modern online judge and contest platform system, supporting <b>IO-based</b>, <
    * Codeforces-style **rating**
    * Restricting contest access to particular organizations or users
 * Rich problem statements, with support for **LaTeX math and diagrams**
-   * Automatic **PDF generation** for for distribution
+   * Automatic **PDF generation** for easy distribution
    * Built-in support for **editorials**
 * **Live updates** for submissions
 * Home page blog and activity stream
-* Fine-grained permission control
-* OAuth login with Google, and Github
+* Fine-grained permission control for staff
+* OAuth login with Google, Facebook, and Github
 * Two-factor authentication support
 
 ## Installation
