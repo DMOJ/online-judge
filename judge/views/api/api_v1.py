@@ -236,7 +236,7 @@ def api_v1_submission_detail(request, submission):
             'memory': case['memory'],
             'points': case['points'],
             'total': case['total'],
-        } for case in submission.test_cases.all().values('case', 'status', 'time', 'memory', 'points', 'total')]
+        } for case in submission.test_cases.all().values('case', 'status', 'time', 'memory', 'points', 'total')],
     }
 
     return JsonResponse(resp)

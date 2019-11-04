@@ -159,7 +159,7 @@ class LeaveOrganization(OrganizationMembershipChange):
             return generic_message(
                 request, _('Cannot leave organization'),
                 _('You may not leave "%s".') % org.short_name,
-                status=403
+                status=403,
             )
         profile.organizations.remove(org)
         cache.delete(make_template_fragment_key('org_member_count', (org.id,)))

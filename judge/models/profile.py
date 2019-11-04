@@ -94,7 +94,7 @@ class Profile(models.Model):
                                     choices=(('user', 'Normal User'),
                                              ('president', 'President'),
                                              ('alumnus', 'Alumnus'),
-                                             ('admin', 'Admin'),))
+                                             ('admin', 'Admin')))
     mute = models.BooleanField(verbose_name=_('comment mute'), help_text=_('Some users are at their best when silent.'),
                                default=False)
     is_unlisted = models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'),

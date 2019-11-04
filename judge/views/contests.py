@@ -593,10 +593,10 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
 
         status_count_queryset = list(
             queryset.values('problem__code', 'result').annotate(count=Count('result'))
-                    .values_list('problem__code', 'result', 'count')
+                    .values_list('problem__code', 'result', 'count'),
         )
         labels, codes = zip(
-            *self.object.contest_problems.order_by('order').values_list('problem__name', 'problem__code')
+            *self.object.contest_problems.order_by('order').values_list('problem__name', 'problem__code'),
         )
         num_problems = len(labels)
         status_counts = [[] for i in range(num_problems)]
@@ -629,15 +629,15 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
         }
         stats['problem_ac_rate'] = get_bar_chart(
             queryset.values('contest__problem__order', 'problem__name').annotate(ac_rate=ac_rate)
-                    .order_by('contest__problem__order').values_list('problem__name', 'ac_rate')
+                    .order_by('contest__problem__order').values_list('problem__name', 'ac_rate'),
         )
         stats['language_count'] = get_pie_chart(
             queryset.values('language__name').annotate(count=Count('language__name'))
-                    .filter(count__gt=0).order_by('-count').values_list('language__name', 'count')
+                    .filter(count__gt=0).order_by('-count').values_list('language__name', 'count'),
         )
         stats['language_ac_rate'] = get_bar_chart(
             queryset.values('language__name').annotate(ac_rate=ac_rate)
-                    .filter(ac_rate__gt=0).values_list('language__name', 'ac_rate')
+                    .filter(ac_rate__gt=0).values_list('language__name', 'ac_rate'),
         )
 
         context['stats'] = mark_safe(json.dumps(stats))
@@ -759,7 +759,7 @@ class ContestRanking(ContestRankingBase):
             return get_contest_ranking_list(
                 self.request, self.object,
                 ranking_list=partial(base_contest_ranking_list, queryset=queryset),
-                ranker=lambda users, key: ((_('???'), user) for user in users)
+                ranker=lambda users, key: ((_('???'), user) for user in users),
             )
 
         return get_contest_ranking_list(self.request, self.object)
@@ -789,7 +789,7 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         return get_contest_ranking_list(
             self.request, self.object, show_current_virtual=False,
             ranking_list=partial(base_contest_ranking_list, queryset=queryset),
-            ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users)
+            ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users),
         )
 
     def get_context_data(self, **kwargs):

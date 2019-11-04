@@ -353,10 +353,10 @@ def user_ranking_redirect(request):
         raise Http404()
     user = get_object_or_404(Profile, user__username=username)
     rank = Profile.objects.filter(
-        is_external_user=False, is_unlisted=False, performance_points__gt=user.performance_points
+        is_external_user=False, is_unlisted=False, performance_points__gt=user.performance_points,
     ).count()
     rank += Profile.objects.filter(
-        is_external_user=False, is_unlisted=False, performance_points__exact=user.performance_points, id__lt=user.id
+        is_external_user=False, is_unlisted=False, performance_points__exact=user.performance_points, id__lt=user.id,
     ).count()
     page = rank // UserList.paginate_by
     return HttpResponseRedirect('%s%s#!%s' % (reverse('user_list'), '?page=%d' % (page + 1) if page else '', username))

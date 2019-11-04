@@ -1,6 +1,7 @@
 from datetime import timedelta
+
 from django.core.exceptions import ValidationError
-from django.db.models import ExpressionWrapper, F, FloatField, Max, Min, Subquery, OuterRef
+from django.db.models import ExpressionWrapper, F, FloatField, Max, Min, OuterRef, Subquery
 from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
@@ -47,7 +48,7 @@ class BonusesContestFormat(DefaultContestFormat):
                                              .filter(total=Subquery(
                                                  participation.submissions.filter(problem_id=OuterRef('problem_id'))
                                                                           .annotate(best=total_wrapper)
-                                                                          .order_by('-best').values('best')[:1]
+                                                                          .order_by('-best').values('best')[:1],
                                              ))
                                              .annotate(time=Min('submission__date'), points=Max('points'))
                                              .values_list('problem_id', 'time', 'points', 'total'))
@@ -67,7 +68,7 @@ class BonusesContestFormat(DefaultContestFormat):
                                       .filter(submission__date=Subquery(
                                           participation.submissions.filter(problem_id=OuterRef('problem_id'))
                                                                    .order_by('submission__date')
-                                                                   .values('submission__date')[:1]
+                                                                   .values('submission__date')[:1],
                                       ))
                                       .annotate(points=Max('points'))
                                       .values_list('problem_id', 'points', 'problem__points'))
@@ -89,7 +90,7 @@ class BonusesContestFormat(DefaultContestFormat):
             first_solve = (' first-solve' if format_data['first_solve'] else '')
             bonus = format_html(
                         '<font style="font-size:10px;"> +{bonus}</font>',
-                        bonus=floatformat(format_data['bonus'])
+                        bonus=floatformat(format_data['bonus']),
                     ) if format_data['bonus'] else ''
 
             return format_html(
