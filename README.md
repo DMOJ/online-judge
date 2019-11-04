@@ -1,13 +1,15 @@
 DMOJ: Modern Online Judge [![Build Status](https://github.com/DMOJ/online-judge/workflows/build/badge.svg)](https://github.com/DMOJ/online-judge/actions/) [![Slack](https://slack.dmoj.ca/badge.svg)](https://slack.dmoj.ca)
 =====
 
-A modern [open-source](https://github.com/DMOJ/online-judge/blob/master/LICENSE) online judge and contest platform system. See it live at [dmoj.ca](https://dmoj.ca/)!
+A modern [open-source](https://github.com/DMOJ/online-judge/blob/master/LICENSE) online judge and contest platform system.
 
 <p align="center">
 <a href="http://dmoj.ca">
 <img src="https://dmoj.ca/logo.svg" align="center"></img> 
 </a>
 </p>
+
+See it live at [dmoj.ca](https://dmoj.ca/)!
 
 ## Features
 
