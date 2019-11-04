@@ -21,4 +21,4 @@ class Command(BaseCommand):
         except Language.DoesNotExist:
             raise CommandError('Invalid target language: %s' % options['target'])
 
-        target.problem_set = source.problem_set.all()
+        target.problem_set.set(source.problem_set.all())
