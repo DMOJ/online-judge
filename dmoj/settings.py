@@ -395,6 +395,7 @@ MARTOR_ENABLE_CONFIGS = {
     'jquery': 'true',
     'living': 'false',
     'spellcheck': 'false',
+    'hljs': 'false',
 }
 MARTOR_MARKDOWNIFY_URL = '/widgets/preview/default'
 MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user'
