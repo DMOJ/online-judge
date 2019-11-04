@@ -62,7 +62,7 @@ class BlogPostForm(ModelForm):
         widgets = {
             'authors': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2',
-                                                        attrs={'style': 'width: 100%'}),
+                                                             attrs={'style': 'width: 100%'}),
         }
 
         if HeavyPreviewAdminPageDownWidget is not None:

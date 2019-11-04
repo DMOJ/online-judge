@@ -67,12 +67,12 @@ class IOIContestFormat(DefaultContestFormat):
             score += points
 
         queryset = (participation.submissions.values('problem_id', 'problem__points')
-                                      .filter(submission__date=Subquery(
-                                          participation.submissions.filter(problem_id=OuterRef('problem_id'))
-                                                                   .order_by('submission__date')
-                                                                   .values('submission__date')[:1]))
-                                      .annotate(points=Max('points'))
-                                      .values_list('problem_id', 'points', 'problem__points'))
+                                             .filter(submission__date=Subquery(
+                                                 participation.submissions.filter(problem_id=OuterRef('problem_id'))
+                                                                          .order_by('submission__date')
+                                                                          .values('submission__date')[:1]))
+                                             .annotate(points=Max('points'))
+                                             .values_list('problem_id', 'points', 'problem__points'))
 
         for problem_id, points, problem_points in queryset:
             format_data[str(problem_id)].update({

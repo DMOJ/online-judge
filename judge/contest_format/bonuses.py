@@ -43,13 +43,11 @@ class BonusesContestFormat(DefaultContestFormat):
         format_data = {}
 
         total_wrapper = ExpressionWrapper(F('points') + F('bonus'), output_field=FloatField())
-        queryset = (participation.submissions.values('problem_id')
-                                             .annotate(total=total_wrapper)
+        queryset = (participation.submissions.values('problem_id').annotate(total=total_wrapper)
                                              .filter(total=Subquery(
                                                  participation.submissions.filter(problem_id=OuterRef('problem_id'))
                                                                           .annotate(best=total_wrapper)
-                                                                          .order_by('-best').values('best')[:1],
-                                             ))
+                                                                          .order_by('-best').values('best')[:1]))
                                              .annotate(time=Min('submission__date'), points=Max('points'))
                                              .values_list('problem_id', 'time', 'points', 'total'))
 
@@ -65,13 +63,12 @@ class BonusesContestFormat(DefaultContestFormat):
             }
 
         queryset = (participation.submissions.values('problem_id', 'problem__points')
-                                      .filter(submission__date=Subquery(
-                                          participation.submissions.filter(problem_id=OuterRef('problem_id'))
-                                                                   .order_by('submission__date')
-                                                                   .values('submission__date')[:1],
-                                      ))
-                                      .annotate(points=Max('points'))
-                                      .values_list('problem_id', 'points', 'problem__points'))
+                                             .filter(submission__date=Subquery(
+                                                 participation.submissions.filter(problem_id=OuterRef('problem_id'))
+                                                                          .order_by('submission__date')
+                                                                          .values('submission__date')[:1]))
+                                             .annotate(points=Max('points'))
+                                             .values_list('problem_id', 'points', 'problem__points'))
 
         for problem_id, points, problem_points in queryset:
             format_data[str(problem_id)].update({
@@ -89,12 +86,12 @@ class BonusesContestFormat(DefaultContestFormat):
             pretest = ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
             first_solve = (' first-solve' if format_data['first_solve'] else '')
             bonus = format_html(
-                        '<font style="font-size:10px;"> +{bonus}</font>',
-                        bonus=floatformat(format_data['bonus']),
-                    ) if format_data['bonus'] else ''
+                '<font style="font-size:10px;"> +{bonus}</font>',
+                bonus=floatformat(format_data['bonus']),
+            ) if format_data['bonus'] else ''
 
             return format_html(
-                u'<td class="{state}"><a href="{url}">{points}{bonus}<div class="solving-time">{time}</div></a></td>',
+                '<td class="{state}"><a href="{url}">{points}{bonus}<div class="solving-time">{time}</div></a></td>',
                 state=pretest + self.best_solution_state(format_data['points'], contest_problem.points) + first_solve,
                 url=reverse('contest_user_submissions',
                             args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),

@@ -6,7 +6,7 @@ from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Profile
-from judge.widgets import AdminPagedownWidget, GenerateKeyTextInputButton, AdminSelect2Widget
+from judge.widgets import AdminPagedownWidget, AdminSelect2Widget, GenerateKeyTextInputButton
 
 
 class ProfileForm(ModelForm):
