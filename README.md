@@ -18,6 +18,7 @@ See it live at [dmoj.ca](https://dmoj.ca/)!
    * **System testing** supported
    * **Hidden scoreboards** and **virtual participation**
    * Codeforces-style **rating**
+   * **Plagiarism detection** via [Stanford MOSS](https://theory.stanford.edu/~aiken/moss/)
    * Restricting contest access to particular organizations or users
 * Rich problem statements, with support for **LaTeX math and diagrams**
    * Automatic **PDF generation** for easy distribution
