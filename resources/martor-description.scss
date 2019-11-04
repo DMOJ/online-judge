@@ -2,6 +2,14 @@
 
 form .martor-preview {
     @include content-description;
+    
+    .martor-preview ul li {
+        list-style: unset !important;
+    }
+
+    .martor-preview ul, .martor-preview ol {
+        margin-left: 0 !important;
+    }
 }
 
 .main-martor-fullscreen {
