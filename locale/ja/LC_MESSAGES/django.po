@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-03 20:11+0000\n"
-"PO-Revision-Date: 2019-11-04 21:11\n"
+"POT-Creation-Date: 2019-11-05 00:26+0000\n"
+"PO-Revision-Date: 2019-11-05 01:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -3597,7 +3597,7 @@ msgstr "出力ファイル"
 msgid "Pretest?"
 msgstr "事前テストか？"
 
-#: templates/problem/data.html:447 templates/problem/submit.html:253
+#: templates/problem/data.html:447 templates/problem/submit.html:252
 msgid "Submit!"
 msgstr "提出！"
 
@@ -3863,12 +3863,12 @@ msgstr "実行する"
 msgid "Random"
 msgstr "ランダム"
 
-#: templates/problem/submit.html:193
+#: templates/problem/submit.html:192
 #, python-format
 msgid "<b>Warning!</b> Your default language, <b>%(default_language)s</b>, is unavailable for this problem and has been deselected."
 msgstr "<b>警告！</b> あなたのデフォルト言語 <b>%(default_language)s</b> はこの課題に利用可能ではないので選択を解除しました。"
 
-#: templates/problem/submit.html:204
+#: templates/problem/submit.html:203
 #, python-format
 msgid "\n"
 "                        You have %(left)s submission left\n"
@@ -3880,11 +3880,11 @@ msgstr[0] "\n"
 " あなたは提出物 %(left)s が残っています \n"
 "                    "
 
-#: templates/problem/submit.html:213
+#: templates/problem/submit.html:212
 msgid "You have 0 submissions left"
 msgstr "あなたには提出物が残っていません"
 
-#: templates/problem/submit.html:251
+#: templates/problem/submit.html:250
 msgid "No judge is available for this problem."
 msgstr "この課題は判定器が利用可能ではありません。"
 

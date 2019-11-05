@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-03 20:11+0000\n"
-"PO-Revision-Date: 2019-11-04 21:11\n"
+"POT-Creation-Date: 2019-11-05 00:26+0000\n"
+"PO-Revision-Date: 2019-11-05 01:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -3597,7 +3597,7 @@ msgstr "输出文件"
 msgid "Pretest?"
 msgstr "预测试？"
 
-#: templates/problem/data.html:447 templates/problem/submit.html:253
+#: templates/problem/data.html:447 templates/problem/submit.html:252
 msgid "Submit!"
 msgstr "提交！"
 
@@ -3863,12 +3863,12 @@ msgstr "搜索"
 msgid "Random"
 msgstr "随机"
 
-#: templates/problem/submit.html:193
+#: templates/problem/submit.html:192
 #, python-format
 msgid "<b>Warning!</b> Your default language, <b>%(default_language)s</b>, is unavailable for this problem and has been deselected."
 msgstr "<b>警告!</b> 您的默认编程语言, <b>%(default_language)s</b>, 在此问题不可用，且已取消选择。"
 
-#: templates/problem/submit.html:204
+#: templates/problem/submit.html:203
 #, python-format
 msgid "\n"
 "                        You have %(left)s submission left\n"
@@ -3880,11 +3880,11 @@ msgstr[0] "\n"
 " 您还剩下 %(left)s 次提交机会 \n"
 "                    "
 
-#: templates/problem/submit.html:213
+#: templates/problem/submit.html:212
 msgid "You have 0 submissions left"
 msgstr "你還可以提交0次"
 
-#: templates/problem/submit.html:251
+#: templates/problem/submit.html:250
 msgid "No judge is available for this problem."
 msgstr "此题目没有可用的裁判服务器。"
 
