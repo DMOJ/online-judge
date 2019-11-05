@@ -14,7 +14,7 @@ See it live at [dmoj.ca](https://dmoj.ca/)!
    * Specifying **per-language resource limits**
    * Capable of scaling to hundreds of judging servers
 * Extremely configurable contest system:
-   * Supports IOI/AtCoder/ECOO formats out-of-the box
+   * Supports ICPC/IOI/AtCoder/ECOO formats out-of-the box
    * **System testing** supported
    * **Hidden scoreboards** and **virtual participation**
    * Topcoder-style **rating**
@@ -64,7 +64,7 @@ Global, per-problem, and per-contest submission lists are live-updating, and can
 
 
 ### Extensible contest system
-Contests feature an optional rating system, and can be configured to run in any timeframe. Users are also able to participate virtually after the contest ends. IOI, AtCoder, and ECOO contest formats are supported out-of-the-box, and new formats can be added with custom code.
+Contests feature an optional rating system, and can be configured to run in any timeframe. Users are also able to participate virtually after the contest ends. ICPC, IOI, AtCoder, and ECOO contest formats are supported out-of-the-box, and new formats can be added with custom code.
 
 
 ![](https://i.imgur.com/0V1fzZi.png)

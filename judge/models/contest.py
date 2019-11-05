@@ -346,6 +346,7 @@ class ContestParticipation(models.Model):
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
     is_disqualified = models.BooleanField(verbose_name=_('is disqualified'), default=False,
                                           help_text=_('Whether this participation is disqualified.'))
+    tiebreaker = models.FloatField(verbose_name=_('tie-breaking field'), default=0.0)
     virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=LIVE,
                                   help_text=_('0 means non-virtual, otherwise the n-th virtual participation.'))
     format_data = JSONField(verbose_name=_('contest format specific data'), null=True, blank=True)
