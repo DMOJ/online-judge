@@ -16,6 +16,7 @@ def make_timezones():
             data[area].append((tz, loc))
     return sorted(data.items(), key=itemgetter(0))
 
+
 TIMEZONE = make_timezones()
 del make_timezones
 

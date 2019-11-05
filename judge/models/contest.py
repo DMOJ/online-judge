@@ -5,12 +5,13 @@ from django.db.models import CASCADE
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
+from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge import contest_format
 from judge.models.problem import Problem
-from judge.models.profile import Profile, Organization
+from judge.models.profile import Organization, Profile
 from judge.models.submission import Submission
 
 __all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission', 'Rating']
@@ -57,9 +58,9 @@ class Contest(models.Model):
     end_time = models.DateTimeField(verbose_name=_('end time'), db_index=True)
     time_limit = models.DurationField(verbose_name=_('time limit'), blank=True, null=True)
     is_visible = models.BooleanField(verbose_name=_('publicly visible'), default=False,
-                                    help_text=_('Should be set even for organization-private contests, where it '
-                                                'determines whether the contest is visible to members of the '
-                                                'specified organizations.'))
+                                     help_text=_('Should be set even for organization-private contests, where it '
+                                                 'determines whether the contest is visible to members of the '
+                                                 'specified organizations.'))
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
     hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
@@ -92,8 +93,10 @@ class Contest(models.Model):
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
-    logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150, blank=True,
-                                           help_text=_('This image will replace the default site logo for users inside the contest.'))
+    logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150,
+                                           blank=True,
+                                           help_text=_('This image will replace the default site logo for users '
+                                                       'inside the contest.'))
     tags = models.ManyToManyField(ContestTag, verbose_name=_('contest tags'), blank=True, related_name='contests')
     user_count = models.IntegerField(verbose_name=_('the amount of live participants'), default=0)
     summary = models.TextField(blank=True, verbose_name=_('contest summary'),
@@ -184,6 +187,8 @@ class Contest(models.Model):
         self.user_count = self.users.filter(virtual=0).count()
         self.save()
 
+    update_user_count.alters_data = True
+
     @cached_property
     def show_scoreboard(self):
         if self.hide_scoreboard and not self.ended:
@@ -208,6 +213,14 @@ class Contest(models.Model):
         if user.has_perm('judge.see_private_contest'):
             return True
 
+        # User can edit the contest
+        return self.is_editable_by(user)
+
+    def is_editable_by(self, user):
+        # If the user can edit all contests
+        if user.has_perm('judge.edit_all_contest'):
+            return True
+
         # If the user is a contest organizer
         if user.has_perm('judge.edit_own_contest') and \
                 self.organizers.filter(id=user.profile.id).exists():
@@ -215,13 +228,13 @@ class Contest(models.Model):
 
         return False
 
-    update_user_count.alters_data = True
-
     class Meta:
         permissions = (
             ('see_private_contest', _('See private contests')),
             ('edit_own_contest', _('Edit own contests')),
             ('edit_all_contest', _('Edit all contests')),
+            ('clone_contest', _('Clone contest')),
+            ('moss_contest', _('MOSS contest')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),
@@ -352,3 +365,23 @@ class Rating(models.Model):
         unique_together = ('user', 'contest')
         verbose_name = _('contest rating')
         verbose_name_plural = _('contest ratings')
+
+
+class ContestMoss(models.Model):
+    LANG_MAPPING = [
+        ('C', MOSS_LANG_C),
+        ('C++', MOSS_LANG_CC),
+        ('Java', MOSS_LANG_JAVA),
+        ('Python', MOSS_LANG_PYTHON),
+    ]
+
+    contest = models.ForeignKey(Contest, verbose_name=_('contest'), related_name='moss', on_delete=CASCADE)
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='moss', on_delete=CASCADE)
+    language = models.CharField(max_length=10)
+    submission_count = models.PositiveIntegerField(default=0)
+    url = models.URLField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('contest', 'problem', 'language')
+        verbose_name = _('contest moss result')
+        verbose_name_plural = _('contest moss results')

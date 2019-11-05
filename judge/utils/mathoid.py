@@ -49,13 +49,13 @@ class MathoidMathParser(object):
         self.mathoid_url = settings.MATHOID_URL
         self.cache = HashFileCache(settings.MATHOID_CACHE_ROOT,
                                    settings.MATHOID_CACHE_URL,
-                                   getattr(settings, 'MATHOID_GZIP', False))
+                                   settings.MATHOID_GZIP)
 
-        mml_cache = getattr(settings, 'MATHOID_MML_CACHE', None)
+        mml_cache = settings.MATHOID_MML_CACHE
         self.mml_cache = mml_cache and caches[mml_cache]
-        self.css_cache = caches[getattr(settings, 'MATHOID_CSS_CACHE', 'default')]
+        self.css_cache = caches[settings.MATHOID_CSS_CACHE]
 
-        self.mml_cache_ttl = getattr(settings, 'MATHOID_MML_CACHE_TTL', 86400)
+        self.mml_cache_ttl = settings.MATHOID_MML_CACHE_TTL
 
     def query_mathoid(self, formula, hash):
         self.cache.create(hash)
@@ -63,7 +63,7 @@ class MathoidMathParser(object):
         try:
             response = requests.post(self.mathoid_url, data={
                 'q': reescape.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
-                'type': 'tex' if formula.startswith('\displaystyle') else 'inline-tex'
+                'type': 'tex' if formula.startswith(r'\displaystyle') else 'inline-tex',
             })
             response.raise_for_status()
             data = response.json()
@@ -132,7 +132,7 @@ class MathoidMathParser(object):
             return None
 
         result['tex'] = formula
-        result['display'] = formula.startswith('\displaystyle')
+        result['display'] = formula.startswith(r'\displaystyle')
         return {
             'mml': self.output_mml,
             'msp': self.output_msp,
@@ -178,7 +178,7 @@ class MathoidMathParser(object):
 
     def display_math(self, math):
         math = format_math(math)
-        return self.get_result('\displaystyle ' + math) or r'\[%s\]' % escape(math)
+        return self.get_result(r'\displaystyle ' + math) or r'\[%s\]' % escape(math)
 
     def inline_math(self, math):
         math = format_math(math)

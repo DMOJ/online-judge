@@ -1,11 +1,11 @@
-from django.db.models import Q, F
-from django.http import JsonResponse, Http404
+from django.db.models import F, Q
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import smart_text
 from django.views.generic.list import BaseListView
 
 from judge.jinja2.gravatar import gravatar
-from judge.models import Profile, Organization, Problem, Comment, Contest
+from judge.models import Comment, Contest, Organization, Problem, Profile
 
 
 def _get_user_queryset(term):
@@ -58,7 +58,7 @@ class ProblemSelect2View(Select2View):
         if not self.request.user.has_perm('judge.see_private_problem'):
             filter = Q(is_public=True)
             if self.request.user.is_authenticated:
-                filter |= Q(authors=self.request.user.profile) | Q(curators=self.request.user.profile)
+                filter |= Q(authors=self.request.profile) | Q(curators=self.request.profile)
             queryset = queryset.filter(filter).distinct()
         return queryset.distinct()
 
@@ -71,8 +71,9 @@ class ContestSelect2View(Select2View):
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False, is_organization_private=False)
             if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.profile.organizations.all())
-                q |= Q(private_contestants=self.request.profile)
+                q |= Q(is_organization_private=True,
+                       organizations__in=self.request.profile.organizations.all())
+                q |= Q(is_private=True, private_contestants=self.request.profile)
             queryset = queryset.filter(q)
         return queryset
 
@@ -117,7 +118,8 @@ class UserSearchSelect2View(BaseListView):
 class ContestUserSearchSelect2View(UserSearchSelect2View):
     def get_queryset(self):
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
-        if not contest.can_see_scoreboard(self.request.user) or contest.hide_scoreboard and contest.is_in_contest(self.request.user):
+        if not contest.can_see_scoreboard(self.request.user) or \
+                contest.hide_scoreboard and contest.is_in_contest(self.request.user):
             raise Http404()
 
         return Profile.objects.filter(contest_history__contest=contest,

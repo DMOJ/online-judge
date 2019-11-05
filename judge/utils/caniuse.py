@@ -1,5 +1,4 @@
 import requests
-
 from ua_parser import user_agent_parser
 
 _SUPPORT_DATA = requests.get('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json').json()['data']

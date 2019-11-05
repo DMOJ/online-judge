@@ -5,13 +5,12 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
-from django.core.exceptions import ValidationError
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from .caching import finished_submission
-from .models import Problem, Contest, Submission, Organization, Profile, MiscConfig, Language, Judge, \
-    BlogPost, ContestSubmission, Comment, License, EFFECTIVE_MATH_ENGINES
+from .models import BlogPost, Comment, Contest, ContestSubmission, EFFECTIVE_MATH_ENGINES, Judge, Language, License, \
+    MiscConfig, Organization, Problem, Profile, Submission
 
 
 def get_pdf_path(basename):
@@ -42,10 +41,8 @@ def problem_update(sender, instance, **kwargs):
                        for lang, _ in settings.LANGUAGES])
     cache.delete_many(['generated-meta-problem:%s:%d' % (lang, instance.id) for lang, _ in settings.LANGUAGES])
 
-    if hasattr(settings, 'DMOJ_PDF_PROBLEM_CACHE'):
-        for lang, _ in settings.LANGUAGES:
-            unlink_if_exists(get_pdf_path('%s.%s.pdf' % (instance.code, lang)))
-            unlink_if_exists(get_pdf_path('%s.%s.log' % (instance.code, lang)))
+    for lang, _ in settings.LANGUAGES:
+        unlink_if_exists(get_pdf_path('%s.%s.pdf' % (instance.code, lang)))
 
 
 @receiver(post_save, sender=Profile)
@@ -128,3 +125,8 @@ def misc_config_update(sender, instance, **kwargs):
     cache.delete_many(['misc_config:%s:%s:%s' % (domain, lang, instance.key.split('.')[0])
                        for lang in _misc_config_i18n
                        for domain in Site.objects.values_list('domain', flat=True)])
+
+
+@receiver(post_save, sender=ContestSubmission)
+def contest_submission_update(sender, instance, **kwargs):
+    Submission.objects.filter(id=instance.submission_id).update(contest_object_id=instance.participation.contest_id)

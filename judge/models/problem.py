@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import F, QuerySet, CASCADE, SET_NULL
+from django.db.models import CASCADE, F, QuerySet, SET_NULL
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.urls import reverse
@@ -13,10 +13,10 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from judge.fulltext import SearchQuerySet
-from judge.models.profile import Profile, Organization
+from judge.models.profile import Organization, Profile
 from judge.models.runtime import Language
 from judge.user_translations import gettext as user_gettext
-from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
+from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 
 __all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification',
            'License', 'Solution', 'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet']
@@ -102,8 +102,8 @@ class Problem(models.Model):
                                         'as shown in the problem list.'))
     description = models.TextField(verbose_name=_('problem body'))
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems',
-                                      help_text=_('These users will be able to edit the problem, '
-                                                  'and be listed as authors.'))
+                                     help_text=_('These users will be able to edit the problem, '
+                                                 'and be listed as authors.'))
     curators = models.ManyToManyField(Profile, verbose_name=_('curators'), blank=True, related_name='curated_problems',
                                       help_text=_('These users will be able to edit the problem, '
                                                   'but not be listed as authors.'))
@@ -111,25 +111,28 @@ class Problem(models.Model):
                                      help_text=_(
                                          'These users will be able to view the private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'),
-                                    help_text=_('The type of problem, '
-                                                "as shown on the problem's page."))
+                                   help_text=_('The type of problem, '
+                                               "as shown on the problem's page."))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE,
-                                help_text=_('The group of problem, '
-                                            'shown under Category in the problem list.'))
+                              help_text=_('The group of problem, shown under Category in the problem list.'))
     time_limit = models.FloatField(verbose_name=_('time limit'),
                                    help_text=_('The time limit for this problem, in seconds. '
                                                'Fractional seconds (e.g. 1.5) are supported.'),
-                                   validators=[MinValueValidator(0), MaxValueValidator(2000)])
+                                   validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_TIME_LIMIT),
+                                               MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT)])
     memory_limit = models.PositiveIntegerField(verbose_name=_('memory limit'),
                                                help_text=_('The memory limit for this problem, in kilobytes '
-                                                           '(e.g. 64mb = 65536 kilobytes).'))
+                                                           '(e.g. 64mb = 65536 kilobytes).'),
+                                               validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
+                                                           MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
     short_circuit = models.BooleanField(default=False)
     points = models.FloatField(verbose_name=_('points'),
-                                help_text=_('Points awarded for problem completion. '
-                                            "Points are displayed with a 'p' suffix if partial."))
+                               help_text=_('Points awarded for problem completion. '
+                                           "Points are displayed with a 'p' suffix if partial."),
+                               validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS)])
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
     allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'),
-                                            help_text=_('List of allowed submission languages.'))
+                                               help_text=_('List of allowed submission languages.'))
     is_public = models.BooleanField(verbose_name=_('publicly visible'), db_index=True, default=False)
     is_manually_managed = models.BooleanField(verbose_name=_('manually managed'), db_index=True, default=False,
                                               help_text=_('Whether judges should be allowed to manage data or not.'))
@@ -215,7 +218,7 @@ class Problem(models.Model):
         return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
 
     def is_subs_manageable_by(self, user):
-        return user.is_staff and user.has_perm('judge.rejudge_submission_lot') and self.is_editable_by(user)
+        return user.is_staff and user.has_perm('judge.rejudge_submission') and self.is_editable_by(user)
 
     def __str__(self):
         return self.name
@@ -272,8 +275,11 @@ class Problem(models.Model):
         self.user_count = self.submission_set.filter(points__gte=self.points, result='AC',
                                                      user__is_unlisted=False).values('user').distinct().count()
         submissions = self.submission_set.count()
-        self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC',
-                                                          user__is_unlisted=False).count() / submissions if submissions else 0
+        if submissions:
+            self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC',
+                                                              user__is_unlisted=False).count() / submissions
+        else:
+            self.ac_rate = 0
         self.save()
 
     update_stats.alters_data = True
@@ -368,8 +374,12 @@ class ProblemClarification(models.Model):
 class LanguageLimit(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits', on_delete=CASCADE)
     language = models.ForeignKey(Language, verbose_name=_('language'), on_delete=CASCADE)
-    time_limit = models.FloatField(verbose_name=_('time limit'))
-    memory_limit = models.IntegerField(verbose_name=_('memory limit'))
+    time_limit = models.FloatField(verbose_name=_('time limit'),
+                                   validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_TIME_LIMIT),
+                                               MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT)])
+    memory_limit = models.IntegerField(verbose_name=_('memory limit'),
+                                       validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
+                                                   MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
 
     class Meta:
         unique_together = ('problem', 'language')

@@ -2,23 +2,23 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
-from django.db import transaction, connection
-from django.db.models import TextField, Q
+from django.db import connection, transaction
+from django.db.models import Q, TextField
 from django.forms import ModelForm, ModelMultipleChoiceField
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, ugettext, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
-from judge.widgets import HeavySelect2Widget, HeavySelect2MultipleWidget, AdminPagedownWidget, Select2MultipleWidget, \
-    HeavyPreviewAdminPageDownWidget, Select2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminPagedownWidget, \
+    AdminSelect2MultipleWidget, AdminSelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
-class HeavySelect2Widget(HeavySelect2Widget):
+class AdminHeavySelect2Widget(AdminHeavySelect2Widget):
     @property
     def is_hidden(self):
         return False
@@ -29,7 +29,7 @@ class ContestTagForm(ModelForm):
         label=_('Included contests'),
         queryset=Contest.objects.all(),
         required=False,
-        widget=HeavySelect2MultipleWidget(data_view='contest_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='contest_select2'))
 
 
 class ContestTagAdmin(admin.ModelAdmin):
@@ -57,7 +57,7 @@ class ContestTagAdmin(admin.ModelAdmin):
 
 class ContestProblemInlineForm(ModelForm):
     class Meta:
-        widgets = {'problem': HeavySelect2Widget(data_view='problem_select2')}
+        widgets = {'problem': AdminHeavySelect2Widget(data_view='problem_select2')}
 
 
 class ContestProblemInline(admin.TabularInline):
@@ -94,12 +94,13 @@ class ContestForm(ModelForm):
 
     class Meta:
         widgets = {
-            'organizers': HeavySelect2MultipleWidget(data_view='profile_select2'),
-            'private_contestants': HeavySelect2MultipleWidget(data_view='profile_select2', 
-                                                              attrs={'style': 'width: 100%'}),
-            'organizations': HeavySelect2MultipleWidget(data_view='organization_select2'),
-            'tags': Select2MultipleWidget,
-            'banned_users': HeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
+            'organizers': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'private_contestants': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                                   attrs={'style': 'width: 100%'}),
+            'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
+            'tags': AdminSelect2MultipleWidget,
+            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                            attrs={'style': 'width: 100%'}),
         }
 
         if HeavyPreviewAdminPageDownWidget is not None:
@@ -108,7 +109,7 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'organizers') }),
+        (None, {'fields': ('key', 'name', 'organizers')}),
         (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_scoreboard',
                                     'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
@@ -116,7 +117,7 @@ class ContestAdmin(VersionAdmin):
         (_('Format'), {'fields': ('format_name', 'format_config')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Access'), {'fields': ('access_code', 'is_private', 'private_contestants', 'is_organization_private',
-                                    'organizations')}),
+                                  'organizations')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
@@ -134,7 +135,7 @@ class ContestAdmin(VersionAdmin):
         if request.user.has_perm('judge.edit_all_contest'):
             return queryset
         else:
-            return queryset.filter(organizers__id=request.user.profile.id)
+            return queryset.filter(organizers__id=request.profile.id)
 
     def get_readonly_fields(self, request, obj=None):
         readonly = []
@@ -151,7 +152,7 @@ class ContestAdmin(VersionAdmin):
             return False
         if request.user.has_perm('judge.edit_all_contest') or obj is None:
             return True
-        return obj.organizers.filter(id=request.user.profile.id).exists()
+        return obj.organizers.filter(id=request.profile.id).exists()
 
     def make_visible(self, request, queryset):
         count = queryset.update(is_visible=True)
@@ -168,9 +169,11 @@ class ContestAdmin(VersionAdmin):
     make_hidden.short_description = _('Mark contests as hidden')
 
     def get_urls(self):
-        return [url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
-                url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
-                url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge')] + super(ContestAdmin, self).get_urls()
+        return [
+            url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
+            url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
+            url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge'),
+        ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
         if not request.user.has_perm('judge.rejudge_submission'):
@@ -180,7 +183,7 @@ class ContestAdmin(VersionAdmin):
 
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
         if not request.user.has_perm('judge.rejudge_submission_lot') and \
-                len(queryset) > getattr(settings, 'DMOJ_SUBMISSIONS_REJUDGE_LIMIT', 10):
+                len(queryset) > settings.DMOJ_SUBMISSIONS_REJUDGE_LIMIT:
             self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
                               level=messages.ERROR)
             return
@@ -226,7 +229,7 @@ class ContestAdmin(VersionAdmin):
         form.base_fields['organizers'].queryset = Profile.objects.filter(
             Q(user__is_superuser=True) |
             Q(user__groups__permissions__codename__in=perms) |
-            Q(user__user_permissions__codename__in=perms)
+            Q(user__user_permissions__codename__in=perms),
         ).distinct()
         return form
 
@@ -234,8 +237,8 @@ class ContestAdmin(VersionAdmin):
 class ContestParticipationForm(ModelForm):
     class Meta:
         widgets = {
-            'contest': Select2Widget(),
-            'user': HeavySelect2Widget(data_view='profile_select2'),
+            'contest': AdminSelect2Widget(),
+            'user': AdminHeavySelect2Widget(data_view='profile_select2'),
         }
 
 
@@ -251,7 +254,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
             'contest__name', 'contest__format_name', 'contest__format_config',
-            'user__user__username', 'real_start', 'score', 'cumtime', 'virtual'
+            'user__user__username', 'real_start', 'score', 'cumtime', 'virtual',
         )
 
     def recalculate_results(self, request, queryset):

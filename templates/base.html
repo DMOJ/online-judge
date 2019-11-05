@@ -74,7 +74,7 @@
     {% compress js %}
         <script>{{ inlinei18n(LANGUAGE_CODE)|safe }}</script>
         {% if INLINE_JQUERY %}
-            <script src="{{ static('libs/jquery-1.11.2.min.js') }}"></script>
+            <script src="{{ static('libs/jquery-3.4.1.min.js') }}"></script>
         {% endif %}
         <script src="{{ static('libs/jquery-cookie.js') }}"></script>
         <script src="{{ static('libs/jquery-taphold.js') }}"></script>
@@ -159,8 +159,8 @@
     {% endif %}
 
     {# Don't run userscript since it may be malicious #}
-    {% if request.user.is_authenticated and request.user.profile.user_script and not request.user.is_impersonate %}
-        <script type="text/javascript">{{ request.user.profile.user_script|safe }}</script>
+    {% if request.user.is_authenticated and request.profile.user_script and not request.user.is_impersonate %}
+        <script type="text/javascript">{{ request.profile.user_script|safe }}</script>
     {% endif %}
 
     <noscript>
@@ -176,6 +176,11 @@
     </noscript>
 </head>
 <body>
+<svg width="0" height="0" style="display: block">
+    <defs>
+        <clipPath id="rating-clip"><circle cx="8" cy="8" r="7"/></clipPath>
+    </defs>
+</svg>
 <nav id="navigation" class="unselectable">
     <div id="nav-container">
         <a id="navicon" href="javascript:void(0)"><i class="fa fa-bars"></i></a>
@@ -232,9 +237,9 @@
                 </ul>
             {% else %}
                 <span class="anon">
-                    <a href="{{ url('auth_login') }}?next={{ LOGIN_RETURN_PATH|urlencode }}">
-                        <b>{{ _('Login') }}</b>
-                    </a>&nbsp;|&nbsp;<a href="{{ url('registration_register') }}">{{ _('Register') }}</a>
+                    <a href="{{ url('auth_login') }}?next={{ LOGIN_RETURN_PATH|urlencode }}"><b>{{ _('Log in') }}</b></a>
+                    &nbsp;{{ _('or') }}&nbsp;
+                    <a href="{{ url('registration_register') }}"><b>{{ _('Sign up') }}</b></a>
                 </span>
             {% endif %}
         </span>

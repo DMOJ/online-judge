@@ -2,7 +2,7 @@ from celery import shared_task
 from django.core.cache import cache
 from django.utils.translation import gettext as _
 
-from judge.models import Submission, Profile, Problem
+from judge.models import Problem, Profile, Submission
 from judge.utils.celery import Progress
 
 __all__ = ('apply_submission_filter', 'rejudge_problem_filter', 'rescore_problem')
@@ -16,6 +16,7 @@ def apply_submission_filter(queryset, id_range, languages, results):
         queryset = queryset.filter(language_id__in=languages)
     if results:
         queryset = queryset.filter(result__in=results)
+    queryset = queryset.exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
     return queryset
 
 

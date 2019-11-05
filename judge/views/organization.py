@@ -1,5 +1,3 @@
-from itertools import chain
-
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -8,19 +6,19 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Q
 from django.forms import Form, modelformset_factory
-from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.translation import gettext as _, gettext_lazy, ungettext
-from django.views.generic import DetailView, ListView, View, UpdateView, FormView
+from django.views.generic import DetailView, FormView, ListView, UpdateView, View
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
 
 from judge.forms import EditOrganizationForm
 from judge.models import Organization, OrganizationRequest, Profile
 from judge.utils.ranker import ranker
-from judge.utils.views import generic_message, TitleMixin
+from judge.utils.views import TitleMixin, generic_message
 
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'OrganizationMembershipChange',
            'JoinOrganization', 'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization',
@@ -31,6 +29,11 @@ __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'Organiz
 class OrganizationMixin(object):
     context_object_name = 'organization'
     model = Organization
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['logo_override_image'] = self.object.logo_override_image
+        return context
 
     def dispatch(self, request, *args, **kwargs):
         try:
@@ -49,7 +52,7 @@ class OrganizationMixin(object):
             org = self.object
         if not self.request.user.is_authenticated:
             return False
-        profile_id = self.request.user.profile.id
+        profile_id = self.request.profile.id
         return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
 
 
@@ -88,17 +91,9 @@ class OrganizationUsers(OrganizationDetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = _('%s Members') % self.object.name
-        context['users'] = ranker(chain(*[
-            i.select_related('user').defer('about') for i in (
-                self.object.members.filter(submission__points__gt=0, is_unlisted=False)
-                    .order_by('-performance_points')
-                    .annotate(problems=Count('submission__problem', distinct=True)),
-                self.object.members.filter(is_unlisted=False)
-                                   .annotate(problems=Max('submission__points')).filter(problems=0),
-                self.object.members.filter(is_unlisted=False)
-                                   .annotate(problems=Count('submission__problem', distinct=True)).filter(problems=0),
-            )
-        ]))
+        context['users'] = \
+            ranker(self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
+                   .select_related('user').defer('about', 'user_script', 'notes'))
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
         context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
@@ -108,7 +103,7 @@ class OrganizationUsers(OrganizationDetailView):
 class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         org = self.get_object()
-        response = self.handle(request, org, request.user.profile)
+        response = self.handle(request, org, request.profile)
         if response is not None:
             return response
         return HttpResponseRedirect(org.get_absolute_url())
@@ -125,9 +120,12 @@ class JoinOrganization(OrganizationMembershipChange):
         if not org.is_open:
             return generic_message(request, _('Joining organization'), _('This organization is not open.'))
 
-        max_orgs = getattr(settings, 'DMOJ_USER_MAX_ORGANIZATION_COUNT', 3)
+        max_orgs = settings.DMOJ_USER_MAX_ORGANIZATION_COUNT
         if profile.organizations.filter(is_open=True).count() >= max_orgs:
-            return generic_message(request, _('Joining organization'), _('You may not be part of more than {count} public organizations.').format(count=max_orgs))
+            return generic_message(
+                request, _('Joining organization'),
+                _('You may not be part of more than {count} public organizations.').format(count=max_orgs),
+            )
 
         profile.organizations.add(org)
         profile.save()
@@ -167,12 +165,12 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
     def form_valid(self, form):
         request = OrganizationRequest()
         request.organization = self.get_object()
-        request.user = self.request.user.profile
+        request.user = self.request.profile
         request.reason = form.cleaned_data['reason']
         request.state = 'P'
         request.save()
         return HttpResponseRedirect(reverse('request_organization_detail', args=(
-            request.organization.id, request.organization.slug, request.id
+            request.organization.id, request.organization.slug, request.id,
         )))
 
 
@@ -184,15 +182,13 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
 
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
-        profile = self.request.user.profile
+        profile = self.request.profile
         if object.user_id != profile.id and not object.organization.admins.filter(id=profile.id).exists():
             raise PermissionDenied()
         return object
 
 
-OrganizationRequestFormSet = modelformset_factory(
-    OrganizationRequest, extra=0, fields=('state',), can_delete=True
-)
+OrganizationRequestFormSet = modelformset_factory(OrganizationRequest, extra=0, fields=('state',), can_delete=True)
 
 
 class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin, View):
@@ -203,7 +199,8 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
-        if not organization.admins.filter(id=self.request.user.profile.id).exists():
+        if not (organization.admins.filter(id=self.request.profile.id).exists() or
+                organization.registrant_id == self.request.profile.id):
             raise PermissionDenied()
         return organization
 
@@ -226,7 +223,7 @@ class OrganizationRequestView(OrganizationRequestBaseView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.formset = OrganizationRequestFormSet(
-            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object)
+            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object),
         )
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
@@ -266,6 +263,11 @@ class OrganizationRequestLog(OrganizationRequestBaseView):
     tab = 'log'
     template_name = 'organization/requests/log.html'
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestLog, self).get_context_data(**kwargs)
         context['requests'] = self.object.requests.filter(state__in=self.states)
@@ -288,7 +290,8 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
 
     def get_form(self, form_class=None):
         form = super(EditOrganization, self).get_form(form_class)
-        form.fields['admins'].queryset = Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object)).distinct()
+        form.fields['admins'].queryset = \
+            Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object)).distinct()
         return form
 
     def form_valid(self, form):

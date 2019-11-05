@@ -8,12 +8,11 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from judge.judgeapi import judge_submission, abort_submission
+from judge.judgeapi import abort_submission, judge_submission
 from judge.models.problem import Problem, TranslatedProblemForeignKeyQuerySet
 from judge.models.profile import Profile
 from judge.models.runtime import Language
 from judge.utils.unicode import utf8bytes
-
 
 __all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionSource', 'SubmissionTestCase']
 
@@ -42,6 +41,7 @@ class Submission(models.Model):
         ('CE', _('Compile Error')),
         ('AB', _('Aborted')),
     )
+    IN_PROGRESS_GRADING_STATUS = ('QU', 'P', 'G')
     RESULT = SUBMISSION_RESULT
     USER_DISPLAY_CODES = {
         'AC': _('Accepted'),
@@ -80,6 +80,8 @@ class Submission(models.Model):
                                   on_delete=models.SET_NULL)
     was_rejudged = models.BooleanField(verbose_name=_('was rejudged by admin'), default=False)
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
+    contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
+                                       on_delete=models.SET_NULL, related_name='+')
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
@@ -140,10 +142,10 @@ class Submission(models.Model):
     def is_graded(self):
         return self.status not in ('QU', 'P', 'G')
 
-    @property
+    @cached_property
     def contest_key(self):
         if hasattr(self, 'contest'):
-            return self.contest.participation.contest.key
+            return self.contest_object.key
 
     def __str__(self):
         return 'Submission %d of %s by %s' % (self.id, self.problem, self.user.user.username)
@@ -160,8 +162,8 @@ class Submission(models.Model):
 
     @classmethod
     def get_id_secret(cls, sub_id):
-        return (hmac.new(utf8bytes(settings.EVENT_DAEMON_SUBMISSION_KEY), b'%d' % sub_id, hashlib.sha512).hexdigest()[:16] +
-                '%08x' % sub_id)
+        return (hmac.new(utf8bytes(settings.EVENT_DAEMON_SUBMISSION_KEY), b'%d' % sub_id, hashlib.sha512)
+                    .hexdigest()[:16] + '%08x' % sub_id)
 
     @cached_property
     def id_secret(self):
@@ -210,5 +212,6 @@ class SubmissionTestCase(models.Model):
         return Submission.USER_DISPLAY_CODES.get(self.status, '')
 
     class Meta:
+        unique_together = ('submission', 'case')
         verbose_name = _('submission test case')
         verbose_name_plural = _('submission test cases')

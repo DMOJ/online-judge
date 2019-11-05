@@ -17,7 +17,7 @@ from social_core.pipeline.partial import partial
 from social_django.middleware import SocialAuthExceptionMiddleware as OldSocialAuthExceptionMiddleware
 
 from judge.forms import ProfileForm
-from judge.models import Profile, Language
+from judge.models import Language, Profile
 
 logger = logging.getLogger('judge.social_auth')
 
@@ -44,7 +44,7 @@ class GitHubSecureEmailOAuth2(GithubOAuth2):
         return data
 
 
-def slugify_username(username, renotword=re.compile('[^\w]')):
+def slugify_username(username, renotword=re.compile(r'[^\w]')):
     return renotword.sub('', username.replace('-', '_'))
 
 
@@ -74,7 +74,7 @@ def choose_username(backend, user, username=None, *args, **kwargs):
         else:
             form = UsernameForm(initial={'username': username})
         return render(request, 'registration/username_select.html', {
-            'title': 'Choose a username', 'form': form
+            'title': 'Choose a username', 'form': form,
         })
 
 
@@ -98,7 +98,7 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     revisions.set_comment('Updated on registration')
                     return
         return render(backend.strategy.request, 'registration/profile_creation.html', {
-            'title': 'Create your profile', 'form': form
+            'title': 'Create your profile', 'form': form,
         })
 
 

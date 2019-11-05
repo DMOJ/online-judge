@@ -1,12 +1,12 @@
 from collections import defaultdict
 from functools import partial
-from packaging import version
 
 from django.shortcuts import render
 from django.utils import six
 from django.utils.translation import gettext as _
+from packaging import version
 
-from judge.models import Judge, RuntimeVersion, Language
+from judge.models import Judge, Language, RuntimeVersion
 
 __all__ = ['status_all', 'status_table']
 

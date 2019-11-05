@@ -1,24 +1,14 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dmoj.settings')
 
-import gevent.monkey
+import gevent.monkey  # noqa: I100, gevent must be imported here
+
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dmoj.settings')
 gevent.monkey.patch_all()
 
-try:
-    import MySQLdb
-except ImportError:
-    import pymysql
-    pymysql.install_as_MySQLdb()
-else:
-    from functools import wraps, partial
-    import gevent.hub
+# noinspection PyUnresolvedReferences
+import dmoj_install_pymysql  # noqa: F401, I100, I202, imported for side effect
 
-    def gevent_waiter(fd, hub=gevent.hub.get_hub()):
-        hub.wait(hub.loop.io(fd, 1))
-
-    MySQLdb.connect = MySQLdb.Connection = MySQLdb.Connect = wraps(MySQLdb.connect)(
-        partial(MySQLdb.connect, waiter=gevent_waiter)
-    )
-
-from django.core.wsgi import get_wsgi_application
+from django.core.wsgi import get_wsgi_application  # noqa: E402, I100, I202, django must be imported here
+# noinspection PyUnresolvedReferences
+import django_2_2_pymysql_patch  # noqa: I100, F401, I202, imported for side effect
 application = get_wsgi_application()

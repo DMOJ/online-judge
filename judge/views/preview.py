@@ -1,5 +1,5 @@
 from django.http import HttpResponseBadRequest
-from django.views.generic.base import TemplateResponseMixin, ContextMixin, View
+from django.views.generic.base import ContextMixin, TemplateResponseMixin, View
 
 
 class MarkdownPreviewView(TemplateResponseMixin, ContextMixin, View):

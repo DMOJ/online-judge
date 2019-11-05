@@ -22,7 +22,7 @@ def _post_update_submission(submission, done=False):
 
 
 def judge_request(packet, reply=True):
-    sock = socket.create_connection(getattr(settings, 'BRIDGED_DJANGO_CONNECT', None) or
+    sock = socket.create_connection(settings.BRIDGED_DJANGO_CONNECT or
                                     settings.BRIDGED_DJANGO_ADDRESS[0])
 
     output = json.dumps(packet, separators=(',', ':'))
@@ -88,9 +88,7 @@ def judge_submission(submission, rejudge, batch_rejudge=False):
             'problem-id': submission.problem.code,
             'language': submission.language.key,
             'source': submission.source.source,
-            'priority': BATCH_REJUDGE_PRIORITY
-                if batch_rejudge
-                else REJUDGE_PRIORITY if rejudge else priority,
+            'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else REJUDGE_PRIORITY if rejudge else priority,
         })
     except BaseException:
         logger.exception('Failed to send request to judge')

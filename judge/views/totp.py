@@ -1,4 +1,5 @@
 import base64
+from io import BytesIO
 
 import pyotp
 import qrcode
@@ -10,7 +11,6 @@ from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.utils.translation import gettext as _
 from django.views.generic import FormView
-from io import BytesIO
 
 from judge.forms import TOTPForm
 from judge.utils.views import TitleMixin
@@ -26,7 +26,7 @@ class TOTPView(TitleMixin, LoginRequiredMixin, FormView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            self.profile = request.user.profile
+            self.profile = request.profile
             if self.check_skip():
                 return self.next_page()
         return super(TOTPView, self).dispatch(request, *args, **kwargs)

@@ -18,8 +18,4 @@ def submission_layout(submission, profile_id, user, editable_problem_ids, comple
     if submission.problem_id in completed_problem_ids:
         can_view |= submission.problem.is_public or profile_id in submission.problem.tester_ids
 
-    info_colspan = 1 if can_view else 2
-    if submission.status != 'G':
-        info_colspan += 1
-
-    return can_view, info_colspan
+    return can_view

@@ -2,7 +2,8 @@ from operator import itemgetter
 
 from celery.result import AsyncResult
 from django.contrib import messages
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
@@ -11,7 +12,7 @@ from django.views.generic import DetailView
 from django.views.generic.detail import BaseDetailView
 
 from judge.models import Language, Submission
-from judge.tasks import rejudge_problem_filter, rescore_problem, apply_submission_filter
+from judge.tasks import apply_submission_filter, rejudge_problem_filter, rescore_problem
 from judge.utils.celery import redirect_to_task_status
 from judge.utils.views import TitleMixin
 from judge.views.problem import ProblemMixin
@@ -51,7 +52,7 @@ class ManageProblemSubmissionView(TitleMixin, ManageProblemSubmissionMixin, Deta
     def get_content_title(self):
         return mark_safe(escape(_('Managing submissions for %s')) % (
             format_html('<a href="{1}">{0}</a>', self.object.name,
-                        reverse('problem_detail', args=[self.object.code]))), )
+                        reverse('problem_detail', args=[self.object.code]))))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -62,7 +63,9 @@ class ManageProblemSubmissionView(TitleMixin, ManageProblemSubmissionMixin, Deta
         return context
 
 
-class BaseRejudgeSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailView):
+class BaseRejudgeSubmissionsView(PermissionRequiredMixin, ManageProblemSubmissionActionMixin, BaseDetailView):
+    permission_required = 'judge.rejudge_submission_lot'
+
     def perform_action(self):
         if self.request.POST.get('use_range', 'off') == 'on':
             try:
@@ -90,7 +93,7 @@ class RejudgeSubmissionsView(BaseRejudgeSubmissionsView):
         status = rejudge_problem_filter.delay(self.object.id, id_range, languages, results)
         return redirect_to_task_status(
             status, message=_('Rejudging selected submissions for %s...') % (self.object.name,),
-            redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id])
+            redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id]),
         )
 
 
@@ -105,7 +108,7 @@ class RescoreAllSubmissionsView(ManageProblemSubmissionActionMixin, BaseDetailVi
         status = rescore_problem.delay(self.object.id)
         return redirect_to_task_status(
             status, message=_('Rescoring all submissions for %s...') % (self.object.name,),
-            redirect=reverse('problem_submissions_rescore_success', args=[self.object.code, status.id])
+            redirect=reverse('problem_submissions_rescore_success', args=[self.object.code, status.id]),
         )
 
 

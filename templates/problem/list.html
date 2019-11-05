@@ -168,6 +168,12 @@
 {% endblock %}
 
 {% block body %}
+    {% if page_obj.num_pages > 1 %}
+        <div style="margin-bottom: 7px; margin-top: 11px;">
+            {% include "list-pages.html" %}
+        </div>
+    {% endif %}
+
     <div id="common-content">
         {% block before_table %}{% endblock %}
         {% if not request.in_contest %}
@@ -190,12 +196,6 @@
             </div>
         {% endif %}
         <div id="content-left" class="problems">
-            {% if page_obj.num_pages > 1 %}
-                <div style="margin-bottom: 7px; margin-top: 3px;">
-                    {% include "list-pages.html" %}
-                </div>
-            {% endif %}
-
             <table id="problem-table" class="table striped">
                 <thead>
                 <tr>

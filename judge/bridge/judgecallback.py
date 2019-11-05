@@ -2,13 +2,14 @@ import json
 import logging
 import os
 import time
+from operator import itemgetter
 
 from django import db
 from django.utils import timezone
 
 from judge import event_poster as event
 from judge.caching import finished_submission
-from judge.models import Submission, SubmissionTestCase, Problem, Judge, Language, LanguageLimit, RuntimeVersion
+from judge.models import Judge, Language, LanguageLimit, Problem, RuntimeVersion, Submission, SubmissionTestCase
 from .judgehandler import JudgeHandler, SubmissionData
 
 logger = logging.getLogger('judge.bridge')
@@ -67,7 +68,7 @@ class DjangoJudgeHandler(JudgeHandler):
             logger.error('Submission vanished: %d', submission)
             json_log.error(self._make_json_log(
                 sub=self._working, action='request',
-                info='submission vanished when fetching info'
+                info='submission vanished when fetching info',
             ))
             return
 
@@ -136,7 +137,7 @@ class DjangoJudgeHandler(JudgeHandler):
         else:
             self._submission_cache = data = Submission.objects.filter(id=id).values(
                 'problem__is_public', 'contest__participation__contest__key',
-                'user_id', 'problem_id', 'status', 'language__key'
+                'user_id', 'problem_id', 'status', 'language__key',
             ).get()
             self._submission_cache_id = id
 
@@ -238,7 +239,7 @@ class DjangoJudgeHandler(JudgeHandler):
             packet, action='grading-end', time=time, memory=memory,
             points=sub_points, total=problem.points, result=submission.result,
             case_points=points, case_total=total, user=submission.user_id,
-            problem=problem.code, finish=True
+            problem=problem.code, finish=True,
         ))
 
         submission.user._updating_stats_only = True
@@ -255,7 +256,7 @@ class DjangoJudgeHandler(JudgeHandler):
             'memory': memory,
             'points': float(points),
             'total': float(problem.points),
-            'result': submission.result
+            'result': submission.result,
         })
         if hasattr(submission, 'contest'):
             participation = submission.contest.participation
@@ -268,7 +269,7 @@ class DjangoJudgeHandler(JudgeHandler):
         if Submission.objects.filter(id=packet['submission-id']).update(status='CE', result='CE', error=packet['log']):
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {
                 'type': 'compile-error',
-                'log': packet['log']
+                'log': packet['log'],
             })
             self._post_update_submission(packet['submission-id'], 'compile-error', done=True)
             json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log'],
@@ -326,46 +327,50 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_test_case(self, packet, max_feedback=SubmissionTestCase._meta.get_field('feedback').max_length):
         super(DjangoJudgeHandler, self).on_test_case(packet)
         id = packet['submission-id']
+        updates = packet['cases']
+        max_position = max(map(itemgetter('position'), updates))
 
-        if not Submission.objects.filter(id=id).update(current_testcase=packet['position'] + 1):
+        if not Submission.objects.filter(id=id).update(current_testcase=max_position + 1):
             logger.warning('Unknown submission: %d', id)
             json_log.error(self._make_json_log(packet, action='test-case', info='unknown submission'))
             return
 
-        test_case = SubmissionTestCase(submission_id=id, case=packet['position'])
-        status = packet['status']
-        if status & 4:
-            test_case.status = 'TLE'
-        elif status & 8:
-            test_case.status = 'MLE'
-        elif status & 64:
-            test_case.status = 'OLE'
-        elif status & 2:
-            test_case.status = 'RTE'
-        elif status & 16:
-            test_case.status = 'IR'
-        elif status & 1:
-            test_case.status = 'WA'
-        elif status & 32:
-            test_case.status = 'SC'
-        else:
-            test_case.status = 'AC'
-        test_case.time = packet['time']
-        test_case.memory = packet['memory']
-        test_case.points = packet['points']
-        test_case.total = packet['total-points']
-        test_case.batch = self.batch_id if self.in_batch else None
-        test_case.feedback = (packet.get('feedback') or '')[:max_feedback]
-        test_case.extended_feedback = packet.get('extended-feedback') or ''
-        test_case.output = packet['output']
-        test_case.save()
+        bulk_test_case_updates = []
+        for result in updates:
+            test_case = SubmissionTestCase(submission_id=id, case=result['position'])
+            status = result['status']
+            if status & 4:
+                test_case.status = 'TLE'
+            elif status & 8:
+                test_case.status = 'MLE'
+            elif status & 64:
+                test_case.status = 'OLE'
+            elif status & 2:
+                test_case.status = 'RTE'
+            elif status & 16:
+                test_case.status = 'IR'
+            elif status & 1:
+                test_case.status = 'WA'
+            elif status & 32:
+                test_case.status = 'SC'
+            else:
+                test_case.status = 'AC'
+            test_case.time = result['time']
+            test_case.memory = result['memory']
+            test_case.points = result['points']
+            test_case.total = result['total-points']
+            test_case.batch = self.batch_id if self.in_batch else None
+            test_case.feedback = (result.get('feedback') or '')[:max_feedback]
+            test_case.extended_feedback = result.get('extended-feedback') or ''
+            test_case.output = result['output']
+            bulk_test_case_updates.append(test_case)
 
-        json_log.info(self._make_json_log(
-            packet, action='test-case', case=test_case.case, batch=test_case.batch,
-            time=test_case.time, memory=test_case.memory, feedback=test_case.feedback,
-            extended_feedback=test_case.extended_feedback, output=test_case.output,
-            points=test_case.points, total=test_case.total, status=test_case.status
-        ))
+            json_log.info(self._make_json_log(
+                packet, action='test-case', case=test_case.case, batch=test_case.batch,
+                time=test_case.time, memory=test_case.memory, feedback=test_case.feedback,
+                extended_feedback=test_case.extended_feedback, output=test_case.output,
+                points=test_case.points, total=test_case.total, status=test_case.status,
+            ))
 
         do_post = True
 
@@ -384,15 +389,11 @@ class DjangoJudgeHandler(JudgeHandler):
         if do_post:
             event.post('sub_%s' % Submission.get_id_secret(id), {
                 'type': 'test-case',
-                'id': packet['position'],
-                'status': test_case.status,
-                'time': '%.3f' % round(float(packet['time']), 3),
-                'memory': packet['memory'],
-                'points': float(test_case.points),
-                'total': float(test_case.total),
-                'output': packet['output']
+                'id': max_position,
             })
             self._post_update_submission(id, state='test-case')
+
+        SubmissionTestCase.objects.bulk_create(bulk_test_case_updates)
 
     def on_supported_problems(self, packet):
         super(DjangoJudgeHandler, self).on_supported_problems(packet)

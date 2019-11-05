@@ -12,7 +12,7 @@
                 start: window.show_pp_base * 10,
                 end: (window.show_pp_base + 1) * 10
             }).done(function (data) {
-                $('table.pp-table').append(data['results']);
+                $('.pp-table').append(data['results']);
                 window.show_pp_base++;
                 if (!data['has_more']) {
                     $("#pp-load-link-wrapper").hide();
@@ -33,14 +33,9 @@
 {% block user_content %}
     {% if pp_breakdown %}
         <h3 class="pp-breakdown-header">{{ _('Points Breakdown') }}</h3>
-        <table id="submissions-table" class="pp-table table">
-            <colgroup>
-                <col class="sub-result">
-                <col class="sub-info">
-                <col class="sub-pp">
-            </colgroup>
-            <tbody>{% include "user/pp-table-body.html" %}</tbody>
-        </table>
+        <div id="submissions-table" class="pp-table table">
+            {% include "user/pp-table-body.html" %}
+        </div>
         {% if pp_has_more %}
             <div id="pp-load-link-wrapper">
                 <a id="pp-load-more-link" href="javascript:load_more_pp()">{{ _('Load more...') }}</a>

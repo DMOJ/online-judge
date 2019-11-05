@@ -30,10 +30,6 @@
         .github-icon i {
             color: black;
         }
-
-        .dropbox-icon i {
-            color: #55ACEE;
-        }
     </style>
 {% endblock %}
 
@@ -66,7 +62,7 @@
         </form>
         <br><a href="{{ url('password_reset') }}">{{ _('Forgot your password?') }}</a>
 
-        {% if form.has_google_auth or form.has_facebook_auth or form.has_github_auth or form.has_dropbox_auth %}
+        {% if form.has_google_auth or form.has_facebook_auth or form.has_github_auth %}
             <h4>{{ _('Or log in with...') }}</h4>
             {% if form.has_google_auth %}
                 <a href="{{ url('social:begin', "google-oauth2") }}?next={{ next }}" class="social google-icon">
@@ -81,11 +77,6 @@
             {% if form.has_github_auth %}
                 <a href="{{ url('social:begin', "github-secure") }}?next={{ next }}" class="social github-icon">
                     <i class="fa fa-github-square"></i>
-                </a>
-            {% endif %}
-            {% if form.has_dropbox_auth %}
-                <a href="{{ url('social:begin', "dropbox-oauth2") }}?next={{ next }}" class="social dropbox-icon">
-                    <i class="fa fa-dropbox"></i>
                 </a>
             {% endif %}
         {% endif %}

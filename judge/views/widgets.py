@@ -2,7 +2,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponse, Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.utils.translation import gettext as _
 from django.views.generic import View
 
@@ -26,7 +26,7 @@ def rejudge_submission(request):
         return HttpResponseBadRequest()
 
     if not request.user.has_perm('judge.edit_all_problem') and \
-            not submission.problem.is_editor(request.user.profile):
+            not submission.problem.is_editor(request.profile):
         return HttpResponseForbidden()
 
     submission.judge(rejudge=True)
@@ -51,7 +51,7 @@ class DetectTimezone(View):
         if not hasattr(settings, 'GEONAMES_USERNAME'):
             raise ImproperlyConfigured()
         data = requests.get('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
-                                             (lat, long, settings.GEONAMES_USERNAME)).json()
+                            (lat, long, settings.GEONAMES_USERNAME)).json()
         try:
             return HttpResponse(data['timezoneId'], content_type='text/plain')
         except KeyError:
@@ -61,7 +61,7 @@ class DetectTimezone(View):
         raise Http404()
 
     def get(self, request, *args, **kwargs):
-        backend = getattr(settings, 'TIMEZONE_DETECT_BACKEND', None)
+        backend = settings.TIMEZONE_DETECT_BACKEND
         try:
             lat, long = float(request.GET['lat']), float(request.GET['long'])
         except (ValueError, KeyError):

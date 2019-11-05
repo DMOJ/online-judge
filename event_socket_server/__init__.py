@@ -1,7 +1,7 @@
 from .base_server import BaseServer
 from .engines import *
 from .handler import Handler
-from .helpers import SizedPacketHandler, ZlibPacketHandler, ProxyProtocolMixin
+from .helpers import ProxyProtocolMixin, SizedPacketHandler, ZlibPacketHandler
 
 
 def get_preferred_engine(choices=('epoll', 'poll', 'select')):

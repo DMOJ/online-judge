@@ -13,8 +13,14 @@
             {{ make_tab('participation', 'fa-users', url('contest_participation_own', contest.key), _('Participation')) }}
         {% endif %}
     {% endif %}
-    {% if perms.judge.change_contest or is_organizer %}
+    {% if contest.is_editable_by(request.user) %}
+        {% if perms.judge.moss_contest and has_moss_api_key %}
+            {{ make_tab('moss', 'fa-gavel', url('contest_moss', contest.key), _('MOSS')) }}
+        {% endif %}
         {{ make_tab('edit', 'fa-edit', url('admin:judge_contest_change', contest.id), _('Edit')) }}
+    {% endif %}
+    {% if perms.judge.clone_contest %}
+        {{ make_tab('clone', 'fa-copy', url('contest_clone', contest.key), _('Clone')) }}
     {% endif %}
 
     {% if request.user.is_authenticated %}
@@ -42,7 +48,7 @@
                           class="contest-join-pseudotab unselectable button full">
                         {% csrf_token %}
                         <input type="submit" value="
-                            {%- if participating and participation.ended or request.user.profile in contest.organizers.all() %}
+                            {%- if participating and participation.ended or request.profile in contest.organizers.all() %}
                                 {{- _('Stop spectating') -}}
                             {% else %}
                                 {{- _('Leave contest') -}}

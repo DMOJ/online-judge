@@ -9,36 +9,35 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.db import IntegrityError, transaction
-from django.db.models import Count, Q, F, Prefetch
+from django.db import transaction
+from django.db.models import Count, F, Prefetch, Q
 from django.db.utils import ProgrammingError
-from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
-from django.shortcuts import render, get_object_or_404
+from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils import translation, timezone
+from django.utils import timezone, translation
 from django.utils.functional import cached_property
-from django.utils.html import format_html, escape
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
-from django.views.decorators.http import require_POST
 from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 
-from django_ace.widgets import ACE_URL
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemSubmitForm
-from judge.models import ContestSubmission, ContestProblem, Judge, Language, Problem, ProblemGroup, ProblemTranslation, \
-    ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, TranslatedProblemForeignKeyQuerySet
-from judge.pdf_problems import HAS_PDF, DefaultPdfMaker
+from judge.models import ContestProblem, ContestSubmission, Judge, Language, Problem, ProblemGroup, \
+    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, \
+    TranslatedProblemForeignKeyQuerySet
+from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
-from judge.utils.problems import contest_completed_ids, user_completed_ids, contest_attempted_ids, user_attempted_ids, \
-    hot_problems
-from judge.utils.strings import safe_int_or_none, safe_float_or_none
+from judge.utils.problems import contest_attempted_ids, contest_completed_ids, hot_problems, user_attempted_ids, \
+    user_completed_ids
+from judge.utils.strings import safe_float_or_none, safe_int_or_none
 from judge.utils.tickets import own_ticket_filter
-from judge.utils.views import SingleObjectFormView, TitleMixin, generic_message, QueryStringSortMixin
+from judge.utils.views import QueryStringSortMixin, SingleObjectFormView, TitleMixin, generic_message
 
 
 def get_contest_problem(problem, profile):
@@ -49,7 +48,8 @@ def get_contest_problem(problem, profile):
 
 
 def get_contest_submission_count(problem, profile):
-    return profile.current_contest.submissions.exclude(submission__status__in=['IE']).filter(problem__problem__code=problem).count()
+    return profile.current_contest.submissions.exclude(submission__status__in=['IE'])\
+                  .filter(problem__problem__code=problem).count()
 
 
 class ProblemMixin(object):
@@ -94,13 +94,13 @@ class SolvedProblemMixin(object):
 
     @cached_property
     def contest(self):
-        return self.request.user.profile.current_contest.contest
+        return self.request.profile.current_contest.contest
 
     @cached_property
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
-        return self.request.user.profile
+        return self.request.profile
 
 
 class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDetailView):
@@ -120,7 +120,9 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
         solution = get_object_or_404(Solution, problem=self.object)
 
         if (not solution.is_public or solution.publish_on > timezone.now()) and \
-                not self.request.user.has_perm('judge.see_private_solution'):
+                not self.request.user.has_perm('judge.see_private_solution') or \
+                (self.request.user.is_authenticated and
+                 self.request.profile.current_contest):
             raise Http404()
         context['solution'] = solution
         context['has_solved_problem'] = self.object.id in self.get_completed_problems()
@@ -239,12 +241,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
         except ProblemTranslation.DoesNotExist:
             trans = None
 
-        error_cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.log' % (problem.code, language))
         cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.pdf' % (problem.code, language))
-
-        if os.path.exists(error_cache):
-            with open(error_cache) as f:
-                return HttpResponse(f.read(), status=500, content_type='text/plain')
 
         if not os.path.exists(cache):
             self.logger.info('Rendering: %s.%s.pdf', problem.code, language)
@@ -266,14 +263,13 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                     maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
                 maker.make()
                 if not maker.success:
-                    with open(error_cache, 'wb') as f:
-                        f.write(maker.log)
                     self.logger.error('Failed to render PDF for %s', problem.code)
                     return HttpResponse(maker.log, status=500, content_type='text/plain')
                 shutil.move(maker.pdffile, cache)
 
         response = HttpResponse()
-        if hasattr(settings, 'DMOJ_PDF_PROBLEM_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
+        if hasattr(settings, 'DMOJ_PDF_PROBLEM_INTERNAL') and \
+                request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
             response['X-Accel-Redirect'] = '%s/%s.%s.pdf' % (settings.DMOJ_PDF_PROBLEM_INTERNAL, problem.code, language)
         else:
             with open(cache, 'rb') as f:
@@ -315,7 +311,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                 queryset = queryset.order_by(self.order + '__name')
             elif sort_key == 'solved':
                 if self.request.user.is_authenticated:
-                    profile = self.request.user.profile
+                    profile = self.request.profile
                     solved = user_completed_ids(profile)
                     attempted = user_attempted_ids(profile)
 
@@ -340,7 +336,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def profile(self):
         if not self.request.user.is_authenticated:
             return None
-        return self.request.user.profile
+        return self.request.profile
 
     def get_contest_queryset(self):
         queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
@@ -455,7 +451,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             return request.session.get(key, False)
         return request.GET.get(key, None) == '1'
 
-    def setup(self, request):
+    def setup_problem_list(self, request):
         self.hide_solved = self.GET_with_session(request, 'hide_solved')
         self.show_types = self.GET_with_session(request, 'show_types')
         self.full_text = self.GET_with_session(request, 'full_text')
@@ -480,7 +476,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         self.point_end = safe_float_or_none(request.GET.get('point_end'))
 
     def get(self, request, *args, **kwargs):
-        self.setup(request)
+        self.setup_problem_list(request)
 
         try:
             return super(ProblemList, self).get(request, *args, **kwargs)
@@ -509,7 +505,7 @@ class LanguageTemplateAjax(View):
 
 class RandomProblem(ProblemList):
     def get(self, request, *args, **kwargs):
-        self.setup(request)
+        self.setup_problem_list(request)
         if self.in_contest:
             raise Http404()
 
@@ -527,16 +523,16 @@ user_logger = logging.getLogger('judge.user')
 @login_required
 def problem_submit(request, problem=None, submission=None):
     if submission is not None and not request.user.has_perm('judge.resubmit_other') and \
-                    get_object_or_404(Submission, id=int(submission)).user.user != request.user:
+            get_object_or_404(Submission, id=int(submission)).user.user != request.user:
         raise PermissionDenied()
 
-    profile = request.user.profile
+    profile = request.profile
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
-                        Submission.objects.filter(user=profile, was_rejudged=False).exclude(
-                            status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
+                    Submission.objects.filter(user=profile, was_rejudged=False)
+                              .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() > 2):
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():
@@ -553,16 +549,19 @@ def problem_submit(request, problem=None, submission=None):
 
             with transaction.atomic():
                 if profile.current_contest is not None:
+                    contest_id = profile.current_contest.contest_id
                     try:
-                        contest_problem = form.cleaned_data['problem'].contests.get(contest=profile.current_contest.contest)
+                        contest_problem = form.cleaned_data['problem'].contests.get(contest_id=contest_id)
                     except ContestProblem.DoesNotExist:
                         model = form.save()
                     else:
                         max_subs = contest_problem.max_submissions
                         if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
                             return generic_message(request, _('Too many submissions'),
-                                                    _('You have exceeded the submission limit for this problem.'))
+                                                   _('You have exceeded the submission limit for this problem.'))
                         model = form.save()
+                        model.contest_object_id = contest_id
+
                         contest = ContestSubmission(submission=model, problem=contest_problem,
                                                     participation=profile.current_contest)
                         contest.save()
@@ -600,8 +599,10 @@ def problem_submit(request, problem=None, submission=None):
         form = ProblemSubmitForm(initial=initial)
         form_data = initial
     if 'problem' in form_data:
-        form.fields['language'].queryset = (form_data['problem'].usable_languages.order_by('name', 'key')
-            .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority'))))
+        form.fields['language'].queryset = (
+            form_data['problem'].usable_languages.order_by('name', 'key')
+            .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority')))
+        )
         problem_object = form_data['problem']
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
@@ -610,7 +611,7 @@ def problem_submit(request, problem=None, submission=None):
     if submission is not None:
         default_lang = sub.language
     else:
-        default_lang = request.user.profile.language
+        default_lang = request.profile.language
 
     submission_limit = submissions_left = None
     if profile.current_contest is not None:
@@ -629,13 +630,13 @@ def problem_submit(request, problem=None, submission=None):
         'content_title': mark_safe(escape(_('Submit to %(problem)s')) % {
             'problem': format_html('<a href="{0}">{1}</a>',
                                    reverse('problem_detail', args=[problem_object.code]),
-                                   problem_object.translated_name(request.LANGUAGE_CODE))
+                                   problem_object.translated_name(request.LANGUAGE_CODE)),
         }),
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset,
         'submission_limit': submission_limit,
         'submissions_left': submissions_left,
-        'ACE_URL': ACE_URL,
+        'ACE_URL': settings.ACE_URL,
 
         'default_lang': default_lang,
     })

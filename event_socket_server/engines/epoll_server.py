@@ -3,7 +3,8 @@ __author__ = 'Quantum'
 
 if not hasattr(select, 'epoll'):
     raise ImportError('System does not support epoll')
-from .poll_server import PollServer
+
+from .poll_server import PollServer  # noqa: E402, must be imported here
 
 
 class EpollServer(PollServer):

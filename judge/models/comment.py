@@ -21,8 +21,8 @@ from judge.utils.cachedict import CacheDict
 
 __all__ = ['Comment', 'CommentLock', 'CommentVote']
 
-comment_validator = RegexValidator('^[pcs]:[a-z0-9]+$|^b:\d+$',
-                                   _('Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
+comment_validator = RegexValidator(r'^[pcs]:[a-z0-9]+$|^b:\d+$',
+                                   _(r'Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
 
 
 class VersionRelation(GenericRelation):
@@ -63,6 +63,7 @@ class Comment(MPTTModel):
 
         problem_access = CacheDict(lambda code: Problem.objects.get(code=code).is_accessible_by(user))
         contest_access = CacheDict(lambda key: Contest.objects.get(key=key).is_accessible_by(user))
+        blog_access = CacheDict(lambda id: BlogPost.objects.get(id=id).can_see(user))
 
         if user.is_superuser:
             return queryset[:n]
@@ -74,7 +75,7 @@ class Comment(MPTTModel):
             if not slice:
                 break
             for comment in slice:
-                if comment.page.startswith('p:'):
+                if comment.page.startswith('p:') or comment.page.startswith('s:'):
                     try:
                         if problem_access[comment.page[2:]]:
                             output.append(comment)
@@ -85,6 +86,12 @@ class Comment(MPTTModel):
                         if contest_access[comment.page[2:]]:
                             output.append(comment)
                     except Contest.DoesNotExist:
+                        pass
+                elif comment.page.startswith('b:'):
+                    try:
+                        if blog_access[comment.page[2:]]:
+                            output.append(comment)
+                    except BlogPost.DoesNotExist:
                         pass
                 else:
                     output.append(comment)
@@ -112,7 +119,7 @@ class Comment(MPTTModel):
                 link = reverse('blog_post', args=(self.page[2:], slug))
             elif self.page.startswith('s:'):
                 link = reverse('problem_editorial', args=(self.page[2:],))
-        except:
+        except Exception:
             link = 'invalid'
         return link
 

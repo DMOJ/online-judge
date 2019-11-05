@@ -1,5 +1,6 @@
-from judge.models import Profile
 from django.utils.timezone import now
+
+from judge.models import Profile
 
 
 class LogUserAccessMiddleware(object):

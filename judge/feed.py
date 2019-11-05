@@ -6,13 +6,13 @@ from django.utils import timezone
 from django.utils.feedgenerator import Atom1Feed
 
 from judge.jinja2.markdown import markdown
-from judge.models import Comment, BlogPost, Problem
+from judge.models import BlogPost, Comment, Problem
 
 
 class ProblemFeed(Feed):
-    title = 'Recently Added %s Problems' % getattr(settings, 'SITE_NAME', 'DMOJ')
+    title = 'Recently Added %s Problems' % settings.SITE_NAME
     link = '/'
-    description = 'The latest problems added on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
+    description = 'The latest problems added on the %s website' % settings.SITE_LONG_NAME
 
     def items(self):
         return Problem.objects.filter(is_public=True, is_organization_private=False).order_by('-date', '-id')[:25]
@@ -40,9 +40,9 @@ class AtomProblemFeed(ProblemFeed):
 
 
 class CommentFeed(Feed):
-    title = 'Latest %s Comments' % getattr(settings, 'SITE_NAME', 'DMOJ')
+    title = 'Latest %s Comments' % settings.SITE_NAME
     link = '/'
-    description = 'The latest comments on the %s website' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
+    description = 'The latest comments on the %s website' % settings.SITE_LONG_NAME
 
     def items(self):
         return Comment.most_recent(AnonymousUser(), 25)
@@ -70,9 +70,9 @@ class AtomCommentFeed(CommentFeed):
 
 
 class BlogFeed(Feed):
-    title = 'Latest %s Blog Posts' % getattr(settings, 'SITE_NAME', 'DMOJ')
+    title = 'Latest %s Blog Posts' % settings.SITE_NAME
     link = '/'
-    description = 'The latest blog posts from the %s' % getattr(settings, 'SITE_LONG_NAME', getattr(settings, 'SITE_NAME', 'DMOJ'))
+    description = 'The latest blog posts from the %s' % settings.SITE_LONG_NAME
 
     def items(self):
         return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')

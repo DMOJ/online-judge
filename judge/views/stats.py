@@ -1,8 +1,8 @@
-from itertools import repeat, chain
+from itertools import chain, repeat
 from operator import itemgetter
 
 from django.conf import settings
-from django.db.models import Count, Sum, Case, When, IntegerField, Value, FloatField
+from django.db.models import Case, Count, FloatField, IntegerField, Value, When
 from django.db.models.expressions import CombinedExpression
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -36,7 +36,7 @@ def repeat_chain(iterable):
 
 def language_data(request, language_count=Language.objects.annotate(count=Count('submission'))):
     languages = language_count.filter(count__gt=0).values('key', 'name', 'count').order_by('-count')
-    threshold = getattr(settings, 'DMOJ_STATS_LANGUAGE_THRESHOLD', 10)
+    threshold = settings.DMOJ_STATS_LANGUAGE_THRESHOLD
     num_languages = min(len(languages), threshold)
     other_count = sum(map(itemgetter('count'), languages[num_languages:]))
 
@@ -103,5 +103,5 @@ def ac_rate(request):
 
 def language(request):
     return render(request, 'stats/language.html', {
-        'title': _('Language statistics'), 'tab': 'language'
+        'title': _('Language statistics'), 'tab': 'language',
     })

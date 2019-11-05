@@ -1,0 +1,24 @@
+[flake8]
+max-line-length = 120
+application-import-names = dmoj,judge,django_ace,event_socket_server
+import-order-style = pycharm
+enable-extensions = G
+ignore =
+    W504, # line break occurred after a binary operator
+    # allow only generator_stop and annotations future imports
+    FI10,FI11,FI12,FI13,FI14,FI15,FI16,FI17,FI18,FI55,FI58,
+    C814, # missing trailing comma in Python 2 only
+per-file-ignores =
+    # F401: unused imports, ignore in all __init__.py
+    # F403: import *
+    ./*/__init__.py:F401,F403
+    # F405: name comes from import *
+    ./event_socket_server/__init__.py:F401,F403,F405
+    ./judge/management/commands/runmoss.py:F403,F405
+    # E501: line too long, ignore in migrations
+    ./judge/migrations/*.py:E501
+    # E303: too many blank lines
+    # PyCharm likes to have double lines between class/def in an if statement.
+    ./judge/widgets/pagedown.py:E303
+exclude =
+    ./dmoj/local_settings.py, # belongs to the user

@@ -2,10 +2,9 @@ import logging
 import socket
 import threading
 import time
-
 from collections import defaultdict, deque
 from functools import total_ordering
-from heapq import heappush, heappop
+from heapq import heappop, heappush
 
 logger = logging.getLogger('event_socket_server')
 

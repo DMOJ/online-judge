@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.forms import ModelForm
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _, gettext, ungettext
+from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Profile
-from judge.widgets import Select2Widget, AdminPagedownWidget
+from judge.widgets import AdminPagedownWidget, AdminSelect2Widget
 
 
 class ProfileForm(ModelForm):
@@ -19,10 +19,10 @@ class ProfileForm(ModelForm):
 
     class Meta:
         widgets = {
-            'timezone': Select2Widget,
-            'language': Select2Widget,
-            'ace_theme': Select2Widget,
-            'current_contest': Select2Widget,
+            'timezone': AdminSelect2Widget,
+            'language': AdminSelect2Widget,
+            'ace_theme': AdminSelect2Widget,
+            'current_contest': AdminSelect2Widget,
         }
         if AdminPagedownWidget is not None:
             widgets['about'] = AdminPagedownWidget
@@ -43,7 +43,8 @@ class TimezoneFilter(admin.SimpleListFilter):
 
 class ProfileAdmin(VersionAdmin):
     fields = ('user', 'display_rank', 'about', 'organizations', 'timezone', 'language', 'ace_theme',
-              'math_engine', 'last_access', 'ip', 'mute', 'is_unlisted', 'notes', 'is_totp_enabled', 'user_script', 'current_contest')
+              'math_engine', 'last_access', 'ip', 'mute', 'is_unlisted', 'notes', 'is_totp_enabled', 'user_script',
+              'current_contest')
     readonly_fields = ('user',)
     list_display = ('admin_user_admin', 'email', 'is_totp_enabled', 'timezone_full',
                     'date_joined', 'last_access', 'ip', 'show_public')
@@ -109,5 +110,5 @@ class ProfileAdmin(VersionAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ProfileAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['user_script'].widget = AceWidget('javascript', request.user.profile.ace_theme)
+        form.base_fields['user_script'].widget = AceWidget('javascript', request.profile.ace_theme)
         return form

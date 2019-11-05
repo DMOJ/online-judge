@@ -52,16 +52,16 @@ class AtCoderContestFormat(DefaultContestFormat):
 
         with connection.cursor() as cursor:
             cursor.execute('''
-            SELECT MAX(cs.points) as `score`, (
-                SELECT MIN(csub.date)
-                    FROM judge_contestsubmission ccs LEFT OUTER JOIN
-                         judge_submission csub ON (csub.id = ccs.submission_id)
-                    WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s AND ccs.points = MAX(cs.points)
-            ) AS `time`, cp.id AS `prob`
-            FROM judge_contestproblem cp INNER JOIN
-                 judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
-                 judge_submission sub ON (sub.id = cs.submission_id)
-            GROUP BY cp.id
+                SELECT MAX(cs.points) as `score`, (
+                    SELECT MIN(csub.date)
+                        FROM judge_contestsubmission ccs LEFT OUTER JOIN
+                             judge_submission csub ON (csub.id = ccs.submission_id)
+                        WHERE ccs.problem_id = cp.id AND ccs.participation_id = %s AND ccs.points = MAX(cs.points)
+                ) AS `time`, cp.id AS `prob`
+                FROM judge_contestproblem cp INNER JOIN
+                     judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
+                     judge_submission sub ON (sub.id = cs.submission_id)
+                GROUP BY cp.id
             ''', (participation.id, participation.id))
 
             for score, time, prob in cursor.fetchall():
@@ -99,8 +99,8 @@ class AtCoderContestFormat(DefaultContestFormat):
                                   penalty=floatformat(format_data['penalty'])) if format_data['penalty'] else ''
             return format_html(
                 '<td class="{state}"><a href="{url}">{points}{penalty}<div class="solving-time">{time}</div></a></td>',
-                state=('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                       self.best_solution_state(format_data['points'], contest_problem.points),
+                state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
+                       self.best_solution_state(format_data['points'], contest_problem.points)),
                 url=reverse('contest_user_submissions',
                             args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
                 points=floatformat(format_data['points']),

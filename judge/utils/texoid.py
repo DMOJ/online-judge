@@ -19,26 +19,26 @@ class TexoidRenderer(object):
     def __init__(self):
         self.cache = HashFileCache(settings.TEXOID_CACHE_ROOT,
                                    settings.TEXOID_CACHE_URL,
-                                   getattr(settings, 'TEXOID_GZIP', False))
-        self.meta_cache = caches[getattr(settings, 'TEXOID_META_CACHE', 'default')]
-        self.meta_cache_ttl = getattr(settings, 'TEXOID_META_CACHE_TTL', 86400)
+                                   settings.TEXOID_GZIP)
+        self.meta_cache = caches[settings.TEXOID_META_CACHE]
+        self.meta_cache_ttl = settings.TEXOID_META_CACHE_TTL
 
     def query_texoid(self, document, hash):
         self.cache.create(hash)
 
         try:
             response = requests.post(settings.TEXOID_URL, data=utf8bytes(document), headers={
-                'Content-Type': 'application/x-tex'
+                'Content-Type': 'application/x-tex',
             })
             response.raise_for_status()
         except requests.HTTPError as e:
             if e.response.status == 400:
                 logger.error('Texoid failed to render: %s\n%s', document, e.response.text)
             else:
-                logger.exception('Failed to connect to texoid for: %s' % document)
+                logger.exception('Failed to connect to texoid for: %s', document)
             return
         except Exception:
-            logger.exception('Failed to connect to texoid for: %s' % document)
+            logger.exception('Failed to connect to texoid for: %s', document)
             return
 
         try:

@@ -17,7 +17,7 @@ class Progress:
                 'done': self._done,
                 'total': self._total,
                 'stage': self._stage,
-            }
+            },
         )
 
     @property

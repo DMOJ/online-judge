@@ -1,5 +1,5 @@
-from django.template import (Template as DjangoTemplate, TemplateSyntaxError as DjangoTemplateSyntaxError,
-                             VariableDoesNotExist, Context)
+from django.template import (Context, Template as DjangoTemplate, TemplateSyntaxError as DjangoTemplateSyntaxError,
+                             VariableDoesNotExist)
 
 from . import registry
 

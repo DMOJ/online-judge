@@ -12,7 +12,7 @@ class JudgeAppConfig(AppConfig):
         #          OPERATIONS MAY HAVE SIDE EFFECTS.
         #          DO NOT REMOVE THINKING THE IMPORT IS UNUSED.
         # noinspection PyUnresolvedReferences
-        from . import signals, jinja2
+        from . import signals, jinja2  # noqa: F401, imported for side effects
 
         from django.contrib.flatpages.models import FlatPage
         from django.contrib.flatpages.admin import FlatPageAdmin

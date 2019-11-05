@@ -1,19 +1,19 @@
 from calendar import Calendar, SUNDAY
-from collections import namedtuple, defaultdict
-from datetime import timedelta, date, datetime, time
+from collections import defaultdict, namedtuple
+from datetime import date, datetime, time, timedelta
 from functools import partial
 from itertools import chain
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 
 from django import forms
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist, ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Q, Min, Max, Sum, Case, When, IntegerField
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, Http404, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.db.models import Case, IntegerField, Max, Min, Q, Sum, When
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import date as date_filter
 from django.urls import reverse
 from django.utils import timezone
@@ -22,19 +22,22 @@ from django.utils.html import escape, format_html
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import BaseDetailView, DetailView
+from django.views.generic.detail import BaseDetailView, DetailView, SingleObjectMixin, View
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
-from judge.models import Contest, ContestParticipation, ContestTag, Profile
-from judge.models import Problem
+from judge.forms import ContestCloneForm
+from judge.models import Contest, ContestMoss, ContestParticipation, ContestProblem, ContestTag, \
+    Problem, Profile
+from judge.tasks import run_moss
+from judge.utils.celery import redirect_to_task_status
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.ranker import ranker
-from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
+from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMixin, generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
-           'contest_ranking_ajax', 'ContestParticipationList', 'get_contest_ranking_list',
-           'base_contest_ranking_list']
+           'ContestClone', 'ContestMossView', 'ContestMossDelete', 'contest_ranking_ajax', 'ContestParticipationList',
+           'get_contest_ranking_list', 'base_contest_ranking_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -54,13 +57,13 @@ class ContestListMixin(object):
         if not self.request.user.has_perm('judge.see_private_contest'):
             q = Q(is_visible=True)
             if self.request.user.is_authenticated:
-                q |= Q(organizers=self.request.user.profile)
+                q |= Q(organizers=self.request.profile)
             queryset = queryset.filter(q)
         if not self.request.user.has_perm('judge.edit_all_contest'):
             q = Q(is_private=False, is_organization_private=False)
             if self.request.user.is_authenticated:
-                q |= Q(organizations__in=self.request.profile.organizations.all())
-                q |= Q(private_contestants=self.request.profile)
+                q |= Q(is_organization_private=True, organizations__in=self.request.profile.organizations.all())
+                q |= Q(is_private=True, private_contestants=self.request.profile)
             queryset = queryset.filter(q)
         return queryset.distinct()
 
@@ -111,9 +114,10 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
 
 
 class PrivateContestError(Exception):
-    def __init__(self, name, private_users, orgs):
+    def __init__(self, name, is_private, is_organization_private, orgs):
         self.name = name
-        self.private_users = private_users
+        self.is_private = is_private
+        self.is_organization_private = is_organization_private
         self.orgs = orgs
 
 
@@ -131,13 +135,13 @@ class ContestMixin(object):
         if profile is None:
             if not self.request.user.is_authenticated:
                 return False
-            profile = self.request.user.profile
+            profile = self.request.profile
         return (contest or self.object).organizers.filter(id=profile.id).exists()
 
     def get_context_data(self, **kwargs):
         context = super(ContestMixin, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            profile = self.request.user.profile
+            profile = self.request.profile
             in_contest = context['in_contest'] = (profile.current_contest is not None and
                                                   profile.current_contest.contest == self.object)
             if in_contest:
@@ -163,6 +167,10 @@ class ContestMixin(object):
                                           self.object.description, 'contest')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+        context['has_moss_api_key'] = settings.MOSS_API_KEY is not None
+        context['logo_override_image'] = self.object.logo_override_image
+        if not context['logo_override_image'] and self.object.organizations.count() == 1:
+            context['logo_override_image'] = self.object.organizations.first().logo_override_image
 
         return context
 
@@ -181,13 +189,15 @@ class ContestMixin(object):
             raise Http404()
 
         if contest.is_private or contest.is_organization_private:
-            private_contest_error = PrivateContestError(contest.name, contest.private_contestants.all(), contest.organizations.all())
+            private_contest_error = PrivateContestError(contest.name, contest.is_private,
+                                                        contest.is_organization_private, contest.organizations.all())
             if profile is None:
                 raise private_contest_error
             if user.has_perm('judge.edit_all_contest'):
                 return contest
-            if not contest.organizations.filter(id__in=profile.organizations.all()).exists() and \
-                    not contest.private_contestants.filter(id=profile.id).exists():
+            if not (contest.is_organization_private and
+                    contest.organizations.filter(id__in=profile.organizations.all()).exists()) and \
+                    not (contest.is_private and contest.private_contestants.filter(id=profile.id).exists()):
                 raise private_contest_error
 
         return contest
@@ -205,7 +215,7 @@ class ContestMixin(object):
                                        _('Could not find such contest.'))
         except PrivateContestError as e:
             return render(request, 'contest/private.html', {
-                'orgs': e.orgs, 'title': _('Access to contest "%s" denied') % escape(e.name)
+                'error': e, 'title': _('Access to contest "%s" denied') % escape(e.name),
             }, status=403)
 
 
@@ -226,6 +236,39 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
                                                     default=0, output_field=IntegerField()))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
         return context
+
+
+class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
+    title = _('Clone Contest')
+    template_name = 'contest/clone.html'
+    form_class = ContestCloneForm
+    permission_required = 'judge.clone_contest'
+
+    def form_valid(self, form):
+        contest = self.object
+
+        tags = contest.tags.all()
+        organizations = contest.organizations.all()
+        private_contestants = contest.private_contestants.all()
+        contest_problems = contest.contest_problems.all()
+
+        contest.pk = None
+        contest.is_visible = False
+        contest.user_count = 0
+        contest.key = form.cleaned_data['key']
+        contest.save()
+
+        contest.tags.set(tags)
+        contest.organizations.set(organizations)
+        contest.private_contestants.set(private_contestants)
+        contest.organizers.add(self.request.profile)
+
+        for problem in contest_problems:
+            problem.contest = contest
+            problem.pk = None
+        ContestProblem.objects.bulk_create(contest_problems)
+
+        return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest.id,)))
 
 
 class ContestAccessDenied(Exception):
@@ -262,7 +305,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
 
-        profile = request.user.profile
+        profile = request.profile
         if profile.current_contest is not None:
             return generic_message(request, _('Already in contest'),
                                    _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
@@ -272,8 +315,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('You have been declared persona non grata for this contest. '
                                      'You are permanently barred from joining this contest.'))
 
-        requires_access_code = not (request.user.is_superuser or self.is_organizer) \
-                               and contest.access_code and access_code != contest.access_code
+        requires_access_code = (not (request.user.is_superuser or self.is_organizer) and
+                                contest.access_code and access_code != contest.access_code)
         if contest.ended:
             if requires_access_code:
                 raise ContestAccessDenied()
@@ -284,7 +327,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 try:
                     participation = ContestParticipation.objects.create(
                         contest=contest, user=profile, virtual=virtual_id,
-                        real_start=timezone.now()
+                        real_start=timezone.now(),
                     )
                 # There is obviously a race condition here, so we keep trying until we win the race.
                 except IntegrityError:
@@ -294,7 +337,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         else:
             try:
                 participation = ContestParticipation.objects.get(
-                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0)
+                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
                 )
             except ContestParticipation.DoesNotExist:
                 if requires_access_code:
@@ -308,9 +351,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 if participation.ended:
                     participation = ContestParticipation.objects.get_or_create(
                         contest=contest, user=profile, virtual=-1,
-                        defaults={
-                            'real_start': timezone.now()
-                        }
+                        defaults={'real_start': timezone.now()},
                     )[0]
 
         profile.current_contest = participation
@@ -339,7 +380,7 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def post(self, request, *args, **kwargs):
         contest = self.get_object()
 
-        profile = request.user.profile
+        profile = request.profile
         if profile.current_contest is None or profile.current_contest.contest_id != contest.id:
             return generic_message(request, _('No such contest'),
                                    _('You are not in contest "%s".') % contest.key, 404)
@@ -447,7 +488,7 @@ class CachedContestCalendar(ContestCalendar):
 ContestRankingProfile = namedtuple(
     'ContestRankingProfile',
     'id user css_class username points cumtime organization participation '
-    'participation_rating problem_cells result_cell'
+    'participation_rating problem_cells result_cell',
 )
 
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
@@ -487,14 +528,14 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
     problems = list(contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'))
 
     if contest.hide_scoreboard and contest.is_in_contest(request.user):
-        return ([(_('???'), make_contest_ranking_profile(contest, request.user.profile.current_contest, problems))],
+        return ([(_('???'), make_contest_ranking_profile(contest, request.profile.current_contest, problems))],
                 problems)
 
     users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
 
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:
-            participation = request.user.profile.current_contest
+            participation = request.profile.current_contest
             if participation is None or participation.contest_id != contest.id:
                 participation = None
         if participation is not None and participation.virtual:
@@ -592,6 +633,61 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         else:
             self.profile = self.request.profile
         return super().get(request, *args, **kwargs)
+
+
+class ContestMossMixin(ContestMixin, PermissionRequiredMixin):
+    permission_required = 'judge.moss_contest'
+
+    def get_object(self, queryset=None):
+        contest = super().get_object(queryset)
+        if settings.MOSS_API_KEY is None:
+            raise Http404()
+        if not contest.is_editable_by(self.request.user):
+            raise Http404()
+        return contest
+
+
+class ContestMossView(ContestMossMixin, TitleMixin, DetailView):
+    template_name = 'contest/moss.html'
+
+    def get_title(self):
+        return _('%s MOSS Results') % self.object.name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        problems = list(map(attrgetter('problem'), self.object.contest_problems.order_by('order')
+                                                              .select_related('problem')))
+        languages = list(map(itemgetter(0), ContestMoss.LANG_MAPPING))
+
+        results = ContestMoss.objects.filter(contest=self.object)
+        moss_results = defaultdict(list)
+        for result in results:
+            moss_results[result.problem].append(result)
+
+        for result_list in moss_results.values():
+            result_list.sort(key=lambda x: languages.index(x.language))
+
+        context['languages'] = languages
+        context['has_results'] = results.exists()
+        context['moss_results'] = [(problem, moss_results[problem]) for problem in problems]
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        status = run_moss.delay(self.object.key)
+        return redirect_to_task_status(
+            status, message=_('Running MOSS for %s...') % (self.object.name,),
+            redirect=reverse('contest_moss', args=(self.object.key,)),
+        )
+
+
+class ContestMossDelete(ContestMossMixin, SingleObjectMixin, View):
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        ContestMoss.objects.filter(contest=self.object).delete()
+        return HttpResponseRedirect(reverse('contest_moss', args=(self.object.key,)))
 
 
 class ContestTagDetailAjax(DetailView):

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count
-from django.db.models.expressions import Value, F
+from django.db.models.expressions import F, Value
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
 from django.http import HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
@@ -19,7 +19,7 @@ from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
 from judge.models import Comment, CommentLock, CommentVote
-from judge.utils.raw_sql import unique_together_left_join, RawSQLColumn
+from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 from judge.widgets import HeavyPreviewPageDownWidget
 
 
@@ -42,7 +42,7 @@ class CommentForm(ModelForm):
 
     def clean(self):
         if self.request is not None and self.request.user.is_authenticated:
-            profile = self.request.user.profile
+            profile = self.request.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
             elif (not self.request.user.is_staff and
@@ -85,7 +85,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         form = CommentForm(request, request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.author = request.user.profile
+            comment.author = request.profile
             comment.page = page
             with LockModel(write=(Comment, Revision, Version), read=(ContentType,)), revisions.create_revision():
                 revisions.set_user(request.user)
@@ -100,7 +100,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         self.object = self.get_object()
         return self.render_to_response(self.get_context_data(
             object=self.object,
-            comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None})
+            comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None}),
         ))
 
     def get_context_data(self, **kwargs):
@@ -112,11 +112,11 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
         if self.request.user.is_authenticated:
             queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
-            profile = self.request.user.profile
+            profile = self.request.profile
             unique_together_left_join(queryset, CommentVote, 'comment', 'voter', profile.id)
             context['is_new_user'] = (not self.request.user.is_staff and
                                       not profile.submission_set.filter(points=F('problem__points')).exists())
         context['comment_list'] = queryset
-        context['vote_hide_threshold'] = getattr(settings, 'DMOJ_COMMENT_VOTE_HIDE_THRESHOLD', -5)
+        context['vote_hide_threshold'] = settings.DMOJ_COMMENT_VOTE_HIDE_THRESHOLD
 
         return context

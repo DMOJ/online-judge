@@ -134,7 +134,7 @@
                             disabled = $prevs.length && $prevs.get(0).getAttribute('data-type') == 'S';
                             $tr.find('input[id$=points], input[id$=pretest]').toggle(val == 'C' && !disabled);
                     }
-                    $tr.attr('data-type', val).nextUntil('tr[data-type=S], tr[data-type=E], tr[data-type=]')
+                    $tr.attr('data-type', val).nextUntil('tr[data-type=S], tr[data-type=E], tr[data-type=""]')
                         .find('input[id$=points], input[id$=pretest]').toggle(!disabled);
                 }).change();
 

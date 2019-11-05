@@ -60,10 +60,28 @@
                     info_float.width(container.width());
                 }
 
-                $('#status').select2({multiple: 1, placeholder: '{{ _('Filter by status...') }}'})
-                    .css({'visibility': 'visible'});
-                $('#language').select2({multiple: 1, placeholder: '{{ _('Filter by language...') }}'})
-                    .css({'visibility': 'visible'});
+                function escapeRegExp(string) {
+                    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+                }
+
+                function idAndTextMatcher(params, data) {
+                    if ($.trim(params.term) === '')
+                        return data;
+                    var regex = new RegExp(escapeRegExp(params.term), 'i');
+                    return data.text.search(regex) >= 0 || data.id.search(regex) >= 0 ? data : null;
+                }
+
+                $('#status').select2({
+                    multiple: 1,
+                    placeholder: '{{ _('Filter by status...') }}',
+                    matcher: idAndTextMatcher,
+                }).css({'visibility': 'visible'});
+
+                $('#language').select2({
+                    multiple: 1,
+                    placeholder: '{{ _('Filter by language...') }}',
+                    matcher: idAndTextMatcher,
+                }).css({'visibility': 'visible'});
             });
 
             // Draw the statistics graph.
@@ -127,7 +145,7 @@
                 var table = $('#submissions-table');
                 var statistics = $("#statistics-table");
                 var doing_ajax = false;
-                var first = parseInt(table.find('tr:first-child').attr('id'));
+                var first = parseInt(table.find('>div:first-child').attr('id'));
 
                 var update_submission = function (message, force) {
                     if (language_filter.length && 'language' in message &&
@@ -138,14 +156,14 @@
                         return;
 
                     var id = message.id;
-                    var row = table.find('tr#' + id);
+                    var row = table.find('div#' + id);
                     if (row.length < 1) {
                         if (id < first)
                             return;
                         first = id;
-                        row = $('<tr>', {id: id}).hide().prependTo(table);
-                        if (table.find('tr').length >= {{ paginator.per_page }})
-                            table.find('tr:last-child').hide('slow', function () {
+                        row = $('<div>', {id: id, 'class': 'submission-row'}).hide().prependTo(table);
+                        if (table.find('>div').length >= {{ paginator.per_page }})
+                            table.find('>div:last-child').hide('slow', function () {
                                 $(this).remove();
                             });
                     }
@@ -159,9 +177,7 @@
                             row.html(data);
                             register_time(row.find('.time-with-rel'));
                             if (!was_shown) {
-                                row.show('slow');
-                                // Hack for Chrome
-                                $('#submissions-table').hide().show(0);
+                                row.slideDown('slow');
                             }
                             if (!force)
                                 setTimeout(function () {
@@ -286,6 +302,12 @@
 {% endblock %}
 
 {% block body %}
+    {% if page_obj.num_pages > 1 %}
+        <div style="margin-bottom: 6px; margin-top: 11px">
+            {% include "list-pages.html" %}
+        </div>
+    {% endif %}
+
     <div id="common-content">
         <div id="content-right" class="submission">
             <div class="info-float">
@@ -335,33 +357,20 @@
         </div>
 
         <div id="content-left" class="submission">
-            {% if page_obj.num_pages > 1 %}
-                <div style="margin-bottom:6px;margin-top:3px">
-                    {% include "list-pages.html" %}
-                </div>
-            {% endif %}
-
             <div class="ws-closed">
                 <a href="javascript:void(0)">{{ _('You were disconnected. Refresh to show latest updates.') }}</a>
             </div>
 
-            <table id="submissions-table" class="table">
-                <colgroup>
-                    <col class="sub-result">
-                    <col class="sub-info">
-                    <col class="sub-testcase">
-                    <col class="sub-prop">
-                    <col class="sub-usage">
-                </colgroup>
-                {% set profile_id = request.user.profile.id if request.user.is_authenticated else 0 %}
+            <div id="submissions-table">
+                {% set profile_id = request.profile.id if request.user.is_authenticated else 0 %}
                 {% for submission in submissions %}
-                    <tr id="{{ submission.id }}">
+                    <div class="submission-row" id="{{ submission.id }}">
                         {% with problem_name=show_problem and submission.problem.i18n_name %}
                             {% include "submission/row.html" %}
                         {% endwith %}
-                    </tr>
+                    </div>
                 {% endfor %}
-            </table>
+            </div>
             {% if page_obj.num_pages > 1 %}
                 <div style="margin-top:10px;">{% include "list-pages.html" %}</div>
             {% endif %}
