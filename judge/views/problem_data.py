@@ -216,10 +216,7 @@ def problem_data_file(request, problem, path):
         except IOError:
             raise Http404()
 
-    type, encoding = mimetypes.guess_type(path)
-    response['Content-Type'] = type or 'application/octet-stream'
-    if encoding is not None:
-        response['Content-Encoding'] = encoding
+    response['Content-Type'] = 'application/octet-stream'
     return response
 
 
