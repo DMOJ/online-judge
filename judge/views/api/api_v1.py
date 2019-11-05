@@ -52,7 +52,7 @@ def api_v1_contest_detail(request, contest):
                       .annotate(old_rating=Subquery(old_ratings_subquery.values('rating')[:1]))
                       .prefetch_related('user__organizations')
                       .annotate(username=F('user__user__username'))
-                      .order_by('-score', 'cumtime') if can_see_rankings else [])
+                      .order_by('-score', 'cumtime', 'tiebreaker') if can_see_rankings else [])
     can_see_problems = (in_contest or contest.ended or contest.is_editable_by(request.user))
 
     return JsonResponse({
@@ -81,6 +81,7 @@ def api_v1_contest_detail(request, contest):
                 'user': participation.username,
                 'points': participation.score,
                 'cumtime': participation.cumtime,
+                'tiebreaker': participation.tiebreaker,
                 'old_rating': participation.old_rating,
                 'new_rating': participation.new_rating,
                 'is_disqualified': participation.is_disqualified,

@@ -14,13 +14,13 @@ from judge.timezone import from_database_time
 from judge.utils.timedelta import nice_repr
 
 
-@register_contest_format('atcoder')
-class AtCoderContestFormat(DefaultContestFormat):
-    name = gettext_lazy('AtCoder')
-    config_defaults = {'penalty': 5}
+@register_contest_format('icpc')
+class ICPCContestFormat(DefaultContestFormat):
+    name = gettext_lazy('ICPC')
+    config_defaults = {'penalty': 20}
     config_validators = {'penalty': lambda x: x >= 0}
     '''
-        penalty: Number of penalty minutes each incorrect submission adds. Defaults to 5.
+        penalty: Number of penalty minutes each incorrect submission adds. Defaults to 20.
     '''
 
     @classmethod
@@ -29,7 +29,7 @@ class AtCoderContestFormat(DefaultContestFormat):
             return
 
         if not isinstance(config, dict):
-            raise ValidationError('AtCoder-styled contest expects no config or dict as config')
+            raise ValidationError('ICPC-styled contest expects no config or dict as config')
 
         for key, value in config.items():
             if key not in cls.config_defaults:
@@ -46,13 +46,14 @@ class AtCoderContestFormat(DefaultContestFormat):
 
     def update_participation(self, participation):
         cumtime = 0
+        last = 0
         penalty = 0
-        points = 0
+        score = 0
         format_data = {}
 
         with connection.cursor() as cursor:
             cursor.execute('''
-                SELECT MAX(cs.points) as `score`, (
+                SELECT MAX(cs.points) as `points`, (
                     SELECT MIN(csub.date)
                         FROM judge_contestsubmission ccs LEFT OUTER JOIN
                              judge_submission csub ON (csub.id = ccs.submission_id)
@@ -64,7 +65,7 @@ class AtCoderContestFormat(DefaultContestFormat):
                 GROUP BY cp.id
             ''', (participation.id, participation.id))
 
-            for score, time, prob in cursor.fetchall():
+            for points, time, prob in cursor.fetchall():
                 time = from_database_time(time)
                 dt = (time - participation.start).total_seconds()
 
@@ -74,7 +75,7 @@ class AtCoderContestFormat(DefaultContestFormat):
                     subs = participation.submissions.exclude(submission__result__isnull=True) \
                                                     .exclude(submission__result__in=['IE', 'CE']) \
                                                     .filter(problem_id=prob)
-                    if score:
+                    if points:
                         prev = subs.filter(submission__date__lte=time).count() - 1
                         penalty += prev * self.config['penalty'] * 60
                     else:
@@ -83,15 +84,16 @@ class AtCoderContestFormat(DefaultContestFormat):
                 else:
                     prev = 0
 
-                if score:
-                    cumtime = max(cumtime, dt)
+                if points:
+                    cumtime += dt
+                    last = max(last, dt)
 
-                format_data[str(prob)] = {'time': dt, 'points': score, 'penalty': prev}
-                points += score
+                format_data[str(prob)] = {'time': dt, 'points': points, 'penalty': prev}
+                score += points
 
         participation.cumtime = cumtime + penalty
-        participation.score = points
-        participation.tiebreaker = 0
+        participation.score = score
+        participation.tiebreaker = last  # field is sorted from least to greatest
         participation.format_data = format_data
         participation.save()
 
@@ -112,3 +114,16 @@ class AtCoderContestFormat(DefaultContestFormat):
             )
         else:
             return mark_safe('<td></td>')
+
+    def get_contest_problem_label_script(self):
+        return '''
+            function(n)
+                n = n + 1
+                ret = ""
+                while n > 0 do
+                    ret = string.char((n - 1) % 26 + 65) .. ret
+                    n = math.floor((n - 1) / 26)
+                end
+                return ret
+            end
+        '''

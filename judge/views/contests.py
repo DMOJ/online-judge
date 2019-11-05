@@ -539,7 +539,7 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
 
 ContestRankingProfile = namedtuple(
     'ContestRankingProfile',
-    'id user css_class username points cumtime organization participation '
+    'id user css_class username points cumtime tiebreaker organization participation '
     'participation_rating problem_cells result_cell',
 )
 
@@ -563,6 +563,7 @@ def make_contest_ranking_profile(contest, participation, contest_problems):
         username=user.username,
         points=participation.score,
         cumtime=participation.cumtime,
+        tiebreaker=participation.tiebreaker,
         organization=user.organization,
         participation_rating=participation.rating.rating if hasattr(participation, 'rating') else None,
         problem_cells=[display_user_problem(contest_problem) for contest_problem in contest_problems],
@@ -579,7 +580,7 @@ def base_contest_ranking_list(contest, problems, queryset):
 def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
                                      .prefetch_related('user__organizations')
-                                     .order_by('is_disqualified', '-score', 'cumtime'))
+                                     .order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker'))
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
@@ -590,7 +591,7 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
         return ([(_('???'), make_contest_ranking_profile(contest, request.profile.current_contest, problems))],
                 problems)
 
-    users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime'))
+    users = ranker(ranking_list(contest, problems), key=attrgetter('points', 'cumtime', 'tiebreaker'))
 
     if show_current_virtual:
         if participation is None and request.user.is_authenticated:

@@ -274,7 +274,7 @@ class ContestParticipationForm(ModelForm):
 
 class ContestParticipationAdmin(admin.ModelAdmin):
     fields = ('contest', 'user', 'real_start', 'virtual', 'is_disqualified')
-    list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime')
+    list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime', 'tiebreaker')
     actions = ['recalculate_results']
     actions_on_bottom = actions_on_top = True
     search_fields = ('contest__key', 'contest__name', 'user__user__username')
@@ -284,7 +284,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         return super(ContestParticipationAdmin, self).get_queryset(request).only(
             'contest__name', 'contest__format_name', 'contest__format_config',
-            'user__user__username', 'real_start', 'score', 'cumtime', 'virtual',
+            'user__user__username', 'real_start', 'score', 'cumtime', 'tiebreaker', 'virtual',
         )
 
     def save_model(self, request, obj, form, change):
