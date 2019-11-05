@@ -474,8 +474,14 @@ class ContestSubmission(models.Model):
                                          help_text=_('Whether this submission was rejudged/rescored '
                                                      'while the contest was frozen.'),
                                          default=False)
+    is_disqualified = models.BooleanField(verbose_name=_('is disqualified'),
+                                          help_text=_('Whether this submission is disqualified.'),
+                                          default=False)
 
     class Meta:
+        permissions = (
+            ('disqualify_submissions', _('Disqualify submissions')),
+        )
         verbose_name = _('contest submission')
         verbose_name_plural = _('contest submissions')
 

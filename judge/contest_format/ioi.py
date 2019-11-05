@@ -49,10 +49,12 @@ class IOIContestFormat(DefaultContestFormat):
                                              .filter(points=Subquery(
                                                  participation.submissions.filter(problem_id=OuterRef('problem_id'))
                                                                           .order_by('-points').values('points')[:1]))
-                                             .annotate(time=Min('submission__date'))
-                                             .values_list('problem_id', 'time', 'points', 'problem__points'))
+                                             .annotate(time=Min('submission__date'),
+                                                       disqualified=Max('is_disqualified'))
+                                             .values_list('problem_id', 'time', 'disqualified',
+                                                          'points', 'problem__points'))
 
-        for problem_id, time, points, problem_points in queryset:
+        for problem_id, time, disqualified, points, problem_points in queryset:
             if self.config['cumtime']:
                 dt = (time - participation.start).total_seconds()
                 if points:
@@ -63,6 +65,7 @@ class IOIContestFormat(DefaultContestFormat):
             format_data[str(problem_id)] = {
                 'points': points,
                 'time': dt,
+                'disqualified': disqualified,
             }
             score += points
 
@@ -88,11 +91,17 @@ class IOIContestFormat(DefaultContestFormat):
         format_data = (participation.format_data or {}).get(str(contest_problem.id))
         if format_data:
             pretest = ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
-            first_solve = (' first-solve' if format_data['first_solve'] else '')
+
+            if format_data['disqualified']:
+                extra = ' disqualified'
+            elif format_data['first_solve']:
+                extra = ' first-solve'
+            else:
+                extra = ''
 
             return format_html(
                 '<td class="{state}"><a href="{url}">{points}<div class="solving-time">{time}</div></a></td>',
-                state=pretest + self.best_solution_state(format_data['points'], contest_problem.points) + first_solve,
+                state=pretest + self.best_solution_state(format_data['points'], contest_problem.points) + extra,
                 url=reverse('contest_user_submissions',
                             args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
                 points=floatformat(format_data['points']),

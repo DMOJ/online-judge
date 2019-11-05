@@ -6,6 +6,9 @@
         django.jQuery(function ($) {
             $('.rejudgelink').appendTo('div#bottombar').show();
         });
+        django.jQuery(function ($) {
+            $('.disqualifylink').appendTo('div#bottombar').show();
+        });
     </script>
 {% endblock extrahead %}
 
@@ -16,5 +19,14 @@
             <i class="fa fa-lg fa-refresh"></i>
             <span class="text">{% trans "Rejudge" %}</span>
         </a>
+
+        {% if original.contest_or_none is not None and perms.judge.disqualify_submissions %}
+            <a style="display: none" title="{% if original.contest.is_disqualified %}{% trans "Un-Disqualify" %}{% else %}{% trans "Disqualify" %}{% endif %}"
+               href="{% url 'admin:judge_submission_disqualify' original.pk %}"
+               class="button disqualifylink">
+                <i class="fa fa-lg fa-gavel"></i>
+                <span class="text">{% if original.contest.is_disqualified %}{% trans "Un-Disqualify" %}{% else %}{% trans "Disqualify" %}{% endif %}</span>
+            </a>
+        {% endif %}
     {% endif %}
 {% endblock %}
