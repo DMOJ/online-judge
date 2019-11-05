@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-05 00:26+0000\n"
-"PO-Revision-Date: 2019-11-05 01:06\n"
+"POT-Creation-Date: 2019-11-05 18:41+0000\n"
+"PO-Revision-Date: 2019-11-05 19:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -3920,20 +3920,20 @@ msgstr "%(key)s es una llave no válida."
 msgid "Your account has been successfully activated."
 msgstr "Su cuenta ha sido activada con éxito."
 
-#: templates/registration/login.html:42
+#: templates/registration/login.html:43
 msgid "Invalid username or password."
 msgstr "Usuario o contraseña inválida."
 
-#: templates/registration/login.html:60
+#: templates/registration/login.html:61
 #: templates/registration/totp_auth.html:39
 msgid "Login!"
 msgstr "¡Iniciar sesión!"
 
-#: templates/registration/login.html:63
+#: templates/registration/login.html:64
 msgid "Forgot your password?"
 msgstr "¿Olvidaste tu contraseña?"
 
-#: templates/registration/login.html:66
+#: templates/registration/login.html:67
 msgid "Or log in with..."
 msgstr "O ingresa con..."
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-05 00:26+0000\n"
-"PO-Revision-Date: 2019-11-05 01:05\n"
+"POT-Creation-Date: 2019-11-05 18:41+0000\n"
+"PO-Revision-Date: 2019-11-05 19:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -3897,20 +3897,20 @@ msgstr "%(key)s は無効な有効化鍵です。"
 msgid "Your account has been successfully activated."
 msgstr "あなたのアカウントは正常に有効化されました。"
 
-#: templates/registration/login.html:42
+#: templates/registration/login.html:43
 msgid "Invalid username or password."
 msgstr "不正な利用者名またはパスワードです。"
 
-#: templates/registration/login.html:60
+#: templates/registration/login.html:61
 #: templates/registration/totp_auth.html:39
 msgid "Login!"
 msgstr "ログイン！"
 
-#: templates/registration/login.html:63
+#: templates/registration/login.html:64
 msgid "Forgot your password?"
 msgstr "パスワードを忘れましたか？"
 
-#: templates/registration/login.html:66
+#: templates/registration/login.html:67
 msgid "Or log in with..."
 msgstr "または次でログイン..."
 

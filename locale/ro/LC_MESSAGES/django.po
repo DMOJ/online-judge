@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-05 00:26+0000\n"
-"PO-Revision-Date: 2019-11-05 01:06\n"
+"POT-Creation-Date: 2019-11-05 18:41+0000\n"
+"PO-Revision-Date: 2019-11-05 19:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Romanian\n"
 "Language: ro_RO\n"
@@ -3933,20 +3933,20 @@ msgstr "%(key)s este o cheie de activare invalidă."
 msgid "Your account has been successfully activated."
 msgstr "Contul a fost activat cu succes."
 
-#: templates/registration/login.html:42
+#: templates/registration/login.html:43
 msgid "Invalid username or password."
 msgstr "Nume de utilizator sau parolă invalide."
 
-#: templates/registration/login.html:60
+#: templates/registration/login.html:61
 #: templates/registration/totp_auth.html:39
 msgid "Login!"
 msgstr "Conectaţi-vă!"
 
-#: templates/registration/login.html:63
+#: templates/registration/login.html:64
 msgid "Forgot your password?"
 msgstr "Ai uitat parola?"
 
-#: templates/registration/login.html:66
+#: templates/registration/login.html:67
 msgid "Or log in with..."
 msgstr "Sau log in cu..."
 

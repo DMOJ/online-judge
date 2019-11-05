@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-05 00:26+0000\n"
-"PO-Revision-Date: 2019-11-05 01:06\n"
+"POT-Creation-Date: 2019-11-05 18:41+0000\n"
+"PO-Revision-Date: 2019-11-05 19:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -3916,20 +3916,20 @@ msgstr "Geçersiz aktivasyon kodu: %(key)s."
 msgid "Your account has been successfully activated."
 msgstr "Hesabın başarıyla aktifleştirildi."
 
-#: templates/registration/login.html:42
+#: templates/registration/login.html:43
 msgid "Invalid username or password."
 msgstr "Kullanıcı adı veya şifre yanlış"
 
-#: templates/registration/login.html:60
+#: templates/registration/login.html:61
 #: templates/registration/totp_auth.html:39
 msgid "Login!"
 msgstr "Giriş Yap!"
 
-#: templates/registration/login.html:63
+#: templates/registration/login.html:64
 msgid "Forgot your password?"
 msgstr "Şifremi unuttum"
 
-#: templates/registration/login.html:66
+#: templates/registration/login.html:67
 msgid "Or log in with..."
 msgstr "Diğer giriş seçenekleri:"
 
