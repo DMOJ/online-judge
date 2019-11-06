@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-05 18:41+0000\n"
-"PO-Revision-Date: 2019-11-06 03:05\n"
+"PO-Revision-Date: 2019-11-06 04:08\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -2848,43 +2848,43 @@ msgstr "Quản trị viên Django"
 #: src/dmoj-wpadmin/test_project/test_project/forms.py:12
 #, python-format
 msgid "Please enter the correct %(username)s and password for an admin account. Note that both fields may be case-sensitive."
-msgstr ""
+msgstr "Hãy nhập %(username)s và mật khẩu hợp lệ cho tài khoản quản trị. Chú ý cả hai trường có phân biệt chữ Hoa-thường."
 
 #: src/dmoj-wpadmin/test_project/test_project/forms.py:32
 #, python-format
 msgid "Please enter the correct %(username)s and password for an user account. Note that both fields may be case-sensitive."
-msgstr ""
+msgstr "Hãy nhập %(username)s và mật khẩu hợp lệ cho tài khoản thành viên. Chú ý cả hai trường có phân biệt chữ Hoa-thường."
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:27
 msgid "Site"
-msgstr ""
+msgstr "Trang"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:38
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:41
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:130
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:133
 msgid "Dashboard"
-msgstr ""
+msgstr "Bảng điều khiển"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:48
 msgid "Applications"
-msgstr ""
+msgstr "Ứng dụng"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:53
 msgid "Administration"
-msgstr ""
+msgstr "Quản trị viên"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:64
 msgid "Color theme"
-msgstr ""
+msgstr "Chủ đề màu sắc"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:66
 msgid "Change color theme"
-msgstr ""
+msgstr "Đổi chủ đề màu sắc"
 
 #: templates/admin/judge/contest/change_form.html:9
 msgid "Are you sure you want to rejudge ALL the submissions?"
-msgstr ""
+msgstr "Bạn có chắc chắn muốn chấm lại TẤT CẢ các bài nộp?"
 
 #: templates/admin/judge/contest/change_form.html:17
 #: templates/admin/judge/contest/change_form.html:20
@@ -2898,21 +2898,21 @@ msgstr "Đánh giá các cuộc thi"
 #: templates/admin/judge/judge/change_form.html:15
 #: templates/admin/judge/judge/change_form.html:18
 msgid "Disconnect"
-msgstr ""
+msgstr "Ngắt kết nối"
 
 #: templates/admin/judge/judge/change_form.html:20
 #: templates/admin/judge/judge/change_form.html:23
 msgid "Terminate"
-msgstr ""
+msgstr "Chấm dứt"
 
 #: templates/admin/judge/problem/change_form.html:14
 msgid "View Submissions"
-msgstr ""
+msgstr "Xem các bài nộp"
 
 #: templates/admin/judge/problem/change_form.html:17
 #: templates/user/user-base.html:61
 msgid "View submissions"
-msgstr ""
+msgstr "Xem các bài nộp"
 
 #: templates/admin/judge/profile/change_form.html:14
 #: templates/admin/judge/profile/change_form.html:17
@@ -2953,7 +2953,7 @@ msgstr "hoặc"
 
 #: templates/base.html:240
 msgid "Sign up"
-msgstr ""
+msgstr "Đăng ký"
 
 #: templates/base.html:252
 msgid "spectating"
@@ -2976,14 +2976,18 @@ msgstr "Soạn thảo"
 msgid "\n"
 "                    posted on %(time)s\n"
 "                "
-msgstr ""
+msgstr "\n"
+"                    đăng vào lúc %(time)s\n"
+"                "
 
 #: templates/blog/dashboard.html:21
 #, python-format
 msgid "\n"
 "                                    on %(time)s\n"
 "                                "
-msgstr ""
+msgstr "\n"
+"                                    vào lúc %(time)s\n"
+"                                "
 
 #: templates/blog/list.html:85
 msgid "Blog"
@@ -3000,7 +3004,7 @@ msgstr "Tin tức"
 #: templates/blog/list.html:106
 #, python-brace-format
 msgid "posted on {time}"
-msgstr ""
+msgstr "đã đăng lúc {time}"
 
 #: templates/blog/list.html:130 templates/problem/problem.html:310
 msgid "Clarifications"
@@ -3028,11 +3032,11 @@ msgstr "Đề bài mới"
 
 #: templates/blog/list.html:225
 msgid "My open tickets"
-msgstr ""
+msgstr "Thẻ mở của tôi"
 
 #: templates/blog/list.html:246
 msgid "New tickets"
-msgstr ""
+msgstr "Thẻ mới"
 
 #: templates/comments/list.html:2
 msgid "Comments"
@@ -3045,12 +3049,12 @@ msgstr "Hãy đăng nhập để bình chọn"
 #: templates/comments/list.html:40
 #, python-brace-format
 msgid "commented on {time}"
-msgstr ""
+msgstr "đã bình luận lúc {time}"
 
 #: templates/comments/list.html:49
 #, python-format
 msgid "edit %(edits)s"
-msgstr ""
+msgstr "sửa %(edits)s"
 
 #: templates/comments/list.html:51 templates/comments/media-js.html:77
 msgid "edited"
@@ -3094,7 +3098,7 @@ msgstr "Đăng!"
 
 #: templates/comments/list.html:155
 msgid "Comments are disabled on this page."
-msgstr ""
+msgstr "Bình luận đã bị vô hiệu hóa trên trang này."
 
 #: templates/comments/media-js.html:72
 #, python-brace-format
@@ -3103,19 +3107,19 @@ msgstr "chỉnh sửa {edits}"
 
 #: templates/comments/media-js.html:75
 msgid "original"
-msgstr ""
+msgstr "nguyên bản"
 
 #: templates/contest/access_code.html:26
 msgid "Invalid access code."
-msgstr ""
+msgstr "Mã truy cập không hợp lệ."
 
 #: templates/contest/access_code.html:29
 msgid "Please enter your access code:"
-msgstr ""
+msgstr "Hãy nhập mã truy cập của bạn:"
 
 #: templates/contest/access_code.html:32
 msgid "Join Contest"
-msgstr ""
+msgstr "Tham gia kỳ thi"
 
 #: templates/contest/calendar.html:12
 msgid "Sunday"
@@ -3147,11 +3151,11 @@ msgstr "Thứ Bảy"
 
 #: templates/contest/clone.html:37
 msgid "Enter a new key for the cloned contest:"
-msgstr ""
+msgstr "Nhập mã mới cho kỳ thi đã nhân bản:"
 
 #: templates/contest/clone.html:40 templates/problem/clone.html:40
 msgid "Clone!"
-msgstr ""
+msgstr "Nhân bản!"
 
 #: templates/contest/contest-list-tabs.html:7
 msgid "Prev"
@@ -3159,7 +3163,7 @@ msgstr "Trước"
 
 #: templates/contest/contest-list-tabs.html:10
 msgid "Today"
-msgstr ""
+msgstr "Hôm nay"
 
 #: templates/contest/contest-list-tabs.html:13
 msgid "Next"
@@ -3974,7 +3978,7 @@ msgstr "Tiếp tục >"
 
 #: templates/registration/registration_closed.html:3
 msgid "Registration is currently closed. Please contact an administrator."
-msgstr ""
+msgstr "Việc đăng ký hiện đã đóng. Vui lòng liên hệ với quản trị viên."
 
 #: templates/registration/registration_complete.html:3
 msgid "You have successfully been registered. An email has been sent to the email address you provided to confirm your registration."
@@ -3986,7 +3990,7 @@ msgstr "(một lần nữa, để xác nhận)"
 
 #: templates/registration/registration_form.html:173
 msgid "(select your closest major city)"
-msgstr ""
+msgstr "(chọn thành phố gần bạn nhất)"
 
 #: templates/registration/registration_form.html:178
 msgid "pick from map"
@@ -4008,7 +4012,7 @@ msgstr "Thông báo cho tôi về các cuộc thi sắp tới"
 
 #: templates/registration/registration_form.html:206
 msgid "By registering, you agree to our"
-msgstr ""
+msgstr "Để đăng ký, bạn đồng ý với chúng tôi"
 
 #: templates/registration/registration_form.html:207
 msgid "Terms & Conditions"
@@ -4022,28 +4026,28 @@ msgstr "Đăng ký!"
 #: templates/registration/totp_disable.html:45
 #: templates/registration/totp_enable.html:83
 msgid "Enter the 6-digit code generated by your app:"
-msgstr ""
+msgstr "Nhập mã 6 chữ số sinh ra bởi ứng dụng của bạn:"
 
 #: templates/registration/totp_auth.html:41
 #, python-format
 msgid "If you lost your authentication device, please contact us at %(email)s."
-msgstr ""
+msgstr "Nếu bạn mất thiết bị xác thực, liên hệ với chúng tội tại %(email)s."
 
 #: templates/registration/totp_disable.html:38
 msgid "To protect your account, you must first authenticate before you can disable Two Factor Authentication."
-msgstr ""
+msgstr "Để bảo vệ tài khoản của bạn, bạn cần xác thực trước khi bạn có thể vô hiệu hóa 2FA."
 
 #: templates/registration/totp_enable.html:71
 msgid "Scan this code with your authenticator app:"
-msgstr ""
+msgstr "Quét mã này với ứng dụng xác thực của bạn:"
 
 #: templates/registration/totp_enable.html:72
 msgid "QR code"
-msgstr ""
+msgstr "Mã QR"
 
 #: templates/registration/totp_enable.html:73
 msgid "Or enter this code manually:"
-msgstr ""
+msgstr "Hoặc nhập mã này thủ công:"
 
 #: templates/stats/base.html:9 templates/submission/list.html:345
 msgid "Statistics"
@@ -4110,7 +4114,7 @@ msgstr "Máy chấm"
 
 #: templates/status/status-tabs.html:6
 msgid "Version Matrix"
-msgstr ""
+msgstr "Mã trận phiên bản"
 
 #: templates/submission/internal-error-message.html:8
 msgid "An internal error occurred while grading."
@@ -4134,7 +4138,7 @@ msgstr "Lọc các bài nộp"
 
 #: templates/submission/list.html:351
 msgid "Total:"
-msgstr ""
+msgstr "Tổng:"
 
 #: templates/submission/list.html:361
 msgid "You were disconnected. Refresh to show latest updates."
@@ -4143,7 +4147,7 @@ msgstr "Bạn đã bị ngắt kết nối. Tải lại trang để hiển thị
 #: templates/submission/row.html:39
 #, python-format
 msgid "Case #%(case)s"
-msgstr ""
+msgstr "Trường hợp #%(case)s"
 
 #: templates/submission/row.html:49
 msgid "view"
@@ -4199,11 +4203,11 @@ msgstr "Hàng loạt "
 
 #: templates/submission/status-testcases.html:43
 msgid "Case"
-msgstr ""
+msgstr "Trường hợp"
 
 #: templates/submission/status-testcases.html:45
 msgid "Pretest"
-msgstr ""
+msgstr "Test đề bài"
 
 #: templates/submission/status-testcases.html:47
 msgid "Test case"
@@ -4211,23 +4215,23 @@ msgstr "Bộ test"
 
 #: templates/submission/status-testcases.html:79
 msgid "Your output (clipped)"
-msgstr ""
+msgstr "Output của bạn (cắt xén)"
 
 #: templates/submission/status-testcases.html:90
 msgid "Judge feedback"
-msgstr ""
+msgstr "Phản hồi trình chấm"
 
 #: templates/submission/status-testcases.html:106
 msgid "Resources:"
-msgstr ""
+msgstr "Tài nguyên:"
 
 #: templates/submission/status-testcases.html:115
 msgid "Final pretest score:"
-msgstr ""
+msgstr "Final pretest score:"
 
 #: templates/submission/status-testcases.html:117
 msgid "Final score:"
-msgstr ""
+msgstr "Điểm cuối cùng:"
 
 #: templates/submission/status-testcases.html:131
 msgid "Passing pretests does not guarantee a full score on system tests."
@@ -4256,7 +4260,7 @@ msgstr "Tốt nhất"
 #: templates/submission/submission-list-tabs.html:12
 #, python-format
 msgid "%(user)s's"
-msgstr ""
+msgstr "%(user)s's"
 
 #: templates/ticket/list.html:135 templates/ticket/ticket.html:257
 msgid "Reopened: "
@@ -4272,11 +4276,11 @@ msgstr "Sử dụng thông báo trên màn hình"
 
 #: templates/ticket/list.html:227
 msgid "Show my tickets only"
-msgstr ""
+msgstr "Chỉ hiện thẻ của tôi"
 
 #: templates/ticket/list.html:231
 msgid "Filing user"
-msgstr ""
+msgstr "Filing user"
 
 #: templates/ticket/list.html:240
 msgid "Assignee"
