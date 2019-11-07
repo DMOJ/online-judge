@@ -8,7 +8,7 @@ except ImportError:
     try:
         import dmoj_install_pymysql  # noqa: F401, imported for side effect
     except ImportError:
-         raise EnvironmentError('at least one of mysqlclient or pymysql must be installed')
+        raise EnvironmentError('at least one of mysqlclient or pymysql must be installed')
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dmoj.settings")
