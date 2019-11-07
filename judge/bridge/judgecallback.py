@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 import time
 from operator import itemgetter
 
@@ -17,7 +16,6 @@ json_log = logging.getLogger('judge.json.bridge')
 
 UPDATE_RATE_LIMIT = 5
 UPDATE_RATE_TIME = 0.5
-TIMER = [time.time, time.clock][os.name == 'nt']
 
 
 def _ensure_connection():
@@ -377,14 +375,14 @@ class DjangoJudgeHandler(JudgeHandler):
         if id in self.update_counter:
             cnt, reset = self.update_counter[id]
             cnt += 1
-            if TIMER() - reset > UPDATE_RATE_TIME:
+            if time.monotonic() - reset > UPDATE_RATE_TIME:
                 del self.update_counter[id]
             else:
                 self.update_counter[id] = (cnt, reset)
                 if cnt > UPDATE_RATE_LIMIT:
                     do_post = False
         if id not in self.update_counter:
-            self.update_counter[id] = (1, TIMER())
+            self.update_counter[id] = (1, time.monotonic())
 
         if do_post:
             event.post('sub_%s' % Submission.get_id_secret(id), {
