@@ -78,10 +78,16 @@ class PostList(ListView):
         visible_contests = Contest.objects.filter(is_visible=True).order_by('start_time')
         q = Q(is_private=False, is_organization_private=False)
         if self.request.user.is_authenticated:
-            q |= Q(is_organization_private=True, organizations__in=user.organizations.all())
-            q |= Q(is_private=True, private_contestants=user)
+            q |= Q(organizers=self.request.profile)
+            q |= Q(is_organization_private=False, is_private=True, private_contestants=self.request.profile)
+            q |= Q(is_organization_private=True, is_private=False,
+                   organizations__in=self.request.profile.organizations.all())
+            q |= Q(is_organization_private=True, is_private=True,
+                   organizations__in=self.request.profile.organizations.all(),
+                   private_contestants=self.request.profile)
             q |= Q(view_contest_scoreboard=user)
-        visible_contests = visible_contests.filter(q)
+        visible_contests = visible_contests.filter(q).distinct()
+
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
 
