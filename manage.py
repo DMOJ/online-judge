@@ -5,7 +5,10 @@ import sys
 try:
     import MySQLdb  # noqa: F401, imported for side effect
 except ImportError:
-    import dmoj_install_pymysql  # noqa: F401, imported for side effect
+    try:
+        import dmoj_install_pymysql  # noqa: F401, imported for side effect
+    except ImportError:
+         raise EnvironmentError('at least one of mysqlclient or pymysql must be installed')
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dmoj.settings")
