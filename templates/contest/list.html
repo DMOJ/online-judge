@@ -65,11 +65,6 @@
                     <i class="fa fa-eye-slash"></i> {{ _('hidden') }}
                 </span>
             {% endif %}
-            {% if contest.is_private %}
-                <span style="background-color: #666666; color: #ffffff" class="contest-tag">
-                    <i class="fa fa-lock"></i> {{ _('private') }}
-                </span>
-            {% endif %}
             {% if contest.is_organization_private %}
                 {% for org in contest.organizations.all() %}
                     <span style="background-color: #cccccc" class="contest-tag">
@@ -78,6 +73,10 @@
                         </a>
                     </span>
                 {% endfor %}
+            {% elif contest.is_private %}
+                <span style="background-color: #666666; color: #ffffff" class="contest-tag">
+                    <i class="fa fa-lock"></i> {{ _('private') }}
+                </span>
             {% endif %}
             {% if contest.is_rated %}
                 <span style="background-color: #e54c14; color: #ffffff" class="contest-tag">

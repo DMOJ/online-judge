@@ -69,14 +69,17 @@ class ContestSelect2View(Select2View):
         if not self.request.user.has_perm('judge.see_private_contest'):
             queryset = queryset.filter(is_visible=True)
         if not self.request.user.has_perm('judge.edit_all_contest'):
-            q = Q(is_private=False, is_organization_private=False)
+            q = Q(is_private=False, is_organization_private=False) | Q(organizers=self.request.profile)
             if self.request.user.is_authenticated:
-                q |= Q(is_organization_private=True,
+                q |= Q(is_organization_private=False, is_private=True, private_contestants=self.request.profile)
+                q |= Q(is_organization_private=True, is_private=False,
                        organizations__in=self.request.profile.organizations.all())
-                q |= Q(is_private=True, private_contestants=self.request.profile)
+                q |= Q(is_organization_private=True, is_private=True,
+                       organizations__in=self.request.profile.organizations.all(),
+                       private_contestants=self.request.profile)
                 q |= Q(view_contest_scoreboard=self.request.profile)
             queryset = queryset.filter(q)
-        return queryset
+        return queryset.distinct()
 
 
 class CommentSelect2View(Select2View):
