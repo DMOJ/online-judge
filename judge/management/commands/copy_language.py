@@ -4,7 +4,7 @@ from judge.models import Language
 
 
 class Command(BaseCommand):
-    help = 'allows the problems allowed to be submitted in the <source> language to be submitted in <target> language'
+    help = 'allows the problems that allow <source> to be submitted in <target>'
 
     def add_arguments(self, parser):
         parser.add_argument('source', help='language to copy from')
