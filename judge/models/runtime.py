@@ -1,6 +1,7 @@
 from collections import OrderedDict, defaultdict
 from operator import attrgetter
 
+from django.conf import settings
 from django.core.cache import cache
 from django.db import models
 from django.db.models import CASCADE
@@ -93,6 +94,14 @@ class Language(models.Model):
 
     def get_absolute_url(self):
         return reverse('runtime_list') + '#' + self.key
+
+    @classmethod
+    def get_default_language(cls):
+        return Language.objects.get(key=settings.DEFAULT_USER_LANGUAGE)
+
+    @classmethod
+    def get_default_language_pk(cls):
+        return cls.get_default_language().pk
 
     class Meta:
         ordering = ['key']
