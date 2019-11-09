@@ -64,7 +64,7 @@ django.jQuery(document).ready(function ($) {{
             do {{
                 window.crypto.getRandomValues(random);
             }} while(random[0] >= n);
-            
+
             key += charset.charAt(random[0]);
         }}
         $('#id_{0}').val(key);
