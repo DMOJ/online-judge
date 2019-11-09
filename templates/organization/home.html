@@ -1,23 +1,37 @@
 {% extends "common-content.html" %}
 
+{% block content_js_media %}
+    <script type="text/javascript">
+        $(function () {
+            $('.leave-organization').click(function () {
+                return confirm('{{ _('Are you sure you want to leave?') }}\n' +
+                    {% if organization.is_open %}
+                        '{{ _('You will have to rejoin to show up on the organization leaderboard.') }}'
+                    {% else %}
+                        '{{ _('You will have to request membership in order to join again.') }}'
+                    {% endif %}
+                );
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block info_float %}
     {% if request.user.is_authenticated %}
-        {% with profile=request.profile %}
-            {% if profile in organization %}
-                <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
-                    {% csrf_token %}
-                    <input type="submit" class="unselectable button full" value="{{ _('Leave organization') }}">
-                </form>
-            {% elif organization.is_open %}
-                <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
-                    {% csrf_token %}
-                    <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">
-                </form>
-            {% else %}
-                <a href="{{ url('request_organization', organization.id, organization.slug) }}"
-                   class="unselectable button full">{{ _('Request membership') }}</a>
-            {% endif %}
-        {% endwith %}
+        {% if request.profile in organization %}
+            <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
+                {% csrf_token %}
+                <input type="submit" class="unselectable button full leave-organization" value="{{ _('Leave organization') }}">
+            </form>
+        {% elif organization.is_open %}
+            <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
+                {% csrf_token %}
+                <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">
+            </form>
+        {% else %}
+            <a href="{{ url('request_organization', organization.id, organization.slug) }}"
+               class="unselectable button full">{{ _('Request membership') }}</a>
+        {% endif %}
         <hr>
     {% endif %}
 
