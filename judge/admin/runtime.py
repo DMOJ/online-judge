@@ -57,9 +57,13 @@ django.jQuery(document).ready(function ($) {{
     $('#id_{0}_regen').click(function () {{
         var length = 100,
             charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{{}};:,<>./?",
-            key = "";
+            key = "",
+            random = new Uint8Array(length);
+        
+        window.crypto.getRandomValues(random);
+
         for (var i = 0, n = charset.length; i < length; ++i) {{
-            key += charset.charAt(Math.floor(Math.random() * n));
+            key += charset.charAt(random[i] % n);
         }}
         $('#id_{0}').val(key);
     }});
