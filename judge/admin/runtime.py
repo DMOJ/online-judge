@@ -58,12 +58,14 @@ django.jQuery(document).ready(function ($) {{
         var length = 100,
             charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{{}};:,<>./?",
             key = "",
-            random = new Uint16Array(length);
-
-        window.crypto.getRandomValues(random);
+            random = new Uint16Array(1);
 
         for (var i = 0, n = charset.length; i < length; ++i) {{
-            key += charset.charAt(random[i] % n);
+            do {{
+                window.crypto.getRandomValues(random);
+            }} while(random[0] >= n);
+            
+            key += charset.charAt(random[0]);
         }}
         $('#id_{0}').val(key);
     }});
