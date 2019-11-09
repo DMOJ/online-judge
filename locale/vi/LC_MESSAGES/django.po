@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-05 18:41+0000\n"
-"PO-Revision-Date: 2019-11-06 04:08\n"
+"POT-Creation-Date: 2019-11-09 20:50+0000\n"
+"PO-Revision-Date: 2019-11-09 21:08\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -2571,7 +2571,7 @@ msgstr "Đăng ký"
 msgid "Authentication failure"
 msgstr "Xác thực không thành công"
 
-#: judge/views/stats.py:106
+#: judge/views/stats.py:105
 msgid "Language statistics"
 msgstr "Thống kê theo ngôn ngữ"
 
@@ -4053,19 +4053,19 @@ msgstr "Hoặc nhập mã này thủ công:"
 msgid "Statistics"
 msgstr "Thống kê"
 
-#: templates/stats/language.html:44
+#: templates/stats/language.html:11
 msgid "Submission Statistics"
 msgstr "Thống kê bài nộp"
 
-#: templates/stats/language.html:50
+#: templates/stats/language.html:16
 msgid "Submissions by Language"
 msgstr "Bài nộp theo ngôn ngữ"
 
-#: templates/stats/language.html:56
+#: templates/stats/language.html:21
 msgid "AC Submissions by Language"
 msgstr "Các bài nộp đã AC theo ngôn ngữ"
 
-#: templates/stats/language.html:62
+#: templates/stats/language.html:26
 msgid "Language AC Rate"
 msgstr "Tỉ lệ AC của ngôn ngữ"
 
