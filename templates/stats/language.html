@@ -4,63 +4,29 @@
         .chart {
             margin: 10px 0;
         }
-
-        ul.legend {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .legend .square {
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            margin-right: .3em;
-        }
-
-        @media (max-width: 450px) {
-            ul.legend {
-                -moz-columns: 5 7em;
-            }
-
-            .chart canvas {
-                display: block;
-                margin: 0 auto;
-            }
-        }
-
-        @media (min-width: 451px) {
-            .chart {
-                display: flex;
-            }
-
-            ul.legend {
-                margin-left: 20px;
-            }
-        }
     </style>
 {% endblock %}
 
 {% block chart_body %}
     <h3>{{ _('Submission Statistics') }}</h3>
     <div id="status-counts" class="chart">
-        <canvas width="300" height="300"></canvas>
-        <ul class="legend"></ul>
+        <canvas width="400" height="300"></canvas>
     </div>
 
     <h3>{{ _('Submissions by Language') }}</h3>
     <div id="lang-all" class="chart">
-        <canvas width="300" height="300"></canvas>
-        <ul class="legend"></ul>
+        <canvas width="400" height="300"></canvas>
     </div>
 
     <h3>{{ _('AC Submissions by Language') }}</h3>
     <div id="lang-ac" class="chart">
-        <canvas width="300" height="300"></canvas>
-        <ul class="legend"></ul>
+        <canvas width="400" height="300"></canvas>
     </div>
 
     <h3>{{ _('Language AC Rate') }}</h3>
-    <canvas id="ac-rate" width="350" height="700"></canvas>
+    <div id="ac-rate" class="chart">
+        <canvas width="400"><canvas>
+    </div>
 {% endblock %}
 
 {% block bodyend %}
@@ -82,17 +48,14 @@
                             responsive: false,
                             animation: false,
                             legend: {
-                                display: false,
-                            }
+                                position: 'right',
+                                labels: {
+                                    fontColor: 'black',
+                                    boxWidth: 20,
+                                },
+                            },
                         }
                     });
-                    var $legend = $chart.find('.legend');
-                    for (var i = 0; i < data.labels.length; ++i) {
-                        $legend.append($('<li>')
-                            .append($('<span>').addClass('square').css('background-color', data.datasets[0].backgroundColor[i]))
-                            .append($('<span>').text(data.labels[i]))
-                        );
-                    }
                 });
             }
 
@@ -101,14 +64,13 @@
             draw_pie_chart('{{ url('stats_data_status') }}', $('#status-counts'));
 
             $.getJSON('{{ url('language_stats_data_ac_rate') }}', function (data) {
-                var ctx = $('canvas#ac-rate').get(0).getContext('2d');
-                ctx.canvas.height = 20 * data.labels.length;
+                var ctx = $('#ac-rate').find('canvas').get(0).getContext('2d');
+                ctx.canvas.height = 20 * data.labels.length + 100;
                 new Chart(ctx, {
                     type: 'horizontalBar',
                     data: data,
                     options: {
                         maintainAspectRatio: false,
-                        responsive: false,
                         legend: {
                             display: false,
                         },
