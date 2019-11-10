@@ -218,9 +218,7 @@ class ContestAdmin(VersionAdmin):
         if not contest.is_rated:
             raise Http404()
         with transaction.atomic():
-            Rating.objects.filter(contest__end_time__gte=contest.end_time).delete()
-            for contest in Contest.objects.filter(is_rated=True, end_time__gte=contest.end_time).order_by('end_time'):
-                rate_contest(contest)
+            contest.rate()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('admin:judge_contest_changelist')))
 
     def get_form(self, *args, **kwargs):
@@ -243,7 +241,7 @@ class ContestParticipationForm(ModelForm):
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
-    fields = ('contest', 'user', 'real_start', 'virtual')
+    fields = ('contest', 'user', 'real_start', 'virtual', 'is_disqualified')
     list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime')
     actions = ['recalculate_results']
     actions_on_bottom = actions_on_top = True
@@ -256,6 +254,19 @@ class ContestParticipationAdmin(admin.ModelAdmin):
             'contest__name', 'contest__format_name', 'contest__format_config',
             'user__user__username', 'real_start', 'score', 'cumtime', 'virtual',
         )
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if form.changed_data and 'is_disqualified' in form.changed_data:
+            obj.recompute_results()
+            if obj.contest.is_rated and obj.contest.ratings.exists():
+                obj.contest.rate()
+            if obj.is_disqualified:
+                if obj.user.current_contest == obj.contest:
+                    obj.user.remove_contest()
+                obj.contest.banned_users.add(obj.user)
+            else:
+                obj.contest.banned_users.remove(obj.user)
 
     def recalculate_results(self, request, queryset):
         count = 0
