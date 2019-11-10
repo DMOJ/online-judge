@@ -250,6 +250,7 @@ def edit_profile(request):
 
     tzmap = settings.TIMEZONE_MAP
     return render(request, 'user/edit-profile.html', {
+        'require_staff_2fa': settings.DMOJ_REQUIRE_STAFF_2FA,
         'form': form, 'title': _('Edit profile'), 'profile': profile,
         'has_math_config': bool(settings.MATHOID_URL),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
