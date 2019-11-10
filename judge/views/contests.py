@@ -434,6 +434,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                     contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
                     real_start=timezone.now(),
                 )
+                event.post('contest_%d' % contest.id, {'type': 'update'})
             else:
                 if participation.ended:
                     participation = ContestParticipation.objects.get_or_create(
