@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 20:50+0000\n"
-"PO-Revision-Date: 2019-11-09 21:07\n"
+"POT-Creation-Date: 2019-11-09 23:40+0000\n"
+"PO-Revision-Date: 2019-11-10 00:11\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -3357,7 +3357,7 @@ msgstr ""
 msgid "Past Contests"
 msgstr "Прошедшие соревнования"
 
-#: templates/contest/media-js.html:4
+#: templates/contest/media-js.html:4 templates/organization/home.html:7
 msgid "Are you sure you want to leave?"
 msgstr "Вы уверены, что вы хотите выйти?"
 
@@ -3494,30 +3494,38 @@ msgid "Update"
 msgstr "Обновить"
 
 #: templates/organization/home.html:9
+msgid "You will have to rejoin to show up on the organization leaderboard."
+msgstr ""
+
+#: templates/organization/home.html:11
+msgid "You will have to request membership in order to join again."
+msgstr ""
+
+#: templates/organization/home.html:24
 msgid "Leave organization"
 msgstr "Покинуть организацию"
 
-#: templates/organization/home.html:14
+#: templates/organization/home.html:29
 msgid "Join organization"
 msgstr "Присоединиться к организации"
 
-#: templates/organization/home.html:18
+#: templates/organization/home.html:33
 msgid "Request membership"
 msgstr ""
 
-#: templates/organization/home.html:25
+#: templates/organization/home.html:39
 msgid "Edit organization"
 msgstr "Редактировать организацию"
 
-#: templates/organization/home.html:29
+#: templates/organization/home.html:43
 msgid "View requests"
 msgstr "Просмотр запросов"
 
-#: templates/organization/home.html:36
+#: templates/organization/home.html:50
 msgid "Admin organization"
 msgstr ""
 
-#: templates/organization/home.html:41
+#: templates/organization/home.html:55
 msgid "View members"
 msgstr ""
 

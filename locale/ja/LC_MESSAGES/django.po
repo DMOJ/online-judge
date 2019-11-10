@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 20:50+0000\n"
-"PO-Revision-Date: 2019-11-09 21:07\n"
+"POT-Creation-Date: 2019-11-09 23:40+0000\n"
+"PO-Revision-Date: 2019-11-10 00:10\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -3313,7 +3313,7 @@ msgstr "現在スケジュールされているコンテストはありません
 msgid "Past Contests"
 msgstr "過去のコンテスト"
 
-#: templates/contest/media-js.html:4
+#: templates/contest/media-js.html:4 templates/organization/home.html:7
 msgid "Are you sure you want to leave?"
 msgstr "あなたは本当に脱退したいですか？"
 
@@ -3450,30 +3450,38 @@ msgid "Update"
 msgstr "更新"
 
 #: templates/organization/home.html:9
+msgid "You will have to rejoin to show up on the organization leaderboard."
+msgstr ""
+
+#: templates/organization/home.html:11
+msgid "You will have to request membership in order to join again."
+msgstr ""
+
+#: templates/organization/home.html:24
 msgid "Leave organization"
 msgstr "組織から脱退する"
 
-#: templates/organization/home.html:14
+#: templates/organization/home.html:29
 msgid "Join organization"
 msgstr "組織に参加する"
 
-#: templates/organization/home.html:18
+#: templates/organization/home.html:33
 msgid "Request membership"
 msgstr "メンバーシップを要求する"
 
-#: templates/organization/home.html:25
+#: templates/organization/home.html:39
 msgid "Edit organization"
 msgstr "組織を編集する"
 
-#: templates/organization/home.html:29
+#: templates/organization/home.html:43
 msgid "View requests"
 msgstr "要求を表示する"
 
-#: templates/organization/home.html:36
+#: templates/organization/home.html:50
 msgid "Admin organization"
 msgstr "組織を管理する"
 
-#: templates/organization/home.html:41
+#: templates/organization/home.html:55
 msgid "View members"
 msgstr "メンバーを表示する"
 

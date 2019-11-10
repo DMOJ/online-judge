@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 20:50+0000\n"
-"PO-Revision-Date: 2019-11-09 21:06\n"
+"POT-Creation-Date: 2019-11-09 23:40+0000\n"
+"PO-Revision-Date: 2019-11-10 00:10\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -3313,7 +3313,7 @@ msgstr "现在没有预定的竞赛。"
 msgid "Past Contests"
 msgstr "过去的竞赛"
 
-#: templates/contest/media-js.html:4
+#: templates/contest/media-js.html:4 templates/organization/home.html:7
 msgid "Are you sure you want to leave?"
 msgstr "你确定要离开竞赛吗？"
 
@@ -3450,30 +3450,38 @@ msgid "Update"
 msgstr "升级"
 
 #: templates/organization/home.html:9
+msgid "You will have to rejoin to show up on the organization leaderboard."
+msgstr ""
+
+#: templates/organization/home.html:11
+msgid "You will have to request membership in order to join again."
+msgstr ""
+
+#: templates/organization/home.html:24
 msgid "Leave organization"
 msgstr "离开组织"
 
-#: templates/organization/home.html:14
+#: templates/organization/home.html:29
 msgid "Join organization"
 msgstr "加入组织"
 
-#: templates/organization/home.html:18
+#: templates/organization/home.html:33
 msgid "Request membership"
 msgstr "申请加入"
 
-#: templates/organization/home.html:25
+#: templates/organization/home.html:39
 msgid "Edit organization"
 msgstr "编辑组织"
 
-#: templates/organization/home.html:29
+#: templates/organization/home.html:43
 msgid "View requests"
 msgstr "查看请求"
 
-#: templates/organization/home.html:36
+#: templates/organization/home.html:50
 msgid "Admin organization"
 msgstr "管理组织"
 
-#: templates/organization/home.html:41
+#: templates/organization/home.html:55
 msgid "View members"
 msgstr "查看成员"
 
