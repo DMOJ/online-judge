@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.db.models import CASCADE
 from django.urls import reverse
 from django.utils import timezone
@@ -265,10 +265,11 @@ class ContestParticipation(models.Model):
     format_data = JSONField(verbose_name=_('contest format specific data'), null=True, blank=True)
 
     def recompute_results(self):
-        self.contest.format.update_participation(self)
-        if self.is_disqualified:
-            self.score = -9999
-            self.save(update_fields=['score'])
+        with transaction.atomic():
+            self.contest.format.update_participation(self)
+            if self.is_disqualified:
+                self.score = -9999
+                self.save(update_fields=['score'])
     recompute_results.alters_data = True
 
     @property
