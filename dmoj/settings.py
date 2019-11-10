@@ -34,6 +34,7 @@ SITE_NAME = 'DMOJ'
 SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
 SITE_ADMIN_EMAIL = False
 
+DMOJ_REQUIRE_STAFF_2FA = True
 
 # Set to 1 to use HTTPS if request was made to https://
 # Set to 2 to always use HTTPS for links
