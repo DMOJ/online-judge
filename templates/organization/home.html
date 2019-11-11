@@ -4,7 +4,7 @@
     <script type="text/javascript">
         $(function () {
             $('.leave-organization').click(function () {
-                return confirm('{{ _('Are you sure you want to leave?') }}\n' +
+                return confirm('{{ _('Are you sure you want to leave this organization?') }}\n' +
                     {% if organization.is_open %}
                         '{{ _('You will have to rejoin to show up on the organization leaderboard.') }}'
                     {% else %}
