@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 23:40+0000\n"
-"PO-Revision-Date: 2019-11-10 00:11\n"
+"POT-Creation-Date: 2019-11-11 21:54+0000\n"
+"PO-Revision-Date: 2019-11-11 22:06\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -435,7 +435,7 @@ msgstr "Yorum"
 msgid "Your part is silent, little toad."
 msgstr "Senin rolün sessiz, küçük kurbağa."
 
-#: judge/comments.py:50 templates/comments/list.html:130
+#: judge/comments.py:50 templates/comments/list.html:131
 msgid "You need to have solved at least one problem before your voice can be heard."
 msgstr "Sesini duyurabilmen için bir problem çözmüş olman gerekiyor."
 
@@ -3094,23 +3094,23 @@ msgid "\n"
 "                                            "
 msgstr ""
 
-#: templates/comments/list.html:119
+#: templates/comments/list.html:120
 msgid "There are no comments at the moment."
 msgstr "Şu anda hiç yorum yok."
 
-#: templates/comments/list.html:125
+#: templates/comments/list.html:126
 msgid "New comment"
 msgstr "Yeni yorum"
 
-#: templates/comments/list.html:139
+#: templates/comments/list.html:140
 msgid "Invalid comment body."
 msgstr "Yorum metninde hata!"
 
-#: templates/comments/list.html:147
+#: templates/comments/list.html:148
 msgid "Post!"
 msgstr "Yayınla!"
 
-#: templates/comments/list.html:155
+#: templates/comments/list.html:156
 msgid "Comments are disabled on this page."
 msgstr ""
 
@@ -3327,7 +3327,7 @@ msgstr "Şu anda planlanmış yarışma bulunmuyor."
 msgid "Past Contests"
 msgstr "Eski Yarışmalar"
 
-#: templates/contest/media-js.html:4 templates/organization/home.html:7
+#: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
 msgstr "Ayrılmak istediğine emin misin?"
 
@@ -3462,6 +3462,10 @@ msgstr "Güncelleme isteğin alındı ve adresine aktivasyon e-postası gönderi
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
 msgstr "Güncelle"
+
+#: templates/organization/home.html:7
+msgid "Are you sure you want to leave this organization?"
+msgstr ""
 
 #: templates/organization/home.html:9
 msgid "You will have to rejoin to show up on the organization leaderboard."

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 23:40+0000\n"
-"PO-Revision-Date: 2019-11-10 00:11\n"
+"POT-Creation-Date: 2019-11-11 21:54+0000\n"
+"PO-Revision-Date: 2019-11-11 22:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -455,7 +455,7 @@ msgstr "Содержание комментария"
 msgid "Your part is silent, little toad."
 msgstr ""
 
-#: judge/comments.py:50 templates/comments/list.html:130
+#: judge/comments.py:50 templates/comments/list.html:131
 msgid "You need to have solved at least one problem before your voice can be heard."
 msgstr "Вам нужно решить хотя бы одну задачу, чтобы оставить комментарий."
 
@@ -3124,23 +3124,23 @@ msgid "\n"
 "                                            "
 msgstr ""
 
-#: templates/comments/list.html:119
+#: templates/comments/list.html:120
 msgid "There are no comments at the moment."
 msgstr "Еще нет ни одного комментария."
 
-#: templates/comments/list.html:125
+#: templates/comments/list.html:126
 msgid "New comment"
 msgstr "Добавить комментарий"
 
-#: templates/comments/list.html:139
+#: templates/comments/list.html:140
 msgid "Invalid comment body."
 msgstr ""
 
-#: templates/comments/list.html:147
+#: templates/comments/list.html:148
 msgid "Post!"
 msgstr ""
 
-#: templates/comments/list.html:155
+#: templates/comments/list.html:156
 msgid "Comments are disabled on this page."
 msgstr ""
 
@@ -3357,7 +3357,7 @@ msgstr ""
 msgid "Past Contests"
 msgstr "Прошедшие соревнования"
 
-#: templates/contest/media-js.html:4 templates/organization/home.html:7
+#: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
 msgstr "Вы уверены, что вы хотите выйти?"
 
@@ -3492,6 +3492,10 @@ msgstr ""
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
 msgstr "Обновить"
+
+#: templates/organization/home.html:7
+msgid "Are you sure you want to leave this organization?"
+msgstr ""
 
 #: templates/organization/home.html:9
 msgid "You will have to rejoin to show up on the organization leaderboard."

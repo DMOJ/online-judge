@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 23:40+0000\n"
-"PO-Revision-Date: 2019-11-10 00:11\n"
+"POT-Creation-Date: 2019-11-11 21:54+0000\n"
+"PO-Revision-Date: 2019-11-11 22:06\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -425,7 +425,7 @@ msgstr "Bình luận"
 msgid "Your part is silent, little toad."
 msgstr "Không có phần nói của ngươi, đồ cóc ghẻ."
 
-#: judge/comments.py:50 templates/comments/list.html:130
+#: judge/comments.py:50 templates/comments/list.html:131
 msgid "You need to have solved at least one problem before your voice can be heard."
 msgstr "Bạn cần giải được ít nhất một bài tập trước khi lời nói của bạn có thể được lắng nghe."
 
@@ -3080,23 +3080,23 @@ msgid "\n"
 "                                            "
 msgstr ""
 
-#: templates/comments/list.html:119
+#: templates/comments/list.html:120
 msgid "There are no comments at the moment."
 msgstr "Không có ý kiến tại thời điểm này."
 
-#: templates/comments/list.html:125
+#: templates/comments/list.html:126
 msgid "New comment"
 msgstr "Bình luận mới"
 
-#: templates/comments/list.html:139
+#: templates/comments/list.html:140
 msgid "Invalid comment body."
 msgstr "Bình luận không hợp lệ."
 
-#: templates/comments/list.html:147
+#: templates/comments/list.html:148
 msgid "Post!"
 msgstr "Đăng!"
 
-#: templates/comments/list.html:155
+#: templates/comments/list.html:156
 msgid "Comments are disabled on this page."
 msgstr "Bình luận đã bị vô hiệu hóa trên trang này."
 
@@ -3313,7 +3313,7 @@ msgstr "Không có không có cuộc thi dự kiến tại thời điểm này."
 msgid "Past Contests"
 msgstr "Cuộc thi đã qua"
 
-#: templates/contest/media-js.html:4 templates/organization/home.html:7
+#: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
 msgstr "Bạn có chắc bạn muốn bỏ qua?"
 
@@ -3448,6 +3448,10 @@ msgstr "Yêu cầu bản Cập Nhật của bạn đã được nhận thành c�
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
 msgstr "Cập Nhật"
+
+#: templates/organization/home.html:7
+msgid "Are you sure you want to leave this organization?"
+msgstr ""
 
 #: templates/organization/home.html:9
 msgid "You will have to rejoin to show up on the organization leaderboard."

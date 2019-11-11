@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 23:40+0000\n"
-"PO-Revision-Date: 2019-11-10 00:10\n"
+"POT-Creation-Date: 2019-11-11 21:54+0000\n"
+"PO-Revision-Date: 2019-11-11 22:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -425,7 +425,7 @@ msgstr "评论正文"
 msgid "Your part is silent, little toad."
 msgstr "你已被静音……"
 
-#: judge/comments.py:50 templates/comments/list.html:130
+#: judge/comments.py:50 templates/comments/list.html:131
 msgid "You need to have solved at least one problem before your voice can be heard."
 msgstr "只有解决了一个题目以后你才能有发言权。"
 
@@ -3080,23 +3080,23 @@ msgid "\n"
 "                                            "
 msgstr ""
 
-#: templates/comments/list.html:119
+#: templates/comments/list.html:120
 msgid "There are no comments at the moment."
 msgstr "目前没有评论。"
 
-#: templates/comments/list.html:125
+#: templates/comments/list.html:126
 msgid "New comment"
 msgstr "新评论"
 
-#: templates/comments/list.html:139
+#: templates/comments/list.html:140
 msgid "Invalid comment body."
 msgstr "无效的评论内容。"
 
-#: templates/comments/list.html:147
+#: templates/comments/list.html:148
 msgid "Post!"
 msgstr "发布"
 
-#: templates/comments/list.html:155
+#: templates/comments/list.html:156
 msgid "Comments are disabled on this page."
 msgstr ""
 
@@ -3313,9 +3313,9 @@ msgstr "现在没有预定的竞赛。"
 msgid "Past Contests"
 msgstr "过去的竞赛"
 
-#: templates/contest/media-js.html:4 templates/organization/home.html:7
+#: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
-msgstr "你确定要离开竞赛吗？"
+msgstr "您确定要离开吗？"
 
 #: templates/contest/media-js.html:5
 msgid "You cannot come back to a virtual participation. You will have to start a new one."
@@ -3448,6 +3448,10 @@ msgstr "您的更新请求成功已被成功接收。我们已经发送了激活
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
 msgstr "升级"
+
+#: templates/organization/home.html:7
+msgid "Are you sure you want to leave this organization?"
+msgstr ""
 
 #: templates/organization/home.html:9
 msgid "You will have to rejoin to show up on the organization leaderboard."

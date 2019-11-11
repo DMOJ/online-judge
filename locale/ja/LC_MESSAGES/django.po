@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 23:40+0000\n"
-"PO-Revision-Date: 2019-11-10 00:10\n"
+"POT-Creation-Date: 2019-11-11 21:54+0000\n"
+"PO-Revision-Date: 2019-11-11 22:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -425,7 +425,7 @@ msgstr "コメント本文"
 msgid "Your part is silent, little toad."
 msgstr "お黙り、ヒキガエル。"
 
-#: judge/comments.py:50 templates/comments/list.html:130
+#: judge/comments.py:50 templates/comments/list.html:131
 msgid "You need to have solved at least one problem before your voice can be heard."
 msgstr "コメントを書くには、少なくとも1度は課題を解く必要があります。"
 
@@ -3080,23 +3080,23 @@ msgid "\n"
 "                                            "
 msgstr ""
 
-#: templates/comments/list.html:119
+#: templates/comments/list.html:120
 msgid "There are no comments at the moment."
 msgstr "現時点でコメントはありません。"
 
-#: templates/comments/list.html:125
+#: templates/comments/list.html:126
 msgid "New comment"
 msgstr "新しいコメント"
 
-#: templates/comments/list.html:139
+#: templates/comments/list.html:140
 msgid "Invalid comment body."
 msgstr "不正なコメント本文。"
 
-#: templates/comments/list.html:147
+#: templates/comments/list.html:148
 msgid "Post!"
 msgstr "投稿！"
 
-#: templates/comments/list.html:155
+#: templates/comments/list.html:156
 msgid "Comments are disabled on this page."
 msgstr ""
 
@@ -3313,7 +3313,7 @@ msgstr "現在スケジュールされているコンテストはありません
 msgid "Past Contests"
 msgstr "過去のコンテスト"
 
-#: templates/contest/media-js.html:4 templates/organization/home.html:7
+#: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
 msgstr "あなたは本当に脱退したいですか？"
 
@@ -3448,6 +3448,10 @@ msgstr "更新要求は正常に受け付けられ、有効化の電子メール
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
 msgstr "更新"
+
+#: templates/organization/home.html:7
+msgid "Are you sure you want to leave this organization?"
+msgstr ""
 
 #: templates/organization/home.html:9
 msgid "You will have to rejoin to show up on the organization leaderboard."

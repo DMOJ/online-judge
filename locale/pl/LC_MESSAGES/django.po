@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-09 23:40+0000\n"
-"PO-Revision-Date: 2019-11-10 00:10\n"
+"POT-Creation-Date: 2019-11-11 21:54+0000\n"
+"PO-Revision-Date: 2019-11-11 22:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -455,7 +455,7 @@ msgstr ""
 msgid "Your part is silent, little toad."
 msgstr ""
 
-#: judge/comments.py:50 templates/comments/list.html:130
+#: judge/comments.py:50 templates/comments/list.html:131
 msgid "You need to have solved at least one problem before your voice can be heard."
 msgstr ""
 
@@ -3124,23 +3124,23 @@ msgid "\n"
 "                                            "
 msgstr ""
 
-#: templates/comments/list.html:119
+#: templates/comments/list.html:120
 msgid "There are no comments at the moment."
 msgstr ""
 
-#: templates/comments/list.html:125
+#: templates/comments/list.html:126
 msgid "New comment"
 msgstr ""
 
-#: templates/comments/list.html:139
+#: templates/comments/list.html:140
 msgid "Invalid comment body."
 msgstr ""
 
-#: templates/comments/list.html:147
+#: templates/comments/list.html:148
 msgid "Post!"
 msgstr ""
 
-#: templates/comments/list.html:155
+#: templates/comments/list.html:156
 msgid "Comments are disabled on this page."
 msgstr ""
 
@@ -3357,7 +3357,7 @@ msgstr ""
 msgid "Past Contests"
 msgstr ""
 
-#: templates/contest/media-js.html:4 templates/organization/home.html:7
+#: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
 msgstr ""
 
@@ -3491,6 +3491,10 @@ msgstr ""
 #: templates/organization/requests/pending.html:34
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
+msgstr ""
+
+#: templates/organization/home.html:7
+msgid "Are you sure you want to leave this organization?"
 msgstr ""
 
 #: templates/organization/home.html:9
