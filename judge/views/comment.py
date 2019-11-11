@@ -166,6 +166,5 @@ def comment_hide(request):
         return HttpResponseBadRequest()
 
     comment = get_object_or_404(Comment, id=comment_id)
-    comment.hidden = True
-    comment.save(update_fields=['hidden'])
+    comment.get_descendants(include_self=True).update(hidden=True)
     return HttpResponse('ok')

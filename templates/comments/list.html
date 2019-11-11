@@ -111,7 +111,8 @@
                 </li>
                 {% with children=node.get_children() %}
                     {% if children %}
-                        <ul class="comments">{{ loop(children) }}</ul>{% endif %}
+                        <ul id="comment-{{ node.id }}-children" class="comments">{{ loop(children) }}</ul>
+                    {% endif %}
                 {% endwith %}
             {% endfor %}
         </ul>
