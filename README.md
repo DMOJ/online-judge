@@ -17,13 +17,14 @@ See it live at [dmoj.ca](https://dmoj.ca/)!
    * Supports IOI/AtCoder/ECOO formats out-of-the box
    * **System testing** supported
    * **Hidden scoreboards** and **virtual participation**
-   * Codeforces-style **rating**
+   * Topcoder-style **rating**
    * **Plagiarism detection** via [Stanford MOSS](https://theory.stanford.edu/~aiken/moss/)
    * Restricting contest access to particular organizations or users
 * Rich problem statements, with support for **LaTeX math and diagrams**
    * Automatic **PDF generation** for easy distribution
    * Built-in support for **editorials**
 * **Live updates** for submissions
+* Internationalized site interface
 * Home page blog and activity stream
 * Fine-grained permission control for staff
 * OAuth login with Google, Facebook, and Github

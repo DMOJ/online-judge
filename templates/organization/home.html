@@ -2,12 +2,12 @@
 {% block title_row %}{% endblock %}
 {% block title_ruler %}{% endblock %}
 
+<<<<<<< HEAD
 {% block media %}
     <style>
         .post {
             margin: 0 1.4em;
         }
-
         .post:first-child {
             margin-top: 0.6em;
         }
@@ -35,6 +35,18 @@
                 $('#info-tab').removeClass('active');
                 $('.blog-content').hide();
                 $('.blog-sidebar').show();
+            });
+        });
+        
+        $(function () {
+            $('.leave-organization').click(function () {
+                return confirm('{{ _('Are you sure you want to leave?') }}\n' +
+                    {% if organization.is_open %}
+                        '{{ _('You will have to rejoin to show up on the organization leaderboard.') }}'
+                    {% else %}
+                        '{{ _('You will have to request membership in order to join again.') }}'
+                    {% endif %}
+                );
             });
         });
     </script>
@@ -83,7 +95,7 @@
                         {% if is_member %}
                             <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
                                 {% csrf_token %}
-                                <input type="submit" class="unselectable button full" value="{{ _('Leave organization') }}">
+                                <input type="submit" class="unselectable button full leave-organization" value="{{ _('Leave organization') }}">
                             </form>
                         {% elif organization.is_open or can_edit %}
                             <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
