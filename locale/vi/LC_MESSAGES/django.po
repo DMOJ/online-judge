@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-11 21:54+0000\n"
-"PO-Revision-Date: 2019-11-11 22:06\n"
+"POT-Creation-Date: 2019-11-12 18:11+0000\n"
+"PO-Revision-Date: 2019-11-12 19:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -213,7 +213,7 @@ msgid "Summary"
 msgstr "Tổng hợp"
 
 #: judge/admin/interface.py:107 judge/models/contest.py:251
-#: judge/models/contest.py:355 judge/models/profile.py:189
+#: judge/models/contest.py:355 judge/models/profile.py:191
 msgid "user"
 msgstr "thành viên"
 
@@ -629,7 +629,7 @@ msgstr "tên cuộc thi"
 msgid "These people will be able to edit the contest."
 msgstr "Những người này sẽ có thể chỉnh sửa các cuộc thi."
 
-#: judge/models/contest.py:55 judge/models/runtime.py:124
+#: judge/models/contest.py:55 judge/models/runtime.py:133
 #: src/dmoj-wpadmin/test_project/apps/books/admin.py:20
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:13
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:27
@@ -641,7 +641,7 @@ msgid "description"
 msgstr "mô tả"
 
 #: judge/models/contest.py:56 judge/models/problem.py:353
-#: judge/models/runtime.py:126
+#: judge/models/runtime.py:135
 msgid "problems"
 msgstr "đề bài"
 
@@ -743,7 +743,7 @@ msgid "private to organizations"
 msgstr "dành riêng cho tổ chức"
 
 #: judge/models/contest.py:93 judge/models/problem.py:155
-#: judge/models/profile.py:76
+#: judge/models/profile.py:77
 msgid "organizations"
 msgstr "tổ chức"
 
@@ -755,7 +755,7 @@ msgstr "Nếu là dành riêng, thì chỉ các tổ chức này mới có thể
 msgid "OpenGraph image"
 msgstr "Ảnh OpenGraph"
 
-#: judge/models/contest.py:96 judge/models/profile.py:47
+#: judge/models/contest.py:96 judge/models/profile.py:48
 msgid "Logo override image"
 msgstr "Ghi đè ảnh Logo"
 
@@ -775,7 +775,7 @@ msgstr "tổng kết cuộc thi"
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr "Văn bản thuần tuý, Hiển thị trong thẻ meta, ví dụ như cho các phương tiện truyền thông xã hội."
 
-#: judge/models/contest.py:104 judge/models/profile.py:46
+#: judge/models/contest.py:104 judge/models/profile.py:47
 msgid "access code"
 msgstr "mã truy cập"
 
@@ -1144,8 +1144,8 @@ msgstr "liên kết"
 msgid "full name"
 msgstr "tên đầy đủ"
 
-#: judge/models/problem.py:56 judge/models/profile.py:32
-#: judge/models/runtime.py:23
+#: judge/models/problem.py:56 judge/models/profile.py:33
+#: judge/models/runtime.py:24
 msgid "short name"
 msgstr "tên viết tắt"
 
@@ -1298,7 +1298,7 @@ msgid "If private, only these organizations may see the problem."
 msgstr "Nếu riêng tư, chỉ những tổ chức này có thể xem bài tập."
 
 #: judge/models/problem.py:358 judge/models/problem.py:376
-#: judge/models/runtime.py:99
+#: judge/models/runtime.py:108
 msgid "language"
 msgstr "ngôn ngữ"
 
@@ -1466,344 +1466,344 @@ msgstr "giá trị điểm"
 msgid "case is pretest?"
 msgstr "test mẫu?"
 
-#: judge/models/profile.py:29
+#: judge/models/profile.py:30
 msgid "organization title"
 msgstr "tiêu đề của tổ chức"
 
-#: judge/models/profile.py:30
+#: judge/models/profile.py:31
 msgid "organization slug"
 msgstr "organization slug"
 
-#: judge/models/profile.py:31
+#: judge/models/profile.py:32
 msgid "Organization name shown in URL"
 msgstr "Tên tổ chức thể hiện trong URL"
 
-#: judge/models/profile.py:33
+#: judge/models/profile.py:34
 msgid "Displayed beside user name during contests"
 msgstr "Hiển thị bên cạnh tên trong cuộc thi"
 
-#: judge/models/profile.py:34
+#: judge/models/profile.py:35
 msgid "organization description"
 msgstr "mô tả tổ chức"
 
-#: judge/models/profile.py:35
+#: judge/models/profile.py:36
 msgid "registrant"
 msgstr "người đăng ký"
 
-#: judge/models/profile.py:36
+#: judge/models/profile.py:37
 msgid "User who registered this organization"
 msgstr "Người dùng đã đăng ký tổ chức này"
 
-#: judge/models/profile.py:37
+#: judge/models/profile.py:38
 msgid "administrators"
 msgstr "quản trị viên"
 
-#: judge/models/profile.py:38
+#: judge/models/profile.py:39
 msgid "Those who can edit this organization"
 msgstr "Những người có thể chỉnh sửa tổ chức"
 
-#: judge/models/profile.py:39
+#: judge/models/profile.py:40
 msgid "creation date"
 msgstr "ngày tạo"
 
-#: judge/models/profile.py:40
+#: judge/models/profile.py:41
 msgid "is open organization?"
 msgstr "là tổ chức mở?"
 
-#: judge/models/profile.py:41
+#: judge/models/profile.py:42
 msgid "Allow joining organization"
 msgstr "Cho phép tham gia tổ chức"
 
-#: judge/models/profile.py:42
+#: judge/models/profile.py:43
 msgid "maximum size"
 msgstr "dung lượng tối đa"
 
-#: judge/models/profile.py:43
+#: judge/models/profile.py:44
 msgid "Maximum amount of users in this organization, only applicable to private organizations"
 msgstr "Số người dùng tối đa trong tổ chức này, chỉ áp dụng đối với tổ chức tư nhân"
 
-#: judge/models/profile.py:45
+#: judge/models/profile.py:46
 msgid "Student access code"
 msgstr "Mã truy cập sinh viên"
 
-#: judge/models/profile.py:49
+#: judge/models/profile.py:50
 msgid "This image will replace the default site logo for users viewing the organization."
 msgstr "Ảnh này sẽ thay thế logo mặc định của trang khi thành viên xem tổ chức."
 
-#: judge/models/profile.py:75 judge/models/profile.py:91
-#: judge/models/profile.py:190
+#: judge/models/profile.py:76 judge/models/profile.py:93
+#: judge/models/profile.py:192
 msgid "organization"
 msgstr "tổ chức"
 
-#: judge/models/profile.py:80
+#: judge/models/profile.py:81
 msgid "user associated"
 msgstr "liên kết với người sử dụng"
 
-#: judge/models/profile.py:81
+#: judge/models/profile.py:82
 msgid "self-description"
 msgstr "tự mô tả"
 
-#: judge/models/profile.py:82
+#: judge/models/profile.py:83
 msgid "location"
 msgstr "vị trí"
 
-#: judge/models/profile.py:84
+#: judge/models/profile.py:85
 msgid "preferred language"
 msgstr "ngôn ngữ"
 
-#: judge/models/profile.py:89
+#: judge/models/profile.py:91
 msgid "last access time"
 msgstr "lần truy cập cuối cùng"
 
-#: judge/models/profile.py:90
+#: judge/models/profile.py:92
 msgid "last IP"
 msgstr "IP"
 
-#: judge/models/profile.py:93
+#: judge/models/profile.py:95
 msgid "display rank"
 msgstr "hiển thị xếp hạng"
 
-#: judge/models/profile.py:95
+#: judge/models/profile.py:97
 msgid "comment mute"
 msgstr "bình luận tắt"
 
-#: judge/models/profile.py:95
+#: judge/models/profile.py:97
 msgid "Some users are at their best when silent."
 msgstr "Một vài người tốt nhất là khi im lặng."
 
-#: judge/models/profile.py:97
+#: judge/models/profile.py:99
 msgid "unlisted user"
 msgstr "thành viên không được liệt kê"
 
-#: judge/models/profile.py:97
+#: judge/models/profile.py:99
 msgid "User will not be ranked."
 msgstr "Thành viên không được xếp hạng."
 
-#: judge/models/profile.py:100
+#: judge/models/profile.py:102
 msgid "user script"
 msgstr "script tự định nghĩa"
 
-#: judge/models/profile.py:101
+#: judge/models/profile.py:103
 msgid "User-defined JavaScript for site customization."
 msgstr "JavaScript tự định nghĩa để tùy chỉnh trang web"
 
-#: judge/models/profile.py:102
+#: judge/models/profile.py:104
 msgid "current contest"
 msgstr "cuộc thi hiện tại"
 
-#: judge/models/profile.py:104
+#: judge/models/profile.py:106
 msgid "math engine"
 msgstr "bộ xử lý toán học"
 
-#: judge/models/profile.py:106
+#: judge/models/profile.py:108
 msgid "the rendering engine used to render math"
 msgstr "công cụ được sử dụng để render toán học"
 
-#: judge/models/profile.py:107
+#: judge/models/profile.py:109
 msgid "2FA enabled"
 msgstr "2FA có hiệu lực"
 
-#: judge/models/profile.py:108
+#: judge/models/profile.py:110
 msgid "check to enable TOTP-based two factor authentication"
 msgstr "đánh dấu để hiệu lực hóa xác minh hai yếu tố TOTP-based"
 
-#: judge/models/profile.py:109
+#: judge/models/profile.py:111
 msgid "TOTP key"
 msgstr "Mã TOTP"
 
-#: judge/models/profile.py:110
+#: judge/models/profile.py:112
 msgid "32 character base32-encoded key for TOTP"
 msgstr "mã 32 ký tự base32-encoded cho TOTP"
 
-#: judge/models/profile.py:112
+#: judge/models/profile.py:114
 msgid "TOTP key must be empty or base32"
 msgstr "Mã TOTP cần rỗng hoặc base32"
 
-#: judge/models/profile.py:113
+#: judge/models/profile.py:115
 msgid "internal notes"
 msgstr "ghi chú nội bộ"
 
-#: judge/models/profile.py:114
+#: judge/models/profile.py:116
 msgid "Notes for administrators regarding this user."
 msgstr "Ghi chú cho quản trị viên chấm lại cho thành viên này."
 
-#: judge/models/profile.py:184
+#: judge/models/profile.py:186
 msgid "user profile"
 msgstr "hồ sơ người dùng"
 
-#: judge/models/profile.py:185
+#: judge/models/profile.py:187
 msgid "user profiles"
 msgstr "hồ sơ người dùng"
 
-#: judge/models/profile.py:192
+#: judge/models/profile.py:194
 msgid "request time"
 msgstr "thời gian yêu cầu"
 
-#: judge/models/profile.py:193
+#: judge/models/profile.py:195
 msgid "state"
 msgstr "trạng thái"
 
-#: judge/models/profile.py:198
+#: judge/models/profile.py:200
 msgid "reason"
 msgstr "lý do"
 
-#: judge/models/profile.py:201
+#: judge/models/profile.py:203
 msgid "organization join request"
 msgstr "yêu cầu tham gia tổ chức"
 
-#: judge/models/profile.py:202
+#: judge/models/profile.py:204
 msgid "organization join requests"
 msgstr "yêu cầu tham gia tổ chức"
 
-#: judge/models/runtime.py:18
+#: judge/models/runtime.py:19
 msgid "short identifier"
 msgstr "nhận dạng ngắn"
 
-#: judge/models/runtime.py:19
+#: judge/models/runtime.py:20
 msgid "The identifier for this language; the same as its executor id for judges."
 msgstr "Mã định danh ngôn ngữ này; giống như id chấp hành cho bộ chấm."
 
-#: judge/models/runtime.py:21
+#: judge/models/runtime.py:22
 msgid "long name"
 msgstr "tên dài"
 
-#: judge/models/runtime.py:22
+#: judge/models/runtime.py:23
 msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
 msgstr "Tên dài của ngôn ngữ, ví dụ như \"Python 2\" hay \"C ++ 11\"."
 
-#: judge/models/runtime.py:24
+#: judge/models/runtime.py:25
 msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
 msgstr "Tên ngắn, dễ đọc hơn, để hiển thị công khai; Ví dụ: \"PY2\" hoặc \"C ++ 11\". Nếu để trống, nó sẽ sử dụng ID ngắn."
 
-#: judge/models/runtime.py:28
+#: judge/models/runtime.py:29
 msgid "common name"
 msgstr "tên chung"
 
-#: judge/models/runtime.py:29
+#: judge/models/runtime.py:30
 msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
 msgstr "Tên phổ biến cho các ngôn ngữ. Ví dụ, tên gọi chung cho C ++ 03, 11 C ++ và C ++ 14 sẽ là \"C++\""
 
-#: judge/models/runtime.py:31
+#: judge/models/runtime.py:32
 msgid "ace mode name"
 msgstr "chế độ tên ace"
 
-#: judge/models/runtime.py:32
+#: judge/models/runtime.py:33
 msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
 msgstr "ID cho ngôn ngữ Ace.js, được nối thêm vào \"mode-\" để xác định tập tin Ace JavaScript để sử dụng, ví dụ như, \"python\"."
 
-#: judge/models/runtime.py:34
+#: judge/models/runtime.py:35
 msgid "pygments name"
 msgstr "tên pygments"
 
-#: judge/models/runtime.py:35
+#: judge/models/runtime.py:36
 msgid "Language ID for Pygments highlighting in source windows."
 msgstr "Highligh ID cho Pygments trong cửa sổ mã nguồn."
 
-#: judge/models/runtime.py:36
+#: judge/models/runtime.py:37
 msgid "code template"
 msgstr "code mẫu"
 
-#: judge/models/runtime.py:37
+#: judge/models/runtime.py:38
 msgid "Code template to display in submission editor."
 msgstr "Mẫu mã nguồn hiển thị trong trình soạn thảo khi nộp bài."
 
-#: judge/models/runtime.py:38
+#: judge/models/runtime.py:39
 msgid "runtime info override"
 msgstr "ghi đè thời gian chạy"
 
-#: judge/models/runtime.py:39
+#: judge/models/runtime.py:40
 msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
 msgstr "Không đặt này trừ khi bạn biết những gì bạn đang làm! Nó sẽ thiết lập các thông tin thời gian chạy, cung cấp cho chương trình chấm!"
 
-#: judge/models/runtime.py:41
+#: judge/models/runtime.py:42
 msgid "language description"
 msgstr "mô tả ngôn ngữ"
 
-#: judge/models/runtime.py:42
+#: judge/models/runtime.py:43
 msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
 msgstr "Sử dụng trường này để thông báo cho người dùng quirks môi trường, hạn chế bổ sung, vv."
 
-#: judge/models/runtime.py:44
+#: judge/models/runtime.py:45
 msgid "extension"
 msgstr "phần mở rộng"
 
-#: judge/models/runtime.py:45
+#: judge/models/runtime.py:46
 msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
 msgstr "Phần mở rộng tập tin mã nguồn, ví dụ như, \"py\" hay \"cpp\"."
 
-#: judge/models/runtime.py:100
+#: judge/models/runtime.py:109
 msgid "languages"
 msgstr "ngôn ngữ"
 
-#: judge/models/runtime.py:104
+#: judge/models/runtime.py:113
 msgid "language to which this runtime belongs"
 msgstr "ngôn ngữ tạo ra runtime"
 
-#: judge/models/runtime.py:105
+#: judge/models/runtime.py:114
 msgid "judge on which this runtime exists"
 msgstr "máy chấm tạo ra runtime"
 
-#: judge/models/runtime.py:106
+#: judge/models/runtime.py:115
 msgid "runtime name"
 msgstr "tên runtime"
 
-#: judge/models/runtime.py:107
+#: judge/models/runtime.py:116
 msgid "runtime version"
 msgstr "phiên bản runtime"
 
-#: judge/models/runtime.py:108
+#: judge/models/runtime.py:117
 msgid "order in which to display this runtime"
 msgstr "thứ tự hiện thị runtime"
 
-#: judge/models/runtime.py:112
+#: judge/models/runtime.py:121
 msgid "Server name, hostname-style"
 msgstr "Tên server, tên host"
 
-#: judge/models/runtime.py:113
+#: judge/models/runtime.py:122
 msgid "time of creation"
 msgstr "thời gian tạo"
 
-#: judge/models/runtime.py:114
+#: judge/models/runtime.py:123
 msgid "A key to authenticated this judge"
 msgstr "Mã truy cập chấm bài"
 
-#: judge/models/runtime.py:115
+#: judge/models/runtime.py:124
 msgid "authentication key"
 msgstr "mã xác thực"
 
-#: judge/models/runtime.py:116
+#: judge/models/runtime.py:125
 msgid "block judge"
 msgstr "khóa trình chấm"
 
-#: judge/models/runtime.py:117
+#: judge/models/runtime.py:126
 msgid "Whether this judge should be blocked from connecting, even if its key is correct."
 msgstr ""
 
-#: judge/models/runtime.py:119
+#: judge/models/runtime.py:128
 msgid "judge online status"
 msgstr "trạng thái bộ chấm online"
 
-#: judge/models/runtime.py:120
+#: judge/models/runtime.py:129
 msgid "judge start time"
 msgstr "thời gian bắt đầu chấm"
 
-#: judge/models/runtime.py:121
+#: judge/models/runtime.py:130
 msgid "response time"
 msgstr "thời gian đáp ứng"
 
-#: judge/models/runtime.py:122
+#: judge/models/runtime.py:131
 msgid "system load"
 msgstr "mức tải của hệ thống"
 
-#: judge/models/runtime.py:123
+#: judge/models/runtime.py:132
 msgid "Load for the last minute, divided by processors to be fair."
 msgstr "Tải cho phút cuối cùng, chia cho số bộ vi xử lý."
 
-#: judge/models/runtime.py:127 judge/models/runtime.py:167
+#: judge/models/runtime.py:136 judge/models/runtime.py:176
 msgid "judges"
 msgstr "chấm điểm"
 
-#: judge/models/runtime.py:166
+#: judge/models/runtime.py:175
 msgid "judge"
 msgstr "máy chấm"
 

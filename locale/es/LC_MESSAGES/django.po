@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-11 21:54+0000\n"
-"PO-Revision-Date: 2019-11-11 22:06\n"
+"POT-Creation-Date: 2019-11-12 18:11+0000\n"
+"PO-Revision-Date: 2019-11-12 19:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -219,7 +219,7 @@ msgid "Summary"
 msgstr "Resumen"
 
 #: judge/admin/interface.py:107 judge/models/contest.py:251
-#: judge/models/contest.py:355 judge/models/profile.py:189
+#: judge/models/contest.py:355 judge/models/profile.py:191
 msgid "user"
 msgstr "usuario"
 
@@ -639,7 +639,7 @@ msgstr "nombre del concurso"
 msgid "These people will be able to edit the contest."
 msgstr "Estas personas serán capaces de editar el concurso."
 
-#: judge/models/contest.py:55 judge/models/runtime.py:124
+#: judge/models/contest.py:55 judge/models/runtime.py:133
 #: src/dmoj-wpadmin/test_project/apps/books/admin.py:20
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:13
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:27
@@ -651,7 +651,7 @@ msgid "description"
 msgstr "descripción"
 
 #: judge/models/contest.py:56 judge/models/problem.py:353
-#: judge/models/runtime.py:126
+#: judge/models/runtime.py:135
 msgid "problems"
 msgstr "problemas"
 
@@ -753,7 +753,7 @@ msgid "private to organizations"
 msgstr "privado para organizaciones"
 
 #: judge/models/contest.py:93 judge/models/problem.py:155
-#: judge/models/profile.py:76
+#: judge/models/profile.py:77
 msgid "organizations"
 msgstr "organizaciones"
 
@@ -765,7 +765,7 @@ msgstr "Es privado, sólo estas organizaciones deben ser el concurso"
 msgid "OpenGraph image"
 msgstr "Imagen de OpenGraph"
 
-#: judge/models/contest.py:96 judge/models/profile.py:47
+#: judge/models/contest.py:96 judge/models/profile.py:48
 msgid "Logo override image"
 msgstr ""
 
@@ -785,7 +785,7 @@ msgstr "resumen del concurso"
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr "Texto sin formato, que se muestra en la etiqueta de metadescripción, por ejemplo, para las redes sociales."
 
-#: judge/models/contest.py:104 judge/models/profile.py:46
+#: judge/models/contest.py:104 judge/models/profile.py:47
 msgid "access code"
 msgstr "código de acceso"
 
@@ -1154,8 +1154,8 @@ msgstr "enlace"
 msgid "full name"
 msgstr "nombre completo"
 
-#: judge/models/problem.py:56 judge/models/profile.py:32
-#: judge/models/runtime.py:23
+#: judge/models/problem.py:56 judge/models/profile.py:33
+#: judge/models/runtime.py:24
 msgid "short name"
 msgstr "nombre corto"
 
@@ -1308,7 +1308,7 @@ msgid "If private, only these organizations may see the problem."
 msgstr ""
 
 #: judge/models/problem.py:358 judge/models/problem.py:376
-#: judge/models/runtime.py:99
+#: judge/models/runtime.py:108
 msgid "language"
 msgstr "idioma"
 
@@ -1476,344 +1476,344 @@ msgstr "valor del punto"
 msgid "case is pretest?"
 msgstr "¿Se trata de una prueba previa?"
 
-#: judge/models/profile.py:29
+#: judge/models/profile.py:30
 msgid "organization title"
 msgstr "título de la organización"
 
-#: judge/models/profile.py:30
+#: judge/models/profile.py:31
 msgid "organization slug"
 msgstr ""
 
-#: judge/models/profile.py:31
+#: judge/models/profile.py:32
 msgid "Organization name shown in URL"
 msgstr ""
 
-#: judge/models/profile.py:33
+#: judge/models/profile.py:34
 msgid "Displayed beside user name during contests"
 msgstr "Se muestra junto al nombre de usuario durante los concursos"
 
-#: judge/models/profile.py:34
+#: judge/models/profile.py:35
 msgid "organization description"
 msgstr "descripción de la organización"
 
-#: judge/models/profile.py:35
+#: judge/models/profile.py:36
 msgid "registrant"
 msgstr "registrante"
 
-#: judge/models/profile.py:36
+#: judge/models/profile.py:37
 msgid "User who registered this organization"
 msgstr "Usuario que registró esta organización"
 
-#: judge/models/profile.py:37
+#: judge/models/profile.py:38
 msgid "administrators"
 msgstr "administradores"
 
-#: judge/models/profile.py:38
+#: judge/models/profile.py:39
 msgid "Those who can edit this organization"
 msgstr "Aquellos que pueden editar esta organización"
 
-#: judge/models/profile.py:39
+#: judge/models/profile.py:40
 msgid "creation date"
 msgstr "fecha de creación"
 
-#: judge/models/profile.py:40
+#: judge/models/profile.py:41
 msgid "is open organization?"
 msgstr "¿es una organización abierta?"
 
-#: judge/models/profile.py:41
+#: judge/models/profile.py:42
 msgid "Allow joining organization"
 msgstr "Permitir la unión a la organización"
 
-#: judge/models/profile.py:42
+#: judge/models/profile.py:43
 msgid "maximum size"
 msgstr "tamaño máximo"
 
-#: judge/models/profile.py:43
+#: judge/models/profile.py:44
 msgid "Maximum amount of users in this organization, only applicable to private organizations"
 msgstr "Máxima cantidad de usuarios en esta organización, solo aplicable para organizaciones privadas"
 
-#: judge/models/profile.py:45
+#: judge/models/profile.py:46
 msgid "Student access code"
 msgstr "Código de acceso para estudiantes"
 
-#: judge/models/profile.py:49
+#: judge/models/profile.py:50
 msgid "This image will replace the default site logo for users viewing the organization."
 msgstr ""
 
-#: judge/models/profile.py:75 judge/models/profile.py:91
-#: judge/models/profile.py:190
+#: judge/models/profile.py:76 judge/models/profile.py:93
+#: judge/models/profile.py:192
 msgid "organization"
 msgstr "onganización"
 
-#: judge/models/profile.py:80
+#: judge/models/profile.py:81
 msgid "user associated"
 msgstr "usuario asociado"
 
-#: judge/models/profile.py:81
+#: judge/models/profile.py:82
 msgid "self-description"
 msgstr "descripción propia"
 
-#: judge/models/profile.py:82
+#: judge/models/profile.py:83
 msgid "location"
 msgstr "ubicación"
 
-#: judge/models/profile.py:84
+#: judge/models/profile.py:85
 msgid "preferred language"
 msgstr "idioma preferido"
 
-#: judge/models/profile.py:89
+#: judge/models/profile.py:91
 msgid "last access time"
 msgstr "último tiempo de acceso"
 
-#: judge/models/profile.py:90
+#: judge/models/profile.py:92
 msgid "last IP"
 msgstr "último IP"
 
-#: judge/models/profile.py:93
+#: judge/models/profile.py:95
 msgid "display rank"
 msgstr "mostrar rango"
 
-#: judge/models/profile.py:95
+#: judge/models/profile.py:97
 msgid "comment mute"
 msgstr "comentario en silencio"
 
-#: judge/models/profile.py:95
+#: judge/models/profile.py:97
 msgid "Some users are at their best when silent."
 msgstr "Algunos usuarios están en su mejor momento cuando están en silencio."
 
-#: judge/models/profile.py:97
+#: judge/models/profile.py:99
 msgid "unlisted user"
 msgstr ""
 
-#: judge/models/profile.py:97
+#: judge/models/profile.py:99
 msgid "User will not be ranked."
 msgstr ""
 
-#: judge/models/profile.py:100
+#: judge/models/profile.py:102
 msgid "user script"
 msgstr "scrip de usuario"
 
-#: judge/models/profile.py:101
+#: judge/models/profile.py:103
 msgid "User-defined JavaScript for site customization."
 msgstr "JavaScript definido por el usuario para la personalización del sitio."
 
-#: judge/models/profile.py:102
+#: judge/models/profile.py:104
 msgid "current contest"
 msgstr "concurso actual"
 
-#: judge/models/profile.py:104
+#: judge/models/profile.py:106
 msgid "math engine"
 msgstr "motor matemático"
 
-#: judge/models/profile.py:106
+#: judge/models/profile.py:108
 msgid "the rendering engine used to render math"
 msgstr "el motor de renderizado utilizado para representar las matemáticas"
 
-#: judge/models/profile.py:107
+#: judge/models/profile.py:109
 msgid "2FA enabled"
 msgstr ""
 
-#: judge/models/profile.py:108
+#: judge/models/profile.py:110
 msgid "check to enable TOTP-based two factor authentication"
 msgstr ""
 
-#: judge/models/profile.py:109
+#: judge/models/profile.py:111
 msgid "TOTP key"
 msgstr ""
 
-#: judge/models/profile.py:110
+#: judge/models/profile.py:112
 msgid "32 character base32-encoded key for TOTP"
 msgstr ""
 
-#: judge/models/profile.py:112
+#: judge/models/profile.py:114
 msgid "TOTP key must be empty or base32"
 msgstr ""
 
-#: judge/models/profile.py:113
+#: judge/models/profile.py:115
 msgid "internal notes"
 msgstr ""
 
-#: judge/models/profile.py:114
+#: judge/models/profile.py:116
 msgid "Notes for administrators regarding this user."
 msgstr ""
 
-#: judge/models/profile.py:184
+#: judge/models/profile.py:186
 msgid "user profile"
 msgstr "perfil del usuario"
 
-#: judge/models/profile.py:185
+#: judge/models/profile.py:187
 msgid "user profiles"
 msgstr "perfiles de usuarios"
 
-#: judge/models/profile.py:192
+#: judge/models/profile.py:194
 msgid "request time"
 msgstr "tiempo requerido"
 
-#: judge/models/profile.py:193
+#: judge/models/profile.py:195
 msgid "state"
 msgstr "estado"
 
-#: judge/models/profile.py:198
+#: judge/models/profile.py:200
 msgid "reason"
 msgstr "razón"
 
-#: judge/models/profile.py:201
+#: judge/models/profile.py:203
 msgid "organization join request"
 msgstr "solicitud para asociarse a la organización"
 
-#: judge/models/profile.py:202
+#: judge/models/profile.py:204
 msgid "organization join requests"
 msgstr "peticiones para unirse a la organización"
 
-#: judge/models/runtime.py:18
+#: judge/models/runtime.py:19
 msgid "short identifier"
 msgstr "identificador corto"
 
-#: judge/models/runtime.py:19
+#: judge/models/runtime.py:20
 msgid "The identifier for this language; the same as its executor id for judges."
 msgstr "El identificador para este idioma; lo mismo que su identificador de ejecutor para los jueces."
 
-#: judge/models/runtime.py:21
+#: judge/models/runtime.py:22
 msgid "long name"
 msgstr "nombre largo"
 
-#: judge/models/runtime.py:22
+#: judge/models/runtime.py:23
 msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
 msgstr "Un nombre más largo para el idioma, por ejemplo, \"Python 2\" o \"C ++ 11\"."
 
-#: judge/models/runtime.py:24
+#: judge/models/runtime.py:25
 msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
 msgstr "Un nombre más legible, pero corto, para mostrar públicamente; por ejemplo \"PY2\" o \"C ++ 11\". Si se deja en blanco, se mostrará de forma predeterminada el identificador corto."
 
-#: judge/models/runtime.py:28
+#: judge/models/runtime.py:29
 msgid "common name"
 msgstr "nombre común"
 
-#: judge/models/runtime.py:29
+#: judge/models/runtime.py:30
 msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
 msgstr "Nombre común del idioma. Por ejemplo, el nombre común de C++03, C++11, y C++14 seria \"C++\""
 
-#: judge/models/runtime.py:31
+#: judge/models/runtime.py:32
 msgid "ace mode name"
 msgstr "nombre del modo ace"
 
-#: judge/models/runtime.py:32
+#: judge/models/runtime.py:33
 msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
 msgstr "Identificador de idioma para destacar el editor Ace.js, anexado a \"modo-\" para determinar el archivo Ace JavaScript a usar, por ejemplo, \"python\"."
 
-#: judge/models/runtime.py:34
+#: judge/models/runtime.py:35
 msgid "pygments name"
 msgstr "nombre de pygments"
 
-#: judge/models/runtime.py:35
+#: judge/models/runtime.py:36
 msgid "Language ID for Pygments highlighting in source windows."
 msgstr "Identificador de idioma para Pygments destacado en ventanas de origen."
 
-#: judge/models/runtime.py:36
+#: judge/models/runtime.py:37
 msgid "code template"
 msgstr "plantilla de código"
 
-#: judge/models/runtime.py:37
+#: judge/models/runtime.py:38
 msgid "Code template to display in submission editor."
 msgstr "Plantilla de código para mostrar en el editor de envío."
 
-#: judge/models/runtime.py:38
+#: judge/models/runtime.py:39
 msgid "runtime info override"
 msgstr "anular información de tiempo de ejecución"
 
-#: judge/models/runtime.py:39
+#: judge/models/runtime.py:40
 msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
 msgstr "¡No configure esto a menos que sepa lo que está haciendo! ¡Anulará la información de tiempo de ejecución proporcionada por el juez, que por lo general es más específica!"
 
-#: judge/models/runtime.py:41
+#: judge/models/runtime.py:42
 msgid "language description"
 msgstr "descripción del idioma"
 
-#: judge/models/runtime.py:42
+#: judge/models/runtime.py:43
 msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
 msgstr "Use este campo para informar a los usuarios de las peculiaridades de su entorno, restricciones adicionales, etc."
 
-#: judge/models/runtime.py:44
+#: judge/models/runtime.py:45
 msgid "extension"
 msgstr "extensión"
 
-#: judge/models/runtime.py:45
+#: judge/models/runtime.py:46
 msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
 msgstr "La extensión de los archivos de código fuente, por ejemplo, \"py\" o \"cpp\"."
 
-#: judge/models/runtime.py:100
+#: judge/models/runtime.py:109
 msgid "languages"
 msgstr "idiomas"
 
-#: judge/models/runtime.py:104
+#: judge/models/runtime.py:113
 msgid "language to which this runtime belongs"
 msgstr "idioma al que pertenece este tiempo de ejecución"
 
-#: judge/models/runtime.py:105
+#: judge/models/runtime.py:114
 msgid "judge on which this runtime exists"
 msgstr "juzgar donde exista el runtime"
 
-#: judge/models/runtime.py:106
+#: judge/models/runtime.py:115
 msgid "runtime name"
 msgstr "nombre de tiempo de ejecución"
 
-#: judge/models/runtime.py:107
+#: judge/models/runtime.py:116
 msgid "runtime version"
 msgstr "versión de tiempo de ejecución"
 
-#: judge/models/runtime.py:108
+#: judge/models/runtime.py:117
 msgid "order in which to display this runtime"
 msgstr "orden en el que se muestra este tiempo de ejecución"
 
-#: judge/models/runtime.py:112
+#: judge/models/runtime.py:121
 msgid "Server name, hostname-style"
 msgstr "Nombre del servidor, nombre del host-style"
 
-#: judge/models/runtime.py:113
+#: judge/models/runtime.py:122
 msgid "time of creation"
 msgstr "fecha de creación"
 
-#: judge/models/runtime.py:114
+#: judge/models/runtime.py:123
 msgid "A key to authenticated this judge"
 msgstr "Una llave para validar este juez"
 
-#: judge/models/runtime.py:115
+#: judge/models/runtime.py:124
 msgid "authentication key"
 msgstr "llave de autentificación"
 
-#: judge/models/runtime.py:116
+#: judge/models/runtime.py:125
 msgid "block judge"
 msgstr ""
 
-#: judge/models/runtime.py:117
+#: judge/models/runtime.py:126
 msgid "Whether this judge should be blocked from connecting, even if its key is correct."
 msgstr ""
 
-#: judge/models/runtime.py:119
+#: judge/models/runtime.py:128
 msgid "judge online status"
 msgstr "estatus del juez en línea"
 
-#: judge/models/runtime.py:120
+#: judge/models/runtime.py:129
 msgid "judge start time"
 msgstr "hola de inicio del juzgado"
 
-#: judge/models/runtime.py:121
+#: judge/models/runtime.py:130
 msgid "response time"
 msgstr "tiempo de respuesta"
 
-#: judge/models/runtime.py:122
+#: judge/models/runtime.py:131
 msgid "system load"
 msgstr "carga del sistema"
 
-#: judge/models/runtime.py:123
+#: judge/models/runtime.py:132
 msgid "Load for the last minute, divided by processors to be fair."
 msgstr "Carga para el último minuto, dividido procesadores para ser justos."
 
-#: judge/models/runtime.py:127 judge/models/runtime.py:167
+#: judge/models/runtime.py:136 judge/models/runtime.py:176
 msgid "judges"
 msgstr "jueces"
 
-#: judge/models/runtime.py:166
+#: judge/models/runtime.py:175
 msgid "judge"
 msgstr "juez"
 

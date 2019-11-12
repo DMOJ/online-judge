@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-11 21:54+0000\n"
-"PO-Revision-Date: 2019-11-11 22:05\n"
+"POT-Creation-Date: 2019-11-12 18:11+0000\n"
+"PO-Revision-Date: 2019-11-12 19:04\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -213,7 +213,7 @@ msgid "Summary"
 msgstr "概要"
 
 #: judge/admin/interface.py:107 judge/models/contest.py:251
-#: judge/models/contest.py:355 judge/models/profile.py:189
+#: judge/models/contest.py:355 judge/models/profile.py:191
 msgid "user"
 msgstr "用户"
 
@@ -629,7 +629,7 @@ msgstr "竞赛名称"
 msgid "These people will be able to edit the contest."
 msgstr "这些人将可以编辑竞赛。"
 
-#: judge/models/contest.py:55 judge/models/runtime.py:124
+#: judge/models/contest.py:55 judge/models/runtime.py:133
 #: src/dmoj-wpadmin/test_project/apps/books/admin.py:20
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:13
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:27
@@ -641,7 +641,7 @@ msgid "description"
 msgstr "描述"
 
 #: judge/models/contest.py:56 judge/models/problem.py:353
-#: judge/models/runtime.py:126
+#: judge/models/runtime.py:135
 msgid "problems"
 msgstr "题目"
 
@@ -743,7 +743,7 @@ msgid "private to organizations"
 msgstr "只对组织可见"
 
 #: judge/models/contest.py:93 judge/models/problem.py:155
-#: judge/models/profile.py:76
+#: judge/models/profile.py:77
 msgid "organizations"
 msgstr "组织"
 
@@ -755,7 +755,7 @@ msgstr "选中时，只对选择的组织才可见"
 msgid "OpenGraph image"
 msgstr "OpenGraph 图像"
 
-#: judge/models/contest.py:96 judge/models/profile.py:47
+#: judge/models/contest.py:96 judge/models/profile.py:48
 msgid "Logo override image"
 msgstr ""
 
@@ -775,7 +775,7 @@ msgstr "竞赛简介"
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr "在meta description标签内显示的纯文本介绍。"
 
-#: judge/models/contest.py:104 judge/models/profile.py:46
+#: judge/models/contest.py:104 judge/models/profile.py:47
 msgid "access code"
 msgstr "访问码"
 
@@ -1144,8 +1144,8 @@ msgstr "链接"
 msgid "full name"
 msgstr "全名字"
 
-#: judge/models/problem.py:56 judge/models/profile.py:32
-#: judge/models/runtime.py:23
+#: judge/models/problem.py:56 judge/models/profile.py:33
+#: judge/models/runtime.py:24
 msgid "short name"
 msgstr "简称"
 
@@ -1298,7 +1298,7 @@ msgid "If private, only these organizations may see the problem."
 msgstr ""
 
 #: judge/models/problem.py:358 judge/models/problem.py:376
-#: judge/models/runtime.py:99
+#: judge/models/runtime.py:108
 msgid "language"
 msgstr "语言"
 
@@ -1466,344 +1466,344 @@ msgstr "分数"
 msgid "case is pretest?"
 msgstr "是否为预测试?"
 
-#: judge/models/profile.py:29
+#: judge/models/profile.py:30
 msgid "organization title"
 msgstr "组织名称"
 
-#: judge/models/profile.py:30
+#: judge/models/profile.py:31
 msgid "organization slug"
 msgstr ""
 
-#: judge/models/profile.py:31
+#: judge/models/profile.py:32
 msgid "Organization name shown in URL"
 msgstr ""
 
-#: judge/models/profile.py:33
+#: judge/models/profile.py:34
 msgid "Displayed beside user name during contests"
 msgstr "竞赛时显示在用户名旁边"
 
-#: judge/models/profile.py:34
+#: judge/models/profile.py:35
 msgid "organization description"
 msgstr "组织描述"
 
-#: judge/models/profile.py:35
+#: judge/models/profile.py:36
 msgid "registrant"
 msgstr "注册人"
 
-#: judge/models/profile.py:36
+#: judge/models/profile.py:37
 msgid "User who registered this organization"
 msgstr "注册此组织的用户"
 
-#: judge/models/profile.py:37
+#: judge/models/profile.py:38
 msgid "administrators"
 msgstr "管理员"
 
-#: judge/models/profile.py:38
+#: judge/models/profile.py:39
 msgid "Those who can edit this organization"
 msgstr "这些用户可以编辑此组织"
 
-#: judge/models/profile.py:39
+#: judge/models/profile.py:40
 msgid "creation date"
 msgstr "创建日期"
 
-#: judge/models/profile.py:40
+#: judge/models/profile.py:41
 msgid "is open organization?"
 msgstr "是开放的组织吗？"
 
-#: judge/models/profile.py:41
+#: judge/models/profile.py:42
 msgid "Allow joining organization"
 msgstr "允许加入组织"
 
-#: judge/models/profile.py:42
+#: judge/models/profile.py:43
 msgid "maximum size"
 msgstr "最大大小"
 
-#: judge/models/profile.py:43
+#: judge/models/profile.py:44
 msgid "Maximum amount of users in this organization, only applicable to private organizations"
 msgstr "这个组织用户最大数量，只适用于私人组织"
 
-#: judge/models/profile.py:45
+#: judge/models/profile.py:46
 msgid "Student access code"
 msgstr "学生访问码"
 
-#: judge/models/profile.py:49
+#: judge/models/profile.py:50
 msgid "This image will replace the default site logo for users viewing the organization."
 msgstr ""
 
-#: judge/models/profile.py:75 judge/models/profile.py:91
-#: judge/models/profile.py:190
+#: judge/models/profile.py:76 judge/models/profile.py:93
+#: judge/models/profile.py:192
 msgid "organization"
 msgstr "组织"
 
-#: judge/models/profile.py:80
+#: judge/models/profile.py:81
 msgid "user associated"
 msgstr "关联的用户"
 
-#: judge/models/profile.py:81
+#: judge/models/profile.py:82
 msgid "self-description"
 msgstr "自我描述"
 
-#: judge/models/profile.py:82
+#: judge/models/profile.py:83
 msgid "location"
 msgstr "位置"
 
-#: judge/models/profile.py:84
+#: judge/models/profile.py:85
 msgid "preferred language"
 msgstr "首选语言"
 
-#: judge/models/profile.py:89
+#: judge/models/profile.py:91
 msgid "last access time"
 msgstr "上次访问时间"
 
-#: judge/models/profile.py:90
+#: judge/models/profile.py:92
 msgid "last IP"
 msgstr "上次访问 IP"
 
-#: judge/models/profile.py:93
+#: judge/models/profile.py:95
 msgid "display rank"
 msgstr "显示排名"
 
-#: judge/models/profile.py:95
+#: judge/models/profile.py:97
 msgid "comment mute"
 msgstr "禁止评论"
 
-#: judge/models/profile.py:95
+#: judge/models/profile.py:97
 msgid "Some users are at their best when silent."
 msgstr "某些用户在沉默时表现最佳。"
 
-#: judge/models/profile.py:97
+#: judge/models/profile.py:99
 msgid "unlisted user"
 msgstr ""
 
-#: judge/models/profile.py:97
+#: judge/models/profile.py:99
 msgid "User will not be ranked."
 msgstr ""
 
-#: judge/models/profile.py:100
+#: judge/models/profile.py:102
 msgid "user script"
 msgstr "用户脚本"
 
-#: judge/models/profile.py:101
+#: judge/models/profile.py:103
 msgid "User-defined JavaScript for site customization."
 msgstr "用户自定义 JavaScript。"
 
-#: judge/models/profile.py:102
+#: judge/models/profile.py:104
 msgid "current contest"
 msgstr "当前竞赛"
 
-#: judge/models/profile.py:104
+#: judge/models/profile.py:106
 msgid "math engine"
 msgstr "数学引擎"
 
-#: judge/models/profile.py:106
+#: judge/models/profile.py:108
 msgid "the rendering engine used to render math"
 msgstr "数学渲染使用的引擎"
 
-#: judge/models/profile.py:107
+#: judge/models/profile.py:109
 msgid "2FA enabled"
 msgstr ""
 
-#: judge/models/profile.py:108
+#: judge/models/profile.py:110
 msgid "check to enable TOTP-based two factor authentication"
 msgstr ""
 
-#: judge/models/profile.py:109
+#: judge/models/profile.py:111
 msgid "TOTP key"
 msgstr ""
 
-#: judge/models/profile.py:110
+#: judge/models/profile.py:112
 msgid "32 character base32-encoded key for TOTP"
 msgstr ""
 
-#: judge/models/profile.py:112
+#: judge/models/profile.py:114
 msgid "TOTP key must be empty or base32"
 msgstr ""
 
-#: judge/models/profile.py:113
+#: judge/models/profile.py:115
 msgid "internal notes"
 msgstr ""
 
-#: judge/models/profile.py:114
+#: judge/models/profile.py:116
 msgid "Notes for administrators regarding this user."
 msgstr ""
 
-#: judge/models/profile.py:184
+#: judge/models/profile.py:186
 msgid "user profile"
 msgstr "用户信息"
 
-#: judge/models/profile.py:185
+#: judge/models/profile.py:187
 msgid "user profiles"
 msgstr "用户信息"
 
-#: judge/models/profile.py:192
+#: judge/models/profile.py:194
 msgid "request time"
 msgstr "请求时间"
 
-#: judge/models/profile.py:193
+#: judge/models/profile.py:195
 msgid "state"
 msgstr "状态"
 
-#: judge/models/profile.py:198
+#: judge/models/profile.py:200
 msgid "reason"
 msgstr "原因"
 
-#: judge/models/profile.py:201
+#: judge/models/profile.py:203
 msgid "organization join request"
 msgstr "组织加入请求"
 
-#: judge/models/profile.py:202
+#: judge/models/profile.py:204
 msgid "organization join requests"
 msgstr "组织加入请求"
 
-#: judge/models/runtime.py:18
+#: judge/models/runtime.py:19
 msgid "short identifier"
 msgstr "标识符"
 
-#: judge/models/runtime.py:19
+#: judge/models/runtime.py:20
 msgid "The identifier for this language; the same as its executor id for judges."
 msgstr "语言标识符（和裁判服务器的执行器标识符一样）"
 
-#: judge/models/runtime.py:21
+#: judge/models/runtime.py:22
 msgid "long name"
 msgstr "长名称"
 
-#: judge/models/runtime.py:22
+#: judge/models/runtime.py:23
 msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
 msgstr "语言全称，比如“Python 2”或”C++11“。"
 
-#: judge/models/runtime.py:24
+#: judge/models/runtime.py:25
 msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
 msgstr "比较好听的公开语言简称，比如“PY2”和“C++11”，如果放空则使用短标识符。"
 
-#: judge/models/runtime.py:28
+#: judge/models/runtime.py:29
 msgid "common name"
 msgstr "通用名"
 
-#: judge/models/runtime.py:29
+#: judge/models/runtime.py:30
 msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
 msgstr "语言的通用名称，例如C++03、C++11、C++14的通用名称为“C++”。"
 
-#: judge/models/runtime.py:31
+#: judge/models/runtime.py:32
 msgid "ace mode name"
 msgstr "ace 模式名称"
 
-#: judge/models/runtime.py:32
+#: judge/models/runtime.py:33
 msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
 msgstr "Ace.js编辑器高亮显示的语言标识符，加上“mode-”前缀而决定使用的JavaScript文件。"
 
-#: judge/models/runtime.py:34
+#: judge/models/runtime.py:35
 msgid "pygments name"
 msgstr "pygments 名称"
 
-#: judge/models/runtime.py:35
+#: judge/models/runtime.py:36
 msgid "Language ID for Pygments highlighting in source windows."
 msgstr "Pygments代码高亮语言标识符，在查看代码是使用。"
 
-#: judge/models/runtime.py:36
+#: judge/models/runtime.py:37
 msgid "code template"
 msgstr "代码模板"
 
-#: judge/models/runtime.py:37
+#: judge/models/runtime.py:38
 msgid "Code template to display in submission editor."
 msgstr "在提交版面中显示的代码模板"
 
-#: judge/models/runtime.py:38
+#: judge/models/runtime.py:39
 msgid "runtime info override"
 msgstr "软件信息覆盖"
 
-#: judge/models/runtime.py:39
+#: judge/models/runtime.py:40
 msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
 msgstr "除非你可以确定你手动设置地软件信息能比裁判服务器自动获取地好，不要使用该设置！"
 
-#: judge/models/runtime.py:41
+#: judge/models/runtime.py:42
 msgid "language description"
 msgstr "语言描述"
 
-#: judge/models/runtime.py:42
+#: judge/models/runtime.py:43
 msgid "Use field this to inform users of quirks with your environment, additional restrictions, etc."
 msgstr "使用本空间来表达运行环境的特性、额外限制等信息。"
 
-#: judge/models/runtime.py:44
+#: judge/models/runtime.py:45
 msgid "extension"
 msgstr "扩展"
 
-#: judge/models/runtime.py:45
+#: judge/models/runtime.py:46
 msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
 msgstr "源文件扩展名，例如：\"py\"或\"cpp\"。"
 
-#: judge/models/runtime.py:100
+#: judge/models/runtime.py:109
 msgid "languages"
 msgstr "语言"
 
-#: judge/models/runtime.py:104
+#: judge/models/runtime.py:113
 msgid "language to which this runtime belongs"
 msgstr "软件属于的语言"
 
-#: judge/models/runtime.py:105
+#: judge/models/runtime.py:114
 msgid "judge on which this runtime exists"
 msgstr "拥有次语言的裁判服务器"
 
-#: judge/models/runtime.py:106
+#: judge/models/runtime.py:115
 msgid "runtime name"
 msgstr "软件名称"
 
-#: judge/models/runtime.py:107
+#: judge/models/runtime.py:116
 msgid "runtime version"
 msgstr "软件版本"
 
-#: judge/models/runtime.py:108
+#: judge/models/runtime.py:117
 msgid "order in which to display this runtime"
 msgstr "软件显示顺序"
 
-#: judge/models/runtime.py:112
+#: judge/models/runtime.py:121
 msgid "Server name, hostname-style"
 msgstr "服务器名称"
 
-#: judge/models/runtime.py:113
+#: judge/models/runtime.py:122
 msgid "time of creation"
 msgstr "创建时间"
 
-#: judge/models/runtime.py:114
+#: judge/models/runtime.py:123
 msgid "A key to authenticated this judge"
 msgstr "裁判服务器连接密匙"
 
-#: judge/models/runtime.py:115
+#: judge/models/runtime.py:124
 msgid "authentication key"
 msgstr "连接密匙"
 
-#: judge/models/runtime.py:116
+#: judge/models/runtime.py:125
 msgid "block judge"
 msgstr ""
 
-#: judge/models/runtime.py:117
+#: judge/models/runtime.py:126
 msgid "Whether this judge should be blocked from connecting, even if its key is correct."
 msgstr ""
 
-#: judge/models/runtime.py:119
+#: judge/models/runtime.py:128
 msgid "judge online status"
 msgstr "裁判在线状态"
 
-#: judge/models/runtime.py:120
+#: judge/models/runtime.py:129
 msgid "judge start time"
 msgstr "裁判启动时间"
 
-#: judge/models/runtime.py:121
+#: judge/models/runtime.py:130
 msgid "response time"
 msgstr "响应时间"
 
-#: judge/models/runtime.py:122
+#: judge/models/runtime.py:131
 msgid "system load"
 msgstr "系统负载"
 
-#: judge/models/runtime.py:123
+#: judge/models/runtime.py:132
 msgid "Load for the last minute, divided by processors to be fair."
 msgstr "最后一分钟的系统负载（每处理器平均值）"
 
-#: judge/models/runtime.py:127 judge/models/runtime.py:167
+#: judge/models/runtime.py:136 judge/models/runtime.py:176
 msgid "judges"
 msgstr "裁判服务器"
 
-#: judge/models/runtime.py:166
+#: judge/models/runtime.py:175
 msgid "judge"
 msgstr "裁判服务器"
 
