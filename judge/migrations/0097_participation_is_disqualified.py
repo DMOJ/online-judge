@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0095_organization_logo_override'),
+        ('judge', '0096_profile_language_set_default'),
     ]
 
     operations = [
