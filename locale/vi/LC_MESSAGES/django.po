@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-12 18:11+0000\n"
-"PO-Revision-Date: 2019-11-12 19:05\n"
+"POT-Creation-Date: 2019-11-13 03:39+0000\n"
+"PO-Revision-Date: 2019-11-13 04:05\n"
 "Last-Translator: Icyene\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -75,6 +75,10 @@ msgstr "Tiếng Việt"
 #: dmoj/settings.py:351
 msgid "Simplified Chinese"
 msgstr "Tiếng Trung (Giản thể)"
+
+#: dmoj/settings.py:352
+msgid "Traditional Chinese"
+msgstr ""
 
 #: dmoj/urls.py:54
 msgid "Login"
