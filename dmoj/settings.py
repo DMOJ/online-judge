@@ -349,6 +349,7 @@ LANGUAGES = [
     ('tr', _('Turkish')),
     ('vi', _('Vietnamese')),
     ('zh-hans', _('Simplified Chinese')),
+    ('zh-hant', _('Traditional Chinese')),
 ]
 
 MARKDOWN_ADMIN_EDITABLE_STYLE = {

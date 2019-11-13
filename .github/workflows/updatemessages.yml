@@ -35,12 +35,14 @@ jobs:
             languages_mapping:
               two_letters_code:
                 zh-CN: zh_Hans
+                zh-TW: zh_Hant
                 sr-CS: sr_Latn
           - source: /locale/en/LC_MESSAGES/djangojs.po
             translation: /locale/%two_letters_code%/LC_MESSAGES/djangojs.po
             languages_mapping:
               two_letters_code:
                 zh-CN: zh_Hans
+                zh-TW: zh_Hant
                 sr-CS: sr_Latn
         EOF
         echo "api_key: ${CROWDIN_API_TOKEN}" >> crowdin.yaml
