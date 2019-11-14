@@ -132,12 +132,14 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         }
         context['search_query'] = self.search_query
 
-        tag_ids = self._get_queryset().values_list('tags', flat=True).distinct()
+        accessible_contests = Contests.contest_list(request.user)
+
+        tag_ids = accessible_contests.values_list('tags', flat=True).distinct()
         context['contest_tags'] = ContestTag.objects.filter(id__in=tag_ids)
         context['selected_tags'] = self.selected_tags
 
-        organization_names = self._get_queryset().filter(is_organization_private=True, organizations__isnull=False) \
-                                                 .values_list('organizations__short_name', flat=True).distinct()
+        organization_names = accessible_contests.filter(is_organization_private=True, organizations__isnull=False) \
+                                                .values_list('organizations__short_name', flat=True).distinct()
         context['contest_organizations'] = organization_names
         context['selected_organizations'] = self.selected_organizations
 
