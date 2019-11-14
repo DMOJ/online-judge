@@ -16,6 +16,18 @@
                     {% endfor %}
                 </select>
             </div>
+            {% if contest_organizations %}
+                <div class="filter-form-group">
+                    <label for="type"><i>{{ _('Organizations') }}</i></label>
+                    <select id="organizations" name="organization" multiple>
+                        {% for organization in contest_organizations %}
+                            <option value="{{ organization }}"{% if organization in selected_organizations %} selected{% endif %}>
+                                {{ organization }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
             <div class="filter-form-group">
                 <label for="rated-state"><i>{{ _('Rated') }}</i></label>
                 <select id="rated-state" name="rated_state">

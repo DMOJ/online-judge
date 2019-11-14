@@ -73,6 +73,8 @@
 
                 $('#tags').select2({multiple: 1, placeholder: '{{ _('Filter by tag...') }}'})
                     .css({'visibility': 'visible'});
+                $('#organizations').select2({multiple: 1, placeholder: '{{ _('Filter by organization...') }}'})
+                    .css({'visibility': 'visible'});
 
                 // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus
                 $search.keypress(function (e) {

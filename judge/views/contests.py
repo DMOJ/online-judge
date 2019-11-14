@@ -83,6 +83,9 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
             queryset = queryset.filter(Q(key__icontains=self.search_query) | Q(name__icontains=self.search_query))
         if self.selected_tags:
             queryset = queryset.filter(tags__in=self.selected_tags)
+        if self.selected_organizations:
+            queryset = queryset.filter(is_organization_private=True,
+                                       organizations__short_name__in=self.selected_organizations)
 
         if self.rated_state == 1:
             queryset = queryset.filter(is_rated=False)
@@ -133,12 +136,18 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['contest_tags'] = ContestTag.objects.filter(id__in=tag_ids)
         context['selected_tags'] = self.selected_tags
 
+        organization_names = self._get_queryset().filter(is_organization_private=True, organizations__isnull=False) \
+                                                 .values_list('organizations__short_name', flat=True).distinct()
+        context['contest_organizations'] = organization_names
+        context['selected_organizations'] = self.selected_organizations
+
         context.update(paginate_query_context(self.request))
         return context
 
     def setup_contest_list(self, request):
         self.search_query = None
         self.selected_tags = []
+        self.selected_organizations = []
         self.rated_state = safe_int_or_none(request.GET.get('rated_state'))
 
         if 'search' in request.GET:
@@ -146,6 +155,11 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         if 'tag' in request.GET:
             try:
                 self.selected_tags = list(map(int, request.GET.getlist('tag')))
+            except ValueError:
+                pass
+        if 'organization' in request.GET:
+            try:
+                self.selected_organizations = list(request.GET.getlist('organization'))
             except ValueError:
                 pass
 
