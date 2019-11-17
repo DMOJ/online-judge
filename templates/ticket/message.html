@@ -1,0 +1,18 @@
+<section id="message-{{ message.id }}" class="message">
+    <div class="info">
+        <a href="{{ url('user_page', message.user.user.username) }}" class="user">
+            <img src="{{ gravatar(message.user, 135) }}" class="gravatar">
+            <div class="username {{ message.user.css_class }}">{{ message.user.user.username }}</div>
+        </a>
+    </div>
+    <div class="detail">
+        <div class="header">
+            <div class="relative-time"></div>
+            <div class="message-date">{{ message.time|date('DATE_FORMAT') }}</div>
+            <div class="message-time">{{ message.time|time('TIME_FORMAT') }}</div>
+        </div>
+        <div class="content content-description">
+            {{ message.body|markdown('ticket', MATH_ENGINE)|reference|str|safe }}
+        </div>
+    </div>
+</section>
