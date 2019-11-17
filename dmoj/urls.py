@@ -324,6 +324,7 @@ urlpatterns = [
 
     url(r'^ticket/(?P<pk>\d+)', include([
         url(r'^$', ticket.TicketView.as_view(), name='ticket'),
+        url(r'^/ajax$', ticket.TicketMessageDataAjax.as_view(), name='ticket_message_ajax'),
         url(r'^/open$', ticket.TicketStatusChangeView.as_view(open=True), name='ticket_open'),
         url(r'^/close$', ticket.TicketStatusChangeView.as_view(open=False), name='ticket_close'),
         url(r'^/notes$', ticket.TicketNotesEditView.as_view(), name='ticket_notes'),
