@@ -149,6 +149,9 @@ class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormVi
             event.post('ticket-%d' % self.object.id, {
                 'type': 'ticket-message', 'message': message.id,
             })
+        if self.request.profile == self.object.user:
+            logger.info('New ticket message for %s by the ticket creator',
+                        self.request.build_absolute_uri(reverse('ticket', args=[self.object.id])))
         return HttpResponseRedirect('%s#message-%d' % (reverse('ticket', args=[self.object.id]), message.id))
 
     def get_title(self):
