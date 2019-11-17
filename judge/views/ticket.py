@@ -314,3 +314,23 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
                 }, truncatechars(message.body, 200)),
             },
         })
+
+
+class TicketMessageDataAjax(TicketMixin, SingleObjectMixin, View):
+    def get(self, request, *args, **kwargs):
+        try:
+            message_id = request.GET['message']
+        except KeyError:
+            return HttpResponseBadRequest()
+        ticket = self.get_object()
+        try:
+            message = ticket.messages.get(id=message_id)
+        except TicketMessage.DoesNotExist:
+            return HttpResponseBadRequest()
+        return JsonResponse({
+            'message': get_template('ticket/message.html').render({'message': message}, request),
+            'notification': {
+                'title': _('New Ticket Message For: %s') % ticket.title,
+                'body': truncatechars(message.body, 200),
+            },
+        })

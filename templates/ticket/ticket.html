@@ -258,6 +258,27 @@
                         '{{ _('Closed: ') }}') + $title.text());
             }
 
+            function ticket_message(ticket) {
+                console.log('Fetching data for: ' + ticket.message);
+                $.ajax({
+                    url: '{{ url('ticket_message_ajax', ticket.id) }}',
+                    data: {message: ticket.message},
+                    success: function (data) {
+                        console.log('Got data for: ' + ticket.message);
+                        console.log(data);
+                        $('#messages').append($(data.message));
+                    },
+                    error: function (data) {
+                        if (data.status === 403)
+                            console.log('No right to see: ' + ticket.message);
+                        else {
+                            console.log('Could not load ticket message:');
+                            console.log(data.responseText);
+                        }
+                    }
+                });
+            }
+
             window.load_dynamic_update = function (last_msg) {
                 return new EventReceiver(
                     "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
@@ -266,6 +287,9 @@
                         switch (message.type) {
                             case 'ticket-status':
                                 ticket_status(message);
+                                break;
+                            case 'ticket-message':
+                                ticket_message(message);
                                 break;
                         }
                     }
@@ -335,26 +359,9 @@
         </aside>
 
         <div class="ticket-messages">
-            <main class="messages">
+            <main id="messages" class="messages">
                 {% for message in ticket_messages %}
-                    <section id="message-{{ message.id }}" class="message">
-                        <div class="info">
-                            <a href="{{ url('user_page', message.user.user.username) }}" class="user">
-                                <img src="{{ gravatar(message.user, 135) }}" class="gravatar">
-                                <div class="username {{ message.user.css_class }}">{{ message.user.user.username }}</div>
-                            </a>
-                        </div>
-                        <div class="detail">
-                            <div class="header">
-                                <div class="relative-time"></div>
-                                <div class="message-date">{{ message.time|date('DATE_FORMAT') }}</div>
-                                <div class="message-time">{{ message.time|time('TIME_FORMAT') }}</div>
-                            </div>
-                            <div class="content content-description">
-                                {{ message.body|markdown('ticket', MATH_ENGINE)|reference|str|safe }}
-                            </div>
-                        </div>
-                    </section>
+                    {% include "ticket/message.html" %}
                 {% endfor %}
             </main>
             <hr>
