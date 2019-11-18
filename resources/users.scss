@@ -51,11 +51,11 @@ th.header.rank {
 
 #users-table {
     .realname {
-        width: 30%;
+        min-width: 175px;
     }
     
     .username {
-        width: 70%;
+        width: 100%;
     }
 
     .header {
