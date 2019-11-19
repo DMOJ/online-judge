@@ -45,6 +45,12 @@
     {% endfor %}
 {% endblock %}
 
+{% block row_extra %}
+    {% if user.participation.is_disqualified %}
+        class="disqualified"
+    {% endif %}
+{% endblock %}
+
 {% block before_point %}
     {% for cell in user.problem_cells %}
         {{ cell }}

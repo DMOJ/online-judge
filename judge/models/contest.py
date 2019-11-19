@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.db.models import CASCADE
 from django.urls import reverse
 from django.utils import timezone
@@ -13,6 +13,7 @@ from judge import contest_format
 from judge.models.problem import Problem
 from judge.models.profile import Organization, Profile
 from judge.models.submission import Submission
+from judge.ratings import rate_contest
 
 __all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission', 'Rating']
 
@@ -228,6 +229,11 @@ class Contest(models.Model):
 
         return False
 
+    def rate(self):
+        Rating.objects.filter(contest__end_time__gte=self.end_time).delete()
+        for contest in Contest.objects.filter(is_rated=True, end_time__gte=self.end_time).order_by('end_time'):
+            rate_contest(contest)
+
     class Meta:
         permissions = (
             ('see_private_contest', _('See private contests')),
@@ -252,12 +258,18 @@ class ContestParticipation(models.Model):
     real_start = models.DateTimeField(verbose_name=_('start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
+    is_disqualified = models.BooleanField(verbose_name=_('is disqualified'), default=False,
+                                          help_text=_('Whether this participation is disqualified.'))
     virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=LIVE,
-                                  help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
+                                  help_text=_('0 means non-virtual, otherwise the n-th virtual participation.'))
     format_data = JSONField(verbose_name=_('contest format specific data'), null=True, blank=True)
 
     def recompute_results(self):
-        self.contest.format.update_participation(self)
+        with transaction.atomic():
+            self.contest.format.update_participation(self)
+            if self.is_disqualified:
+                self.score = -9999
+                self.save(update_fields=['score'])
     recompute_results.alters_data = True
 
     @property
