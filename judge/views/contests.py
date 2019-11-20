@@ -21,7 +21,7 @@ from django.template.defaultfilters import date as date_filter
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.html import escape, format_html
+from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
@@ -270,7 +270,7 @@ class ContestMixin(object):
                                        _('Could not find such contest.'))
         except PrivateContestError as e:
             return render(request, 'contest/private.html', {
-                'error': e, 'title': _('Access to contest "%s" denied') % escape(e.name),
+                'error': e, 'title': _('Access to contest "%s" denied') % e.name,
             }, status=403)
 
 
@@ -698,7 +698,7 @@ def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
                                                                      .prefetch_related('user__organizations')
                                                                      .annotate(submission_count=Count('submission'))
-                                                                     .order_by('-score', 'cumtime',
+                                                                     .order_by('is_disqualified', '-score', 'cumtime',
                                                                                '-submission_count'))
 
 

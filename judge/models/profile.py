@@ -13,6 +13,7 @@ from fernet_fields import EncryptedCharField
 from sortedm2m.fields import SortedManyToManyField
 
 from judge.models.choices import ACE_THEMES, MATH_ENGINES_CHOICES, TIMEZONE
+from judge.models.runtime import Language
 from judge.ratings import rating_class
 
 __all__ = ['Organization', 'Profile', 'OrganizationRequest']
@@ -81,7 +82,8 @@ class Profile(models.Model):
     about = models.TextField(verbose_name=_('self-description'), null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name=_('location'), choices=TIMEZONE,
                                 default=settings.DEFAULT_USER_TIME_ZONE)
-    language = models.ForeignKey('Language', verbose_name=_('preferred language'), on_delete=models.CASCADE)
+    language = models.ForeignKey('Language', verbose_name=_('preferred language'), on_delete=models.SET_DEFAULT,
+                                 default=Language.get_default_language_pk)
     points = models.FloatField(default=0, db_index=True)
     performance_points = models.FloatField(default=0, db_index=True)
     problem_count = models.IntegerField(default=0, db_index=True)
