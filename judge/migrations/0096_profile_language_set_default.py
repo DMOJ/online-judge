@@ -9,7 +9,7 @@ import judge.models.runtime
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0095_organization_logo_override'),
+        ('judge', '0096_disqualified_submissions'),
     ]
 
     operations = [
