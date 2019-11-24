@@ -188,31 +188,21 @@ class ContestMixin(object):
 
     def get_object(self, queryset=None):
         contest = super(ContestMixin, self).get_object(queryset)
-        user = self.request.user
-        profile = self.request.profile
 
+        profile = self.request.profile
         if (profile is not None and
                 ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
             return contest
 
-        if not contest.is_visible and not user.has_perm('judge.see_private_contest') and (
-                not user.has_perm('judge.edit_own_contest') or
-                not self.check_organizer(contest, user)):
+        try:
+            contest.access_check(self.request.user)
+        except Contest.PrivateContest:
+            raise PrivateContestError(contest.name, contest.is_private, contest.is_organization_private,
+                                      contest.organizations.all())
+        except Contest.Inaccessible:
             raise Http404()
-
-        if contest.is_private or contest.is_organization_private:
-            private_contest_error = PrivateContestError(contest.name, contest.is_private,
-                                                        contest.is_organization_private, contest.organizations.all())
-            if profile is None:
-                raise private_contest_error
-            if user.has_perm('judge.edit_all_contest'):
-                return contest
-            if not (contest.is_organization_private and
-                    contest.organizations.filter(id__in=profile.organizations.all()).exists()) and \
-                    not (contest.is_private and contest.private_contestants.filter(id=profile.id).exists()):
-                raise private_contest_error
-
-        return contest
+        else:
+            return contest
 
     def dispatch(self, request, *args, **kwargs):
         try:
