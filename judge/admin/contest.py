@@ -1,6 +1,5 @@
-from django.conf import settings
 from django.conf.urls import url
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import connection, transaction
 from django.db.models import Q, TextField
@@ -9,7 +8,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _, ugettext, ungettext
+from django.utils.translation import gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
@@ -176,18 +175,7 @@ class ContestAdmin(VersionAdmin):
         ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
-        if not request.user.has_perm('judge.rejudge_submission'):
-            self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
-                              level=messages.ERROR)
-            return
-
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
-        if not request.user.has_perm('judge.rejudge_submission_lot') and \
-                len(queryset) > settings.DMOJ_SUBMISSIONS_REJUDGE_LIMIT:
-            self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
-                              level=messages.ERROR)
-            return
-
         for model in queryset:
             model.submission.judge(rejudge=True)
 
