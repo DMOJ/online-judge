@@ -176,18 +176,7 @@ class ContestAdmin(VersionAdmin):
         ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
-        if not request.user.has_perm('judge.rejudge_submission'):
-            self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
-                              level=messages.ERROR)
-            return
-
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
-        if not request.user.has_perm('judge.rejudge_submission_lot') and \
-                len(queryset) > settings.DMOJ_SUBMISSIONS_REJUDGE_LIMIT:
-            self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
-                              level=messages.ERROR)
-            return
-
         for model in queryset:
             model.submission.judge(rejudge=True)
 
