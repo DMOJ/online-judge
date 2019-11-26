@@ -29,7 +29,8 @@
                             outdated
                         {%- endif %}">
                         {%- for version in versions -%}
-                            {{ version.name }}&nbsp;{{ version.version }}{% if not loop.last %}<br>{% endif %}
+                            {{ version.name }}{% if version.version %}&nbsp;{{ version.version }}{% endif %}
+                            {% if not loop.last %}<br>{% endif %}
                         {%- else -%}
                             &mdash;
                         {%- endfor -%}
