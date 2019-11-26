@@ -46,6 +46,8 @@ class JudgeList(object):
 
     def register(self, judge):
         with self.lock:
+            # Disconnect all judges with the same name, see <https://github.com/DMOJ/online-judge/issues/828>
+            self.disconnect(judge, force=True)
             self.judges.add(judge)
             self._handle_free_judge(judge)
 
