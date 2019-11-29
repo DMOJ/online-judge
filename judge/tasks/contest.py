@@ -7,7 +7,22 @@ from moss import MOSS
 from judge.models import Contest, ContestMoss, ContestParticipation, Submission
 from judge.utils.celery import Progress
 
-__all__ = ('run_moss',)
+__all__ = ('rescore_contest', 'run_moss')
+
+
+@shared_task(bind=True)
+def rescore_contest(self, contest_key):
+    contest = Contest.objects.get(key=contest_key)
+    participations = contest.users
+
+    rescored = 0
+    with Progress(self, participations.count(), stage=_('Recalculating contest scores')) as p:
+        for participation in participations.iterator():
+            participation.recompute_results()
+            rescored += 1
+            if rescored % 10 == 0:
+                p.done = rescored
+    return rescored
 
 
 @shared_task(bind=True)
