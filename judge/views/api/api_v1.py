@@ -74,6 +74,7 @@ def api_v1_contest_detail(request, contest):
                 'user': participation.username,
                 'points': participation.score,
                 'cumtime': participation.cumtime,
+                'is_disqualified': participation.is_disqualified,
                 'solutions': contest.format.get_problem_breakdown(participation, problems),
             } for participation in participations],
     })
