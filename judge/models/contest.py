@@ -364,7 +364,7 @@ class ContestRegistration(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('registrant'), related_name='contest_registrations',
                              on_delete=CASCADE)
     registration_time = models.DateTimeField(verbose_name=_('time of registration'), default=timezone.now)
-    data = models.TextField(verbose_name=_('user registration data'), null=True, blank=True)
+    data = JSONField(verbose_name=_('user registration data'), null=True, blank=True)
 
     class Meta:
         verbose_name = _('contest registration')
