@@ -44,9 +44,7 @@ def api_v1_contest_detail(request, contest):
                       .annotate(username=F('user__user__username'))
                       .order_by('-score', 'cumtime') if can_see_rankings else [])
 
-    if not (in_contest or contest.ended or request.user.is_superuser or
-            (request.user.is_authenticated and contest.organizers.filter(id=request.profile.id).exists())):
-        problems = []
+    can_see_problems = (in_contest or contest.ended or contest.is_editable_by(request.user))
 
     return JsonResponse({
         'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
@@ -68,7 +66,7 @@ def api_v1_contest_detail(request, contest):
                 'partial': problem.partial,
                 'name': problem.problem.name,
                 'code': problem.problem.code,
-            } for problem in problems],
+            } for problem in problems] if can_see_problems else [],
         'rankings': [
             {
                 'user': participation.username,
