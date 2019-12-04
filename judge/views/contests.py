@@ -530,7 +530,7 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
                 'datasets': [
                     {
                         'label': name,
-                        'backgroundColor': settings.DMOJ_STATS_SUBMISSION_RESULT_COLOURS[name],
+                        'backgroundColor': settings.DMOJ_STATS_SUBMISSION_RESULT_COLORS[name],
                         'data': data,
                     }
                     for name, data in result_data.items()

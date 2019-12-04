@@ -253,7 +253,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['selected_statuses'] = self.selected_statuses
 
         context['results_json'] = mark_safe(json.dumps(self.get_result_data()))
-        context['results_colours'] = mark_safe(json.dumps(settings.DMOJ_STATS_SUBMISSION_RESULT_COLOURS))
+        context['results_colors_json'] = mark_safe(json.dumps(settings.DMOJ_STATS_SUBMISSION_RESULT_COLORS))
 
         context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
         context['first_page_href'] = (self.first_page_href or '.') + suffix
