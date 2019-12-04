@@ -9,24 +9,9 @@ from django.shortcuts import render
 from django.utils.translation import gettext as _
 
 from judge.models import Language, Submission
-
-chart_colors = [0x3366CC, 0xDC3912, 0xFF9900, 0x109618, 0x990099, 0x3B3EAC, 0x0099C6, 0xDD4477, 0x66AA00, 0xB82E2E,
-                0x316395, 0x994499, 0x22AA99, 0xAAAA11, 0x6633CC, 0xE67300, 0x8B0707, 0x329262, 0x5574A6, 0x3B3EAC]
-highlight_colors = []
+from judge.utils.stats import chart_colors, get_bar_chart, get_pie_chart, highlight_colors
 
 
-def _highlight_colors():
-    for color in chart_colors:
-        r, g, b = color >> 16, (color >> 8) & 0xFF, color & 0xFF
-        highlight_colors.append('#%02X%02X%02X' % (min(int(r * 1.2), 255),
-                                                   min(int(g * 1.2), 255),
-                                                   min(int(b * 1.2), 255)))
-
-
-_highlight_colors()
-del _highlight_colors
-
-chart_colors = list(map('#%06X'.__mod__, chart_colors))
 ac_count = Count(Case(When(submission__result='AC', then=Value(1)), output_field=IntegerField()))
 
 
@@ -65,39 +50,16 @@ def status_data(request, statuses=None):
         if not res:
             continue
         count = status['count']
-        data.append({
-            'count': count, 'result': str(Submission.USER_DISPLAY_CODES[res]),
-        })
+        data.append((str(Submission.USER_DISPLAY_CODES[res]), count))
 
-    return JsonResponse({
-        'labels': list(map(itemgetter('result'), data)),
-        'datasets': [
-            {
-                'backgroundColor': chart_colors,
-                'highlightBackgroundColor': highlight_colors,
-                'data': list(map(itemgetter('count'), data)),
-            },
-        ],
-    }, safe=False)
+    return JsonResponse(get_pie_chart(data), safe=False)
 
 
 def ac_rate(request):
     rate = CombinedExpression(ac_count / Count('submission'), '*', Value(100.0), output_field=FloatField())
     data = Language.objects.annotate(total=Count('submission'), ac_rate=rate).filter(total__gt=0) \
-        .values('key', 'name', 'ac_rate').order_by('total')
-    return JsonResponse({
-        'labels': list(map(itemgetter('name'), data)),
-        'datasets': [
-            {
-                'backgroundColor': 'rgba(151,187,205,0.5)',
-                'borderColor': 'rgba(151,187,205,0.8)',
-                'borderWidth': 1,
-                'hoverBackgroundColor': 'rgba(151,187,205,0.75)',
-                'hoverBorderColor': 'rgba(151,187,205,1)',
-                'data': list(map(itemgetter('ac_rate'), data)),
-            },
-        ],
-    })
+        .order_by('total').values_list('name', 'ac_rate')
+    return JsonResponse(get_bar_chart(list(data)))
 
 
 def language(request):

@@ -25,7 +25,7 @@
 
     <h3>{{ _('Language AC Rate') }}</h3>
     <div id="ac-rate" class="chart">
-        <canvas width="400"><canvas>
+        <canvas><canvas>
     </div>
 {% endblock %}
 
@@ -37,52 +37,18 @@
                     Chart.defaults.global.tooltipTitleFontFamily =
                         $('body').css('font-family');
 
-            function draw_pie_chart(url, $chart) {
+            function pie_chart(url, $chart) {
                 $.getJSON(url, function (data) {
-                    var ctx = $chart.find('canvas').get(0).getContext('2d');
-                    var chart = new Chart(ctx, {
-                        type: 'pie',
-                        data: data,
-                        options: {
-                            maintainAspectRatio: false,
-                            responsive: false,
-                            animation: false,
-                            legend: {
-                                position: 'right',
-                                labels: {
-                                    fontColor: 'black',
-                                    boxWidth: 20,
-                                },
-                            },
-                        }
-                    });
+                    draw_pie_chart(data, $chart);
                 });
             }
 
-            draw_pie_chart('{{ url('language_stats_data_all') }}', $('#lang-all'));
-            draw_pie_chart('{{ url('language_stats_data_ac') }}', $('#lang-ac'));
-            draw_pie_chart('{{ url('stats_data_status') }}', $('#status-counts'));
+            pie_chart('{{ url('language_stats_data_all') }}', $('#lang-all'));
+            pie_chart('{{ url('language_stats_data_ac') }}', $('#lang-ac'));
+            pie_chart('{{ url('stats_data_status') }}', $('#status-counts'));
 
             $.getJSON('{{ url('language_stats_data_ac_rate') }}', function (data) {
-                var ctx = $('#ac-rate').find('canvas').get(0).getContext('2d');
-                ctx.canvas.height = 20 * data.labels.length + 100;
-                new Chart(ctx, {
-                    type: 'horizontalBar',
-                    data: data,
-                    options: {
-                        maintainAspectRatio: false,
-                        legend: {
-                            display: false,
-                        },
-                        tooltips: {
-                            callbacks: {
-                                label: function(tooltipItem, data) {
-                                    return (Math.round(tooltipItem.value * 100) / 100) + '%';
-                                },
-                            },
-                        },
-                    },
-                });
+                draw_bar_chart(data, $('#ac-rate'));
             });
         });
     </script>
