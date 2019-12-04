@@ -12,4 +12,7 @@ class LanguageList(TitleMixin, ListView):
     title = gettext_lazy('Runtimes')
 
     def get_queryset(self):
-        return super(LanguageList, self).get_queryset().prefetch_related('runtimeversion_set')
+        queryset = super().get_queryset().prefetch_related('runtimeversion_set')
+        if not self.request.user.is_superuser and not self.request.user.is_staff:
+            queryset = queryset.filter(judges__online=True).distinct()
+        return queryset

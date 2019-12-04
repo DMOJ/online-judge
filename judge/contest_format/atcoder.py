@@ -80,6 +80,8 @@ class AtCoderContestFormat(DefaultContestFormat):
                     else:
                         # We should always display the penalty, even if the user has a score of 0
                         prev = subs.count()
+                else:
+                    prev = 0
 
                 if score:
                     cumtime = max(cumtime, dt)
