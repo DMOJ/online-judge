@@ -22,6 +22,7 @@
 
     function draw_bar_chart(data, $chart) {
         var ctx = $chart.find('canvas')[0].getContext('2d');
+        ctx.canvas.height = 20 * data.labels.length + 100;
         var chart = new Chart(ctx, {
             type: 'horizontalBar',
             data: data,
@@ -43,6 +44,7 @@
 
     function draw_stacked_bar_chart(data, $chart) {
         var ctx = $chart.find('canvas')[0].getContext('2d');
+        ctx.canvas.height = 20 * data.labels.length + 100;
         var chart = new Chart(ctx, {
             type: 'horizontalBar',
             data: data,
