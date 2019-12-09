@@ -499,7 +499,7 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if not self.object.ended:
+        if not (self.object.ended or self.object.is_editable_by(self.request.user)):
             raise Http404()
 
         queryset = Submission.objects.filter(contest_object=self.object)
