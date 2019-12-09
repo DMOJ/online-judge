@@ -322,8 +322,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 raise ContestAccessDenied()
 
             while True:
-                virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
-                              .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1
+                virtual_id = max((ContestParticipation.objects.filter(contest=contest, user=profile)
+                                  .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1, 1)
                 try:
                     participation = ContestParticipation.objects.create(
                         contest=contest, user=profile, virtual=virtual_id,
