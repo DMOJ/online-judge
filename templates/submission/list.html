@@ -87,13 +87,7 @@
             // Draw the statistics graph.
             var chart = null;
             function stats_graph(raw_data) {
-                var colors = {
-                    TLE: '#a3bcbd',
-                    AC: '#00a92a',
-                    WA: '#ed4420',
-                    CE: '#42586d',
-                    ERR: '#ffa71c',
-                };
+                var colors = {{ results_colors_json }};
 
                 var ctx = $('#status-graph').find('canvas')[0].getContext('2d');
                 var font = $('body').css('font-family');

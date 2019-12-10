@@ -2,7 +2,7 @@
 
 {% block js_media %}
     {% compress js %}
-        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.js') }}"></script>
+        {% include "stats/media-js.html" %}
     {% endcompress %}
 {% endblock %}
 

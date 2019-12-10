@@ -1,6 +1,7 @@
 import json
 from operator import attrgetter
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist, PermissionDenied
@@ -252,6 +253,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['selected_statuses'] = self.selected_statuses
 
         context['results_json'] = mark_safe(json.dumps(self.get_result_data()))
+        context['results_colors_json'] = mark_safe(json.dumps(settings.DMOJ_STATS_SUBMISSION_RESULT_COLORS))
 
         context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
         context['first_page_href'] = (self.first_page_href or '.') + suffix
