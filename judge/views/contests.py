@@ -35,11 +35,11 @@ from judge.models import Contest, ContestMoss, ContestParticipation, ContestProb
     ContestTag, Problem, Profile, Submission
 from judge.tasks import run_moss
 from judge.utils.celery import redirect_to_task_status
-from judge.utils.chart import get_bar_chart, get_pie_chart
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import _get_result_data
 from judge.utils.ranker import ranker
 from judge.utils.strings import safe_int_or_none
+from judge.utils.stats import get_bar_chart, get_pie_chart
 from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMixin, generic_message, \
     paginate_query_context
 
@@ -426,8 +426,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 raise ContestAccessDenied()
 
             while True:
-                virtual_id = (ContestParticipation.objects.filter(contest=contest, user=profile)
-                              .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1
+                virtual_id = max((ContestParticipation.objects.filter(contest=contest, user=profile)
+                                  .aggregate(virtual_id=Max('virtual'))['virtual_id'] or 0) + 1, 1)
                 try:
                     participation = ContestParticipation.objects.create(
                         contest=contest, user=profile, virtual=virtual_id,
@@ -599,15 +599,14 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if not self.object.ended or not self.object.can_see_full_scoreboard(self.request.user):
+        if not ((self.object.ended and self.object.can_see_full_scoreboard(self.request.user)) or
+                self.object.is_editable_by(self.request.user)):
             raise Http404()
 
         queryset = Submission.objects.filter(contest_object=self.object)
 
         ac_count = Count(Case(When(result='AC', then=Value(1)), output_field=IntegerField()))
         ac_rate = CombinedExpression(ac_count / Count('problem'), '*', Value(100.0), output_field=FloatField())
-
-        stats = {}
 
         status_count_queryset = list(
             queryset.values('problem__code', 'result').annotate(count=Count('result'))
@@ -621,42 +620,36 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
         for problem_code, result, count in status_count_queryset:
             status_counts[codes.index(problem_code)].append((result, count))
 
-        colors = {
-            'AC': '#00a92a',
-            'WA': '#ed4420',
-            'CE': '#42586d',
-            'TLE': '#a3bcbd',
-            'ERR': '#ffa71c',
-        }
-        categories = list(colors.keys())
-        result_data = {category: [0] * num_problems for category in categories}
+        result_data = defaultdict(partial(list, [0] * num_problems))
         for i in range(num_problems):
             for category in _get_result_data(defaultdict(int, status_counts[i]))['categories']:
                 result_data[category['code']][i] = category['count']
 
-        stats['problem_status_count'] = {
-            'labels': labels,
-            'datasets': [
-                {
-                    'label': name,
-                    'backgroundColor': colors[name],
-                    'data': data,
-                }
-                for name, data in result_data.items()
-            ],
+        stats = {
+            'problem_status_count': {
+                'labels': labels,
+                'datasets': [
+                    {
+                        'label': name,
+                        'backgroundColor': settings.DMOJ_STATS_SUBMISSION_RESULT_COLORS[name],
+                        'data': data,
+                    }
+                    for name, data in result_data.items()
+                ],
+            },
+            'problem_ac_rate': get_bar_chart(
+                queryset.values('contest__problem__order', 'problem__name').annotate(ac_rate=ac_rate)
+                        .order_by('contest__problem__order').values_list('problem__name', 'ac_rate'),
+            ),
+            'language_count': get_pie_chart(
+                queryset.values('language__name').annotate(count=Count('language__name'))
+                        .filter(count__gt=0).order_by('-count').values_list('language__name', 'count'),
+            ),
+            'language_ac_rate': get_bar_chart(
+                queryset.values('language__name').annotate(ac_rate=ac_rate)
+                        .filter(ac_rate__gt=0).values_list('language__name', 'ac_rate'),
+            ),
         }
-        stats['problem_ac_rate'] = get_bar_chart(
-            queryset.values('contest__problem__order', 'problem__name').annotate(ac_rate=ac_rate)
-                    .order_by('contest__problem__order').values_list('problem__name', 'ac_rate'),
-        )
-        stats['language_count'] = get_pie_chart(
-            queryset.values('language__name').annotate(count=Count('language__name'))
-                    .filter(count__gt=0).order_by('-count').values_list('language__name', 'count'),
-        )
-        stats['language_ac_rate'] = get_bar_chart(
-            queryset.values('language__name').annotate(ac_rate=ac_rate)
-                    .filter(ac_rate__gt=0).values_list('language__name', 'ac_rate'),
-        )
 
         context['stats'] = mark_safe(json.dumps(stats))
 

@@ -558,13 +558,11 @@ def problem_submit(request, problem=None, submission=None):
     if request.method == 'POST':
         form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
         if form.is_valid():
-            submission_count = Submission.objects.filter(user=profile, was_rejudged=False) \
-                                                 .exclude(status__in=['D', 'IE', 'CE', 'AB']).count()
+            limit = 1 if profile.is_external_user else settings.DMOJ_SUBMISSION_LIMIT
 
-            exceeded_limit = (profile.is_external_user and submission_count > 0) or \
-                             (not profile.is_external_user and submission_count > 2)
-
-            if not request.user.has_perm('judge.spam_submission') and exceeded_limit:
+            if (not request.user.has_perm('judge.spam_submission') and
+                    Submission.objects.filter(user=profile, was_rejudged=False)
+                              .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() >= limit):
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
             if not form.cleaned_data['problem'].allowed_languages.filter(
                     id=form.cleaned_data['language'].id).exists():

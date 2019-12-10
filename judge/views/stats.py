@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext as _
 
 from judge.models import Language, Submission
-from judge.utils.chart import chart_colors, highlight_colors
+from judge.utils.stats import chart_colors, get_bar_chart, get_pie_chart, highlight_colors
 
 
 ac_count = Count(Case(When(submission__result='AC', then=Value(1)), output_field=IntegerField()))
@@ -50,39 +50,16 @@ def status_data(request, statuses=None):
         if not res:
             continue
         count = status['count']
-        data.append({
-            'count': count, 'result': str(Submission.USER_DISPLAY_CODES[res]),
-        })
+        data.append((str(Submission.USER_DISPLAY_CODES[res]), count))
 
-    return JsonResponse({
-        'labels': list(map(itemgetter('result'), data)),
-        'datasets': [
-            {
-                'backgroundColor': chart_colors,
-                'highlightBackgroundColor': highlight_colors,
-                'data': list(map(itemgetter('count'), data)),
-            },
-        ],
-    }, safe=False)
+    return JsonResponse(get_pie_chart(data), safe=False)
 
 
 def ac_rate(request):
     rate = CombinedExpression(ac_count / Count('submission'), '*', Value(100.0), output_field=FloatField())
     data = Language.objects.annotate(total=Count('submission'), ac_rate=rate).filter(total__gt=0) \
-        .values('key', 'name', 'ac_rate').order_by('total')
-    return JsonResponse({
-        'labels': list(map(itemgetter('name'), data)),
-        'datasets': [
-            {
-                'backgroundColor': 'rgba(151,187,205,0.5)',
-                'borderColor': 'rgba(151,187,205,0.8)',
-                'borderWidth': 1,
-                'hoverBackgroundColor': 'rgba(151,187,205,0.75)',
-                'hoverBorderColor': 'rgba(151,187,205,1)',
-                'data': list(map(itemgetter('ac_rate'), data)),
-            },
-        ],
-    })
+        .order_by('total').values_list('name', 'ac_rate')
+    return JsonResponse(get_bar_chart(list(data)))
 
 
 def language(request):

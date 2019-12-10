@@ -90,7 +90,9 @@ class TOTPDisableView(TOTPView):
     template_name = 'registration/totp_disable.html'
 
     def check_skip(self):
-        return not self.profile.is_totp_enabled
+        if not self.profile.is_totp_enabled:
+            return True
+        return settings.DMOJ_REQUIRE_STAFF_2FA and self.request.user.is_staff
 
     def form_valid(self, form):
         self.profile.is_totp_enabled = False

@@ -34,6 +34,7 @@ SITE_NAME = 'DMOJ'
 SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
 SITE_ADMIN_EMAIL = False
 
+DMOJ_REQUIRE_STAFF_2FA = True
 
 # Set to 1 to use HTTPS if request was made to https://
 # Set to 2 to always use HTTPS for links
@@ -65,6 +66,8 @@ DMOJ_RATING_COLORS = False
 DMOJ_EMAIL_THROTTLING = (10, 60)
 DMOJ_STATS_LANGUAGE_THRESHOLD = 10
 DMOJ_SUBMISSIONS_REJUDGE_LIMIT = 10
+# Maximum number of submissions a single user can queue without the `spam_submission` permission
+DMOJ_SUBMISSION_LIMIT = 2
 DMOJ_BLOG_NEW_PROBLEM_COUNT = 7
 DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT = 7
 DMOJ_TOTP_TOLERANCE_HALF_MINUTES = 1
@@ -72,6 +75,13 @@ DMOJ_USER_MAX_ORGANIZATION_COUNT = 3
 DMOJ_COMMENT_VOTE_HIDE_THRESHOLD = -5
 DMOJ_PDF_PROBLEM_CACHE = ''
 DMOJ_PDF_PROBLEM_TEMP_DIR = tempfile.gettempdir()
+DMOJ_STATS_SUBMISSION_RESULT_COLORS = {
+    'TLE': '#a3bcbd',
+    'AC': '#00a92a',
+    'WA': '#ed4420',
+    'CE': '#42586d',
+    'ERR': '#ffa71c',
+}
 
 MARKDOWN_STYLES = {}
 MARKDOWN_DEFAULT_STYLE = {}

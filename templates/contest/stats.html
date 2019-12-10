@@ -13,78 +13,13 @@
         window.stats = {{ stats }};
     </script>
     {% compress js %}
-        <script type="text/javascript" src="{{ static('libs/chart.js/Chart.js') }}"></script>
+        {% include "stats/media-js.html" %}
         <script type="text/javascript">
             $(function () {
-                function draw_pie_chart(data, $chart) {
-                    var ctx = $chart.find('canvas')[0].getContext('2d');
-                    var chart = new Chart(ctx, {
-                        type: 'pie',
-                        data: data,
-                        options: {
-                            maintainAspectRatio: false,
-                            responsive: false,
-                            animation: false,
-                            legend: {
-                                position: 'right',
-                                labels: {
-                                    fontColor: 'black',
-                                    boxWidth: 20,
-                                },
-                            },
-                        },
-                    });
-                }
-
-                function draw_bar_chart(data, $chart) {
-                    var ctx = $chart.find('canvas')[0].getContext('2d');
-                    var chart = new Chart(ctx, {
-                        type: 'horizontalBar',
-                        data: data,
-                        options: {
-                            maintainAspectRatio: false,
-                            legend: {
-                                display: false,
-                            },
-                            tooltips: {
-                                callbacks: {
-                                    label: function(tooltipItem, data) {
-                                        return (Math.round(tooltipItem.value * 100) / 100) + '%';
-                                    },
-                                },
-                            },
-                        },
-                    });
-                }
-
-                function draw_stacked_bar_chart(data, $chart) {
-                    var ctx = $chart.find('canvas')[0].getContext('2d');
-                    var chart = new Chart(ctx, {
-                        type: 'horizontalBar',
-                        data: data,
-                        options: {
-                            maintainAspectRatio: false,
-                            tooltips: {
-                                mode: 'index',
-                                intersect: false,
-                            },
-                            scales: {
-                                xAxes: [{
-                                    stacked: true,
-                                }],
-                                yAxes: [{
-                                    stacked: true,
-                                }],
-                            },
-                        },
-                    });
-                }
-
-
-                draw_stacked_bar_chart(window.stats.problem_status_count, $('#problem-status-count'))
-                draw_bar_chart(window.stats.problem_ac_rate, $('#problem-ac-rate'))
-                draw_pie_chart(window.stats.language_count, $('#language-count'))
-                draw_bar_chart(window.stats.language_ac_rate, $('#language-ac-rate'))
+                draw_stacked_bar_chart(window.stats.problem_status_count, $('#problem-status-count'));
+                draw_bar_chart(window.stats.problem_ac_rate, $('#problem-ac-rate'));
+                draw_pie_chart(window.stats.language_count, $('#language-count'));
+                draw_bar_chart(window.stats.language_ac_rate, $('#language-ac-rate'));
             });
         </script>
     {% endcompress %}
@@ -102,7 +37,7 @@
 {% block body %}
     <h3>{{ _('Problem Status Distribution') }}</h3>
     <div id="problem-status-count" class="chart">
-        <canvas height="300"></canvas>
+        <canvas></canvas>
     </div>
 
     <h3>{{ _('Problem AC Rate') }}</h3>
@@ -118,6 +53,6 @@
 
     <h3>{{ _('Language AC Rate') }}</h3>
     <div id="language-ac-rate" class="chart">
-        <canvas width="400"></canvas>
+        <canvas></canvas>
     </div>
 {% endblock %}
