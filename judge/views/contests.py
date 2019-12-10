@@ -517,7 +517,8 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
         num_problems = len(labels)
         status_counts = [[] for i in range(num_problems)]
         for problem_code, result, count in status_count_queryset:
-            status_counts[codes.index(problem_code)].append((result, count))
+            if problem_code in codes:
+                status_counts[codes.index(problem_code)].append((result, count))
 
         result_data = defaultdict(partial(list, [0] * num_problems))
         for i in range(num_problems):
