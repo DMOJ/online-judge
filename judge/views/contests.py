@@ -38,8 +38,8 @@ from judge.utils.celery import redirect_to_task_status
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import _get_result_data
 from judge.utils.ranker import ranker
-from judge.utils.strings import safe_int_or_none
 from judge.utils.stats import get_bar_chart, get_pie_chart
+from judge.utils.strings import safe_int_or_none
 from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMixin, generic_message, \
     paginate_query_context
 
