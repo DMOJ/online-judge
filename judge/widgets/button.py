@@ -5,8 +5,7 @@ from django.utils.safestring import mark_safe
 
 class GenerateKeyTextInputButton(TextInput):
     def __init__(self, *args, **kwargs):
-        self.charset = kwargs.pop("charset", "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\
-                                              0123456789`~!@#$%^&*()_+-=|[]{};:,<>./")
+        self.charset = kwargs.pop("charset", "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{};:,<>./")  # noqa: E501
         self.length = kwargs.pop("length", 100)
         super(TextInput, self).__init__(*args, **kwargs)
 
