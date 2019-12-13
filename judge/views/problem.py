@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.db.utils import ProgrammingError
-from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
 from django.urls import reverse
@@ -582,6 +582,9 @@ def problem_submit(request, problem=None, submission=None):
             form_data = form.cleaned_data
             if submission is not None:
                 sub = get_object_or_404(Submission, id=int(submission))
+
+            if 'problem' not in form_data:
+                return HttpResponseBadRequest()
     else:
         initial = {'language': profile.language}
         if problem is not None:
