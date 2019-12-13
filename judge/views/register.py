@@ -25,9 +25,11 @@ class CustomRegistrationForm(RegistrationForm):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label=_('Username'),
                                 error_messages={'invalid': _('A username must contain letters, '
                                                              'numbers, or underscores')})
-    first_name = forms.RegexField(regex=r'^[a-zA-Z]+$', max_length=30, required=True, label=_('First name'),
+    first_name = forms.RegexField(regex=r'^[a-zA-Z]+$', min_length=2, max_length=30, required=True,
+                                  label=_('First name'),
                                   error_messages={'invalid': _('Your first name must contain only letters.')})
-    last_name = forms.RegexField(regex=r'^[a-zA-Z]+$', max_length=30, required=True, label=_('Last name'),
+    last_name = forms.RegexField(regex=r'^[a-zA-Z]+$', min_length=2, max_length=30, required=True,
+                                 label=_('Last name'),
                                  error_messages={'invalid': _('Your last name must contain only letters.')})
     timezone = ChoiceField(label=_('Timezone'), choices=TIMEZONE,
                            widget=Select2Widget(attrs={'style': 'width:100%'}))
@@ -75,8 +77,8 @@ class RegistrationView(OldRegistrationView):
         })
 
         cleaned_data = form.cleaned_data
-        user.first_name = cleaned_data['first_name']
-        user.last_name = cleaned_data['last_name']
+        user.first_name = cleaned_data['first_name'].capitalize()
+        user.last_name = cleaned_data['last_name'].capitalize()
         user.save()
         profile.timezone = cleaned_data['timezone']
         profile.language = cleaned_data['language']
