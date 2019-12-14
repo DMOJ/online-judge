@@ -219,6 +219,8 @@ urlpatterns = [
         url(r'^/participations$', contests.ContestParticipationList.as_view(), name='contest_participation_own'),
         url(r'^/participations/(?P<user>\w+)$',
             contests.ContestParticipationList.as_view(), name='contest_participation'),
+        url(r'^/participation/disqualify$', contests.ContestParticipationDisqualify.as_view(),
+            name='contest_participation_disqualify'),
 
         url(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))),
     ])),

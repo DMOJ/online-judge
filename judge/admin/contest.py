@@ -246,15 +246,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         if form.changed_data and 'is_disqualified' in form.changed_data:
-            obj.recompute_results()
-            if obj.contest.is_rated and obj.contest.ratings.exists():
-                obj.contest.rate()
-            if obj.is_disqualified:
-                if obj.user.current_contest == obj.contest:
-                    obj.user.remove_contest()
-                obj.contest.banned_users.add(obj.user)
-            else:
-                obj.contest.banned_users.remove(obj.user)
+            obj.set_disqualified(obj.is_disqualified)
 
     def recalculate_results(self, request, queryset):
         count = 0

@@ -272,6 +272,19 @@ class ContestParticipation(models.Model):
                 self.save(update_fields=['score'])
     recompute_results.alters_data = True
 
+    def set_disqualified(self, disqualified):
+        self.is_disqualified = disqualified
+        self.recompute_results()
+        if self.contest.is_rated and self.contest.ratings.exists():
+            self.contest.rate()
+        if self.is_disqualified:
+            if self.user.current_contest == self:
+                self.user.remove_contest()
+            self.contest.banned_users.add(self.user)
+        else:
+            self.contest.banned_users.remove(self.user)
+    set_disqualified.alters_data = True
+
     @property
     def live(self):
         return self.virtual == self.LIVE
