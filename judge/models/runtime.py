@@ -40,7 +40,7 @@ class Language(models.Model):
                             help_text=_("Do not set this unless you know what you're doing! It will override the "
                                         "usually more specific, judge-provided runtime info!"))
     description = models.TextField(verbose_name=_('language description'),
-                                   help_text=_('Use field this to inform users of quirks with your environment, '
+                                   help_text=_('Use this field to inform users of quirks with your environment, '
                                                'additional restrictions, etc.'), blank=True)
     extension = models.CharField(max_length=10, verbose_name=_('extension'),
                                  help_text=_('The extension of source files, e.g., "py" or "cpp".'))
@@ -120,7 +120,7 @@ class RuntimeVersion(models.Model):
 class Judge(models.Model):
     name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('time of creation'))
-    auth_key = models.CharField(max_length=100, help_text=_('A key to authenticated this judge'),
+    auth_key = models.CharField(max_length=100, help_text=_('A key to authenticate this judge'),
                                 verbose_name=_('authentication key'))
     is_blocked = models.BooleanField(verbose_name=_('block judge'), default=False,
                                      help_text=_('Whether this judge should be blocked from connecting, '
