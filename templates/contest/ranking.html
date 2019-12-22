@@ -25,7 +25,7 @@
             display: block;
         }
 
-        .userinfo a {
+        .userinfo a, .user-name a, .user-name form {
             display: inline !important;
         }
 
@@ -165,6 +165,22 @@
 {% endblock %}
 
 {% block users_js_media %}
+    {% if is_organizer %}
+        <script type="text/javascript">
+            $(function () {
+                $('a.disqualify-participation').click(function (e) {
+                    e.preventDefault();
+                    if (e.ctrlKey || e.metaKey || confirm("{{ _('Are you sure you want to disqualify this participation?') }}"))
+                        $(this).closest('form').submit();
+                })
+                $('a.un-disqualify-participation').click(function (e) {
+                    e.preventDefault();
+                    if (e.ctrlKey || e.metaKey || confirm("{{ _('Are you sure you want to un-disqualify this participation?') }}"))
+                        $(this).closest('form').submit();
+                })
+            });
+        </script>
+    {% endif %}
     {% if perms.judge.change_contestparticipation %}
         <script type="text/javascript">
             $(function () {

@@ -199,3 +199,17 @@ form.contest-join-pseudotab {
         font-weight: 600;
     }
 }
+
+.contest-participation-operation {
+    float: right;
+
+    .fa {
+        color: #444;
+    }
+
+    a + a {
+        padding-left: 1px;
+    }
+
+    padding: 0 5px;
+}
