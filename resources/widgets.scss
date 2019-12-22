@@ -206,6 +206,7 @@ input {
         list-style: outside none none;
         display: flex;
         overflow-x: auto;
+        overflow-y: hidden;
 
         > li {
             margin-bottom: -1px;
