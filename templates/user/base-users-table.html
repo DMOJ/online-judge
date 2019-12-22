@@ -23,9 +23,8 @@
     <tr id="user-{{ user.user.username }}" {% block row_extra scoped %}{% endblock %}>
         <td>{{ rank }}</td>
         {% block after_rank scoped %}{% endblock %}
-        <td class="user-name">{{ link_user(user) }}</td>
+        <td class="user-name">{{ link_user(user) }} {% block user_data scoped %}{% endblock %}</td>
         {% block after_username scoped %}{% endblock %}
-        {% block user_data scoped %}{% endblock %}
         {% if perms.judge.view_name %}
             <td class="real-name">
                 {{ user.user.get_full_name() }}
