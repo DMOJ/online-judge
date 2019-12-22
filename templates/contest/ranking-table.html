@@ -21,18 +21,24 @@
 {% endblock %}
 
 {% block user_data %}
-    {% if not contest.ended %}
-        {% if user.participation and not user.participation.ended %}
-            <div class="start-time active">
-                {{ relative_time(user.participation.start, abs=_('Started on {time}'), rel=_('Started {time}')) }}
-            </div>
-        {% else %}
-            <div class="start-time">{{ _('Participation ended.') }}</div>
-        {% endif %}
-    {% endif %}
-    {% if perms.judge.change_contestparticipation %}
-        <div data-link="{{ url('admin:judge_contestparticipation_change', user.participation.id) }}"
-             class="edit-participation"></div>
+    {% if is_organizer %}
+        <span class="contest-participation-operation">
+            <form action="{{ url('contest_participation_disqualify', contest.key) }}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="participation" value="{{ user.participation.id }}">
+                {% if user.participation.is_disqualified %}
+                    <a href="#" title="{{ _('Un-Disqualify') }}"
+                       class="un-disqualify-participation"><i class="fa fa-undo fa-fw"></i></a>
+                {% else %}
+                    <a href="#" title="{{ _('Disqualify') }}"
+                       class="disqualify-participation"><i class="fa fa-trash fa-fw"></i></a>
+                {% endif %}
+            </form>
+            {% if perms.judge.change_contestparticipation %}
+                <a href="{{ url('admin:judge_contestparticipation_change', user.participation.id) }}"
+                   title="{{ _('Admin') }}" class="edit-participation"><i class="fa fa-cog fa-fw"></i></a>
+            {% endif %}
+        </span>
     {% endif %}
 {% endblock %}
 

@@ -45,7 +45,8 @@ from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMix
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'ContestClone', 'ContestStats', 'ContestMossView', 'ContestMossDelete', 'contest_ranking_ajax',
-           'ContestParticipationList', 'get_contest_ranking_list', 'base_contest_ranking_list']
+           'ContestParticipationList', 'ContestParticipationDisqualify', 'get_contest_ranking_list',
+           'base_contest_ranking_list']
 
 
 def _find_contest(request, key, private_check=True):
@@ -188,12 +189,10 @@ class ContestMixin(object):
     def is_organizer(self):
         return self.check_organizer()
 
-    def check_organizer(self, contest=None, profile=None):
-        if profile is None:
-            if not self.request.user.is_authenticated:
-                return False
-            profile = self.request.profile
-        return (contest or self.object).organizers.filter(id=profile.id).exists()
+    def check_organizer(self, contest=None, user=None):
+        if user is None:
+            user = self.request.user
+        return (contest or self.object).is_editable_by(user)
 
     def get_context_data(self, **kwargs):
         context = super(ContestMixin, self).get_context_data(**kwargs)
@@ -239,6 +238,11 @@ class ContestMixin(object):
         if (profile is not None and
                 ContestParticipation.objects.filter(id=profile.current_contest_id, contest_id=contest.id).exists()):
             return contest
+
+        if not contest.is_visible and not user.has_perm('judge.see_private_contest') and (
+                not user.has_perm('judge.edit_own_contest') or
+                not self.check_organizer(contest, user)):
+            raise Http404()
 
         if contest.is_private or contest.is_organization_private:
             private_contest_error = PrivateContestError(contest.name, contest.is_private,
@@ -618,7 +622,8 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
         num_problems = len(labels)
         status_counts = [[] for i in range(num_problems)]
         for problem_code, result, count in status_count_queryset:
-            status_counts[codes.index(problem_code)].append((result, count))
+            if problem_code in codes:
+                status_counts[codes.index(problem_code)].append((result, count))
 
         result_data = defaultdict(partial(list, [0] * num_problems))
         for i in range(num_problems):
@@ -816,6 +821,25 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         else:
             self.profile = self.request.profile
         return super().get(request, *args, **kwargs)
+
+
+class ContestParticipationDisqualify(ContestMixin, SingleObjectMixin, View):
+    def get_object(self, queryset=None):
+        contest = super().get_object(queryset)
+        if not contest.is_editable_by(self.request.user):
+            raise Http404()
+        return contest
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        try:
+            participation = self.object.users.get(pk=request.POST.get('participation'))
+        except ObjectDoesNotExist:
+            pass
+        else:
+            participation.set_disqualified(not participation.is_disqualified)
+        return HttpResponseRedirect(reverse('contest_ranking', args=(self.object.key,)))
 
 
 class ContestMossMixin(ContestMixin, PermissionRequiredMixin):
