@@ -13,6 +13,7 @@ class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         if 'current_contest' in self.base_fields:
+            # form.fields['current_contest'] does not exist when the user has only view permission on the model.
             self.fields['current_contest'].queryset = self.instance.contest_history.select_related('contest') \
                 .only('contest__name', 'user_id', 'virtual')
             self.fields['current_contest'].label_from_instance = \
@@ -112,5 +113,6 @@ class ProfileAdmin(VersionAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(ProfileAdmin, self).get_form(request, obj, **kwargs)
         if 'user_script' in form.base_fields:
+            # form.base_fields['user_script'] does not exist when the user has only view permission on the model.
             form.base_fields['user_script'].widget = AceWidget('javascript', request.profile.ace_theme)
         return form
