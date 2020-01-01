@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
@@ -11,7 +12,8 @@ class Command(BaseCommand):
         parser.add_argument('name', help='username')
         parser.add_argument('email', help='email, not necessary to be resolvable')
         parser.add_argument('password', help='password for the user')
-        parser.add_argument('language', nargs='?', default='PY2', help='default language ID for user')
+        parser.add_argument('language', nargs='?', default=settings.DEFAULT_USER_LANGUAGE,
+                            help='default language ID for user')
 
         parser.add_argument('--superuser', action='store_true', default=False,
                             help="if specified, creates user with superuser privileges")
