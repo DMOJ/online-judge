@@ -49,7 +49,7 @@ def get_contest_problem(problem, profile):
 
 def get_contest_submission_count(problem, profile, virtual):
     return profile.current_contest.submissions.exclude(submission__status__in=['IE']) \
-                  .filter(problem__problem__code=problem).filter(participation__virtual=virtual).count()
+                  .filter(problem__problem__code=problem, participation__virtual=virtual).count()
 
 
 class ProblemMixin(object):
