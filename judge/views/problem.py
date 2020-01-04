@@ -47,12 +47,9 @@ def get_contest_problem(problem, profile):
         return None
 
 
-def get_contest_submission_count(problem, profile, virtual=None):
-    queryset = profile.current_contest.submissions.exclude(submission__status__in=['IE']) \
-                      .filter(problem__problem__code=problem)
-    if virtual is not None:
-        queryset.filter(participation__virtual=virtual)
-    return queryset.count()
+def get_contest_submission_count(problem, profile, virtual):
+    return profile.current_contest.submissions.exclude(submission__status__in=['IE']) \
+                  .filter(problem__problem__code=problem).filter(participation__virtual=virtual).count()
 
 
 class ProblemMixin(object):
