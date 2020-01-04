@@ -47,9 +47,12 @@ def get_contest_problem(problem, profile):
         return None
 
 
-def get_contest_submission_count(problem, profile):
-    return profile.current_contest.submissions.exclude(submission__status__in=['IE'])\
-                  .filter(problem__problem__code=problem).count()
+def get_contest_submission_count(problem, profile, virtual=None):
+    queryset = profile.current_contest.submissions.exclude(submission__status__in=['IE']) \
+                      .filter(problem__problem__code=problem)
+    if virtual is not None:
+        queryset.filter(participation__virtual=virtual)
+    return queryset.count()
 
 
 class ProblemMixin(object):
@@ -177,7 +180,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['submission_limit'] = contest_problem.max_submissions
             if contest_problem.max_submissions:
                 context['submissions_left'] = max(contest_problem.max_submissions -
-                                                  get_contest_submission_count(self.object.code, user.profile), 0)
+                                                  get_contest_submission_count(self.object.code, user.profile,
+                                                                               user.profile.current_contest.virtual), 0)
 
         context['available_judges'] = Judge.objects.filter(online=True, problems=self.object)
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
