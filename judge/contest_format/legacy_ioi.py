@@ -89,6 +89,6 @@ class LegacyIOIContestFormat(DefaultContestFormat):
             '<td class="user-points"><a href="{url}">{points}<div class="solving-time">{cumtime}</div></a></td>',
             url=reverse('contest_all_user_submissions',
                         args=[self.contest.key, participation.user.user.username]),
-            points=floatformat(participation.score),
+            points=floatformat(participation.score, -self.contest.points_precision),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday') if self.config['cumtime'] else '',
         )
