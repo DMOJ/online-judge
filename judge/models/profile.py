@@ -157,7 +157,7 @@ class Profile(models.Model):
 
     def update_contest(self):
         contest = self.current_contest
-        if contest is not None and contest.ended:
+        if contest is not None and (contest.ended or not contest.contest.is_accessible_by(self.user)):
             self.remove_contest()
 
     update_contest.alters_data = True
