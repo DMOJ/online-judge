@@ -757,8 +757,6 @@ class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
         context['users'] = users
         context['problems'] = problems
         context['last_msg'] = event.last()
-        if not self.request.user.is_authenticated or self.request.profile.is_external_user:
-            context['last_msg'] = None
         context['tab'] = self.tab
         return context
 
