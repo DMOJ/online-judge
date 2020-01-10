@@ -322,6 +322,7 @@ class Contest(models.Model):
                 if user.is_authenticated and not user.profile.is_external_user:
                     return True
 
+        # User can edit the contest
         return self.is_editable_by(user)
 
     def is_editable_by(self, user):

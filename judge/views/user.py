@@ -99,7 +99,6 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context['hide_solved'] = int(self.hide_solved)
         context['authored'] = self.object.authored_problems.filter(is_public=True, is_organization_private=False) \
                                   .order_by('code')
-
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
 
