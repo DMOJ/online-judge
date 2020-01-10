@@ -557,7 +557,8 @@ def problem_submit(request, problem=None, submission=None):
                         model = form.save()
                     else:
                         max_subs = contest_problem.max_submissions
-                        if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
+                        if max_subs and get_contest_submission_count(problem, profile,
+                                                                     profile.current_contest.virtual) >= max_subs:
                             return generic_message(request, _('Too many submissions'),
                                                    _('You have exceeded the submission limit for this problem.'))
                         model = form.save()
@@ -625,7 +626,8 @@ def problem_submit(request, problem=None, submission=None):
             pass
         else:
             if submission_limit:
-                submissions_left = submission_limit - get_contest_submission_count(problem, profile)
+                submissions_left = submission_limit - get_contest_submission_count(problem, profile,
+                                                                                   profile.current_contest.virtual)
     return render(request, 'problem/submit.html', {
         'form': form,
         'title': _('Submit to %(problem)s') % {
