@@ -118,9 +118,6 @@ class OrganizationUsers(OrganizationDetailView):
 
 class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
-        if request.profile.is_external_user:
-            raise Http404()
-
         org = self.get_object()
         response = self.handle(request, org, request.profile)
         if response is not None:
