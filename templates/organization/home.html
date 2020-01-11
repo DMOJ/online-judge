@@ -90,7 +90,7 @@
             <div class="blog-sidebox sidebox">
                 <h3>{{ _('Controls') }} <i class="fa fa-cog"></i></h3>
                 <div class="sidebox-content" style="padding: 1em;">
-                    {% if request.user.is_authenticated and not request.profile.is_external_user %}
+                    {% if request.user.is_authenticated %}
                         {% if is_member %}
                             <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
                                 {% csrf_token %}
