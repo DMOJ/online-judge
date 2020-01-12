@@ -47,9 +47,9 @@ def get_contest_problem(problem, profile):
         return None
 
 
-def get_contest_submission_count(problem, profile):
-    return profile.current_contest.submissions.exclude(submission__status__in=['IE'])\
-                  .filter(problem__problem__code=problem).count()
+def get_contest_submission_count(problem, profile, virtual):
+    return profile.current_contest.submissions.exclude(submission__status__in=['IE']) \
+                  .filter(problem__problem__code=problem, participation__virtual=virtual).count()
 
 
 class ProblemMixin(object):
@@ -181,7 +181,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['submission_limit'] = contest_problem.max_submissions
             if contest_problem.max_submissions:
                 context['submissions_left'] = max(contest_problem.max_submissions -
-                                                  get_contest_submission_count(self.object.code, user.profile), 0)
+                                                  get_contest_submission_count(self.object.code, user.profile,
+                                                                               user.profile.current_contest.virtual), 0)
 
         context['available_judges'] = Judge.objects.filter(online=True, problems=self.object)
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
@@ -586,7 +587,8 @@ def problem_submit(request, problem=None, submission=None):
                         model = form.save()
                     else:
                         max_subs = contest_problem.max_submissions
-                        if max_subs and get_contest_submission_count(problem, profile) >= max_subs:
+                        if max_subs and get_contest_submission_count(problem, profile,
+                                                                     profile.current_contest.virtual) >= max_subs:
                             return generic_message(request, _('Too many submissions'),
                                                    _('You have exceeded the submission limit for this problem.'))
                         model = form.save()
@@ -654,7 +656,8 @@ def problem_submit(request, problem=None, submission=None):
             pass
         else:
             if submission_limit:
-                submissions_left = submission_limit - get_contest_submission_count(problem, profile)
+                submissions_left = submission_limit - get_contest_submission_count(problem, profile,
+                                                                                   profile.current_contest.virtual)
     return render(request, 'problem/submit.html', {
         'form': form,
         'title': _('Submit to %(problem)s') % {
