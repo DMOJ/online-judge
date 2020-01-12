@@ -97,17 +97,22 @@ class AtCoderContestFormat(DefaultContestFormat):
     def display_user_problem(self, participation, contest_problem):
         format_data = (participation.format_data or {}).get(str(contest_problem.id))
         if format_data:
-            penalty = format_html('<small style="color:red"> ({penalty})</small>',
-                                  penalty=floatformat(format_data['penalty'])) if format_data['penalty'] else ''
-            return format_html(
-                '<td class="{state}"><a href="{url}">{points}{penalty}<div class="solving-time">{time}</div></a></td>',
-                state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                       self.best_solution_state(format_data['points'], contest_problem.points)),
-                url=reverse('contest_user_submissions',
-                            args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
-                points=floatformat(format_data['points']),
-                penalty=penalty,
-                time=nice_repr(timedelta(seconds=format_data['time']), 'noday'),
-            )
+            try:
+                penalty = format_html('<small style="color:red"> ({penalty})</small>',
+                                      penalty=floatformat(format_data['penalty'])) if format_data['penalty'] else ''
+                return format_html(
+                    '<td class="{state}"><a href="{url}">{points}{penalty}'
+                    '<div class="solving-time">{time}</div></a></td>',
+                    state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
+                           self.best_solution_state(format_data['points'], contest_problem.points)),
+                    url=reverse('contest_user_submissions',
+                                args=[self.contest.key, participation.user.user.username,
+                                      contest_problem.problem.code]),
+                    points=floatformat(format_data['points']),
+                    penalty=penalty,
+                    time=nice_repr(timedelta(seconds=format_data['time']), 'noday'),
+                )
+            except (KeyError, TypeError, ValueError):
+                return mark_safe('<td>???</td>')
         else:
             return mark_safe('<td></td>')
