@@ -729,6 +729,7 @@ def contest_ranking_ajax(request, contest, participation=None):
     return render(request, 'contest/ranking-table.html', {
         'users': users,
         'problems': problems,
+        'is_organizer': contest.is_editable_by(request.user),
         'contest': contest,
         'has_rating': contest.ratings.exists(),
     })
