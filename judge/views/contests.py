@@ -565,6 +565,14 @@ BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pre
 
 
 def make_contest_ranking_profile(contest, participation, contest_problems):
+    def display_user_problem(contest_problem):
+        # When the contest format is changed, `format_data` might be invalid.
+        # This will cause `display_user_problem` to error, so we display '???' instead.
+        try:
+            return contest.format.display_user_problem(participation, contest_problem)
+        except (KeyError, TypeError, ValueError):
+            return mark_safe('<td>???</td>')
+
     user = participation.user
     return ContestRankingProfile(
         id=user.id,
@@ -575,8 +583,7 @@ def make_contest_ranking_profile(contest, participation, contest_problems):
         cumtime=participation.cumtime,
         organization=user.organization,
         participation_rating=participation.rating.rating if hasattr(participation, 'rating') else None,
-        problem_cells=[contest.format.display_user_problem(participation, contest_problem)
-                       for contest_problem in contest_problems],
+        problem_cells=[display_user_problem(contest_problem) for contest_problem in contest_problems],
         result_cell=contest.format.display_participation_result(participation),
         participation=participation,
     )
