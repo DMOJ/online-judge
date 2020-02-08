@@ -140,7 +140,9 @@ class ContestMixin(object):
     def check_organizer(self, contest=None, user=None):
         if user is None:
             user = self.request.user
-        return (contest or self.object).is_editable_by(user)
+        if not user.is_authenticated:
+            return False
+        return (contest or self.object).organizers.filter(id=user.profile.id).exists()
 
     def get_context_data(self, **kwargs):
         context = super(ContestMixin, self).get_context_data(**kwargs)
