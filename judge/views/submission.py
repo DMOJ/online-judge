@@ -201,10 +201,11 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         else:
             queryset = queryset.select_related('contest_object').defer('contest_object__description')
 
-            # This is not technically correct since contest organizers *should* see these, but
-            # the join would be far too messy
             if not self.request.user.has_perm('judge.see_private_contest'):
-                queryset = queryset.exclude(contest_object_id__in=Contest.objects.filter(hide_scoreboard=True))
+                # Show submissions for any contest you can edit or visible scoreboard
+                contest_queryset = Contest.objects.filter(Q(organizers=self.request.profile) |
+                                                          Q(hide_scoreboard=False))
+                queryset = queryset.filter(contest_object_id__in=contest_queryset)
 
         if self.selected_languages:
             queryset = queryset.filter(language_id__in=Language.objects.filter(key__in=self.selected_languages))
