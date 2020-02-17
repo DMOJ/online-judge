@@ -3,6 +3,7 @@ from operator import attrgetter
 from django.db.models import F, Prefetch
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from dmoj import settings
 from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Submission
@@ -171,3 +172,24 @@ def api_v1_user_submissions(request, user):
         'status': sub['status'],
         'result': sub['result'],
     } for sub in subs.values('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')})
+
+
+def api_v1_user_ratings(request, page):
+    queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'rating')
+    paginator = Paginator(queryset, 1000)
+    
+    try:
+        page = paginator.page(int(page))
+    except (PageNotAnInteger, EmptyPage):
+        return JsonResponse({'error': "page not found"}, status=422)
+    except (KeyError, ValueError):
+        return JsonResponse({'error': "invalid page number"}, status=422)
+    
+    return JsonResponse({
+        'pages': paginator.num_pages,
+        'users': {
+            username: {
+                'rating': rating,
+            } for username, rating in page
+        }
+    })
