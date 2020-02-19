@@ -55,13 +55,12 @@ jobs:
         git checkout .
         git clean -fd
     - name: Create pull request
-      uses: peter-evans/create-pull-request@v1.4.1-multi
-      env:
-        GITHUB_TOKEN: ${{ secrets.REPO_SCOPED_TOKEN }}
-        COMMIT_MESSAGE: 'i18n: update translations from Crowdin'
-        PULL_REQUEST_TITLE: 'Update translations from Crowdin'
-        PULL_REQUEST_BODY: This PR has been auto-generated to pull in latest translations from [Crowdin](https://translate.dmoj.ca).
-        PULL_REQUEST_LABELS: i18n, enhancement
-        PULL_REQUEST_REVIEWERS: Xyene, quantum5
-        PULL_REQUEST_BRANCH: update-i18n
-        BRANCH_SUFFIX: none
+      uses: peter-evans/create-pull-request@v2
+      with:
+        token: ${{ secrets.REPO_SCOPED_TOKEN }}
+        commit-message: 'i18n: update translations from Crowdin'
+        title: 'Update translations from Crowdin'
+        body: This PR has been auto-generated to pull in latest translations from [Crowdin](https://translate.dmoj.ca).
+        labels: i18n, enhancement
+        assignees: Xyene, quantum5
+        branch: update-i18n
