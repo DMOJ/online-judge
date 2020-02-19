@@ -175,8 +175,8 @@ def api_v1_user_submissions(request, user):
 
 
 def api_v1_user_ratings(request, page):
-    queryset = Profile.objects.filter(is_unlisted=False).values_list('user__username', 'rating')
-    paginator = Paginator(queryset, 1000)
+    queryset = Profile.objects.filter(is_unlisted=False, user__is_active=True).values_list('user__username', 'rating')
+    paginator = Paginator(queryset, settings.DMOJ_API_PAGE_SIZE)
 
     try:
         page = paginator.page(int(page))
