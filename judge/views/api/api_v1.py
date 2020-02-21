@@ -181,9 +181,9 @@ def api_v1_user_ratings(request, page):
     try:
         page = paginator.page(int(page))
     except (PageNotAnInteger, EmptyPage):
-        return JsonResponse({'error': "page not found"}, status=422)
+        return JsonResponse({'error': 'page not found'}, status=422)
     except (KeyError, ValueError):
-        return JsonResponse({'error': "invalid page number"}, status=422)
+        return JsonResponse({'error': 'invalid page number'}, status=422)
 
     return JsonResponse({
         'pages': paginator.num_pages,
