@@ -2,6 +2,7 @@ from operator import attrgetter
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import F, Prefetch
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -204,6 +205,27 @@ def api_v1_user_submissions(request, username):
         'status': sub['status'],
         'result': sub['result'],
     } for sub in subs.values('id', 'problem__code', 'time', 'memory', 'points', 'language__key', 'status', 'result')})
+
+
+def api_v1_user_ratings(request, page):
+    queryset = Profile.objects.filter(is_unlisted=False, user__is_active=True).values_list('user__username', 'rating')
+    paginator = Paginator(queryset, settings.DMOJ_API_PAGE_SIZE)
+
+    try:
+        page = paginator.page(int(page))
+    except (PageNotAnInteger, EmptyPage):
+        return JsonResponse({'error': 'page not found'}, status=422)
+    except (KeyError, ValueError):
+        return JsonResponse({'error': 'invalid page number'}, status=422)
+
+    return JsonResponse({
+        'pages': paginator.num_pages,
+        'users': {
+            username: {
+                'rating': rating,
+            } for username, rating in page
+        },
+    })
 
 
 def api_v1_submission_list(request):
