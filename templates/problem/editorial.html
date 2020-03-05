@@ -23,7 +23,14 @@
         {% endif %}
         {% with authors=solution.authors.all() %}
             {% if authors %}
-                <p>Authors: {{ link_users(authors) }}</p>
+                <p>
+                    {% trans trimmed count=authors|length %}
+                        Author: 
+                    {% pluralize %}
+                        Authors: 
+                    {% endtrans %}
+                    {{ link_users(authors) }}
+                </p>
             {% endif %}
         {% endwith %}
         {{ solution.content|markdown('solution', MATH_ENGINE)|reference|str|safe }}
