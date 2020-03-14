@@ -10,6 +10,7 @@ from django.utils.translation import gettext_lazy
 
 from judge.contest_format.default import DefaultContestFormat
 from judge.contest_format.registry import register_contest_format
+from judge.models import SubmissionTestCase
 from judge.timezone import from_database_time
 from judge.utils.timedelta import nice_repr
 
@@ -122,5 +123,6 @@ class ECOOContestFormat(DefaultContestFormat):
         )
 
     def get_submission_count(self, participation, contest_problem):
-        return participation.submissions.exclude(submission__status__in=('IE', 'CE'))\
-                            .filter(problem=contest_problem, passed_samples=True).count()
+        return participation.submissions.exclude(submission__status__in=('IE', 'CE'),
+                                                 failed_on=SubmissionTestCase.KIND_SAMPLE) \
+                            .filter(problem=contest_problem).count()

@@ -193,7 +193,7 @@ class DjangoJudgeHandler(JudgeHandler):
         points = 0.0
         total = 0
         status = 0
-        passed_samples = True
+        failed_on = None
         status_codes = ['SC', 'AC', 'WA', 'MLE', 'TLE', 'IR', 'RTE', 'OLE']
         batches = {}  # batch number: (points, total)
 
@@ -212,8 +212,8 @@ class DjangoJudgeHandler(JudgeHandler):
             i = status_codes.index(case.status)
             if i > status:
                 status = i
-            if case.kind == SubmissionTestCase.KIND_SAMPLE and case.status != 'AC':
-                passed_samples = False
+            if case.status != 'AC' and failed_on is None:
+                failed_on = case.kind
 
         for i in batches:
             points += batches[i][0]
@@ -234,7 +234,7 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.memory = memory
         submission.points = sub_points
         submission.result = status_codes[status]
-        submission.passed_samples = passed_samples
+        submission.failed_on = failed_on
         submission.save()
 
         json_log.info(self._make_json_log(
