@@ -41,10 +41,8 @@
                     {%- endif -%}
                     {%- if batch.id -%}
                         <b>{{ _('Case') }} #{{ loop.index }}:</b>
-                    {%- elif is_pretest -%}
-                        <b>{{ _('Pretest') }} #{{ test_case_id() }}:</b>
                     {%- else -%}
-                        <b>{{ _('Test case') }} #{{ test_case_id() }}:</b>
+                        <b>{{ case.get_kind_display }} #{{ test_case_id() }}:</b>
                     {%- endif -%}
                 </td>
 

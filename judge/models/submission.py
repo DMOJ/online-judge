@@ -199,7 +199,7 @@ class SubmissionTestCase(models.Model):
     KIND_PRETEST = 'pretest'
     KIND_SAMPLE = 'sample'
     KINDS = (
-        (KIND_NORMAL, _('Normal')),
+        (KIND_NORMAL, _('Test case')),
         (KIND_PRETEST, _('Pretest')),
         (KIND_SAMPLE, _('Sample')),
     )
