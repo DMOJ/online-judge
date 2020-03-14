@@ -72,6 +72,7 @@ class Submission(models.Model):
     result = models.CharField(verbose_name=_('result'), max_length=3, choices=SUBMISSION_RESULT,
                               default=None, null=True, blank=True, db_index=True)
     error = models.TextField(verbose_name=_('compile errors'), null=True, blank=True)
+    passed_samples = models.BooleanField(verbose_name=_('passed sample cases'), default=False)
     current_testcase = models.IntegerField(default=0)
     batch = models.BooleanField(verbose_name=_('batched cases'), default=False)
     case_points = models.FloatField(verbose_name=_('test case points'), default=0)
@@ -194,9 +195,19 @@ class SubmissionSource(models.Model):
 class SubmissionTestCase(models.Model):
     RESULT = SUBMISSION_RESULT
 
+    KIND_NORMAL = 'normal'
+    KIND_PRETEST = 'pretest'
+    KIND_SAMPLE = 'sample'
+    KINDS = (
+        (KIND_NORMAL, _('Normal')),
+        (KIND_PRETEST, _('Pretest')),
+        (KIND_SAMPLE, _('Sample')),
+    )
+
     submission = models.ForeignKey(Submission, verbose_name=_('associated submission'),
                                    related_name='test_cases', on_delete=models.CASCADE)
     case = models.IntegerField(verbose_name=_('test case ID'))
+    kind = models.CharField(max_length=20, verbose_name=_('test case kind'), choices=KINDS)
     status = models.CharField(max_length=3, verbose_name=_('status flag'), choices=SUBMISSION_RESULT)
     time = models.FloatField(verbose_name=_('execution time'), null=True)
     memory = models.FloatField(verbose_name=_('memory usage'), null=True)
