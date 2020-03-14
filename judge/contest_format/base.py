@@ -82,6 +82,17 @@ class BaseContestFormat(six.with_metaclass(ABCMeta)):
         """
         raise NotImplementedError()
 
+    @abstractmethod
+    def get_submission_count(self, participation, contest_problem):
+        """
+        Returns the number of submissions made by the user for an individual problem.
+
+        :param participation: The ContestParticipation object.
+        :param contest_problem: The ContestProblem object representing the problem in question.
+        :return An integer, the number of submissions made.
+        """
+        raise NotImplementedError()
+
     @classmethod
     def best_solution_state(cls, points, total):
         if not points:

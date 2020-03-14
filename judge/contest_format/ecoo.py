@@ -120,3 +120,7 @@ class ECOOContestFormat(DefaultContestFormat):
             points=floatformat(participation.score),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday') if self.config['cumtime'] else '',
         )
+
+    def get_submission_count(self, participation, contest_problem):
+        return participation.submissions.exclude(submission__status__in=('IE', 'CE'))\
+                            .filter(problem=contest_problem, passed_samples=True).count()

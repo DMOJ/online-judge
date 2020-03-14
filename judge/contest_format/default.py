@@ -68,3 +68,7 @@ class DefaultContestFormat(BaseContestFormat):
 
     def get_problem_breakdown(self, participation, contest_problems):
         return [(participation.format_data or {}).get(str(contest_problem.id)) for contest_problem in contest_problems]
+
+    def get_submission_count(self, participation, contest_problem):
+        return participation.submissions.exclude(submission__status__in=('IE',)) \
+                            .filter(problem=contest_problem).count()
