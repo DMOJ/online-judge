@@ -115,7 +115,7 @@ def markdown(value, style, math_engine=None, lazy_load=False):
     escape = styles.get('safe_mode', True)
     nofollow = styles.get('nofollow', True)
     texoid = TEXOID_ENABLED and styles.get('texoid', False)
-    math = hasattr(settings, 'MATHOID_URL') and styles.get('math', False)
+    math = getattr(settings, 'MATHOID_URL') and styles.get('math', False)
 
     post_processors = []
     if styles.get('use_camo', False) and camo_client is not None:
