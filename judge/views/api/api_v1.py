@@ -1,13 +1,12 @@
 from operator import attrgetter
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import F, Prefetch
+from django.db.models import F, OuterRef, Prefetch, Subquery
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
-from django.db.models import OuterRef, Subquery
 
 from dmoj import settings
-from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Submission, Rating
+from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Rating, Submission
 
 
 def sane_time_repr(delta):
