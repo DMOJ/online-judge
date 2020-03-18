@@ -1,5 +1,7 @@
+import re
+
 from django.conf import settings
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import Resolver404, resolve, reverse
 from django.utils.http import urlquote
 
@@ -72,8 +74,14 @@ class APIMiddleware(object):
     def __call__(self, request):
         full_token = request.META.get('HTTP_AUTHORIZATION', None)
         if full_token:
-            token = full_token.split()[-1]
-            request.user = Profile.objects.get(api_token=token).user
+            if re.search(settings.DMOJ_API_HEADER_PATTERN, full_token):
+                token = full_token.split()[-1]
+                try:
+                    request.user = Profile.objects.get(api_token=token).user
+                except Profile.DoesNotExist:
+                    return HttpResponse('Invalid token', status=401)
+            else:
+                return HttpResponse('Invalid authorization header', status=400)
 
         response = self.get_response(request)
         return response
