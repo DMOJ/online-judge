@@ -68,9 +68,9 @@ class Contest(models.Model):
                                           help_text=_('Whether the scoreboard should remain hidden for the duration '
                                                       'of the contest.'),
                                           default=False)
-    see_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('See Contest Scoreboard'), blank=True,
-                                                    related_name='see_contest_scoreboard',
-                                                    help_text=_('These users will be able to view the scoreboard.'))
+    view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
+                                                     related_name='view_contest_scoreboard',
+                                                     help_text=_('These users will be able to view the scoreboard.'))
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -142,7 +142,7 @@ class Contest(models.Model):
             return True
         if user.is_authenticated and self.organizers.filter(id=user.profile.id).exists():
             return True
-        if self.see_contest_scoreboard.filter(id=user.profile.id).exists():
+        if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
         if not self.is_visible:
             return False
@@ -214,7 +214,7 @@ class Contest(models.Model):
                 # User is in the group of private contestants
                 if self.private_contestants.filter(id=user.profile.id).exists():
                     return True
-                if self.see_contest_scoreboard.filter(id=user.profile.id).exists():
+                if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
                     return True
 
         # If the user can view all contests

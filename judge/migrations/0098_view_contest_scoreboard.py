@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='contest',
-            name='see_contest_scoreboard',
-            field=models.ManyToManyField(blank=True, help_text='These users will be able to view the scoreboard.', related_name='see_contest_scoreboard', to='judge.Profile', verbose_name='See Contest Scoreboard'),
+            name='view_contest_scoreboard',
+            field=models.ManyToManyField(blank=True, help_text='These users will be able to view the scoreboard.', related_name='view_contest_scoreboard', to='judge.Profile', verbose_name='view contest scoreboard'),
         ),
     ]
