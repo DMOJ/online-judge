@@ -273,6 +273,16 @@ def generate_api_token(request):
         else:
             revisions.set_comment(_('Generated API token for user'))
 
+@require_POST
+@login_required
+def remove_api_token(request):
+    profile = Profile.objects.get(user=request.user)
+    with transaction.atomic(), revisions.create_revision():
+        profile.api_token = ''
+        profile.save()
+        revisions.set_user(request.user)
+        revisions.set_comment(_('Removed API token for user'))
+
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
