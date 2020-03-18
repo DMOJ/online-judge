@@ -261,8 +261,6 @@ def edit_profile(request):
 @login_required
 def generate_api_token(request):
     profile = Profile.objects.get(user=request.user)
-    if profile.mute:
-        raise Http404()
     with transaction.atomic(), revision.create_revision():
         regenerated = not profile.api_token
         profile.api_token = pyotp.random_base32(length=32).lower()
