@@ -259,6 +259,7 @@ def edit_profile(request):
         'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',
     })
 
+
 @require_POST
 @login_required
 def generate_api_token(request):
@@ -272,6 +273,7 @@ def generate_api_token(request):
             revisions.set_comment(_('Regenerated API token for user'))
         else:
             revisions.set_comment(_('Generated API token for user'))
+
 
 @require_POST
 @login_required
