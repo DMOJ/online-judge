@@ -1,5 +1,6 @@
 import itertools
 import json
+import pyotp
 from datetime import datetime
 from operator import itemgetter
 
@@ -19,6 +20,7 @@ from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
@@ -261,7 +263,7 @@ def edit_profile(request):
 @login_required
 def generate_api_token(request):
     profile = Profile.objects.get(user=request.user)
-    with transaction.atomic(), revision.create_revision():
+    with transaction.atomic(), revisions.create_revision():
         regenerated = not profile.api_token
         profile.api_token = pyotp.random_base32(length=32).lower()
         profile.save()
