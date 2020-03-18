@@ -112,6 +112,10 @@ class Profile(models.Model):
                                       help_text=_('32 character base32-encoded key for TOTP'),
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                  _('TOTP key must be empty or base32'))])
+    api_token = EncryptedNullCharField(max_length=32, null=True, blank=True, verbose_name=_('API token'),
+                                       help_text=_('32 character base32-encoded API access token'),
+                                       validators=[RegexValidator('^$|^[a-z2-9]{32}$',
+                                                                  _('API token must be empty or base32')
     notes = models.TextField(verbose_name=_('internal notes'), null=True, blank=True,
                              help_text=_('Notes for administrators regarding this user.'))
 
