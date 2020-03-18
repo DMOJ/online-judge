@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from django.urls import Resolver404, resolve, reverse
 from django.utils.http import urlquote
 
+from judge.models import Profile
+
 
 class ShortCircuitMiddleware:
     def __init__(self, get_response):
@@ -61,3 +63,17 @@ class ContestMiddleware(object):
             request.in_contest = False
             request.participation = None
         return self.get_response(request)
+
+
+class APIMiddleware(object):
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        full_token = request.META.get('HTTP_AUTHORIZATION', None)
+        if full_token:
+            token = full_token.split()[-1]
+            request.user = Profile.objects.get(api_token=token).user
+
+        response = self.get_response(request)
+        return response
