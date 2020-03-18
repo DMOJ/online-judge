@@ -257,6 +257,22 @@ def edit_profile(request):
         'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',
     })
 
+@require_POST
+@login_required
+def generate_api_token(request):
+    profile = Profile.objects.get(user=request.user)
+    if profile.mute:
+        raise Http404()
+    with transaction.atomic(), revision.create_revision():
+        regenerated = not profile.api_token
+        profile.api_token = pyotp.random_base32(length=32).lower()
+        profile.save()
+        revisions.set_user(request.user)
+        if regenerated:
+            revisions.set_comment(_('Regenerated API token for user'))
+        else:
+            revisions.set_comment(_('Generated API token for user'))
+
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
