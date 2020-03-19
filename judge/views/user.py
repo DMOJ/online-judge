@@ -12,7 +12,7 @@ from django.contrib.auth.views import redirect_to_login
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 from django.db.models import Count, Max, Min
-from django.http import Http404, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
@@ -273,6 +273,7 @@ def generate_api_token(request):
             revisions.set_comment(_('Regenerated API token for user'))
         else:
             revisions.set_comment(_('Generated API token for user'))
+        return HttpResponse()
 
 
 @require_POST
@@ -284,6 +285,7 @@ def remove_api_token(request):
         profile.save()
         revisions.set_user(request.user)
         revisions.set_comment(_('Removed API token for user'))
+        return HttpResponse()
 
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
