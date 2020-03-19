@@ -78,6 +78,7 @@ class APIMiddleware(object):
                 token = full_token.split()[-1]
                 try:
                     request.user = Profile.objects.get(api_token=token).user
+                    request.csrf_processing_done = True
                 except Profile.DoesNotExist:
                     response = HttpResponse('Invalid token')
                     response['WWW-Authenticate'] = 'Bearer Authentication realm="API"'
