@@ -79,7 +79,10 @@ class APIMiddleware(object):
                 try:
                     request.user = Profile.objects.get(api_token=token).user
                 except Profile.DoesNotExist:
-                    return HttpResponse('Invalid token', status=401)
+                    response = HttpResponse('Invalid token')
+                    response['WWW-Authenticate'] = 'Bearer Authentication realm="API"'
+                    response.status_code = 401
+                    return response
             else:
                 return HttpResponse('Invalid authorization header', status=400)
 
