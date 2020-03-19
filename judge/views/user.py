@@ -280,7 +280,7 @@ def generate_api_token(request):
 def remove_api_token(request):
     profile = Profile.objects.get(user=request.user)
     with transaction.atomic(), revisions.create_revision():
-        profile.api_token = ''
+        profile.api_token = None
         profile.save()
         revisions.set_user(request.user)
         revisions.set_comment(_('Removed API token for user'))
