@@ -1,10 +1,9 @@
 import pyotp
-
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
 from judge.models import Profile
+
 
 class Command(BaseCommand):
     help = 'generates or regenerates API token for user'
