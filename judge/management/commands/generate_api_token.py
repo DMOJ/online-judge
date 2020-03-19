@@ -12,9 +12,6 @@ class Command(BaseCommand):
         parser.add_argument('name', help='username')
 
     def handle(self, *args, **options):
-        usr = User.objects.get(username=options['name'])
-
-        # Set new API token
-        profile = Profile.objects.get(user=usr)
+        profile = Profile.objects.get(user__username=options['name'])
         profile.api_token = pyotp.random_base32(length=32).lower()
         profile.save()
