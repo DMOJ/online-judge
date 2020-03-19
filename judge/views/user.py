@@ -273,7 +273,7 @@ def generate_api_token(request):
             revisions.set_comment(_('Regenerated API token for user'))
         else:
             revisions.set_comment(_('Generated API token for user'))
-        return HttpResponse()
+        return JsonResponse({'token': profile.api_token})
 
 
 @require_POST
@@ -285,7 +285,7 @@ def remove_api_token(request):
         profile.save()
         revisions.set_user(request.user)
         revisions.set_comment(_('Removed API token for user'))
-        return HttpResponse()
+        return HttpResponse('success', content_type='text/plain')
 
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
