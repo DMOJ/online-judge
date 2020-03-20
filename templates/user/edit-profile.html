@@ -90,6 +90,21 @@
                     });
                 }
             })
+            $('a#remove-api-token-button').click(function (event) {
+                event.preventDefault();
+                if (confirm('{{ _('Are you sure you want to remove your API token?') }}')) {
+                    $.ajax({
+                        type: "POST",
+                        url: $(this).attr('href'),
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#api-token').text('');
+                            $('#generate-api-token-button').text('{{ _('Generate') }}');
+                            $('#remove-api-token-button').remove();
+                        }
+                    });
+                }
+            })
         });
     </script>
 
