@@ -52,6 +52,18 @@
             left: 50%;
             width: 700px;
         }
+
+        .api-token {
+           padding-top: 5px;
+           font-family: Consolas,andale mono wt,andale mono,lucida console,lucida sans typewriter,dejavu sans mono,bitstream vera sans mono,liberation mono,nimbus mono l,Monaco,courier new,Courier,monospace;
+           -webkit-user-select: all;
+           -ms-user-select: all;
+           user-select: all;
+        }
+
+       .ml-5 {
+           margin-left: 5px;
+       }
     </style>
 {% endblock %}
 
@@ -89,13 +101,13 @@
 
                             // Add remove button on-the-fly
                             if ($('#remove-api-token-button').length == 0)
-                                $('#api-token-td').append('<a id=\'remove-api-token-button\' href="{{ url('remove_api_token') }}" class="button inline-button">{{ _('Remove') }}</a>');
+                                $('<a id=\'remove-api-token-button\' href="{{ url('remove_api_token') }}" class="button inline-button ml-5">{{ _('Remove') }}</a>').insertAfter('#generate-api-token-button');
                         }
                     });
                 }
             })
 
-            // Delegated event handler because there may not be a remove-api-token-button
+            // Delegated event handler because the remove button may have been added on-the-fly
             $('#api-token-td').on('click', '#remove-api-token-button', function (event) {
                 event.preventDefault();
                 if (confirm('{{ _('Are you sure you want to remove your API token?') }}')) {
@@ -212,12 +224,12 @@
                                 <td colspan="2"><span id='api-token-td' class="inline-header">
                                     {{ _('API Token:') }}
                                     {% if profile.api_token %}
-                                        <span id='api-token'>{{ profile.api_token }}</span>
                                         <a id='generate-api-token-button' href="{{ url('generate_api_token') }}" class="button inline-button">{{ _('Regenerate') }}</a>
-                                        <a id='remove-api-token-button' href="{{ url('remove_api_token') }}" class="button inline-button">{{ _('Remove') }}</a>
+                                        <a id='remove-api-token-button' href="{{ url('remove_api_token') }}" class="button inline-button ml-5">{{ _('Remove') }}</a>
+                                        <div class='api-token' id='api-token'>{{ profile.api_token }}</div>
                                     {% else %}
-                                        <span id='api-token'></span>
                                         <a id='generate-api-token-button' href="{{ url('generate_api_token') }}" class="button inline-button">Generate</a>
+                                        <div class='api-token' id='api-token'></div>
                                     {% endif %}
                                 </span></td>
                             </tr>
