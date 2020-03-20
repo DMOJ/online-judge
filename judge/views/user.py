@@ -263,7 +263,7 @@ def edit_profile(request):
 @require_POST
 @login_required
 def generate_api_token(request):
-    profile = Profile.objects.get(user=request.user)
+    profile = request.profile
     with transaction.atomic(), revisions.create_revision():
         profile.api_token = pyotp.random_base32(length=32).lower()
         profile.save()
@@ -275,7 +275,7 @@ def generate_api_token(request):
 @require_POST
 @login_required
 def remove_api_token(request):
-    profile = Profile.objects.get(user=request.user)
+    profile = request.profile
     with transaction.atomic(), revisions.create_revision():
         profile.api_token = None
         profile.save()
