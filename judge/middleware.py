@@ -68,16 +68,18 @@ class ContestMiddleware(object):
 
 
 class APIMiddleware(object):
+    HEADER_PATTERN = re.compile('^Bearer ([a-z2-7]{32})$', re.I)
+
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        full_token = request.META.get('HTTP_AUTHORIZATION', None)
+        full_token = request.META.get('HTTP_AUTHORIZATION', '')
         if full_token:
-            if re.search(settings.DMOJ_API_HEADER_PATTERN, full_token):
-                token = full_token.split()[-1]
+            token = re.match(self.HEADER_PATTERN, full_token)
+            if token:
                 try:
-                    request.user = Profile.objects.get(api_token=token).user
+                    request.user = Profile.objects.get(api_token=token.group(1)).user
                     request._cached_user = request.user
                     request.csrf_processing_done = True
                 except Profile.DoesNotExist:
