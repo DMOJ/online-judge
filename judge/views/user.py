@@ -265,14 +265,10 @@ def edit_profile(request):
 def generate_api_token(request):
     profile = Profile.objects.get(user=request.user)
     with transaction.atomic(), revisions.create_revision():
-        regenerated = not profile.api_token
         profile.api_token = pyotp.random_base32(length=32).lower()
         profile.save()
         revisions.set_user(request.user)
-        if regenerated:
-            revisions.set_comment(_('Regenerated API token for user'))
-        else:
-            revisions.set_comment(_('Generated API token for user'))
+        revisions.set_comment(_('Generated API token for user'))
         return JsonResponse({'token': profile.api_token})
 
 
