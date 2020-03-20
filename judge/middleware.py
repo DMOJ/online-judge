@@ -1,12 +1,10 @@
 import re
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import Resolver404, resolve, reverse
 from django.utils.http import urlquote
-
-from judge.models import Profile
-
 
 class ShortCircuitMiddleware:
     def __init__(self, get_response):
@@ -79,10 +77,10 @@ class APIMiddleware(object):
             token = re.match(self.HEADER_PATTERN, full_token)
             if token:
                 try:
-                    request.user = Profile.objects.get(api_token=token.group(1)).user
+                    request.user = User.objects.get(profile__api_token=token.group(1))
                     request._cached_user = request.user
                     request.csrf_processing_done = True
-                except Profile.DoesNotExist:
+                except User.DoesNotExist:
                     response = HttpResponse('Invalid token')
                     response['WWW-Authenticate'] = 'Bearer Authentication realm="API"'
                     response.status_code = 401
