@@ -78,7 +78,7 @@
                 event.preventDefault();
                 if (confirm('{{ _('Are you sure you want to generate or regenerate your API token?') }}' + '\n'
                          + '{{ _('This will invalidate any previous API tokens and allows access to your account without Two Factor Authentication.') }}')) {
-                    $('#api-token').text('{{ _('Generating...') }}')
+                    $('#api-token').text('{{ _('Generating...') }}');
                     $.ajax({
                         type: "POST",
                         url: $(this).attr('href'),
@@ -89,7 +89,7 @@
 
                             // Add remove button on-the-fly
                             if ($('#remove-api-token-button').length == 0)
-                             $('#api-token-td').append('<a id=\'remove-api-token-button\' href="{{ url('remove_api_token') }}" class="button inline-button">{{ _('Remove') }}</a>');
+                                $('#api-token-td').append('<a id=\'remove-api-token-button\' href="{{ url('remove_api_token') }}" class="button inline-button">{{ _('Remove') }}</a>');
                         }
                     });
                 }
