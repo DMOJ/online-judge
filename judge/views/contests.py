@@ -512,10 +512,8 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
         )
         labels, codes = [], []
         contest_problems = self.object.contest_problems.order_by('order').values_list('problem__name', 'problem__code')
-        if contest_problems.exists():
-            labels, codes = zip(
-                *contest_problems,
-            )
+        if contest_problems:
+            labels, codes = zip(*contest_problems)
         num_problems = len(labels)
         status_counts = [[] for i in range(num_problems)]
         for problem_code, result, count in status_count_queryset:
