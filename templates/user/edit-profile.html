@@ -72,6 +72,27 @@
             });
         });
     </script>
+    <script type="text/javascript">
+        $(function () {
+            $('a#generate-api-token-button').click(function (event) {
+                event.preventDefault();
+                if (confirm('{{ _('Are you sure you want to generate or regenerate your API token?') }}' + '\n'
+                         + '{{ _('This will invalidate any previous API tokens and allows access to your account without Two Factor Authentication.') }}')) {
+                    $('#api-token').text('{{ _('Generating...') }}')
+                    $.ajax({
+                        type: "POST",
+                        url: $(this).attr('href'),
+                        dataType: 'json',
+                        success: function(data) {
+                            console.log(data);
+                            $('#api-token').text(data.data.token);
+                        }
+                    });
+                }
+            })
+        });
+    </script>
+
 {% endblock %}
 
 {% block title_ruler %}{% endblock %}
@@ -163,6 +184,19 @@
                                     {% else %}
                                         {{ _('Two Factor Authentication is disabled.') }}
                                         <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
+                                    {% endif %}
+                                </span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><span id='api-token-td' class="inline-header">
+                                    {{ _('API Token:') }}
+                                    {% if profile.api_token %}
+                                        <span id='api-token'>{{ profile.api_token }}</span>
+                                        <a id='generate-api-token-button' href="{{ url('generate_api_token') }}" class="button inline-button">{{ _('Regenerate') }}</a>
+                                        <a id='remove-api-token-button' href="{{ url('remove_api_token') }}" class="button inline-button">{{ _('Remove') }}</a>
+                                    {% else %}
+                                        <span id='api-token'></span>
+                                        <a id='generate-api-token-button' href="{{ url('generate_api_token') }}" class="button inline-button">Generate</a>
                                     {% endif %}
                                 </span></td>
                             </tr>
