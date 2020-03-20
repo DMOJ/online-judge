@@ -67,7 +67,7 @@ class ContestMiddleware(object):
 
 
 class APIMiddleware(object):
-    HEADER_PATTERN = re.compile('^Bearer ([a-z2-7]{32})$', re.I)
+    header_pattern = re.compile('^Bearer ([a-z2-7]{32})$', re.I)
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -75,7 +75,7 @@ class APIMiddleware(object):
     def __call__(self, request):
         full_token = request.META.get('HTTP_AUTHORIZATION', '')
         if full_token:
-            token = re.match(self.HEADER_PATTERN, full_token)
+            token = self.header_pattern.match(full_token)
             if token:
                 try:
                     request.user = User.objects.get(profile__api_token=token.group(1))
