@@ -77,6 +77,8 @@ class APIMiddleware(object):
         if full_token:
             token = self.header_pattern.match(full_token)
             if token:
+                if request.path.startswith(reverse('admin:index')):
+                    return HttpResponse('Admin inaccessible', status=403)
                 try:
                     request.user = User.objects.get(profile__api_token=token.group(1))
                     request._cached_user = request.user
