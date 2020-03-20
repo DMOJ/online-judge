@@ -86,6 +86,11 @@
     </script>
     <script type="text/javascript">
         $(function () {
+            $('#api-token').click(function (event) {
+                if ($(this).text() != $(this).attr("data-token"))
+                    $(this).text($(this).attr("data-token"));
+            });
+
             $('#generate-api-token-button').click(function (event) {
                 event.preventDefault();
                 if (confirm('{{ _('Are you sure you want to generate or regenerate your API token?') }}' + '\n'
@@ -226,7 +231,7 @@
                                     {% if profile.api_token %}
                                         <a id='generate-api-token-button' href="{{ url('generate_api_token') }}" class="button inline-button">{{ _('Regenerate') }}</a>
                                         <a id='remove-api-token-button' href="{{ url('remove_api_token') }}" class="button inline-button ml-5">{{ _('Remove') }}</a>
-                                        <div class='api-token' id='api-token'>{{ profile.api_token }}</div>
+                                        <div class='api-token' id='api-token' data-token='{{ profile.api_token }}'>{{ _('Click to show') }}</div>
                                     {% else %}
                                         <a id='generate-api-token-button' href="{{ url('generate_api_token') }}" class="button inline-button">Generate</a>
                                         <div class='api-token' id='api-token'></div>
