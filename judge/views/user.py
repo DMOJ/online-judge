@@ -281,7 +281,7 @@ def remove_api_token(request):
         profile.save()
         revisions.set_user(request.user)
         revisions.set_comment(_('Removed API token for user'))
-    return JsonResponse()
+    return JsonResponse({})
 
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
