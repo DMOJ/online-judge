@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import Resolver404, resolve, reverse
 from django.utils.http import urlquote
 
+
 class ShortCircuitMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
