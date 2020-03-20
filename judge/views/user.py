@@ -269,7 +269,7 @@ def generate_api_token(request):
         profile.save()
         revisions.set_user(request.user)
         revisions.set_comment(_('Generated API token for user'))
-        return JsonResponse({"data": {"token": profile.api_token}})
+        return JsonResponse({'data': {'token': profile.api_token}})
 
 
 @require_POST
