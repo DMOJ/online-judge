@@ -74,7 +74,7 @@
     </script>
     <script type="text/javascript">
         $(function () {
-            $('a#generate-api-token-button').click(function (event) {
+            $('#generate-api-token-button').click(function (event) {
                 event.preventDefault();
                 if (confirm('{{ _('Are you sure you want to generate or regenerate your API token?') }}' + '\n'
                          + '{{ _('This will invalidate any previous API tokens and allows access to your account without Two Factor Authentication.') }}')) {
@@ -84,13 +84,19 @@
                         url: $(this).attr('href'),
                         dataType: 'json',
                         success: function(data) {
-                            console.log(data);
                             $('#api-token').text(data.data.token);
+                            $('#generate-api-token-button').text('{{ _('Regenerate') }}');
+
+                            // Add remove button on-the-fly
+                            if ($('#remove-api-token-button').length == 0)
+                             $('#api-token-td').append('<a id=\'remove-api-token-button\' href="{{ url('remove_api_token') }}" class="button inline-button">{{ _('Remove') }}</a>');
                         }
                     });
                 }
             })
-            $('a#remove-api-token-button').click(function (event) {
+
+            // Delegated event handler because there may not be a remove-api-token-button
+            $('#api-token-td').on('click', '#remove-api-token-button', function (event) {
                 event.preventDefault();
                 if (confirm('{{ _('Are you sure you want to remove your API token?') }}')) {
                     $.ajax({
