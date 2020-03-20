@@ -1,12 +1,12 @@
 from operator import attrgetter
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import F, Prefetch
+from django.db.models import F, OuterRef, Prefetch, Subquery
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404
 
 from dmoj import settings
-from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Submission
+from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Rating, Submission
 
 
 def sane_time_repr(delta):
@@ -40,11 +40,17 @@ def api_v1_contest_detail(request, contest):
 
     problems = list(contest.contest_problems.select_related('problem')
                     .defer('problem__description').order_by('order'))
+
+    new_ratings_subquery = Rating.objects.filter(participation=OuterRef('pk'))
+    old_ratings_subquery = (Rating.objects.filter(user=OuterRef('user__pk'),
+                                                  contest__end_time__lt=OuterRef('contest__end_time'))
+                            .order_by('-contest__end_time'))
     participations = (contest.users.filter(virtual=0, user__is_unlisted=False)
+                      .annotate(new_rating=Subquery(new_ratings_subquery.values('rating')[:1]))
+                      .annotate(old_rating=Subquery(old_ratings_subquery.values('rating')[:1]))
                       .prefetch_related('user__organizations')
                       .annotate(username=F('user__user__username'))
                       .order_by('-score', 'cumtime') if can_see_rankings else [])
-
     can_see_problems = (in_contest or contest.ended or contest.is_editable_by(request.user))
 
     return JsonResponse({
@@ -73,6 +79,8 @@ def api_v1_contest_detail(request, contest):
                 'user': participation.username,
                 'points': participation.score,
                 'cumtime': participation.cumtime,
+                'old_rating': participation.old_rating,
+                'new_rating': participation.new_rating,
                 'is_disqualified': participation.is_disqualified,
                 'solutions': contest.format.get_problem_breakdown(participation, problems),
             } for participation in participations],
