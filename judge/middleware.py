@@ -82,7 +82,7 @@ class APIMiddleware(object):
                     request.csrf_processing_done = True
                 except User.DoesNotExist:
                     response = HttpResponse('Invalid token')
-                    response['WWW-Authenticate'] = 'Bearer Authentication realm="API"'
+                    response['WWW-Authenticate'] = 'Bearer realm="API"'
                     response.status_code = 401
                     return response
             else:
