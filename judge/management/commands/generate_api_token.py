@@ -12,6 +12,6 @@ class Command(BaseCommand):
         parser.add_argument('name', help='username')
 
     def handle(self, *args, **options):
-        if not Profile.objects.filter(user__username=options['name']).update(api_token=
-               pyotp.random_base32(length=32).lower()):
+        token = pyotp.random_base32(length=32).lower()
+        if not Profile.objects.filter(user__username=options['name']).update(api_token=token):
             raise User.DoesNotExist('User ' + options['name'] + ' does not exist')
