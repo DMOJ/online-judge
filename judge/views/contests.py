@@ -512,9 +512,10 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
             queryset.values('problem__code', 'result').annotate(count=Count('result'))
                     .values_list('problem__code', 'result', 'count'),
         )
-        labels, codes = zip(
-            *self.object.contest_problems.order_by('order').values_list('problem__name', 'problem__code'),
-        )
+        labels, codes = [], []
+        contest_problems = self.object.contest_problems.order_by('order').values_list('problem__name', 'problem__code')
+        if contest_problems:
+            labels, codes = zip(*contest_problems)
         num_problems = len(labels)
         status_counts = [[] for i in range(num_problems)]
         for problem_code, result, count in status_count_queryset:
