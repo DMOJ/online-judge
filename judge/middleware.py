@@ -91,5 +91,4 @@ class APIMiddleware(object):
             else:
                 return HttpResponse('Invalid authorization header', status=400)
 
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)
