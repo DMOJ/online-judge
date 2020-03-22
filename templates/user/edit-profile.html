@@ -101,6 +101,7 @@
                         url: $(this).attr('href'),
                         dataType: 'json',
                         success: function(data) {
+                            $('#api-token').attr("data-token", data.data.token);
                             $('#api-token').text(data.data.token);
                             $('#generate-api-token-button').text('{{ _('Regenerate') }}');
 
