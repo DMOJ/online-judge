@@ -12,6 +12,6 @@ function mathjax_pagedown($) {
 
 window.mathjax_pagedown = mathjax_pagedown;
 
-$(window).load(function () {
+$(window).on('load', function () {
     (mathjax_pagedown)('$' in window ? $ : django.jQuery);
 });
