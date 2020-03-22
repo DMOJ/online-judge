@@ -12,6 +12,7 @@
 .wmd-input {
     height: 300px;
     width: 100%;
+    max-width: 100%;
     background: #fff;
     border: 1px solid DarkGray;
     font-family: Consolas, "Liberation Mono", Monaco, "Courier New", monospace !important;

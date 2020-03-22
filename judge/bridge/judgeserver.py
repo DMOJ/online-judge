@@ -4,7 +4,7 @@ import threading
 import time
 
 from event_socket_server import get_preferred_engine
-from judge.models import Judge
+from judge.models import Judge, Submission
 from .judgelist import JudgeList
 
 logger = logging.getLogger('judge.bridge')
@@ -18,6 +18,7 @@ class JudgeServer(get_preferred_engine()):
     def __init__(self, *args, **kwargs):
         super(JudgeServer, self).__init__(*args, **kwargs)
         reset_judges()
+        Submission.objects.filter(status__in=Submission.IN_PROGRESS_GRADING_STATUS).update(status='IE', result='IE')
         self.judges = JudgeList()
         self.ping_judge_thread = threading.Thread(target=self.ping_judge, args=())
         self.ping_judge_thread.daemon = True
