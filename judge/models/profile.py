@@ -112,7 +112,7 @@ class Profile(models.Model):
                                       help_text=_('32 character base32-encoded key for TOTP'),
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                  _('TOTP key must be empty or base32'))])
-    api_token = models.CharField(max_length=32, null=True, blank=True, verbose_name=_('API token'),
+    api_token = models.CharField(max_length=32, null=True, verbose_name=_('API token'),
                                  help_text=_('32 character base32-encoded API access token'),
                                  validators=[RegexValidator('^$|^[a-z2-7]{32}$',
                                                             _('API token must be empty or base32'))])

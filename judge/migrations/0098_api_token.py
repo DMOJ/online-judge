@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='api_token',
-            field=models.CharField(blank=True, help_text='32 character base32-encoded API access token', max_length=32, null=True, validators=[django.core.validators.RegexValidator('^$|^[a-z2-7]{32}$', 'API token must be empty or base32')], verbose_name='API token'),
+            field=models.CharField(help_text='32 character base32-encoded API access token', max_length=32, null=True, validators=[django.core.validators.RegexValidator('^$|^[a-z2-7]{32}$', 'API token must be empty or base32')], verbose_name='API token'),
         ),
     ]
