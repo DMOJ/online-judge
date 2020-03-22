@@ -14,4 +14,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         token = pyotp.random_base32(length=32).lower()
         if not Profile.objects.filter(user__username=options['name']).update(api_token=token):
-            raise User.DoesNotExist('User ' + options['name'] + ' does not exist')
+            raise User.DoesNotExist('User %s does not exist' % options['name'])
