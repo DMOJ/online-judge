@@ -229,6 +229,7 @@ class Contest(models.Model):
             filter = Q(is_visible=True)
             if user.is_authenticated:
                 filter |= Q(organizers=profile)
+                filter |= Q(view_contest_scoreboard=profile)
             queryset = queryset.filter(filter)
         if not user.has_perm('judge.edit_all_contest'):
             filter = Q(is_private=False, is_organization_private=False)
@@ -238,6 +239,7 @@ class Contest(models.Model):
                 filter |= Q(is_organization_private=True, organizations__in=profile.organizations.all())
                 filter |= Q(is_private_viewable=True, organizations__in=profile.organizations.all())
                 filter |= Q(is_private=True, private_contestants=profile)
+                filter |= Q(organizers=profile)
                 filter |= Q(view_contest_scoreboard=profile)
             queryset = queryset.filter(filter)
         return queryset.distinct()
