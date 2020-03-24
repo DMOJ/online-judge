@@ -222,27 +222,25 @@ class Contest(models.Model):
 
     @classmethod
     def contests_list(cls, user):
-        if self.request.user.is_authenticated:
-            user = self.request.profile
-            context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
-                                                      .exclude(problem__in=user_completed_ids(user))
-                                                      .values_list('problem__code', 'problem__name', 'problem__points')
-                                                      .annotate(points=Max('points'), latest=Max('date'))
-                                                      .order_by('-latest')
-                                                      [:settings.DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT])
+        profile = user.profile if user.is_authenticated else None
+        queryset = cls.objects.all().defer('description', 'registration_page')
 
-        visible_contests = Contest.objects.filter(is_visible=True).order_by('start_time')
-        q = Q(is_private=False, is_organization_private=False)
-        if self.request.user.is_authenticated:
-            q |= Q(organizers=self.request.profile)
-            q |= Q(is_organization_private=False, is_private=True, private_contestants=self.request.profile)
-            q |= Q(is_organization_private=True, is_private=False,
-                   organizations__in=self.request.profile.organizations.all())
-            q |= Q(is_organization_private=True, is_private=True,
-                   organizations__in=self.request.profile.organizations.all(),
-                   private_contestants=self.request.profile)
-            q |= Q(view_contest_scoreboard=user)
-        return visible_contests.filter(q).distinct()
+        if not user.has_perm('judge.see_private_contest'):
+            filter = Q(is_visible=True)
+            if user.is_authenticated:
+                filter |= Q(organizers=profile)
+            queryset = queryset.filter(filter)
+        if not user.has_perm('judge.edit_all_contest'):
+            filter = Q(is_private=False, is_organization_private=False)
+            if not user.is_authenticated or profile.is_external_user:
+                filter &= Q(is_external=True)
+            if user.is_authenticated:
+                filter |= Q(is_organization_private=True, organizations__in=profile.organizations.all())
+                filter |= Q(is_private_viewable=True, organizations__in=profile.organizations.all())
+                filter |= Q(is_private=True, private_contestants=profile)
+                filter |= Q(view_contest_scoreboard=profile)
+            queryset = queryset.filter(filter)
+        return queryset.distinct()
 
     @property
     def contest_window_length(self):
