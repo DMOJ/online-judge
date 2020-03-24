@@ -30,3 +30,4 @@ packaging
 celery
 -e git://github.com/DMOJ/ansi2html.git#egg=ansi2html
 sqlparse
+lupa
