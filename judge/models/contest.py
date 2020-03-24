@@ -187,10 +187,10 @@ class Contest(models.Model):
             # so test it to see if the script returns a valid label.
             label = self.get_label_for_problem(0)
         except Exception as e:
-            raise ValidationError(e)
+            raise ValidationError('Contest problem label script: %s' % e)
         else:
             if not isinstance(label, str):
-                raise ValidationError('Problem label script should return a string.')
+                raise ValidationError('Contest problem label script: script should return a string.')
 
     def is_in_contest(self, user):
         if user.is_authenticated:
@@ -415,6 +415,7 @@ class Contest(models.Model):
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),
+            ('change_contest_visibility', _('Change contest visibility')),
             ('contest_problem_label', _('Edit contest problem label script')),
         )
         verbose_name = _('contest')
