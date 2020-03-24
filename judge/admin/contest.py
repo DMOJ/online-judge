@@ -11,6 +11,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
+from django_ace import AceWidget
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminPagedownWidget, \
@@ -116,7 +117,7 @@ class ContestAdmin(VersionAdmin):
                                     'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
-        (_('Format'), {'fields': ('format_name', 'format_config')}),
+        (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Access'), {'fields': ('access_code', 'is_private', 'private_contestants', 'is_organization_private',
                                   'organizations', 'view_contest_scoreboard')}),
@@ -147,6 +148,8 @@ class ContestAdmin(VersionAdmin):
             readonly += ['access_code']
         if not request.user.has_perm('judge.create_private_contest'):
             readonly += ['is_private', 'private_contestants', 'is_organization_private', 'organizations']
+        if not request.user.has_perm('judge.contest_problem_label'):
+            readonly += ['problem_label_script']
         return readonly
 
     def has_change_permission(self, request, obj=None):
@@ -212,8 +215,13 @@ class ContestAdmin(VersionAdmin):
             contest.rate()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('admin:judge_contest_changelist')))
 
-    def get_form(self, *args, **kwargs):
-        form = super(ContestAdmin, self).get_form(*args, **kwargs)
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ContestAdmin, self).get_form(request, obj, **kwargs)
+        if 'problem_label_script' in form.base_fields:
+            # form.base_fields['problem_label_script'] does not exist when the user has only view permission
+            # on the model.
+            form.base_fields['problem_label_script'].widget = AceWidget('lua', request.profile.ace_theme)
+
         perms = ('edit_own_contest', 'edit_all_contest')
         form.base_fields['organizers'].queryset = Profile.objects.filter(
             Q(user__is_superuser=True) |

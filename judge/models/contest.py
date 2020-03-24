@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
+from lupa import LuaRuntime
 from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge import contest_format
@@ -116,6 +117,10 @@ class Contest(models.Model):
                               help_text=_('A JSON object to serve as the configuration for the chosen contest format '
                                           'module. Leave empty to use None. Exact format depends on the contest format '
                                           'selected.'))
+    problem_label_script = models.TextField(verbose_name='contest problem label script', blank=True,
+                                            help_text='A custom Lua function to generate problem labels. Requires a '
+                                                      'single function with an integer parameter, the zero-indexed '
+                                                      'contest problem index, and returns a string, the label.')
 
     @cached_property
     def format_class(self):
@@ -125,11 +130,28 @@ class Contest(models.Model):
     def format(self):
         return self.format_class(self, self.format_config)
 
+    @cached_property
+    def get_label_for_problem(self):
+        def DENY_ALL(obj, attr_name, is_setting):
+            raise AttributeError()
+        lua = LuaRuntime(attribute_filter=DENY_ALL, register_eval=False, register_builtins=False)
+        return lua.eval(self.problem_label_script or self.format.get_contest_problem_label_script())
+
     def clean(self):
         # Django will complain if you didn't fill in start_time or end_time, so we don't have to.
         if self.start_time and self.end_time and self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
         self.format_class.validate(self.format_config)
+
+        try:
+            # a contest should have at least one problem, with contest problem index 0
+            # so test it to see if the script returns a valid label.
+            label = self.get_label_for_problem(0)
+        except Exception as e:
+            raise ValidationError(e)
+        else:
+            if not isinstance(label, str):
+                raise ValidationError('Problem label script should return a string.')
 
     def is_in_contest(self, user):
         if user.is_authenticated:
@@ -251,6 +273,7 @@ class Contest(models.Model):
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),
+            ('contest_problem_label', _('Edit contest problem label script')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')
