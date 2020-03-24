@@ -82,6 +82,15 @@ class BaseContestFormat(six.with_metaclass(ABCMeta)):
         """
         raise NotImplementedError()
 
+    @abstractmethod
+    def get_contest_problem_label_script(self):
+        """
+        Returns the default Lua script to generate contest problem labels.
+
+        :return: A string, the Lua script.
+        """
+        raise NotImplementedError()
+
     @classmethod
     def best_solution_state(cls, points, total):
         if not points:

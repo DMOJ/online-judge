@@ -56,11 +56,6 @@ DMOJ_CAMO_URL = None
 DMOJ_CAMO_KEY = None
 DMOJ_CAMO_HTTPS = False
 DMOJ_CAMO_EXCLUDE = ()
-DMOJ_CONTEST_DEFAULT_PROBLEM_LABEL_SCRIPT = '''\
-function(n)
-    return tostring(math.floor(n))
-end
-'''
 DMOJ_PROBLEM_DATA_ROOT = None
 DMOJ_PROBLEM_MIN_TIME_LIMIT = 0  # seconds
 DMOJ_PROBLEM_MAX_TIME_LIMIT = 60  # seconds

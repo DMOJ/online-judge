@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models, transaction
@@ -119,8 +118,8 @@ class Contest(models.Model):
                                           'module. Leave empty to use None. Exact format depends on the contest format '
                                           'selected.'))
     problem_label_script = models.TextField(verbose_name='contest problem label script', blank=True,
-                                            help_text='A custom LUA function to generate problem labels. Requires a '
-                                                      'single function with an integer paramater, the contest problem '
+                                            help_text='A custom Lua function to generate problem labels. Requires a '
+                                                      'single function with an integer parameter, the contest problem '
                                                       '"order", and returns a string, the label.')
 
     @cached_property
@@ -136,7 +135,7 @@ class Contest(models.Model):
         def DENY_ALL(obj, attr_name, is_setting):
             raise AttributeError()
         lua = LuaRuntime(attribute_filter=DENY_ALL, register_eval=False, register_builtins=False)
-        return lua.eval(self.problem_label_script or settings.DMOJ_CONTEST_DEFAULT_PROBLEM_LABEL_SCRIPT)
+        return lua.eval(self.problem_label_script or self.format.get_contest_problem_label_script())
 
     def clean(self):
         # Django will complain if you didn't fill in start_time or end_time, so we don't have to.

@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='problem_label_script',
-            field=models.TextField(blank=True, help_text='A custom LUA function to generate problem labels. Requires a single function with an integer paramater, the contest problem "order", and returns a string, the label.', verbose_name='contest problem label script'),
+            field=models.TextField(blank=True, help_text='A custom Lua function to generate problem labels. Requires a single function with an integer parameter, the contest problem "order", and returns a string, the label.', verbose_name='contest problem label script'),
         ),
         migrations.AlterModelOptions(
             name='contest',
