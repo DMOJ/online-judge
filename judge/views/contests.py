@@ -247,22 +247,6 @@ class ContestMixin(object):
                                       contest.organizations.all())
         except Contest.Inaccessible:
             raise Http404()
-
-        if contest.is_private or contest.is_organization_private:
-            private_contest_error = PrivateContestError(contest.name, contest.is_private,
-                                                        contest.is_organization_private, contest.organizations.all())
-            if profile is None:
-                raise private_contest_error
-            if self.request.user.has_perm('judge.edit_all_contest'):
-                return contest
-            if not (contest.is_organization_private and
-                    contest.organizations.filter(id__in=profile.organizations.all()).exists()) and \
-                    not (contest.is_private and contest.private_contestants.filter(id=profile.id).exists()):
-                raise private_contest_error
-
-        if not contest.is_accessible_by(self.request.user):
-            raise Http404()
-
         return contest
 
     def dispatch(self, request, *args, **kwargs):

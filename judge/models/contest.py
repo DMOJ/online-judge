@@ -213,9 +213,9 @@ class Contest(models.Model):
         if self.is_editable_by(user):
             return True
         if not self.is_accessible_by(user):
-            if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
-                return True
             return False
+        if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+            return True
         if not self.show_scoreboard:
             return False
         return True
