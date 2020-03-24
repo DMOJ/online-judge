@@ -1,21 +1,40 @@
-DMOJ Site [![Documentation Status](https://readthedocs.org/projects/dmoj/badge/?version=latest)](http://dmoj.readthedocs.org/en/latest/?badge=latest) [![Slack](https://slack.dmoj.ca/badge.svg)](https://slack.dmoj.ca)
+DMOJ: Modern Online Judge [![Build Status](https://github.com/DMOJ/online-judge/workflows/build/badge.svg)](https://github.com/DMOJ/online-judge/actions/) [![Slack](https://slack.dmoj.ca/badge.svg)](https://slack.dmoj.ca)
 =====
-Django [AGPLv3](https://github.com/DMOJ/site/blob/master/LICENSE) contest judge frontend for the [DMOJ judge](https://github.com/DMOJ/judge) system. See it live at https://dmoj.ca/.
 
-<table>
-<tr>
-<td>
-<a href="http://dmoj.ca">
-<img src="https://avatars2.githubusercontent.com/u/6934864?v=3&s=100" align="left"></img>
-</a>
-</td>
-<td>
-A modern online judge and contest platform system, supporting <b>IO-based</b>, <b>interactive</b>, and <b>signature-graded</b> tasks.
-</td>
-</tr>
-</table>
+A modern [open-source](https://github.com/DMOJ/online-judge/blob/master/LICENSE) online judge and contest platform system. It has been used to host hundreds of competitions, including several national olympiads.
+
+See it live at [dmoj.ca](https://dmoj.ca/)!
 
 ## Features
+
+* [Support for over **60 language runtimes**](https://github.com/DMOJ/online-judge#supported-languages)
+* Highly robust judging system:
+   * Supports **interactive** and **signature-graded** tasks
+   * Supports **runtime data generators** and **custom output validators** 
+   * Specifying **per-language resource limits**
+   * Capable of scaling to hundreds of judging servers
+* Extremely configurable contest system:
+   * Supports IOI/AtCoder/ECOO formats out-of-the box
+   * **System testing** supported
+   * **Hidden scoreboards** and **virtual participation**
+   * Topcoder-style **rating**
+   * **Plagiarism detection** via [Stanford MOSS](https://theory.stanford.edu/~aiken/moss/)
+   * Restricting contest access to particular organizations or users
+* Rich problem statements, with support for **LaTeX math and diagrams**
+   * Automatic **PDF generation** for easy distribution
+   * Built-in support for **editorials**
+* **Live updates** for submissions
+* Internationalized site interface
+* Home page blog and activity stream
+* Fine-grained permission control for staff
+* OAuth login with Google, Facebook, and Github
+* Two-factor authentication support
+
+## Installation
+
+Check out the install documentation at [docs.dmoj.ca](https://docs.dmoj.ca/#/site/installation). Feel free to reach out to us on [Slack](https://slack.dmoj.ca) if you have any questions.
+
+## Screenshots
 
 ### Sleek problem statements
 Problems are written in Markdown, with LaTeX-enabled math and figures, as well as syntax highlighting. Problem statements can be saved to PDF for ease of distribution to contestants.
@@ -78,14 +97,50 @@ The DMOJ admin interface is highly versatile, and can be efficiently used for an
 
 ![](https://dmoj.ml/data/_other/readme/admin-dashboard.png)
 
+## Supported Languages
 
-### Miscellaneous others
-This is by no means a complete list, but other features in the DMOJ site include:
+Check out [**DMOJ/judge**](https://github.com/DMOJ/judge) for more judging backend details.
 
-* OAuth logins with Google, Facebook, and GitHub;
-* Two-factor authentication (TOTP);
-* Arbitrary flatpages;
-* User rating graphs;
-* Registration emails;
-* Automated contest email notifying;
-* ...and many more!
+Supported languages include:
+* C++ 11/14/17 (GCC and Clang)
+* C 99/11
+* Java 8/9/10/11
+* Python 2/3
+* PyPy 2/3
+* Pascal
+* Perl
+* Mono C#/F#/VB
+
+The judge can also grade in the languages listed below. These languages are less tested and more likely to be buggy.
+* Ada
+* AWK
+* COBOL
+* D
+* Dart
+* Fortran
+* Forth
+* Go
+* Groovy
+* GAS x86/x64/ARM
+* Haskell
+* INTERCAL
+* Kotlin
+* Lua
+* NASM x86/x64
+* Objective-C
+* OCaml
+* PHP
+* Pike
+* Prolog
+* Racket
+* Ruby
+* Rust
+* Scala
+* Chicken Scheme
+* sed
+* Steel Bank Common Lisp
+* Swift
+* Tcl
+* Turing
+* V8 JavaScript
+* Brain\*\*\*\*

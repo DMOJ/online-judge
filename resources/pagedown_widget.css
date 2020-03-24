@@ -12,6 +12,7 @@
 .wmd-input {
     height: 300px;
     width: 100%;
+    max-width: 100%;
     background: #fff;
     border: 1px solid DarkGray;
     font-family: Consolas, "Liberation Mono", Monaco, "Courier New", monospace !important;
@@ -27,6 +28,7 @@
     margin: 10px 5px 5px;
     padding: 0;
     height: 20px;
+    overflow-x: auto;
 }
 
 .wmd-spacer {

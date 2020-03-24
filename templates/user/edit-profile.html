@@ -65,6 +65,13 @@
             });
         });
     </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#disable-2fa-button').click(function () {
+                alert("The administrators for this site require all the staff to have two-factor authentication enabled, so it may not be disabled at this time.");
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block title_ruler %}{% endblock %}
@@ -148,7 +155,11 @@
                                 <td colspan="2"><span class="inline-header">
                                     {% if profile.is_totp_enabled %}
                                         {{ _('Two Factor Authentication is enabled.') }}
-                                        <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
+                                        {% if require_staff_2fa and request.user.is_staff %}
+                                            <a id="disable-2fa-button" class="button inline-button">Disable</a>
+                                        {% else %}
+                                            <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
+                                        {% endif %}
                                     {% else %}
                                         {{ _('Two Factor Authentication is disabled.') }}
                                         <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>

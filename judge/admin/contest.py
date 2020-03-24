@@ -1,6 +1,5 @@
-from django.conf import settings
 from django.conf.urls import url
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import connection, transaction
 from django.db.models import Q, TextField
@@ -9,9 +8,10 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _, ugettext, ungettext
+from django.utils.translation import gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
+from django_ace import AceWidget
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
@@ -85,6 +85,7 @@ class ContestForm(ModelForm):
             else:
                 self.fields['rate_exclude'].queryset = Profile.objects.none()
         self.fields['banned_users'].widget.can_add_related = False
+        self.fields['view_contest_scoreboard'].widget.can_add_related = False
 
     def clean(self):
         cleaned_data = super(ContestForm, self).clean()
@@ -99,6 +100,8 @@ class ContestForm(ModelForm):
             'tags': AdminSelect2MultipleWidget,
             'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
                                                             attrs={'style': 'width: 100%'}),
+            'view_contest_scoreboard': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                                       attrs={'style': 'width: 100%'}),
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('contest_preview')}),
         }
 
@@ -110,10 +113,10 @@ class ContestAdmin(VersionAdmin):
                                     'run_pretests_only')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
-        (_('Format'), {'fields': ('format_name', 'format_config')}),
+        (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Access'), {'fields': ('access_code', 'is_private', 'private_contestants', 'is_organization_private',
-                                  'organizations')}),
+                                  'organizations', 'view_contest_scoreboard')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
@@ -141,6 +144,8 @@ class ContestAdmin(VersionAdmin):
             readonly += ['access_code']
         if not request.user.has_perm('judge.create_private_contest'):
             readonly += ['is_private', 'private_contestants', 'is_organization_private', 'organizations']
+        if not request.user.has_perm('judge.contest_problem_label'):
+            readonly += ['problem_label_script']
         return readonly
 
     def has_change_permission(self, request, obj=None):
@@ -172,18 +177,7 @@ class ContestAdmin(VersionAdmin):
         ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
-        if not request.user.has_perm('judge.rejudge_submission'):
-            self.message_user(request, ugettext('You do not have the permission to rejudge submissions.'),
-                              level=messages.ERROR)
-            return
-
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
-        if not request.user.has_perm('judge.rejudge_submission_lot') and \
-                len(queryset) > settings.DMOJ_SUBMISSIONS_REJUDGE_LIMIT:
-            self.message_user(request, ugettext('You do not have the permission to rejudge THAT many submissions.'),
-                              level=messages.ERROR)
-            return
-
         for model in queryset:
             model.submission.judge(rejudge=True)
 
@@ -214,13 +208,16 @@ class ContestAdmin(VersionAdmin):
         if not contest.is_rated:
             raise Http404()
         with transaction.atomic():
-            Rating.objects.filter(contest__end_time__gte=contest.end_time).delete()
-            for contest in Contest.objects.filter(is_rated=True, end_time__gte=contest.end_time).order_by('end_time'):
-                rate_contest(contest)
+            contest.rate()
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('admin:judge_contest_changelist')))
 
-    def get_form(self, *args, **kwargs):
-        form = super(ContestAdmin, self).get_form(*args, **kwargs)
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(ContestAdmin, self).get_form(request, obj, **kwargs)
+        if 'problem_label_script' in form.base_fields:
+            # form.base_fields['problem_label_script'] does not exist when the user has only view permission
+            # on the model.
+            form.base_fields['problem_label_script'].widget = AceWidget('lua', request.profile.ace_theme)
+
         perms = ('edit_own_contest', 'edit_all_contest')
         form.base_fields['organizers'].queryset = Profile.objects.filter(
             Q(user__is_superuser=True) |
@@ -239,7 +236,7 @@ class ContestParticipationForm(ModelForm):
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
-    fields = ('contest', 'user', 'real_start', 'virtual')
+    fields = ('contest', 'user', 'real_start', 'virtual', 'is_disqualified')
     list_display = ('contest', 'username', 'show_virtual', 'real_start', 'score', 'cumtime')
     actions = ['recalculate_results']
     actions_on_bottom = actions_on_top = True
@@ -252,6 +249,11 @@ class ContestParticipationAdmin(admin.ModelAdmin):
             'contest__name', 'contest__format_name', 'contest__format_config',
             'user__user__username', 'real_start', 'score', 'cumtime', 'virtual',
         )
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if form.changed_data and 'is_disqualified' in form.changed_data:
+            obj.set_disqualified(obj.is_disqualified)
 
     def recalculate_results(self, request, queryset):
         count = 0

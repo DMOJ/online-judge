@@ -6,4 +6,4 @@ from . import registry
 def camo(url):
     if camo_client is None:
         return url
-    return camo_client.image_url(url)
+    return camo_client.rewrite_url(url)

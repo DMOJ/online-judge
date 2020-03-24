@@ -1,18 +1,20 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.db.models import CASCADE
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
+from lupa import LuaRuntime
 from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge import contest_format
 from judge.models.problem import Problem
 from judge.models.profile import Organization, Profile
 from judge.models.submission import Submission
+from judge.ratings import rate_contest
 
 __all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission', 'Rating']
 
@@ -67,6 +69,9 @@ class Contest(models.Model):
                                           help_text=_('Whether the scoreboard should remain hidden for the duration '
                                                       'of the contest.'),
                                           default=False)
+    view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
+                                                     related_name='view_contest_scoreboard',
+                                                     help_text=_('These users will be able to view the scoreboard.'))
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -112,6 +117,10 @@ class Contest(models.Model):
                               help_text=_('A JSON object to serve as the configuration for the chosen contest format '
                                           'module. Leave empty to use None. Exact format depends on the contest format '
                                           'selected.'))
+    problem_label_script = models.TextField(verbose_name='contest problem label script', blank=True,
+                                            help_text='A custom Lua function to generate problem labels. Requires a '
+                                                      'single function with an integer parameter, the zero-indexed '
+                                                      'contest problem index, and returns a string, the label.')
 
     @cached_property
     def format_class(self):
@@ -121,11 +130,28 @@ class Contest(models.Model):
     def format(self):
         return self.format_class(self, self.format_config)
 
+    @cached_property
+    def get_label_for_problem(self):
+        def DENY_ALL(obj, attr_name, is_setting):
+            raise AttributeError()
+        lua = LuaRuntime(attribute_filter=DENY_ALL, register_eval=False, register_builtins=False)
+        return lua.eval(self.problem_label_script or self.format.get_contest_problem_label_script())
+
     def clean(self):
         # Django will complain if you didn't fill in start_time or end_time, so we don't have to.
         if self.start_time and self.end_time and self.start_time >= self.end_time:
             raise ValidationError('What is this? A contest that ended before it starts?')
         self.format_class.validate(self.format_config)
+
+        try:
+            # a contest should have at least one problem, with contest problem index 0
+            # so test it to see if the script returns a valid label.
+            label = self.get_label_for_problem(0)
+        except Exception as e:
+            raise ValidationError(e)
+        else:
+            if not isinstance(label, str):
+                raise ValidationError('Problem label script should return a string.')
 
     def is_in_contest(self, user):
         if user.is_authenticated:
@@ -137,6 +163,8 @@ class Contest(models.Model):
         if user.has_perm('judge.see_private_contest'):
             return True
         if user.is_authenticated and self.organizers.filter(id=user.profile.id).exists():
+            return True
+        if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
         if not self.is_visible:
             return False
@@ -195,26 +223,58 @@ class Contest(models.Model):
             return False
         return True
 
-    def is_accessible_by(self, user):
-        # Contest is publicly visible
-        if self.is_visible:
-            # Contest is not private
-            if not self.is_private and not self.is_organization_private:
-                return True
-            if user.is_authenticated:
-                # User is in the organizations it is private to
-                if self.organizations.filter(id__in=user.profile.organizations.all()).exists():
-                    return True
-                # User is in the group of private contestants
-                if self.private_contestants.filter(id=user.profile.id).exists():
-                    return True
+    class Inaccessible(Exception):
+        pass
 
+    class PrivateContest(Exception):
+        pass
+
+    def access_check(self, user):
         # If the user can view all contests
         if user.has_perm('judge.see_private_contest'):
-            return True
+            return
 
         # User can edit the contest
-        return self.is_editable_by(user)
+        if self.is_editable_by(user):
+            return
+
+        # Contest is not publicly visible
+        if not self.is_visible:
+            raise self.Inaccessible()
+
+        # Contest is not private
+        if not self.is_private and not self.is_organization_private:
+            return
+
+        if user.is_authenticated:
+            if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+                return
+
+            in_org = self.organizations.filter(id__in=user.profile.organizations.all()).exists()
+            in_users = self.private_contestants.filter(id=user.profile.id).exists()
+
+            if not self.is_private and self.is_organization_private:
+                if in_org:
+                    return
+                raise self.PrivateContest()
+
+            if self.is_private and not self.is_organization_private:
+                if in_users:
+                    return
+                raise self.PrivateContest()
+
+            if self.is_private and self.is_organization_private:
+                if in_org and in_users:
+                    return
+                raise self.PrivateContest()
+
+    def is_accessible_by(self, user):
+        try:
+            self.access_check(user)
+        except (self.Inaccessible, self.PrivateContest):
+            return False
+        else:
+            return True
 
     def is_editable_by(self, user):
         # If the user can edit all contests
@@ -228,6 +288,11 @@ class Contest(models.Model):
 
         return False
 
+    def rate(self):
+        Rating.objects.filter(contest__end_time__gte=self.end_time).delete()
+        for contest in Contest.objects.filter(is_rated=True, end_time__gte=self.end_time).order_by('end_time'):
+            rate_contest(contest)
+
     class Meta:
         permissions = (
             ('see_private_contest', _('See private contests')),
@@ -238,6 +303,7 @@ class Contest(models.Model):
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),
+            ('contest_problem_label', _('Edit contest problem label script')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')
@@ -252,13 +318,32 @@ class ContestParticipation(models.Model):
     real_start = models.DateTimeField(verbose_name=_('start time'), default=timezone.now, db_column='start')
     score = models.IntegerField(verbose_name=_('score'), default=0, db_index=True)
     cumtime = models.PositiveIntegerField(verbose_name=_('cumulative time'), default=0)
+    is_disqualified = models.BooleanField(verbose_name=_('is disqualified'), default=False,
+                                          help_text=_('Whether this participation is disqualified.'))
     virtual = models.IntegerField(verbose_name=_('virtual participation id'), default=LIVE,
-                                  help_text=_('0 means non-virtual, otherwise the n-th virtual participation'))
+                                  help_text=_('0 means non-virtual, otherwise the n-th virtual participation.'))
     format_data = JSONField(verbose_name=_('contest format specific data'), null=True, blank=True)
 
     def recompute_results(self):
-        self.contest.format.update_participation(self)
+        with transaction.atomic():
+            self.contest.format.update_participation(self)
+            if self.is_disqualified:
+                self.score = -9999
+                self.save(update_fields=['score'])
     recompute_results.alters_data = True
+
+    def set_disqualified(self, disqualified):
+        self.is_disqualified = disqualified
+        self.recompute_results()
+        if self.contest.is_rated and self.contest.ratings.exists():
+            self.contest.rate()
+        if self.is_disqualified:
+            if self.user.current_contest == self:
+                self.user.remove_contest()
+            self.contest.banned_users.add(self.user)
+        else:
+            self.contest.banned_users.remove(self.user)
+    set_disqualified.alters_data = True
 
     @property
     def live(self):

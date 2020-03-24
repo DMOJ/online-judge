@@ -1,0 +1,78 @@
+<script type="text/javascript" src="{{ static('libs/chart.js/Chart.js') }}"></script>
+<script type="text/javascript">
+    function draw_pie_chart(data, $chart) {
+        var ctx = $chart.find('canvas')[0].getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: {
+                maintainAspectRatio: false,
+                responsive: false,
+                animation: false,
+                legend: {
+                    position: 'right',
+                    labels: {
+                        fontColor: 'black',
+                        boxWidth: 20,
+                    },
+                },
+            },
+        });
+    }
+
+    function draw_bar_chart(data, $chart) {
+        var ctx = $chart.find('canvas')[0].getContext('2d');
+        ctx.canvas.height = 20 * data.labels.length + 100;
+        var chart = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: data,
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false,
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return (Math.round(tooltipItem.value * 100) / 100) + '%';
+                        },
+                    },
+                },
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                        },
+                    }],
+                },
+            },
+        });
+    }
+
+    function draw_stacked_bar_chart(data, $chart) {
+        var ctx = $chart.find('canvas')[0].getContext('2d');
+        ctx.canvas.height = 20 * data.labels.length + 100;
+        var chart = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: data,
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                        ticks: {
+                            min: 0,
+                        },
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                    }],
+                },
+            },
+        });
+    }
+</script>

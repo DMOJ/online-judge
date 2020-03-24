@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 import time
 from operator import itemgetter
 
@@ -17,7 +16,6 @@ json_log = logging.getLogger('judge.json.bridge')
 
 UPDATE_RATE_LIMIT = 5
 UPDATE_RATE_TIME = 0.5
-TIMER = [time.time, time.clock][os.name == 'nt']
 
 
 def _ensure_connection():
@@ -45,7 +43,7 @@ class DjangoJudgeHandler(JudgeHandler):
         super(DjangoJudgeHandler, self).on_close()
         json_log.info(self._make_json_log(action='disconnect', info='judge disconnected'))
         if self._working:
-            Submission.objects.filter(id=self._working).update(status='IE')
+            Submission.objects.filter(id=self._working).update(status='IE', result='IE')
             json_log.error(self._make_json_log(sub=self._working, action='close', info='IE due to shutdown on grading'))
 
     def on_malformed(self, packet):
@@ -65,7 +63,7 @@ class DjangoJudgeHandler(JudgeHandler):
                                        'problem__short_circuit', 'language__id', 'is_pretested', 'date', 'user__id',
                                        'contest__participation__virtual', 'contest__participation__id')).get()
         except Submission.DoesNotExist:
-            logger.error('Submission vanished: %d', submission)
+            logger.error('Submission vanished: %s', submission)
             json_log.error(self._make_json_log(
                 sub=self._working, action='request',
                 info='submission vanished when fetching info',
@@ -157,7 +155,7 @@ class DjangoJudgeHandler(JudgeHandler):
             self._post_update_submission(id, 'processing')
             json_log.info(self._make_json_log(packet, action='processing'))
         else:
-            logger.warning('Unknown submission: %d', id)
+            logger.warning('Unknown submission: %s', id)
             json_log.error(self._make_json_log(packet, action='processing', info='unknown submission'))
 
     def on_submission_wrong_acknowledge(self, packet, expected, got):
@@ -173,12 +171,12 @@ class DjangoJudgeHandler(JudgeHandler):
             self._post_update_submission(packet['submission-id'], 'grading-begin')
             json_log.info(self._make_json_log(packet, action='grading-begin'))
         else:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %s', packet['submission-id'])
             json_log.error(self._make_json_log(packet, action='grading-begin', info='unknown submission'))
 
     def _submission_is_batch(self, id):
         if not Submission.objects.filter(id=id).update(batch=True):
-            logger.warning('Unknown submission: %d', id)
+            logger.warning('Unknown submission: %s', id)
 
     def on_grading_end(self, packet):
         super(DjangoJudgeHandler, self).on_grading_end(packet)
@@ -186,7 +184,7 @@ class DjangoJudgeHandler(JudgeHandler):
         try:
             submission = Submission.objects.get(id=packet['submission-id'])
         except Submission.DoesNotExist:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %s', packet['submission-id'])
             json_log.error(self._make_json_log(packet, action='grading-end', info='unknown submission'))
             return
 
@@ -275,7 +273,7 @@ class DjangoJudgeHandler(JudgeHandler):
             json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log'],
                                               finish=True, result='CE'))
         else:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %s', packet['submission-id'])
             json_log.error(self._make_json_log(packet, action='compile-error', info='unknown submission',
                                                log=packet['log'], finish=True, result='CE'))
 
@@ -286,7 +284,7 @@ class DjangoJudgeHandler(JudgeHandler):
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'compile-message'})
             json_log.info(self._make_json_log(packet, action='compile-message', log=packet['log']))
         else:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %s', packet['submission-id'])
             json_log.error(self._make_json_log(packet, action='compile-message', info='unknown submission',
                                                log=packet['log']))
 
@@ -300,7 +298,7 @@ class DjangoJudgeHandler(JudgeHandler):
             json_log.info(self._make_json_log(packet, action='internal-error', message=packet['message'],
                                               finish=True, result='IE'))
         else:
-            logger.warning('Unknown submission: %d', id)
+            logger.warning('Unknown submission: %s', id)
             json_log.error(self._make_json_log(packet, action='internal-error', info='unknown submission',
                                                message=packet['message'], finish=True, result='IE'))
 
@@ -312,7 +310,7 @@ class DjangoJudgeHandler(JudgeHandler):
             self._post_update_submission(packet['submission-id'], 'terminated', done=True)
             json_log.info(self._make_json_log(packet, action='aborted', finish=True, result='AB'))
         else:
-            logger.warning('Unknown submission: %d', packet['submission-id'])
+            logger.warning('Unknown submission: %s', packet['submission-id'])
             json_log.error(self._make_json_log(packet, action='aborted', info='unknown submission',
                                                finish=True, result='AB'))
 
@@ -331,7 +329,7 @@ class DjangoJudgeHandler(JudgeHandler):
         max_position = max(map(itemgetter('position'), updates))
 
         if not Submission.objects.filter(id=id).update(current_testcase=max_position + 1):
-            logger.warning('Unknown submission: %d', id)
+            logger.warning('Unknown submission: %s', id)
             json_log.error(self._make_json_log(packet, action='test-case', info='unknown submission'))
             return
 
@@ -377,14 +375,14 @@ class DjangoJudgeHandler(JudgeHandler):
         if id in self.update_counter:
             cnt, reset = self.update_counter[id]
             cnt += 1
-            if TIMER() - reset > UPDATE_RATE_TIME:
+            if time.monotonic() - reset > UPDATE_RATE_TIME:
                 del self.update_counter[id]
             else:
                 self.update_counter[id] = (cnt, reset)
                 if cnt > UPDATE_RATE_LIMIT:
                     do_post = False
         if id not in self.update_counter:
-            self.update_counter[id] = (1, TIMER())
+            self.update_counter[id] = (1, time.monotonic())
 
         if do_post:
             event.post('sub_%s' % Submission.get_id_secret(id), {

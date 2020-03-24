@@ -59,11 +59,10 @@ def version_matrix(request):
     groups = defaultdict(list)
 
     judges = {judge.id: judge.name for judge in Judge.objects.filter(online=True)}
-    languages = Language.objects.all()
+    languages = Language.objects.filter(judges__online=True).distinct()
 
     for runtime in RuntimeVersion.objects.filter(judge__online=True).order_by('priority'):
-        if runtime.version:
-            matrix[runtime.judge_id][runtime.language_id].append(runtime)
+        matrix[runtime.judge_id][runtime.language_id].append(runtime)
 
     for judge, data in six.iteritems(matrix):
         name_tuple = judges[judge].rpartition('.')

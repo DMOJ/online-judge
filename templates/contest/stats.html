@@ -1,0 +1,58 @@
+{% extends "common-content.html" %}
+
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'stats' %}
+    {% set title = contest.name %}
+    {% include "contest/contest-tabs.html" %}
+{% endblock %}
+
+{% block content_js_media %}
+    <script type="text/javascript">
+        window.stats = {{ stats }};
+    </script>
+    {% compress js %}
+        {% include "stats/media-js.html" %}
+        <script type="text/javascript">
+            $(function () {
+                draw_stacked_bar_chart(window.stats.problem_status_count, $('#problem-status-count'));
+                draw_bar_chart(window.stats.problem_ac_rate, $('#problem-ac-rate'));
+                draw_pie_chart(window.stats.language_count, $('#language-count'));
+                draw_bar_chart(window.stats.language_ac_rate, $('#language-ac-rate'));
+            });
+        </script>
+    {% endcompress %}
+    {% include "contest/media-js.html" %}
+{% endblock %}
+
+{% block content_media %}
+    <style>
+        .chart {
+            margin: 10px 0;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <h3>{{ _('Problem Status Distribution') }}</h3>
+    <div id="problem-status-count" class="chart">
+        <canvas></canvas>
+    </div>
+
+    <h3>{{ _('Problem AC Rate') }}</h3>
+    <div id="problem-ac-rate" class="chart">
+        <canvas></canvas>
+    </div>
+
+    <h3>{{ _('Submissions by Language') }}</h3>
+    <div id="language-count" class="chart">
+        <canvas width="400" height="300"></canvas>
+        <ul class="legend"></ul>
+    </div>
+
+    <h3>{{ _('Language AC Rate') }}</h3>
+    <div id="language-ac-rate" class="chart">
+        <canvas></canvas>
+    </div>
+{% endblock %}

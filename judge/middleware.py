@@ -42,6 +42,7 @@ class DMOJImpersonationMiddleware(object):
 
     def __call__(self, request):
         if request.user.is_impersonate:
+            request.no_profile_update = True
             request.profile = request.user.profile
         return self.get_response(request)
 

@@ -1,6 +1,7 @@
 import json
 from operator import attrgetter
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist, PermissionDenied
@@ -200,10 +201,11 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         else:
             queryset = queryset.select_related('contest_object').defer('contest_object__description')
 
-            # This is not technically correct since contest organizers *should* see these, but
-            # the join would be far too messy
             if not self.request.user.has_perm('judge.see_private_contest'):
-                queryset = queryset.exclude(contest_object_id__in=Contest.objects.filter(hide_scoreboard=True))
+                # Show submissions for any contest you can edit or visible scoreboard
+                contest_queryset = Contest.objects.filter(Q(organizers=self.request.profile) |
+                                                          Q(hide_scoreboard=False))
+                queryset = queryset.filter(Q(contest_object_id__in=contest_queryset) | Q(contest_object__isnull=True))
 
         if self.selected_languages:
             queryset = queryset.filter(language_id__in=Language.objects.filter(key__in=self.selected_languages))
@@ -252,6 +254,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['selected_statuses'] = self.selected_statuses
 
         context['results_json'] = mark_safe(json.dumps(self.get_result_data()))
+        context['results_colors_json'] = mark_safe(json.dumps(settings.DMOJ_STATS_SUBMISSION_RESULT_COLORS))
 
         context['page_suffix'] = suffix = ('?' + self.request.GET.urlencode()) if self.request.GET else ''
         context['first_page_href'] = (self.first_page_href or '.') + suffix

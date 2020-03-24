@@ -30,7 +30,7 @@ class JudgeAppConfig(AppConfig):
         from django.contrib.auth.models import User
 
         try:
-            lang = Language.get_python2()
+            lang = Language.get_python3()
             for user in User.objects.filter(profile=None):
                 # These poor profileless users
                 profile = Profile(user=user, language=lang)

@@ -138,6 +138,7 @@
                 var id = $(this).attr('data-id');
                 $.post('{{ url('comment_hide') }}', {id: id}).then(function () {
                     $('#comment-' + id).remove();
+                    $('#comment-' + id + '-children').remove();
                 }).catch(function () {
                     alert('Failed.');
                 });
