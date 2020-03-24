@@ -157,7 +157,7 @@ class ContestAdmin(VersionAdmin):
             readonly += ['access_code']
         if not request.user.has_perm('judge.create_private_contest'):
             readonly += ['is_private', 'private_contestants', 'is_organization_private', 'organizations']
-            if not request.user.had_perm('judge.change_contest_visibility'):
+            if not request.user.has_perm('judge.change_contest_visibility'):
                 readonly += ['is_visible']
         if not request.user.has_perm('judge.contest_problem_label'):
             readonly += ['problem_label_script']
