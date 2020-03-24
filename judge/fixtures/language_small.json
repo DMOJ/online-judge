@@ -59,7 +59,7 @@
          "pygments":"c",
          "template":"",
          "info":"",
-         "description":"Compile options: `gcc -std=c99 -Wall -O2  -fmax-errors=5 -lm -march=native -s`",
+         "description":"Compile options: `gcc -std=c99 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
          "extension":""
       }
    },
@@ -75,7 +75,7 @@
          "pygments":"cpp",
          "template":"",
          "info":"",
-         "description":"Compile options: `g++ -Wall -O2 -fmax-errors=5 -lm -march=native -s`",
+         "description":"Compile options: `g++ -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
          "extension":""
       }
    },
@@ -91,7 +91,7 @@
          "pygments":"cpp",
          "template":"",
          "info":"",
-         "description":"Compile options: `g++ -std=c++11 -Wall -O2 -fmax-errors=5 -lm -march=native -s`",
+         "description":"Compile options: `g++ -std=c++11 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
          "extension":""
       }
    },
@@ -139,7 +139,7 @@
          "pygments":"java",
          "template":"",
          "info":"",
-         "description":"",
+         "description":"Compile options: `javac -encoding UTF-8 -profile compact1`",
          "extension":""
       }
    },
@@ -203,7 +203,7 @@
          "pygments":"cpp",
          "template":"",
          "info":"",
-         "description":"Compile options: `g++ -std=c++14 -Wall -O2 -fmax-errors=5 -lm -march=native -s`",
+         "description":"Compile options: `g++ -std=c++14 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
          "extension":""
       }
    },
@@ -235,7 +235,7 @@
          "pygments":"cpp",
          "template":"",
          "info":"",
-         "description":"Compile options: `g++ -std=c++17 -Wall -O2 -fmax-errors=5 -lm -march=native -s`",
+         "description":"Compile options: `g++ -std=c++17 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
          "extension":""
       }
    },
@@ -251,7 +251,7 @@
          "pygments":"cpp",
          "template":"",
          "info":"",
-         "description":"Compile options: `gcc -std=c11 -Wall -O2  -fmax-errors=5 -lm -march=native -s`",
+         "description":"Compile options: `gcc -std=c11 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
          "extension":""
       }
    },
