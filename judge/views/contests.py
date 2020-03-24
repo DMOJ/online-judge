@@ -70,6 +70,7 @@ class ContestListMixin(object):
             if self.request.user.is_authenticated:
                 q |= Q(is_organization_private=True, organizations__in=self.request.profile.organizations.all())
                 q |= Q(is_private=True, private_contestants=self.request.profile)
+                q |= Q(view_contest_scoreboard=self.request.profile)
             queryset = queryset.filter(q)
         return queryset.distinct()
 
@@ -256,6 +257,7 @@ class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         tags = contest.tags.all()
         organizations = contest.organizations.all()
         private_contestants = contest.private_contestants.all()
+        view_contest_scoreboard = contest.view_contest_scoreboard.all()
         contest_problems = contest.contest_problems.all()
 
         contest.pk = None
@@ -267,6 +269,7 @@ class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         contest.tags.set(tags)
         contest.organizations.set(organizations)
         contest.private_contestants.set(private_contestants)
+        contest.view_contest_scoreboard.set(view_contest_scoreboard)
         contest.organizers.add(self.request.profile)
 
         for problem in contest_problems:

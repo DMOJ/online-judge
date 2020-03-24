@@ -80,6 +80,7 @@ class PostList(ListView):
         if self.request.user.is_authenticated:
             q |= Q(is_organization_private=True, organizations__in=user.organizations.all())
             q |= Q(is_private=True, private_contestants=user)
+            q |= Q(view_contest_scoreboard=user)
         visible_contests = visible_contests.filter(q)
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)

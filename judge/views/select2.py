@@ -74,6 +74,7 @@ class ContestSelect2View(Select2View):
                 q |= Q(is_organization_private=True,
                        organizations__in=self.request.profile.organizations.all())
                 q |= Q(is_private=True, private_contestants=self.request.profile)
+                q |= Q(view_contest_scoreboard=self.request.profile)
             queryset = queryset.filter(q)
         return queryset
 
