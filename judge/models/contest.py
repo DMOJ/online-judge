@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext, gettext_lazy as _
 from jsonfield import JSONField
+from lupa import LuaRuntime
 from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge import contest_format
@@ -89,6 +90,9 @@ class Contest(models.Model):
                                                       help_text=('Whether the scoreboard should remain hidden '
                                                                  'permanently. Requires "hide scoreboard" to be '
                                                                  'set as well to have any effect.'))
+    view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
+                                                     related_name='view_contest_scoreboard',
+                                                     help_text=_('These users will be able to view the scoreboard.'))
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -145,6 +149,10 @@ class Contest(models.Model):
                               help_text=_('A JSON object to serve as the configuration for the chosen contest format '
                                           'module. Leave empty to use None. Exact format depends on the contest format '
                                           'selected.'))
+    problem_label_script = models.TextField(verbose_name='contest problem label script', blank=True,
+                                            help_text='A custom Lua function to generate problem labels. Requires a '
+                                                      'single function with an integer parameter, the zero-indexed '
+                                                      'contest problem index, and returns a string, the label.')
 
     @cached_property
     def format_class(self):
@@ -153,6 +161,13 @@ class Contest(models.Model):
     @cached_property
     def format(self):
         return self.format_class(self, self.format_config)
+
+    @cached_property
+    def get_label_for_problem(self):
+        def DENY_ALL(obj, attr_name, is_setting):
+            raise AttributeError()
+        lua = LuaRuntime(attribute_filter=DENY_ALL, register_eval=False, register_builtins=False)
+        return lua.eval(self.problem_label_script or self.format.get_contest_problem_label_script())
 
     def clean(self):
         # Django will complain if you didn't fill in start_time or end_time, so we don't have to.
@@ -166,6 +181,16 @@ class Contest(models.Model):
             elif self.registration_start_time >= self.registration_end_time:
                 raise ValidationError('What is this? Registration ends before it starts?')
         self.format_class.validate(self.format_config)
+
+        try:
+            # a contest should have at least one problem, with contest problem index 0
+            # so test it to see if the script returns a valid label.
+            label = self.get_label_for_problem(0)
+        except Exception as e:
+            raise ValidationError(e)
+        else:
+            if not isinstance(label, str):
+                raise ValidationError('Problem label script should return a string.')
 
     def is_in_contest(self, user):
         if user.is_authenticated:
@@ -187,6 +212,8 @@ class Contest(models.Model):
     def can_see_full_scoreboard(self, user):
         if self.is_editable_by(user):
             return True
+        if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+            return True
         if not self.is_accessible_by(user):
             return False
         if not self.show_scoreboard:
@@ -195,24 +222,27 @@ class Contest(models.Model):
 
     @classmethod
     def contests_list(cls, user):
-        profile = user.profile if user.is_authenticated else None
-        queryset = cls.objects.all().defer('description', 'registration_page')
+        if self.request.user.is_authenticated:
+            user = self.request.profile
+            context['recently_attempted_problems'] = (Submission.objects.filter(user=user)
+                                                      .exclude(problem__in=user_completed_ids(user))
+                                                      .values_list('problem__code', 'problem__name', 'problem__points')
+                                                      .annotate(points=Max('points'), latest=Max('date'))
+                                                      .order_by('-latest')
+                                                      [:settings.DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT])
 
-        if not user.has_perm('judge.see_private_contest'):
-            filter = Q(is_visible=True)
-            if user.is_authenticated:
-                filter |= Q(organizers=profile)
-            queryset = queryset.filter(filter)
-        if not user.has_perm('judge.edit_all_contest'):
-            filter = Q(is_private=False, is_organization_private=False)
-            if not user.is_authenticated or profile.is_external_user:
-                filter &= Q(is_external=True)
-            if user.is_authenticated:
-                filter |= Q(is_organization_private=True, organizations__in=profile.organizations.all())
-                filter |= Q(is_private_viewable=True, organizations__in=profile.organizations.all())
-                filter |= Q(is_private=True, private_contestants=profile)
-            queryset = queryset.filter(filter)
-        return queryset.distinct()
+        visible_contests = Contest.objects.filter(is_visible=True).order_by('start_time')
+        q = Q(is_private=False, is_organization_private=False)
+        if self.request.user.is_authenticated:
+            q |= Q(organizers=self.request.profile)
+            q |= Q(is_organization_private=False, is_private=True, private_contestants=self.request.profile)
+            q |= Q(is_organization_private=True, is_private=False,
+                   organizations__in=self.request.profile.organizations.all())
+            q |= Q(is_organization_private=True, is_private=True,
+                   organizations__in=self.request.profile.organizations.all(),
+                   private_contestants=self.request.profile)
+            q |= Q(view_contest_scoreboard=user)
+        return visible_contests.filter(q).distinct()
 
     @property
     def contest_window_length(self):
@@ -314,6 +344,8 @@ class Contest(models.Model):
                 # User is in the group of private contestants
                 if self.is_private and self.private_contestants.filter(id=user.profile.id).exists():
                     return True
+                if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+                    return True
 
             # Contest is not private
             if not self.is_private and not self.is_organization_private:
@@ -354,6 +386,7 @@ class Contest(models.Model):
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),
+            ('contest_problem_label', _('Edit contest problem label script')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')

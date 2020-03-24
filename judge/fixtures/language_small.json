@@ -1,122 +1,274 @@
 [
-    {
-        "fields": {
-            "ace": "python",
-            "common_name": "Python",
-            "description": "",
-            "extension": "",
-            "info": "python 2.7.9",
-            "key": "PY2",
-            "name": "Python 2",
-            "pygments": "python",
-            "short_name": ""
-        },
-        "model": "judge.language",
-        "pk": 1
-    },
-    {
-        "fields": {
-            "ace": "assembly_x86",
-            "common_name": "Assembly",
-            "description": "",
-            "extension": "",
-            "info": "binutils 2.25",
-            "key": "GAS64",
-            "name": "Assembly (x64)",
-            "pygments": "gas",
-            "short_name": ""
-        },
-        "model": "judge.language",
-        "pk": 2
-    },
-    {
-        "fields": {
-            "ace": "AWK",
-            "common_name": "Awk",
-            "description": "",
-            "extension": "",
-            "info": "mawk 1.3.3",
-            "key": "AWK",
-            "name": "AWK",
-            "pygments": "awk",
-            "short_name": "AWK"
-        },
-        "model": "judge.language",
-        "pk": 3
-    },
-    {
-        "fields": {
-            "ace": "c_cpp",
-            "common_name": "C",
-            "description": "Compile options: `gcc -std=c99 -Wall -O2 -lm -march=native -s`\r\n",
-            "extension": "",
-            "info": "gcc 4.9.2",
-            "key": "C",
-            "name": "C",
-            "pygments": "c",
-            "short_name": ""
-        },
-        "model": "judge.language",
-        "pk": 4
-    },
-    {
-        "fields": {
-            "ace": "c_cpp",
-            "common_name": "C++",
-            "description": "Compile options: `g++ -Wall -O2 -lm -march=native -s`\r\n",
-            "extension": "",
-            "info": "g++ 4.9.2",
-            "key": "CPP03",
-            "name": "C++03",
-            "pygments": "cpp",
-            "short_name": "C++03"
-        },
-        "model": "judge.language",
-        "pk": 5
-    },
-    {
-        "fields": {
-            "ace": "c_cpp",
-            "common_name": "C++",
-            "description": "Compile options: `g++ -std=c++11 -Wall -O2 -lm -march=native -s`\r\n",
-            "extension": "",
-            "info": "g++-4.9.2 -std=c++11",
-            "key": "CPP11",
-            "name": "C++11",
-            "pygments": "cpp",
-            "short_name": "C++11"
-        },
-        "model": "judge.language",
-        "pk": 6
-    },
-    {
-        "fields": {
-            "ace": "perl",
-            "common_name": "Perl",
-            "description": "",
-            "extension": "",
-            "info": "perl 5.10.1",
-            "key": "PERL",
-            "name": "Perl",
-            "pygments": "perl",
-            "short_name": ""
-        },
-        "model": "judge.language",
-        "pk": 7
-    },
-    {
-        "fields": {
-            "ace": "python",
-            "common_name": "Python",
-            "description": "",
-            "extension": "",
-            "info": "python 3.4.2",
-            "key": "PY3",
-            "name": "Python 3",
-            "pygments": "python3",
-            "short_name": ""
-        },
-        "model": "judge.language",
-        "pk": 8
-    }
+   {
+      "model":"judge.language",
+      "pk":1,
+      "fields":{
+         "key":"PY2",
+         "name":"Python 2",
+         "short_name":null,
+         "common_name":"Python",
+         "ace":"python",
+         "pygments":"python",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":2,
+      "fields":{
+         "key":"GAS64",
+         "name":"Assembly (x64)",
+         "short_name":null,
+         "common_name":"Assembly",
+         "ace":"assembly_x86",
+         "pygments":"gas",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":3,
+      "fields":{
+         "key":"AWK",
+         "name":"AWK",
+         "short_name":"AWK",
+         "common_name":"Awk",
+         "ace":"AWK",
+         "pygments":"awk",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":4,
+      "fields":{
+         "key":"C",
+         "name":"C",
+         "short_name":null,
+         "common_name":"C",
+         "ace":"c_cpp",
+         "pygments":"c",
+         "template":"",
+         "info":"",
+         "description":"Compile options: `gcc -std=c99 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":5,
+      "fields":{
+         "key":"CPP03",
+         "name":"C++03",
+         "short_name":"C++03",
+         "common_name":"C++",
+         "ace":"c_cpp",
+         "pygments":"cpp",
+         "template":"",
+         "info":"",
+         "description":"Compile options: `g++ -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":6,
+      "fields":{
+         "key":"CPP11",
+         "name":"C++11",
+         "short_name":"C++11",
+         "common_name":"C++",
+         "ace":"c_cpp",
+         "pygments":"cpp",
+         "template":"",
+         "info":"",
+         "description":"Compile options: `g++ -std=c++11 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":7,
+      "fields":{
+         "key":"PERL",
+         "name":"Perl",
+         "short_name":null,
+         "common_name":"Perl",
+         "ace":"perl",
+         "pygments":"perl",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":8,
+      "fields":{
+         "key":"PY3",
+         "name":"Python 3",
+         "short_name":null,
+         "common_name":"Python",
+         "ace":"python",
+         "pygments":"python3",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":9,
+      "fields":{
+         "key":"JAVA8",
+         "name":"Java 8",
+         "short_name":null,
+         "common_name":"Java",
+         "ace":"java",
+         "pygments":"java",
+         "template":"",
+         "info":"",
+         "description":"Compile options: `javac -encoding UTF-8 -profile compact1`",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":10,
+      "fields":{
+         "key":"TEXT",
+         "name":"Text",
+         "short_name":null,
+         "common_name":"Text",
+         "ace":"text",
+         "pygments":"text",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":11,
+      "fields":{
+         "key":"GAS32",
+         "name":"Assembly (x86)",
+         "short_name":null,
+         "common_name":"Assembly",
+         "ace":"assembly_x86",
+         "pygments":"gas",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":12,
+      "fields":{
+         "key":"SED",
+         "name":"Sed",
+         "short_name":null,
+         "common_name":"Sed",
+         "ace":"sed",
+         "pygments":"sed",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":13,
+      "fields":{
+         "key":"CPP14",
+         "name":"C++14",
+         "short_name":"C++14",
+         "common_name":"C++",
+         "ace":"c_cpp",
+         "pygments":"cpp",
+         "template":"",
+         "info":"",
+         "description":"Compile options: `g++ -std=c++14 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":14,
+      "fields":{
+         "key":"PAS",
+         "name":"Pascal",
+         "short_name":null,
+         "common_name":"Pascal",
+         "ace":"pascal",
+         "pygments":"pascal",
+         "template":"",
+         "info":"",
+         "description":"",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":15,
+      "fields":{
+         "key":"CPP17",
+         "name":"C++17",
+         "short_name":"C++17",
+         "common_name":"C++",
+         "ace":"c_cpp",
+         "pygments":"cpp",
+         "template":"",
+         "info":"",
+         "description":"Compile options: `g++ -std=c++17 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":16,
+      "fields":{
+         "key":"C11",
+         "name":"C11",
+         "short_name":null,
+         "common_name":"C",
+         "ace":"c_cpp",
+         "pygments":"cpp",
+         "template":"",
+         "info":"",
+         "description":"Compile options: `gcc -std=c11 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
+         "extension":""
+      }
+   },
+   {
+      "model":"judge.language",
+      "pk":17,
+      "fields":{
+         "key":"BF",
+         "name":"Brain****",
+         "short_name":null,
+         "common_name":"Brain****",
+         "ace":"bf",
+         "pygments":"bf",
+         "template":"",
+         "info":"",
+         "description":"Classical [brain\\*\\*\\*\\*][1] with as many byte-sized cells as there are bytes in the memory limit.\r\n\r\n  [1]: http://www.muppetlabs.com/~breadbox/bf/",
+         "extension":""
+      }
+   }
 ]

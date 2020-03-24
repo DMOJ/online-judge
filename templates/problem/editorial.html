@@ -26,7 +26,7 @@
                 <p>
                     {% trans trimmed count=authors|length %}
                         Author:
-                    {% pluralize count %}
+                    {% pluralize %}
                         Authors:
                     {% endtrans %}
                     {{ link_users(authors) }}
