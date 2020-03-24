@@ -72,6 +72,6 @@ class DefaultContestFormat(BaseContestFormat):
     def get_contest_problem_label_script(self):
         return '''
             function(n)
-                return tostring(math.floor(n))
+                return tostring(math.floor(n + 1))
             end
         '''

@@ -119,8 +119,8 @@ class Contest(models.Model):
                                           'selected.'))
     problem_label_script = models.TextField(verbose_name='contest problem label script', blank=True,
                                             help_text='A custom Lua function to generate problem labels. Requires a '
-                                                      'single function with an integer parameter, the contest problem '
-                                                      '"order", and returns a string, the label.')
+                                                      'single function with an integer parameter, the zero-indexed '
+                                                      'contest problem index, and returns a string, the label.')
 
     @cached_property
     def format_class(self):
@@ -144,9 +144,9 @@ class Contest(models.Model):
         self.format_class.validate(self.format_config)
 
         try:
-            # a contest should have at least one problem, with contest problem order "1"
+            # a contest should have at least one problem, with contest problem index 0
             # so test it to see if the script returns a valid label.
-            label = self.get_label_for_problem(1)
+            label = self.get_label_for_problem(0)
         except Exception as e:
             raise ValidationError(e)
         else:
