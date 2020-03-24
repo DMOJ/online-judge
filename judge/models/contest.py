@@ -212,9 +212,9 @@ class Contest(models.Model):
     def can_see_full_scoreboard(self, user):
         if self.is_editable_by(user):
             return True
-        if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
-            return True
         if not self.is_accessible_by(user):
+            if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+                return True
             return False
         if not self.show_scoreboard:
             return False
@@ -331,29 +331,58 @@ class Contest(models.Model):
             return True
         return False
 
-    def is_accessible_by(self, user):
-        # Contest is publicly visible
-        if self.is_visible:
-            if user.is_authenticated:
-                # User is in the organizations it is private to
-                if (self.is_private_viewable or self.is_organization_private) and \
-                        self.organizations.filter(id__in=user.profile.organizations.all()).exists():
-                    return True
-                # User is in the group of private contestants
-                if self.is_private and self.private_contestants.filter(id=user.profile.id).exists():
-                    return True
-                if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
-                    return True
+    class Inaccessible(Exception):
+        pass
 
-            # Contest is not private
-            if not self.is_private and not self.is_organization_private:
-                if self.is_external:
-                    return True
-                if user.is_authenticated and not user.profile.is_external_user:
-                    return True
+    class PrivateContest(Exception):
+        pass
+
+    def access_check(self, user):
+        # If the user can view all contests
+        if user.has_perm('judge.see_private_contest'):
+            return
 
         # User can edit the contest
-        return self.is_editable_by(user)
+        if self.is_editable_by(user):
+            return
+
+        # Contest is not publicly visible
+        if not self.is_visible:
+            raise self.Inaccessible()
+
+        # Contest is not private
+        if not self.is_private and not self.is_organization_private:
+            return
+
+        if user.is_authenticated:
+            if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+                return
+
+            in_org = self.organizations.filter(id__in=user.profile.organizations.all()).exists()
+            in_users = self.private_contestants.filter(id=user.profile.id).exists()
+
+            if not self.is_private and (self.is_organization_private or self.is_private_viewable):
+                if in_org:
+                    return
+                raise self.PrivateContest()
+
+            if self.is_private and not self.is_organization_private:
+                if in_users:
+                    return
+                raise self.PrivateContest()
+
+            if self.is_private and (self.is_organization_private or self.is_private_viewable):
+                if in_org and in_users:
+                    return
+                raise self.PrivateContest()
+
+    def is_accessible_by(self, user):
+        try:
+            self.access_check(user)
+        except (self.Inaccessible, self.PrivateContest):
+            return False
+        else:
+            return True
 
     def is_editable_by(self, user):
         # If the user can edit all contests
