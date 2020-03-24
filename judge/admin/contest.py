@@ -194,12 +194,8 @@ class ContestAdmin(VersionAdmin):
         if not request.user.has_perm('judge.contest_rating'):
             raise PermissionDenied()
         with transaction.atomic():
-            if connection.vendor == 'sqlite':
-                Rating.objects.all().delete()
-            else:
-                cursor = connection.cursor()
+            with connection.cursor() as cursor:
                 cursor.execute('TRUNCATE TABLE `%s`' % Rating._meta.db_table)
-                cursor.close()
             Profile.objects.update(rating=None)
             for contest in Contest.objects.filter(is_rated=True).order_by('end_time'):
                 rate_contest(contest)
