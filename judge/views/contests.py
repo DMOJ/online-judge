@@ -59,25 +59,7 @@ def _find_contest(request, key, private_check=True):
 
 class ContestListMixin(object):
     def get_queryset(self):
-        queryset = Contest.objects.all()
-        if not self.request.user.has_perm('judge.see_private_contest'):
-            q = Q(is_visible=True)
-            if self.request.user.is_authenticated:
-                q |= Q(organizers=self.request.profile)
-            queryset = queryset.filter(q)
-        if not self.request.user.has_perm('judge.edit_all_contest'):
-            q = Q(is_private=False, is_organization_private=False)
-            if self.request.user.is_authenticated:
-                q |= Q(organizers=self.request.profile)
-                q |= Q(is_organization_private=False, is_private=True, private_contestants=self.request.profile)
-                q |= Q(is_organization_private=True, is_private=False,
-                       organizations__in=self.request.profile.organizations.all())
-                q |= Q(is_organization_private=True, is_private=True,
-                       organizations__in=self.request.profile.organizations.all(),
-                       private_contestants=self.request.profile)
-                q |= Q(view_contest_scoreboard=self.request.profile)
-            queryset = queryset.filter(q)
-        return queryset.distinct()
+        return Contest.get_visible_contests(self.request.user)
 
 
 class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
@@ -417,7 +399,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
     def get_contest_data(self, start, end):
         end += timedelta(days=1)
         contests = self.get_queryset().filter(Q(start_time__gte=start, start_time__lt=end) |
-                                              Q(end_time__gte=start, end_time__lt=end)).defer('description')
+                                              Q(end_time__gte=start, end_time__lt=end))
         starts, ends, oneday = (defaultdict(list) for i in range(3))
         for contest in contests:
             start_date = timezone.localtime(contest.start_time).date()
