@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models, transaction
-from django.db.models import CASCADE
+from django.db.models import CASCADE, Q
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -287,6 +287,28 @@ class Contest(models.Model):
             return True
 
         return False
+
+    @classmethod
+    def get_visible_contests(cls, user):
+        queryset = cls.objects.defer('description')
+        if not user.has_perm('judge.see_private_contest'):
+            q = Q(is_visible=True)
+            if user.is_authenticated:
+                q |= Q(organizers=user.profile)
+            queryset = queryset.filter(q)
+        if not user.has_perm('judge.edit_all_contest'):
+            q = Q(is_private=False, is_organization_private=False)
+            if user.is_authenticated:
+                q |= Q(organizers=user.profile)
+                q |= Q(is_organization_private=False, is_private=True, private_contestants=user.profile)
+                q |= Q(is_organization_private=True, is_private=False,
+                       organizations__in=user.profile.organizations.all())
+                q |= Q(is_organization_private=True, is_private=True,
+                       organizations__in=user.profile.organizations.all(),
+                       private_contestants=user.profile)
+                q |= Q(view_contest_scoreboard=user.profile)
+            queryset = queryset.filter(q)
+        return queryset.distinct()
 
     def rate(self):
         Rating.objects.filter(contest__end_time__gte=self.end_time).delete()

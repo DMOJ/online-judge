@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Count, Max, Q
+from django.db.models import Count, Max
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -75,18 +75,7 @@ class PostList(ListView):
                                                       .order_by('-latest')
                                                       [:settings.DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT])
 
-        visible_contests = Contest.objects.filter(is_visible=True).order_by('start_time')
-        q = Q(is_private=False, is_organization_private=False)
-        if self.request.user.is_authenticated:
-            q |= Q(organizers=self.request.profile)
-            q |= Q(is_organization_private=False, is_private=True, private_contestants=self.request.profile)
-            q |= Q(is_organization_private=True, is_private=False,
-                   organizations__in=self.request.profile.organizations.all())
-            q |= Q(is_organization_private=True, is_private=True,
-                   organizations__in=self.request.profile.organizations.all(),
-                   private_contestants=self.request.profile)
-            q |= Q(view_contest_scoreboard=user)
-        visible_contests = visible_contests.filter(q).distinct()
+        visible_contests = Contest.get_visible_contests(self.request.user).filter(is_visible=True)
 
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
