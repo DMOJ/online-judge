@@ -34,7 +34,7 @@ def get_request_user(request):
 def api_v1_contest_list(request):
     user = get_request_user(request)
 
-    queryset = Contest.contests_list(user).prefetch_related(
+    queryset = Contest.get_visible_contests(user).prefetch_related(
         Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
 
     return JsonResponse({c.key: {
