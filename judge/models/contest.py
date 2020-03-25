@@ -391,16 +391,16 @@ class Contest(models.Model):
             if user.is_authenticated:
                 filter |= Q(organizers=profile)
                 filter |= Q(is_private=False, is_organization_private=True,
-                            organizations__in=profile.organizations.all())
+                            organizations__in=profile.organizations)
                 filter |= Q(is_private=False, is_private_viewable=True,
-                            organizations__in=profile.organizations.all())
+                            organizations__in=profile.organizations)
                 filter |= Q(is_private=True, is_organization_private=False, is_private_viewable=False,
                             private_contestants=profile)
                 filter |= Q(is_private=True, is_organization_private=True,
-                            organizations__in=profile.organizations.all(),
+                            organizations__in=profile.organizations,
                             private_contestants=profile)
                 filter |= Q(is_private=True, is_private_viewable=True,
-                            organizations__in=profile.organizations.all(),
+                            organizations__in=profile.organizations,
                             private_contestants=profile)
                 filter |= Q(view_contest_scoreboard=profile)
             queryset = queryset.filter(filter)
