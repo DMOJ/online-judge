@@ -33,7 +33,7 @@ class ContestSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Contest.contests_list(AnonymousUser()).values_list('key')
+        return Contest.get_visible_contests(AnonymousUser()).values_list('key')
 
     def location(self, obj):
         return reverse('contest_view', args=obj)

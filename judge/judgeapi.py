@@ -92,11 +92,11 @@ def judge_submission(submission, rejudge, batch_rejudge=False):
         })
     except BaseException:
         logger.exception('Failed to send request to judge')
-        Submission.objects.filter(id=submission.id).update(status='IE')
+        Submission.objects.filter(id=submission.id).update(status='IE', result='IE')
         success = False
     else:
         if response['name'] != 'submission-received' or response['submission-id'] != submission.id:
-            Submission.objects.filter(id=submission.id).update(status='IE')
+            Submission.objects.filter(id=submission.id).update(status='IE', result='IE')
         _post_update_submission(submission)
         success = True
     return success

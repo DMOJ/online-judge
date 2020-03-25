@@ -70,7 +70,7 @@ class PostList(ListView):
 
         now = timezone.now()
 
-        visible_contests = Contest.contests_list(self.request.user).order_by('start_time')
+        visible_contests = Contest.get_visible_contests(self.request.user).order_by('start_time')
 
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
