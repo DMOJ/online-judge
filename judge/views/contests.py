@@ -62,7 +62,7 @@ def _find_contest(request, key, private_check=True):
 
 class ContestListMixin(object):
     def get_queryset(self):
-        return Contest.contests_list(self.request.user)
+        return Contest.get_visible_contests(self.request.user)
 
 
 class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
@@ -512,7 +512,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
     def get_contest_data(self, start, end):
         end += timedelta(days=1)
         contests = self.get_queryset().filter(Q(start_time__gte=start, start_time__lt=end) |
-                                              Q(end_time__gte=start, end_time__lt=end)).defer('description')
+                                              Q(end_time__gte=start, end_time__lt=end))
         starts, ends, oneday = (defaultdict(list) for i in range(3))
         for contest in contests:
             start_date = timezone.localtime(contest.start_time).date()

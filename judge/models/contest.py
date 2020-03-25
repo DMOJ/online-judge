@@ -406,6 +406,28 @@ class Contest(models.Model):
 
         return False
 
+    @classmethod
+    def get_visible_contests(cls, user):
+        queryset = cls.objects.defer('description')
+        if not user.has_perm('judge.see_private_contest'):
+            q = Q(is_visible=True)
+            if user.is_authenticated:
+                q |= Q(organizers=user.profile)
+            queryset = queryset.filter(q)
+        if not user.has_perm('judge.edit_all_contest'):
+            q = Q(is_private=False, is_organization_private=False)
+            if user.is_authenticated:
+                q |= Q(organizers=user.profile)
+                q |= Q(is_organization_private=False, is_private=True, private_contestants=user.profile)
+                q |= Q(is_organization_private=True, is_private=False,
+                       organizations__in=user.profile.organizations.all())
+                q |= Q(is_organization_private=True, is_private=True,
+                       organizations__in=user.profile.organizations.all(),
+                       private_contestants=user.profile)
+                q |= Q(view_contest_scoreboard=user.profile)
+            queryset = queryset.filter(q)
+        return queryset.distinct()
+
     def rate(self):
         Rating.objects.filter(contest__end_time__gte=self.end_time).delete()
         for contest in Contest.objects.filter(is_rated=True, end_time__gte=self.end_time).order_by('end_time'):
