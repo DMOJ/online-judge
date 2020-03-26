@@ -25,6 +25,24 @@
             <h3>{{ _('Execution Results') }}</h3>
         {% endif %}
         <br>
+        {% if statuses %}
+            {% for case in statuses %}
+                {% if not submission.is_graded and loop.last %}
+                    <span class="fa fa-spinner fa-pulse"></span>
+                {% elif case.is_combined %}
+                    <span class="case-AC">&#8943;</span>
+                {% elif case.status == "AC" %}
+                    <span class="fa fa-check case-AC"></span>
+                {% elif case.status == "SC" %}
+                    <span class="case-SC">&ndash;</span>
+                {% else %}
+                    <a href="#{{ case.id }}">
+                        <span class="fa fa-times case-{{ case.status }} case-bad"></span>
+                    </a>
+                {% endif %}
+            {% endfor %}
+            <br><br>
+        {% endif %}
         {% set test_case_id = counter() %}
         {% for batch in batches %}
             {% if batch.id %}
