@@ -75,7 +75,8 @@ class PostList(ListView):
                                                       .order_by('-latest')
                                                       [:settings.DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT])
 
-        visible_contests = Contest.get_visible_contests(self.request.user).filter(is_visible=True)
+        visible_contests = Contest.get_visible_contests(self.request.user).filter(is_visible=True) \
+                                  .order_by('start_time')
 
         context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
