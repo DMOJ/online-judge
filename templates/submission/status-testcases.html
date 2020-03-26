@@ -30,7 +30,7 @@
                 {% if not submission.is_graded and loop.last %}
                     <span class="fa fa-spinner fa-pulse"></span>
                 {% elif case.is_combined %}
-                    <span class="case-AC">&#8943;</span>
+                    <span class="case-{{ case.status }}">&#8943;</span>
                 {% elif case.status == "AC" %}
                     <span class="fa fa-check case-AC"></span>
                 {% elif case.status == "SC" %}

@@ -114,7 +114,7 @@ def combine_statuses(status_cases):
     ret = []
     for key, group in groupby(status_cases, key=attrgetter('status')):
         group = list(group)
-        if key == 'AC' and len(group) > 10:
+        if len(group) > 10:
             # Generates "[status] [status] ... [status] [status]" except we keep the test case ids as well
             ret.extend(group[:2] + [TestCase(id=None, status=key, is_combined=True)] + group[-2:])
         else:
