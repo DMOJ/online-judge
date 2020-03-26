@@ -106,8 +106,8 @@ def combine_statuses(status_cases):
     for key, group in groupby(status_cases, key=attrgetter('status')):
         group = list(group)
         if key == 'AC' and len(group) > 10:
-            # Generates "AC AC ... AC AC" except we keep the test case ids as well
-            ret.extend(group[:2] + [TestCase(id=None, status='AC', is_combined=True)] + group[-2:])
+            # Generates "[status] [status] ... [status] [status]" except we keep the test case ids as well
+            ret.extend(group[:2] + [TestCase(id=None, status=key, is_combined=True)] + group[-2:])
         else:
             ret.extend(group)
     return ret
@@ -121,13 +121,13 @@ def group_test_cases(cases):
     for case in cases:
         if case.batch != last and buf:
             result.append(make_batch(last, buf))
-            status.append(get_statuses(last, buf))
+            status.extend(get_statuses(last, buf))
             buf = []
         buf.append(case)
         last = case.batch
     if buf:
         result.append(make_batch(last, buf))
-        status.append(get_statuses(last, buf))
+        status.extend(get_statuses(last, buf))
     return result, combine_statuses(status)
 
 
