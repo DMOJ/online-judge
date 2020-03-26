@@ -377,7 +377,7 @@ class Contest(models.Model):
     @classmethod
     def get_visible_contests(cls, user):
         profile = user.profile if user.is_authenticated else None
-        queryset = cls.objects.all().defer('description', 'registration_page')
+        queryset = cls.objects.defer('description', 'registration_page')
 
         if not user.has_perm('judge.see_private_contest'):
             filter = Q(is_visible=True)
@@ -391,16 +391,16 @@ class Contest(models.Model):
             if user.is_authenticated:
                 filter |= Q(organizers=profile)
                 filter |= Q(is_private=False, is_organization_private=True,
-                            organizations__in=profile.organizations)
+                            organizations__in=profile.organizations.all())
                 filter |= Q(is_private=False, is_private_viewable=True,
-                            organizations__in=profile.organizations)
+                            organizations__in=profile.organizations.all())
                 filter |= Q(is_private=True, is_organization_private=False, is_private_viewable=False,
                             private_contestants=profile)
                 filter |= Q(is_private=True, is_organization_private=True,
-                            organizations__in=profile.organizations,
+                            organizations__in=profile.organizations.all(),
                             private_contestants=profile)
                 filter |= Q(is_private=True, is_private_viewable=True,
-                            organizations__in=profile.organizations,
+                            organizations__in=profile.organizations.all(),
                             private_contestants=profile)
                 filter |= Q(view_contest_scoreboard=profile)
             queryset = queryset.filter(filter)
