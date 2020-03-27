@@ -110,8 +110,8 @@
 
                             // Add remove button on-the-fly
                             if ($('#remove-api-token-button').length == 0) {
-                                $('#generate-api-token-button').after($('<a id="remove-api-token-button" \
-                                    href="{{ url('remove_api_token') }}" \
+                                $('#generate-api-token-button').after($('<a id="remove-api-token-button" href="{{
+                                    url('remove_api_token') }}" \
                                     class="button inline-button ml-5">{{ _('Remove') }}</a>'));
                             }
                         },
