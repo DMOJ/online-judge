@@ -78,6 +78,7 @@ class Submission(models.Model):
     case_total = models.FloatField(verbose_name=_('test case total points'), default=0)
     judged_on = models.ForeignKey('Judge', verbose_name=_('judged on'), null=True, blank=True,
                                   on_delete=models.SET_NULL)
+    judged_date = models.DateTimeField(verbose_name=_('submission judge time'), default=None, null=True)
     was_rejudged = models.BooleanField(verbose_name=_('was rejudged by admin'), default=False)
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
     contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,

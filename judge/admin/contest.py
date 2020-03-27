@@ -171,14 +171,25 @@ class ContestAdmin(VersionAdmin):
         return readonly
 
     def save_model(self, request, obj, form, change):
-        if form.cleaned_data['is_visible']:
-            if not request.user.has_perm('judge.change_contest_visibility'):
-                if not form.cleaned_data['is_private'] and not form.cleaned_data['is_organization_private']:
-                    raise PermissionDenied
-                if not request.user.has_perm('judge.create_private_contest'):
-                    raise PermissionDenied
+        # `is_visible` will not appear in `cleaned_data` if user cannot edit it
+        if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):
+            if not form.cleaned_data['is_private'] and not form.cleaned_data['is_organization_private']:
+                raise PermissionDenied
+            if not request.user.has_perm('judge.create_private_contest'):
+                raise PermissionDenied
 
         super().save_model(request, obj, form, change)
+        # We need this flag because `save_related` deals with the inlines, but does not know if we have already rescored
+        self._rescored = False
+        if form.changed_data and any(f in form.changed_data for f in ('format_config', 'format_name')):
+            self._rescore(obj.key)
+            self._rescored = True
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        # Only rescored if we did not already do so in `save_model`
+        if not self._rescored and any(formset.has_changed() for formset in formsets):
+            self._rescore(form.cleaned_data['key'])
 
     def has_change_permission(self, request, obj=None):
         if not request.user.has_perm('judge.edit_own_contest'):
@@ -186,6 +197,10 @@ class ContestAdmin(VersionAdmin):
         if request.user.has_perm('judge.edit_all_contest') or obj is None:
             return True
         return obj.organizers.filter(id=request.profile.id).exists()
+
+    def _rescore(self, contest_key):
+        from judge.tasks import rescore_contest
+        transaction.on_commit(rescore_contest.s(contest_key).delay)
 
     def make_visible(self, request, queryset):
         if not request.user.has_perm('judge.change_contest_visibility'):
