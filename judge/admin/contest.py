@@ -164,12 +164,12 @@ class ContestAdmin(VersionAdmin):
         return readonly
 
     def save_model(self, request, obj, form, change):
-        if form.cleaned_data['is_visible']:
-            if not request.user.has_perm('judge.change_contest_visibility'):
-                if not form.cleaned_data['is_private'] and not form.cleaned_data['is_organization_private']:
-                    raise PermissionDenied
-                if not request.user.has_perm('judge.create_private_contest'):
-                    raise PermissionDenied
+        # `is_visible` will not appear in `cleaned_data` if user cannot edit it
+        if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):
+            if not form.cleaned_data['is_private'] and not form.cleaned_data['is_organization_private']:
+                raise PermissionDenied
+            if not request.user.has_perm('judge.create_private_contest'):
+                raise PermissionDenied
 
         super().save_model(request, obj, form, change)
 
