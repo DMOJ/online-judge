@@ -95,7 +95,7 @@
             $('#generate-api-token-button').click(function (event) {
                 event.preventDefault();
                 if (confirm("{{ _('Are you sure you want to generate or regenerate your API token?') }}\n"
-                          + "{{ _('This will invalidate any previous API tokens.') }}"
+                          + "{{ _('This will invalidate any previous API tokens.') }} "
                           + "{{ _('It also allows access to your account without Two Factor Authentication.') }}")) {
                     $('#api-token').text("{{ _('Generating...') }}");
 
