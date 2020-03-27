@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0099_contest_problem_label'),
+        ('judge', '0101_submission_judged_date'),
     ]
 
     operations = [

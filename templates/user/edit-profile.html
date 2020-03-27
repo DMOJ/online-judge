@@ -87,27 +87,29 @@
     <script type="text/javascript">
         $(function () {
             $('#api-token').click(function (event) {
-                if ($(this).text() != $(this).attr("data-token"))
-                    $(this).text($(this).attr("data-token"));
+                if ($(this).text() != $(this).attr('data-token'))
+                    $(this).text($(this).attr('data-token'));
             });
 
             $('#generate-api-token-button').click(function (event) {
                 event.preventDefault();
-                if (confirm('{{ _('Are you sure you want to generate or regenerate your API token?') }}' + '\n'
-                         + '{{ _('This will invalidate any previous API tokens and allows access to your account without Two Factor Authentication.') }}')) {
-                    $('#api-token').text('{{ _('Generating...') }}');
+                if (confirm("{{ _('Are you sure you want to generate or regenerate your API token?') }}\n"
+                         + "{{ _('This will invalidate any previous API tokens.') }}"
+                         + "{{ _('It also allows access to your account without Two Factor Authentication.') }}")) {
+                    $('#api-token').text("{{ _('Generating...') }}");
                     $.ajax({
                         type: "POST",
                         url: $(this).attr('href'),
                         dataType: 'json',
                         success: function(data) {
-                            $('#api-token').attr("data-token", data.data.token);
+                            $('#api-token').attr('data-token', data.data.token);
                             $('#api-token').text(data.data.token);
-                            $('#generate-api-token-button').text('{{ _('Regenerate') }}');
+                            $('#generate-api-token-button').text("{{ _('Regenerate') }}");
 
                             // Add remove button on-the-fly
                             if ($('#remove-api-token-button').length == 0)
-                                $('<a id=\'remove-api-token-button\' href="{{ url('remove_api_token') }}" class="button inline-button ml-5">{{ _('Remove') }}</a>')
+                                $('<a id="remove-api-token-button" href="{{ url('remove_api_token') }}" \
+                                    class="button inline-button ml-5">{{ _('Remove') }}</a>')
                                     .insertAfter('#generate-api-token-button');
                         }
                     });
@@ -231,12 +233,12 @@
                                 <td colspan="2"><span id='api-token-td' class="inline-header">
                                     {{ _('API Token:') }}
                                     {% if profile.api_token %}
-                                        <a id='generate-api-token-button' href="{{ url('generate_api_token') }}" class="button inline-button">{{ _('Regenerate') }}</a>
-                                        <a id='remove-api-token-button' href="{{ url('remove_api_token') }}" class="button inline-button ml-5">{{ _('Remove') }}</a>
-                                        <div class='api-token' id='api-token' data-token='{{ profile.api_token }}'>{{ _('Click to show') }}</div>
+                                        <a id="generate-api-token-button" href="{{ url('generate_api_token') }}" class="button inline-button">{{ _('Regenerate') }}</a>
+                                        <a id="remove-api-token-button" href="{{ url('remove_api_token') }}" class="button inline-button ml-5">{{ _('Remove') }}</a>
+                                        <div class="api-token" id="api-token" data-token="{{ profile.api_token }}">{{ _('Click to show') }}</div>
                                     {% else %}
-                                        <a id='generate-api-token-button' href="{{ url('generate_api_token') }}" class="button inline-button">Generate</a>
-                                        <div class='api-token' id='api-token'></div>
+                                        <a id="generate-api-token-button" href="{{ url('generate_api_token') }}" class="button inline-button">Generate</a>
+                                        <div class="api-token" id="api-token"></div>
                                     {% endif %}
                                 </span></td>
                             </tr>
