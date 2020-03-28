@@ -15,7 +15,7 @@ from django_ace import AceWidget
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
-    AdminSelect2MultipleWidget, AdminSelect2Widget, HeavyPreviewAdminPageDownWidget
+    AdminSelect2MultipleWidget, AdminSelect2Widget
 
 
 class AdminHeavySelect2Widget(AdminHeavySelect2Widget):
