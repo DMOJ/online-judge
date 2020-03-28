@@ -23,7 +23,9 @@
     <script type="text/javascript">
         $(function () {
             $('form.kick-form').find('a.button').click(function () {
-                $(this).parent().submit();
+                if (confirm('Are you sure you want to kick?')){
+                    $(this).parent().submit();
+                }
                 return false;
             })
         });
