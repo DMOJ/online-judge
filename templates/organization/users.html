@@ -9,6 +9,14 @@
         .kick-form .button {
             margin: -8px 0;
         }
+
+        form.kick-form a.button {
+            visibility: hidden;
+        }
+
+        tr:hover td > form.kick-form a.button {
+            visibility: visible;
+        }
     </style>
 
     {% if is_admin %}
@@ -23,7 +31,7 @@
     <script type="text/javascript">
         $(function () {
             $('form.kick-form').find('a.button').click(function () {
-                if (confirm('Are you sure you want to kick?')){
+                if (confirm(_('Are you sure you want to kick this user?'))) {
                     $(this).parent().submit();
                 }
                 return false;
