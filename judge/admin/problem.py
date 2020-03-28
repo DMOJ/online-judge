@@ -210,13 +210,9 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         return queryset.filter(access).distinct() if access else queryset.none()
 
     def has_change_permission(self, request, obj=None):
-        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+        if obj is None:
             return True
-        if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
-            return True
-        if not request.user.has_perm('judge.edit_own_problem'):
-            return False
-        return obj.is_editor(request.profile)
+        return obj.is_editable_by(request.user)
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':
