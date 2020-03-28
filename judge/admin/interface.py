@@ -70,10 +70,9 @@ class BlogPostAdmin(VersionAdmin):
     date_hierarchy = 'publish_on'
 
     def has_change_permission(self, request, obj=None):
-        return (request.user.has_perm('judge.edit_all_post') or
-                request.user.has_perm('judge.change_blogpost') and (
-                    obj is None or
-                    obj.authors.filter(id=request.profile.id).exists()))
+        if obj is None:
+            return True
+        return obj.is_editable_by(request.user)
 
 
 class SolutionForm(ModelForm):
