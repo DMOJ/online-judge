@@ -10,7 +10,7 @@
 
 {% block header %}
     <div style="float:right">
-        {% if perms.judge.change_problem %}
+        {% if problem.is_editable_by(request.user) %}
             [<a href="{{ url('admin:judge_problem_change', problem.id) }}">{{ _('Edit') }}</a>]
         {% endif %}
     </div>
