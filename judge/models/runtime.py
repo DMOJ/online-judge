@@ -97,7 +97,10 @@ class Language(models.Model):
 
     @classmethod
     def get_default_language(cls):
-        return Language.objects.get(key=settings.DEFAULT_USER_LANGUAGE)
+        try:
+            return Language.objects.get(key=settings.DEFAULT_USER_LANGUAGE)
+        except Language.DoesNotExist:
+            return cls.get_python3()
 
     @classmethod
     def get_default_language_pk(cls):

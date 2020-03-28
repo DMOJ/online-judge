@@ -6,6 +6,11 @@ from django.db import migrations, models
 import judge.models.runtime
 
 
+def create_python3(apps, schema_editor):
+    Language = apps.get_model('judge', 'Language')
+    Language.objects.get_or_create(key='PY3', defaults={'name': 'Python 3'})[0]
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -13,6 +18,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(create_python3, reverse_code=migrations.RunPython.noop),
         migrations.AlterField(
             model_name='profile',
             name='language',
