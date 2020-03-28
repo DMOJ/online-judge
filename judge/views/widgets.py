@@ -15,9 +15,6 @@ __all__ = ['rejudge_submission', 'DetectTimezone']
 @login_required
 @require_POST
 def rejudge_submission(request):
-    if not request.user.has_perm('judge.rejudge_submission'):
-        return HttpResponseForbidden()
-
     if 'id' not in request.POST or not request.POST['id'].isdigit():
         return HttpResponseBadRequest()
 
