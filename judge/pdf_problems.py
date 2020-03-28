@@ -138,7 +138,8 @@ page.open(param.input, function (status) {
         with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
             f.write(self.get_render_script())
         cmdline = [settings.PHANTOMJS, '_render.js']
-        self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir)
+        env = {'OPENSSL_CONF': '/etc/ssl'}
+        self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir, env=env)
         self.log = self.proc.communicate()[0]
 
 

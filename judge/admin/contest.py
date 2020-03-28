@@ -15,7 +15,7 @@ from django_ace import AceWidget
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
-    AdminSelect2MultipleWidget, AdminSelect2Widget
+    AdminSelect2MultipleWidget, AdminSelect2Widget, HeavyPreviewAdminPageDownWidget
 
 
 class AdminHeavySelect2Widget(AdminHeavySelect2Widget):
@@ -106,7 +106,7 @@ class ContestForm(ModelForm):
         }
 
 
-class ContestAdmin(VersionAdmin):
+class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers')}),
         (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_scoreboard',
@@ -120,7 +120,6 @@ class ContestAdmin(VersionAdmin):
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
-    actions = ['make_visible', 'make_hidden']
     inlines = [ContestProblemInline]
     actions_on_top = True
     actions_on_bottom = True
@@ -128,6 +127,16 @@ class ContestAdmin(VersionAdmin):
     change_list_template = 'admin/judge/contest/change_list.html'
     filter_horizontal = ['rate_exclude']
     date_hierarchy = 'start_time'
+
+    def get_actions(self, request):
+        actions = super(ContestAdmin, self).get_actions(request)
+
+        if request.user.has_perm('judge.change_contest_visibility') or \
+                request.user.has_perm('judge.create_private_contest'):
+            for action in ('make_visible', 'make_hidden'):
+                actions[action] = self.get_action(action)
+
+        return actions
 
     def get_queryset(self, request):
         queryset = Contest.objects.all()
@@ -144,9 +153,32 @@ class ContestAdmin(VersionAdmin):
             readonly += ['access_code']
         if not request.user.has_perm('judge.create_private_contest'):
             readonly += ['is_private', 'private_contestants', 'is_organization_private', 'organizations']
+            if not request.user.has_perm('judge.change_contest_visibility'):
+                readonly += ['is_visible']
         if not request.user.has_perm('judge.contest_problem_label'):
             readonly += ['problem_label_script']
         return readonly
+
+    def save_model(self, request, obj, form, change):
+        # `is_visible` will not appear in `cleaned_data` if user cannot edit it
+        if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):
+            if not form.cleaned_data['is_private'] and not form.cleaned_data['is_organization_private']:
+                raise PermissionDenied
+            if not request.user.has_perm('judge.create_private_contest'):
+                raise PermissionDenied
+
+        super().save_model(request, obj, form, change)
+        # We need this flag because `save_related` deals with the inlines, but does not know if we have already rescored
+        self._rescored = False
+        if form.changed_data and any(f in form.changed_data for f in ('format_config', 'format_name')):
+            self._rescore(obj.key)
+            self._rescored = True
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        # Only rescored if we did not already do so in `save_model`
+        if not self._rescored and any(formset.has_changed() for formset in formsets):
+            self._rescore(form.cleaned_data['key'])
 
     def has_change_permission(self, request, obj=None):
         if not request.user.has_perm('judge.edit_own_contest'):
@@ -155,7 +187,13 @@ class ContestAdmin(VersionAdmin):
             return True
         return obj.organizers.filter(id=request.profile.id).exists()
 
+    def _rescore(self, contest_key):
+        from judge.tasks import rescore_contest
+        transaction.on_commit(rescore_contest.s(contest_key).delay)
+
     def make_visible(self, request, queryset):
+        if not request.user.has_perm('judge.change_contest_visibility'):
+            queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
         count = queryset.update(is_visible=True)
         self.message_user(request, ungettext('%d contest successfully marked as visible.',
                                              '%d contests successfully marked as visible.',
@@ -163,7 +201,9 @@ class ContestAdmin(VersionAdmin):
     make_visible.short_description = _('Mark contests as visible')
 
     def make_hidden(self, request, queryset):
-        count = queryset.update(is_visible=False)
+        if not request.user.has_perm('judge.change_contest_visibility'):
+            queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
+        count = queryset.update(is_visible=True)
         self.message_user(request, ungettext('%d contest successfully marked as hidden.',
                                              '%d contests successfully marked as hidden.',
                                              count) % count)
@@ -190,12 +230,8 @@ class ContestAdmin(VersionAdmin):
         if not request.user.has_perm('judge.contest_rating'):
             raise PermissionDenied()
         with transaction.atomic():
-            if connection.vendor == 'sqlite':
-                Rating.objects.all().delete()
-            else:
-                cursor = connection.cursor()
+            with connection.cursor() as cursor:
                 cursor.execute('TRUNCATE TABLE `%s`' % Rating._meta.db_table)
-                cursor.close()
             Profile.objects.update(rating=None)
             for contest in Contest.objects.filter(is_rated=True).order_by('end_time'):
                 rate_contest(contest)

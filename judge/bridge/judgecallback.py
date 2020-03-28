@@ -164,8 +164,8 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
         if Submission.objects.filter(id=packet['submission-id']).update(
-                status='G', is_pretested=packet['pretested'],
-                current_testcase=1, batch=False):
+                status='G', is_pretested=packet['pretested'], current_testcase=1,
+                batch=False, judged_date=timezone.now()):
             SubmissionTestCase.objects.filter(submission_id=packet['submission-id']).delete()
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'grading-begin'})
             self._post_update_submission(packet['submission-id'], 'grading-begin')

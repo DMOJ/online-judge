@@ -17,9 +17,8 @@ def sane_time_repr(delta):
 
 
 def api_v1_contest_list(request):
-    queryset = Contest.objects.filter(is_visible=True, is_private=False,
-                                      is_organization_private=False).prefetch_related(
-        Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
+    queryset = Contest.get_visible_contests(request.user).prefetch_related(
+        Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list'))
 
     return JsonResponse({c.key: {
         'name': c.name,

@@ -11,6 +11,7 @@ from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
+from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget, AdminSelect2MultipleWidget, \
     AdminSelect2Widget, CheckboxSelectMultipleWithSelectAll
 
@@ -110,7 +111,7 @@ class ProblemTranslationInline(admin.StackedInline):
     extra = 0
 
 
-class ProblemAdmin(VersionAdmin):
+class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {
             'fields': (
@@ -204,13 +205,9 @@ class ProblemAdmin(VersionAdmin):
         return queryset.filter(access).distinct() if access else queryset.none()
 
     def has_change_permission(self, request, obj=None):
-        if request.user.has_perm('judge.edit_all_problem') or obj is None:
+        if obj is None:
             return True
-        if request.user.has_perm('judge.edit_public_problem') and obj.is_public:
-            return True
-        if not request.user.has_perm('judge.edit_own_problem'):
-            return False
-        return obj.is_editor(request.profile)
+        return obj.is_editable_by(request.user)
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'allowed_languages':

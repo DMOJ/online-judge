@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models, transaction
-from django.db.models import CASCADE
+from django.db.models import CASCADE, Q
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -148,10 +148,10 @@ class Contest(models.Model):
             # so test it to see if the script returns a valid label.
             label = self.get_label_for_problem(0)
         except Exception as e:
-            raise ValidationError(e)
+            raise ValidationError('Contest problem label script: %s' % e)
         else:
             if not isinstance(label, str):
-                raise ValidationError('Problem label script should return a string.')
+                raise ValidationError('Contest problem label script: script should return a string.')
 
     def is_in_contest(self, user):
         if user.is_authenticated:
@@ -288,6 +288,28 @@ class Contest(models.Model):
 
         return False
 
+    @classmethod
+    def get_visible_contests(cls, user):
+        queryset = cls.objects.defer('description')
+        if not user.has_perm('judge.see_private_contest'):
+            q = Q(is_visible=True)
+            if user.is_authenticated:
+                q |= Q(organizers=user.profile)
+            queryset = queryset.filter(q)
+        if not user.has_perm('judge.edit_all_contest'):
+            q = Q(is_private=False, is_organization_private=False)
+            if user.is_authenticated:
+                q |= Q(organizers=user.profile)
+                q |= Q(is_organization_private=False, is_private=True, private_contestants=user.profile)
+                q |= Q(is_organization_private=True, is_private=False,
+                       organizations__in=user.profile.organizations.all())
+                q |= Q(is_organization_private=True, is_private=True,
+                       organizations__in=user.profile.organizations.all(),
+                       private_contestants=user.profile)
+                q |= Q(view_contest_scoreboard=user.profile)
+            queryset = queryset.filter(q)
+        return queryset.distinct()
+
     def rate(self):
         Rating.objects.filter(contest__end_time__gte=self.end_time).delete()
         for contest in Contest.objects.filter(is_rated=True, end_time__gte=self.end_time).order_by('end_time'):
@@ -303,6 +325,7 @@ class Contest(models.Model):
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
             ('create_private_contest', _('Create private contests')),
+            ('change_contest_visibility', _('Change contest visibility')),
             ('contest_problem_label', _('Edit contest problem label script')),
         )
         verbose_name = _('contest')
