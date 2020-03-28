@@ -6,6 +6,7 @@ from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Profile
+from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminPagedownWidget, AdminSelect2Widget, GenerateKeyTextInputButton
 
 
@@ -44,7 +45,7 @@ class TimezoneFilter(admin.SimpleListFilter):
         return queryset.filter(timezone=self.value())
 
 
-class ProfileAdmin(VersionAdmin):
+class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
     form = ProfileForm
     fieldsets = (
         (None, {'fields': ('user', 'display_rank')}),
