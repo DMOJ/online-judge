@@ -82,9 +82,14 @@ class BlogPost(models.Model):
     def can_see(self, user):
         if self.visible and self.publish_on <= timezone.now():
             return True
+        return self.is_editable_by(user)
+
+    def is_editable_by(self, user):
+        if not user.is_authenticated:
+            return False
         if user.has_perm('judge.edit_all_post'):
             return True
-        return user.is_authenticated and self.authors.filter(id=user.profile.id).exists()
+        return user.has_perm('judge.change_blogpost') and self.authors.filter(id=user.profile.id).exists()
 
     class Meta:
         permissions = (
