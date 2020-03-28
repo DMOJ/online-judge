@@ -223,7 +223,7 @@ def problem_data_file(request, problem, path):
 @login_required
 def problem_init_view(request, problem):
     problem = get_object_or_404(Problem, code=problem)
-    if not request.user.is_superuser and not problem.is_editable_by(request.user):
+    if not problem.is_editable_by(request.user):
         raise Http404()
 
     try:
