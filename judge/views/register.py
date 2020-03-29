@@ -71,7 +71,7 @@ class RegistrationView(OldRegistrationView):
     def register(self, form):
         user = super(RegistrationView, self).register(form)
         profile, _ = Profile.objects.get_or_create(user=user, defaults={
-            'language': Language.get_python3(),
+            'language': Language.get_default_language(),
         })
 
         cleaned_data = form.cleaned_data
