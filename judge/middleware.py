@@ -29,9 +29,9 @@ class ECOOForceLoginMiddleware(object):
 
         url_name = resolve(request.path_info).url_name
         if (url_name.startswith('password_') or
-            url_name in ('auth_login', 'auth_logout', 'login_2fa', 'home')):
+                url_name in ('auth_login', 'auth_logout', 'login_2fa', 'home')):
             return self.get_response(request)
-        
+
         login_path = reverse('auth_login')
         return HttpResponseRedirect(login_path + '?next=' + urlquote(request.get_full_path()))
 
