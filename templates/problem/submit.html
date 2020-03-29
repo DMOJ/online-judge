@@ -110,7 +110,7 @@
 
                 $('#problem_submit').submit(function (event) {
                     if ($('#id_source').val().length > 65536) {
-                        alert("{{ _('Your source code must contain less than or equal to 65536 characters.') }}");
+                        alert("{{ _('Your source code must contain at most 65536 characters.') }}");
                         event.preventDefault();
                         $('#problem_submit').find(':submit').attr('disabled', false);
                     }
