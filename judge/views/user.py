@@ -5,7 +5,6 @@ import struct
 from datetime import datetime
 from operator import itemgetter
 
-import pyotp
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required

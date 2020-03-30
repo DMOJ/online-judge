@@ -2,15 +2,14 @@ import base64
 import hmac
 import re
 import struct
-from requests.exceptions import HTTPError
 
 from django.conf import settings
-from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import Resolver404, resolve, reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlquote
+from requests.exceptions import HTTPError
 
 
 class ShortCircuitMiddleware:
@@ -73,7 +72,7 @@ class ContestMiddleware(object):
 
 
 class APIMiddleware(object):
-    header_pattern = re.compile('^Bearer ([a-zA-Z0-9_\-]{48})$')
+    header_pattern = re.compile('^Bearer ([a-zA-Z0-9_-]{48})$')
 
     def __init__(self, get_response):
         self.get_response = get_response
