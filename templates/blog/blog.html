@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block header %}
-    {% if perms.judge.change_blogpost %}
+    {% if post.is_editable_by(request.user) %}
         <div class="title-line-action">[<a href="{{ url('admin:judge_blogpost_change', post.id) }}">{{ _('Edit') }}</a>]
         </div>
     {% endif %}
