@@ -218,8 +218,6 @@ class Contest(models.Model):
             return True
         if not self.show_scoreboard:
             return False
-        if not self.is_visible:
-            return False
         if self.start_time is not None and self.start_time > timezone.now():
             return False
         if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > timezone.now():
@@ -358,10 +356,10 @@ class Contest(models.Model):
                 return
             raise self.PrivateContest()
 
-            if self.is_private and (self.is_organization_private or self.is_private_viewable):
-                if in_org and in_users:
-                    return
-                raise self.PrivateContest()
+        if self.is_private and (self.is_organization_private or self.is_private_viewable):
+            if in_org and in_users:
+                return
+            raise self.PrivateContest()
 
     def is_accessible_by(self, user):
         try:
