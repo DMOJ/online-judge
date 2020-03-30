@@ -205,12 +205,6 @@ class Contest(models.Model):
             return False
         if not self.can_join:
             return False
-        if not self.is_visible:
-            return False
-        if self.start_time is not None and self.start_time > timezone.now():
-            return False
-        if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > timezone.now():
-            return False
         return True
 
     def can_see_full_scoreboard(self, user):
