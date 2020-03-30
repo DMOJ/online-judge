@@ -205,6 +205,8 @@ class Contest(models.Model):
             return False
         if not self.can_join:
             return False
+        if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > self._now:
+            return False
         return True
 
     def can_see_full_scoreboard(self, user):
