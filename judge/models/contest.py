@@ -348,12 +348,12 @@ class Contest(models.Model):
             in_org = False
             in_users = False
 
-            if not self.is_private and (self.is_organization_private or self.is_private_viewable):
-                if in_org:
-                    return
-                raise self.PrivateContest()
+        if not self.is_private and (self.is_organization_private or self.is_private_viewable):
+            if in_org:
+                return
+            raise self.PrivateContest()
 
-        if self.is_private and not self.is_organization_private:
+        if self.is_private and not (self.is_organization_private or self.is_private_viewable):
             if in_users:
                 return
             raise self.PrivateContest()
