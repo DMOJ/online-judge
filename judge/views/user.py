@@ -1,7 +1,5 @@
-import base64
 import itertools
 import json
-import struct
 from datetime import datetime
 from operator import itemgetter
 
@@ -266,10 +264,9 @@ def edit_profile(request):
 def generate_api_token(request):
     profile = request.profile
     with transaction.atomic(), revisions.create_revision():
-        token = base64.urlsafe_b64encode(struct.pack('>I32s', request.user.id, profile.generate_api_token()))
         revisions.set_user(request.user)
         revisions.set_comment(_('Generated API token for user'))
-        return JsonResponse({'data': {'token': token.decode('utf-8')}})
+        return JsonResponse({'data': {'token': profile.generate_api_token()}})
 
 
 @require_POST

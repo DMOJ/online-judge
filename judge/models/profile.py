@@ -1,5 +1,7 @@
+import base64
 import hmac
 import secrets
+import struct
 from operator import mul
 
 from django.conf import settings
@@ -157,10 +159,11 @@ class Profile(models.Model):
     calculate_points.alters_data = True
 
     def generate_api_token(self):
-        token = secrets.token_bytes(32)
-        self.api_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=token, digestmod='sha256').hexdigest()
+        secret = secrets.token_bytes(32)
+        self.api_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=secret, digestmod='sha256').hexdigest()
         self.save(update_fields=['api_token'])
-        return token
+        token = base64.urlsafe_b64encode(struct.pack('>I32s', self.user.id, secret))
+        return token.decode('utf-8')
 
     generate_api_token.alters_data = True
 
