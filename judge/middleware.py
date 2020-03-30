@@ -1,9 +1,15 @@
+import base64
+import hmac
 import re
+import struct
+from requests.exceptions import HTTPError
 
 from django.conf import settings
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import Resolver404, resolve, reverse
+from django.utils.encoding import force_bytes
 from django.utils.http import urlquote
 
 
@@ -67,28 +73,33 @@ class ContestMiddleware(object):
 
 
 class APIMiddleware(object):
-    header_pattern = re.compile('^Bearer ([a-z2-7]{32})$', re.I)
+    header_pattern = re.compile('^Bearer ([a-zA-Z0-9_\-]{48})$')
 
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
         full_token = request.META.get('HTTP_AUTHORIZATION', '')
-        if full_token:
-            token = self.header_pattern.match(full_token)
-            if token:
-                if request.path.startswith(reverse('admin:index')):
-                    return HttpResponse('Admin inaccessible', status=403)
-                try:
-                    request.user = User.objects.get(profile__api_token=token.group(1))
-                    request._cached_user = request.user
-                    request.csrf_processing_done = True
-                except User.DoesNotExist:
-                    response = HttpResponse('Invalid token')
-                    response['WWW-Authenticate'] = 'Bearer realm="API"'
-                    response.status_code = 401
-                    return response
-            else:
-                return HttpResponse('Invalid authorization header', status=400)
+        if not full_token:
+            return self.get_response(request)
 
+        token = self.header_pattern.match(full_token)
+        if not token:
+            return HttpResponse('Invalid authorization header', status=400)
+        if request.path.startswith(reverse('admin:index')):
+            return HttpResponse('Admin inaccessible', status=403)
+
+        try:
+            id, secret = struct.unpack('>I32s', base64.urlsafe_b64decode(token.group(1)))
+            request.user = User.objects.get(id=id)
+            digest = hmac.new(force_bytes(settings.SECRET_KEY), msg=secret, digestmod="sha256").hexdigest()
+            if not hmac.compare_digest(digest, request.user.profile.api_token):
+                raise HTTPError()
+            request._cached_user = request.user
+            request.csrf_processing_done = True
+        except (User.DoesNotExist, HTTPError):
+            response = HttpResponse('Invalid token')
+            response['WWW-Authenticate'] = 'Bearer realm="API"'
+            response.status_code = 401
+            return response
         return self.get_response(request)
