@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from judge.models import Comment
-from judge.widgets import AdminHeavySelect2Widget, HeavyPreviewAdminPageDownWidget
+from judge.widgets import AdminHeavySelect2Widget, AdminMartorWidget
 
 
 class CommentForm(ModelForm):
@@ -13,9 +13,8 @@ class CommentForm(ModelForm):
         widgets = {
             'author': AdminHeavySelect2Widget(data_view='profile_select2'),
             'parent': AdminHeavySelect2Widget(data_view='comment_select2'),
+            'body': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('comment_preview')}),
         }
-        if HeavyPreviewAdminPageDownWidget is not None:
-            widgets['body'] = HeavyPreviewAdminPageDownWidget(preview=reverse_lazy('comment_preview'))
 
 
 class CommentAdmin(VersionAdmin):

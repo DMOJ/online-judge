@@ -11,7 +11,7 @@ from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Judge, Problem
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminPagedownWidget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget
 
 
 class LanguageForm(ModelForm):
@@ -23,8 +23,7 @@ class LanguageForm(ModelForm):
         widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
 
     class Meta:
-        if AdminPagedownWidget is not None:
-            widgets = {'description': AdminPagedownWidget}
+        widgets = {'description': AdminMartorWidget}
 
 
 class LanguageAdmin(VersionAdmin):
@@ -70,9 +69,7 @@ django.jQuery(document).ready(function ($) {{
 
 class JudgeAdminForm(ModelForm):
     class Meta:
-        widgets = {'auth_key': GenerateKeyTextInput}
-        if AdminPagedownWidget is not None:
-            widgets['description'] = AdminPagedownWidget
+        widgets = {'auth_key': GenerateKeyTextInput, 'description': AdminMartorWidget}
 
 
 class JudgeAdmin(VersionAdmin):
@@ -86,6 +83,9 @@ class JudgeAdmin(VersionAdmin):
     )
     list_display = ('name', 'online', 'start_time', 'ping', 'load', 'last_ip')
     ordering = ['-online', 'name']
+    formfield_overrides = {
+        TextField: {'widget': AdminMartorWidget},
+    }
 
     def get_urls(self):
         return ([url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
@@ -113,8 +113,3 @@ class JudgeAdmin(VersionAdmin):
         if result and obj is not None:
             return not obj.online
         return result
-
-    if AdminPagedownWidget is not None:
-        formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
-        }

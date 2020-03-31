@@ -237,6 +237,7 @@ INSTALLED_APPS += (
     'statici18n',
     'impersonate',
     'django_jinja',
+    'martor',
 )
 
 MIDDLEWARE = (
@@ -386,6 +387,7 @@ MARKDOWN_USER_LARGE_STYLE = {
 }
 
 MARKDOWN_STYLES = {
+    'default': MARKDOWN_DEFAULT_STYLE,
     'comment': MARKDOWN_DEFAULT_STYLE,
     'self-description': MARKDOWN_USER_LARGE_STYLE,
     'problem': MARKDOWN_ADMIN_EDITABLE_STYLE,
@@ -399,6 +401,22 @@ MARKDOWN_STYLES = {
     'organization-about': MARKDOWN_USER_LARGE_STYLE,
     'ticket': MARKDOWN_USER_LARGE_STYLE,
 }
+
+MARTOR_ENABLE_CONFIGS = {
+    'imgur': 'true',
+    'mention': 'false',
+    'jquery': 'true',
+    'living': 'false',
+    'spellcheck': 'false',
+    'hljs': 'false',
+}
+MARTOR_MARKDOWNIFY_URL = '/widgets/preview/default'
+MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user'
+MARTOR_UPLOAD_URL = '/widgets/martor/upload-image'
+
+# Directory under MEDIA_ROOT to use to store image uploaded through martor.
+MARTOR_UPLOAD_MEDIA_DIR = 'martor'
+MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.png', '.gif'}
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
