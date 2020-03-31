@@ -96,6 +96,7 @@ class APIMiddleware(object):
                 raise HTTPError()
             request._cached_user = request.user
             request.csrf_processing_done = True
+            request.session['2fa_passed'] = True
         except (User.DoesNotExist, HTTPError):
             response = HttpResponse('Invalid token')
             response['WWW-Authenticate'] = 'Bearer realm="API"'
