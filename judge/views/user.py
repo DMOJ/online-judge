@@ -37,7 +37,7 @@ from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, TitleMix
 from .contests import ContestRanking
 
 __all__ = ['UserPage', 'UserAboutPage', 'UserList', 'UserDashboard', 'UserProblemsPage', 'users',
-           'edit_profile', 'generate_api_token']
+           'edit_profile']
 
 
 def remap_keys(iterable, mapping):
@@ -290,15 +290,23 @@ def edit_profile(request):
 @require_POST
 @login_required
 def generate_api_token(request):
-    profile = Profile.objects.get(user=request.user)
-    if profile.mute:
-        raise Http404()
+    profile = request.profile
     with transaction.atomic(), revisions.create_revision():
-        profile.api_token = pyotp.random_base32(length=32)
+        revisions.set_user(request.user)
+        revisions.set_comment(_('Generated API token for user'))
+        return JsonResponse({'data': {'token': profile.generate_api_token()}})
+
+
+@require_POST
+@login_required
+def remove_api_token(request):
+    profile = request.profile
+    with transaction.atomic(), revisions.create_revision():
+        profile.api_token = None
         profile.save()
         revisions.set_user(request.user)
-        revisions.set_comment(_('Updated API token on site'))
-    return HttpResponseRedirect(reverse('user_edit_profile'))
+        revisions.set_comment(_('Removed API token for user'))
+    return JsonResponse({})
 
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):

@@ -1,0 +1,946 @@
+[
+{
+    "model": "judge.language",
+    "pk": 1,
+    "fields": {
+        "key": "PY2",
+        "name": "Python 2",
+        "short_name": "",
+        "common_name": "Python",
+        "ace": "python",
+        "pygments": "python",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 2,
+    "fields": {
+        "key": "CPP03",
+        "name": "C++03",
+        "short_name": "C++03",
+        "common_name": "C++",
+        "ace": "c_cpp",
+        "pygments": "cpp",
+        "template": "#include <bits/stdc++.h>\r\n\r\nusing namespace std;\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 4,
+    "fields": {
+        "key": "RUBY18",
+        "name": "Ruby 1.8",
+        "short_name": "",
+        "common_name": "Ruby",
+        "ace": "ruby",
+        "pygments": "ruby",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 5,
+    "fields": {
+        "key": "PHP",
+        "name": "PHP",
+        "short_name": null,
+        "common_name": "PHP",
+        "ace": "php",
+        "pygments": "php",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 6,
+    "fields": {
+        "key": "PERL",
+        "name": "Perl",
+        "short_name": "",
+        "common_name": "Perl",
+        "ace": "perl",
+        "pygments": "perl",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 8,
+    "fields": {
+        "key": "PY3",
+        "name": "Python 3",
+        "short_name": "",
+        "common_name": "Python",
+        "ace": "python",
+        "pygments": "python3",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 9,
+    "fields": {
+        "key": "C",
+        "name": "C",
+        "short_name": "",
+        "common_name": "C",
+        "ace": "c_cpp",
+        "pygments": "c",
+        "template": "#include <stdio.h>\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 10,
+    "fields": {
+        "key": "PAS",
+        "name": "Pascal",
+        "short_name": "",
+        "common_name": "Pascal",
+        "ace": "pas",
+        "pygments": "pascal",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 13,
+    "fields": {
+        "key": "CPP11",
+        "name": "C++11",
+        "short_name": "C++11",
+        "common_name": "C++",
+        "ace": "c_cpp",
+        "pygments": "cpp",
+        "template": "#include <bits/stdc++.h>\r\n\r\nusing namespace std;\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 14,
+    "fields": {
+        "key": "MONOCS",
+        "name": "C#",
+        "short_name": "C#",
+        "common_name": "C#",
+        "ace": "csharp",
+        "pygments": "c#",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 15,
+    "fields": {
+        "key": "HASK",
+        "name": "Haskell",
+        "short_name": "HASK",
+        "common_name": "Haskell",
+        "ace": "haskell",
+        "pygments": "haskell",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 16,
+    "fields": {
+        "key": "GO",
+        "name": "Go",
+        "short_name": "GO",
+        "common_name": "Go",
+        "ace": "golang",
+        "pygments": "go",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 17,
+    "fields": {
+        "key": "PYPY",
+        "name": "PyPy 2",
+        "short_name": "PYPY2",
+        "common_name": "Python",
+        "ace": "python",
+        "pygments": "python",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 18,
+    "fields": {
+        "key": "PYPY3",
+        "name": "PyPy 3",
+        "short_name": "PYPY3",
+        "common_name": "Python",
+        "ace": "python",
+        "pygments": "python3",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 19,
+    "fields": {
+        "key": "F95",
+        "name": "Fortran",
+        "short_name": "",
+        "common_name": "Fortran",
+        "ace": "fortran",
+        "pygments": "fortran",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 20,
+    "fields": {
+        "key": "NASM",
+        "name": "NASM",
+        "short_name": "",
+        "common_name": "Assembly",
+        "ace": "assembly_x86",
+        "pygments": "nasm",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 21,
+    "fields": {
+        "key": "RUBY2",
+        "name": "Ruby 2",
+        "short_name": "",
+        "common_name": "Ruby",
+        "ace": "ruby",
+        "pygments": "ruby",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 22,
+    "fields": {
+        "key": "LUA",
+        "name": "Lua",
+        "short_name": "LUA",
+        "common_name": "Lua",
+        "ace": "lua",
+        "pygments": "lua",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 23,
+    "fields": {
+        "key": "OCAML",
+        "name": "OCaml",
+        "short_name": "OCAML",
+        "common_name": "OCaml",
+        "ace": "ocaml",
+        "pygments": "ocaml",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 24,
+    "fields": {
+        "key": "TUR",
+        "name": "Turing",
+        "short_name": "",
+        "common_name": "Turing",
+        "ace": "turing",
+        "pygments": "turing",
+        "template": "",
+        "info": "tprologc; OpenTuring 1.0.0",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 25,
+    "fields": {
+        "key": "JAVA8",
+        "name": "Java 8",
+        "short_name": null,
+        "common_name": "Java",
+        "ace": "java",
+        "pygments": "java",
+        "template": "import java.io.*;\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n    }\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 27,
+    "fields": {
+        "key": "V8JS",
+        "name": "V8 JavaScript",
+        "short_name": null,
+        "common_name": "JS",
+        "ace": "javascript",
+        "pygments": "javascript",
+        "template": "/* \r\n * This is a custom version of V8 that adds six functions in order to perform I/O and aid in online judging.\r\n *\r\n * * `print(...)`: similar to Python's `print`, prints all argument separated by space followed by new line.\r\n * * `flush()`: flushes stdout, ensuring everything output by `print()` immediately shows up.\r\n * * `gets()`: similar to the Ruby equivalent, returns one line of input from `stdin`.\r\n * * `read(bytes)`: read `bytes` bytes from stdin as an `ArrayBuffer`.\r\n * * `write(buffer)`: write a typed array, `ArrayBuffer`, or a view of `ArrayBuffer` to stdout.\r\n * * `quit(code)`: exits the program with `code`.\r\n * * You can also assign to the global variable `autoflush` to control whether `print()` flushes.\r\n *\r\n */",
+        "info": "",
+        "description": "This is a custom version of V8 that adds six functions in order to perform I/O and aid in online judging.\r\n\r\n* `print(...)`: similar to Python's `print`, prints all argument separated by space followed by new line.\r\n* `flush()`: flushes stdout, ensuring everything output by `print()` immediately shows up.\r\n* `gets()`: similar to the Ruby equivalent, returns one line of input from `stdin`.\r\n* `read(bytes)`: read `bytes` bytes from stdin as an [`ArrayBuffer`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer).\r\n* `write(buffer)`: write a typed array, `ArrayBuffer`, or a view of `ArrayBuffer` to stdout.\r\n* `quit(code)`: exits the program with `code`.\r\n* You can also assign to the global variable `autoflush` to control whether `print()` flushes.",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 29,
+    "fields": {
+        "key": "D",
+        "name": "D",
+        "short_name": "",
+        "common_name": "D",
+        "ace": "d",
+        "pygments": "d",
+        "template": "import std.stdio;\r\n\r\nvoid main() {\r\n\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 30,
+    "fields": {
+        "key": "BF",
+        "name": "Brain****",
+        "short_name": null,
+        "common_name": "Brain****",
+        "ace": "plain_text",
+        "pygments": "bf",
+        "template": "",
+        "info": "",
+        "description": "Classical [brain\\*\\*\\*\\*](http://www.muppetlabs.com/~breadbox/bf/) with as many byte-sized cells as there are bytes in the memory limit.",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 31,
+    "fields": {
+        "key": "OBJC",
+        "name": "Objective-C",
+        "short_name": "",
+        "common_name": "ObjC",
+        "ace": "objectivec",
+        "pygments": "objc",
+        "template": "",
+        "info": "",
+        "description": "Objective-C with GNUstep Base 1.22.1 on GCC 4.7.2+.",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 33,
+    "fields": {
+        "key": "CPP14",
+        "name": "C++14",
+        "short_name": "C++14",
+        "common_name": "C++",
+        "ace": "c_cpp",
+        "pygments": "cpp",
+        "template": "#include <bits/stdc++.h>\r\n\r\nusing namespace std;\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 34,
+    "fields": {
+        "key": "MONOVB",
+        "name": "Visual Basic",
+        "short_name": "VB",
+        "common_name": "VB",
+        "ace": "vbscript",
+        "pygments": "vb",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 35,
+    "fields": {
+        "key": "CLANG",
+        "name": "Clang",
+        "short_name": "Clang",
+        "common_name": "C",
+        "ace": "c_cpp",
+        "pygments": "c",
+        "template": "#include <stdio.h>\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 36,
+    "fields": {
+        "key": "CLANGX",
+        "name": "Clang++",
+        "short_name": "Clang++",
+        "common_name": "C++",
+        "ace": "c_cpp",
+        "pygments": "cpp",
+        "template": "#include <bits/stdc++.h>\r\n\r\nusing namespace std;\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 37,
+    "fields": {
+        "key": "DART",
+        "name": "Dart",
+        "short_name": "DART",
+        "common_name": "Dart",
+        "ace": "dart",
+        "pygments": "dart",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 38,
+    "fields": {
+        "key": "TCL",
+        "name": "TCL",
+        "short_name": "TCL",
+        "common_name": "TCL",
+        "ace": "tcl",
+        "pygments": "tcl",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 39,
+    "fields": {
+        "key": "CBL",
+        "name": "COBOL",
+        "short_name": "",
+        "common_name": "COBOL",
+        "ace": "cobol",
+        "pygments": "cobol",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 40,
+    "fields": {
+        "key": "MONOFS",
+        "name": "F#",
+        "short_name": "F#",
+        "common_name": "F#",
+        "ace": "fsharp",
+        "pygments": "fsharp",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 41,
+    "fields": {
+        "key": "SCM",
+        "name": "Scheme",
+        "short_name": "SCM",
+        "common_name": "Scheme",
+        "ace": "scheme",
+        "pygments": "scheme",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 42,
+    "fields": {
+        "key": "ADA",
+        "name": "Ada",
+        "short_name": "ADA",
+        "common_name": "Ada",
+        "ace": "ada",
+        "pygments": "ada",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 43,
+    "fields": {
+        "key": "AWK",
+        "name": "AWK",
+        "short_name": "AWK",
+        "common_name": "Awk",
+        "ace": "AWK",
+        "pygments": "awk",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 44,
+    "fields": {
+        "key": "RUST",
+        "name": "Rust",
+        "short_name": "RUST",
+        "common_name": "Rust",
+        "ace": "rust",
+        "pygments": "rust",
+        "template": "#[macro_use] extern crate dmoj;\r\n\r\nfn main() {\r\n    println!(\"Hello, World!\");\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 45,
+    "fields": {
+        "key": "COFFEE",
+        "name": "CoffeeScript",
+        "short_name": "",
+        "common_name": "JS",
+        "ace": "coffee",
+        "pygments": "coffeescript",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 47,
+    "fields": {
+        "key": "PRO",
+        "name": "Prolog",
+        "short_name": "PRO",
+        "common_name": "Prolog",
+        "ace": "prolog",
+        "pygments": "prolog",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 49,
+    "fields": {
+        "key": "FORTH",
+        "name": "Forth",
+        "short_name": "FORTH",
+        "common_name": "Forth",
+        "ace": "forth",
+        "pygments": "forth",
+        "template": "",
+        "info": "",
+        "description": "Gforth 0.7.2.\r\n\r\nSubmissions ran as `gforth <source>.fs -e bye`.",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 50,
+    "fields": {
+        "key": "ICK",
+        "name": "INTERCAL",
+        "short_name": "",
+        "common_name": "Intercal",
+        "ace": "text",
+        "pygments": "text",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 51,
+    "fields": {
+        "key": "TEXT",
+        "name": "Text",
+        "short_name": "",
+        "common_name": "Text",
+        "ace": "text",
+        "pygments": "text",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 52,
+    "fields": {
+        "key": "SCALA",
+        "name": "Scala",
+        "short_name": "SCALA",
+        "common_name": "Scala",
+        "ace": "scala",
+        "pygments": "scala",
+        "template": "// Must be the same name as the problem code\r\nobject problemcode extends App {\r\n    \r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 54,
+    "fields": {
+        "key": "SWIFT",
+        "name": "Swift",
+        "short_name": null,
+        "common_name": "Swift",
+        "ace": "swift",
+        "pygments": "swift",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 56,
+    "fields": {
+        "key": "GAS32",
+        "name": "Assembly (x86)",
+        "short_name": "",
+        "common_name": "Assembly",
+        "ace": "assembly_x86",
+        "pygments": "gas",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 57,
+    "fields": {
+        "key": "GASARM",
+        "name": "Assembly (ARM)",
+        "short_name": "",
+        "common_name": "Assembly",
+        "ace": "assembly_x86",
+        "pygments": "gas",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 58,
+    "fields": {
+        "key": "GAS64",
+        "name": "Assembly (x64)",
+        "short_name": "",
+        "common_name": "Assembly",
+        "ace": "assembly_x86",
+        "pygments": "gas",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 60,
+    "fields": {
+        "key": "SED",
+        "name": "Sed",
+        "short_name": "",
+        "common_name": "Sed",
+        "ace": "perl",
+        "pygments": "perl",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 61,
+    "fields": {
+        "key": "JAVA9",
+        "name": "Java 9",
+        "short_name": null,
+        "common_name": "Java",
+        "ace": "java",
+        "pygments": "java",
+        "template": "import java.io.*;\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n    }\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 62,
+    "fields": {
+        "key": "NASM64",
+        "name": "NASM64",
+        "short_name": "",
+        "common_name": "Assembly",
+        "ace": "assembly_x86",
+        "pygments": "nasm",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 63,
+    "fields": {
+        "key": "RKT",
+        "name": "Racket",
+        "short_name": "",
+        "common_name": "Racket",
+        "ace": "lisp",
+        "pygments": "racket",
+        "template": "#lang racket",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 64,
+    "fields": {
+        "key": "GROOVY",
+        "name": "Groovy",
+        "short_name": "Groovy",
+        "common_name": "Groovy",
+        "ace": "groovy",
+        "pygments": "groovy",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 67,
+    "fields": {
+        "key": "KOTLIN",
+        "name": "Kotlin",
+        "short_name": "",
+        "common_name": "Kotlin",
+        "ace": "kotlin",
+        "pygments": "kotlin",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 68,
+    "fields": {
+        "key": "PIKE",
+        "name": "Pike",
+        "short_name": "",
+        "common_name": "Pike",
+        "ace": "pike",
+        "pygments": "pike",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 69,
+    "fields": {
+        "key": "CPP17",
+        "name": "C++17",
+        "short_name": "C++17",
+        "common_name": "C++",
+        "ace": "c_cpp",
+        "pygments": "cpp",
+        "template": "#include <bits/stdc++.h>\r\n\r\nusing namespace std;\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 70,
+    "fields": {
+        "key": "SBCL",
+        "name": "Lisp",
+        "short_name": "Lisp",
+        "common_name": "Lisp",
+        "ace": "lisp",
+        "pygments": "lisp",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 71,
+    "fields": {
+        "key": "JAVA10",
+        "name": "Java 10",
+        "short_name": null,
+        "common_name": "Java",
+        "ace": "java",
+        "pygments": "java",
+        "template": "import java.io.*;\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n    }\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 72,
+    "fields": {
+        "key": "C11",
+        "name": "C11",
+        "short_name": null,
+        "common_name": "C",
+        "ace": "c_cpp",
+        "pygments": "c",
+        "template": "#include <stdio.h>\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 74,
+    "fields": {
+        "key": "JAVA11",
+        "name": "Java 11",
+        "short_name": null,
+        "common_name": "Java",
+        "ace": "java",
+        "pygments": "java",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
+}
+]

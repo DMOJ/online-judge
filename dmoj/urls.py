@@ -83,7 +83,8 @@ register_patterns = [
     url(r'^2fa/enable/$', totp.TOTPEnableView.as_view(), name='enable_2fa'),
     url(r'^2fa/disable/$', totp.TOTPDisableView.as_view(), name='disable_2fa'),
 
-    url(r'^api/token/generate/$', user.generate_api_token, name="generate_api_token"),
+    url(r'api/token/generate/$', user.generate_api_token, name='generate_api_token'),
+    url(r'api/token/remove/$', user.remove_api_token, name='remove_api_token'),
 ]
 
 
