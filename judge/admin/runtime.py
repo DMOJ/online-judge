@@ -9,7 +9,7 @@ from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
 from judge.models import Judge, Problem
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminPagedownWidget, GenerateKeyTextInputButton
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget, GenerateKeyTextInputButton
 
 
 class LanguageForm(ModelForm):
@@ -21,8 +21,7 @@ class LanguageForm(ModelForm):
         widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
 
     class Meta:
-        if AdminPagedownWidget is not None:
-            widgets = {'description': AdminPagedownWidget}
+        widgets = {'description': AdminMartorWidget}
 
 
 class LanguageAdmin(VersionAdmin):
@@ -46,9 +45,7 @@ class LanguageAdmin(VersionAdmin):
 
 class JudgeAdminForm(ModelForm):
     class Meta:
-        widgets = {'auth_key': GenerateKeyTextInputButton}
-        if AdminPagedownWidget is not None:
-            widgets['description'] = AdminPagedownWidget
+        widgets = {'auth_key': GenerateKeyTextInputButton, 'description': AdminMartorWidget}
 
 
 class JudgeAdmin(VersionAdmin):
@@ -62,6 +59,9 @@ class JudgeAdmin(VersionAdmin):
     )
     list_display = ('name', 'online', 'start_time', 'ping', 'load', 'last_ip')
     ordering = ['-online', 'name']
+    formfield_overrides = {
+        TextField: {'widget': AdminMartorWidget},
+    }
 
     def get_urls(self):
         return ([url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
@@ -94,8 +94,3 @@ class JudgeAdmin(VersionAdmin):
         if obj.id and obj.is_blocked and obj.online:
             obj.disconnect(force=False)
         super(JudgeAdmin, self).save_model(request, obj, form, change)
-
-    if AdminPagedownWidget is not None:
-        formfield_overrides = {
-            TextField: {'widget': AdminPagedownWidget},
-        }
