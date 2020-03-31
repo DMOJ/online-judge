@@ -126,10 +126,6 @@ class Profile(models.Model):
                                                             _('API token must be None or hexadecimal'))])
     notes = models.TextField(verbose_name=_('internal notes'), null=True, blank=True,
                              help_text=_('Notes for administrators regarding this user.'))
-    api_token = EncryptedNullCharField(max_length=32, null=True, blank=True, verbose_name=_('API token'),
-                                       help_text=_('32 character base32-encoded key for API access'),
-                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
-                                                                  _('API token must be empty or base32'))])
     is_external_user = models.BooleanField(verbose_name=_('external user'), default=False,
                                            help_text=_('If set, this account is an external user, and '
                                                        'has extra restrictions.'))

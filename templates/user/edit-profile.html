@@ -77,15 +77,6 @@
             $('#ace_user_script').on('ace_load', function (e, editor) {
                 editor.getSession().setMode("ace/mode/javascript");
             });
-            $('a#generate-api-token-link').click(function (event) {
-                event.preventDefault();
-                action = document.getElementById('generate-api-token-link').innerHTML.trim();
-                if (confirm('Are you sure you want to ' + action.toLocaleLowerCase() + ' your API token?')) {
-                    document.getElementById('api-token').innerHTML = action.slice(0, -1) + 'ing...'
-                    $.post('{{ url('generate_api_token') }}');
-                    $('#api-token').load(document.URL +  ' #api-token');
-                }
-            })
         });
     </script>
     <script type="text/javascript">

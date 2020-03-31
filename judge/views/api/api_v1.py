@@ -1,7 +1,5 @@
 from operator import attrgetter
 
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import F, OuterRef, Prefetch, Subquery
 from django.http import Http404, JsonResponse
@@ -16,6 +14,7 @@ def sane_time_repr(delta):
     hours = delta.seconds / 3600
     minutes = (delta.seconds % 3600) / 60
     return '%02d:%02d:%02d' % (days, hours, minutes)
+
 
 def api_v1_contest_list(request):
     queryset = Contest.get_visible_contests(request.user).prefetch_related(
@@ -119,7 +118,7 @@ def api_v1_problem_info(request, problem):
         'languages': list(p.allowed_languages.values_list('key', flat=True)),
     }
 
-    if user.profile.current_contest is None:
+    if request.profile.current_contest is None:
         resp['types'] = list(p.types.values_list('full_name', flat=True))
         resp['points'] = p.points
         resp['partial'] = p.partial
