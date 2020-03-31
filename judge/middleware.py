@@ -91,9 +91,16 @@ class APIMiddleware(object):
         try:
             id, secret = struct.unpack('>I32s', base64.urlsafe_b64decode(token.group(1)))
             request.user = User.objects.get(id=id)
+
+            # User hasn't generated a token
+            if not request.user.profile.api_token:
+                raise HTTPError()
+
+            # Token comparison
             digest = hmac.new(force_bytes(settings.SECRET_KEY), msg=secret, digestmod='sha256').hexdigest()
             if not hmac.compare_digest(digest, request.user.profile.api_token):
                 raise HTTPError()
+
             request._cached_user = request.user
             request.csrf_processing_done = True
             request.session['2fa_passed'] = True
