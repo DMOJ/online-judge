@@ -56,11 +56,13 @@
         .api-token {
             padding-top: 5px;
             font-family: Consolas, Liberation Mono, Monaco, Courier New, monospace;
-            font-size: 12px;
+            font-size: 13px;
             -webkit-user-select: all;
             -ms-user-select: all;
             user-select: all;
             white-space: nowrap;
+            color: black;
+            font-weight: bold;
         }
 
         .ml-5 {
@@ -234,14 +236,12 @@
                     </span></td>
                     <td>
                         {% if profile.is_totp_enabled %}
-                            {{ _('Two Factor Authentication is enabled.') }}
                             {% if require_staff_2fa and request.user.is_staff %}
                                 <a id="disable-2fa-button" class="button inline-button">Disable</a>
                             {% else %}
                                 <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
                             {% endif %}
                         {% else %}
-                            {{ _('Two Factor Authentication is disabled.') }}
                             <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
                         {% endif %}
                     </td>
