@@ -107,7 +107,7 @@ def api_v1_problem_list(request):
 
 def api_v1_problem_info(request, problem):
     p = get_object_or_404(Problem, code=problem)
-    if not p.is_accessible_by(request.user):
+    if not p.is_accessible_by(request.user, skip_contest_problem_check=True):
         raise Http404()
 
     return JsonResponse({
