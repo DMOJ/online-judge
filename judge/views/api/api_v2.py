@@ -266,11 +266,13 @@ class APIProblemDetail(APIDetailView):
     slug_url_kwarg = 'problem'
 
     def get_object(self, queryset=None):
-        # unconditionally deny access in contests to avoid revealing authors, types, points, etc.
-        if self.request.user.is_authenticated and self.request.profile.current_contest is not None:
+        problem = super().get_object(queryset)
+
+        # if in a contest with this problem, deny access
+        if self.request.in_contest and \
+                self.request.participation.contest.contest_problems.filter(problem=problem).exists():
             raise PermissionDenied()
 
-        problem = super().get_object(queryset)
         if not problem.is_accessible_by(self.request.user):
             raise Http404()
         return problem
@@ -406,13 +408,15 @@ class APISubmissionDetail(LoginRequiredMixin, APIDetailView):
     slug_url_kwarg = 'submission'
 
     def get_object(self, queryset=None):
-        # unconditionally deny access in contest to avoid revealing points
-        if self.request.profile.current_contest is not None:
-            raise PermissionDenied()
-
         submission = super().get_object(queryset)
         profile = self.request.profile
         problem = submission.problem
+
+        # if in a contest with this problem, deny access
+        if self.request.in_contest and \
+                self.request.participation.contest.contest_problems.filter(problem=problem).exists():
+            raise PermissionDenied()
+
         if self.request.user.has_perm('judge.view_all_submission'):
             return submission
         if submission.user_id == profile.id:
