@@ -132,11 +132,20 @@ class APIContestList(APIListView):
     model = Contest
     list_filters = (
         ('tag', 'tags__name'),
+        ('organization', 'organizations'),
     )
 
     def get_unfiltered_queryset(self):
-        return Contest.get_visible_contests(self.request.user).prefetch_related(
-            Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list'),
+        return (
+            Contest.get_visible_contests(self.request.user)
+            .prefetch_related(
+                Prefetch(
+                    'tags',
+                    queryset=ContestTag.objects.only('name'),
+                    to_attr='tag_list'
+                ),
+            )
+            .order_by('end_time')
         )
 
     def get_object_data(self, contest):
@@ -266,6 +275,7 @@ class APIContestParticipationList(APIListView):
             ContestParticipation.objects
             .filter(virtual__gte=0, contest__in=visible_contests)
             .annotate(contest_key=F('contest__key'), username=F('user__user__username'))
+            .order_by('id')
             .only('score', 'cumtime', 'is_disqualified', 'virtual')
         )
 
@@ -303,6 +313,7 @@ class APIProblemList(APIListView):
                 ),
             )
             .defer('description')
+            .order_by('code')
         )
 
         # TODO: replace with Problem.get_visible_problems() when method is made
@@ -384,6 +395,7 @@ class APIUserList(APIListView):
                 latest_rating=Subquery(latest_rating_subquery.values('rating')[:1]),
                 latest_volatility=Subquery(latest_rating_subquery.values('volatility')[:1]),
             )
+            .order_by('id')
             .only('points', 'performance_points', 'problem_count', 'display_rank')
         )
 
@@ -558,7 +570,7 @@ class APIOrganizationList(APIListView):
     )
 
     def get_unfiltered_queryset(self):
-        return Organization.objects.annotate(member_count=Count('member'))
+        return Organization.objects.annotate(member_count=Count('member')).order_by('id')
 
     def get_object_data(self, organization):
         return {
