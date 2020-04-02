@@ -2,14 +2,14 @@ from operator import attrgetter
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
-from django.db.models import F, OuterRef, Prefetch, Q, Subquery
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.db.models import Count, F, OuterRef, Prefetch, Q, Subquery
 from django.http import Http404, JsonResponse
 from django.utils.timezone import now
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
 
-from judge.models import Contest, ContestParticipation, ContestTag, Problem, Profile, Rating, Submission
+from judge.models import Contest, ContestParticipation, ContestTag, Organization, Problem, Profile, Rating, Submission
 
 
 def sane_time_repr(delta):
@@ -61,6 +61,7 @@ class APIMixin(JSONResponseMixin):
     def get_error(self, exception):
         excepted_exceptions = {
             ValueError: (400, 'invalid filter value type'),
+            ValidationError: (400, 'invalid filter value type'),
             PermissionDenied: (403, 'permission denied'),
             Http404: (404, 'page/object not found'),
         }
@@ -453,4 +454,23 @@ class APISubmissionDetail(LoginRequiredMixin, APIDetailView):
                     'total': case['total'],
                 } for case in submission.test_cases.values('case', 'status', 'time', 'memory', 'points', 'total')
             ],
+        }
+
+
+class APIOrganizationList(APIListView):
+    model = Organization
+    basic_filters = (
+        ('is_open', 'is_open'),
+    )
+
+    def get_unfiltered_queryset(self):
+        return Organization.objects.annotate(member_count=Count('member'))
+
+    def get_object_data(self, organization):
+        return {
+            'id': organization.id,
+            'slug': organization.slug,
+            'short_name': organization.short_name,
+            'is_open': organization.is_open,
+            'member_count': organization.member_count,
         }
