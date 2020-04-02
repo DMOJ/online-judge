@@ -277,6 +277,7 @@ urlpatterns = [
             url(r'^submissions$', api.api_v2.APISubmissionList.as_view()),
             url(r'^submission/(?P<submission>\d+)$', api.api_v2.APISubmissionDetail.as_view()),
             url(r'^organizations$', api.api_v2.APIOrganizationList.as_view()),
+            url(r'^participations$', api.api_v2.APIContestParticipationList.as_view()),
         ])),
     ])),
 

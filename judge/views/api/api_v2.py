@@ -219,6 +219,46 @@ class APIContestDetail(APIDetailView):
         }
 
 
+class APIContestParticipationList(APIListView):
+    model = ContestParticipation
+    basic_filters = (
+        ('contest', 'contest__key'),
+        ('user', 'user__user__username'),
+        ('is_disqualified', 'is_disqualified'),
+        ('virtual', 'virtual'),
+    )
+
+    def get_unfiltered_queryset(self):
+        visible_contests = Contest.get_visible_contests(self.request.user)
+
+        # Check which contest scoreboards the user can actually see.
+        # "Contest.get_visible_contests" only gets which contests the user can *see*.
+        # Conditions for participation scoreboard access:
+        #   1. Contest has ended
+        #   2. User is the organizer of the contest
+        #   3. User is specified to be able to "view contest scoreboard"
+        if not self.request.user.has_perm('judge.see_private_contest'):
+            q = Q(end_time__lt=now())
+            if self.request.user.is_authenticated:
+                if self.request.user.has_perm('judge.edit_own_contest'):
+                    q |= Q(organizers=self.request.profile)
+                q |= Q(view_contest_scoreboard=self.request.profile)
+            visible_contests = visible_contests.filter(q)
+
+        return ContestParticipation.objects.filter(virtual__gte=0, contest__in=visible_contests) \
+                                           .select_related('contest', 'user__user')
+
+    def get_object_data(self, participation):
+        return {
+            'user': participation.user.user.username,
+            'contest': participation.contest.key,
+            'score': participation.score,
+            'cumtime': participation.cumtime,
+            'is_disqualified': participation.is_disqualified,
+            'virtual': participation.virtual,
+        }
+
+
 class APIProblemList(APIListView):
     model = Problem
     list_filters = (
@@ -375,7 +415,7 @@ class APIUserDetail(APIDetailView):
 class APISubmissionList(APIListView):
     model = Submission
     list_filters = (
-        ('username', 'user__user__username'),
+        ('user', 'user__user__username'),
         ('problem', 'problem__code'),
         ('language', 'language__key'),
         ('result', 'result'),
