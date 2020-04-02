@@ -52,7 +52,7 @@ class APIMixin(JSONResponseMixin):
     def get_api_data(self, context):
         raise NotImplementedError()
 
-    def get_default_data(self, **kwargs):
+    def get_base_response(self, **kwargs):
         resp = {
             'api_version': '2.0',
             'method': self.request.method.lower(),
@@ -62,7 +62,7 @@ class APIMixin(JSONResponseMixin):
         return resp
 
     def get_data(self, context):
-        return self.get_default_data(data=self.get_api_data(context))
+        return self.get_base_response(data=self.get_api_data(context))
 
     def get_error(self, exception):
         excepted_exceptions = {
@@ -75,7 +75,7 @@ class APIMixin(JSONResponseMixin):
         if exception_type in excepted_exceptions:
             exception_data = excepted_exceptions[exception_type]
             return JsonResponse(
-                self.get_default_data(error={
+                self.get_base_response(error={
                     'code': exception_data[0],
                     'message': exception_data[1],
                 }),
@@ -96,14 +96,14 @@ class APIListView(APIMixin, BaseListView):
     def filter_queryset(self, queryset):
         for key, filter_name in self.basic_filters:
             if key in self.request.GET:
-                # may raise ValueError, but is excepted in APIMixin
+                # may raise ValueError or ValidationError, but is excepted in APIMixin
                 queryset = queryset.filter(**{
                     filter_name: self.request.GET.get(key),
                 })
 
         for key, filter_name in self.list_filters:
             if key in self.request.GET:
-                # may raise ValueError, but is excepted in APIMixin
+                # may raise ValueError or ValidationError, but is excepted in APIMixin
                 queryset = queryset.filter(**{
                     filter_name + '__in': self.request.GET.getlist(key),
                 })
