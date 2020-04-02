@@ -10,15 +10,10 @@ from django.utils.functional import cached_property
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
 
-from judge.models import Contest, ContestParticipation, ContestTag, Organization, Problem, Profile, Rating, Submission
+from judge.models import (
+    Contest, ContestParticipation, ContestTag, Organization, Problem, ProblemType, Profile, Rating, Submission,
+)
 from judge.utils.raw_sql import use_straight_join
-
-
-def sane_time_repr(delta):
-    days = delta.days
-    hours = delta.seconds / 3600
-    minutes = (delta.seconds % 3600) / 60
-    return '%02d:%02d:%02d' % (days, hours, minutes)
 
 
 class JSONResponseMixin:
@@ -96,14 +91,14 @@ class APIListView(APIMixin, BaseListView):
     def filter_queryset(self, queryset):
         for key, filter_name in self.basic_filters:
             if key in self.request.GET:
-                # may raise ValueError or ValidationError, but is excepted in APIMixin
+                # May raise ValueError or ValidationError, but is excepted in APIMixin
                 queryset = queryset.filter(**{
                     filter_name: self.request.GET.get(key),
                 })
 
         for key, filter_name in self.list_filters:
             if key in self.request.GET:
-                # may raise ValueError or ValidationError, but is excepted in APIMixin
+                # May raise ValueError or ValidationError, but is excepted in APIMixin
                 queryset = queryset.filter(**{
                     filter_name + '__in': self.request.GET.getlist(key),
                 })
@@ -149,7 +144,7 @@ class APIContestList(APIListView):
             'name': contest.name,
             'start_time': contest.start_time.isoformat(),
             'end_time': contest.end_time.isoformat(),
-            'time_limit': contest.time_limit and sane_time_repr(contest.time_limit),
+            'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
             'tags': list(map(attrgetter('name'), contest.tag_list)),
         }
 
@@ -178,10 +173,9 @@ class APIContestDetail(APIDetailView):
         old_ratings_subquery = (Rating.objects.filter(user=OuterRef('user__pk'),
                                                       contest__end_time__lt=OuterRef('contest__end_time'))
                                 .order_by('-contest__end_time'))
-        participations = (contest.users.filter(virtual=0, user__is_unlisted=False)
+        participations = (contest.users.filter(virtual=ContestParticipation.LIVE, user__is_unlisted=False)
                           .annotate(new_rating=Subquery(new_ratings_subquery.values('rating')[:1]))
                           .annotate(old_rating=Subquery(old_ratings_subquery.values('rating')[:1]))
-                          .prefetch_related('user__organizations')
                           .annotate(username=F('user__user__username'))
                           .order_by('-score', 'cumtime') if can_see_rankings else [])
         can_see_problems = (in_contest or contest.ended or contest.is_editable_by(self.request.user))
@@ -189,26 +183,29 @@ class APIContestDetail(APIDetailView):
         return {
             'key': contest.key,
             'name': contest.name,
-            'is_organization_private': contest.is_organization_private,
-            'organizations': list(contest.organizations.values_list('id', flat=True)),
-            'is_private': contest.is_private,
-            'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
             'start_time': contest.start_time.isoformat(),
             'end_time': contest.end_time.isoformat(),
-            'tags': list(contest.tags.values_list('name', flat=True)),
+            'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
             'is_rated': contest.is_rated,
             'rate_all': contest.is_rated and contest.rate_all,
             'has_rating': contest.ratings.exists(),
             'rating_floor': contest.rating_floor,
             'rating_ceiling': contest.rating_ceiling,
+            'is_organization_private': contest.is_organization_private,
+            'organizations': list(contest.organizations.values_list('id', flat=True)),
+            'is_private': contest.is_private,
+            'tags': list(contest.tags.values_list('name', flat=True)),
             'format': {
                 'name': contest.format_name,
                 'config': contest.format_config,
+                'problem_label_script': contest.problem_label_script,
             },
             'problems': [
                 {
                     'points': int(problem.points),
                     'partial': problem.partial,
+                    'is_pretested': problem.is_pretested and contest.run_pretests_only,
+                    'max_submissions': problem.max_submissions or None,
                     'name': problem.problem.name,
                     'code': problem.problem.code,
                 } for problem in problems] if can_see_problems else [],
@@ -251,13 +248,17 @@ class APIContestParticipationList(APIListView):
                 q |= Q(view_contest_scoreboard=self.request.profile)
             visible_contests = visible_contests.filter(q)
 
-        return ContestParticipation.objects.filter(virtual__gte=0, contest__in=visible_contests) \
-                                           .select_related('contest', 'user__user')
+        return (
+            ContestParticipation.objects
+            .filter(virtual__gte=0, contest__in=visible_contests)
+            .annotate(contest_key=F('contest__key'), username=F('user__user__username'))
+            .only('user__user__username', 'contest__key', 'score', 'cumtime', 'is_disqualified', 'virtual')
+        )
 
     def get_object_data(self, participation):
         return {
-            'user': participation.user.user.username,
-            'contest': participation.contest.key,
+            'user': participation.username,
+            'contest': participation.contest_key,
             'score': participation.score,
             'cumtime': participation.cumtime,
             'is_disqualified': participation.is_disqualified,
@@ -267,12 +268,25 @@ class APIContestParticipationList(APIListView):
 
 class APIProblemList(APIListView):
     model = Problem
+    basic_filters = (
+        ('partial', 'partial'),
+    )
     list_filters = (
         ('group', 'group__full_name'),
+        ('types', 'types__full_name'),
+        ('organization', 'organizations'),
     )
 
     def get_unfiltered_queryset(self):
-        queryset = Problem.objects.select_related('group').defer('description')
+        queryset = (
+            Problem
+            .objects
+            .select_related('group')
+            .prefetch_related(
+                Prefetch('types', queryset=ProblemType.objects.only('full_name'), to_attr='type_list'),
+            )
+            .defer('description')
+        )
 
         # TODO: replace with Problem.get_visible_problems() when method is made
         if not self.request.user.has_perm('see_private_problem'):
@@ -301,9 +315,10 @@ class APIProblemList(APIListView):
         return {
             'code': problem.code,
             'name': problem.name,
-            'partial': problem.partial,
-            'points': problem.points,
+            'types': list(map(attrgetter('full_name'), problem.type_list)),
             'group': problem.group.full_name,
+            'points': problem.points,
+            'partial': problem.partial,
         }
 
 
@@ -314,13 +329,13 @@ class APIProblemDetail(APIDetailView):
 
     def get_object(self, queryset=None):
         problem = super().get_object(queryset)
-
         if not problem.is_accessible_by(self.request.user, skip_contest_problem_check=True):
             raise Http404()
         return problem
 
     def get_object_data(self, problem):
         return {
+            'code': problem.code,
             'name': problem.name,
             'authors': list(problem.authors.values_list('user__username', flat=True)),
             'types': list(problem.types.values_list('full_name', flat=True)),
@@ -429,21 +444,26 @@ class APISubmissionList(APIListView):
         queryset = Submission.objects.all()
         use_straight_join(queryset)
         queryset = (
-            queryset.select_related('problem', 'user__user', 'language')
-                    .filter(problem_id__in=visible_problems)
-                    .only('id', 'problem_id', 'problem__code', 'user__user__username', 'date',
-                          'language__key', 'time', 'memory', 'points', 'result')
-                    .order_by('id')
+            queryset
+            .filter(problem__in=visible_problems)
+            .annotate(
+                username=F('user__user__username'),
+                problem_code=F('problem__code'),
+                language_key=F('language__key'),
+            )
+            .order_by('id')
+            .only('id', 'problem__code', 'user__user__username', 'date',
+                  'language__key', 'time', 'memory', 'points', 'result')
         )
         return queryset
 
     def get_object_data(self, submission):
         return {
             'id': submission.id,
-            'problem': submission.problem.code,
-            'user': submission.user.user.username,
+            'problem': submission.problem_code,
+            'user': submission.username,
             'date': submission.date.isoformat(),
-            'language': submission.language.key,
+            'language': submission.language_key,
             'time': submission.time,
             'memory': submission.memory,
             'points': submission.points,
