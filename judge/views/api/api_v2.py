@@ -166,18 +166,30 @@ class APIContestDetail(APIDetailView):
         if contest.hide_scoreboard and in_contest:
             can_see_rankings = False
 
-        problems = list(contest.contest_problems.select_related('problem')
-                        .defer('problem__description').order_by('order'))
+        problems = list(
+            contest.contest_problems
+            .select_related('problem')
+            .defer('problem__description')
+            .order_by('order'),
+        )
 
         new_ratings_subquery = Rating.objects.filter(participation=OuterRef('pk'))
-        old_ratings_subquery = (Rating.objects.filter(user=OuterRef('user__pk'),
-                                                      contest__end_time__lt=OuterRef('contest__end_time'))
-                                .order_by('-contest__end_time'))
-        participations = (contest.users.filter(virtual=ContestParticipation.LIVE, user__is_unlisted=False)
-                          .annotate(new_rating=Subquery(new_ratings_subquery.values('rating')[:1]))
-                          .annotate(old_rating=Subquery(old_ratings_subquery.values('rating')[:1]))
-                          .annotate(username=F('user__user__username'))
-                          .order_by('-score', 'cumtime') if can_see_rankings else [])
+        old_ratings_subquery = (
+            Rating.objects
+            .filter(user=OuterRef('user__pk'), contest__end_time__lt=OuterRef('contest__end_time'))
+            .order_by('-contest__end_time')
+        )
+        participations = (
+            contest.users
+            .filter(virtual=ContestParticipation.LIVE, user__is_unlisted=False)
+            .annotate(
+                username=F('user__user__username'),
+                old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
+                new_rating=Subquery(new_ratings_subquery.values('rating')[:1]),
+            )
+            .order_by('-score', 'cumtime')
+            if can_see_rankings else []
+        )
         can_see_problems = (in_contest or contest.ended or contest.is_editable_by(self.request.user))
 
         return {
