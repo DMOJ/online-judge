@@ -136,7 +136,8 @@ class APIContestList(APIListView):
 
     def get_unfiltered_queryset(self):
         return Contest.get_visible_contests(self.request.user).prefetch_related(
-            Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list'))
+            Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list'),
+        )
 
     def get_object_data(self, contest):
         return {
@@ -165,6 +166,7 @@ class APIContestDetail(APIDetailView):
         can_see_rankings = contest.can_see_scoreboard(self.request.user)
         if contest.hide_scoreboard and in_contest:
             can_see_rankings = False
+        can_see_problems = (in_contest or contest.ended or contest.is_editable_by(self.request.user))
 
         problems = list(
             contest.contest_problems
@@ -188,9 +190,7 @@ class APIContestDetail(APIDetailView):
                 new_rating=Subquery(new_ratings_subquery.values('rating')[:1]),
             )
             .order_by('-score', 'cumtime')
-            if can_see_rankings else []
         )
-        can_see_problems = (in_contest or contest.ended or contest.is_editable_by(self.request.user))
 
         return {
             'key': contest.key,
@@ -220,7 +220,8 @@ class APIContestDetail(APIDetailView):
                     'max_submissions': problem.max_submissions or None,
                     'name': problem.problem.name,
                     'code': problem.problem.code,
-                } for problem in problems] if can_see_problems else [],
+                } for problem in problems
+            ] if can_see_problems else [],
             'rankings': [
                 {
                     'user': participation.username,
@@ -230,7 +231,8 @@ class APIContestDetail(APIDetailView):
                     'new_rating': participation.new_rating,
                     'is_disqualified': participation.is_disqualified,
                     'solutions': contest.format.get_problem_breakdown(participation, problems),
-                } for participation in participations],
+                } for participation in participations
+            ] if can_see_rankings else [],
         }
 
 
