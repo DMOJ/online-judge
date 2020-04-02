@@ -234,7 +234,7 @@ class APIContestDetail(APIDetailView):
             'rankings': [
                 {
                     'user': participation.username,
-                    'points': participation.score,
+                    'score': participation.score,
                     'cumtime': participation.cumtime,
                     'old_rating': participation.old_rating,
                     'new_rating': participation.new_rating,
@@ -297,7 +297,7 @@ class APIProblemList(APIListView):
     )
     list_filters = (
         ('group', 'group__full_name'),
-        ('types', 'types__full_name'),
+        ('type', 'types__full_name'),
         ('organization', 'organizations'),
     )
 
