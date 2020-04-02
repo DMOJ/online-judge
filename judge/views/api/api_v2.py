@@ -113,7 +113,7 @@ class APIListView(APIMixin, BaseListView):
         objects = context['object_list']
         return {
             'current_object_count': len(objects),
-            'items_per_page': page.paginator.per_page,
+            'objects_per_page': page.paginator.per_page,
             'total_objects': page.paginator.count,
             'page_index': page.number,
             'total_pages': page.paginator.num_pages,
