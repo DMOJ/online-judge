@@ -279,11 +279,14 @@ class APIProblemList(APIListView):
 
     def get_unfiltered_queryset(self):
         queryset = (
-            Problem
-            .objects
+            Problem.objects
             .select_related('group')
             .prefetch_related(
-                Prefetch('types', queryset=ProblemType.objects.only('full_name'), to_attr='type_list'),
+                Prefetch(
+                    'types',
+                    queryset=ProblemType.objects.only('full_name'),
+                    to_attr='type_list',
+                ),
             )
             .defer('description')
         )
