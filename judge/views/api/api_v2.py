@@ -5,7 +5,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, F, OuterRef, Prefetch, Q, Subquery
 from django.http import Http404, JsonResponse
-from django.utils.timezone import now
+from django.utils import timezone
+from django.utils.functional import cached_property
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
 
@@ -41,6 +42,10 @@ class JSONResponseMixin:
 
 
 class APIMixin(JSONResponseMixin):
+    @cached_property
+    def _now(self):
+        return timezone.now()
+
     def get_object_data(self, obj):
         raise NotImplementedError()
 
@@ -51,7 +56,7 @@ class APIMixin(JSONResponseMixin):
         resp = {
             'api_version': '2.0',
             'method': self.request.method.lower(),
-            'fetched': now().isoformat(),
+            'fetched': self._now.isoformat(),
         }
         resp.update(kwargs)
         return resp
@@ -239,7 +244,7 @@ class APIContestParticipationList(APIListView):
         #   2. User is the organizer of the contest
         #   3. User is specified to be able to "view contest scoreboard"
         if not self.request.user.has_perm('judge.see_private_contest'):
-            q = Q(end_time__lt=now())
+            q = Q(end_time__lt=self._now)
             if self.request.user.is_authenticated:
                 if self.request.user.has_perm('judge.edit_own_contest'):
                     q |= Q(organizers=self.request.profile)
@@ -383,7 +388,7 @@ class APIUserDetail(APIDetailView):
             user=profile,
             virtual=ContestParticipation.LIVE,
             contest__in=Contest.get_visible_contests(self.request.user),
-            contest__end_time__lt=now(),
+            contest__end_time__lt=self._now,
         )
         for contest_key, score, cumtime, rating, volatility in participations.values_list(
             'contest__key', 'score', 'cumtime', 'rating__rating', 'rating__volatility',
