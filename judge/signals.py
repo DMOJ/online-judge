@@ -9,8 +9,21 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from .caching import finished_submission
-from .models import BlogPost, Comment, Contest, ContestSubmission, EFFECTIVE_MATH_ENGINES, Judge, Language, License, \
-    MiscConfig, Organization, Problem, Profile, Submission
+from .models import (
+    BlogPost,
+    Comment,
+    Contest,
+    ContestSubmission,
+    EFFECTIVE_MATH_ENGINES,
+    Judge,
+    Language,
+    License,
+    MiscConfig,
+    Organization,
+    Problem,
+    Profile,
+    Submission,
+)
 
 
 def get_pdf_path(basename):
@@ -30,15 +43,24 @@ def problem_update(sender, instance, **kwargs):
     if hasattr(instance, '_updating_stats_only'):
         return
 
-    cache.delete_many([
-        make_template_fragment_key('submission_problem', (instance.id,)),
-        make_template_fragment_key('problem_feed', (instance.id,)),
-        'problem_tls:%s' % instance.id, 'problem_mls:%s' % instance.id,
-    ])
-    cache.delete_many([make_template_fragment_key('problem_html', (instance.id, engine, lang))
-                       for lang, _ in settings.LANGUAGES for engine in EFFECTIVE_MATH_ENGINES])
-    cache.delete_many([make_template_fragment_key('problem_authors', (instance.id, lang))
-                       for lang, _ in settings.LANGUAGES])
+    cache.delete_many(
+        [
+            make_template_fragment_key('submission_problem', (instance.id,)),
+            make_template_fragment_key('problem_feed', (instance.id,)),
+            'problem_tls:%s' % instance.id,
+            'problem_mls:%s' % instance.id,
+        ]
+    )
+    cache.delete_many(
+        [
+            make_template_fragment_key('problem_html', (instance.id, engine, lang))
+            for lang, _ in settings.LANGUAGES
+            for engine in EFFECTIVE_MATH_ENGINES
+        ]
+    )
+    cache.delete_many(
+        [make_template_fragment_key('problem_authors', (instance.id, lang)) for lang, _ in settings.LANGUAGES]
+    )
     cache.delete_many(['generated-meta-problem:%s:%d' % (lang, instance.id) for lang, _ in settings.LANGUAGES])
 
     for lang, _ in settings.LANGUAGES:
@@ -50,10 +72,13 @@ def profile_update(sender, instance, **kwargs):
     if hasattr(instance, '_updating_stats_only'):
         return
 
-    cache.delete_many([make_template_fragment_key('user_about', (instance.id, engine))
-                       for engine in EFFECTIVE_MATH_ENGINES] +
-                      [make_template_fragment_key('org_member_count', (org_id,))
-                       for org_id in instance.organizations.values_list('id', flat=True)])
+    cache.delete_many(
+        [make_template_fragment_key('user_about', (instance.id, engine)) for engine in EFFECTIVE_MATH_ENGINES]
+        + [
+            make_template_fragment_key('org_member_count', (org_id,))
+            for org_id in instance.organizations.values_list('id', flat=True)
+        ]
+    )
 
 
 @receiver(post_save, sender=Contest)
@@ -61,9 +86,10 @@ def contest_update(sender, instance, **kwargs):
     if hasattr(instance, '_updating_stats_only'):
         return
 
-    cache.delete_many(['generated-meta-contest:%d' % instance.id] +
-                      [make_template_fragment_key('contest_html', (instance.id, engine))
-                       for engine in EFFECTIVE_MATH_ENGINES])
+    cache.delete_many(
+        ['generated-meta-contest:%d' % instance.id]
+        + [make_template_fragment_key('contest_html', (instance.id, engine)) for engine in EFFECTIVE_MATH_ENGINES]
+    )
 
 
 @receiver(post_save, sender=License)
@@ -73,8 +99,7 @@ def license_update(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Language)
 def language_update(sender, instance, **kwargs):
-    cache.delete_many([make_template_fragment_key('language_html', (instance.id,)),
-                       'lang:cn_map'])
+    cache.delete_many([make_template_fragment_key('language_html', (instance.id,)), 'lang:cn_map'])
 
 
 @receiver(post_save, sender=Judge)
@@ -89,13 +114,16 @@ def comment_update(sender, instance, **kwargs):
 
 @receiver(post_save, sender=BlogPost)
 def post_update(sender, instance, **kwargs):
-    cache.delete_many([
-        make_template_fragment_key('post_summary', (instance.id,)),
-        'blog_slug:%d' % instance.id,
-        'blog_feed:%d' % instance.id,
-    ])
-    cache.delete_many([make_template_fragment_key('post_content', (instance.id, engine))
-                       for engine in EFFECTIVE_MATH_ENGINES])
+    cache.delete_many(
+        [
+            make_template_fragment_key('post_summary', (instance.id,)),
+            'blog_slug:%d' % instance.id,
+            'blog_feed:%d' % instance.id,
+        ]
+    )
+    cache.delete_many(
+        [make_template_fragment_key('post_content', (instance.id, engine)) for engine in EFFECTIVE_MATH_ENGINES]
+    )
 
 
 @receiver(post_delete, sender=Submission)
@@ -112,8 +140,9 @@ def contest_submission_delete(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Organization)
 def organization_update(sender, instance, **kwargs):
-    cache.delete_many([make_template_fragment_key('organization_html', (instance.id, engine))
-                       for engine in EFFECTIVE_MATH_ENGINES])
+    cache.delete_many(
+        [make_template_fragment_key('organization_html', (instance.id, engine)) for engine in EFFECTIVE_MATH_ENGINES]
+    )
 
 
 _misc_config_i18n = [code for code, _ in settings.LANGUAGES]
@@ -122,9 +151,13 @@ _misc_config_i18n.append('')
 
 @receiver(post_save, sender=MiscConfig)
 def misc_config_update(sender, instance, **kwargs):
-    cache.delete_many(['misc_config:%s:%s:%s' % (domain, lang, instance.key.split('.')[0])
-                       for lang in _misc_config_i18n
-                       for domain in Site.objects.values_list('domain', flat=True)])
+    cache.delete_many(
+        [
+            'misc_config:%s:%s:%s' % (domain, lang, instance.key.split('.')[0])
+            for lang in _misc_config_i18n
+            for domain in Site.objects.values_list('domain', flat=True)
+        ]
+    )
 
 
 @receiver(post_save, sender=ContestSubmission)

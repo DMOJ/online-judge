@@ -5,9 +5,7 @@ __all__ = ['MartorWidget', 'AdminMartorWidget']
 
 class MartorWidget(OldMartorWidget):
     class Media:
-        css = {
-            'all': ['martor-description.css'],
-        }
+        css = {'all': ['martor-description.css']}
         js = ['martor-mathjax.js']
 
 

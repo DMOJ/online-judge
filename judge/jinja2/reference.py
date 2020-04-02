@@ -51,15 +51,15 @@ def get_user_rating(username, data):
 
 
 def get_user_info(usernames):
-    return {name: (rank, rating) for name, rank, rating in
-            Profile.objects.filter(user__username__in=usernames)
-                   .values_list('user__username', 'display_rank', 'rating')}
+    return {
+        name: (rank, rating)
+        for name, rank, rating in Profile.objects.filter(user__username__in=usernames).values_list(
+            'user__username', 'display_rank', 'rating'
+        )
+    }
 
 
-reference_map = {
-    'user': (get_user, get_user_info),
-    'ruser': (get_user_rating, get_user_info),
-}
+reference_map = {'user': (get_user, get_user_info), 'ruser': (get_user_rating, get_user_info)}
 
 
 def process_reference(text):
@@ -70,9 +70,9 @@ def process_reference(text):
     elements = []
     for piece in rereference.finditer(text):
         if prev is None:
-            tail = text[last:piece.start()]
+            tail = text[last : piece.start()]
         else:
-            prev.append(text[last:piece.start()])
+            prev.append(text[last : piece.start()])
         prev = list(piece.groups())
         elements.append(prev)
         last = piece.end()

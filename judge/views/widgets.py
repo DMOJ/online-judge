@@ -44,8 +44,10 @@ class DetectTimezone(View):
     def askgeo(self, lat, long):
         if not hasattr(settings, 'ASKGEO_ACCOUNT_ID') or not hasattr(settings, 'ASKGEO_ACCOUNT_API_KEY'):
             raise ImproperlyConfigured()
-        data = requests.get('http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f' %
-                            (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat, long)).json()
+        data = requests.get(
+            'http://api.askgeo.com/v1/%s/%s/query.json?databases=TimeZone&points=%f,%f'
+            % (settings.ASKGEO_ACCOUNT_ID, settings.ASKGEO_ACCOUNT_API_KEY, lat, long)
+        ).json()
         try:
             return HttpResponse(data['data'][0]['TimeZone']['TimeZoneId'], content_type='text/plain')
         except (IndexError, KeyError):
@@ -54,8 +56,9 @@ class DetectTimezone(View):
     def geonames(self, lat, long):
         if not hasattr(settings, 'GEONAMES_USERNAME'):
             raise ImproperlyConfigured()
-        data = requests.get('http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' %
-                            (lat, long, settings.GEONAMES_USERNAME)).json()
+        data = requests.get(
+            'http://api.geonames.org/timezoneJSON?lat=%f&lng=%f&username=%s' % (lat, long, settings.GEONAMES_USERNAME)
+        ).json()
         try:
             return HttpResponse(data['timezoneId'], content_type='text/plain')
         except KeyError:
@@ -70,10 +73,7 @@ class DetectTimezone(View):
             lat, long = float(request.GET['lat']), float(request.GET['long'])
         except (ValueError, KeyError):
             return HttpResponse(_('Bad latitude or longitude'), content_type='text/plain', status=404)
-        return {
-            'askgeo': self.askgeo,
-            'geonames': self.geonames,
-        }.get(backend, self.default)(lat, long)
+        return {'askgeo': self.askgeo, 'geonames': self.geonames}.get(backend, self.default)(lat, long)
 
 
 def django_uploader(image):
@@ -82,8 +82,9 @@ def django_uploader(image):
         ext = '.png'
     name = str(uuid.uuid4()) + ext
     default_storage.save(os.path.join(settings.MARTOR_UPLOAD_MEDIA_DIR, name), image)
-    url_base = getattr(settings, 'MARTOR_UPLOAD_URL_PREFIX',
-                       urljoin(settings.MEDIA_URL, settings.MARTOR_UPLOAD_MEDIA_DIR))
+    url_base = getattr(
+        settings, 'MARTOR_UPLOAD_URL_PREFIX', urljoin(settings.MEDIA_URL, settings.MARTOR_UPLOAD_MEDIA_DIR)
+    )
     if not url_base.endswith('/'):
         url_base += '/'
     return json.dumps({'status': 200, 'name': '', 'link': urljoin(url_base, name)})

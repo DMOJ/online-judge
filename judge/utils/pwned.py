@@ -58,12 +58,7 @@ def _get_pwned(prefix):
     """
     try:
         response = requests.get(
-            url=API_ENDPOINT.format(prefix),
-            timeout=getattr(
-                settings,
-                'PWNED_PASSWORDS_API_TIMEOUT',
-                REQUEST_TIMEOUT,
-            ),
+            url=API_ENDPOINT.format(prefix), timeout=getattr(settings, 'PWNED_PASSWORDS_API_TIMEOUT', REQUEST_TIMEOUT)
         )
         response.raise_for_status()
     except requests.RequestException:
@@ -98,6 +93,7 @@ class PwnedPasswordsValidator(object):
     """
     Password validator which checks the Pwned Passwords database.
     """
+
     DEFAULT_HELP_MESSAGE = _("Your password can't be a commonly used password.")
     DEFAULT_PWNED_MESSAGE = _('This password is too common.')
 
@@ -110,10 +106,7 @@ class PwnedPasswordsValidator(object):
             singular, plural = error_message, error_message
         else:
             singular, plural = error_message
-        self.error_message = {
-            'singular': singular,
-            'plural': plural,
-        }
+        self.error_message = {'singular': singular, 'plural': plural}
 
     def validate(self, password, user=None):
         amount = pwned_password(password)
@@ -124,11 +117,7 @@ class PwnedPasswordsValidator(object):
             CommonPasswordValidator().validate(password, user)
         elif amount:
             raise ValidationError(
-                ungettext(
-                    self.error_message['singular'],
-                    self.error_message['plural'],
-                    amount,
-                ),
+                ungettext(self.error_message['singular'], self.error_message['plural'], amount),
                 params={'amount': amount},
                 code='pwned_password',
             )

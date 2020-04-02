@@ -25,6 +25,7 @@ class EchoPacketHandler(ProxyProtocolMixin, ZlibPacketHandler):
 
 def main():
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--host', action='append')
     parser.add_argument('-p', '--port', type=int, action='append')

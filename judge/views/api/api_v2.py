@@ -58,34 +58,38 @@ def api_v2_user_info(request):
 
     last_rating = list(profile.ratings.order_by('-contest__end_time'))
 
-    resp = {
-        "rank": profile.display_rank,
-        "organizations": list(profile.organizations.values_list('key', flat=True)),
-    }
+    resp = {"rank": profile.display_rank, "organizations": list(profile.organizations.values_list('key', flat=True))}
 
     contest_history = []
-    for participation in (ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_visible=True)
-                          .order_by('-contest__end_time')):
+    for participation in ContestParticipation.objects.filter(
+        user=profile, virtual=0, contest__is_visible=True
+    ).order_by('-contest__end_time'):
         contest = participation.contest
 
-        problems = list(contest.contest_problems.select_related('problem').defer('problem__description')
-                               .order_by('order'))
-        rank, result = next(filter(lambda data: data[1].user == profile.user,
-                                   ranker(contest_ranking_list(contest, problems),
-                                          key=attrgetter('points', 'cumtime'))))
+        problems = list(
+            contest.contest_problems.select_related('problem').defer('problem__description').order_by('order')
+        )
+        rank, result = next(
+            filter(
+                lambda data: data[1].user == profile.user,
+                ranker(contest_ranking_list(contest, problems), key=attrgetter('points', 'cumtime')),
+            )
+        )
 
-        contest_history.append({
-            'contest': {
-                'code': contest.key,
-                'name': contest.name,
-                'tags': list(contest.tags.values_list('name', flat=True)),
-                'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
-                'start_time': contest.start_time.isoformat(),
-                'end_time': contest.end_time.isoformat(),
-            },
-            'rank': rank,
-            'rating': result.participation_rating,
-        })
+        contest_history.append(
+            {
+                'contest': {
+                    'code': contest.key,
+                    'name': contest.name,
+                    'tags': list(contest.tags.values_list('name', flat=True)),
+                    'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
+                    'start_time': contest.start_time.isoformat(),
+                    'end_time': contest.end_time.isoformat(),
+                },
+                'rank': rank,
+                'rating': result.participation_rating,
+            }
+        )
 
     resp['contests'] = {
         "current_rating": last_rating[0].rating if last_rating else None,
@@ -96,27 +100,29 @@ def api_v2_user_info(request):
     solved_problems = []
     attempted_problems = []
 
-    problem_data = (Submission.objects.filter(points__gt=0, user=profile, problem__is_public=True,
-                                              problem__is_organization_private=False)
-                    .annotate(max_pts=Max('points'))
-                    .values_list('max_pts', 'problem__points', 'problem__code')
-                    .distinct())
+    problem_data = (
+        Submission.objects.filter(
+            points__gt=0, user=profile, problem__is_public=True, problem__is_organization_private=False
+        )
+        .annotate(max_pts=Max('points'))
+        .values_list('max_pts', 'problem__points', 'problem__code')
+        .distinct()
+    )
     for awarded_pts, max_pts, problem in problem_data:
         if awarded_pts == max_pts:
             solved_problems.append(problem)
         else:
-            attempted_problems.append({
-                'awarded': awarded_pts,
-                'max': max_pts,
-                'problem': problem,
-            })
+            attempted_problems.append({'awarded': awarded_pts, 'max': max_pts, 'problem': problem})
 
     resp['problems'] = {
         'points': profile.points,
         'solved': solved_problems,
         'attempted': attempted_problems,
-        'authored': list(Problem.objects.filter(is_public=True, is_organization_private=False, authors=profile)
-                         .values_list('code', flat=True)),
+        'authored': list(
+            Problem.objects.filter(is_public=True, is_organization_private=False, authors=profile).values_list(
+                'code', flat=True
+            )
+        ),
     }
 
     return JsonResponse(resp)

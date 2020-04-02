@@ -59,10 +59,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         return '<a href="%s"%s>%s</a>' % (link, self._link_rel(link), text)
 
     def table(self, header, body):
-        return (
-            '<table class="table">\n<thead>%s</thead>\n'
-            '<tbody>\n%s</tbody>\n</table>\n'
-        ) % (header, body)
+        return ('<table class="table">\n<thead>%s</thead>\n' '<tbody>\n%s</tbody>\n</table>\n') % (header, body)
 
     def link(self, link, title, text):
         link = mistune.escape_link(link)
@@ -78,23 +75,29 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
 
     def block_html(self, html):
         if self.texoid and html.startswith('<latex'):
-            attr = html[6:html.index('>')]
-            latex = html[html.index('>') + 1:html.rindex('<')]
+            attr = html[6 : html.index('>')]
+            latex = html[html.index('>') + 1 : html.rindex('<')]
             latex = self.parser.unescape(latex)
             result = self.texoid.get_result(latex)
             if not result:
                 return '<pre>%s</pre>' % mistune.escape(latex, smart_amp=False)
             elif 'error' not in result:
-                img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
-                       'width="%(width)s" height="%(height)s"%(tail)s>') % {
-                    'svg': result['svg'], 'png': result['png'],
-                    'width': result['meta']['width'], 'height': result['meta']['height'],
+                img = (
+                    '''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
+                    'width="%(width)s" height="%(height)s"%(tail)s>'
+                ) % {
+                    'svg': result['svg'],
+                    'png': result['png'],
+                    'width': result['meta']['width'],
+                    'height': result['meta']['height'],
                     'tail': ' /' if self.options.get('use_xhtml') else '',
                 }
-                style = ['max-width: 100%',
-                         'height: %s' % result['meta']['height'],
-                         'max-height: %s' % result['meta']['height'],
-                         'width: %s' % result['meta']['height']]
+                style = [
+                    'max-width: 100%',
+                    'height: %s' % result['meta']['height'],
+                    'max-height: %s' % result['meta']['height'],
+                    'width: %s' % result['meta']['height'],
+                ]
                 if 'inline' in attr:
                     tag = 'span'
                 else:
@@ -123,10 +126,10 @@ def markdown(value, style, math_engine=None, lazy_load=False):
     if lazy_load:
         post_processors.append(lazy_load_processor)
 
-    renderer = AwesomeRenderer(escape=escape, nofollow=nofollow, texoid=texoid,
-                               math=math and math_engine is not None, math_engine=math_engine)
-    markdown = mistune.Markdown(renderer=renderer, inline=AwesomeInlineLexer,
-                                parse_block_html=1, parse_inline_html=1)
+    renderer = AwesomeRenderer(
+        escape=escape, nofollow=nofollow, texoid=texoid, math=math and math_engine is not None, math_engine=math_engine
+    )
+    markdown = mistune.Markdown(renderer=renderer, inline=AwesomeInlineLexer, parse_block_html=1, parse_inline_html=1)
     result = markdown(value)
 
     if post_processors:

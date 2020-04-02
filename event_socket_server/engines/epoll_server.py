@@ -1,4 +1,5 @@
 import select
+
 __author__ = 'Quantum'
 
 if not hasattr(select, 'epoll'):

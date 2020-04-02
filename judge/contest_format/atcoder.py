@@ -51,7 +51,8 @@ class AtCoderContestFormat(DefaultContestFormat):
         format_data = {}
 
         with connection.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute(
+                '''
                 SELECT MAX(cs.points) as `score`, (
                     SELECT MIN(csub.date)
                         FROM judge_contestsubmission ccs LEFT OUTER JOIN
@@ -62,7 +63,9 @@ class AtCoderContestFormat(DefaultContestFormat):
                      judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
                      judge_submission sub ON (sub.id = cs.submission_id)
                 GROUP BY cp.id
-            ''', (participation.id, participation.id))
+            ''',
+                (participation.id, participation.id),
+            )
 
             for score, time, prob in cursor.fetchall():
                 time = from_database_time(time)
@@ -71,9 +74,11 @@ class AtCoderContestFormat(DefaultContestFormat):
                 # Compute penalty
                 if self.config['penalty']:
                     # An IE can have a submission result of `None`
-                    subs = participation.submissions.exclude(submission__result__isnull=True) \
-                                                    .exclude(submission__result__in=['IE', 'CE']) \
-                                                    .filter(problem_id=prob)
+                    subs = (
+                        participation.submissions.exclude(submission__result__isnull=True)
+                        .exclude(submission__result__in=['IE', 'CE'])
+                        .filter(problem_id=prob)
+                    )
                     if score:
                         prev = subs.filter(submission__date__lte=time).count() - 1
                         penalty += prev * self.config['penalty'] * 60
@@ -97,14 +102,23 @@ class AtCoderContestFormat(DefaultContestFormat):
     def display_user_problem(self, participation, contest_problem):
         format_data = (participation.format_data or {}).get(str(contest_problem.id))
         if format_data:
-            penalty = format_html('<small style="color:red"> ({penalty})</small>',
-                                  penalty=floatformat(format_data['penalty'])) if format_data['penalty'] else ''
+            penalty = (
+                format_html(
+                    '<small style="color:red"> ({penalty})</small>', penalty=floatformat(format_data['penalty'])
+                )
+                if format_data['penalty']
+                else ''
+            )
             return format_html(
                 '<td class="{state}"><a href="{url}">{points}{penalty}<div class="solving-time">{time}</div></a></td>',
-                state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                       self.best_solution_state(format_data['points'], contest_problem.points)),
-                url=reverse('contest_user_submissions',
-                            args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
+                state=(
+                    ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
+                    + self.best_solution_state(format_data['points'], contest_problem.points)
+                ),
+                url=reverse(
+                    'contest_user_submissions',
+                    args=[self.contest.key, participation.user.user.username, contest_problem.problem.code],
+                ),
                 points=floatformat(format_data['points']),
                 penalty=penalty,
                 time=nice_repr(timedelta(seconds=format_data['time']), 'noday'),

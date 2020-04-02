@@ -15,8 +15,13 @@ from django_ace import AceWidget
 from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
 from judge.utils.views import NoBatchDeleteMixin
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
-    AdminSelect2MultipleWidget, AdminSelect2Widget
+from judge.widgets import (
+    AdminHeavySelect2MultipleWidget,
+    AdminHeavySelect2Widget,
+    AdminMartorWidget,
+    AdminSelect2MultipleWidget,
+    AdminSelect2Widget,
+)
 
 
 class AdminHeavySelect2Widget(AdminHeavySelect2Widget):
@@ -30,7 +35,8 @@ class ContestTagForm(ModelForm):
         label=_('Included contests'),
         queryset=Contest.objects.all(),
         required=False,
-        widget=AdminHeavySelect2MultipleWidget(data_view='contest_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='contest_select2'),
+    )
 
 
 class ContestTagAdmin(admin.ModelAdmin):
@@ -39,9 +45,7 @@ class ContestTagAdmin(admin.ModelAdmin):
     actions_on_top = True
     actions_on_bottom = True
     form = ContestTagForm
-    formfield_overrides = {
-        TextField: {'widget': AdminMartorWidget},
-    }
+    formfield_overrides = {TextField: {'widget': AdminMartorWidget}}
 
     def save_model(self, request, obj, form, change):
         super(ContestTagAdmin, self).save_model(request, obj, form, change)
@@ -63,16 +67,27 @@ class ContestProblemInline(admin.TabularInline):
     model = ContestProblem
     verbose_name = _('Problem')
     verbose_name_plural = 'Problems'
-    fields = ('problem', 'points', 'partial', 'is_pretested', 'max_submissions', 'output_prefix_override', 'order',
-              'rejudge_column')
+    fields = (
+        'problem',
+        'points',
+        'partial',
+        'is_pretested',
+        'max_submissions',
+        'output_prefix_override',
+        'order',
+        'rejudge_column',
+    )
     readonly_fields = ('rejudge_column',)
     form = ContestProblemInlineForm
 
     def rejudge_column(self, obj):
         if obj.id is None:
             return ''
-        return format_html('<a class="button rejudge-link" href="{}">Rejudge</a>',
-                           reverse('admin:judge_contest_rejudge', args=(obj.contest.id, obj.id)))
+        return format_html(
+            '<a class="button rejudge-link" href="{}">Rejudge</a>',
+            reverse('admin:judge_contest_rejudge', args=(obj.contest.id, obj.id)),
+        )
+
     rejudge_column.short_description = ''
 
 
@@ -81,8 +96,9 @@ class ContestForm(ModelForm):
         super(ContestForm, self).__init__(*args, **kwargs)
         if 'rate_exclude' in self.fields:
             if self.instance and self.instance.id:
-                self.fields['rate_exclude'].queryset = \
-                    Profile.objects.filter(contest_history__contest=self.instance).distinct()
+                self.fields['rate_exclude'].queryset = Profile.objects.filter(
+                    contest_history__contest=self.instance
+                ).distinct()
             else:
                 self.fields['rate_exclude'].queryset = Profile.objects.none()
         self.fields['banned_users'].widget.can_add_related = False
@@ -95,14 +111,17 @@ class ContestForm(ModelForm):
     class Meta:
         widgets = {
             'organizers': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
-            'private_contestants': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                                   attrs={'style': 'width: 100%'}),
+            'private_contestants': AdminHeavySelect2MultipleWidget(
+                data_view='profile_select2', attrs={'style': 'width: 100%'}
+            ),
             'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
             'tags': AdminSelect2MultipleWidget,
-            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                            attrs={'style': 'width: 100%'}),
-            'view_contest_scoreboard': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                                       attrs={'style': 'width: 100%'}),
+            'banned_users': AdminHeavySelect2MultipleWidget(
+                data_view='profile_select2', attrs={'style': 'width: 100%'}
+            ),
+            'view_contest_scoreboard': AdminHeavySelect2MultipleWidget(
+                data_view='profile_select2', attrs={'style': 'width: 100%'}
+            ),
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('contest_preview')}),
         }
 
@@ -110,14 +129,35 @@ class ContestForm(ModelForm):
 class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers')}),
-        (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_scoreboard',
-                                    'run_pretests_only')}),
+        (
+            _('Settings'),
+            {
+                'fields': (
+                    'is_visible',
+                    'use_clarifications',
+                    'hide_problem_tags',
+                    'hide_scoreboard',
+                    'run_pretests_only',
+                )
+            },
+        ),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
-        (_('Access'), {'fields': ('access_code', 'is_private', 'private_contestants', 'is_organization_private',
-                                  'organizations', 'view_contest_scoreboard')}),
+        (
+            _('Access'),
+            {
+                'fields': (
+                    'access_code',
+                    'is_private',
+                    'private_contestants',
+                    'is_organization_private',
+                    'organizations',
+                    'view_contest_scoreboard',
+                )
+            },
+        ),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
@@ -132,8 +172,9 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     def get_actions(self, request):
         actions = super(ContestAdmin, self).get_actions(request)
 
-        if request.user.has_perm('judge.change_contest_visibility') or \
-                request.user.has_perm('judge.create_private_contest'):
+        if request.user.has_perm('judge.change_contest_visibility') or request.user.has_perm(
+            'judge.create_private_contest'
+        ):
             for action in ('make_visible', 'make_hidden'):
                 actions[action] = self.get_action(action)
 
@@ -190,24 +231,33 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def _rescore(self, contest_key):
         from judge.tasks import rescore_contest
+
         transaction.on_commit(rescore_contest.s(contest_key).delay)
 
     def make_visible(self, request, queryset):
         if not request.user.has_perm('judge.change_contest_visibility'):
             queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
         count = queryset.update(is_visible=True)
-        self.message_user(request, ungettext('%d contest successfully marked as visible.',
-                                             '%d contests successfully marked as visible.',
-                                             count) % count)
+        self.message_user(
+            request,
+            ungettext(
+                '%d contest successfully marked as visible.', '%d contests successfully marked as visible.', count
+            )
+            % count,
+        )
+
     make_visible.short_description = _('Mark contests as visible')
 
     def make_hidden(self, request, queryset):
         if not request.user.has_perm('judge.change_contest_visibility'):
             queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
         count = queryset.update(is_visible=True)
-        self.message_user(request, ungettext('%d contest successfully marked as hidden.',
-                                             '%d contests successfully marked as hidden.',
-                                             count) % count)
+        self.message_user(
+            request,
+            ungettext('%d contest successfully marked as hidden.', '%d contests successfully marked as hidden.', count)
+            % count,
+        )
+
     make_hidden.short_description = _('Mark contests as hidden')
 
     def get_urls(self):
@@ -222,9 +272,15 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         for model in queryset:
             model.submission.judge(rejudge=True)
 
-        self.message_user(request, ungettext('%d submission was successfully scheduled for rejudging.',
-                                             '%d submissions were successfully scheduled for rejudging.',
-                                             len(queryset)) % len(queryset))
+        self.message_user(
+            request,
+            ungettext(
+                '%d submission was successfully scheduled for rejudging.',
+                '%d submissions were successfully scheduled for rejudging.',
+                len(queryset),
+            )
+            % len(queryset),
+        )
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest_id,)))
 
     def rate_all_view(self, request):
@@ -257,19 +313,16 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
 
         perms = ('edit_own_contest', 'edit_all_contest')
         form.base_fields['organizers'].queryset = Profile.objects.filter(
-            Q(user__is_superuser=True) |
-            Q(user__groups__permissions__codename__in=perms) |
-            Q(user__user_permissions__codename__in=perms),
+            Q(user__is_superuser=True)
+            | Q(user__groups__permissions__codename__in=perms)
+            | Q(user__user_permissions__codename__in=perms)
         ).distinct()
         return form
 
 
 class ContestParticipationForm(ModelForm):
     class Meta:
-        widgets = {
-            'contest': AdminSelect2Widget(),
-            'user': AdminHeavySelect2Widget(data_view='profile_select2'),
-        }
+        widgets = {'contest': AdminSelect2Widget(), 'user': AdminHeavySelect2Widget(data_view='profile_select2')}
 
 
 class ContestParticipationAdmin(admin.ModelAdmin):
@@ -282,9 +335,19 @@ class ContestParticipationAdmin(admin.ModelAdmin):
     date_hierarchy = 'real_start'
 
     def get_queryset(self, request):
-        return super(ContestParticipationAdmin, self).get_queryset(request).only(
-            'contest__name', 'contest__format_name', 'contest__format_config',
-            'user__user__username', 'real_start', 'score', 'cumtime', 'virtual',
+        return (
+            super(ContestParticipationAdmin, self)
+            .get_queryset(request)
+            .only(
+                'contest__name',
+                'contest__format_name',
+                'contest__format_config',
+                'user__user__username',
+                'real_start',
+                'score',
+                'cumtime',
+                'virtual',
+            )
         )
 
     def save_model(self, request, obj, form, change):
@@ -297,17 +360,20 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         for participation in queryset:
             participation.recompute_results()
             count += 1
-        self.message_user(request, ungettext('%d participation recalculated.',
-                                             '%d participations recalculated.',
-                                             count) % count)
+        self.message_user(
+            request, ungettext('%d participation recalculated.', '%d participations recalculated.', count) % count
+        )
+
     recalculate_results.short_description = _('Recalculate results')
 
     def username(self, obj):
         return obj.user.username
+
     username.short_description = _('username')
     username.admin_order_field = 'user__user__username'
 
     def show_virtual(self, obj):
         return obj.virtual or '-'
+
     show_virtual.short_description = _('virtual')
     show_virtual.admin_order_field = 'virtual'

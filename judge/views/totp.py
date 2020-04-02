@@ -111,9 +111,7 @@ class TOTPLoginView(SuccessURLAllowedHostsMixin, TOTPView):
     def next_page(self):
         redirect_to = self.request.GET.get('next', '')
         url_is_safe = is_safe_url(
-            url=redirect_to,
-            allowed_hosts=self.get_success_url_allowed_hosts(),
-            require_https=self.request.is_secure(),
+            url=redirect_to, allowed_hosts=self.get_success_url_allowed_hosts(), require_https=self.request.is_secure()
         )
         return HttpResponseRedirect((redirect_to if url_is_safe else '') or reverse('user_page'))
 

@@ -14,16 +14,22 @@ size_pack = struct.Struct('!I')
 
 def _post_update_submission(submission, done=False):
     if submission.problem.is_public:
-        event.post('submissions', {'type': 'done-submission' if done else 'update-submission',
-                                   'id': submission.id,
-                                   'contest': submission.contest_key,
-                                   'user': submission.user_id, 'problem': submission.problem_id,
-                                   'status': submission.status, 'language': submission.language.key})
+        event.post(
+            'submissions',
+            {
+                'type': 'done-submission' if done else 'update-submission',
+                'id': submission.id,
+                'contest': submission.contest_key,
+                'user': submission.user_id,
+                'problem': submission.problem_id,
+                'status': submission.status,
+                'language': submission.language.key,
+            },
+        )
 
 
 def judge_request(packet, reply=True):
-    sock = socket.create_connection(settings.BRIDGED_DJANGO_CONNECT or
-                                    settings.BRIDGED_DJANGO_ADDRESS[0])
+    sock = socket.create_connection(settings.BRIDGED_DJANGO_CONNECT or settings.BRIDGED_DJANGO_ADDRESS[0])
 
     output = json.dumps(packet, separators=(',', ':'))
     output = zlib.compress(output.encode('utf-8'))
@@ -56,13 +62,23 @@ def judge_submission(submission, rejudge, batch_rejudge=False):
     REJUDGE_PRIORITY = 2
     BATCH_REJUDGE_PRIORITY = 3
 
-    updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'error': None,
-               'was_rejudged': rejudge, 'status': 'QU'}
+    updates = {
+        'time': None,
+        'memory': None,
+        'points': None,
+        'result': None,
+        'error': None,
+        'was_rejudged': rejudge,
+        'status': 'QU',
+    }
     try:
         # This is set proactively; it might get unset in judgecallback's on_grading_begin if the problem doesn't
         # actually have pretests stored on the judge.
-        updates['is_pretested'] = all(ContestSubmission.objects.filter(submission=submission)
-                                      .values_list('problem__contest__run_pretests_only', 'problem__is_pretested')[0])
+        updates['is_pretested'] = all(
+            ContestSubmission.objects.filter(submission=submission).values_list(
+                'problem__contest__run_pretests_only', 'problem__is_pretested'
+            )[0]
+        )
     except IndexError:
         priority = DEFAULT_PRIORITY
     else:
@@ -82,14 +98,16 @@ def judge_submission(submission, rejudge, batch_rejudge=False):
     SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
 
     try:
-        response = judge_request({
-            'name': 'submission-request',
-            'submission-id': submission.id,
-            'problem-id': submission.problem.code,
-            'language': submission.language.key,
-            'source': submission.source.source,
-            'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else REJUDGE_PRIORITY if rejudge else priority,
-        })
+        response = judge_request(
+            {
+                'name': 'submission-request',
+                'submission-id': submission.id,
+                'problem-id': submission.problem.code,
+                'language': submission.language.key,
+                'source': submission.source.source,
+                'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else REJUDGE_PRIORITY if rejudge else priority,
+            }
+        )
     except BaseException:
         logger.exception('Failed to send request to judge')
         Submission.objects.filter(id=submission.id).update(status='IE', result='IE')
@@ -108,6 +126,7 @@ def disconnect_judge(judge, force=False):
 
 def abort_submission(submission):
     from .models import Submission
+
     response = judge_request({'name': 'terminate-submission', 'submission-id': submission.id})
     # This defaults to true, so that in the case the judgelist fails to remove the submission from the queue,
     # and returns a bad-request, the submission is not falsely shown as "Aborted" when it will still be judged.

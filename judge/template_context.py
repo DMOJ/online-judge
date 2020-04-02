@@ -47,8 +47,7 @@ def comet_location(request):
     else:
         websocket = settings.EVENT_DAEMON_GET
         poll = settings.EVENT_DAEMON_POLL
-    return {'EVENT_DAEMON_LOCATION': websocket,
-            'EVENT_DAEMON_POLL_LOCATION': poll}
+    return {'EVENT_DAEMON_LOCATION': websocket, 'EVENT_DAEMON_POLL_LOCATION': poll}
 
 
 def __nav_tab(path):
@@ -99,14 +98,18 @@ class MiscConfigDict(dict):
 
 def misc_config(request):
     domain = get_current_site(request).domain
-    return {'misc_config': MiscConfigDict(domain=domain),
-            'i18n_config': MiscConfigDict(language=request.LANGUAGE_CODE, domain=domain)}
+    return {
+        'misc_config': MiscConfigDict(domain=domain),
+        'i18n_config': MiscConfigDict(language=request.LANGUAGE_CODE, domain=domain),
+    }
 
 
 def site_name(request):
-    return {'SITE_NAME': settings.SITE_NAME,
-            'SITE_LONG_NAME': settings.SITE_LONG_NAME,
-            'SITE_ADMIN_EMAIL': settings.SITE_ADMIN_EMAIL}
+    return {
+        'SITE_NAME': settings.SITE_NAME,
+        'SITE_LONG_NAME': settings.SITE_LONG_NAME,
+        'SITE_ADMIN_EMAIL': settings.SITE_ADMIN_EMAIL,
+    }
 
 
 def math_setting(request):

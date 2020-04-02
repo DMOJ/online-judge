@@ -58,24 +58,41 @@ class DjangoJudgeHandler(JudgeHandler):
 
         try:
             pid, time, memory, short_circuit, lid, is_pretested, sub_date, uid, part_virtual, part_id = (
-                Submission.objects.filter(id=submission)
-                          .values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
-                                       'problem__short_circuit', 'language__id', 'is_pretested', 'date', 'user__id',
-                                       'contest__participation__virtual', 'contest__participation__id')).get()
+                Submission.objects.filter(id=submission).values_list(
+                    'problem__id',
+                    'problem__time_limit',
+                    'problem__memory_limit',
+                    'problem__short_circuit',
+                    'language__id',
+                    'is_pretested',
+                    'date',
+                    'user__id',
+                    'contest__participation__virtual',
+                    'contest__participation__id',
+                )
+            ).get()
         except Submission.DoesNotExist:
             logger.error('Submission vanished: %s', submission)
-            json_log.error(self._make_json_log(
-                sub=self._working, action='request',
-                info='submission vanished when fetching info',
-            ))
+            json_log.error(
+                self._make_json_log(sub=self._working, action='request', info='submission vanished when fetching info')
+            )
             return
 
-        attempt_no = Submission.objects.filter(problem__id=pid, contest__participation__id=part_id, user__id=uid,
-                                               date__lt=sub_date).exclude(status__in=('CE', 'IE')).count() + 1
+        attempt_no = (
+            Submission.objects.filter(
+                problem__id=pid, contest__participation__id=part_id, user__id=uid, date__lt=sub_date
+            )
+            .exclude(status__in=('CE', 'IE'))
+            .count()
+            + 1
+        )
 
         try:
-            time, memory = (LanguageLimit.objects.filter(problem__id=pid, language__id=lid)
-                                         .values_list('time_limit', 'memory_limit').get())
+            time, memory = (
+                LanguageLimit.objects.filter(problem__id=pid, language__id=lid)
+                .values_list('time_limit', 'memory_limit')
+                .get()
+            )
         except LanguageLimit.DoesNotExist:
             pass
 
@@ -114,8 +131,11 @@ class DjangoJudgeHandler(JudgeHandler):
         judge.last_ip = self.client_address[0]
         judge.save()
         self.judge_address = '[%s]:%s' % (self.client_address[0], self.client_address[1])
-        json_log.info(self._make_json_log(action='auth', info='judge successfully authenticated',
-                                          executors=list(self.executors.keys())))
+        json_log.info(
+            self._make_json_log(
+                action='auth', info='judge successfully authenticated', executors=list(self.executors.keys())
+            )
+        )
 
     def _disconnected(self):
         Judge.objects.filter(id=self.judge.id).update(online=False)
@@ -133,20 +153,34 @@ class DjangoJudgeHandler(JudgeHandler):
         if self._submission_cache_id == id:
             data = self._submission_cache
         else:
-            self._submission_cache = data = Submission.objects.filter(id=id).values(
-                'problem__is_public', 'contest__participation__contest__key',
-                'user_id', 'problem_id', 'status', 'language__key',
-            ).get()
+            self._submission_cache = data = (
+                Submission.objects.filter(id=id)
+                .values(
+                    'problem__is_public',
+                    'contest__participation__contest__key',
+                    'user_id',
+                    'problem_id',
+                    'status',
+                    'language__key',
+                )
+                .get()
+            )
             self._submission_cache_id = id
 
         if data['problem__is_public']:
-            event.post('submissions', {
-                'type': 'done-submission' if done else 'update-submission',
-                'state': state, 'id': id,
-                'contest': data['contest__participation__contest__key'],
-                'user': data['user_id'], 'problem': data['problem_id'],
-                'status': data['status'], 'language': data['language__key'],
-            })
+            event.post(
+                'submissions',
+                {
+                    'type': 'done-submission' if done else 'update-submission',
+                    'state': state,
+                    'id': id,
+                    'contest': data['contest__participation__contest__key'],
+                    'user': data['user_id'],
+                    'problem': data['problem_id'],
+                    'status': data['status'],
+                    'language': data['language__key'],
+                },
+            )
 
     def on_submission_processing(self, packet):
         id = packet['submission-id']
@@ -164,8 +198,8 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_grading_begin(self, packet):
         super(DjangoJudgeHandler, self).on_grading_begin(packet)
         if Submission.objects.filter(id=packet['submission-id']).update(
-                status='G', is_pretested=packet['pretested'], current_testcase=1,
-                batch=False, judged_date=timezone.now()):
+            status='G', is_pretested=packet['pretested'], current_testcase=1, batch=False, judged_date=timezone.now()
+        ):
             SubmissionTestCase.objects.filter(submission_id=packet['submission-id']).delete()
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'grading-begin'})
             self._post_update_submission(packet['submission-id'], 'grading-begin')
@@ -233,12 +267,22 @@ class DjangoJudgeHandler(JudgeHandler):
         submission.result = status_codes[status]
         submission.save()
 
-        json_log.info(self._make_json_log(
-            packet, action='grading-end', time=time, memory=memory,
-            points=sub_points, total=problem.points, result=submission.result,
-            case_points=points, case_total=total, user=submission.user_id,
-            problem=problem.code, finish=True,
-        ))
+        json_log.info(
+            self._make_json_log(
+                packet,
+                action='grading-end',
+                time=time,
+                memory=memory,
+                points=sub_points,
+                total=problem.points,
+                result=submission.result,
+                case_points=points,
+                case_total=total,
+                user=submission.user_id,
+                problem=problem.code,
+                finish=True,
+            )
+        )
 
         submission.user._updating_stats_only = True
         submission.user.calculate_points()
@@ -248,14 +292,17 @@ class DjangoJudgeHandler(JudgeHandler):
 
         finished_submission(submission)
 
-        event.post('sub_%s' % submission.id_secret, {
-            'type': 'grading-end',
-            'time': time,
-            'memory': memory,
-            'points': float(points),
-            'total': float(problem.points),
-            'result': submission.result,
-        })
+        event.post(
+            'sub_%s' % submission.id_secret,
+            {
+                'type': 'grading-end',
+                'time': time,
+                'memory': memory,
+                'points': float(points),
+                'total': float(problem.points),
+                'result': submission.result,
+            },
+        )
         if hasattr(submission, 'contest'):
             participation = submission.contest.participation
             event.post('contest_%d' % participation.contest_id, {'type': 'update'})
@@ -265,17 +312,26 @@ class DjangoJudgeHandler(JudgeHandler):
         super(DjangoJudgeHandler, self).on_compile_error(packet)
 
         if Submission.objects.filter(id=packet['submission-id']).update(status='CE', result='CE', error=packet['log']):
-            event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {
-                'type': 'compile-error',
-                'log': packet['log'],
-            })
+            event.post(
+                'sub_%s' % Submission.get_id_secret(packet['submission-id']),
+                {'type': 'compile-error', 'log': packet['log']},
+            )
             self._post_update_submission(packet['submission-id'], 'compile-error', done=True)
-            json_log.info(self._make_json_log(packet, action='compile-error', log=packet['log'],
-                                              finish=True, result='CE'))
+            json_log.info(
+                self._make_json_log(packet, action='compile-error', log=packet['log'], finish=True, result='CE')
+            )
         else:
             logger.warning('Unknown submission: %s', packet['submission-id'])
-            json_log.error(self._make_json_log(packet, action='compile-error', info='unknown submission',
-                                               log=packet['log'], finish=True, result='CE'))
+            json_log.error(
+                self._make_json_log(
+                    packet,
+                    action='compile-error',
+                    info='unknown submission',
+                    log=packet['log'],
+                    finish=True,
+                    result='CE',
+                )
+            )
 
     def on_compile_message(self, packet):
         super(DjangoJudgeHandler, self).on_compile_message(packet)
@@ -285,8 +341,9 @@ class DjangoJudgeHandler(JudgeHandler):
             json_log.info(self._make_json_log(packet, action='compile-message', log=packet['log']))
         else:
             logger.warning('Unknown submission: %s', packet['submission-id'])
-            json_log.error(self._make_json_log(packet, action='compile-message', info='unknown submission',
-                                               log=packet['log']))
+            json_log.error(
+                self._make_json_log(packet, action='compile-message', info='unknown submission', log=packet['log'])
+            )
 
     def on_internal_error(self, packet):
         super(DjangoJudgeHandler, self).on_internal_error(packet)
@@ -295,12 +352,23 @@ class DjangoJudgeHandler(JudgeHandler):
         if Submission.objects.filter(id=id).update(status='IE', result='IE', error=packet['message']):
             event.post('sub_%s' % Submission.get_id_secret(id), {'type': 'internal-error'})
             self._post_update_submission(id, 'internal-error', done=True)
-            json_log.info(self._make_json_log(packet, action='internal-error', message=packet['message'],
-                                              finish=True, result='IE'))
+            json_log.info(
+                self._make_json_log(
+                    packet, action='internal-error', message=packet['message'], finish=True, result='IE'
+                )
+            )
         else:
             logger.warning('Unknown submission: %s', id)
-            json_log.error(self._make_json_log(packet, action='internal-error', info='unknown submission',
-                                               message=packet['message'], finish=True, result='IE'))
+            json_log.error(
+                self._make_json_log(
+                    packet,
+                    action='internal-error',
+                    info='unknown submission',
+                    message=packet['message'],
+                    finish=True,
+                    result='IE',
+                )
+            )
 
     def on_submission_terminated(self, packet):
         super(DjangoJudgeHandler, self).on_submission_terminated(packet)
@@ -311,8 +379,9 @@ class DjangoJudgeHandler(JudgeHandler):
             json_log.info(self._make_json_log(packet, action='aborted', finish=True, result='AB'))
         else:
             logger.warning('Unknown submission: %s', packet['submission-id'])
-            json_log.error(self._make_json_log(packet, action='aborted', info='unknown submission',
-                                               finish=True, result='AB'))
+            json_log.error(
+                self._make_json_log(packet, action='aborted', info='unknown submission', finish=True, result='AB')
+            )
 
     def on_batch_begin(self, packet):
         super(DjangoJudgeHandler, self).on_batch_begin(packet)
@@ -363,12 +432,22 @@ class DjangoJudgeHandler(JudgeHandler):
             test_case.output = result['output']
             bulk_test_case_updates.append(test_case)
 
-            json_log.info(self._make_json_log(
-                packet, action='test-case', case=test_case.case, batch=test_case.batch,
-                time=test_case.time, memory=test_case.memory, feedback=test_case.feedback,
-                extended_feedback=test_case.extended_feedback, output=test_case.output,
-                points=test_case.points, total=test_case.total, status=test_case.status,
-            ))
+            json_log.info(
+                self._make_json_log(
+                    packet,
+                    action='test-case',
+                    case=test_case.case,
+                    batch=test_case.batch,
+                    time=test_case.time,
+                    memory=test_case.memory,
+                    feedback=test_case.feedback,
+                    extended_feedback=test_case.extended_feedback,
+                    output=test_case.output,
+                    points=test_case.points,
+                    total=test_case.total,
+                    status=test_case.status,
+                )
+            )
 
         do_post = True
 
@@ -385,10 +464,7 @@ class DjangoJudgeHandler(JudgeHandler):
             self.update_counter[id] = (1, time.monotonic())
 
         if do_post:
-            event.post('sub_%s' % Submission.get_id_secret(id), {
-                'type': 'test-case',
-                'id': max_position,
-            })
+            event.post('sub_%s' % Submission.get_id_secret(id), {'type': 'test-case', 'id': max_position})
             self._post_update_submission(id, state='test-case')
 
         SubmissionTestCase.objects.bulk_create(bulk_test_case_updates)
@@ -399,10 +475,7 @@ class DjangoJudgeHandler(JudgeHandler):
         json_log.info(self._make_json_log(action='update-problems', count=len(self.problems)))
 
     def _make_json_log(self, packet=None, sub=None, **kwargs):
-        data = {
-            'judge': self.name,
-            'address': self.judge_address,
-        }
+        data = {'judge': self.name, 'address': self.judge_address}
         if sub is None and packet is not None:
             sub = packet.get('submission-id')
         if sub is not None:

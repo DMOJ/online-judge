@@ -17,13 +17,14 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('code', help='code of problem to render')
         parser.add_argument('directory', nargs='?', help='directory to store temporaries')
-        parser.add_argument('-l', '--language', default=settings.LANGUAGE_CODE,
-                            help='language to render PDF in')
-        parser.add_argument('-p', '--phantomjs', action='store_const', const=PhantomJSPdfMaker,
-                            default=DefaultPdfMaker, dest='engine')
+        parser.add_argument('-l', '--language', default=settings.LANGUAGE_CODE, help='language to render PDF in')
+        parser.add_argument(
+            '-p', '--phantomjs', action='store_const', const=PhantomJSPdfMaker, default=DefaultPdfMaker, dest='engine'
+        )
         parser.add_argument('-s', '--slimerjs', action='store_const', const=SlimerJSPdfMaker, dest='engine')
-        parser.add_argument('-c', '--chrome', '--puppeteer', action='store_const',
-                            const=PuppeteerPDFRender, dest='engine')
+        parser.add_argument(
+            '-c', '--chrome', '--puppeteer', action='store_const', const=PuppeteerPDFRender, dest='engine'
+        )
 
     def handle(self, *args, **options):
         try:
@@ -38,16 +39,24 @@ class Command(BaseCommand):
             trans = None
 
         directory = options['directory']
-        with options['engine'](directory, clean_up=directory is None) as maker, \
-                translation.override(options['language']):
+        with options['engine'](directory, clean_up=directory is None) as maker, translation.override(
+            options['language']
+        ):
             problem_name = problem.name if trans is None else trans.name
-            maker.html = get_template('problem/raw.html').render({
-                'problem': problem,
-                'problem_name': problem_name,
-                'description': problem.description if trans is None else trans.description,
-                'url': '',
-                'math_engine': maker.math_engine,
-            }).replace('"//', '"https://').replace("'//", "'https://")
+            maker.html = (
+                get_template('problem/raw.html')
+                .render(
+                    {
+                        'problem': problem,
+                        'problem_name': problem_name,
+                        'description': problem.description if trans is None else trans.description,
+                        'url': '',
+                        'math_engine': maker.math_engine,
+                    }
+                )
+                .replace('"//', '"https://')
+                .replace("'//", "'https://")
+            )
             maker.title = problem_name
             for file in ('style.css', 'pygment-github.css', 'mathjax_config.js'):
                 maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))

@@ -53,7 +53,8 @@ class ECOOContestFormat(DefaultContestFormat):
         format_data = {}
 
         with connection.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute(
+                '''
             SELECT (
                 SELECT MAX(ccs.points)
                     FROM judge_contestsubmission ccs LEFT OUTER JOIN
@@ -69,7 +70,9 @@ class ECOOContestFormat(DefaultContestFormat):
                      judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
                      judge_submission sub ON (sub.id = cs.submission_id)
                 GROUP BY cp.id
-            ''', (participation.id, participation.id, participation.id))
+            ''',
+                (participation.id, participation.id, participation.id),
+            )
 
             for score, time, prob, subs, max_score in cursor.fetchall():
                 time = from_database_time(time)
@@ -98,15 +101,22 @@ class ECOOContestFormat(DefaultContestFormat):
     def display_user_problem(self, participation, contest_problem):
         format_data = (participation.format_data or {}).get(str(contest_problem.id))
         if format_data:
-            bonus = format_html('<small> +{bonus}</small>',
-                                bonus=floatformat(format_data['bonus'])) if format_data['bonus'] else ''
+            bonus = (
+                format_html('<small> +{bonus}</small>', bonus=floatformat(format_data['bonus']))
+                if format_data['bonus']
+                else ''
+            )
 
             return format_html(
                 '<td class="{state}"><a href="{url}">{points}{bonus}<div class="solving-time">{time}</div></a></td>',
-                state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                       self.best_solution_state(format_data['points'], contest_problem.points)),
-                url=reverse('contest_user_submissions',
-                            args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
+                state=(
+                    ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
+                    + self.best_solution_state(format_data['points'], contest_problem.points)
+                ),
+                url=reverse(
+                    'contest_user_submissions',
+                    args=[self.contest.key, participation.user.user.username, contest_problem.problem.code],
+                ),
                 points=floatformat(format_data['points']),
                 bonus=bonus,
                 time=nice_repr(timedelta(seconds=format_data['time']), 'noday'),

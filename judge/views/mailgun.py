@@ -20,6 +20,7 @@ logger = logging.getLogger('judge.mail.activate')
 
 class MailgunActivationView(View):
     if hasattr(settings, 'MAILGUN_ACCESS_KEY'):
+
         def post(self, request, *args, **kwargs):
             params = request.POST
             timestamp = params.get('timestamp', '')
@@ -28,8 +29,14 @@ class MailgunActivationView(View):
 
             logger.debug('Received request: %s', params)
 
-            if signature != hmac.new(key=utf8bytes(settings.MAILGUN_ACCESS_KEY),
-                                     msg=utf8bytes('%s%s' % (timestamp, token)), digestmod=hashlib.sha256).hexdigest():
+            if (
+                signature
+                != hmac.new(
+                    key=utf8bytes(settings.MAILGUN_ACCESS_KEY),
+                    msg=utf8bytes('%s%s' % (timestamp, token)),
+                    digestmod=hashlib.sha256,
+                ).hexdigest()
+            ):
                 logger.info('Rejected request: signature: %s, timestamp: %s, token: %s', signature, timestamp, token)
                 raise PermissionDenied()
             _, sender = parseaddr(params.get('from'))

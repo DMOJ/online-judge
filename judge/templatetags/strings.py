@@ -10,7 +10,7 @@ def split(value):
 
 @register.filter(name='cutoff')
 def cutoff(value, length):
-    return value[:int(length)]
+    return value[: int(length)]
 
 
 @register.filter(name='roundfloat')

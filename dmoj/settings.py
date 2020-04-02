@@ -155,62 +155,40 @@ else:
                 {
                     'model': 'judge.Problem',
                     'icon': 'fa-question-circle',
-                    'children': [
-                        'judge.ProblemGroup',
-                        'judge.ProblemType',
-                    ],
+                    'children': ['judge.ProblemGroup', 'judge.ProblemType'],
                 },
                 {
                     'model': 'judge.Submission',
                     'icon': 'fa-check-square-o',
-                    'children': [
-                        'judge.Language',
-                        'judge.Judge',
-                    ],
+                    'children': ['judge.Language', 'judge.Judge'],
                 },
                 {
                     'model': 'judge.Contest',
                     'icon': 'fa-bar-chart',
-                    'children': [
-                        'judge.ContestParticipation',
-                        'judge.ContestTag',
-                    ],
+                    'children': ['judge.ContestParticipation', 'judge.ContestTag'],
                 },
                 {
                     'model': 'auth.User',
                     'icon': 'fa-user',
-                    'children': [
-                        'auth.Group',
-                        'registration.RegistrationProfile',
-                    ],
+                    'children': ['auth.Group', 'registration.RegistrationProfile'],
                 },
                 {
                     'model': 'judge.Profile',
                     'icon': 'fa-user-plus',
-                    'children': [
-                        'judge.Organization',
-                        'judge.OrganizationRequest',
-                    ],
+                    'children': ['judge.Organization', 'judge.OrganizationRequest'],
                 },
                 {
                     'model': 'judge.NavigationBar',
                     'icon': 'fa-bars',
-                    'children': [
-                        'judge.MiscConfig',
-                        'judge.License',
-                        'sites.Site',
-                        'redirects.Redirect',
-                    ],
+                    'children': ['judge.MiscConfig', 'judge.License', 'sites.Site', 'redirects.Redirect'],
                 },
                 ('judge.BlogPost', 'fa-rss-square'),
                 ('judge.Comment', 'fa-comment-o'),
                 ('flatpages.FlatPage', 'fa-file-text-o'),
                 ('judge.Solution', 'fa-pencil'),
             ],
-            'dashboard': {
-                'breadcrumbs': True,
-            },
-        },
+            'dashboard': {'breadcrumbs': True},
+        }
     }
 
 INSTALLED_APPS += (
@@ -267,18 +245,10 @@ IMPERSONATE_DISABLE_LOGGING = True
 ACCOUNT_ACTIVATION_DAYS = 7
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'judge.utils.pwned.PwnedPasswordsValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'judge.utils.pwned.PwnedPasswordsValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 SILENCED_SYSTEM_CHECKS = ['urls.W002', 'fields.W342']
@@ -290,9 +260,7 @@ WSGI_APPLICATION = 'dmoj.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django_jinja.backend.Jinja2',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': False,
         'OPTIONS': {
             'match_extension': ('.html', '.txt'),
@@ -316,7 +284,8 @@ TEMPLATES = [
             'autoescape': select_autoescape(['html', 'xml']),
             'trim_blocks': True,
             'lstrip_blocks': True,
-            'extensions': DEFAULT_EXTENSIONS + [
+            'extensions': DEFAULT_EXTENSIONS
+            + [
                 'compressor.contrib.jinja2ext.CompressorExtension',
                 'judge.jinja2.DMOJExtension',
                 'judge.jinja2.spaceless.SpacelessExtension',
@@ -326,9 +295,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'APP_DIRS': True,
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-        ],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
@@ -337,14 +304,12 @@ TEMPLATES = [
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
-            ],
+            ]
         },
     },
 ]
 
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, 'locale'),
-]
+LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 LANGUAGES = [
     ('de', _('German')),
@@ -365,26 +330,11 @@ LANGUAGES = [
     ('zh-hant', _('Traditional Chinese')),
 ]
 
-MARKDOWN_ADMIN_EDITABLE_STYLE = {
-    'safe_mode': False,
-    'use_camo': True,
-    'texoid': True,
-    'math': True,
-}
+MARKDOWN_ADMIN_EDITABLE_STYLE = {'safe_mode': False, 'use_camo': True, 'texoid': True, 'math': True}
 
-MARKDOWN_DEFAULT_STYLE = {
-    'safe_mode': True,
-    'nofollow': True,
-    'use_camo': True,
-    'math': True,
-}
+MARKDOWN_DEFAULT_STYLE = {'safe_mode': True, 'nofollow': True, 'use_camo': True, 'math': True}
 
-MARKDOWN_USER_LARGE_STYLE = {
-    'safe_mode': True,
-    'nofollow': True,
-    'use_camo': True,
-    'math': True,
-}
+MARKDOWN_USER_LARGE_STYLE = {'safe_mode': True, 'nofollow': True, 'use_camo': True, 'math': True}
 
 MARKDOWN_STYLES = {
     'default': MARKDOWN_DEFAULT_STYLE,
@@ -421,12 +371,7 @@ MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.png', '.gif'}
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-}
+DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': os.path.join(BASE_DIR, 'db.sqlite3')}}
 
 ENABLE_FTS = False
 
@@ -467,9 +412,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'resources'),
-]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'resources')]
 STATIC_URL = '/static/'
 
 # Define a cache

@@ -35,9 +35,12 @@ class DMOJLoginMiddleware(object):
         if request.user.is_authenticated:
             profile = request.profile = request.user.profile
             login_2fa_path = reverse('login_2fa')
-            if (profile.is_totp_enabled and not request.session.get('2fa_passed', False) and
-                    request.path not in (login_2fa_path, reverse('auth_logout')) and
-                    not request.path.startswith(settings.STATIC_URL)):
+            if (
+                profile.is_totp_enabled
+                and not request.session.get('2fa_passed', False)
+                and request.path not in (login_2fa_path, reverse('auth_logout'))
+                and not request.path.startswith(settings.STATIC_URL)
+            ):
                 return HttpResponseRedirect(login_2fa_path + '?next=' + urlquote(request.get_full_path()))
         else:
             request.profile = None

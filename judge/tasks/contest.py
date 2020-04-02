@@ -42,16 +42,24 @@ def run_moss(self, contest_key):
             for dmoj_lang, moss_lang in ContestMoss.LANG_MAPPING:
                 result = ContestMoss(contest=contest, problem=problem, language=dmoj_lang)
 
-                subs = Submission.objects.filter(
-                    contest__participation__virtual__in=(ContestParticipation.LIVE, ContestParticipation.SPECTATE),
-                    contest_object=contest,
-                    problem=problem,
-                    language__common_name=dmoj_lang,
-                ).order_by('-points').values_list('user__user__username', 'source__source')
+                subs = (
+                    Submission.objects.filter(
+                        contest__participation__virtual__in=(ContestParticipation.LIVE, ContestParticipation.SPECTATE),
+                        contest_object=contest,
+                        problem=problem,
+                        language__common_name=dmoj_lang,
+                    )
+                    .order_by('-points')
+                    .values_list('user__user__username', 'source__source')
+                )
 
                 if subs.exists():
-                    moss_call = MOSS(moss_api_key, language=moss_lang, matching_file_limit=100,
-                                     comment='%s - %s' % (contest.key, problem.code))
+                    moss_call = MOSS(
+                        moss_api_key,
+                        language=moss_lang,
+                        matching_file_limit=100,
+                        comment='%s - %s' % (contest.key, problem.code),
+                    )
 
                     users = set()
 

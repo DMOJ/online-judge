@@ -66,12 +66,12 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         try:
             return super(UserPage, self).dispatch(request, *args, **kwargs)
         except Http404:
-            return generic_message(request, _('No such user'), _('No user handle "%s".') %
-                                   self.kwargs.get(self.slug_url_kwarg, None))
+            return generic_message(
+                request, _('No such user'), _('No user handle "%s".') % self.kwargs.get(self.slug_url_kwarg, None)
+            )
 
     def get_title(self):
-        return (_('My account') if self.request.user == self.object.user else
-                _('User %s') % self.object.user.username)
+        return _('My account') if self.request.user == self.object.user else _('User %s') % self.object.user.username
 
     # TODO: the same code exists in problem.py, maybe move to problems.py?
     @cached_property
@@ -94,22 +94,24 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context = super(UserPage, self).get_context_data(**kwargs)
 
         context['hide_solved'] = int(self.hide_solved)
-        context['authored'] = self.object.authored_problems.filter(is_public=True, is_organization_private=False) \
-                                  .order_by('code')
+        context['authored'] = self.object.authored_problems.filter(
+            is_public=True, is_organization_private=False
+        ).order_by('code')
         rating = self.object.ratings.order_by('-contest__end_time')[:1]
         context['rating'] = rating[0] if rating else None
 
-        context['rank'] = Profile.objects.filter(
-            is_unlisted=False, performance_points__gt=self.object.performance_points,
-        ).count() + 1
+        context['rank'] = (
+            Profile.objects.filter(is_unlisted=False, performance_points__gt=self.object.performance_points).count() + 1
+        )
 
         if rating:
-            context['rating_rank'] = Profile.objects.filter(
-                is_unlisted=False, rating__gt=self.object.rating,
-            ).count() + 1
+            context['rating_rank'] = (
+                Profile.objects.filter(is_unlisted=False, rating__gt=self.object.rating).count() + 1
+            )
             context['rated_users'] = Profile.objects.filter(is_unlisted=False, rating__isnull=False).count()
-        context.update(self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'),
-                                                     contests=Count('contest')))
+        context.update(
+            self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'), contests=Count('contest'))
+        )
         return context
 
     def get(self, request, *args, **kwargs):
@@ -125,19 +127,27 @@ class UserAboutPage(UserPage):
 
     def get_context_data(self, **kwargs):
         context = super(UserAboutPage, self).get_context_data(**kwargs)
-        ratings = context['ratings'] = self.object.ratings.order_by('-contest__end_time').select_related('contest') \
-            .defer('contest__description')
+        ratings = context['ratings'] = (
+            self.object.ratings.order_by('-contest__end_time').select_related('contest').defer('contest__description')
+        )
 
-        context['rating_data'] = mark_safe(json.dumps([{
-            'label': rating.contest.name,
-            'rating': rating.rating,
-            'ranking': rating.rank,
-            'link': reverse('contest_ranking', args=(rating.contest.key,)),
-            'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000,
-            'date': date_format(rating.contest.end_time, _('M j, Y, G:i')),
-            'class': rating_class(rating.rating),
-            'height': '%.3fem' % rating_progress(rating.rating),
-        } for rating in ratings]))
+        context['rating_data'] = mark_safe(
+            json.dumps(
+                [
+                    {
+                        'label': rating.contest.name,
+                        'rating': rating.rating,
+                        'ranking': rating.rank,
+                        'link': reverse('contest_ranking', args=(rating.contest.key,)),
+                        'timestamp': (rating.contest.end_time - EPOCH).total_seconds() * 1000,
+                        'date': date_format(rating.contest.end_time, _('M j, Y, G:i')),
+                        'class': rating_class(rating.rating),
+                        'height': '%.3fem' % rating_progress(rating.rating),
+                    }
+                    for rating in ratings
+                ]
+            )
+        )
 
         if ratings:
             user_data = self.object.ratings.aggregate(Min('rating'), Max('rating'))
@@ -157,11 +167,16 @@ class UserProblemsPage(UserPage):
     def get_context_data(self, **kwargs):
         context = super(UserProblemsPage, self).get_context_data(**kwargs)
 
-        result = Submission.objects.filter(user=self.object, points__gt=0, problem__is_public=True,
-                                           problem__is_organization_private=False) \
-            .exclude(problem__in=self.get_completed_problems() if self.hide_solved else []) \
-            .values('problem__id', 'problem__code', 'problem__name', 'problem__points', 'problem__group__full_name') \
-            .distinct().annotate(points=Max('points')).order_by('problem__group__full_name', 'problem__code')
+        result = (
+            Submission.objects.filter(
+                user=self.object, points__gt=0, problem__is_public=True, problem__is_organization_private=False
+            )
+            .exclude(problem__in=self.get_completed_problems() if self.hide_solved else [])
+            .values('problem__id', 'problem__code', 'problem__name', 'problem__points', 'problem__group__full_name')
+            .distinct()
+            .annotate(points=Max('points'))
+            .order_by('problem__group__full_name', 'problem__code')
+        )
 
         def process_group(group, problems_iter):
             problems = list(problems_iter)
@@ -169,11 +184,19 @@ class UserProblemsPage(UserPage):
             return {'name': group, 'problems': problems, 'points': points}
 
         context['best_submissions'] = [
-            process_group(group, problems) for group, problems in itertools.groupby(
-                remap_keys(result, {
-                    'problem__code': 'code', 'problem__name': 'name', 'problem__points': 'total',
-                    'problem__group__full_name': 'group',
-                }), itemgetter('group'))
+            process_group(group, problems)
+            for group, problems in itertools.groupby(
+                remap_keys(
+                    result,
+                    {
+                        'problem__code': 'code',
+                        'problem__name': 'name',
+                        'problem__points': 'total',
+                        'problem__group__full_name': 'group',
+                    },
+                ),
+                itemgetter('group'),
+            )
         ]
         breakdown, has_more = get_pp_breakdown(self.object, start=0, end=10)
         context['pp_breakdown'] = breakdown
@@ -202,10 +225,7 @@ class UserPerformancePointsAjax(UserProblemsPage):
         httpresp = super(UserPerformancePointsAjax, self).get(request, *args, **kwargs)
         httpresp.render()
 
-        return JsonResponse({
-            'results': utf8text(httpresp.content),
-            'has_more': self.has_more,
-        })
+        return JsonResponse({'results': utf8text(httpresp.content), 'has_more': self.has_more})
 
 
 @login_required
@@ -250,13 +270,19 @@ def edit_profile(request):
         form.fields['test_site'].initial = request.user.has_perm('judge.test_site')
 
     tzmap = settings.TIMEZONE_MAP
-    return render(request, 'user/edit-profile.html', {
-        'require_staff_2fa': settings.DMOJ_REQUIRE_STAFF_2FA,
-        'form': form, 'title': _('Edit profile'), 'profile': profile,
-        'has_math_config': bool(settings.MATHOID_URL),
-        'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
-        'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',
-    })
+    return render(
+        request,
+        'user/edit-profile.html',
+        {
+            'require_staff_2fa': settings.DMOJ_REQUIRE_STAFF_2FA,
+            'form': form,
+            'title': _('Edit profile'),
+            'profile': profile,
+            'has_math_config': bool(settings.MATHOID_URL),
+            'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
+            'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',
+        },
+    )
 
 
 @require_POST
@@ -292,9 +318,12 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     default_sort = '-performance_points'
 
     def get_queryset(self):
-        return (Profile.objects.filter(is_unlisted=False).order_by(self.order, 'id').select_related('user')
-                .only('display_rank', 'user__username', 'points', 'rating', 'performance_points',
-                      'problem_count'))
+        return (
+            Profile.objects.filter(is_unlisted=False)
+            .order_by(self.order, 'id')
+            .select_related('user')
+            .only('display_rank', 'user__username', 'points', 'rating', 'performance_points', 'problem_count')
+        )
 
     def get_context_data(self, **kwargs):
         context = super(UserList, self).get_context_data(**kwargs)
@@ -332,7 +361,7 @@ def user_ranking_redirect(request):
     user = get_object_or_404(Profile, user__username=username)
     rank = Profile.objects.filter(is_unlisted=False, performance_points__gt=user.performance_points).count()
     rank += Profile.objects.filter(
-        is_unlisted=False, performance_points__exact=user.performance_points, id__lt=user.id,
+        is_unlisted=False, performance_points__exact=user.performance_points, id__lt=user.id
     ).count()
     page = rank // UserList.paginate_by
     return HttpResponseRedirect('%s%s#!%s' % (reverse('user_list'), '?page=%d' % (page + 1) if page else '', username))

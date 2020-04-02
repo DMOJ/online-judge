@@ -74,10 +74,12 @@ class PollServer(BaseServer):
                             except KeyError:
                                 pass
                             else:
-                                logger.debug('Client active: %s, read: %d, write: %d',
-                                             client.client_address,
-                                             event & self.POLLIN,
-                                             event & self.POLLOUT)
+                                logger.debug(
+                                    'Client active: %s, read: %d, write: %d',
+                                    client.client_address,
+                                    event & self.POLLIN,
+                                    event & self.POLLOUT,
+                                )
                                 if event & self.POLLIN:
                                     logger.debug('Non-blocking read on client: %s', client.client_address)
                                     self._nonblock_read(client)

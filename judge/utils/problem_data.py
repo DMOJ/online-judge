@@ -10,9 +10,13 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 if os.altsep:
+
     def split_path_first(path, repath=re.compile('[%s]' % re.escape(os.sep + os.altsep))):
         return repath.split(path, 1)
+
+
 else:
+
     def split_path_first(path):
         return path.split(os.sep, 1)
 
@@ -65,10 +69,7 @@ class ProblemDataCompiler(object):
 
         def make_checker(case):
             if case.checker_args:
-                return {
-                    'name': case.checker,
-                    'args': json.loads(case.checker_args),
-                }
+                return {'name': case.checker, 'args': json.loads(case.checker_args)}
             return case.checker
 
         for i, case in enumerate(self.cases, 1):
@@ -84,11 +85,9 @@ class ProblemDataCompiler(object):
 
                 if not self.generator:
                     if case.input_file not in self.files:
-                        raise ProblemDataError(_('Input file for case %d does not exist: %s') %
-                                               (i, case.input_file))
+                        raise ProblemDataError(_('Input file for case %d does not exist: %s') % (i, case.input_file))
                     if case.output_file not in self.files:
-                        raise ProblemDataError(_('Output file for case %d does not exist: %s') %
-                                               (i, case.output_file))
+                        raise ProblemDataError(_('Output file for case %d does not exist: %s') % (i, case.output_file))
 
                 if case.input_file:
                     data['in'] = case.input_file
@@ -113,11 +112,7 @@ class ProblemDataCompiler(object):
                     end_batch()
                 if case.points is None:
                     raise ProblemDataError(_('Batch start case #%d requires points.') % i)
-                batch = {
-                    'points': case.points,
-                    'batched': [],
-                    'is_pretest': case.is_pretest,
-                }
+                batch = {'points': case.points, 'batched': [], 'is_pretest': case.is_pretest}
                 if case.generator_args:
                     batch['generator_args'] = case.generator_args.splitlines()
                 if case.output_limit is not None:

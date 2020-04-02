@@ -45,8 +45,9 @@ class NavigationBar(MPTTModel):
     label = models.CharField(max_length=20, verbose_name=_('label'))
     path = models.CharField(max_length=255, verbose_name=_('link path'))
     regex = models.TextField(verbose_name=_('highlight regex'), validators=[validate_regex])
-    parent = TreeForeignKey('self', verbose_name=_('parent item'), null=True, blank=True,
-                            related_name='children', on_delete=models.CASCADE)
+    parent = TreeForeignKey(
+        'self', verbose_name=_('parent item'), null=True, blank=True, related_name='children', on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return self.label
@@ -92,8 +93,6 @@ class BlogPost(models.Model):
         return user.has_perm('judge.change_blogpost') and self.authors.filter(id=user.profile.id).exists()
 
     class Meta:
-        permissions = (
-            ('edit_all_post', _('Edit all posts')),
-        )
+        permissions = (('edit_all_post', _('Edit all posts')),)
         verbose_name = _('blog post')
         verbose_name_plural = _('blog posts')

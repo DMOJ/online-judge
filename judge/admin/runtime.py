@@ -20,15 +20,26 @@ class LanguageForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are NOT allowed to be submitted in this language'),
-        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'),
+    )
 
     class Meta:
         widgets = {'description': AdminMartorWidget}
 
 
 class LanguageAdmin(VersionAdmin):
-    fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description',
-              'template', 'problems')
+    fields = (
+        'key',
+        'name',
+        'short_name',
+        'common_name',
+        'ace',
+        'pygments',
+        'info',
+        'description',
+        'template',
+        'problems',
+    )
     list_display = ('key', 'name', 'common_name', 'info')
     form = LanguageForm
 
@@ -37,8 +48,9 @@ class LanguageAdmin(VersionAdmin):
         obj.problem_set.set(Problem.objects.exclude(id__in=form.cleaned_data['problems'].values('id')))
 
     def get_form(self, request, obj=None, **kwargs):
-        self.form.base_fields['problems'].initial = \
+        self.form.base_fields['problems'].initial = (
             Problem.objects.exclude(id__in=obj.problem_set.values('id')).values_list('pk', flat=True) if obj else []
+        )
         form = super(LanguageAdmin, self).get_form(request, obj, **kwargs)
         if obj is not None:
             form.base_fields['template'].widget = AceWidget(obj.ace, request.profile.ace_theme)
@@ -48,8 +60,10 @@ class LanguageAdmin(VersionAdmin):
 class GenerateKeyTextInput(TextInput):
     def render(self, name, value, attrs=None, renderer=None):
         text = super(TextInput, self).render(name, value, attrs)
-        return mark_safe(text + format_html(
-            '''\
+        return mark_safe(
+            text
+            + format_html(
+                '''\
 <a href="#" onclick="return false;" class="button" id="id_{0}_regen">Regenerate</a>
 <script type="text/javascript">
 django.jQuery(document).ready(function ($) {{
@@ -64,7 +78,10 @@ django.jQuery(document).ready(function ($) {{
     }});
 }});
 </script>
-''', name))
+''',
+                name,
+            )
+        )
 
 
 class JudgeAdminForm(ModelForm):
@@ -83,14 +100,13 @@ class JudgeAdmin(VersionAdmin):
     )
     list_display = ('name', 'online', 'start_time', 'ping', 'load', 'last_ip')
     ordering = ['-online', 'name']
-    formfield_overrides = {
-        TextField: {'widget': AdminMartorWidget},
-    }
+    formfield_overrides = {TextField: {'widget': AdminMartorWidget}}
 
     def get_urls(self):
-        return ([url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
-                 url(r'^(\d+)/terminate/$', self.terminate_view, name='judge_judge_terminate')] +
-                super(JudgeAdmin, self).get_urls())
+        return [
+            url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
+            url(r'^(\d+)/terminate/$', self.terminate_view, name='judge_judge_terminate'),
+        ] + super(JudgeAdmin, self).get_urls()
 
     def disconnect_judge(self, id, force=False):
         judge = get_object_or_404(Judge, id=id)

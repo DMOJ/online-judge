@@ -8,14 +8,18 @@ from judge.timezone import from_database_time
 
 PP_WEIGHT_TABLE = [pow(settings.DMOJ_PP_STEP, i) for i in range(settings.DMOJ_PP_ENTRIES)]
 
-PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_name problem_code '
-                                        'sub_id sub_date sub_points sub_total sub_result_class '
-                                        'sub_short_status sub_long_status sub_lang')
+PPBreakdown = namedtuple(
+    'PPBreakdown',
+    'points weight scaled_points problem_name problem_code '
+    'sub_id sub_date sub_points sub_total sub_result_class '
+    'sub_short_status sub_long_status sub_lang',
+)
 
 
 def get_pp_breakdown(user, start=0, end=settings.DMOJ_PP_ENTRIES):
     with connection.cursor() as cursor:
-        cursor.execute('''
+        cursor.execute(
+            '''
             SELECT max_points_table.problem_code,
                    max_points_table.problem_name,
                    max_points_table.max_points,
@@ -47,7 +51,9 @@ def get_pp_breakdown(user, start=0, end=settings.DMOJ_PP_ENTRIES):
             GROUP BY max_points_table.problem_id
             ORDER BY max_points DESC, judge_submission.date DESC
             LIMIT %s OFFSET %s
-        ''', (user.id, user.id, end - start + 1, start))
+        ''',
+            (user.id, user.id, end - start + 1, start),
+        )
         data = cursor.fetchall()
 
     breakdown = []
@@ -59,20 +65,22 @@ def get_pp_breakdown(user, start=0, end=settings.DMOJ_PP_ENTRIES):
         result_class = Submission.result_class_from_code(result, case_points, case_total)
         long_status = Submission.USER_DISPLAY_CODES.get(result, '')
 
-        breakdown.append(PPBreakdown(
-            points=points,
-            weight=weight * 100,
-            scaled_points=points * weight,
-            problem_name=name,
-            problem_code=code,
-            sub_id=id,
-            sub_date=from_database_time(date),
-            sub_points=case_points,
-            sub_total=case_total,
-            sub_short_status=result,
-            sub_long_status=long_status,
-            sub_result_class=result_class,
-            sub_lang=lang_short_display_name,
-        ))
+        breakdown.append(
+            PPBreakdown(
+                points=points,
+                weight=weight * 100,
+                scaled_points=points * weight,
+                problem_name=name,
+                problem_code=code,
+                sub_id=id,
+                sub_date=from_database_time(date),
+                sub_points=case_points,
+                sub_total=case_total,
+                sub_short_status=result,
+                sub_long_status=long_status,
+                sub_result_class=result_class,
+                sub_lang=lang_short_display_name,
+            )
+        )
     has_more = end < min(len(PP_WEIGHT_TABLE), start + len(data))
     return breakdown, has_more

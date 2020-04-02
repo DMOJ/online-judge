@@ -107,13 +107,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
 
     def get_related_submission_data(self, submission):
         return SubmissionData(
-            time=2,
-            memory=16384,
-            short_circuit=False,
-            pretests_only=False,
-            contest_no=None,
-            attempt_no=1,
-            user_id=None,
+            time=2, memory=16384, short_circuit=False, pretests_only=False, contest_no=None, attempt_no=1, user_id=None
         )
 
     def disconnect(self, force=False):
@@ -127,22 +121,24 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
         data = self.get_related_submission_data(id)
         self._working = id
         self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
-        self.send({
-            'name': 'submission-request',
-            'submission-id': id,
-            'problem-id': problem,
-            'language': language,
-            'source': source,
-            'time-limit': data.time,
-            'memory-limit': data.memory,
-            'short-circuit': data.short_circuit,
-            'meta': {
-                'pretests-only': data.pretests_only,
-                'in-contest': data.contest_no,
-                'attempt-no': data.attempt_no,
-                'user': data.user_id,
-            },
-        })
+        self.send(
+            {
+                'name': 'submission-request',
+                'submission-id': id,
+                'problem-id': problem,
+                'language': language,
+                'source': source,
+                'time-limit': data.time,
+                'memory-limit': data.memory,
+                'short-circuit': data.short_circuit,
+                'meta': {
+                    'pretests-only': data.pretests_only,
+                    'in-contest': data.contest_no,
+                    'attempt-no': data.attempt_no,
+                    'user': data.user_id,
+                },
+            }
+        )
 
     def _kill_if_no_response(self):
         logger.error('Judge seems dead: %s: %s', self.name, self._working)
@@ -160,8 +156,12 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
 
     def on_submission_acknowledged(self, packet):
         if not packet.get('submission-id', None) == self._working:
-            logger.error('Wrong acknowledgement: %s: %s, expected: %s', self.name, packet.get('submission-id', None),
-                         self._working)
+            logger.error(
+                'Wrong acknowledgement: %s: %s, expected: %s',
+                self.name,
+                packet.get('submission-id', None),
+                self._working,
+            )
             self.on_submission_wrong_acknowledge(packet, self._working, packet.get('submission-id', None))
             self.close()
         logger.info('Submission acknowledged: %d', self._working)

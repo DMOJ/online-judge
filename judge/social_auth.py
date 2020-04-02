@@ -54,8 +54,12 @@ def verify_email(backend, details, *args, **kwargs):
 
 
 class UsernameForm(forms.Form):
-    username = forms.RegexField(regex=r'^\w+$', max_length=30, label='Username',
-                                error_messages={'invalid': 'A username must contain letters, numbers, or underscores'})
+    username = forms.RegexField(
+        regex=r'^\w+$',
+        max_length=30,
+        label='Username',
+        error_messages={'invalid': 'A username must contain letters, numbers, or underscores'},
+    )
 
     def clean_username(self):
         if User.objects.filter(username=self.cleaned_data['username']).exists():
@@ -73,9 +77,7 @@ def choose_username(backend, user, username=None, *args, **kwargs):
                 return {'username': form.cleaned_data['username']}
         else:
             form = UsernameForm(initial={'username': username})
-        return render(request, 'registration/username_select.html', {
-            'title': 'Choose a username', 'form': form,
-        })
+        return render(request, 'registration/username_select.html', {'title': 'Choose a username', 'form': form})
 
 
 @partial
@@ -97,13 +99,16 @@ def make_profile(backend, user, response, is_new=False, *args, **kwargs):
                     revisions.set_user(user)
                     revisions.set_comment('Updated on registration')
                     return
-        return render(backend.strategy.request, 'registration/profile_creation.html', {
-            'title': 'Create your profile', 'form': form,
-        })
+        return render(
+            backend.strategy.request,
+            'registration/profile_creation.html',
+            {'title': 'Create your profile', 'form': form},
+        )
 
 
 class SocialAuthExceptionMiddleware(OldSocialAuthExceptionMiddleware):
     def process_exception(self, request, exception):
         if isinstance(exception, SocialAuthBaseException):
-            return HttpResponseRedirect('%s?message=%s' % (reverse('social_auth_error'),
-                                                           quote(self.get_message(request, exception))))
+            return HttpResponseRedirect(
+                '%s?message=%s' % (reverse('social_auth_error'), quote(self.get_message(request, exception)))
+            )

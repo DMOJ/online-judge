@@ -25,6 +25,7 @@ class NavigationBarAdmin(DraggableMPTTAdmin):
 
     def linked_path(self, obj):
         return format_html(u'<a href="{0}" target="_blank">{0}</a>', obj.path)
+
     linked_path.short_description = _('link path')
 
     def save_model(self, request, obj, form, change):
@@ -133,11 +134,15 @@ class LogEntryAdmin(admin.ModelAdmin):
         else:
             ct = obj.content_type
             try:
-                link = format_html('<a href="{1}">{0}</a>', obj.object_repr,
-                                   reverse('admin:%s_%s_change' % (ct.app_label, ct.model), args=(obj.object_id,)))
+                link = format_html(
+                    '<a href="{1}">{0}</a>',
+                    obj.object_repr,
+                    reverse('admin:%s_%s_change' % (ct.app_label, ct.model), args=(obj.object_id,)),
+                )
             except NoReverseMatch:
                 link = obj.object_repr
         return link
+
     object_link.admin_order_field = 'object_repr'
     object_link.short_description = _('object')
 

@@ -29,8 +29,17 @@ def unique_together_left_join(queryset, model, link_field_name, filter_field_nam
 
 
 class RawSQLJoin(Join):
-    def __init__(self, subquery, subquery_params, parent_alias, table_alias, join_type, join_field, nullable,
-                 filtered_relation=None):
+    def __init__(
+        self,
+        subquery,
+        subquery_params,
+        parent_alias,
+        table_alias,
+        join_type,
+        join_field,
+        nullable,
+        filtered_relation=None,
+    ):
         self.subquery_params = subquery_params
         super().__init__(subquery, parent_alias, table_alias, join_type, join_field, nullable, filtered_relation)
 

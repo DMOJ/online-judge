@@ -74,8 +74,9 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
         if times_rated[i] == 0:
             new_volatility[i] = 385
         else:
-            new_volatility[i] = math.sqrt(((new_rating[i] - old_rating[i]) ** 2) / Weight +
-                                          (old_volatility[i] ** 2) / (Weight + 1))
+            new_volatility[i] = math.sqrt(
+                ((new_rating[i] - old_rating[i]) ** 2) / Weight + (old_volatility[i] ** 2) / (Weight + 1)
+            )
         if abs(old_rating[i] - new_rating[i]) > Cap:
             if old_rating[i] < new_rating[i]:
                 new_rating[i] = old_rating[i] + Cap
@@ -97,7 +98,8 @@ def rate_contest(contest):
     from judge.models import Rating, Profile
 
     cursor = connection.cursor()
-    cursor.execute('''
+    cursor.execute(
+        '''
         SELECT judge_rating.user_id, judge_rating.rating, judge_rating.volatility, r.times
         FROM judge_rating INNER JOIN
              judge_contest ON (judge_contest.id = judge_rating.contest_id) INNER JOIN (
@@ -113,13 +115,19 @@ def rate_contest(contest):
             GROUP BY judge_rating.user_id
             ORDER BY judge_contestparticipation.score DESC, judge_contestparticipation.cumtime ASC
         ) AS r ON (judge_rating.user_id = r.id AND judge_contest.end_time = r.last_time)
-    ''', (contest.id, contest.end_time, contest.id))
+    ''',
+        (contest.id, contest.end_time, contest.id),
+    )
     data = {user: (rating, volatility, times) for user, rating, volatility, times in cursor.fetchall()}
     cursor.close()
 
-    users = contest.users.order_by('is_disqualified', '-score', 'cumtime').annotate(submissions=Count('submission')) \
-                   .exclude(user_id__in=contest.rate_exclude.all()).filter(virtual=0, user__is_unlisted=False) \
-                   .values_list('id', 'user_id', 'score', 'cumtime')
+    users = (
+        contest.users.order_by('is_disqualified', '-score', 'cumtime')
+        .annotate(submissions=Count('submission'))
+        .exclude(user_id__in=contest.rate_exclude.all())
+        .filter(virtual=0, user__is_unlisted=False)
+        .values_list('id', 'user_id', 'score', 'cumtime')
+    )
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
     if contest.rating_floor is not None:
@@ -137,18 +145,23 @@ def rate_contest(contest):
     rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked)
 
     now = timezone.now()
-    ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
-               for id, p, r, v, z in zip(user_ids, participation_ids, rating, volatility, ranking)]
+    ratings = [
+        Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
+        for id, p, r, v, z in zip(user_ids, participation_ids, rating, volatility, ranking)
+    ]
     cursor = connection.cursor()
     cursor.execute('CREATE TEMPORARY TABLE _profile_rating_update(id integer, rating integer)')
     cursor.executemany('INSERT INTO _profile_rating_update VALUES (%s, %s)', list(zip(user_ids, rating)))
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)
-        cursor.execute('''
+        cursor.execute(
+            '''
             UPDATE `%s` p INNER JOIN `_profile_rating_update` tmp ON (p.id = tmp.id)
             SET p.rating = tmp.rating
-        ''' % Profile._meta.db_table)
+        '''
+            % Profile._meta.db_table
+        )
     cursor.execute('DROP TABLE _profile_rating_update')
     cursor.close()
     return old_rating, old_volatility, ranking, times_ranked, rating, volatility
@@ -156,8 +169,15 @@ def rate_contest(contest):
 
 RATING_LEVELS = ['Newbie', 'Amateur', 'Expert', 'Candidate Master', 'Master', 'Grandmaster', 'Target']
 RATING_VALUES = [1000, 1200, 1500, 1800, 2200, 3000]
-RATING_CLASS = ['rate-newbie', 'rate-amateur', 'rate-expert', 'rate-candidate-master',
-                'rate-master', 'rate-grandmaster', 'rate-target']
+RATING_CLASS = [
+    'rate-newbie',
+    'rate-amateur',
+    'rate-expert',
+    'rate-candidate-master',
+    'rate-master',
+    'rate-grandmaster',
+    'rate-target',
+]
 
 
 def rating_level(rating):

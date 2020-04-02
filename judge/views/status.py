@@ -20,19 +20,14 @@ def get_judges(request):
 
 def status_all(request):
     see_all, judges = get_judges(request)
-    return render(request, 'status/judge-status.html', {
-        'title': _('Status'),
-        'judges': judges,
-        'see_all_judges': see_all,
-    })
+    return render(
+        request, 'status/judge-status.html', {'title': _('Status'), 'judges': judges, 'see_all_judges': see_all}
+    )
 
 
 def status_table(request):
     see_all, judges = get_judges(request)
-    return render(request, 'status/judge-status-table.html', {
-        'judges': judges,
-        'see_all_judges': see_all,
-    })
+    return render(request, 'status/judge-status-table.html', {'judges': judges, 'see_all_judges': see_all})
 
 
 class LatestList(list):
@@ -103,9 +98,8 @@ def version_matrix(request):
             versions.is_latest = versions.versions == latest[language]
 
     languages = sorted(languages, key=lambda lang: version.parse(lang.name))
-    return render(request, 'status/versions.html', {
-        'title': _('Version matrix'),
-        'judges': sorted(matrix.keys()),
-        'languages': languages,
-        'matrix': matrix,
-    })
+    return render(
+        request,
+        'status/versions.html',
+        {'title': _('Version matrix'), 'judges': sorted(matrix.keys()), 'languages': languages, 'matrix': matrix},
+    )

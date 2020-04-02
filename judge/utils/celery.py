@@ -11,14 +11,7 @@ class Progress:
         self._stage = stage
 
     def _update_state(self):
-        self.task.update_state(
-            state='PROGRESS',
-            meta={
-                'done': self._done,
-                'total': self._total,
-                'stage': self._stage,
-            },
-        )
+        self.task.update_state(state='PROGRESS', meta={'done': self._done, 'total': self._total, 'stage': self._stage})
 
     @property
     def done(self):

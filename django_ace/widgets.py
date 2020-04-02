@@ -11,8 +11,9 @@ from django.utils.safestring import mark_safe
 
 
 class AceWidget(forms.Textarea):
-    def __init__(self, mode=None, theme=None, wordwrap=False, width='100%', height='300px',
-                 no_ace_media=False, *args, **kwargs):
+    def __init__(
+        self, mode=None, theme=None, wordwrap=False, width='100%', height='300px', no_ace_media=False, *args, **kwargs
+    ):
         self.mode = mode
         self.theme = theme
         self.wordwrap = wordwrap
@@ -25,9 +26,7 @@ class AceWidget(forms.Textarea):
     def media(self):
         js = [urljoin(settings.ACE_URL, 'ace.js')] if self.ace_media else []
         js.append('django_ace/widget.js')
-        css = {
-            'screen': ['django_ace/widget.css'],
-        }
+        css = {'screen': ['django_ace/widget.css']}
         return forms.Media(js=js, css=css)
 
     def render(self, name, value, attrs=None, renderer=None):
@@ -51,7 +50,9 @@ class AceWidget(forms.Textarea):
         html = '<div%s><div></div></div>%s' % (flatatt(ace_attrs), textarea)
 
         # add toolbar
-        html = ('<div class="django-ace-editor"><div style="width: 100%%" class="django-ace-toolbar">'
-                '<a href="./" class="django-ace-max_min"></a></div>%s</div>') % html
+        html = (
+            '<div class="django-ace-editor"><div style="width: 100%%" class="django-ace-toolbar">'
+            '<a href="./" class="django-ace-max_min"></a></div>%s</div>'
+        ) % html
 
         return mark_safe(html)

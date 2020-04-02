@@ -12,7 +12,8 @@ class ProblemGroupForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are included in this group of problems'),
-        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'),
+    )
 
 
 class ProblemGroupAdmin(admin.ModelAdmin):
@@ -35,7 +36,8 @@ class ProblemTypeForm(ModelForm):
         queryset=Problem.objects.all(),
         required=False,
         help_text=_('These problems are included in this type of problems'),
-        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
+        widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'),
+    )
 
 
 class ProblemTypeAdmin(admin.ModelAdmin):

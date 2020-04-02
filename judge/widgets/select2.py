@@ -49,10 +49,18 @@ from django.urls import reverse_lazy
 DEFAULT_SELECT2_JS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
 DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
 
-__all__ = ['Select2Widget', 'Select2MultipleWidget', 'Select2TagWidget',
-           'HeavySelect2Widget', 'HeavySelect2MultipleWidget', 'HeavySelect2TagWidget',
-           'AdminSelect2Widget', 'AdminSelect2MultipleWidget', 'AdminHeavySelect2Widget',
-           'AdminHeavySelect2MultipleWidget']
+__all__ = [
+    'Select2Widget',
+    'Select2MultipleWidget',
+    'Select2TagWidget',
+    'HeavySelect2Widget',
+    'HeavySelect2MultipleWidget',
+    'HeavySelect2TagWidget',
+    'AdminSelect2Widget',
+    'AdminSelect2MultipleWidget',
+    'AdminHeavySelect2Widget',
+    'AdminHeavySelect2MultipleWidget',
+]
 
 
 class Select2Mixin(object):
@@ -95,8 +103,7 @@ class Select2Mixin(object):
             https://docs.djangoproject.com/en/1.8/topics/forms/media/#media-as-a-dynamic-property
         """
         return forms.Media(
-            js=[settings.SELECT2_JS_URL, 'django_select2.js'],
-            css={'screen': [settings.SELECT2_CSS_URL]},
+            js=[settings.SELECT2_JS_URL, 'django_select2.js'], css={'screen': [settings.SELECT2_CSS_URL]}
         )
 
 
@@ -214,9 +221,9 @@ class HeavySelect2Mixin(Select2Mixin):
         result = super(HeavySelect2Mixin, self).format_value(value)
         if isinstance(self.choices, ModelChoiceIterator):
             chosen = copy(self.choices)
-            chosen.queryset = chosen.queryset.filter(pk__in=[
-                int(i) for i in result if isinstance(i, int) or i.isdigit()
-            ])
+            chosen.queryset = chosen.queryset.filter(
+                pk__in=[int(i) for i in result if isinstance(i, int) or i.isdigit()]
+            )
             self.choices = set(chosen)
         return result
 

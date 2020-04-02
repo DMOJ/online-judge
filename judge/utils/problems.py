@@ -18,8 +18,11 @@ def user_authored_ids(profile):
 
 
 def user_editable_ids(profile):
-    result = set((Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile))
-                 .values_list('id', flat=True))
+    result = set(
+        (Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile)).values_list(
+            'id', flat=True
+        )
+    )
     return result
 
 
@@ -27,8 +30,11 @@ def contest_completed_ids(participation):
     key = 'contest_complete:%d' % participation.id
     result = cache.get(key)
     if result is None:
-        result = set(participation.submissions.filter(submission__result='AC', points=F('problem__points'))
-                     .values_list('problem__problem__id', flat=True).distinct())
+        result = set(
+            participation.submissions.filter(submission__result='AC', points=F('problem__points'))
+            .values_list('problem__problem__id', flat=True)
+            .distinct()
+        )
         cache.set(key, result, 86400)
     return result
 
@@ -37,8 +43,11 @@ def user_completed_ids(profile):
     key = 'user_complete:%d' % profile.id
     result = cache.get(key)
     if result is None:
-        result = set(Submission.objects.filter(user=profile, result='AC', points=F('problem__points'))
-                     .values_list('problem_id', flat=True).distinct())
+        result = set(
+            Submission.objects.filter(user=profile, result='AC', points=F('problem__points'))
+            .values_list('problem_id', flat=True)
+            .distinct()
+        )
         cache.set(key, result, 86400)
     return result
 
@@ -47,11 +56,14 @@ def contest_attempted_ids(participation):
     key = 'contest_attempted:%s' % participation.id
     result = cache.get(key)
     if result is None:
-        result = {id: {'achieved_points': points, 'max_points': max_points}
-                  for id, max_points, points in (participation.submissions
-                                                 .values_list('problem__problem__id', 'problem__points')
-                                                 .annotate(points=Max('points'))
-                                                 .filter(points__lt=F('problem__points')))}
+        result = {
+            id: {'achieved_points': points, 'max_points': max_points}
+            for id, max_points, points in (
+                participation.submissions.values_list('problem__problem__id', 'problem__points')
+                .annotate(points=Max('points'))
+                .filter(points__lt=F('problem__points'))
+            )
+        }
         cache.set(key, result, 86400)
     return result
 
@@ -60,11 +72,15 @@ def user_attempted_ids(profile):
     key = 'user_attempted:%s' % profile.id
     result = cache.get(key)
     if result is None:
-        result = {id: {'achieved_points': points, 'max_points': max_points}
-                  for id, max_points, points in (Submission.objects.filter(user=profile)
-                                                 .values_list('problem__id', 'problem__points')
-                                                 .annotate(points=Max('points'))
-                                                 .filter(points__lt=F('problem__points')))}
+        result = {
+            id: {'achieved_points': points, 'max_points': max_points}
+            for id, max_points, points in (
+                Submission.objects.filter(user=profile)
+                .values_list('problem__id', 'problem__points')
+                .annotate(points=Max('points'))
+                .filter(points__lt=F('problem__points'))
+            )
+        }
         cache.set(key, result, 86400)
     return result
 
@@ -78,8 +94,16 @@ def _get_result_data(results):
             {'code': 'WA', 'name': gettext_noop('Wrong'), 'count': results['WA']},
             {'code': 'CE', 'name': gettext_noop('Compile Error'), 'count': results['CE']},
             {'code': 'TLE', 'name': gettext_noop('Timeout'), 'count': results['TLE']},
-            {'code': 'ERR', 'name': gettext_noop('Error'),
-             'count': results['MLE'] + results['OLE'] + results['IR'] + results['RTE'] + results['AB'] + results['IE']},
+            {
+                'code': 'ERR',
+                'name': gettext_noop('Error'),
+                'count': results['MLE']
+                + results['OLE']
+                + results['IR']
+                + results['RTE']
+                + results['AB']
+                + results['IE'],
+            },
         ],
         'total': sum(results.values()),
     }
@@ -112,8 +136,13 @@ def hot_problems(duration, limit):
     cache_key = 'hot_problems:%d:%d' % (duration.total_seconds(), limit)
     qs = cache.get(cache_key)
     if qs is None:
-        qs = Problem.objects.filter(is_public=True, is_organization_private=False,
-                                    submission__date__gt=timezone.now() - duration, points__gt=3, points__lt=25)
+        qs = Problem.objects.filter(
+            is_public=True,
+            is_organization_private=False,
+            submission__date__gt=timezone.now() - duration,
+            points__gt=3,
+            points__lt=25,
+        )
         qs0 = qs.annotate(k=Count('submission__user', distinct=True)).order_by('-k').values_list('k', flat=True)
 
         if not qs0:
@@ -123,25 +152,33 @@ def hot_problems(duration, limit):
 
         qs = qs.annotate(unique_user_count=Count('submission__user', distinct=True))
         # fix braindamage in excluding CE
-        qs = qs.annotate(submission_volume=Count(Case(
-            When(submission__result='AC', then=1),
-            When(submission__result='WA', then=1),
-            When(submission__result='IR', then=1),
-            When(submission__result='RTE', then=1),
-            When(submission__result='TLE', then=1),
-            When(submission__result='OLE', then=1),
-            output_field=FloatField(),
-        )))
-        qs = qs.annotate(ac_volume=Count(Case(
-            When(submission__result='AC', then=1),
-            output_field=FloatField(),
-        )))
+        qs = qs.annotate(
+            submission_volume=Count(
+                Case(
+                    When(submission__result='AC', then=1),
+                    When(submission__result='WA', then=1),
+                    When(submission__result='IR', then=1),
+                    When(submission__result='RTE', then=1),
+                    When(submission__result='TLE', then=1),
+                    When(submission__result='OLE', then=1),
+                    output_field=FloatField(),
+                )
+            )
+        )
+        qs = qs.annotate(ac_volume=Count(Case(When(submission__result='AC', then=1), output_field=FloatField())))
         qs = qs.filter(unique_user_count__gt=max(mx / 3.0, 1))
 
-        qs = qs.annotate(ordering=ExpressionWrapper(
-            0.5 * F('points') * (0.4 * F('ac_volume') / F('submission_volume') + 0.6 * F('ac_rate')) +
-            100 * e ** (F('unique_user_count') / mx), output_field=FloatField(),
-        )).order_by('-ordering').defer('description')[:limit]
+        qs = (
+            qs.annotate(
+                ordering=ExpressionWrapper(
+                    0.5 * F('points') * (0.4 * F('ac_volume') / F('submission_volume') + 0.6 * F('ac_rate'))
+                    + 100 * e ** (F('unique_user_count') / mx),
+                    output_field=FloatField(),
+                )
+            )
+            .order_by('-ordering')
+            .defer('description')[:limit]
+        )
 
         cache.set(cache_key, qs, 900)
     return qs

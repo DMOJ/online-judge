@@ -7,17 +7,21 @@ from lxml import html
 
 
 class CompressorWidgetMixin(object):
-    __template_css = dedent('''\
+    __template_css = dedent(
+        '''\
         {% compress css %}
             {{ media.css }}
         {% endcompress %}
-    ''')
+    '''
+    )
 
-    __template_js = dedent('''\
+    __template_js = dedent(
+        '''\
         {% compress js %}
             {{ media.js }}
         {% endcompress %}
-    ''')
+    '''
+    )
 
     __templates = {
         (False, False): Template(''),
@@ -35,6 +39,7 @@ class CompressorWidgetMixin(object):
         pass
     else:
         if getattr(settings, 'COMPRESS_ENABLED', not settings.DEBUG):
+
             @property
             def media(self):
                 media = super().media

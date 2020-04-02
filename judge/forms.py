@@ -14,8 +14,13 @@ from django.utils.translation import gettext_lazy as _
 from django_ace import AceWidget
 from judge.models import Contest, Language, Organization, PrivateMessage, Problem, Profile, Submission
 from judge.utils.subscription import newsletter_id
-from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
-    Select2Widget
+from judge.widgets import (
+    HeavyPreviewPageDownWidget,
+    MathJaxPagedownWidget,
+    PagedownWidget,
+    Select2MultipleWidget,
+    Select2Widget,
+)
 
 
 def fix_unicode(string, unsafe=tuple('\u202a\u202b\u202d\u202e')):
@@ -44,8 +49,7 @@ class ProfileForm(ModelForm):
 
         if HeavyPreviewPageDownWidget is not None:
             widgets['about'] = HeavyPreviewPageDownWidget(
-                preview=reverse_lazy('profile_preview'),
-                attrs={'style': 'max-width:700px;min-width:700px;width:700px'},
+                preview=reverse_lazy('profile_preview'), attrs={'style': 'max-width:700px;min-width:700px;width:700px'}
             )
 
     def clean(self):
@@ -54,7 +58,8 @@ class ProfileForm(ModelForm):
 
         if sum(org.is_open for org in organizations) > max_orgs:
             raise ValidationError(
-                _('You may not be part of more than {count} public organizations.').format(count=max_orgs))
+                _('You may not be part of more than {count} public organizations.').format(count=max_orgs)
+            )
 
         return self.cleaned_data
 
@@ -63,7 +68,7 @@ class ProfileForm(ModelForm):
         super(ProfileForm, self).__init__(*args, **kwargs)
         if not user.has_perm('judge.edit_all_organization'):
             self.fields['organizations'].queryset = Organization.objects.filter(
-                Q(is_open=True) | Q(id__in=user.profile.organizations.all()),
+                Q(is_open=True) | Q(id__in=user.profile.organizations.all())
             )
 
 
@@ -112,8 +117,9 @@ class CustomAuthenticationForm(AuthenticationForm):
         self.has_github_auth = self._has_social_auth('GITHUB_SECURE')
 
     def _has_social_auth(self, key):
-        return (getattr(settings, 'SOCIAL_AUTH_%s_KEY' % key, None) and
-                getattr(settings, 'SOCIAL_AUTH_%s_SECRET' % key, None))
+        return getattr(settings, 'SOCIAL_AUTH_%s_KEY' % key, None) and getattr(
+            settings, 'SOCIAL_AUTH_%s_SECRET' % key, None
+        )
 
 
 class NoAutoCompleteCharField(forms.CharField):
@@ -126,9 +132,9 @@ class NoAutoCompleteCharField(forms.CharField):
 class TOTPForm(Form):
     TOLERANCE = settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES
 
-    totp_token = NoAutoCompleteCharField(validators=[
-        RegexValidator('^[0-9]{6}$', _('Two Factor Authentication tokens must be 6 decimal digits.')),
-    ])
+    totp_token = NoAutoCompleteCharField(
+        validators=[RegexValidator('^[0-9]{6}$', _('Two Factor Authentication tokens must be 6 decimal digits.'))]
+    )
 
     def __init__(self, *args, **kwargs):
         self.totp_key = kwargs.pop('totp_key')

@@ -23,13 +23,13 @@ class SizedPacketHandler(Handler):
         self._buffer += data
         while len(self._buffer) >= self._packetlen if self._packetlen else len(self._buffer) >= size_pack.size:
             if self._packetlen:
-                data = self._buffer[:self._packetlen]
-                self._buffer = self._buffer[self._packetlen:]
+                data = self._buffer[: self._packetlen]
+                self._buffer = self._buffer[self._packetlen :]
                 self._packetlen = 0
                 self._packet(data)
             else:
-                data = self._buffer[:size_pack.size]
-                self._buffer = self._buffer[size_pack.size:]
+                data = self._buffer[: size_pack.size]
+                self._buffer = self._buffer[size_pack.size :]
                 self._packetlen = size_pack.unpack(data)[0]
 
     def send(self, data, callback=None):
@@ -83,8 +83,9 @@ class ProxyProtocolMixin(object):
     def __init__(self, server, socket):
         super(ProxyProtocolMixin, self).__init__(server, socket)
         self.__buffer = b''
-        self.__type = (self.__UNKNOWN_TYPE if self._REAL_IP_SET and
-                       self.client_address[0] in self._REAL_IP_SET else self.__DATA)
+        self.__type = (
+            self.__UNKNOWN_TYPE if self._REAL_IP_SET and self.client_address[0] in self._REAL_IP_SET else self.__DATA
+        )
 
     def __parse_proxy1(self, data):
         self.__buffer += data
@@ -105,7 +106,7 @@ class ProxyProtocolMixin(object):
                 return self.close()
 
             self.__type = self.__DATA
-            super(ProxyProtocolMixin, self)._recv_data(data[index + 2:])
+            super(ProxyProtocolMixin, self)._recv_data(data[index + 2 :])
         elif len(self.__buffer) > 107 or index > 105:
             self.close()
 
@@ -113,7 +114,7 @@ class ProxyProtocolMixin(object):
         if self.__type == self.__DATA:
             super(ProxyProtocolMixin, self)._recv_data(data)
         elif self.__type == self.__UNKNOWN_TYPE:
-            if len(data) >= 16 and data[:self.__HEADER2_LEN] == self.__HEADER2:
+            if len(data) >= 16 and data[: self.__HEADER2_LEN] == self.__HEADER2:
                 self.close()
             elif len(data) >= 8 and data[:5] == b'PROXY':
                 self.__type = self.__PROXY1

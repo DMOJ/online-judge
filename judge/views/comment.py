@@ -17,8 +17,7 @@ from judge.models import Comment, CommentVote
 from judge.utils.views import TitleMixin
 from judge.widgets import MathJaxPagedownWidget
 
-__all__ = ['upvote_comment', 'downvote_comment', 'CommentEditAjax', 'CommentContent',
-           'CommentEdit']
+__all__ = ['upvote_comment', 'downvote_comment', 'CommentEditAjax', 'CommentContent', 'CommentEdit']
 
 
 @login_required
@@ -33,8 +32,9 @@ def vote_comment(request, delta):
         return HttpResponseBadRequest()
 
     if not request.user.is_staff and not request.profile.submission_set.filter(points=F('problem__points')).exists():
-        return HttpResponseBadRequest(_('You must solve at least one problem before you can vote.'),
-                                      content_type='text/plain')
+        return HttpResponseBadRequest(
+            _('You must solve at least one problem before you can vote.'), content_type='text/plain'
+        )
 
     try:
         comment_id = int(request.POST['id'])
@@ -151,8 +151,9 @@ class CommentVotesAjax(PermissionRequiredMixin, CommentMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CommentVotesAjax, self).get_context_data(**kwargs)
-        context['votes'] = (self.object.votes.select_related('voter__user')
-                            .only('id', 'voter__display_rank', 'voter__user__username', 'score'))
+        context['votes'] = self.object.votes.select_related('voter__user').only(
+            'id', 'voter__display_rank', 'voter__user__username', 'score'
+        )
         return context
 
 

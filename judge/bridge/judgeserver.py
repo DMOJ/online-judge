@@ -52,13 +52,13 @@ def main():
     handler.setLevel(logging.INFO)
     logging.getLogger().addHandler(handler)
 
-    parser = argparse.ArgumentParser(description='''
+    parser = argparse.ArgumentParser(
+        description='''
         Runs the bridge between DMOJ website and judges.
-    ''')
-    parser.add_argument('judge_host', nargs='+', action='append',
-                        help='host to listen for the judge')
-    parser.add_argument('-p', '--judge-port', type=int, action='append',
-                        help='port to listen for the judge')
+    '''
+    )
+    parser.add_argument('judge_host', nargs='+', action='append', help='host to listen for the judge')
+    parser.add_argument('-p', '--judge-port', type=int, action='append', help='port to listen for the judge')
 
     args = parser.parse_args()
     server = JudgeServer(list(zip(args.judge_host, args.judge_port)), JudgeHandler)

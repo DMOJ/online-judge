@@ -20,9 +20,13 @@ try:
     import pygments.formatters.html
     import pygments.util
 except ImportError:
+
     def highlight_code(code, language, cssclass=None):
         return _make_pre_code(code)
+
+
 else:
+
     class HtmlCodeFormatter(pygments.formatters.HtmlFormatter):
         def wrap(self, source, outfile):
             return self._wrap_div(self._wrap_pre(_wrap_code(source)))
