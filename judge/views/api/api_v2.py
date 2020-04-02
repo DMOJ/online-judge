@@ -252,7 +252,7 @@ class APIContestParticipationList(APIListView):
             ContestParticipation.objects
             .filter(virtual__gte=0, contest__in=visible_contests)
             .annotate(contest_key=F('contest__key'), username=F('user__user__username'))
-            .only('user__user__username', 'contest__key', 'score', 'cumtime', 'is_disqualified', 'virtual')
+            .only('score', 'cumtime', 'is_disqualified', 'virtual')
         )
 
     def get_object_data(self, participation):
@@ -361,18 +361,27 @@ class APIUserList(APIListView):
     )
 
     def get_unfiltered_queryset(self):
-        return Profile.objects.filter(is_unlisted=False).select_related('user')
+        latest_rating_subquery = Rating.objects.filter(user=OuterRef('pk')).order_by('-contest__end_time')
+        return (
+            Profile.objects
+            .filter(is_unlisted=False)
+            .annotate(
+                username=F('user__username'),
+                latest_rating=Subquery(latest_rating_subquery.values('rating')[:1]),
+                latest_volatility=Subquery(latest_rating_subquery.values('volatility')[:1]),
+            )
+            .only('points', 'performance_points', 'problem_count', 'display_rank')
+        )
 
     def get_object_data(self, profile):
-        last_rating = profile.ratings.last()
         return {
-            'username': profile.user.username,
+            'username': profile.username,
             'points': profile.points,
             'performance_points': profile.performance_points,
             'problem_count': profile.problem_count,
             'rank': profile.display_rank,
-            'rating': last_rating.rating if last_rating is not None else None,
-            'volatility': last_rating.volatility if last_rating is not None else None,
+            'rating': profile.latest_rating,
+            'volatility': profile.latest_volatility,
         }
 
 
@@ -395,14 +404,18 @@ class APIUserDetail(APIDetailView):
             .values_list('problem__code', flat=True),
         )
 
-        last_rating = profile.ratings.last()
+        last_rating = profile.ratings.order_by('-contest__end_time').first()
 
         contest_history = []
-        participations = ContestParticipation.objects.filter(
-            user=profile,
-            virtual=ContestParticipation.LIVE,
-            contest__in=Contest.get_visible_contests(self.request.user),
-            contest__end_time__lt=self._now,
+        participations = (
+            ContestParticipation.objects
+            .filter(
+                user=profile,
+                virtual=ContestParticipation.LIVE,
+                contest__in=Contest.get_visible_contests(self.request.user),
+                contest__end_time__lt=self._now,
+            )
+            .order_by('contest__end_time')
         )
         for contest_key, score, cumtime, rating, volatility in participations.values_list(
             'contest__key', 'score', 'cumtime', 'rating__rating', 'rating__volatility',
@@ -455,8 +468,7 @@ class APISubmissionList(APIListView):
                 language_key=F('language__key'),
             )
             .order_by('id')
-            .only('id', 'problem__code', 'user__user__username', 'date',
-                  'language__key', 'time', 'memory', 'points', 'result')
+            .only('id', 'date', 'time', 'memory', 'points', 'result')
         )
         return queryset
 
