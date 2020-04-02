@@ -10,6 +10,7 @@ from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
 
 from judge.models import Contest, ContestParticipation, ContestTag, Organization, Problem, Profile, Rating, Submission
+from judge.utils.raw_sql import use_straight_join
 
 
 def sane_time_repr(delta):
@@ -113,7 +114,7 @@ class APIListView(APIMixin, BaseListView):
         return {
             'current_object_count': len(objects),
             'items_per_page': page.paginator.per_page,
-            'total_objects': len(page.paginator.object_list),
+            'total_objects': page.paginator.count,
             'page_index': page.number,
             'total_pages': page.paginator.num_pages,
             'objects': [self.get_object_data(obj) for obj in objects],
@@ -424,12 +425,16 @@ class APISubmissionList(APIListView):
     def get_unfiltered_queryset(self):
         # TODO: after Problem.get_visible_problems is made, show all submissions that a user can access
         visible_problems = Problem.objects.filter(is_public=True, is_organization_private=False)
-        return (
-            Submission.objects
-            .filter(problem__in=visible_problems)
-            .only('id', 'problem_id', 'problem__code', 'user__user__username', 'date',
-                  'language__key', 'points', 'result')
+        queryset = Submission.objects.all()
+        use_straight_join(queryset)
+        queryset = (
+            queryset.select_related('problem', 'user__user', 'language')
+                    .filter(problem_id__in=visible_problems)
+                    .only('id', 'problem_id', 'problem__code', 'user__user__username', 'date',
+                          'language__key', 'time', 'memory', 'points', 'result')
+                    .order_by('id')
         )
+        return queryset
 
     def get_object_data(self, submission):
         return {
@@ -438,6 +443,8 @@ class APISubmissionList(APIListView):
             'user': submission.user.user.username,
             'date': submission.date.isoformat(),
             'language': submission.language.key,
+            'time': submission.time,
+            'memory': submission.memory,
             'points': submission.points,
             'result': submission.result,
         }
