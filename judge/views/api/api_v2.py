@@ -315,12 +315,7 @@ class APIProblemDetail(APIDetailView):
     def get_object(self, queryset=None):
         problem = super().get_object(queryset)
 
-        # if in a contest with this problem, deny access
-        if self.request.in_contest and \
-                self.request.participation.contest.contest_problems.filter(problem=problem).exists():
-            raise PermissionDenied()
-
-        if not problem.is_accessible_by(self.request.user):
+        if not problem.is_accessible_by(self.request.user, skip_contest_problem_check=True):
             raise Http404()
         return problem
 
@@ -373,6 +368,7 @@ class APIUserDetail(APIDetailView):
             Submission.objects
             .filter(
                 case_points=F('case_total'),
+                result='AC',
                 user=profile,
                 problem__is_public=True,
                 problem__is_organization_private=False,
@@ -465,16 +461,13 @@ class APISubmissionDetail(LoginRequiredMixin, APIDetailView):
         profile = self.request.profile
         problem = submission.problem
 
-        # if in a contest with this problem, deny access
-        if self.request.in_contest and \
-                self.request.participation.contest.contest_problems.filter(problem=problem).exists():
-            raise PermissionDenied()
-
         if self.request.user.has_perm('judge.view_all_submission'):
             return submission
-        if submission.user_id == profile.id:
+        if problem.is_editor(profile):
             return submission
-        if problem.is_editable_by(profile):
+        if not problem.is_accessible_by(self.request.user, skip_contest_problem_check=True):
+            raise PermissionDenied()
+        if submission.user_id == profile.id:
             return submission
         if problem.is_public or problem.testers.filter(id=profile.id).exists():
             if Submission.objects.filter(user_id=profile.id, result='AC', problem_id=problem.id,
