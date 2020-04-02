@@ -142,7 +142,7 @@ class APIContestList(APIListView):
                 Prefetch(
                     'tags',
                     queryset=ContestTag.objects.only('name'),
-                    to_attr='tag_list'
+                    to_attr='tag_list',
                 ),
             )
             .order_by('end_time')
@@ -461,13 +461,10 @@ class APIUserDetail(APIDetailView):
             'problem_count': profile.problem_count,
             'solved_problems': submissions,
             'rank': profile.display_rank,
-            'rating': profile.rating,
+            'rating': last_rating.rating if last_rating is not None else None,
+            'volatility': last_rating.volatility if last_rating is not None else None,
             'organizations': list(profile.organizations.values_list('id', flat=True)),
-            'contests': {
-                'current_rating': last_rating.rating if last_rating is not None else None,
-                'current_volatility': last_rating.volatility if last_rating is not None else None,
-                'history': contest_history,
-            },
+            'contests': contest_history,
         }
 
 
