@@ -219,7 +219,6 @@ class APIContestDetail(APIDetailView):
             'format': {
                 'name': contest.format_name,
                 'config': contest.format_config,
-                'problem_label_script': contest.problem_label_script,
             },
             'problems': [
                 {
@@ -227,9 +226,10 @@ class APIContestDetail(APIDetailView):
                     'partial': problem.partial,
                     'is_pretested': problem.is_pretested and contest.run_pretests_only,
                     'max_submissions': problem.max_submissions or None,
+                    'label': contest.get_label_for_problem(index),
                     'name': problem.problem.name,
                     'code': problem.problem.code,
-                } for problem in problems
+                } for index, problem in enumerate(problems)
             ] if can_see_problems else [],
             'rankings': [
                 {
