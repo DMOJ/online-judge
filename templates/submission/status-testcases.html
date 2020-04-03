@@ -53,7 +53,7 @@
                 <br>
                 <div class="batch-cases">
             {% endif %}
-        <table id="submissions-status-table">{% for case in batch.cases %}
+        <table class="submissions-status-table">{% for case in batch.cases %}
             <tr id="{{ case.id }}" class="case-row toggle closed">
                 <td>
                     {%- if case.status != 'AC' and case.output and (prefix_length is none or prefix_length > 0) -%}
