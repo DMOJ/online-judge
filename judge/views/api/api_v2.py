@@ -251,7 +251,7 @@ class APIContestParticipationList(APIListView):
         ('contest', 'contest__key'),
         ('user', 'user__user__username'),
         ('is_disqualified', 'is_disqualified'),
-        ('virtual', 'virtual'),
+        ('participation_number', 'virtual'),
     )
 
     def get_unfiltered_queryset(self):
@@ -286,7 +286,7 @@ class APIContestParticipationList(APIListView):
             'score': participation.score,
             'cumulative_time': participation.cumtime,
             'is_disqualified': participation.is_disqualified,
-            'virtual': participation.virtual,
+            'participation_number': participation.virtual,
         }
 
 
