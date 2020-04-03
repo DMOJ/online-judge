@@ -404,7 +404,7 @@ MARKDOWN_STYLES = {
 
 MARTOR_ENABLE_CONFIGS = {
     'imgur': 'true',
-    'mention': 'false',
+    'mention': 'true',
     'jquery': 'true',
     'living': 'false',
     'spellcheck': 'false',
@@ -413,6 +413,7 @@ MARTOR_ENABLE_CONFIGS = {
 MARTOR_MARKDOWNIFY_URL = '/widgets/preview/default'
 MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user'
 MARTOR_UPLOAD_URL = '/widgets/martor/upload-image'
+MARTOR_MARKDOWN_BASE_MENTION_URL = '/user/'
 
 # Directory under MEDIA_ROOT to use to store image uploaded through martor.
 MARTOR_UPLOAD_MEDIA_DIR = 'martor'
