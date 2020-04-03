@@ -3,11 +3,11 @@
 form .martor-preview {
     @include content-description;
     
-    .martor-preview ul li {
+    ul li {
         list-style: unset !important;
     }
 
-    .martor-preview ul, .martor-preview ol {
+    ul, ol {
         margin-left: 0 !important;
     }
 }
