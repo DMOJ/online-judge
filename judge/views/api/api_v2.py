@@ -235,7 +235,7 @@ class APIContestDetail(APIDetailView):
                 {
                     'user': participation.username,
                     'score': participation.score,
-                    'cumtime': participation.cumtime,
+                    'cumulative_time': participation.cumtime,
                     'old_rating': participation.old_rating,
                     'new_rating': participation.new_rating,
                     'is_disqualified': participation.is_disqualified,
@@ -284,7 +284,7 @@ class APIContestParticipationList(APIListView):
             'user': participation.username,
             'contest': participation.contest_key,
             'score': participation.score,
-            'cumtime': participation.cumtime,
+            'cumulative_time': participation.cumtime,
             'is_disqualified': participation.is_disqualified,
             'virtual': participation.virtual,
         }
@@ -449,7 +449,7 @@ class APIUserDetail(APIDetailView):
             contest_history.append({
                 'key': contest_key,
                 'score': score,
-                'cumtime': cumtime,
+                'cumulative_time': cumtime,
                 'rating': rating,
                 'volatility': volatility,
             })
