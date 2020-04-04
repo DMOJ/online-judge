@@ -123,38 +123,37 @@ class ContestMixin(object):
 
     @cached_property
     def is_organizer(self):
-        return self.check_organizer()
-
-    def check_organizer(self, contest=None, user=None):
-        if user is None:
-            user = self.request.user
-        if not user.is_authenticated:
+        if not self.request.user.is_authenticated:
             return False
-        return (contest or self.object).organizers.filter(id=user.profile.id).exists()
+        return self.object.organizers.filter(id=self.request.profile.id).exists()
+
+    @cached_property
+    def can_edit(self):
+        return self.object.is_editable_by(self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super(ContestMixin, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
-            profile = self.request.profile
-            in_contest = context['in_contest'] = (profile.current_contest is not None and
-                                                  profile.current_contest.contest == self.object)
-            if in_contest:
-                context['participation'] = profile.current_contest
-                context['participating'] = True
+            try:
+                live_participation = (
+                    self.request.profile.contest_history.get(
+                        contest=self.object,
+                        virtual=ContestParticipation.LIVE,
+                    )
+                )
+            except ContestParticipation.DoesNotExist:
+                context['has_finished_participating'] = False
+                context['has_joined'] = False
             else:
-                try:
-                    context['participation'] = profile.contest_history.get(contest=self.object, virtual=0)
-                except ContestParticipation.DoesNotExist:
-                    context['participating'] = False
-                    context['participation'] = None
-                else:
-                    context['participating'] = True
+                context['has_finished_participating'] = live_participation.ended
+                context['has_joined'] = True
         else:
-            context['participating'] = False
-            context['participation'] = None
-            context['in_contest'] = False
+            context['has_finished_participating'] = False
+            context['has_joined'] = False
+
         context['now'] = timezone.now()
         context['is_organizer'] = self.is_organizer
+        context['can_edit'] = self.can_edit
 
         if not self.object.og_image or not self.object.summary:
             metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id,
@@ -301,8 +300,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('You have been declared persona non grata for this contest. '
                                      'You are permanently barred from joining this contest.'))
 
-        requires_access_code = (not (request.user.is_superuser or self.is_organizer) and
-                                contest.access_code and access_code != contest.access_code)
+        requires_access_code = (not self.can_edit and contest.access_code and access_code != contest.access_code)
         if contest.ended:
             if requires_access_code:
                 raise ContestAccessDenied()
@@ -321,22 +319,24 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 else:
                     break
         else:
+            SPECTATE = ContestParticipation.SPECTATE
+            LIVE = ContestParticipation.LIVE
             try:
                 participation = ContestParticipation.objects.get(
-                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
+                    contest=contest, user=profile, virtual=(SPECTATE if self.is_organizer else LIVE),
                 )
             except ContestParticipation.DoesNotExist:
                 if requires_access_code:
                     raise ContestAccessDenied()
 
                 participation = ContestParticipation.objects.create(
-                    contest=contest, user=profile, virtual=(-1 if self.is_organizer else 0),
+                    contest=contest, user=profile, virtual=(SPECTATE if self.is_organizer else LIVE),
                     real_start=timezone.now(),
                 )
             else:
                 if participation.ended:
                     participation = ContestParticipation.objects.get_or_create(
-                        contest=contest, user=profile, virtual=-1,
+                        contest=contest, user=profile, virtual=SPECTATE,
                         defaults={'real_start': timezone.now()},
                     )[0]
 
@@ -480,7 +480,7 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if not (self.object.ended or self.object.is_editable_by(self.request.user)):
+        if not (self.object.ended or self.can_edit):
             raise Http404()
 
         queryset = Submission.objects.filter(contest_object=self.object)
@@ -698,7 +698,7 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
 class ContestParticipationDisqualify(ContestMixin, SingleObjectMixin, View):
     def get_object(self, queryset=None):
         contest = super().get_object(queryset)
-        if not contest.is_editable_by(self.request.user):
+        if not self.can_edit:
             raise Http404()
         return contest
 
@@ -719,9 +719,7 @@ class ContestMossMixin(ContestMixin, PermissionRequiredMixin):
 
     def get_object(self, queryset=None):
         contest = super().get_object(queryset)
-        if settings.MOSS_API_KEY is None:
-            raise Http404()
-        if not contest.is_editable_by(self.request.user):
+        if settings.MOSS_API_KEY is None or not self.can_edit:
             raise Http404()
         return contest
 
