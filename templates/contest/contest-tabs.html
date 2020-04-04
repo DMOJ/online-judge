@@ -25,7 +25,7 @@
     {% endif %}
 
     {% if request.user.is_authenticated %}
-        {% if contest.can_join or is_organizer %}
+        {% if contest.can_join and contest.is_joinable_by(request.user) or is_organizer %}
             {% set in_contest = contest.is_in_contest(request.user) %}
             {% if contest.ended %}
                 {# Allow users to leave the virtual contest #}
