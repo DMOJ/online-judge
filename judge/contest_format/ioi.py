@@ -1,11 +1,7 @@
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
-<<<<<<< HEAD
 from django.db.models import Max, Min, OuterRef, Subquery
-=======
-from django.db.models import Min, OuterRef, Subquery
->>>>>>> f7cc0c44feaa589938f0ba49850e5bf3203ce156
 from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
