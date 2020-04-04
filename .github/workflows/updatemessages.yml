@@ -4,6 +4,7 @@ on:
     - cron: '0 * * * *'
 jobs:
   updatemessages:
+    if: github.repository == 'DMOJ/online-judge'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -60,7 +61,7 @@ jobs:
         token: ${{ secrets.REPO_SCOPED_TOKEN }}
         committer: dmoj-build <dmoj-build@dmoj.ca> 
         commit-message: 'i18n: update translations from Crowdin'
-        title: 'Update translations from Crowdin'
+        title: Update translations from Crowdin
         body: This PR has been auto-generated to pull in latest translations from [Crowdin](https://translate.dmoj.ca).
         labels: i18n, enhancement
         assignees: Xyene, quantum5
