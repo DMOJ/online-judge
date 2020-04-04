@@ -177,7 +177,7 @@
     {% compress js %}
         <script type="text/javascript" src="{{ static('event.js') }}"></script>
     {% endcompress %}
-    {% if is_organizer %}
+    {% if can_edit %}
         <script type="text/javascript">
             $(function () {
                 $('a.disqualify-participation').click(function (e) {
