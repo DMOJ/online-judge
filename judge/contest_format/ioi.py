@@ -45,14 +45,14 @@ class IOIContestFormat(DefaultContestFormat):
         score = 0
         format_data = {}
 
-        queryset = (participation.submissions.values('problem_id', 'problem__points')
+        queryset = (participation.submissions.values('problem_id')
                                              .filter(points=Subquery(
                                                  participation.submissions.filter(problem_id=OuterRef('problem_id'))
                                                                           .order_by('-points').values('points')[:1]))
                                              .annotate(time=Min('submission__date'))
-                                             .values_list('problem_id', 'time', 'points', 'problem__points'))
+                                             .values_list('problem_id', 'time', 'points'))
 
-        for problem_id, time, points, problem_points in queryset:
+        for problem_id, time, points in queryset:
             if self.config['cumtime']:
                 dt = (time - participation.start).total_seconds()
                 if points:
@@ -60,10 +60,7 @@ class IOIContestFormat(DefaultContestFormat):
             else:
                 dt = 0
 
-            format_data[str(problem_id)] = {
-                'points': points,
-                'time': dt,
-            }
+            format_data[str(problem_id)] = {'points': points, 'time': dt}
             score += points
 
         queryset = (participation.submissions.values('problem_id', 'problem__points')
