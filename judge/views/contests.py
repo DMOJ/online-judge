@@ -246,7 +246,8 @@ class ContestMixin(object):
                                       contest.organizations.all())
         except Contest.Inaccessible:
             raise Http404()
-        return contest
+        else:
+            return contest
 
     def dispatch(self, request, *args, **kwargs):
         try:
@@ -693,10 +694,9 @@ def base_contest_ranking_list(contest, problems, queryset):
 
 def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
-                                                                     .prefetch_related('user__organizations')
-                                                                     .annotate(submission_count=Count('submission'))
-                                                                     .order_by('is_disqualified', '-score', 'cumtime',
-                                                                               '-submission_count'))
+                                     .prefetch_related('user__organizations')
+                                     .annotate(submission_count=Count('submission'))
+                                     .order_by('is_disqualified', '-score', 'cumtime', '-submission_count'))
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
@@ -802,8 +802,7 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
         return get_contest_ranking_list(
             self.request, self.object, show_current_virtual=False,
             ranking_list=partial(base_contest_ranking_list, queryset=queryset),
-            ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users),
-        )
+            ranker=lambda users, key: ((user.participation.virtual or live_link, user) for user in users))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -18,7 +18,7 @@ def sane_time_repr(delta):
 
 def api_v1_contest_list(request):
     queryset = Contest.get_visible_contests(request.user).prefetch_related(
-        Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list')).defer('description')
+        Prefetch('tags', queryset=ContestTag.objects.only('name'), to_attr='tag_list'))
 
     return JsonResponse({c.key: {
         'name': c.name,
@@ -109,21 +109,17 @@ def api_v1_problem_info(request, problem):
     if not p.is_accessible_by(request.user, skip_contest_problem_check=True):
         raise Http404()
 
-    resp = {
+    return JsonResponse({
         'name': p.name,
         'authors': list(p.authors.values_list('user__username', flat=True)),
+        'types': list(p.types.values_list('full_name', flat=True)),
         'group': p.group.full_name,
         'time_limit': p.time_limit,
         'memory_limit': p.memory_limit,
+        'points': p.points,
+        'partial': p.partial,
         'languages': list(p.allowed_languages.values_list('key', flat=True)),
-    }
-
-    if request.profile.current_contest is None:
-        resp['types'] = list(p.types.values_list('full_name', flat=True))
-        resp['points'] = p.points
-        resp['partial'] = p.partial
-
-    return JsonResponse(resp)
+    })
 
 
 def api_v1_user_list(request):
@@ -136,11 +132,11 @@ def api_v1_user_list(request):
     } for username, points, performance_points, rank in queryset})
 
 
-def api_v1_user_info(request, username):
-    profile = get_object_or_404(Profile, user__username=username)
-    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile,
-                                                 problem__is_public=True, problem__is_organization_private=False)
-                                 .values('problem').distinct().values_list('problem__code', flat=True))
+def api_v1_user_info(request, user):
+    profile = get_object_or_404(Profile, user__username=user)
+    submissions = list(Submission.objects.filter(case_points=F('case_total'), user=profile, problem__is_public=True,
+                                                 problem__is_organization_private=False)
+                       .values('problem').distinct().values_list('problem__code', flat=True))
     resp = {
         'points': profile.points,
         'performance_points': profile.performance_points,
@@ -209,10 +205,6 @@ def api_v1_user_ratings(request, page):
             } for username, rating in page
         },
     })
-
-
-def api_v1_submission_list(request):
-    pass
 
 
 def api_v1_submission_detail(request, submission):
