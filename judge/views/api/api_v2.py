@@ -401,6 +401,7 @@ class APIUserList(APIListView):
 
     def get_object_data(self, profile):
         return {
+            'id': profile.id,
             'username': profile.username,
             'points': profile.points,
             'performance_points': profile.performance_points,
@@ -455,6 +456,7 @@ class APIUserDetail(APIDetailView):
             })
 
         return {
+            'id': profile.id,
             'username': profile.user.username,
             'points': profile.points,
             'performance_points': profile.performance_points,
