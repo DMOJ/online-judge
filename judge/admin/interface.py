@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from django.contrib.flatpages.admin import FlatPageAdmin, FlatpageForm
+from django.contrib.flatpages.admin import FlatPageAdmin as OldFlatPageAdmin, FlatpageForm as OldFlatpageForm
 from django.forms import ModelForm
 from django.urls import NoReverseMatch, reverse, reverse_lazy
 from django.utils.html import format_html
@@ -42,15 +42,13 @@ class NavigationBarAdmin(DraggableMPTTAdmin):
         return result
 
 
-class FlatPageForm(FlatpageForm):
-    class Meta:
-        widgets = {
-            'content': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('flatpage_preview')}),
-        }
+class FlatpageForm(OldFlatpageForm):
+    class Meta(OldFlatpageForm.Meta):
+        widgets = {'content': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('flatpage_preview')})}
 
 
-class FlatPageAdmin(VersionAdmin, FlatPageAdmin):
-    form = FlatPageForm
+class FlatPageAdmin(VersionAdmin, OldFlatPageAdmin):
+    form = FlatpageForm
 
 
 class BlogPostForm(ModelForm):
