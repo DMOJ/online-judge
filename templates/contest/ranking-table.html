@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block user_data %}
-    {% if is_organizer %}
+    {% if can_edit %}
         <span class="contest-participation-operation">
             <form action="{{ url('contest_participation_disqualify', contest.key) }}" method="post">
                 {% csrf_token %}
