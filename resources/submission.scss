@@ -8,6 +8,10 @@
     background: rgba(0, 0, 0, .01);
 }
 
+.submissions-status-table {
+    border-spacing: 0;
+}
+
 .submission-row {
     display: flex;
     border-left: #ccc 1px solid;
@@ -289,6 +293,10 @@ label[for="language"], label[for="status"] {
 .case-MLE, .case-OLE, .case-RTE, .case-IR {
     color: orange;
     font-weight: bold;
+}
+
+.case-bad {
+    text-decoration: underline;
 }
 
 .half-hr {

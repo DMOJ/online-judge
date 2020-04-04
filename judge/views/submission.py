@@ -1,4 +1,6 @@
 import json
+from collections import namedtuple
+from itertools import groupby
 from operator import attrgetter
 
 from django.conf import settings
@@ -96,19 +98,51 @@ def make_batch(batch, cases):
     return result
 
 
+TestCase = namedtuple('TestCase', 'id status batch num_combined')
+
+
+def get_statuses(batch, cases):
+    cases = [TestCase(id=case.id, status=case.status, batch=batch, num_combined=1) for case in cases]
+    if batch:
+        # Get the first non-AC case if it exists.
+        return [next((case for case in cases if case.status != 'AC'), cases[0])]
+    else:
+        return cases
+
+
+def combine_statuses(status_cases, submission):
+    ret = []
+    # If the submission is not graded and the final case is a batch,
+    # we don't actually know if it is completed or not, so just remove it.
+    if not submission.is_graded and len(status_cases) > 0 and status_cases[-1].batch is not None:
+        status_cases.pop()
+
+    for key, group in groupby(status_cases, key=attrgetter('status')):
+        group = list(group)
+        if len(group) > 10:
+            # Grab the first case's id so the user can jump to that case, and combine the rest.
+            ret.append(TestCase(id=group[0].id, status=key, batch=None, num_combined=len(group)))
+        else:
+            ret.extend(group)
+    return ret
+
+
 def group_test_cases(cases):
     result = []
+    status = []
     buf = []
     last = None
     for case in cases:
         if case.batch != last and buf:
             result.append(make_batch(last, buf))
+            status.extend(get_statuses(last, buf))
             buf = []
         buf.append(case)
         last = case.batch
     if buf:
         result.append(make_batch(last, buf))
-    return result
+        status.extend(get_statuses(last, buf))
+    return result, status
 
 
 class SubmissionStatus(SubmissionDetailBase):
@@ -118,7 +152,10 @@ class SubmissionStatus(SubmissionDetailBase):
         context = super(SubmissionStatus, self).get_context_data(**kwargs)
         submission = self.object
         context['last_msg'] = event.last()
-        context['batches'] = group_test_cases(submission.test_cases.all())
+
+        context['batches'], statuses = group_test_cases(submission.test_cases.all())
+        context['statuses'] = combine_statuses(statuses, submission)
+
         context['time_limit'] = submission.problem.time_limit
         try:
             lang_limit = submission.problem.language_limits.get(language=submission.language)
