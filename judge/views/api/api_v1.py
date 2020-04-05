@@ -171,8 +171,8 @@ def api_v1_user_info(request, user):
     return JsonResponse(resp)
 
 
-def api_v1_user_submissions(request, username):
-    profile = get_object_or_404(Profile, user__username=username)
+def api_v1_user_submissions(request, user):
+    profile = get_object_or_404(Profile, user__username=user)
     subs = Submission.objects.filter(user=profile, problem__is_public=True, problem__is_organization_private=False)
 
     return JsonResponse({sub['id']: {

@@ -227,6 +227,11 @@ class Problem(models.Model):
         if not user.is_authenticated:
             return False
 
+        # If the user can view all problems.
+        if user.has_perm('judge.see_private_problem'):
+            if user.has_perm('judge.see_restricted_problem') or not self.is_restricted:
+                return True
+
         if self.is_editable_by(user):
             return True
 
@@ -245,10 +250,6 @@ class Problem(models.Model):
             if ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists():
                 return True
 
-        # If the user can view all problems.
-        if user.has_perm('judge.see_private_problem'):
-            if user.has_perm('judge.see_restricted_problem') or not self.is_restricted:
-                return True
         return False
 
     def is_subs_manageable_by(self, user):
