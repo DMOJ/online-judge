@@ -199,20 +199,19 @@ class ContestMixin(object):
         context = super(ContestMixin, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             try:
-                live_participation = (
+                context['live_participation'] = (
                     self.request.profile.contest_history.get(
                         contest=self.object,
                         virtual=ContestParticipation.LIVE,
                     )
                 )
             except ContestParticipation.DoesNotExist:
-                context['has_finished_participating'] = False
+                context['live_participation'] = None
                 context['has_joined'] = False
             else:
-                context['has_finished_participating'] = live_participation.ended
                 context['has_joined'] = True
         else:
-            context['has_finished_participating'] = False
+            context['live_participation'] = None
             context['has_joined'] = False
 
         context['now'] = timezone.now()
@@ -822,7 +821,7 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
 class ContestParticipationDisqualify(ContestMixin, SingleObjectMixin, View):
     def get_object(self, queryset=None):
         contest = super().get_object(queryset)
-        if not self.can_edit:
+        if not contest.is_editable_by(self.request.user):
             raise Http404()
         return contest
 
@@ -843,7 +842,7 @@ class ContestMossMixin(ContestMixin, PermissionRequiredMixin):
 
     def get_object(self, queryset=None):
         contest = super().get_object(queryset)
-        if settings.MOSS_API_KEY is None or not self.can_edit:
+        if settings.MOSS_API_KEY is None or not contest.is_editable_by(self.request.user):
             raise Http404()
         return contest
 

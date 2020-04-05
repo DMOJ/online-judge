@@ -1,7 +1,10 @@
-import requests
+import json
+import os
+
 from ua_parser import user_agent_parser
 
-_SUPPORT_DATA = requests.get('https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json').json()['data']
+with open(os.path.join(os.path.dirname(__file__), '..', '..', 'resources', 'caniuse.json')) as f:
+    _SUPPORT_DATA = json.loads(f.read())['data']
 
 SUPPORT = 'y'
 PARTIAL_SUPPORT = 'a'
