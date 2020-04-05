@@ -1,3 +1,4 @@
+import base64
 import errno
 import io
 import json
@@ -9,6 +10,11 @@ import uuid
 
 from django.conf import settings
 from django.utils.translation import gettext
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 HAS_PHANTOMJS = os.access(settings.PHANTOMJS, os.X_OK)
 HAS_SLIMERJS = os.access(settings.SLIMERJS, os.X_OK)
@@ -17,8 +23,10 @@ NODE_PATH = settings.NODEJS
 PUPPETEER_MODULE = settings.PUPPETEER_MODULE
 HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE)
 
+HAS_SELENIUM = settings.SELENIUM
+
 HAS_PDF = (os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and
-           (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER))
+           (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER or HAS_SELENIUM))
 
 EXIFTOOL = settings.EXIFTOOL
 HAS_EXIFTOOL = os.access(EXIFTOOL, os.X_OK)
@@ -66,7 +74,7 @@ class BasePdfMaker(object):
 
     @property
     def success(self):
-        return self.proc.returncode == 0
+        return self.proc.returncode == 0 
 
     @property
     def created(self):
@@ -258,6 +266,59 @@ puppeteer.launch().then(browser => Promise.resolve()
         self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir, env=env)
         self.log = self.proc.communicate()[0]
 
+class SeleniumPDFRender(BasePdfMaker):
+    response = None
+    template = {
+        'format': settings.SELENIUM_PAPER_SIZE,
+        'margin': {
+             'top': '1cm',
+             'bottom': '1cm',
+             'left': '1cm',
+             'right': '1cm',    
+        },
+        'printBackground': True,
+        'displayHeaderFooter': True,
+        'headerTemplate':'<div></div>',
+        'footerTemplate': '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">'
+            + gettext('Page [page] of [topage]').replace('[page]', '<span class="pageNumber"></span>')
+                                                .replace('[topage]', '<span class="totalPages"></span>')
+            + '</center>',
+    }
+
+    @property
+    def success(self):
+        return self.response is not None
+
+    def _make(self, debug):
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.binary_location = settings.SELENIUM_CHROME_BINARY
+        
+        if settings.SELENIUM_CHROMEDRIVER_BINARY:
+            browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_BINARY, options=options)
+        else:
+            browser = webdriver.Chrome(options=options)
+        browser.get("file://" + os.path.abspath(os.path.join(self.dir, 'input.html')))
+
+        try:
+            WebDriverWait(browser, 15).until(EC.presence_of_element_located((By.CLASS_NAME, 'math-loaded')))
+        except TimeoutException:
+            logger.error('PDF math generation timed out')
+            return
+
+        # Call Chrome DevTools Page.printToPDF
+        resource = "/session/%s/chromium/send_command_and_get_result" % browser.session_id
+        url = browser.command_executor._url + resource
+        body = json.dumps({'cmd': "Page.printToPDF", 'params': self.template})
+        self.response = browser.command_executor._request('POST', url, body).get('value')
+
+        if not self.response:
+            return
+
+        with open(os.path.abspath(os.path.join(self.dir, 'output.pdf')), 'wb') as f:
+            f.write(base64.b64decode(self.response['data']))
+
 
 if HAS_PUPPETEER:
     DefaultPdfMaker = PuppeteerPDFRender
@@ -265,5 +326,7 @@ elif HAS_SLIMERJS:
     DefaultPdfMaker = SlimerJSPdfMaker
 elif HAS_PHANTOMJS:
     DefaultPdfMaker = PhantomJSPdfMaker
+elif HAS_SELENIUM:
+    DefaultPdfMaker = SeleniumPDFRender
 else:
     DefaultPdfMaker = None
