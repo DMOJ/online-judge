@@ -10,11 +10,15 @@ import uuid
 
 from django.conf import settings
 from django.utils.translation import gettext
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
+
+HAS_SELENIUM = False
+if settings.USE_SELENIUM:
+    from selenium import webdriver
+    from selenium.common.exceptions import TimeoutException
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.support.ui import WebDriverWait
+    HAS_SELENIUM = True
 
 HAS_PHANTOMJS = os.access(settings.PHANTOMJS, os.X_OK)
 HAS_SLIMERJS = os.access(settings.SLIMERJS, os.X_OK)
@@ -22,8 +26,6 @@ HAS_SLIMERJS = os.access(settings.SLIMERJS, os.X_OK)
 NODE_PATH = settings.NODEJS
 PUPPETEER_MODULE = settings.PUPPETEER_MODULE
 HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE)
-
-HAS_SELENIUM = settings.SELENIUM
 
 HAS_PDF = (os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and
            (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER or HAS_SELENIUM))
@@ -268,15 +270,8 @@ puppeteer.launch().then(browser => Promise.resolve()
 
 
 class SeleniumPDFRender(BasePdfMaker):
-    response = None
+    success = False
     template = {
-        'format': settings.SELENIUM_PAPER_SIZE,
-        'margin': {
-             'top': '1cm',
-             'bottom': '1cm',
-             'left': '1cm',
-             'right': '1cm',
-        },
         'printBackground': True,
         'displayHeaderFooter': True,
         'headerTemplate':'<div></div>',
@@ -286,20 +281,13 @@ class SeleniumPDFRender(BasePdfMaker):
             + '</center>',
     }
 
-    @property
-    def success(self):
-        return self.response is not None
-
     def _make(self, debug):
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
-        options.binary_location = settings.SELENIUM_CHROME_BINARY
+        options.binary_location = settings.SELENIUM_CUSTOM_CHROME_PATH
 
-        if settings.SELENIUM_CHROMEDRIVER_BINARY:
-            browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_BINARY, options=options)
-        else:
-            browser = webdriver.Chrome(options=options)
+        browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_PATH, options=options)
         browser.get("file://" + os.path.abspath(os.path.join(self.dir, 'input.html')))
 
         try:
@@ -309,25 +297,23 @@ class SeleniumPDFRender(BasePdfMaker):
             return
 
         # Call Chrome DevTools Page.printToPDF
-        resource = "/session/%s/chromium/send_command_and_get_result" % browser.session_id
-        url = browser.command_executor._url + resource
-        body = json.dumps({'cmd': "Page.printToPDF", 'params': self.template})
-        self.response = browser.command_executor._request('POST', url, body).get('value')
-
-        if not self.response:
+        response = browser.execute_cdp_cmd('Page.printToPDF', self.template)
+        if not response:
             return
 
         with open(os.path.abspath(os.path.join(self.dir, 'output.pdf')), 'wb') as f:
-            f.write(base64.b64decode(self.response['data']))
+            f.write(base64.b64decode(response['data']))
+
+        self.success = True
 
 
 if HAS_PUPPETEER:
     DefaultPdfMaker = PuppeteerPDFRender
+elif HAS_SELENIUM:
+    DefaultPdfMaker = SeleniumPDFRender
 elif HAS_SLIMERJS:
     DefaultPdfMaker = SlimerJSPdfMaker
 elif HAS_PHANTOMJS:
     DefaultPdfMaker = PhantomJSPdfMaker
-elif HAS_SELENIUM:
-    DefaultPdfMaker = SeleniumPDFRender
 else:
     DefaultPdfMaker = None
