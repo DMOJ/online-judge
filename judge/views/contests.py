@@ -595,7 +595,7 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         if not ((self.object.ended and self.object.can_see_full_scoreboard(self.request.user)) or
-                self.object.can_edit):
+                self.can_edit):
             raise Http404()
 
         queryset = Submission.objects.filter(contest_object=self.object)
