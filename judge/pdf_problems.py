@@ -274,11 +274,11 @@ class SeleniumPDFRender(BasePdfMaker):
     template = {
         'printBackground': True,
         'displayHeaderFooter': True,
-        'headerTemplate':'<div></div>',
-        'footerTemplate': '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">'
-            + gettext('Page [page] of [topage]').replace('[page]', '<span class="pageNumber"></span>')
-                                                .replace('[topage]', '<span class="totalPages"></span>')
-            + '</center>',
+        'headerTemplate': '<div></div>',
+        'footerTemplate': '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">' +
+            gettext('Page [page] of [topage]').replace('[page]', '<span class="pageNumber"></span>')
+                                              .replace('[topage]', '<span class="totalPages"></span>') +
+            '</center>',
     }
 
     def _make(self, debug):
