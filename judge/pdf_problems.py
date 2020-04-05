@@ -74,7 +74,7 @@ class BasePdfMaker(object):
 
     @property
     def success(self):
-        return self.proc.returncode == 0 
+        return self.proc.returncode == 0
 
     @property
     def created(self):
@@ -266,6 +266,7 @@ puppeteer.launch().then(browser => Promise.resolve()
         self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir, env=env)
         self.log = self.proc.communicate()[0]
 
+
 class SeleniumPDFRender(BasePdfMaker):
     response = None
     template = {
@@ -274,7 +275,7 @@ class SeleniumPDFRender(BasePdfMaker):
              'top': '1cm',
              'bottom': '1cm',
              'left': '1cm',
-             'right': '1cm',    
+             'right': '1cm',
         },
         'printBackground': True,
         'displayHeaderFooter': True,
@@ -294,7 +295,7 @@ class SeleniumPDFRender(BasePdfMaker):
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         options.binary_location = settings.SELENIUM_CHROME_BINARY
-        
+
         if settings.SELENIUM_CHROMEDRIVER_BINARY:
             browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_BINARY, options=options)
         else:
@@ -304,7 +305,7 @@ class SeleniumPDFRender(BasePdfMaker):
         try:
             WebDriverWait(browser, 15).until(EC.presence_of_element_located((By.CLASS_NAME, 'math-loaded')))
         except TimeoutException:
-            logger.error('PDF math generation timed out')
+            logger.error('PDF math rendering timed out')
             return
 
         # Call Chrome DevTools Page.printToPDF
