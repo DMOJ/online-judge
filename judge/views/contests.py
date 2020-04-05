@@ -135,20 +135,19 @@ class ContestMixin(object):
         context = super(ContestMixin, self).get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             try:
-                live_participation = (
+                context['live_participation'] = (
                     self.request.profile.contest_history.get(
                         contest=self.object,
                         virtual=ContestParticipation.LIVE,
                     )
                 )
             except ContestParticipation.DoesNotExist:
-                context['has_finished_participating'] = False
+                context['live_participation'] = None
                 context['has_joined'] = False
             else:
-                context['has_finished_participating'] = live_participation.ended
                 context['has_joined'] = True
         else:
-            context['has_finished_participating'] = False
+            context['live_participation'] = None
             context['has_joined'] = False
 
         context['now'] = timezone.now()

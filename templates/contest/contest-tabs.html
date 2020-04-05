@@ -58,7 +58,7 @@
                                 {{- _('Leave contest') -}}
                             {% endif %}">
                     </form>
-                {% elif is_organizer or has_finished_participating %}
+                {% elif is_organizer or live_participation.ended %}
                     <form action="{{ url('contest_join', contest.key) }}" method="post"
                           class="contest-join-pseudotab unselectable button">
                         {% csrf_token %}
