@@ -289,15 +289,20 @@ class SeleniumPDFRender(BasePdfMaker):
 
         browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_PATH, options=options)
         browser.get("file://" + os.path.abspath(os.path.join(self.dir, 'input.html')))
+        self.log = [browser.get_log('driver')]
+        self.log.append(browser.get_log('browser'))
 
         try:
             WebDriverWait(browser, 15).until(EC.presence_of_element_located((By.CLASS_NAME, 'math-loaded')))
         except TimeoutException:
             logger.error('PDF math rendering timed out')
+            self.log.append(['PDF math rendering timed out'])
             return
 
         # Call Chrome DevTools Page.printToPDF
         response = browser.execute_cdp_cmd('Page.printToPDF', self.template)
+        self.log = [browser.get_log('driver')]
+        self.log.append(browser.get_log('browser'))
         if not response:
             return
 
