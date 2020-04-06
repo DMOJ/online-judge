@@ -276,15 +276,13 @@ class SeleniumPDFRender(BasePdfMaker):
         'displayHeaderFooter': True,
         'headerTemplate': '<div></div>',
         'footerTemplate': '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">' +
-                          gettext('Page [page] of [topage]').replace('[page]', '<span class="pageNumber"></span>')
-                                                            .replace('[topage]', '<span class="totalPages"></span>') +
+                          gettext('Page %s of %s') %
+                          ('<span class="pageNumber"></span>', '<span class="totalPages"></span>') +
                           '</center>',
     }
 
     def get_log(self, driver):
-        log = driver.get_log('driver')
-        log.extend(driver.get_log('browser'))
-        return '\n'.join(map(str, log))
+        return '\n'.join(map(str, driver.get_log('driver') + driver.get_log('browser')))
 
     def _make(self, debug):
         options = webdriver.ChromeOptions()
@@ -292,7 +290,7 @@ class SeleniumPDFRender(BasePdfMaker):
         options.binary_location = settings.SELENIUM_CUSTOM_CHROME_PATH
 
         browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_PATH, options=options)
-        browser.get("file://" + os.path.abspath(os.path.join(self.dir, 'input.html')))
+        browser.get('file://' + os.path.abspath(os.path.join(self.dir, 'input.html')))
         self.log = self.get_log(browser)
 
         try:
