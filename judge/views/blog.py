@@ -39,7 +39,7 @@ class PostList(ListView):
         context['first_page_href'] = reverse('home')
         context['page_prefix'] = reverse('blog_post_list')
         context['comments'] = Comment.most_recent(self.request.user, 10)
-        context['new_problems'] = Problem.objects.filter(is_public=True, is_organization_private=False) \
+        context['new_problems'] = Problem.get_public_problems() \
                                          .order_by('-date', '-id')[:settings.DMOJ_BLOG_NEW_PROBLEM_COUNT]
         context['page_titles'] = CacheDict(lambda page: Comment.get_page_title(page))
 
@@ -52,7 +52,7 @@ class PostList(ListView):
                 context['clarifications'] = clarifications.order_by('-date')
 
         context['user_count'] = lazy(Profile.objects.count, int, int)
-        context['problem_count'] = lazy(Problem.objects.filter(is_public=True).count, int, int)
+        context['problem_count'] = lazy(Problem.get_public_problems().count, int, int)
         context['submission_count'] = lazy(Submission.objects.count, int, int)
         context['language_count'] = lazy(Language.objects.count, int, int)
 

@@ -5,7 +5,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
-from django.db.models import CASCADE, F, QuerySet, SET_NULL
+from django.db.models import CASCADE, F, Q, QuerySet, SET_NULL
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.urls import reverse
@@ -223,6 +223,43 @@ class Problem(models.Model):
 
     def is_subs_manageable_by(self, user):
         return user.is_staff and user.has_perm('judge.rejudge_submission') and self.is_editable_by(user)
+
+    @classmethod
+    def get_visible_problems(cls, user):
+        # Do unauthenticated check here so we can skip authentication checks later on.
+        if not user.is_authenticated:
+            return cls.get_public_problems()
+
+        # Conditions for visible problem:
+        #   - `judge.edit_all_problem` or `judge.see_private_problem`
+        #   - otherwise
+        #       - not is_public problems
+        #           - author or curator or tester
+        #       - is_public problems
+        #           - not is_organization_private or in organization or `judge.see_organization_problem`
+        #           - author or curator or tester
+        queryset = cls.objects.defer('description')
+
+        if not (user.has_perm('judge.see_private_problem') or user.has_perm('judge.edit_all_problem')):
+            q = Q(is_public=True)
+            if not user.has_perm('judge.see_organization_problem'):
+                # Either not organization private or in the organization.
+                q &= (
+                    Q(is_organization_private=False) |
+                    Q(is_organization_private=True, organizations__in=user.profile.organizations.all())
+                )
+
+            # Authors, curators, and testers should always have access, so OR at the very end.
+            q |= Q(authors=user.profile)
+            q |= Q(curators=user.profile)
+            q |= Q(testers=user.profile)
+            queryset = queryset.filter(q)
+
+        return queryset.distinct()
+
+    @classmethod
+    def get_public_problems(cls):
+        return cls.objects.filter(is_public=True, is_organization_private=False).defer('description').distinct()
 
     def __str__(self):
         return self.name
