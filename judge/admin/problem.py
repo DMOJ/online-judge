@@ -194,17 +194,22 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def get_queryset(self, request):
         queryset = Problem.objects.prefetch_related('authors__user')
+        if not request.user.has_perm('judge.edit_own_problem'):
+            return queryset.none()
+
         if request.user.has_perm('judge.edit_all_problem'):
             return queryset
 
-        access = Q()
+        q = Q(authors__id=request.profile.id) | Q(curators__id=request.profile.id)
         if request.user.has_perm('judge.edit_public_problem'):
-            access |= Q(is_public=True)
-        if request.user.has_perm('judge.edit_own_problem'):
-            access |= Q(authors__id=request.profile.id) | Q(curators__id=request.profile.id)
-        return queryset.filter(access).distinct() if access else queryset.none()
+            q |= Q(is_public=True, is_organization_private=False)
+        if request.user.has_perm('judge.edit_organization_problem'):
+            q |= Q(is_public=True, is_organization_private=True)
+        return queryset.filter(q).distinct()
 
     def has_change_permission(self, request, obj=None):
+        if not request.user.has_perm('judge.edit_own_problem'):
+            return False
         if obj is None:
             return True
         return obj.is_editable_by(request.user)

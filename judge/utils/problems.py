@@ -103,7 +103,9 @@ def editable_problems(user, profile=None):
     if not user.has_perm('judge.edit_all_problem'):
         subfilter = Q(authors__id=profile.id) | Q(curators__id=profile.id)
         if user.has_perm('judge.edit_public_problem'):
-            subfilter |= Q(is_public=True)
+            subfilter |= Q(is_public=True, is_organization_private=False)
+        if user.has_perm('judge.edit_organization_problem'):
+            subfilter |= Q(is_public=True, is_organization_private=True)
         subquery = subquery.filter(subfilter)
     return subquery
 

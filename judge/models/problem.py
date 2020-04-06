@@ -175,8 +175,14 @@ class Problem(models.Model):
     def is_editable_by(self, user):
         if not user.is_authenticated:
             return False
-        if user.has_perm('judge.edit_all_problem') or user.has_perm('judge.edit_public_problem') and self.is_public:
+        if user.has_perm('judge.edit_all_problem'):
             return True
+        if self.is_public:
+            if not self.is_organization_private and user.has_perm('judge.edit_public_problem'):
+                return True
+            if self.is_organization_private and user.has_perm('judge.edit_organization_problem'):
+                return True
+
         return user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile)
 
     def is_accessible_by(self, user, skip_contest_problem_check=False):
@@ -195,15 +201,15 @@ class Problem(models.Model):
                     self.organizations.filter(id__in=user.profile.organizations.all()):
                 return True
 
+        if not user.is_authenticated:
+            return False
+
         # If the user can view all problems.
         if user.has_perm('judge.see_private_problem'):
             return True
 
-        if not user.is_authenticated:
-            return False
-
-        # If the user authored the problem or is a curator.
-        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
+        # If you can edit, you can access.
+        if self.is_editable_by(user):
             return True
 
         # If user is a tester.
@@ -345,13 +351,14 @@ class Problem(models.Model):
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
+            ('see_organization_problem', 'See organization-private problems'),
             ('edit_own_problem', 'Edit own problems'),
             ('edit_all_problem', 'Edit all problems'),
-            ('edit_public_problem', 'Edit all public problems'),
+            ('edit_public_problem', 'Edit public not organization-private problems'),
+            ('edit_organization_problem', 'Edit public organization-private problems'),
             ('clone_problem', 'Clone problem'),
             ('change_public_visibility', 'Change is_public field'),
             ('change_manually_managed', 'Change is_manually_managed field'),
-            ('see_organization_problem', 'See organization-private problems'),
         )
         verbose_name = _('problem')
         verbose_name_plural = _('problems')
