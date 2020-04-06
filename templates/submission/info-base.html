@@ -8,7 +8,7 @@
             {% endif %}
             <br>
             <span>{{ submission.language }}</span>
-            {% if perms.judge.change_submission %}
+            {% if submission.problem.is_editable_by(request.user) %}
                 [<a href="{{ url('admin:judge_submission_change', submission.id) }}">{{ _('Admin') }}</a>]
             {% endif %}
         </span>
