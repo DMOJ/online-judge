@@ -250,7 +250,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     def get_queryset(self):
         queryset = self._get_queryset()
         if not self.in_contest:
-            queryset = queryset.filter(problem__in=Problem.get_visible_problems(self.request.user))
+            queryset = queryset.filter(problem__in=list(Problem.get_visible_problems(self.request.user)))
         return queryset
 
     def get_my_submissions_page(self):
