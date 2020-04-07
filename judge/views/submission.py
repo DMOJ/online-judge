@@ -250,16 +250,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     def get_queryset(self):
         queryset = self._get_queryset()
         if not self.in_contest:
-            if not self.request.user.has_perm('judge.see_private_problem'):
-                queryset = queryset.filter(problem__is_public=True)
-            elif not self.request.user.has_perm('judge.see_restricted_problem'):
-                queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
-
-            if not self.request.user.has_perm('judge.see_organization_problem'):
-                filter = Q(problem__is_organization_private=False)
-                if self.request.user.is_authenticated:
-                    filter |= Q(problem__organizations__in=self.request.profile.organizations.all())
-                queryset = queryset.filter(filter)
+            queryset = queryset.filter(problem__in=Problem.get_visible_problems(self.request.user))
         return queryset
 
     def get_my_submissions_page(self):

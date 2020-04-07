@@ -11,7 +11,7 @@ class ProblemSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Problem.problems_list(AnonymousUser()).values_list('code')
+        return Problem.get_public_problems().values_list('code')
 
     def location(self, obj):
         return reverse('problem_detail', args=obj)
