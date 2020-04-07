@@ -138,12 +138,15 @@ class Profile(models.Model):
 
     def calculate_points(self, table=_pp_table):
         from judge.models import Problem
-        data = (Problem.objects.filter(submission__user=self, submission__points__isnull=False, is_public=True,
-                                       is_organization_private=False)
-                       .annotate(max_points=Max('submission__points')).order_by('-max_points')
-                       .values_list('max_points', flat=True).filter(max_points__gt=0))
-        extradata = Problem.objects.filter(submission__user=self, submission__result='AC', is_public=True) \
-                           .values('id').distinct().count()
+        public_problems = Problem.get_public_problems()
+        data = (
+            public_problems.filter(submission__user=self, submission__points__isnull=False)
+                           .annotate(max_points=Max('submission__points')).order_by('-max_points')
+                           .values_list('max_points', flat=True).filter(max_points__gt=0)
+        )
+        extradata = (
+            public_problems.filter(submission__user=self, submission__result='AC').values('id').count()
+        )
         bonus_function = settings.DMOJ_PP_BONUS_FUNCTION
         points = sum(data)
         problems = len(data)

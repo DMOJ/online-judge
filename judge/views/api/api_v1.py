@@ -90,7 +90,7 @@ def api_v1_contest_detail(request, contest):
 
 
 def api_v1_problem_list(request):
-    queryset = Problem.objects.filter(is_public=True, is_organization_private=False)
+    queryset = Problem.get_visible_problems(request.user)
     if settings.ENABLE_FTS and 'search' in request.GET:
         query = ' '.join(request.GET.getlist('search')).strip()
         if query:
