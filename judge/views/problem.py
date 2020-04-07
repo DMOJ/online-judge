@@ -369,7 +369,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                                    'problem__group__full_name', 'points', 'partial', 'user_count')]
 
     def get_normal_queryset(self):
-        queryset = Problem.problems_list(self.request.user)
+        queryset = Problem.get_visible_problems(self.request.user)
 
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))

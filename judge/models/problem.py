@@ -165,29 +165,6 @@ class Problem(models.Model):
         self._i18n_name = None
         self.__original_code = self.code
 
-    @classmethod
-    def problems_list(cls, user):
-        profile = user.profile if user.is_authenticated else None
-
-        filter = Q(is_public=True)
-        if user.has_perm('judge.see_private_problem'):
-            filter |= Q(is_restricted=False)
-            if user.has_perm('judge.see_restricted_problem'):
-                filter |= Q(is_restricted=True)
-        if profile is not None:
-            filter |= Q(authors=profile)
-            filter |= Q(curators=profile)
-            filter |= Q(testers=profile)
-
-        queryset = cls.objects.filter(filter).select_related('group').defer('description')
-        if not user.has_perm('judge.see_organization_problem'):
-            filter = Q(is_organization_private=False)
-            if profile is not None:
-                filter |= Q(organizations__in=profile.organizations.all())
-            queryset = queryset.filter(filter)
-
-        return queryset.distinct()
-
     @cached_property
     def types_list(self):
         return list(map(user_gettext, map(attrgetter('full_name'), self.types.all())))
@@ -281,6 +258,12 @@ class Problem(models.Model):
                 )
 
             # Authors, curators, and testers should always have access, so OR at the very end.
+            q |= Q(authors=user.profile)
+            q |= Q(curators=user.profile)
+            q |= Q(testers=user.profile)
+            queryset = queryset.filter(q)
+        elif not user.has_perm('judge.see_restricted_problem'):
+            q = Q(is_public=True) | Q(is_restricted=False)
             q |= Q(authors=user.profile)
             q |= Q(curators=user.profile)
             q |= Q(testers=user.profile)
