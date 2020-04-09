@@ -145,7 +145,7 @@ class Profile(models.Model):
                            .values_list('max_points', flat=True).filter(max_points__gt=0)
         )
         extradata = (
-            public_problems.filter(submission__user=self, submission__result='AC').values('id').count()
+            public_problems.filter(submission__user=self, submission__result='AC').values('id').distinct().count()
         )
         bonus_function = settings.DMOJ_PP_BONUS_FUNCTION
         points = sum(data)
