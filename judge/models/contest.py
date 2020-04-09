@@ -342,17 +342,17 @@ class Contest(models.Model):
             in_org = False
             in_users = False
 
-        if not self.is_private and (self.is_organization_private or self.is_private_viewable):
+        if not self.is_private and self.is_organization_private:
             if in_org:
                 return
             raise self.PrivateContest()
 
-        if self.is_private and not (self.is_organization_private or self.is_private_viewable):
+        if self.is_private and not self.is_organization_private:
             if in_users:
                 return
             raise self.PrivateContest()
 
-        if self.is_private and (self.is_organization_private or self.is_private_viewable):
+        if self.is_private and self.is_organization_private:
             if in_org and in_users:
                 return
             raise self.PrivateContest()
@@ -395,14 +395,9 @@ class Contest(models.Model):
                 filter |= Q(organizers=profile)
                 filter |= Q(is_private=False, is_organization_private=True,
                             organizations__in=profile.organizations.all())
-                filter |= Q(is_private=False, is_private_viewable=True,
-                            organizations__in=profile.organizations.all())
-                filter |= Q(is_private=True, is_organization_private=False, is_private_viewable=False,
+                filter |= Q(is_private=True, is_organization_private=False,
                             private_contestants=profile)
                 filter |= Q(is_private=True, is_organization_private=True,
-                            organizations__in=profile.organizations.all(),
-                            private_contestants=profile)
-                filter |= Q(is_private=True, is_private_viewable=True,
                             organizations__in=profile.organizations.all(),
                             private_contestants=profile)
                 filter |= Q(view_contest_scoreboard=profile)
