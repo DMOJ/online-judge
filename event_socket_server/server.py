@@ -4,14 +4,14 @@ from socketserver import TCPServer, ThreadingMixIn
 from event_socket_server.handler import TCPHandler
 
 
-class ThreadingTCPServer(ThreadingMixIn, TCPServer):
+class ThreadingTCPListener(ThreadingMixIn, TCPServer):
     allow_reuse_address = True
 
 
 class Server:
     def __init__(self, addresses, client):
         handler = TCPHandler.wrap(client)
-        self.servers = [ThreadingTCPServer(address, handler) for address in addresses]
+        self.servers = [ThreadingTCPListener(address, handler) for address in addresses]
         self._shutdown = threading.Event()
 
     def serve_forever(self):
