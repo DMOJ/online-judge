@@ -2,44 +2,35 @@ import json
 import logging
 import struct
 
-from event_socket_server import ZlibPacketHandler
+from judge.bridge.base_handler import ZlibPacketHandler, Disconnect
 
 logger = logging.getLogger('judge.bridge')
 size_pack = struct.Struct('!I')
 
 
 class DjangoHandler(ZlibPacketHandler):
-    def __init__(self, server, socket, judges):
-        super(DjangoHandler, self).__init__(server, socket)
+    def __init__(self, request, client_address, server, judges):
+        super().__init__(request, client_address, server)
 
         self.handlers = {
             'submission-request': self.on_submission,
             'terminate-submission': self.on_termination,
-            'disconnect-judge': self.on_disconnect,
+            'disconnect-judge': self.on_disconnect_request,
         }
-        self._to_kill = True
         self.judges = judges
 
-    def _kill_if_no_request(self):
-        if self._to_kill:
-            logger.info('Killed inactive connection: %s', self._socket.getpeername())
-            self.close()
-
-    def _format_send(self, data):
-        return super(DjangoHandler, self)._format_send(json.dumps(data, separators=(',', ':')))
+    def send(self, data):
+        super().send(json.dumps(data, separators=(',', ':')))
 
     def packet(self, packet):
-        self._to_kill = False
         packet = json.loads(packet)
         try:
             result = self.handlers.get(packet.get('name', None), self.on_malformed)(packet)
         except Exception:
             logger.exception('Error in packet handling (Django-facing)')
             result = {'name': 'bad-request'}
-        self.send(result, self._schedule_close)
-
-    def _schedule_close(self):
-        self.server.schedule(0, self.close)
+        self.send(result)
+        raise Disconnect()
 
     def on_submission(self, data):
         id = data['submission-id']
@@ -55,7 +46,7 @@ class DjangoHandler(ZlibPacketHandler):
     def on_termination(self, data):
         return {'name': 'submission-received', 'judge-aborted': self.judges.abort(data['submission-id'])}
 
-    def on_disconnect(self, data):
+    def on_disconnect_request(self, data):
         judge_id = data['judge-id']
         force = data['force']
         self.judges.disconnect(judge_id, force=force)

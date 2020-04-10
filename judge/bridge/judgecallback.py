@@ -26,8 +26,8 @@ def _ensure_connection():
 
 
 class DjangoJudgeHandler(JudgeHandler):
-    def __init__(self, server, socket, judges):
-        super(DjangoJudgeHandler, self).__init__(server, socket, judges)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
         # each value is (updates, last reset)
         self.update_counter = {}
@@ -39,7 +39,7 @@ class DjangoJudgeHandler(JudgeHandler):
 
         json_log.info(self._make_json_log(action='connect'))
 
-    def on_close(self):
+    def on_disconnect(self):
         super(DjangoJudgeHandler, self).on_close()
         json_log.info(self._make_json_log(action='disconnect', info='judge disconnected'))
         if self._working:

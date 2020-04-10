@@ -146,3 +146,6 @@ class ZlibPacketHandler(BaseRequestHandler):
     def send(self, data):
         compressed = zlib.compress(data.encode('utf-8'))
         self.request.sendall(size_pack.pack(len(compressed)) + compressed)
+
+    def close(self):
+        self.request.shutdown(socket.SHUT_RDWR)

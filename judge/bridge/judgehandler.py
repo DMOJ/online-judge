@@ -1,18 +1,19 @@
 import json
 import logging
+import threading
 import time
 from collections import deque, namedtuple
 
-from event_socket_server import ProxyProtocolMixin, ZlibPacketHandler
+from judge.bridge.base_handler import ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
 
 SubmissionData = namedtuple('SubmissionData', 'time memory short_circuit pretests_only contest_no attempt_no user_id')
 
 
-class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
-    def __init__(self, server, socket, judges):
-        super(JudgeHandler, self).__init__(server, socket)
+class JudgeHandler(ZlibPacketHandler):
+    def __init__(self, request, client_address, server, judges):
+        super().__init__(request, client_address, server)
 
         self.judges = judges
         self.handlers = {
@@ -30,7 +31,6 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
             'supported-problems': self.on_supported_problems,
             'handshake': self.on_handshake,
         }
-        self._to_kill = True
         self._working = False
         self._no_response_job = None
         self._problems = []
@@ -45,18 +45,11 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
         self._ping_average = deque(maxlen=6)  # 1 minute average, just like load
         self._time_delta = deque(maxlen=6)
 
-        self.server.schedule(15, self._kill_if_no_auth)
+    def on_connect(self):
+        self.timeout = 15
         logger.info('Judge connected from: %s', self.client_address)
 
-    def _kill_if_no_auth(self):
-        if self._to_kill:
-            logger.info('Judge not authenticated: %s', self.client_address)
-            self.close()
-
-    def on_close(self):
-        self._to_kill = False
-        if self._no_response_job:
-            self.server.unschedule(self._no_response_job)
+    def on_disconnect(self):
         self.judges.remove(self)
         if self.name is not None:
             self._disconnected()
@@ -74,8 +67,8 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
     def _update_ping(self):
         pass
 
-    def _format_send(self, data):
-        return super(JudgeHandler, self)._format_send(json.dumps(data, separators=(',', ':')))
+    def send(self, data):
+        super().send(json.dumps(data, separators=(',', ':')))
 
     def on_handshake(self, packet):
         if 'id' not in packet or 'key' not in packet:
@@ -88,7 +81,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
             self.close()
             return
 
-        self._to_kill = False
+        self.timeout = None
         self._problems = packet['problems']
         self.problems = dict(self._problems)
         self.executors = packet['executors']
@@ -127,7 +120,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
     def submit(self, id, problem, language, source):
         data = self.get_related_submission_data(id)
         self._working = id
-        self._no_response_job = self.server.schedule(20, self._kill_if_no_response)
+        self._no_response_job = threading.Timer(20, self._kill_if_no_response)
         self.send({
             'name': 'submission-request',
             'submission-id': id,
@@ -167,7 +160,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
             self.close()
         logger.info('Submission acknowledged: %d', self._working)
         if self._no_response_job:
-            self.server.unschedule(self._no_response_job)
+            self._no_response_job.cancel()
             self._no_response_job = None
         self.on_submission_processing(packet)
 
