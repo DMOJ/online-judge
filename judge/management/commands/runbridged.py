@@ -6,7 +6,8 @@ from functools import partial
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from event_socket_server.server import Server
+from event_socket_server.handler import TCPHandler
+from judge.bridge.server import Server
 from judge.bridge import DjangoHandler, JudgeList
 from judge.bridge import DjangoJudgeHandler
 from judge.models import Judge, Submission
@@ -46,8 +47,8 @@ class Command(BaseCommand):
         Submission.objects.filter(status__in=Submission.IN_PROGRESS_GRADING_STATUS).update(status='IE', result='IE')
         judges = JudgeList()
 
-        judge_server = Server(settings.BRIDGED_JUDGE_ADDRESS, partial(judge_handler, judges=judges))
-        django_server = Server(settings.BRIDGED_DJANGO_ADDRESS, partial(DjangoHandler, judges=judges))
+        judge_server = Server(settings.BRIDGED_JUDGE_ADDRESS, TCPHandler.wrap(partial(judge_handler, judges=judges)))
+        django_server = Server(settings.BRIDGED_DJANGO_ADDRESS, TCPHandler.wrap(partial(DjangoHandler, judges=judges)))
 
         ping_thread = threading.Thread(target=ping_judges, kwargs={'judges': judges})
         ping_thread.daemon = True

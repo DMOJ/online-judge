@@ -1,16 +1,13 @@
 import threading
 from socketserver import TCPServer, ThreadingMixIn
 
-from event_socket_server.handler import TCPHandler
-
 
 class ThreadingTCPListener(ThreadingMixIn, TCPServer):
     allow_reuse_address = True
 
 
 class Server:
-    def __init__(self, addresses, client):
-        handler = TCPHandler.wrap(client)
+    def __init__(self, addresses, handler):
         self.servers = [ThreadingTCPListener(address, handler) for address in addresses]
         self._shutdown = threading.Event()
 
