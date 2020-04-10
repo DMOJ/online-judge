@@ -1,5 +1,5 @@
-from .server import Server
 from .helpers import ProxyProtocolMixin, ZlibPacketHandler
+from .server import Server
 
 
 class EchoPacketHandler(ProxyProtocolMixin, ZlibPacketHandler):
