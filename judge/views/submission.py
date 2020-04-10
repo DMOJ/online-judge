@@ -23,7 +23,7 @@ from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Contest, Language, Problem, ProblemTranslation, Profile, Submission
 from judge.utils.problems import get_result_data, user_authored_ids, user_completed_ids, user_editable_ids
-from judge.utils.raw_sql import use_straight_join
+from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.utils.views import DiggPaginatorMixin, TitleMixin
 
 
@@ -250,7 +250,13 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     def get_queryset(self):
         queryset = self._get_queryset()
         if not self.in_contest:
-            queryset = queryset.filter(problem__in=list(Problem.get_visible_problems(self.request.user)))
+            join_sql_subquery(
+                queryset,
+                subquery=str(Problem.get_visible_problems(self.request.user).distinct().only('id').query),
+                params=[],
+                join_fields=[('problem_id', 'id')],
+                alias='visible_problems',
+            )
 
         return queryset
 
