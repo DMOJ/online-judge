@@ -234,6 +234,9 @@ class Problem(models.Model):
 
     @classmethod
     def get_visible_problems(cls, user):
+        # ALSO UPDATE judge/views/submission.py IF ANYTHING IS CHANGED HERE
+        # judge/views/submission.py uses JOINs instead of an IN for performance.
+
         # Do unauthenticated check here so we can skip authentication checks later on.
         if not user.is_authenticated:
             return cls.get_public_problems()
@@ -269,11 +272,11 @@ class Problem(models.Model):
             q |= Q(testers=user.profile)
             queryset = queryset.filter(q)
 
-        return queryset.distinct()
+        return queryset
 
     @classmethod
     def get_public_problems(cls):
-        return cls.objects.filter(is_public=True, is_organization_private=False).defer('description').distinct()
+        return cls.objects.filter(is_public=True, is_organization_private=False).defer('description')
 
     def __str__(self):
         return self.name
