@@ -23,7 +23,7 @@ from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Contest, Language, Problem, ProblemTranslation, Profile, Submission
 from judge.utils.problems import get_result_data, user_authored_ids, user_completed_ids, user_editable_ids
-from judge.utils.raw_sql import use_straight_join
+from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.utils.views import DiggPaginatorMixin, TitleMixin
 
 
@@ -254,22 +254,14 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     def get_queryset(self):
         queryset = self._get_queryset()
         if not self.in_contest:
-            user = self.request.user
-            # Should remain a copy of `Problem.get_visible_problems`
-            if not user.is_authenticated:
-                queryset = queryset.filter(problem__is_public=True, problem__is_organization_private=False)
-            elif not (user.has_perm('judge.see_private_problem') or user.has_perm('judge.edit_all_problem')):
-                q = Q(problem__is_public=True)
-                if not user.has_perm('judge.see_organization_problem'):
-                    q &= (
-                        Q(problem__is_organization_private=False) |
-                        Q(problem__is_organization_private=True,
-                          problem__organizations__in=user.profile.organizations.all())
-                    )
-                q |= Q(problem__authors=user.profile)
-                q |= Q(problem__curators=user.profile)
-                q |= Q(problem__testers=user.profile)
-                queryset = queryset.filter(q)
+            join_sql_subquery(
+                queryset,
+                subquery=str(Problem.get_visible_problems(self.request.user).distinct().only('id').query),
+                params=[],
+                join_fields=[('problem_id', 'id')],
+                alias='visible_problems',
+            )
+
         return queryset
 
     def get_my_submissions_page(self):

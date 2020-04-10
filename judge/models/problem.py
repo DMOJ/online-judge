@@ -226,9 +226,6 @@ class Problem(models.Model):
 
     @classmethod
     def get_visible_problems(cls, user):
-        # ALSO UPDATE judge/views/submission.py IF ANYTHING IS CHANGED HERE
-        # judge/views/submission.py uses JOINs instead of an IN for performance.
-
         # Do unauthenticated check here so we can skip authentication checks later on.
         if not user.is_authenticated:
             return cls.get_public_problems()
