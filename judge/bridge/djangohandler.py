@@ -9,7 +9,7 @@ size_pack = struct.Struct('!I')
 
 
 class DjangoHandler(ZlibPacketHandler):
-    def __init__(self, server, socket):
+    def __init__(self, server, socket, judges):
         super(DjangoHandler, self).__init__(server, socket)
 
         self.handlers = {
@@ -18,7 +18,7 @@ class DjangoHandler(ZlibPacketHandler):
             'disconnect-judge': self.on_disconnect,
         }
         self._to_kill = True
-        # self.server.schedule(5, self._kill_if_no_request)
+        self.judges = judges
 
     def _kill_if_no_request(self):
         if self._to_kill:
@@ -47,18 +47,18 @@ class DjangoHandler(ZlibPacketHandler):
         language = data['language']
         source = data['source']
         priority = data['priority']
-        if not self.server.judges.check_priority(priority):
+        if not self.judges.check_priority(priority):
             return {'name': 'bad-request'}
-        self.server.judges.judge(id, problem, language, source, priority)
+        self.judges.judge(id, problem, language, source, priority)
         return {'name': 'submission-received', 'submission-id': id}
 
     def on_termination(self, data):
-        return {'name': 'submission-received', 'judge-aborted': self.server.judges.abort(data['submission-id'])}
+        return {'name': 'submission-received', 'judge-aborted': self.judges.abort(data['submission-id'])}
 
     def on_disconnect(self, data):
         judge_id = data['judge-id']
         force = data['force']
-        self.server.judges.disconnect(judge_id, force=force)
+        self.judges.disconnect(judge_id, force=force)
 
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)

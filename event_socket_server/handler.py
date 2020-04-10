@@ -51,6 +51,10 @@ class FakeServer:
         timer = threading.Timer(time, timer_func)
         self.timers.add(timer)
         timer.start()
+        return timer
+
+    def unschedule(self, timer):
+        timer.cancel()
 
     def __enter__(self):
         return self

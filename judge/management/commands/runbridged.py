@@ -1,10 +1,17 @@
 import threading
+from functools import partial
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from judge.bridge import DjangoHandler, DjangoServer
-from judge.bridge import DjangoJudgeHandler, JudgeServer
+from event_socket_server.server import Server
+from judge.bridge import DjangoHandler, JudgeList
+from judge.bridge import DjangoJudgeHandler
+from judge.models import Judge, Submission
+
+
+def reset_judges():
+    Judge.objects.update(online=False, ping=None, load=None)
 
 
 class Command(BaseCommand):
@@ -20,14 +27,17 @@ class Command(BaseCommand):
             if proxies:
                 judge_handler = judge_handler.with_proxy_set(proxies)
 
-        judge_server = JudgeServer(settings.BRIDGED_JUDGE_ADDRESS, judge_handler)
-        django_server = DjangoServer(judge_server.judges, settings.BRIDGED_DJANGO_ADDRESS, DjangoHandler)
+        reset_judges()
+        Submission.objects.filter(status__in=Submission.IN_PROGRESS_GRADING_STATUS).update(status='IE', result='IE')
+        judges = JudgeList()
 
-        # TODO: Merge the two servers
+        judge_server = Server(settings.BRIDGED_JUDGE_ADDRESS, partial(judge_handler, judges=judges))
+        django_server = Server(settings.BRIDGED_DJANGO_ADDRESS, partial(DjangoHandler, judges=judges))
+
         threading.Thread(target=django_server.serve_forever).start()
         try:
             judge_server.serve_forever()
         except KeyboardInterrupt:
             pass
         finally:
-            django_server.stop()
+            django_server.shutdown()

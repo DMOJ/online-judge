@@ -11,9 +11,10 @@ SubmissionData = namedtuple('SubmissionData', 'time memory short_circuit pretest
 
 
 class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
-    def __init__(self, server, socket):
+    def __init__(self, server, socket, judges):
         super(JudgeHandler, self).__init__(server, socket)
 
+        self.judges = judges
         self.handlers = {
             'grading-begin': self.on_grading_begin,
             'grading-end': self.on_grading_end,
@@ -56,7 +57,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
         self._to_kill = False
         if self._no_response_job:
             self.server.unschedule(self._no_response_job)
-        self.server.judges.remove(self)
+        self.judges.remove(self)
         if self.name is not None:
             self._disconnected()
         logger.info('Judge disconnected from: %s', self.client_address)
@@ -95,7 +96,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
 
         self.send({'name': 'handshake-success'})
         logger.info('Judge authenticated: %s (%s)', self.client_address, packet['id'])
-        self.server.judges.register(self)
+        self.judges.register(self)
         self._connected()
 
     def can_judge(self, problem, executor):
@@ -207,7 +208,7 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
         self._problems = packet['problems']
         self.problems = dict(self._problems)
         if not self.working:
-            self.server.judges.update_problems(self)
+            self.judges.update_problems(self)
 
     def on_grading_begin(self, packet):
         logger.info('%s: Grading has begun on: %s', self.name, packet['submission-id'])
@@ -265,4 +266,4 @@ class JudgeHandler(ProxyProtocolMixin, ZlibPacketHandler):
 
     def _free_self(self, packet):
         self._working = False
-        self.server.judges.on_judge_free(self, packet['submission-id'])
+        self.judges.on_judge_free(self, packet['submission-id'])

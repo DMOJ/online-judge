@@ -26,8 +26,8 @@ def _ensure_connection():
 
 
 class DjangoJudgeHandler(JudgeHandler):
-    def __init__(self, server, socket):
-        super(DjangoJudgeHandler, self).__init__(server, socket)
+    def __init__(self, server, socket, judges):
+        super(DjangoJudgeHandler, self).__init__(server, socket, judges)
 
         # each value is (updates, last reset)
         self.update_counter = {}
@@ -54,7 +54,7 @@ class DjangoJudgeHandler(JudgeHandler):
         json_log.exception(self._make_json_log(sub=self._working, info='packet processing exception'))
 
     def get_related_submission_data(self, submission):
-        _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
+        _ensure_connection()
 
         try:
             pid, time, memory, short_circuit, lid, is_pretested, sub_date, uid, part_virtual, part_id = (
@@ -149,6 +149,8 @@ class DjangoJudgeHandler(JudgeHandler):
             })
 
     def on_submission_processing(self, packet):
+        _ensure_connection()
+
         id = packet['submission-id']
         if Submission.objects.filter(id=id).update(status='P', judged_on=self.judge):
             event.post('sub_%s' % Submission.get_id_secret(id), {'type': 'processing'})
