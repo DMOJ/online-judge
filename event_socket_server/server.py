@@ -5,7 +5,7 @@ from event_socket_server.handler import TCPHandler
 
 
 class ThreadingTCPServer(ThreadingMixIn, TCPServer):
-    pass
+    allow_reuse_address = True
 
 
 class Server:
