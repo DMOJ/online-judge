@@ -18,9 +18,19 @@ def user_authored_ids(profile):
 
 
 def user_editable_ids(profile):
-    result = set((Problem.objects.filter(authors=profile) | Problem.objects.filter(curators=profile))
-                 .values_list('id', flat=True))
-    return result
+    user = profile.user
+    if not user.has_perm('judge.edit_own_problem'):
+        return set()
+    if user.has_perm('judge.edit_all_problem') and user.has_perm('judge.see_restricted_problem'):
+        return set(Problem.objects.values_list('id', flat=True))
+
+    q = Q(authors=profile) | Q(curators=profile)
+
+    if user.has_perm('judge.edit_all_problem'):
+        q |= Q(is_public=True) | Q(is_restricted=False)
+    elif user.has_perm('judge.edit_public_problem'):
+        q |= Q(is_public=True)
+    return set(Problem.objects.filter(q).values_list('id', flat=True))
 
 
 def contest_completed_ids(participation):

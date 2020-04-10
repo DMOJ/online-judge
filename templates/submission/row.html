@@ -52,7 +52,7 @@
         <a href="{{ url('submission_status', submission.id) }}">
             <i class="fa fa-eye fa-fw"></i><span class="label">{{ _('view') }}</span>
         </a>
-        {% if perms.judge.rejudge_submission and submission.problem.is_editable_by(request.user) %} ·
+        {% if perms.judge.rejudge_submission and submission.problem.id in editable_problem_ids %} ·
             <a href="#" onclick="rejudge_submission({{ submission.id }}, event);return false">
                 <i class="fa fa-refresh fa-fw"></i><span class="label">{{ _('rejudge') }}</span>
             </a>
