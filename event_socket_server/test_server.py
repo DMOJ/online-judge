@@ -1,4 +1,4 @@
-from .engines import engines
+from .server import Server
 from .helpers import ProxyProtocolMixin, ZlibPacketHandler
 
 
@@ -28,7 +28,6 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--host', action='append')
     parser.add_argument('-p', '--port', type=int, action='append')
-    parser.add_argument('-e', '--engine', default='select', choices=sorted(engines.keys()))
     try:
         import netaddr
     except ImportError:
@@ -37,16 +36,10 @@ def main():
         parser.add_argument('-P', '--proxy', action='append')
     args = parser.parse_args()
 
-    class TestServer(engines[args.engine]):
-        def _accept(self, sock):
-            client = super(TestServer, self)._accept(sock)
-            print('New connection:', client.socket.getpeername())
-            return client
-
     handler = EchoPacketHandler
     if netaddr is not None and args.proxy:
         handler = handler.with_proxy_set(args.proxy)
-    server = TestServer(list(zip(args.host, args.port)), handler)
+    server = Server(list(zip(args.host, args.port)), handler)
     server.serve_forever()
 
 
