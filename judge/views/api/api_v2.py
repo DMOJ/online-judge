@@ -302,8 +302,8 @@ class APIProblemList(APIListView):
     )
 
     def get_unfiltered_queryset(self):
-        queryset = (
-            Problem.objects
+        return (
+            Problem.get_visible_problems(self.request.user)
             .select_related('group')
             .prefetch_related(
                 Prefetch(
@@ -312,24 +312,9 @@ class APIProblemList(APIListView):
                     to_attr='type_list',
                 ),
             )
-            .defer('description')
             .order_by('code')
+            .distinct()
         )
-
-        # TODO: replace with Problem.get_visible_problems() when method is made
-        if not self.request.user.has_perm('see_private_problem'):
-            filter = Q(is_public=True)
-            if self.request.user.is_authenticated:
-                filter |= Q(authors=self.request.profile)
-                filter |= Q(curators=self.request.profile)
-                filter |= Q(testers=self.request.profile)
-            queryset = queryset.filter(filter)
-            if not self.request.user.has_perm('see_organization_problem'):
-                filter = Q(is_organization_private=False)
-                if self.request.user.is_authenticated:
-                    filter |= Q(organizations__in=self.request.profile.organizations.all())
-                queryset = queryset.filter(filter)
-        return queryset
 
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
@@ -480,7 +465,7 @@ class APISubmissionList(APIListView):
     )
 
     def get_unfiltered_queryset(self):
-        # TODO: after Problem.get_visible_problems is made, show all submissions that a user can access
+        # TODO: show all submissions that a user can access. Cannot use Problem.get_visible_problems as it is too slow.
         visible_problems = Problem.objects.filter(is_public=True, is_organization_private=False)
         queryset = Submission.objects.all()
         use_straight_join(queryset)
