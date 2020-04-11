@@ -1,3 +1,4 @@
+import hmac
 import json
 import logging
 import time
@@ -94,7 +95,13 @@ class DjangoJudgeHandler(JudgeHandler):
         )
 
     def _authenticate(self, id, key):
-        result = Judge.objects.filter(name=id, auth_key=key, is_blocked=False).exists()
+        try:
+            judge = Judge.objects.get(name=id, is_blocked=False)
+        except Judge.DoesNotExist:
+            result = False
+        else:
+            result = hmac.compare_digest(judge.auth_key, key)
+
         if not result:
             json_log.warning(self._make_json_log(action='auth', judge=id, info='judge failed authentication'))
         return result
