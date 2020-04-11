@@ -7,8 +7,9 @@ from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
-from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.views import LoginView, redirect_to_login
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Count, Max, Min
 from django.http import Http404, HttpResponseRedirect, JsonResponse
@@ -23,11 +24,12 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
-from judge.forms import ProfileForm, newsletter_id
+from judge.forms import CustomAuthenticationForm, ProfileForm, newsletter_id
 from judge.models import Profile, Rating, Submission
 from judge.performance_points import get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
 from judge.utils.problems import contest_completed_ids, user_completed_ids
+from judge.utils.pwned import PwnedPasswordsValidator
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
 from judge.utils.unicode import utf8text
@@ -115,6 +117,23 @@ class UserPage(TitleMixin, UserMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.hide_solved = request.GET.get('hide_solved') == '1' if 'hide_solved' in request.GET else False
         return super(UserPage, self).get(request, *args, **kwargs)
+
+
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'
+    extra_context = {'title': _('Login')}
+    authentication_form = CustomAuthenticationForm
+    redirect_authenticated_user = True
+
+    def form_valid(self, form):
+        password = form.cleaned_data['password']
+        validator = PwnedPasswordsValidator()
+        try:
+            validator.validate(password)
+            self.request.session['password_pwned'] = False
+        except ValidationError:
+            self.request.session['password_pwned'] = True
+        return super().form_valid(form)
 
 
 EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
