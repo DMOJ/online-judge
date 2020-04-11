@@ -2,7 +2,7 @@ import json
 import logging
 import struct
 
-from judge.bridge.base_handler import ZlibPacketHandler, Disconnect
+from judge.bridge.base_handler import Disconnect, ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
 size_pack = struct.Struct('!I')
