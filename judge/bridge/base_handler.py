@@ -170,7 +170,8 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
             return
         except zlib.error:
             if self._got_packet:
-                logger.warning('Found zlib error in connection', exc_info=True)
+                logger.warning('Encountered zlib error during packet handling, disconnecting client: %s',
+                               self.client_address, exc_info=True)
             else:
                 logger.info('Potentially wrong protocol (zlib error): %s: %r', self.client_address,
                             size_pack.pack([self._initial_tag]), exc_info=True)
