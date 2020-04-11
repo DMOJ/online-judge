@@ -71,7 +71,7 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
     def read_sized_packet(self, size, initial=None):
         if size > MAX_ALLOWED_PACKET_SIZE:
             logger.log(logging.WARNING if self._got_packet else logging.INFO,
-                       'Disconnecting due to large size (%d): %s', size, self.client_address)
+                       'Disconnecting client due to too-large message size (%d bytes): %s', size, self.client_address)
             raise Disconnect()
 
         buffer = []
