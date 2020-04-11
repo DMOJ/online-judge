@@ -119,8 +119,9 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         return buffer
 
     def _on_packet(self, data):
+        decompressed = zlib.decompress(data).decode('utf-8')
         self._got_packet = True
-        self.on_packet(zlib.decompress(data).decode('utf-8'))
+        self.on_packet(decompressed)
 
     def on_packet(self, data):
         raise NotImplementedError()
@@ -130,9 +131,6 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
 
     def on_disconnect(self):
         pass
-
-    def on_invalid(self):
-        raise ValueError()
 
     def on_timeout(self):
         pass
@@ -165,7 +163,11 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         except Disconnect:
             return
         except zlib.error:
-            self.on_invalid()
+            if self._got_packet:
+                logger.info('Found zlib error in connection')
+            else:
+                logger.info('Potentially wrong protocol (zlib error): %s: %r', self.client_address,
+                            size_pack.pack([self._initial_tag]))
         except socket.timeout:
             if self._got_packet:
                 logger.info('Socket timed out: %s', self.client_address)
