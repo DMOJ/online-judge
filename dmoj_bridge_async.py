@@ -7,6 +7,10 @@ gevent.monkey.patch_all()
 
 # noinspection PyUnresolvedReferences
 import dmoj_install_pymysql  # noqa: F401, I100, I202, imported for side effect
+
+import django  # noqa: F401, I100, I202, django must be imported here
+django.setup()
+
 # noinspection PyUnresolvedReferences
 import django_2_2_pymysql_patch  # noqa: I100, F401, I202, imported for side effect
 
