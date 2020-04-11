@@ -56,6 +56,8 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         self.server = server
         self.client_address = client_address
         self.server_address = server.server_address
+        self._initial_tag = None
+        self._got_packet = False
 
     @property
     def timeout(self):
@@ -117,6 +119,7 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         return buffer
 
     def _on_packet(self, data):
+        self._got_packet = True
         self.on_packet(zlib.decompress(data).decode('utf-8'))
 
     def on_packet(self, data):
@@ -136,7 +139,7 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
 
     def handle(self):
         try:
-            tag = self.read_size()
+            tag = self._initial_tag = self.read_size()
             if self.client_address[0] in self.proxies and tag == PROXY_MAGIC:
                 proxy, _, remainder = self.read_proxy_header(b'PROX').partition(b'\r\n')
                 self.parse_proxy_protocol(proxy)
@@ -164,8 +167,12 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         except zlib.error:
             self.on_invalid()
         except socket.timeout:
-            logger.warning('Socket timed out: %s', self.client_address)
-            self.on_timeout()
+            if self._got_packet:
+                logger.info('Socket timed out: %s', self.client_address)
+                self.on_timeout()
+            else:
+                logger.info('Potentially wrong protocol: %s: %r', self.client_address,
+                            size_pack.pack([self._initial_tag]))
         except socket.error as e:
             # When a gevent socket is shutdown, gevent cancels all waits, causing recv to raise cancel_wait_ex.
             if e.__class__.__name__ == 'cancel_wait_ex':

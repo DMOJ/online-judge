@@ -148,7 +148,8 @@ class JudgeHandler(ZlibPacketHandler):
         self.close()
 
     def on_timeout(self):
-        logger.error('Judge seems dead: %s: %s', self.name, self._working)
+        if self.name:
+            logger.warning('Judge seems dead: %s: %s', self.name, self._working)
 
     def malformed_packet(self, exception):
         logger.exception('Judge sent malformed packet: %s', self.name)
