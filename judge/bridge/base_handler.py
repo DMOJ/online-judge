@@ -13,6 +13,7 @@ logger = logging.getLogger('judge.bridge')
 size_pack = struct.Struct('!I')
 assert size_pack.size == 4
 PROXY_MAGIC = size_pack.unpack(b'PROX')[0]
+MAX_ALLOWED_PACKET_SIZE = 8 * 1024 * 1024
 
 
 def proxy_list(human_readable):
@@ -68,6 +69,11 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         self.request.settimeout(timeout or None)
 
     def read_sized_packet(self, size, initial=None):
+        if size > MAX_ALLOWED_PACKET_SIZE:
+            logger.log(logging.WARNING if self._got_packet else logging.INFO,
+                       'Disconnecting due to large size (%d): %s', size, self.client_address)
+            raise Disconnect()
+
         buffer = []
         remainder = size
 
