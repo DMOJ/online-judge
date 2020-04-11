@@ -70,6 +70,7 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         if initial:
             buffer.append(initial)
             remainder -= len(initial)
+            assert remainder >= 0
 
         while remainder:
             data = self.request.recv(remainder)
@@ -132,8 +133,11 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
     def handle(self):
         try:
             tag = self.read_size()
+            logger.info('%s: tag %d', self.client_address, tag)
             if self.client_address[0] in self.proxies and tag == PROXY_MAGIC:
+                logger.info('%s: reading proxy header', self.client_address)
                 proxy, _, remainder = self.read_proxy_header(b'PROX').partition(b'\r\n')
+                logger.info('%s: read: %s', self.client_address, proxy)
                 self.parse_proxy_protocol(proxy)
 
                 while remainder:
