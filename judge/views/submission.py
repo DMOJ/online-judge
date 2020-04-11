@@ -232,9 +232,9 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                                                           queryset=ProblemTranslation.objects.filter(
                                                               language=self.request.LANGUAGE_CODE), to_attr='_trans'))
         if self.in_contest:
-            queryset = queryset.filter(contest__participation__contest_id=self.contest.id)
+            queryset = queryset.filter(contest_object=self.contest)
             if self.contest.hide_scoreboard and self.contest.is_in_contest(self.request.user):
-                queryset = queryset.filter(contest__participation__user=self.request.profile)
+                queryset = queryset.filter(user=self.request.profile)
         else:
             queryset = queryset.select_related('contest_object').defer('contest_object__description')
 
