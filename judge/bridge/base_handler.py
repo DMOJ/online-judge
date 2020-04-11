@@ -31,11 +31,23 @@ class Disconnect(Exception):
     pass
 
 
-class ZlibPacketHandler(BaseRequestHandler):
+class RequestHandlerMeta(type):
+    def __call__(cls, *args, **kwargs):
+        handler = super().__call__(cls, *args, **kwargs)
+        handler.on_connect()
+        try:
+            handler.handle()
+        finally:
+            handler.on_disconnect()
+
+
+class ZlibPacketHandler(metaclass=RequestHandlerMeta):
     proxies = []
 
     def __init__(self, request, client_address, server):
-        super().__init__(request, client_address, server)
+        self.request = request
+        self.server = server
+        self.client_address = client_address
         self.server_address = server.server_address
 
     @property
@@ -113,8 +125,6 @@ class ZlibPacketHandler(BaseRequestHandler):
         raise Disconnect()
 
     def handle(self):
-        self.on_connect()
-
         try:
             tag = self.read_size()
             if self.client_address[0] in self.proxies and tag == PROXY_MAGIC:
@@ -148,8 +158,6 @@ class ZlibPacketHandler(BaseRequestHandler):
         except BaseException:
             logger.exception('Error in base packet handling')
             raise
-        finally:
-            self.on_disconnect()
 
     def send(self, data):
         compressed = zlib.compress(data.encode('utf-8'))
