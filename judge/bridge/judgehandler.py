@@ -50,6 +50,8 @@ class JudgeHandler(ZlibPacketHandler):
         logger.info('Judge connected from: %s', self.client_address)
 
     def on_disconnect(self):
+        if self._working:
+            logger.error('Judge %s disconnected while handling submission %s', self.name, self._working)
         self.judges.remove(self)
         if self.name is not None:
             self._disconnected()
