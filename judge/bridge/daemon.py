@@ -18,17 +18,6 @@ def reset_judges():
     Judge.objects.update(online=False, ping=None, load=None)
 
 
-def ping_judges(judges):
-    try:
-        while True:
-            for judge in judges:
-                judge.ping()
-            time.sleep(10)
-    except Exception:
-        logger.exception('Ping error')
-        raise
-
-
 def judge_daemon():
     reset_judges()
     Submission.objects.filter(status__in=Submission.IN_PROGRESS_GRADING_STATUS).update(status='IE', result='IE')
@@ -36,10 +25,6 @@ def judge_daemon():
 
     judge_server = Server(settings.BRIDGED_JUDGE_ADDRESS, partial(DjangoJudgeHandler, judges=judges))
     django_server = Server(settings.BRIDGED_DJANGO_ADDRESS, partial(DjangoHandler, judges=judges))
-
-    ping_thread = threading.Thread(target=ping_judges, kwargs={'judges': judges})
-    ping_thread.daemon = True
-    ping_thread.start()
 
     threading.Thread(target=django_server.serve_forever).start()
     threading.Thread(target=judge_server.serve_forever).start()

@@ -42,6 +42,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.name = None
         self.batch_id = None
         self.in_batch = False
+        self._stop_ping = threading.Event()
         self._ping_average = deque(maxlen=6)  # 1 minute average, just like load
         self._time_delta = deque(maxlen=6)
 
@@ -50,6 +51,7 @@ class JudgeHandler(ZlibPacketHandler):
         logger.info('Judge connected from: %s', self.client_address)
 
     def on_disconnect(self):
+        self._stop_ping.set()
         if self._working:
             logger.error('Judge %s disconnected while handling submission %s', self.name, self._working)
         self.judges.remove(self)
@@ -83,7 +85,7 @@ class JudgeHandler(ZlibPacketHandler):
             self.close()
             return
 
-        self.timeout = None
+        self.timeout = 60
         self._problems = packet['problems']
         self.problems = dict(self._problems)
         self.executors = packet['executors']
@@ -92,6 +94,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.send({'name': 'handshake-success'})
         logger.info('Judge authenticated: %s (%s)', self.client_address, packet['id'])
         self.judges.register(self)
+        threading.Thread(target=self._ping_thread).start()
         self._connected()
 
     def can_judge(self, problem, executor):
@@ -141,8 +144,11 @@ class JudgeHandler(ZlibPacketHandler):
         })
 
     def _kill_if_no_response(self):
-        logger.error('Judge seems dead: %s: %s', self.name, self._working)
+        logger.error('Judge failed to acknowledge submission: %s: %s', self.name, self._working)
         self.close()
+
+    def on_timeout(self):
+        logger.error('Judge seems dead: %s: %s', self.name, self._working)
 
     def malformed_packet(self, exception):
         logger.exception('Judge sent malformed packet: %s', self.name)
@@ -262,3 +268,14 @@ class JudgeHandler(ZlibPacketHandler):
     def _free_self(self, packet):
         self._working = False
         self.judges.on_judge_free(self, packet['submission-id'])
+
+    def _ping_thread(self):
+        try:
+            while True:
+                self.ping()
+                if self._stop_ping.wait(10):
+                    break
+        except Exception:
+            logger.exception('Ping error in %s', self.name)
+            self.close()
+            raise

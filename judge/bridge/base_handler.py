@@ -132,7 +132,7 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         raise ValueError()
 
     def on_timeout(self):
-        raise Disconnect()
+        pass
 
     def handle(self):
         try:
@@ -165,6 +165,7 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
             self.on_invalid()
         except socket.timeout:
             logger.warning('Socket timed out: %s', self.client_address)
+            self.on_timeout()
         except socket.error as e:
             # When a gevent socket is shutdown, gevent cancels all waits, causing recv to raise cancel_wait_ex.
             if e.__class__.__name__ == 'cancel_wait_ex':
