@@ -47,7 +47,7 @@ class DjangoJudgeHandler(JudgeHandler):
         super(DjangoJudgeHandler, self).on_disconnect()
         json_log.info(self._make_json_log(action='disconnect', info='judge disconnected'))
         if self._working:
-            Submission.objects.filter(id=self._working).update(status='IE', result='IE')
+            Submission.objects.filter(id=self._working).update(status='IE', result='IE', error='')
             json_log.error(self._make_json_log(sub=self._working, action='close', info='IE due to shutdown on grading'))
 
     def on_malformed(self, packet):
