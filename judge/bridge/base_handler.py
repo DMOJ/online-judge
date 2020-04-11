@@ -38,7 +38,7 @@ class Disconnect(Exception):
 # calling the methods that handles the request.
 class RequestHandlerMeta(type):
     def __call__(cls, *args, **kwargs):
-        handler = super().__call__(cls, *args, **kwargs)
+        handler = super().__call__(*args, **kwargs)
         handler.on_connect()
         try:
             handler.handle()
