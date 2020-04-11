@@ -41,6 +41,9 @@ class RequestHandlerMeta(type):
         handler.on_connect()
         try:
             handler.handle()
+        except BaseException:
+            logger.exception('Error in base packet handling')
+            raise
         finally:
             handler.on_disconnect()
 
@@ -162,8 +165,10 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
             self.on_invalid()
         except socket.timeout:
             logger.warning('Socket timed out: %s', self.client_address)
-        except BaseException:
-            logger.exception('Error in base packet handling')
+        except socket.error as e:
+            # When a gevent socket is shutdown, gevent cancels all waits, causing recv to raise cancel_wait_ex.
+            if e.__class__.__name__ == 'cancel_wait_ex':
+                return
             raise
 
     def send(self, data):
