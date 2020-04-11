@@ -1,6 +1,6 @@
 import logging
+import signal
 import threading
-import time
 from functools import partial
 
 from django.conf import settings
@@ -29,11 +29,18 @@ def judge_daemon():
     threading.Thread(target=django_server.serve_forever).start()
     threading.Thread(target=judge_server.serve_forever).start()
 
+    stop = threading.Event()
+
+    def signal_handler(signum, _):
+        logger.info('Exiting due to %s', signal.Signals(signum).name)
+        stop.set()
+
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGQUIT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
     try:
-        while True:
-            time.sleep(86400)
-    except KeyboardInterrupt:
-        pass
+        stop.wait()
     finally:
         django_server.shutdown()
         judge_server.shutdown()
