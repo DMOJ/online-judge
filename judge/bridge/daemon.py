@@ -5,7 +5,9 @@ from functools import partial
 
 from django.conf import settings
 
-from judge.bridge import DjangoHandler, DjangoJudgeHandler, JudgeList
+from judge.bridge.djangohandler import DjangoHandler
+from judge.bridge.judgecallback import DjangoJudgeHandler
+from judge.bridge.judgelist import JudgeList
 from judge.bridge.server import Server
 from judge.models import Judge, Submission
 
