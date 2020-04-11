@@ -44,7 +44,7 @@ class DjangoJudgeHandler(JudgeHandler):
         json_log.info(self._make_json_log(action='connect'))
 
     def on_disconnect(self):
-        super(DjangoJudgeHandler, self).on_close()
+        super(DjangoJudgeHandler, self).on_disconnect()
         json_log.info(self._make_json_log(action='disconnect', info='judge disconnected'))
         if self._working:
             Submission.objects.filter(id=self._working).update(status='IE', result='IE')
