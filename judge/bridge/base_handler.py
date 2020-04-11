@@ -58,7 +58,7 @@ class ZlibPacketHandler(BaseRequestHandler):
             data = self.request.recv(remainder)
             remainder -= len(data)
             buffer.append(data)
-        self._packet(b''.join(buffer))
+        self._on_packet(b''.join(buffer))
 
     def parse_proxy_protocol(self, line):
         if len(line) < 2:
@@ -94,7 +94,7 @@ class ZlibPacketHandler(BaseRequestHandler):
             buffer += data
         return buffer
 
-    def _packet(self, data):
+    def _on_packet(self, data):
         self.on_packet(zlib.decompress(data).decode('utf-8'))
 
     def on_packet(self, data):
@@ -132,7 +132,7 @@ class ZlibPacketHandler(BaseRequestHandler):
                         self.read_sized_packet(size, remainder)
                         break
 
-                    self._packet(remainder[:size])
+                    self._on_packet(remainder[:size])
                     remainder = remainder[size:]
             else:
                 self.read_sized_packet(tag)
