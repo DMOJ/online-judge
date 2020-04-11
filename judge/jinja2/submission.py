@@ -2,7 +2,7 @@ from . import registry
 
 
 @registry.function
-def submission_layout(submission, profile_id, user, editable_problem_ids, completed_problem_ids):
+def submission_layout(submission, profile_id, user, completed_problem_ids, editable_problem_ids, tester_problem_ids):
     problem_id = submission.problem_id
     can_view = False
 
@@ -16,6 +16,6 @@ def submission_layout(submission, profile_id, user, editable_problem_ids, comple
         can_view = True
 
     if submission.problem_id in completed_problem_ids:
-        can_view |= submission.problem.is_public or profile_id in submission.problem.tester_ids
+        can_view |= submission.problem.is_public or submission.problem_id in tester_problem_ids
 
     return can_view
