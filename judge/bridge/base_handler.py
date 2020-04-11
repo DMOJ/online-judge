@@ -95,9 +95,9 @@ class ZlibPacketHandler(BaseRequestHandler):
         return buffer
 
     def _packet(self, data):
-        self.packet(zlib.decompress(data).decode('utf-8'))
+        self.on_packet(zlib.decompress(data).decode('utf-8'))
 
-    def packet(self, data):
+    def on_packet(self, data):
         raise NotImplementedError()
 
     def on_connect(self):

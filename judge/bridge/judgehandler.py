@@ -173,7 +173,7 @@ class JudgeHandler(ZlibPacketHandler):
     def ping(self):
         self.send({'name': 'ping', 'when': time.time()})
 
-    def packet(self, data):
+    def on_packet(self, data):
         try:
             try:
                 data = json.loads(data)

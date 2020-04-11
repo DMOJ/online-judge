@@ -9,7 +9,7 @@ class EchoPacketHandler(ZlibPacketHandler):
     def on_timeout(self):
         print('Inactive client:', self.client_address)
 
-    def packet(self, data):
+    def on_packet(self, data):
         self.timeout = None
         print('Data from %s: %r' % (self.client_address, data[:30] if len(data) > 30 else data))
         self.send(data)
