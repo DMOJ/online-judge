@@ -144,7 +144,7 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
     def handle(self):
         try:
             tag = self.read_size()
-            self._initial_tag = size_pack.pack([tag])
+            self._initial_tag = size_pack.pack(tag)
             if self.client_address[0] in self.proxies and self._initial_tag == b'PROX':
                 proxy, _, remainder = self.read_proxy_header(self._initial_tag).partition(b'\r\n')
                 self.parse_proxy_protocol(proxy)
