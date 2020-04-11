@@ -31,6 +31,11 @@ class Disconnect(Exception):
     pass
 
 
+# socketserver.BaseRequestHandler does all the handling in __init__,
+# making it impossible to inherit __init__ sanely. While it lets you
+# use setup(), most tools will complain about uninitialized variables.
+# This metaclass will allow sane __init__ behaviour while also magically
+# calling the methods that handles the request.
 class RequestHandlerMeta(type):
     def __call__(cls, *args, **kwargs):
         handler = super().__call__(cls, *args, **kwargs)
