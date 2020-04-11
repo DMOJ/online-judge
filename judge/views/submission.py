@@ -22,7 +22,7 @@ from django.views.generic import DetailView, ListView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Contest, Language, Problem, ProblemTranslation, Profile, Submission
-from judge.utils.problems import get_result_data, user_authored_ids, user_completed_ids, user_editable_ids
+from judge.utils.problems import get_result_data, user_completed_ids, user_editable_ids, user_tester_ids
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.utils.views import DiggPaginatorMixin, TitleMixin
 
@@ -282,8 +282,8 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context['dynamic_update'] = False
         context['show_problem'] = self.show_problem
         context['completed_problem_ids'] = user_completed_ids(self.request.profile) if authenticated else []
-        context['authored_problem_ids'] = user_authored_ids(self.request.profile) if authenticated else []
         context['editable_problem_ids'] = user_editable_ids(self.request.profile) if authenticated else []
+        context['tester_problem_ids'] = user_tester_ids(self.request.profile) if authenticated else []
 
         context['all_languages'] = Language.objects.all().values_list('key', 'name')
         context['selected_languages'] = self.selected_languages
@@ -463,9 +463,9 @@ def single_submission(request, submission_id, show_problem=True):
 
     return render(request, 'submission/row.html', {
         'submission': submission,
-        'authored_problem_ids': user_authored_ids(request.profile) if authenticated else [],
         'completed_problem_ids': user_completed_ids(request.profile) if authenticated else [],
         'editable_problem_ids': user_editable_ids(request.profile) if authenticated else [],
+        'tester_problem_ids': user_tester_ids(request.profile) if authenticated else [],
         'show_problem': show_problem,
         'problem_name': show_problem and submission.problem.translated_name(request.LANGUAGE_CODE),
         'profile_id': request.profile.id if authenticated else 0,

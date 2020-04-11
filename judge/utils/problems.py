@@ -9,12 +9,11 @@ from django.utils.translation import gettext as _, gettext_noop
 
 from judge.models import Problem, Submission
 
-__all__ = ['contest_completed_ids', 'get_result_data', 'user_completed_ids', 'user_authored_ids', 'user_editable_ids']
+__all__ = ['contest_completed_ids', 'get_result_data', 'user_completed_ids', 'user_editable_ids', 'user_tester_ids']
 
 
-def user_authored_ids(profile):
-    result = set(Problem.objects.filter(authors=profile).values_list('id', flat=True))
-    return result
+def user_tester_ids(profile):
+    return set(Problem.objects.filter(testers=profile).values_list('id', flat=True))
 
 
 def user_editable_ids(profile):
