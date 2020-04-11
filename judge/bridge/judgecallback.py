@@ -4,9 +4,11 @@ import time
 from operator import itemgetter
 
 from django import db
+from django.conf import settings
 from django.utils import timezone
 
 from judge import event_poster as event
+from judge.bridge.base_handler import proxy_list
 from judge.caching import finished_submission
 from judge.models import Judge, Language, LanguageLimit, Problem, RuntimeVersion, Submission, SubmissionTestCase
 from .judgehandler import JudgeHandler, SubmissionData
@@ -26,6 +28,8 @@ def _ensure_connection():
 
 
 class DjangoJudgeHandler(JudgeHandler):
+    proxies = proxy_list(settings.BRIDGED_JUDGE_PROXIES or [])
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

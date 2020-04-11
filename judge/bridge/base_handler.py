@@ -3,7 +3,6 @@ import socket
 import struct
 import zlib
 from itertools import chain
-from socketserver import BaseRequestHandler
 
 from netaddr import IPGlob, IPSet
 
