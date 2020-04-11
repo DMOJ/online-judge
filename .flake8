@@ -1,6 +1,6 @@
 [flake8]
 max-line-length = 120
-application-import-names = dmoj,judge,django_ace,event_socket_server
+application-import-names = dmoj,judge,django_ace
 import-order-style = pycharm
 enable-extensions = G
 ignore =
@@ -13,7 +13,6 @@ per-file-ignores =
     # F403: import *
     ./*/__init__.py:F401,F403
     # F405: name comes from import *
-    ./event_socket_server/__init__.py:F401,F403,F405
     ./judge/management/commands/runmoss.py:F403,F405
     # E501: line too long, ignore in migrations
     ./judge/migrations/*.py:E501
