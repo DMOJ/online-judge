@@ -134,7 +134,7 @@ class UserDashboard(UserPage):
         profile = self.request.profile
         context = super(UserDashboard, self).get_context_data(**kwargs)
         context['recently_attempted_problems'] = (Submission.objects.filter(user=profile, problem__is_public=True)
-                                                  .exclude(problem__id__in=user_completed_ids(profile))
+                                                  .exclude(problem_id__in=user_completed_ids(profile))
                                                   .values_list('problem__code', 'problem__name', 'problem__points')
                                                   .annotate(points=Max('points'), latest=Max('date'))
                                                   .order_by('-latest')
