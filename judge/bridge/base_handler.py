@@ -78,18 +78,20 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
         self._on_packet(b''.join(buffer))
 
     def parse_proxy_protocol(self, line):
-        if len(line) < 2:
+        words = line.split()
+
+        if len(words) < 2:
             raise Disconnect()
 
-        if line[1] == b'TCP4':
-            if len(line) != 6:
+        if words[1] == b'TCP4':
+            if len(words) != 6:
                 raise Disconnect()
-            self.client_address = (utf8text(line[2]), utf8text(line[4]))
-            self.server_address = (utf8text(line[3]), utf8text(line[5]))
-        elif line[1] == b'TCP6':
-            self.client_address = (utf8text(line[2]), utf8text(line[4]), 0, 0)
-            self.server_address = (utf8text(line[3]), utf8text(line[5]), 0, 0)
-        elif line[1] != b'UNKNOWN':
+            self.client_address = (utf8text(words[2]), utf8text(words[4]))
+            self.server_address = (utf8text(words[3]), utf8text(words[5]))
+        elif words[1] == b'TCP6':
+            self.client_address = (utf8text(words[2]), utf8text(words[4]), 0, 0)
+            self.server_address = (utf8text(words[3]), utf8text(words[5]), 0, 0)
+        elif words[1] != b'UNKNOWN':
             raise Disconnect()
 
     def read_size(self, buffer=b''):
