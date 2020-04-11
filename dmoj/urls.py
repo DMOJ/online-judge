@@ -12,7 +12,6 @@ from django.views.generic import RedirectView
 from martor.views import markdown_search_user
 
 from judge.feed import AtomBlogFeed, AtomCommentFeed, AtomProblemFeed, BlogFeed, CommentFeed, ProblemFeed
-from judge.forms import CustomAuthenticationForm
 from judge.sitemap import BlogPostSitemap, ContestSitemap, HomePageSitemap, OrganizationSitemap, ProblemSitemap, \
     SolutionSitemap, UrlSitemap, UserSitemap
 from judge.views import TitledTemplateView, api, blog, comment, contests, language, license, mailgun, organization, \
@@ -51,12 +50,7 @@ register_patterns = [
         TitledTemplateView.as_view(template_name='registration/registration_closed.html',
                                    title='Registration not allowed'),
         name='registration_disallowed'),
-    url(r'^login/$', auth_views.LoginView.as_view(
-        template_name='registration/login.html',
-        extra_context={'title': _('Login')},
-        authentication_form=CustomAuthenticationForm,
-        redirect_authenticated_user=True,
-    ), name='auth_login'),
+    url(r'^login/$', user.CustomLoginView.as_view(), name='auth_login'),
     url(r'^logout/$', user.UserLogoutView.as_view(), name='auth_logout'),
     url(r'^password/change/$', auth_views.PasswordChangeView.as_view(
         template_name='registration/password_change_form.html',
