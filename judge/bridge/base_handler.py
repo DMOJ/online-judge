@@ -12,7 +12,7 @@ logger = logging.getLogger('judge.bridge')
 
 size_pack = struct.Struct('!I')
 assert size_pack.size == 4
-PROXY_MAGIC = size_pack.unpack(b'PROX')[0]
+
 MAX_ALLOWED_PACKET_SIZE = 8 * 1024 * 1024
 
 
@@ -143,9 +143,10 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
 
     def handle(self):
         try:
-            tag = self._initial_tag = self.read_size()
-            if self.client_address[0] in self.proxies and tag == PROXY_MAGIC:
-                proxy, _, remainder = self.read_proxy_header(b'PROX').partition(b'\r\n')
+            tag = self.read_size()
+            self._initial_tag = size_pack.pack([tag])
+            if self.client_address[0] in self.proxies and self._initial_tag == b'PROX':
+                proxy, _, remainder = self.read_proxy_header(self._initial_tag).partition(b'\r\n')
                 self.parse_proxy_protocol(proxy)
 
                 while remainder:
@@ -173,15 +174,14 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
                 logger.warning('Encountered zlib error during packet handling, disconnecting client: %s',
                                self.client_address, exc_info=True)
             else:
-                logger.info('Potentially wrong protocol (zlib error): %s: %r', self.client_address,
-                            size_pack.pack([self._initial_tag]), exc_info=True)
+                logger.info('Potentially wrong protocol (zlib error): %s: %r', self.client_address, self._initial_tag,
+                            exc_info=True)
         except socket.timeout:
             if self._got_packet:
                 logger.info('Socket timed out: %s', self.client_address)
                 self.on_timeout()
             else:
-                logger.info('Potentially wrong protocol: %s: %r', self.client_address,
-                            size_pack.pack([self._initial_tag]))
+                logger.info('Potentially wrong protocol: %s: %r', self.client_address, self._initial_tag)
         except socket.error as e:
             # When a gevent socket is shutdown, gevent cancels all waits, causing recv to raise cancel_wait_ex.
             if e.__class__.__name__ == 'cancel_wait_ex':
