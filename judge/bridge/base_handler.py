@@ -82,6 +82,17 @@ class ZlibPacketHandler(BaseRequestHandler):
             buffer += recv
         return size_pack.unpack(buffer)[0]
 
+    def read_proxy_header(self, buffer=b''):
+        # Max line length for PROXY protocol is 107, and we received 4 already.
+        while b'\r\n' not in buffer:
+            if len(buffer) > 107:
+                raise Disconnect()
+            data = self.request.recv(107)
+            if not data:
+                raise Disconnect()
+            buffer += data
+        return buffer
+
     def _packet(self, data):
         self.packet(zlib.decompress(data).decode('utf-8'))
 
@@ -106,11 +117,7 @@ class ZlibPacketHandler(BaseRequestHandler):
         try:
             tag = self.request.recv(4)
             if self.client_address[0] in self.proxies and tag == b'PROX':
-                # Max line length for PROXY protocol is 107, and we received 4 already.
-                line = tag + self.request.recv(103)
-                proxy, newline, remainder = line.partition(b'\r\n')
-                if not newline:
-                    raise Disconnect()
+                proxy, _, remainder = self.read_proxy_header(tag).partition(b'\r\n')
                 self.parse_proxy_protocol(proxy)
 
                 while remainder:
