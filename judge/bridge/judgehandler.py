@@ -57,7 +57,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.judges.remove(self)
         if self.name is not None:
             self._disconnected()
-        logger.info('Judge disconnected from: %s', self.client_address)
+        logger.info('Judge disconnected from: %s with name %s', self.client_address, self.name)
 
     def _authenticate(self, id, key):
         return False
