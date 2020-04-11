@@ -1,0 +1,178 @@
+@import "vars";
+
+@mixin content-description {
+    line-height: 1.5em;
+    font-size: 1em;
+    font-family: "Segoe UI", "Lucida Grande", Arial, sans-serif;
+
+    p {
+        margin: 1em 0 !important;
+        padding: 0 !important;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: normal;
+        color: #111;
+        margin-bottom: 0.75em;
+        padding: 0;
+        background: 0;
+    }
+
+    h3, h4, h5, h6 {
+        font-weight: bold;
+    }
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+    h2 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 1.6em;
+        margin: 0;
+        padding: 0;
+    }
+
+    h4 {
+        font-size: 1.4em;
+        border-bottom: 1px solid #EEE;
+        line-height: 1.225;
+        padding-bottom: 0.3em;
+        padding-top: 0.5em;
+    }
+
+    h5 {
+        font-size: 1.15em;
+        margin-top: 0;
+    }
+
+    h6 {
+        font-size: 0.9em;
+    }
+
+    blockquote {
+        color: #666;
+        margin: 0;
+        padding-left: 1.5em;
+        border-left: 0.5em #EEE solid;
+    }
+
+    hr {
+        display: block;
+        height: 0;
+        border: 0;
+        font-style: italic;
+        border-bottom: 1px solid $border_gray;
+        margin: 25px 0 20px 0;
+        padding: 0;
+    }
+
+    pre, code, kbd, samp, span.code {
+        color: #000;
+        page-break-inside: avoid;
+        font-family: $monospace-fonts;
+        font-size: 0.98em;
+    }
+
+    code, span.code {
+        font-family: $monospace-fonts !important;
+        margin: 0 2px;
+        padding: 0 5px;
+        border: 1px solid $border_gray;
+        background-color: #f8f8f8;
+        border-radius: $widget_border_radius;
+        font-size: 0.95em;
+        color: #444;
+    }
+
+    pre {
+        code, div.code {
+            border: 0;
+            line-height: 1em;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            font-size: 1em;
+            color: black;
+        }
+
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin: 1.5em 0 1.5em 0;
+        padding: 1em;
+        border: 1px solid $border_gray;
+        background-color: #f8f8f8;
+        color: black;
+        border-radius: $widget_border_radius;
+    }
+
+    b, strong {
+        font-weight: bold;
+    }
+
+    dfn {
+        font-style: italic;
+    }
+
+    ins {
+        background: #ff9;
+        color: #000;
+        text-decoration: none;
+    }
+
+    mark {
+        background: #ff0;
+        color: #000;
+        font-style: italic;
+        font-weight: bold;
+    }
+
+    sub {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+    }
+
+    sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+        top: -0.5em;
+    }
+
+    sub {
+        bottom: -0.25em;
+    }
+
+    ul, ol {
+        padding: 0 0 0 2em !important;
+    }
+
+    li p:last-child {
+        margin: 0;
+    }
+
+    dd {
+        margin: 0 0 0 2em;
+    }
+
+    img {
+        border: 0;
+        -ms-interpolation-mode: bicubic;
+        vertical-align: middle;
+    }
+
+    td {
+        vertical-align: top;
+    }
+}

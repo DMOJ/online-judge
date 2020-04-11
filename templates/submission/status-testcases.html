@@ -25,6 +25,26 @@
             <h3>{{ _('Execution Results') }}</h3>
         {% endif %}
         <br>
+        {% if statuses or not submission.is_graded %}
+            {% for case in statuses %}
+                {% if case.status == "AC" %}
+                    <span class="fa fa-check case-AC"></span>
+                {% elif case.status == "SC" %}
+                    <span class="case-SC">&ndash;</span>
+                {% else %}
+                    <a href="#{{ case.id }}">
+                        <span class="fa fa-times case-{{ case.status }} case-bad"></span>
+                    </a>
+                {% endif %}
+                {% if case.num_combined > 1 %}
+                    <sup class="case-{{ case.status }}">&times;{{ case.num_combined }}</sup>
+                {% endif %}
+            {% endfor %}
+            {% if not submission.is_graded %}
+                <span class="fa fa-spinner fa-pulse"></span>
+            {% endif %}
+            <br><br>
+        {% endif %}
         {% set test_case_id = counter() %}
         {% for batch in batches %}
             {% if batch.id %}
@@ -33,7 +53,7 @@
                 <br>
                 <div class="batch-cases">
             {% endif %}
-        <table>{% for case in batch.cases %}
+        <table class="submissions-status-table">{% for case in batch.cases %}
             <tr id="{{ case.id }}" class="case-row toggle closed">
                 <td>
                     {%- if case.status != 'AC' and case.output and (prefix_length is none or prefix_length > 0) -%}

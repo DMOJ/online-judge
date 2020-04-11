@@ -1,0 +1,39 @@
+@import "base-description";
+
+form .martor-preview {
+    @include content-description;
+    
+    ul li {
+        list-style: unset !important;
+    }
+
+    ul, ol {
+        margin-left: 0 !important;
+    }
+
+    h5 {
+        text-transform: none !important;
+    }
+}
+
+.main-martor-fullscreen {
+    z-index: 99999 !important;
+}
+
+.section-martor {
+    div[data-tab="editor-tab-description"] {
+        padding: 0;
+    }
+
+    .markdown-selector.markdown-emoji {
+        display: none !important;
+    }
+
+    .tab-martor-menu a.item {
+        font-size: 0.8rem;
+    }
+
+    .martor-field {
+        height: 400px;
+    }
+}

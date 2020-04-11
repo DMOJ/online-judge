@@ -19,6 +19,7 @@ from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, ListView, TemplateView
 from reversion import revisions
 
@@ -256,6 +257,28 @@ def edit_profile(request):
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',
     })
+
+
+@require_POST
+@login_required
+def generate_api_token(request):
+    profile = request.profile
+    with transaction.atomic(), revisions.create_revision():
+        revisions.set_user(request.user)
+        revisions.set_comment(_('Generated API token for user'))
+        return JsonResponse({'data': {'token': profile.generate_api_token()}})
+
+
+@require_POST
+@login_required
+def remove_api_token(request):
+    profile = request.profile
+    with transaction.atomic(), revisions.create_revision():
+        profile.api_token = None
+        profile.save()
+        revisions.set_user(request.user)
+        revisions.set_comment(_('Removed API token for user'))
+    return JsonResponse({})
 
 
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):

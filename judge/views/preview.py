@@ -5,7 +5,7 @@ from django.views.generic.base import ContextMixin, TemplateResponseMixin, View
 class MarkdownPreviewView(TemplateResponseMixin, ContextMixin, View):
     def post(self, request, *args, **kwargs):
         try:
-            self.preview_data = data = request.POST['preview']
+            self.preview_data = data = request.POST['content']
         except KeyError:
             return HttpResponseBadRequest('No preview data specified.')
 
@@ -30,6 +30,10 @@ class CommentMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'comments/preview.html'
 
 
+class FlatPageMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'flatpage-preview.html'
+
+
 class ProfileMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'user/preview.html'
 
@@ -48,3 +52,7 @@ class LicenseMarkdownPreviewView(MarkdownPreviewView):
 
 class TicketMarkdownPreviewView(MarkdownPreviewView):
     template_name = 'ticket/preview.html'
+
+
+class DefaultMarkdownPreviewView(MarkdownPreviewView):
+    template_name = 'default-preview.html'

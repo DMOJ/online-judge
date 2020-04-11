@@ -165,7 +165,7 @@
 {% endblock %}
 
 {% block users_js_media %}
-    {% if is_organizer %}
+    {% if can_edit %}
         <script type="text/javascript">
             $(function () {
                 $('a.disqualify-participation').click(function (e) {

@@ -2,7 +2,6 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext as _
 
-from judge.models import Submission
 from judge.utils.problems import get_result_data
 from judge.utils.raw_sql import join_sql_subquery
 from judge.views.submission import ForceContestMixin, ProblemSubmissions
@@ -84,6 +83,5 @@ class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
                            self.get_problem_number(self.problem), self.contest.name,
                            reverse('contest_view', args=[self.contest.key]))
 
-    def _get_result_data(self):
-        return get_result_data(Submission.objects.filter(
-            problem_id=self.problem.id, contest__participation__contest_id=self.contest.id))
+    def _get_queryset(self):
+        return super()._get_queryset().filter(contest_object=self.contest)
