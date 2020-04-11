@@ -13,6 +13,7 @@ logger = logging.getLogger('judge.bridge')
 
 size_pack = struct.Struct('!I')
 assert size_pack.size == 4
+PROXY_MAGIC = size_pack.unpack(b'PROX')[0]
 
 
 def proxy_list(human_readable):
@@ -115,9 +116,9 @@ class ZlibPacketHandler(BaseRequestHandler):
         self.on_connect()
 
         try:
-            tag = self.request.recv(4)
-            if self.client_address[0] in self.proxies and tag == b'PROX':
-                proxy, _, remainder = self.read_proxy_header(tag).partition(b'\r\n')
+            tag = self.read_size()
+            if self.client_address[0] in self.proxies and tag == PROXY_MAGIC:
+                proxy, _, remainder = self.read_proxy_header(b'PROX').partition(b'\r\n')
                 self.parse_proxy_protocol(proxy)
 
                 while remainder:
@@ -134,7 +135,7 @@ class ZlibPacketHandler(BaseRequestHandler):
                     self._packet(remainder[:size])
                     remainder = remainder[size:]
             else:
-                self.read_sized_packet(self.read_size(tag))
+                self.read_sized_packet(tag)
 
             while True:
                 self.read_sized_packet(self.read_size())
