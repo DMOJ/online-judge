@@ -140,11 +140,11 @@ class ZlibPacketHandler(BaseRequestHandler):
             while True:
                 self.read_sized_packet(self.read_size())
         except Disconnect:
-            self.on_timeout()
+            return
         except zlib.error:
             self.on_invalid()
         except socket.timeout:
-            return
+            logger.warning('Socket timed out: %s', self.client_address)
         except BaseException:
             logger.exception('Error in base packet handling')
             raise

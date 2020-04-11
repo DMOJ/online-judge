@@ -1,7 +1,3 @@
-import socketserver
-import threading
-
-
 class Handler(object):
     def __init__(self, server, socket):
         self._socket = socket
