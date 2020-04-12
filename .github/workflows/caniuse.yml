@@ -15,7 +15,7 @@ jobs:
       uses: peter-evans/create-pull-request@v2
       with:
         token: ${{ secrets.REPO_SCOPED_TOKEN }}
-        committer: dmoj-build <dmoj-build@dmoj.ca>
+        committer: dmoj-build <build@dmoj.ca>
         title: Import latest Can I use... data
         commit-message: Import latest Can I use... data
         body: This PR has been auto-generated to pull in the latest copy of Can I use... `data.json` from [upstream](https://github.com/Fyrd/caniuse/blob/master/data.json).

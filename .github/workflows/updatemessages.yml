@@ -59,7 +59,7 @@ jobs:
       uses: peter-evans/create-pull-request@v2
       with:
         token: ${{ secrets.REPO_SCOPED_TOKEN }}
-        committer: dmoj-build <dmoj-build@dmoj.ca> 
+        committer: dmoj-build <build@dmoj.ca> 
         commit-message: 'i18n: update translations from Crowdin'
         title: Update translations from Crowdin
         body: This PR has been auto-generated to pull in latest translations from [Crowdin](https://translate.dmoj.ca).
