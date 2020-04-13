@@ -13,7 +13,7 @@ from django.views.generic.list import BaseListView
 from judge.models import (
     Contest, ContestParticipation, ContestTag, Organization, Problem, ProblemType, Profile, Rating, Submission,
 )
-from judge.utils.raw_sql import use_straight_join
+from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 
 
 class JSONResponseMixin:
@@ -457,21 +457,27 @@ class APIUserDetail(APIDetailView):
 
 class APISubmissionList(APIListView):
     model = Submission
-    list_filters = (
+    basic_filters = (
         ('user', 'user__user__username'),
         ('problem', 'problem__code'),
+    )
+    list_filters = (
         ('language', 'language__key'),
         ('result', 'result'),
     )
 
     def get_unfiltered_queryset(self):
-        # TODO: show all submissions that a user can access. Cannot use Problem.get_visible_problems as it is too slow.
-        visible_problems = Problem.objects.filter(is_public=True, is_organization_private=False)
         queryset = Submission.objects.all()
         use_straight_join(queryset)
+        join_sql_subquery(
+            queryset,
+            subquery=Problem.get_visible_problems(self.request.user).query,
+            params=[],
+            join_fields=[('problem_id', 'id')],
+            alias='visible_problems',
+        )
         queryset = (
             queryset
-            .filter(problem__in=visible_problems)
             .annotate(
                 username=F('user__user__username'),
                 problem_code=F('problem__code'),
