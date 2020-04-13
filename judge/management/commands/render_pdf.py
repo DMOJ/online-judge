@@ -8,7 +8,8 @@ from django.template.loader import get_template
 from django.utils import translation
 
 from judge.models import Problem, ProblemTranslation
-from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, PuppeteerPDFRender, SlimerJSPdfMaker
+from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, PuppeteerPDFRender, SeleniumPDFRender, \
+    SlimerJSPdfMaker
 
 
 class Command(BaseCommand):
@@ -24,6 +25,7 @@ class Command(BaseCommand):
         parser.add_argument('-s', '--slimerjs', action='store_const', const=SlimerJSPdfMaker, dest='engine')
         parser.add_argument('-c', '--chrome', '--puppeteer', action='store_const',
                             const=PuppeteerPDFRender, dest='engine')
+        parser.add_argument('-S', '--selenium', action='store_const', const=SeleniumPDFRender, dest='engine')
 
     def handle(self, *args, **options):
         try:

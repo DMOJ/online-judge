@@ -125,6 +125,10 @@ SLIMERJS_PAPER_SIZE = 'Letter'
 PUPPETEER_MODULE = '/usr/lib/node_modules/puppeteer'
 PUPPETEER_PAPER_SIZE = 'Letter'
 
+USE_SELENIUM = False
+SELENIUM_CUSTOM_CHROME_PATH = None
+SELENIUM_CHROMEDRIVER_PATH = 'chromedriver'
+
 PYGMENT_THEME = 'pygment-github.css'
 INLINE_JQUERY = True
 INLINE_FONTAWESOME = True

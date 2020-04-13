@@ -379,29 +379,24 @@ class Contest(models.Model):
 
     @classmethod
     def get_visible_contests(cls, user):
-        profile = user.profile if user.is_authenticated else None
-        queryset = cls.objects.defer('description', 'registration_page')
+        if not user.is_authenticated:
+            return cls.objects.filter(is_visible=True, is_organization_private=False, is_private=False) \
+                              .defer('description', 'registration_page').distinct()
 
-        if not user.has_perm('judge.see_private_contest'):
-            filter = Q(is_visible=True)
-            if user.is_authenticated:
-                filter |= Q(organizers=profile)
-            queryset = queryset.filter(filter)
-        if not user.has_perm('judge.edit_all_contest'):
-            filter = Q(is_private=False, is_organization_private=False)
-            if not user.is_authenticated or profile.is_external_user:
-                filter &= Q(is_external=True)
-            if user.is_authenticated:
-                filter |= Q(organizers=profile)
-                filter |= Q(is_private=False, is_organization_private=True,
-                            organizations__in=profile.organizations.all())
-                filter |= Q(is_private=True, is_organization_private=False,
-                            private_contestants=profile)
-                filter |= Q(is_private=True, is_organization_private=True,
-                            organizations__in=profile.organizations.all(),
-                            private_contestants=profile)
-                filter |= Q(view_contest_scoreboard=profile)
-            queryset = queryset.filter(filter)
+        queryset = cls.objects.defer('description', 'registration_page')
+        if not (user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest')):
+            q = Q(is_visible=True)
+            q &= (
+                Q(view_contest_scoreboard=user.profile) |
+                Q(is_organization_private=False, is_private=False) |
+                Q(is_organization_private=False, is_private=True, private_contestants=user.profile) |
+                Q(is_organization_private=True, is_private=False, organizations__in=user.profile.organizations.all()) |
+                Q(is_organization_private=True, is_private=True, organizations__in=user.profile.organizations.all(),
+                  private_contestants=user.profile)
+            )
+
+            q |= Q(organizers=user.profile)
+            queryset = queryset.filter(q)
         return queryset.distinct()
 
     def rate(self):

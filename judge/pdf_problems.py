@@ -1,3 +1,4 @@
+import base64
 import errno
 import io
 import json
@@ -10,6 +11,15 @@ import uuid
 from django.conf import settings
 from django.utils.translation import gettext
 
+HAS_SELENIUM = False
+if settings.USE_SELENIUM:
+    from selenium import webdriver
+    from selenium.common.exceptions import TimeoutException
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support import expected_conditions as EC
+    from selenium.webdriver.support.ui import WebDriverWait
+    HAS_SELENIUM = True
+
 HAS_PHANTOMJS = os.access(settings.PHANTOMJS, os.X_OK)
 HAS_SLIMERJS = os.access(settings.SLIMERJS, os.X_OK)
 
@@ -18,7 +28,7 @@ PUPPETEER_MODULE = settings.PUPPETEER_MODULE
 HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE)
 
 HAS_PDF = (os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and
-           (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER))
+           (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER or HAS_SELENIUM))
 
 EXIFTOOL = settings.EXIFTOOL
 HAS_EXIFTOOL = os.access(EXIFTOOL, os.X_OK)
@@ -259,8 +269,52 @@ puppeteer.launch().then(browser => Promise.resolve()
         self.log = self.proc.communicate()[0]
 
 
+class SeleniumPDFRender(BasePdfMaker):
+    success = False
+    template = {
+        'printBackground': True,
+        'displayHeaderFooter': True,
+        'headerTemplate': '<div></div>',
+        'footerTemplate': '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">' +
+                          gettext('Page %s of %s') %
+                          ('<span class="pageNumber"></span>', '<span class="totalPages"></span>') +
+                          '</center>',
+    }
+
+    def get_log(self, driver):
+        return '\n'.join(map(str, driver.get_log('driver') + driver.get_log('browser')))
+
+    def _make(self, debug):
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless")
+        options.binary_location = settings.SELENIUM_CUSTOM_CHROME_PATH
+
+        browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_PATH, options=options)
+        browser.get('file://' + os.path.abspath(os.path.join(self.dir, 'input.html')))
+        self.log = self.get_log(browser)
+
+        try:
+            WebDriverWait(browser, 15).until(EC.presence_of_element_located((By.CLASS_NAME, 'math-loaded')))
+        except TimeoutException:
+            logger.error('PDF math rendering timed out')
+            self.log = self.get_log(browser) + '\nPDF math rendering timed out'
+            return
+
+        response = browser.execute_cdp_cmd('Page.printToPDF', self.template)
+        self.log = self.get_log(browser)
+        if not response:
+            return
+
+        with open(os.path.abspath(os.path.join(self.dir, 'output.pdf')), 'wb') as f:
+            f.write(base64.b64decode(response['data']))
+
+        self.success = True
+
+
 if HAS_PUPPETEER:
     DefaultPdfMaker = PuppeteerPDFRender
+elif HAS_SELENIUM:
+    DefaultPdfMaker = SeleniumPDFRender
 elif HAS_SLIMERJS:
     DefaultPdfMaker = SlimerJSPdfMaker
 elif HAS_PHANTOMJS:
