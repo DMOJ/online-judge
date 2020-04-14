@@ -72,7 +72,7 @@ def api_v2_user_info(request):
                                .order_by('order'))
         rank, result = next(filter(lambda data: data[1].user == profile.user,
                                    ranker(contest_ranking_list(contest, problems),
-                                          key=attrgetter('points', 'cumtime'))))
+                                          key=attrgetter('points', 'cumtime', 'tiebreaker'))))
 
         contest_history.append({
             'contest': {

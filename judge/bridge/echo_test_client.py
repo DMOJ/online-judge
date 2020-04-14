@@ -1,14 +1,10 @@
-import ctypes
+import os
 import socket
 import struct
 import time
 import zlib
 
 size_pack = struct.Struct('!I')
-try:
-    RtlGenRandom = ctypes.windll.advapi32.SystemFunction036
-except AttributeError:
-    RtlGenRandom = None
 
 
 def open_connection():
@@ -25,15 +21,6 @@ def dezlibify(data, skip_head=True):
     if skip_head:
         data = data[size_pack.size:]
     return zlib.decompress(data).decode('utf-8')
-
-
-def random(length):
-    if RtlGenRandom is None:
-        with open('/dev/urandom') as f:
-            return f.read(length)
-    buf = ctypes.create_string_buffer(length)
-    RtlGenRandom(buf, length)
-    return buf.raw
 
 
 def main():
@@ -64,11 +51,11 @@ def main():
     s2.close()
     print('Large random data test:', end=' ')
     s4 = open_connection()
-    data = random(1000000)
+    data = os.urandom(1000000).decode('iso-8859-1')
     print('Generated', end=' ')
     s4.sendall(zlibify(data))
     print('Sent', end=' ')
-    result = ''
+    result = b''
     while len(result) < size_pack.size:
         result += s4.recv(1024)
     size = size_pack.unpack(result[:size_pack.size])[0]
@@ -81,7 +68,7 @@ def main():
     s4.close()
     print('Test malformed connection:', end=' ')
     s5 = open_connection()
-    s5.sendall(data[:100000])
+    s5.sendall(data[:100000].encode('utf-8'))
     s5.close()
     print('Success')
     print('Waiting for timeout to close idle connection:', end=' ')

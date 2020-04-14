@@ -109,7 +109,7 @@ def disconnect_judge(judge, force=False):
 def abort_submission(submission):
     from .models import Submission
     response = judge_request({'name': 'terminate-submission', 'submission-id': submission.id})
-    # This defaults to true, so that in the case the judgelist fails to remove the submission from the queue,
+    # This defaults to true, so that in the case the JudgeList fails to remove the submission from the queue,
     # and returns a bad-request, the submission is not falsely shown as "Aborted" when it will still be judged.
     if not response.get('judge-aborted', True):
         Submission.objects.filter(id=submission.id).update(status='AB', result='AB')
