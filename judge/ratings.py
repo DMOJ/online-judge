@@ -112,7 +112,7 @@ def rate_contest(contest):
                   ) AND judge_contestparticipation.virtual = 0
             GROUP BY judge_rating.user_id
             ORDER BY judge_contestparticipation.score DESC, judge_contestparticipation.cumtime ASC,
-                     judge_contestparticipation.tiebreaker DESC
+                     judge_contestparticipation.tiebreaker ASC
         ) AS r ON (judge_rating.user_id = r.id AND judge_contest.end_time = r.last_time)
     ''', (contest.id, contest.end_time, contest.id))
     data = {user: (rating, volatility, times) for user, rating, volatility, times in cursor.fetchall()}
