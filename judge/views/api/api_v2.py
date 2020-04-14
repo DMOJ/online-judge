@@ -544,7 +544,7 @@ class APISubmissionDetail(LoginRequiredMixin, APIDetailView):
                 } for case in batch['cases']
             ]
 
-            # These are an individual cases.
+            # These are individual cases.
             if batch['id'] is None:
                 cases.extend(batch_cases)
             # This is one batch.
