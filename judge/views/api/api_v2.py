@@ -198,7 +198,7 @@ class APIContestDetail(APIDetailView):
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
                 new_rating=Subquery(new_ratings_subquery.values('rating')[:1]),
             )
-            .order_by('-score', 'cumtime')
+            .order_by('-score', 'cumtime', 'tiebreaker')
         )
 
         return {
@@ -236,6 +236,7 @@ class APIContestDetail(APIDetailView):
                     'user': participation.username,
                     'score': participation.score,
                     'cumulative_time': participation.cumtime,
+                    'tiebreaker': participation.tiebreaker,
                     'old_rating': participation.old_rating,
                     'new_rating': participation.new_rating,
                     'is_disqualified': participation.is_disqualified,
@@ -276,7 +277,7 @@ class APIContestParticipationList(APIListView):
             .filter(virtual__gte=0, contest__in=visible_contests)
             .annotate(contest_key=F('contest__key'), username=F('user__user__username'))
             .order_by('id')
-            .only('score', 'cumtime', 'is_disqualified', 'virtual')
+            .only('score', 'cumtime', 'tiebreaker', 'is_disqualified', 'virtual')
         )
 
     def get_object_data(self, participation):
@@ -285,6 +286,7 @@ class APIContestParticipationList(APIListView):
             'contest': participation.contest_key,
             'score': participation.score,
             'cumulative_time': participation.cumtime,
+            'tiebreaker': participation.tiebreaker,
             'is_disqualified': participation.is_disqualified,
             'virtual_participation_number': participation.virtual,
         }
@@ -374,7 +376,7 @@ class APIUserList(APIListView):
         latest_rating_subquery = Rating.objects.filter(user=OuterRef('pk')).order_by('-contest__end_time')
         return (
             Profile.objects
-            .filter(is_unlisted=False)
+            .filter(is_unlisted=False, user__is_active=True)
             .annotate(
                 username=F('user__username'),
                 latest_rating=Subquery(latest_rating_subquery.values('rating')[:1]),
@@ -403,7 +405,7 @@ class APIUserDetail(APIDetailView):
     slug_url_kwarg = 'user'
 
     def get_object_data(self, profile):
-        submissions = list(
+        solved_problems = list(
             Submission.objects
             .filter(
                 case_points=F('case_total'),
@@ -446,7 +448,7 @@ class APIUserDetail(APIDetailView):
             'points': profile.points,
             'performance_points': profile.performance_points,
             'problem_count': profile.problem_count,
-            'solved_problems': submissions,
+            'solved_problems': solved_problems,
             'rank': profile.display_rank,
             'rating': last_rating.rating if last_rating is not None else None,
             'volatility': last_rating.volatility if last_rating is not None else None,
