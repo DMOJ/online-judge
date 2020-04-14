@@ -696,7 +696,8 @@ def contest_ranking_list(contest, problems):
     return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0, user__is_unlisted=False)
                                      .prefetch_related('user__organizations')
                                      .annotate(submission_count=Count('submission'))
-                                     .order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker', '-submission_count'))
+                                     .order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker',
+                                               '-submission_count'))
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
