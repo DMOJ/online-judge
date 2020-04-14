@@ -52,9 +52,10 @@ class JudgeList(object):
             self._handle_free_judge(judge)
 
     def disconnect(self, judge_id, force=False):
-        for judge in self.judges:
-            if judge.name == judge_id:
-                judge.disconnect(force=force)
+        with self.lock:
+            for judge in self.judges:
+                if judge.name == judge_id:
+                    judge.disconnect(force=force)
 
     def update_problems(self, judge):
         with self.lock:
