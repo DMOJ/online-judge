@@ -77,6 +77,7 @@ class BonusesContestFormat(DefaultContestFormat):
 
         participation.cumtime = max(cumtime, 0)
         participation.score = score
+        participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
 
