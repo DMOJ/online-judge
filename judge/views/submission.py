@@ -43,19 +43,9 @@ class SubmissionMixin(object):
 class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, DetailView):
     def get_object(self, queryset=None):
         submission = super(SubmissionDetailBase, self).get_object(queryset)
-        profile = self.request.profile
-        problem = submission.problem
-        if self.request.user.has_perm('judge.view_all_submission'):
-            return submission
-        if submission.user_id == profile.id:
-            return submission
-        if problem.is_editor(profile):
-            return submission
-        if problem.is_public or problem.testers.filter(id=profile.id).exists():
-            if Submission.objects.filter(user_id=profile.id, result='AC', problem_id=problem.id,
-                                         points=problem.points).exists():
-                return submission
-        raise PermissionDenied()
+        if not submission.can_see_detail(self.request.user):
+            raise PermissionDenied()
+        return submission
 
     def get_title(self):
         submission = self.object
