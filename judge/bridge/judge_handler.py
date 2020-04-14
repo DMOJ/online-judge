@@ -179,9 +179,9 @@ class JudgeHandler(ZlibPacketHandler):
         try:
             pid, time, memory, short_circuit, lid, is_pretested, sub_date, uid, part_virtual, part_id = (
                 Submission.objects.filter(id=submission)
-                    .values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
-                                 'problem__short_circuit', 'language__id', 'is_pretested', 'date', 'user__id',
-                                 'contest__participation__virtual', 'contest__participation__id')).get()
+                          .values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
+                                       'problem__short_circuit', 'language__id', 'is_pretested', 'date', 'user__id',
+                                       'contest__participation__virtual', 'contest__participation__id')).get()
         except Submission.DoesNotExist:
             logger.error('Submission vanished: %s', submission)
             json_log.error(self._make_json_log(
