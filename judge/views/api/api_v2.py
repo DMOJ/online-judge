@@ -527,7 +527,7 @@ class APISubmissionDetail(LoginRequiredMixin, APIDetailView):
         submission = super().get_object(queryset)
         if not submission.can_see_detail(self.request.user):
             raise PermissionDenied()
-        raise PermissionDenied()
+        return submission
 
     def get_object_data(self, submission):
         cases = []
