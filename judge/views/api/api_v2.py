@@ -357,6 +357,15 @@ class APIProblemDetail(APIDetailView):
             'group': problem.group.full_name,
             'time_limit': problem.time_limit,
             'memory_limit': problem.memory_limit,
+            'language_resource_limits': [
+                {
+                    'language': key,
+                    'time_limit': time_limit,
+                    'memory_limit': memory_limit,
+                }
+                for key, time_limit, memory_limit in
+                problem.language_limits.values_list('language__key', 'time_limit', 'memory_limit')
+            ],
             'points': problem.points,
             'partial': problem.partial,
             'short_circuit': problem.short_circuit,
