@@ -5,9 +5,9 @@ from functools import partial
 
 from django.conf import settings
 
-from judge.bridge.djangohandler import DjangoHandler
-from judge.bridge.judgecallback import DjangoJudgeHandler
-from judge.bridge.judgelist import JudgeList
+from judge.bridge.django_handler import DjangoHandler
+from judge.bridge.judge_handler import JudgeHandler
+from judge.bridge.judge_list import JudgeList
 from judge.bridge.server import Server
 from judge.models import Judge, Submission
 
@@ -24,7 +24,7 @@ def judge_daemon():
         .update(status='IE', result='IE', error=None)
     judges = JudgeList()
 
-    judge_server = Server(settings.BRIDGED_JUDGE_ADDRESS, partial(DjangoJudgeHandler, judges=judges))
+    judge_server = Server(settings.BRIDGED_JUDGE_ADDRESS, partial(JudgeHandler, judges=judges))
     django_server = Server(settings.BRIDGED_DJANGO_ADDRESS, partial(DjangoHandler, judges=judges))
 
     threading.Thread(target=django_server.serve_forever).start()
