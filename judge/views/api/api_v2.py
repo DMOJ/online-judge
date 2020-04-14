@@ -418,7 +418,6 @@ class APIUserDetail(APIDetailView):
         solved_problems = list(
             Submission.objects
             .filter(
-                case_points=F('case_total'),
                 result='AC',
                 user=profile,
                 problem__is_public=True,
