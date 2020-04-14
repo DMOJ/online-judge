@@ -166,8 +166,8 @@ class JudgeHandler(ZlibPacketHandler):
         threading.Thread(target=self._ping_thread).start()
         self._connected()
 
-    def can_judge(self, problem, executor):
-        return problem in self.problems and executor in self.executors
+    def can_judge(self, problem, executor, judge_id=None):
+        return problem in self.problems and executor in self.executors and (not judge_id or self.name == judge_id)
 
     @property
     def working(self):
