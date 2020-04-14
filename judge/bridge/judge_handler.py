@@ -1,21 +1,26 @@
+import hmac
 import json
 import logging
+import threading
 import time
+from collections import deque, namedtuple
 from operator import itemgetter
 
 from django import db
+from django.conf import settings
 from django.utils import timezone
 
 from judge import event_poster as event
+from judge.bridge.base_handler import ZlibPacketHandler, proxy_list
 from judge.caching import finished_submission
 from judge.models import Judge, Language, LanguageLimit, Problem, RuntimeVersion, Submission, SubmissionTestCase
-from .judgehandler import JudgeHandler, SubmissionData
 
 logger = logging.getLogger('judge.bridge')
 json_log = logging.getLogger('judge.json.bridge')
 
 UPDATE_RATE_LIMIT = 5
 UPDATE_RATE_TIME = 0.5
+SubmissionData = namedtuple('SubmissionData', 'time memory short_circuit pretests_only contest_no attempt_no user_id')
 
 
 def _ensure_connection():
@@ -25,9 +30,42 @@ def _ensure_connection():
         db.connection.close()
 
 
-class DjangoJudgeHandler(JudgeHandler):
-    def __init__(self, server, socket):
-        super(DjangoJudgeHandler, self).__init__(server, socket)
+class JudgeHandler(ZlibPacketHandler):
+    proxies = proxy_list(settings.BRIDGED_JUDGE_PROXIES or [])
+
+    def __init__(self, request, client_address, server, judges):
+        super().__init__(request, client_address, server)
+
+        self.judges = judges
+        self.handlers = {
+            'grading-begin': self.on_grading_begin,
+            'grading-end': self.on_grading_end,
+            'compile-error': self.on_compile_error,
+            'compile-message': self.on_compile_message,
+            'batch-begin': self.on_batch_begin,
+            'batch-end': self.on_batch_end,
+            'test-case-status': self.on_test_case,
+            'internal-error': self.on_internal_error,
+            'submission-terminated': self.on_submission_terminated,
+            'submission-acknowledged': self.on_submission_acknowledged,
+            'ping-response': self.on_ping_response,
+            'supported-problems': self.on_supported_problems,
+            'handshake': self.on_handshake,
+        }
+        self._working = False
+        self._no_response_job = None
+        self._problems = []
+        self.executors = {}
+        self.problems = {}
+        self.latency = None
+        self.time_delta = None
+        self.load = 1e100
+        self.name = None
+        self.batch_id = None
+        self.in_batch = False
+        self._stop_ping = threading.Event()
+        self._ping_average = deque(maxlen=6)  # 1 minute average, just like load
+        self._time_delta = deque(maxlen=6)
 
         # each value is (updates, last reset)
         self.update_counter = {}
@@ -37,60 +75,33 @@ class DjangoJudgeHandler(JudgeHandler):
         self._submission_cache_id = None
         self._submission_cache = {}
 
+    def on_connect(self):
+        self.timeout = 15
+        logger.info('Judge connected from: %s', self.client_address)
         json_log.info(self._make_json_log(action='connect'))
 
-    def on_close(self):
-        super(DjangoJudgeHandler, self).on_close()
+    def on_disconnect(self):
+        self._stop_ping.set()
+        if self._working:
+            logger.error('Judge %s disconnected while handling submission %s', self.name, self._working)
+        self.judges.remove(self)
+        if self.name is not None:
+            self._disconnected()
+        logger.info('Judge disconnected from: %s with name %s', self.client_address, self.name)
+
         json_log.info(self._make_json_log(action='disconnect', info='judge disconnected'))
         if self._working:
-            Submission.objects.filter(id=self._working).update(status='IE', result='IE')
+            Submission.objects.filter(id=self._working).update(status='IE', result='IE', error='')
             json_log.error(self._make_json_log(sub=self._working, action='close', info='IE due to shutdown on grading'))
 
-    def on_malformed(self, packet):
-        super(DjangoJudgeHandler, self).on_malformed(packet)
-        json_log.exception(self._make_json_log(sub=self._working, info='malformed zlib packet'))
-
-    def _packet_exception(self):
-        json_log.exception(self._make_json_log(sub=self._working, info='packet processing exception'))
-
-    def get_related_submission_data(self, submission):
-        _ensure_connection()  # We are called from the django-facing daemon thread. Guess what happens.
-
-        try:
-            pid, time, memory, short_circuit, lid, is_pretested, sub_date, uid, part_virtual, part_id = (
-                Submission.objects.filter(id=submission)
-                          .values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
-                                       'problem__short_circuit', 'language__id', 'is_pretested', 'date', 'user__id',
-                                       'contest__participation__virtual', 'contest__participation__id')).get()
-        except Submission.DoesNotExist:
-            logger.error('Submission vanished: %s', submission)
-            json_log.error(self._make_json_log(
-                sub=self._working, action='request',
-                info='submission vanished when fetching info',
-            ))
-            return
-
-        attempt_no = Submission.objects.filter(problem__id=pid, contest__participation__id=part_id, user__id=uid,
-                                               date__lt=sub_date).exclude(status__in=('CE', 'IE')).count() + 1
-
-        try:
-            time, memory = (LanguageLimit.objects.filter(problem__id=pid, language__id=lid)
-                                         .values_list('time_limit', 'memory_limit').get())
-        except LanguageLimit.DoesNotExist:
-            pass
-
-        return SubmissionData(
-            time=time,
-            memory=memory,
-            short_circuit=short_circuit,
-            pretests_only=is_pretested,
-            contest_no=part_virtual,
-            attempt_no=attempt_no,
-            user_id=uid,
-        )
-
     def _authenticate(self, id, key):
-        result = Judge.objects.filter(name=id, auth_key=key, is_blocked=False).exists()
+        try:
+            judge = Judge.objects.get(name=id, is_blocked=False)
+        except Judge.DoesNotExist:
+            result = False
+        else:
+            result = hmac.compare_digest(judge.auth_key, key)
+
         if not result:
             json_log.warning(self._make_json_log(action='auth', judge=id, info='judge failed authentication'))
         return result
@@ -129,26 +140,118 @@ class DjangoJudgeHandler(JudgeHandler):
             if e.__class__.__name__ == 'OperationalError' and e.__module__ == '_mysql_exceptions' and e.args[0] == 2006:
                 db.connection.close()
 
-    def _post_update_submission(self, id, state, done=False):
-        if self._submission_cache_id == id:
-            data = self._submission_cache
-        else:
-            self._submission_cache = data = Submission.objects.filter(id=id).values(
-                'problem__is_public', 'contest_object__key',
-                'user_id', 'problem_id', 'status', 'language__key',
-            ).get()
-            self._submission_cache_id = id
+    def send(self, data):
+        super().send(json.dumps(data, separators=(',', ':')))
 
-        if data['problem__is_public']:
-            event.post('submissions', {
-                'type': 'done-submission' if done else 'update-submission',
-                'state': state, 'id': id,
-                'contest': data['contest_object__key'],
-                'user': data['user_id'], 'problem': data['problem_id'],
-                'status': data['status'], 'language': data['language__key'],
-            })
+    def on_handshake(self, packet):
+        if 'id' not in packet or 'key' not in packet:
+            logger.warning('Malformed handshake: %s', self.client_address)
+            self.close()
+            return
+
+        if not self._authenticate(packet['id'], packet['key']):
+            logger.warning('Authentication failure: %s', self.client_address)
+            self.close()
+            return
+
+        self.timeout = 60
+        self._problems = packet['problems']
+        self.problems = dict(self._problems)
+        self.executors = packet['executors']
+        self.name = packet['id']
+
+        self.send({'name': 'handshake-success'})
+        logger.info('Judge authenticated: %s (%s)', self.client_address, packet['id'])
+        self.judges.register(self)
+        threading.Thread(target=self._ping_thread).start()
+        self._connected()
+
+    def can_judge(self, problem, executor):
+        return problem in self.problems and executor in self.executors
+
+    @property
+    def working(self):
+        return bool(self._working)
+
+    def get_related_submission_data(self, submission):
+        _ensure_connection()
+
+        try:
+            pid, time, memory, short_circuit, lid, is_pretested, sub_date, uid, part_virtual, part_id = (
+                Submission.objects.filter(id=submission)
+                          .values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
+                                       'problem__short_circuit', 'language__id', 'is_pretested', 'date', 'user__id',
+                                       'contest__participation__virtual', 'contest__participation__id')).get()
+        except Submission.DoesNotExist:
+            logger.error('Submission vanished: %s', submission)
+            json_log.error(self._make_json_log(
+                sub=self._working, action='request',
+                info='submission vanished when fetching info',
+            ))
+            return
+
+        attempt_no = Submission.objects.filter(problem__id=pid, contest__participation__id=part_id, user__id=uid,
+                                               date__lt=sub_date).exclude(status__in=('CE', 'IE')).count() + 1
+
+        try:
+            time, memory = (LanguageLimit.objects.filter(problem__id=pid, language__id=lid)
+                            .values_list('time_limit', 'memory_limit').get())
+        except LanguageLimit.DoesNotExist:
+            pass
+
+        return SubmissionData(
+            time=time,
+            memory=memory,
+            short_circuit=short_circuit,
+            pretests_only=is_pretested,
+            contest_no=part_virtual,
+            attempt_no=attempt_no,
+            user_id=uid,
+        )
+
+    def disconnect(self, force=False):
+        if force:
+            # Yank the power out.
+            self.close()
+        else:
+            self.send({'name': 'disconnect'})
+
+    def submit(self, id, problem, language, source):
+        data = self.get_related_submission_data(id)
+        self._working = id
+        self._no_response_job = threading.Timer(20, self._kill_if_no_response)
+        self.send({
+            'name': 'submission-request',
+            'submission-id': id,
+            'problem-id': problem,
+            'language': language,
+            'source': source,
+            'time-limit': data.time,
+            'memory-limit': data.memory,
+            'short-circuit': data.short_circuit,
+            'meta': {
+                'pretests-only': data.pretests_only,
+                'in-contest': data.contest_no,
+                'attempt-no': data.attempt_no,
+                'user': data.user_id,
+            },
+        })
+
+    def _kill_if_no_response(self):
+        logger.error('Judge failed to acknowledge submission: %s: %s', self.name, self._working)
+        self.close()
+
+    def on_timeout(self):
+        if self.name:
+            logger.warning('Judge seems dead: %s: %s', self.name, self._working)
+
+    def malformed_packet(self, exception):
+        logger.exception('Judge sent malformed packet: %s', self.name)
+        super(JudgeHandler, self).malformed_packet(exception)
 
     def on_submission_processing(self, packet):
+        _ensure_connection()
+
         id = packet['submission-id']
         if Submission.objects.filter(id=id).update(status='P', judged_on=self.judge):
             event.post('sub_%s' % Submission.get_id_secret(id), {'type': 'processing'})
@@ -161,8 +264,65 @@ class DjangoJudgeHandler(JudgeHandler):
     def on_submission_wrong_acknowledge(self, packet, expected, got):
         json_log.error(self._make_json_log(packet, action='processing', info='wrong-acknowledge', expected=expected))
 
+    def on_submission_acknowledged(self, packet):
+        if not packet.get('submission-id', None) == self._working:
+            logger.error('Wrong acknowledgement: %s: %s, expected: %s', self.name, packet.get('submission-id', None),
+                         self._working)
+            self.on_submission_wrong_acknowledge(packet, self._working, packet.get('submission-id', None))
+            self.close()
+        logger.info('Submission acknowledged: %d', self._working)
+        if self._no_response_job:
+            self._no_response_job.cancel()
+            self._no_response_job = None
+        self.on_submission_processing(packet)
+
+    def abort(self):
+        self.send({'name': 'terminate-submission'})
+
+    def get_current_submission(self):
+        return self._working or None
+
+    def ping(self):
+        self.send({'name': 'ping', 'when': time.time()})
+
+    def on_packet(self, data):
+        try:
+            try:
+                data = json.loads(data)
+                if 'name' not in data:
+                    raise ValueError
+            except ValueError:
+                self.on_malformed(data)
+            else:
+                handler = self.handlers.get(data['name'], self.on_malformed)
+                handler(data)
+        except Exception:
+            logger.exception('Error in packet handling (Judge-side): %s', self.name)
+            self._packet_exception()
+            # You can't crash here because you aren't so sure about the judges
+            # not being malicious or simply malforms. THIS IS A SERVER!
+
+    def _packet_exception(self):
+        json_log.exception(self._make_json_log(sub=self._working, info='packet processing exception'))
+
+    def _submission_is_batch(self, id):
+        if not Submission.objects.filter(id=id).update(batch=True):
+            logger.warning('Unknown submission: %s', id)
+
+    def on_supported_problems(self, packet):
+        logger.info('%s: Updated problem list', self.name)
+        self._problems = packet['problems']
+        self.problems = dict(self._problems)
+        if not self.working:
+            self.judges.update_problems(self)
+
+        self.judge.problems.set(Problem.objects.filter(code__in=list(self.problems.keys())))
+        json_log.info(self._make_json_log(action='update-problems', count=len(self.problems)))
+
     def on_grading_begin(self, packet):
-        super(DjangoJudgeHandler, self).on_grading_begin(packet)
+        logger.info('%s: Grading has begun on: %s', self.name, packet['submission-id'])
+        self.batch_id = None
+
         if Submission.objects.filter(id=packet['submission-id']).update(
                 status='G', is_pretested=packet['pretested'], current_testcase=1,
                 batch=False, judged_date=timezone.now()):
@@ -174,12 +334,10 @@ class DjangoJudgeHandler(JudgeHandler):
             logger.warning('Unknown submission: %s', packet['submission-id'])
             json_log.error(self._make_json_log(packet, action='grading-begin', info='unknown submission'))
 
-    def _submission_is_batch(self, id):
-        if not Submission.objects.filter(id=id).update(batch=True):
-            logger.warning('Unknown submission: %s', id)
-
     def on_grading_end(self, packet):
-        super(DjangoJudgeHandler, self).on_grading_end(packet)
+        logger.info('%s: Grading has ended on: %s', self.name, packet['submission-id'])
+        self._free_self(packet)
+        self.batch_id = None
 
         try:
             submission = Submission.objects.get(id=packet['submission-id'])
@@ -262,7 +420,8 @@ class DjangoJudgeHandler(JudgeHandler):
         self._post_update_submission(submission.id, 'grading-end', done=True)
 
     def on_compile_error(self, packet):
-        super(DjangoJudgeHandler, self).on_compile_error(packet)
+        logger.info('%s: Submission failed to compile: %s', self.name, packet['submission-id'])
+        self._free_self(packet)
 
         if Submission.objects.filter(id=packet['submission-id']).update(status='CE', result='CE', error=packet['log']):
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {
@@ -278,7 +437,7 @@ class DjangoJudgeHandler(JudgeHandler):
                                                log=packet['log'], finish=True, result='CE'))
 
     def on_compile_message(self, packet):
-        super(DjangoJudgeHandler, self).on_compile_message(packet)
+        logger.info('%s: Submission generated compiler messages: %s', self.name, packet['submission-id'])
 
         if Submission.objects.filter(id=packet['submission-id']).update(error=packet['log']):
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'compile-message'})
@@ -289,7 +448,11 @@ class DjangoJudgeHandler(JudgeHandler):
                                                log=packet['log']))
 
     def on_internal_error(self, packet):
-        super(DjangoJudgeHandler, self).on_internal_error(packet)
+        try:
+            raise ValueError('\n\n' + packet['message'])
+        except ValueError:
+            logger.exception('Judge %s failed while handling submission %s', self.name, packet['submission-id'])
+        self._free_self(packet)
 
         id = packet['submission-id']
         if Submission.objects.filter(id=id).update(status='IE', result='IE', error=packet['message']):
@@ -303,7 +466,8 @@ class DjangoJudgeHandler(JudgeHandler):
                                                message=packet['message'], finish=True, result='IE'))
 
     def on_submission_terminated(self, packet):
-        super(DjangoJudgeHandler, self).on_submission_terminated(packet)
+        logger.info('%s: Submission aborted: %s', self.name, packet['submission-id'])
+        self._free_self(packet)
 
         if Submission.objects.filter(id=packet['submission-id']).update(status='AB', result='AB'):
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'aborted-submission'})
@@ -315,15 +479,23 @@ class DjangoJudgeHandler(JudgeHandler):
                                                finish=True, result='AB'))
 
     def on_batch_begin(self, packet):
-        super(DjangoJudgeHandler, self).on_batch_begin(packet)
+        logger.info('%s: Batch began on: %s', self.name, packet['submission-id'])
+        self.in_batch = True
+        if self.batch_id is None:
+            self.batch_id = 0
+            self._submission_is_batch(packet['submission-id'])
+        self.batch_id += 1
+
         json_log.info(self._make_json_log(packet, action='batch-begin', batch=self.batch_id))
 
     def on_batch_end(self, packet):
-        super(DjangoJudgeHandler, self).on_batch_end(packet)
+        self.in_batch = False
+        logger.info('%s: Batch ended on: %s', self.name, packet['submission-id'])
         json_log.info(self._make_json_log(packet, action='batch-end', batch=self.batch_id))
 
     def on_test_case(self, packet, max_feedback=SubmissionTestCase._meta.get_field('feedback').max_length):
-        super(DjangoJudgeHandler, self).on_test_case(packet)
+        logger.info('%s: %d test case(s) completed on: %s', self.name, len(packet['cases']), packet['submission-id'])
+
         id = packet['submission-id']
         updates = packet['cases']
         max_position = max(map(itemgetter('position'), updates))
@@ -393,10 +565,33 @@ class DjangoJudgeHandler(JudgeHandler):
 
         SubmissionTestCase.objects.bulk_create(bulk_test_case_updates)
 
-    def on_supported_problems(self, packet):
-        super(DjangoJudgeHandler, self).on_supported_problems(packet)
-        self.judge.problems.set(Problem.objects.filter(code__in=list(self.problems.keys())))
-        json_log.info(self._make_json_log(action='update-problems', count=len(self.problems)))
+    def on_malformed(self, packet):
+        logger.error('%s: Malformed packet: %s', self.name, packet)
+        json_log.exception(self._make_json_log(sub=self._working, info='malformed json packet'))
+
+    def on_ping_response(self, packet):
+        end = time.time()
+        self._ping_average.append(end - packet['when'])
+        self._time_delta.append((end + packet['when']) / 2 - packet['time'])
+        self.latency = sum(self._ping_average) / len(self._ping_average)
+        self.time_delta = sum(self._time_delta) / len(self._time_delta)
+        self.load = packet['load']
+        self._update_ping()
+
+    def _free_self(self, packet):
+        self._working = False
+        self.judges.on_judge_free(self, packet['submission-id'])
+
+    def _ping_thread(self):
+        try:
+            while True:
+                self.ping()
+                if self._stop_ping.wait(10):
+                    break
+        except Exception:
+            logger.exception('Ping error in %s', self.name)
+            self.close()
+            raise
 
     def _make_json_log(self, packet=None, sub=None, **kwargs):
         data = {
@@ -409,3 +604,22 @@ class DjangoJudgeHandler(JudgeHandler):
             data['submission'] = sub
         data.update(kwargs)
         return json.dumps(data)
+
+    def _post_update_submission(self, id, state, done=False):
+        if self._submission_cache_id == id:
+            data = self._submission_cache
+        else:
+            self._submission_cache = data = Submission.objects.filter(id=id).values(
+                'problem__is_public', 'contest_object__key',
+                'user_id', 'problem_id', 'status', 'language__key',
+            ).get()
+            self._submission_cache_id = id
+
+        if data['problem__is_public']:
+            event.post('submissions', {
+                'type': 'done-submission' if done else 'update-submission',
+                'state': state, 'id': id,
+                'contest': data['contest_object__key'],
+                'user': data['user_id'], 'problem': data['problem_id'],
+                'status': data['status'], 'language': data['language__key'],
+            })
