@@ -14,6 +14,7 @@ from judge.models import (
     Contest, ContestParticipation, ContestTag, Organization, Problem, ProblemType, Profile, Rating, Submission,
 )
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
+from judge.views.submission import group_test_cases
 
 
 class JSONResponseMixin:
@@ -538,6 +539,33 @@ class APISubmissionDetail(LoginRequiredMixin, APIDetailView):
         raise PermissionDenied()
 
     def get_object_data(self, submission):
+        cases = []
+        for batch in group_test_cases(submission.test_cases.all())[0]:
+            batch_cases = [
+                {
+                    'type': 'case',
+                    'case_id': case.case,
+                    'status': case.status,
+                    'time': case.time,
+                    'memory': case.memory,
+                    'points': case.points,
+                    'total': case.total,
+                } for case in batch['cases']
+            ]
+
+            # These are an individual cases.
+            if batch['id'] is None:
+                cases.extend(batch_cases)
+            # This is one batch.
+            else:
+                cases.append({
+                    'type': 'batch',
+                    'batch_id': batch['id'],
+                    'cases': batch_cases,
+                    'points': batch['points'],
+                    'total': batch['total'],
+                })
+
         return {
             'id': submission.id,
             'problem': submission.problem.code,
@@ -551,16 +579,7 @@ class APISubmissionDetail(LoginRequiredMixin, APIDetailView):
             'result': submission.result,
             'case_points': submission.case_points,
             'case_total': submission.case_total,
-            'cases': [
-                {
-                    'case_number': case['case'],
-                    'status': case['status'],
-                    'time': case['time'],
-                    'memory': case['memory'],
-                    'points': case['points'],
-                    'total': case['total'],
-                } for case in submission.test_cases.values('case', 'status', 'time', 'memory', 'points', 'total')
-            ],
+            'cases': cases,
         }
 
 
