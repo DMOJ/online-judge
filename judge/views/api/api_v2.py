@@ -17,27 +17,7 @@ from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.views.submission import group_test_cases
 
 
-class JSONResponseMixin:
-    def get_data(self, context):
-        raise NotImplementedError()
-
-    def get_error(self, exception):
-        raise NotImplementedError()
-
-    def render_to_response(self, context, **response_kwargs):
-        return JsonResponse(
-            self.get_data(context),
-            **response_kwargs,
-        )
-
-    def dispatch(self, request, *args, **kwargs):
-        try:
-            return super().dispatch(request, *args, **kwargs)
-        except Exception as e:
-            return self.get_error(e)
-
-
-class APIMixin(JSONResponseMixin):
+class APIMixin:
     @cached_property
     def _now(self):
         return timezone.now()
@@ -79,6 +59,18 @@ class APIMixin(JSONResponseMixin):
             )
         else:
             raise exception
+
+    def render_to_response(self, context, **response_kwargs):
+        return JsonResponse(
+            self.get_data(context),
+            **response_kwargs,
+        )
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except Exception as e:
+            return self.get_error(e)
 
 
 class APIListView(APIMixin, BaseListView):
