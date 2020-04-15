@@ -96,7 +96,7 @@ class APIListView(APIMixin, BaseListView):
                     filter_name + '__in': self.request.GET.getlist(key),
                 })
 
-        return queryset.distinct()
+        return queryset
 
     def get_queryset(self):
         return self.filter_queryset(self.get_unfiltered_queryset())
