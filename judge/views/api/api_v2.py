@@ -271,15 +271,23 @@ class APIContestParticipationList(APIListView):
         return (
             ContestParticipation.objects
             .filter(virtual__gte=0, contest__in=visible_contests)
-            .annotate(contest_key=F('contest__key'), username=F('user__user__username'))
+            .select_related('user__user', 'contest')
             .order_by('id')
-            .only('score', 'cumtime', 'tiebreaker', 'is_disqualified', 'virtual')
+            .only(
+                'user__user__username',
+                'contest__key',
+                'score',
+                'cumtime',
+                'tiebreaker',
+                'is_disqualified',
+                'virtual',
+            )
         )
 
     def get_object_data(self, participation):
         return {
-            'user': participation.username,
-            'contest': participation.contest_key,
+            'user': participation.user.username,
+            'contest': participation.contest.key,
             'score': participation.score,
             'cumulative_time': participation.cumtime,
             'tiebreaker': participation.tiebreaker,
@@ -486,22 +494,28 @@ class APISubmissionList(APIListView):
         )
         return (
             queryset
-            .annotate(
-                username=F('user__user__username'),
-                problem_code=F('problem__code'),
-                language_key=F('language__key'),
-            )
+            .select_related('problem', 'user__user', 'language')
             .order_by('id')
-            .only('id', 'date', 'time', 'memory', 'points', 'result')
+            .only(
+                'id',
+                'problem__code',
+                'user__user__username',
+                'date',
+                'language__key',
+                'time',
+                'memory',
+                'points',
+                'result',
+            )
         )
 
     def get_object_data(self, submission):
         return {
             'id': submission.id,
-            'problem': submission.problem_code,
-            'user': submission.username,
+            'problem': submission.problem.code,
+            'user': submission.user.user.username,
             'date': submission.date.isoformat(),
-            'language': submission.language_key,
+            'language': submission.language.key,
             'time': submission.time,
             'memory': submission.memory,
             'points': submission.points,
