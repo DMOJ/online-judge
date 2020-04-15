@@ -61,15 +61,15 @@ class APIMixin(JSONResponseMixin):
         return self.get_base_response(data=self.get_api_data(context))
 
     def get_error(self, exception):
-        excepted_exceptions = {
+        caught_exceptions = {
             ValueError: (400, 'invalid filter value type'),
             ValidationError: (400, 'invalid filter value type'),
             PermissionDenied: (403, 'permission denied'),
             Http404: (404, 'page/object not found'),
         }
         exception_type = type(exception)
-        if exception_type in excepted_exceptions:
-            exception_data = excepted_exceptions[exception_type]
+        if exception_type in caught_exceptions:
+            exception_data = caught_exceptions[exception_type]
             return JsonResponse(
                 self.get_base_response(error={
                     'code': exception_data[0],
@@ -92,14 +92,14 @@ class APIListView(APIMixin, BaseListView):
     def filter_queryset(self, queryset):
         for key, filter_name in self.basic_filters:
             if key in self.request.GET:
-                # May raise ValueError or ValidationError, but is excepted in APIMixin
+                # May raise ValueError or ValidationError, but is caught in APIMixin
                 queryset = queryset.filter(**{
                     filter_name: self.request.GET.get(key),
                 })
 
         for key, filter_name in self.list_filters:
             if key in self.request.GET:
-                # May raise ValueError or ValidationError, but is excepted in APIMixin
+                # May raise ValueError or ValidationError, but is caught in APIMixin
                 queryset = queryset.filter(**{
                     filter_name + '__in': self.request.GET.getlist(key),
                 })
@@ -492,7 +492,7 @@ class APISubmissionList(APIListView):
             join_fields=[('problem_id', 'id')],
             alias='visible_problems',
         )
-        queryset = (
+        return (
             queryset
             .annotate(
                 username=F('user__user__username'),
@@ -502,7 +502,6 @@ class APISubmissionList(APIListView):
             .order_by('id')
             .only('id', 'date', 'time', 'memory', 'points', 'result')
         )
-        return queryset
 
     def get_object_data(self, submission):
         return {
