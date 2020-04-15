@@ -66,6 +66,7 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
         if request.user.has_perm('judge.totp'):
             fields = list(self.fields)
             fields.insert(fields.index('is_totp_enabled') + 1, 'totp_key')
+            fields.insert(fields.index('totp_key') + 1, 'scratch_codes')
             return tuple(fields)
         else:
             return self.fields

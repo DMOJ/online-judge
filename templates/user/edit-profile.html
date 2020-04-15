@@ -70,6 +70,24 @@
         .ml-5 {
             margin-left: 5px;
         }
+
+        #hidden-word {
+            padding-top: 5px;
+            font-family: Consolas, Liberation Mono, Monaco, Courier New, monospace;
+            font-size: 12px;
+        }
+
+        #scratch-codes {
+            font-family: Consolas, Liberation Mono, Monaco, Courier New, monospace;
+            font-size: 12px;
+            white-space: pre;
+        }
+
+        #scratch-codes-text {
+            padding-top: 5px;
+            font-size: 12px;
+        }
+
     </style>
 {% endblock %}
 
@@ -177,6 +195,65 @@
             });
         });
     </script>
+    <script src="{{ static('libs/clipboard/clipboard.js') }}"></script>
+    <script src="{{ static('libs/clipboard/tooltip.js') }}"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#generate-scratch-codes-button').click(function(event) {
+                event.preventDefault();
+                if (confirm("{{ _('Are you sure you want to generate or regenerate a new set of scratch codes? \
+This will invalidate any previous scratch codes you have. \
+You will not be able to view your scratch codes after you leave this page!') }}")) {
+                    $('#scratch-codes').text("{{ _('Generating...') }}");
+
+                    var copyButton;
+                    $('pre code').each(function () {
+                        $(this).parent().before($('<div>', {'class': 'copy-clipboard', 'id': {}})
+                            .append(copyButton = $('<span>', {
+                                'class': 'btn-clipboard',
+                                'id': 'scratch-codes-copy-button',
+                                'data-clipboard-text': '',
+                                'title': 'Click to copy'
+                            }).text('Copy')));
+
+                        $(copyButton.get(0)).mouseleave(function () {
+                            $(this).attr('class', 'btn-clipboard');
+                            $(this).removeAttr('aria-label');
+                        });
+
+                        var curClipboard = new Clipboard(copyButton.get(0));
+
+                        curClipboard.on('success', function(e) {
+                            e.clearSelection();
+                            showTooltip(e.trigger, _('Copied!'));
+                        });
+
+                        curClipboard.on('error', function(e) {
+                            showTooltip(e.trigger, fallbackMessage(e.action));
+                        });
+                    });
+ 
+                    $.ajax({
+                        type: 'POST',
+                        url: $(this).attr('href'),
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#scratch-codes').text(data.data.codes.join('\n'));
+                            $('#scratch-codes-copy-button').attr('data-clipboard-text', data.data.codes.join('\n'));
+                            $('#generate-scratch-codes-button').text("{{ _('Regenerate') }}");
+                            $('.hidden-word').empty();
+                            $('#scratch-codes-text').text("{{ _('Below is a list of one-time use scratch codes. \
+                                                                 These codes can only be used once and are for emergency use. \
+                                                                 You can use these codes to login to your account or disable two-factor authentication. \
+                                                                 If you ever need more scratch codes, you can regenerate them on the edit profile tab. \
+                                                                 Please write these down and keep them in a secure location. \
+                                                                 These codes will never be shown again after you enable two-factor authentication.') }}");
+                        },
+                    });
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block title_ruler %}{% endblock %}
@@ -272,8 +349,6 @@
                             </td></tr>
                         {% endif %}
                     </table>
-                </div>
-                <div class="pane">
                     <div>
                         <span class="inline-header grayed">
                             {% if profile.is_totp_enabled %}
@@ -288,11 +363,41 @@
                             {% else %}
                                 <a href="{{ url('disable_2fa') }}" class="button inline-button">{{ _('Disable') }}</a>
                             {% endif %}
+                            <span class="inline-header grayed">
+                                {{ _('Scratch Codes:') }}
+                                {% if profile.scratch_codes %}
+                                    <a id="generate-scratch-codes-button" href="{{ url('generate_scratch_codes') }}"
+                                        class="button inline-button">{{ _('Regenerate') }}</a>
+                                {% else %}
+                                    <a id="generate-scratch-codes-button" href="{{ url('generate_scratch_codes') }}"
+                                        class="button inline-button">{{ _('Generate') }}</a>
+                                {% endif %}
+                                <div id="hidden-word">{{ _('Hidden') }}</div>
+                                <div id="scratch-codes-text"></div>
+                                <pre><code id="scratch-codes"></code></pre>
+                            </span>
                         {% else %}
                             <a href="{{ url('enable_2fa') }}" class="button inline-button">{{ _('Enable') }}</a>
                         {% endif %}
                     </div>
+                </div>
+                <div class="pane">
+                    <span id="api-token-td" class="inline-header grayed">
+                        {{ _('API Token') }}:
+                        {% if profile.api_token %}
+                            <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
+                                class="button inline-button">{{ _('Regenerate') }}</a>
+                            <a id="remove-api-token-button" href="{{ url('remove_api_token') }}"
+                                class="button inline-button ml-5">{{ _('Remove') }}</a>
+                            <div class="api-token" id="api-token">{{ _('Hidden') }}</div>
+                        {% else %}
+                            <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
+                                class="button inline-button">{{ _('Generate') }}</a>
+                            <div class="api-token" id="api-token"></div>
+                        {% endif %}
+                    </span>
                     <br>
+                    <span class="inline-header grayed">
                     {% if HAS_WEBAUTHN %}
                         <div style="padding-bottom:0.4em" class="block-header">
                             {{ _('Security keys') }}:
@@ -317,19 +422,6 @@
                             </tr>
                         </table>
                     {% endif %}
-                    <span id="api-token-td" class="inline-header grayed">
-                        {{ _('API Token') }}:
-                        {% if profile.api_token %}
-                            <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
-                               class="button inline-button">{{ _('Regenerate') }}</a>
-                            <a id="remove-api-token-button" href="{{ url('remove_api_token') }}"
-                               class="button inline-button ml-5">{{ _('Remove') }}</a>
-                            <div class="api-token" id="api-token">{{ _('Hidden') }}</div>
-                        {% else %}
-                            <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
-                               class="button inline-button">{{ _('Generate') }}</a>
-                            <div class="api-token" id="api-token"></div>
-                        {% endif %}
                     </span>
                 </div>
             </div>
