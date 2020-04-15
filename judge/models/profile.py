@@ -1,9 +1,11 @@
 import base64
 import hmac
+import json
 import secrets
 import struct
 from operator import mul
 
+import pyotp
 import webauthn
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -124,6 +126,13 @@ class Profile(models.Model):
                                       help_text=_('32 character base32-encoded key for TOTP'),
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                  _('TOTP key must be empty or base32'))])
+    scratch_codes = EncryptedNullCharField(max_length=255, null=True, blank=True, verbose_name=_('scratch codes'),
+                                           help_text=_('JSON array of 16 character base32-encoded codes \
+                                                        for scratch codes'),
+                                           validators=[
+                                               RegexValidator(r'^(\[\])?$|^\[("[A-Z0-9]{16}", *)*"[A-Z0-9]{16}"\]$',
+                                                              _('Scratch codes must be empty or a JSON array of \
+                                                                 16-character base32 codes'))])
     api_token = models.CharField(max_length=64, null=True, verbose_name=_('API token'),
                                  help_text=_('64 character hex-encoded API access token'),
                                  validators=[RegexValidator('^[a-f0-9]{64}$',
@@ -177,6 +186,14 @@ class Profile(models.Model):
         return token.decode('utf-8')
 
     generate_api_token.alters_data = True
+
+    def generate_scratch_codes(self):
+        codes = [pyotp.random_base32(length=16) for i in range(settings.DMOJ_SCRATCH_CODES_COUNT)]
+        self.scratch_codes = json.dumps(codes)
+        self.save(update_fields=['scratch_codes'])
+        return codes
+
+    generate_scratch_codes.alters_data = True
 
     def remove_contest(self):
         self.current_contest = None

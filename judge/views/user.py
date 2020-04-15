@@ -408,6 +408,16 @@ def remove_api_token(request):
     return JsonResponse({})
 
 
+@require_POST
+@login_required
+def generate_scratch_codes(request):
+    profile = request.profile
+    with transaction.atomic(), revisions.create_revision():
+        revisions.set_user(request.user)
+        revisions.set_comment(_('Generated scratch codes for user'))
+    return JsonResponse({'data': {'codes': profile.generate_scratch_codes()}})
+
+
 class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     model = Profile
     title = gettext_lazy('Leaderboard')

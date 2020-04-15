@@ -20,6 +20,21 @@ from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
     Select2Widget
 
+two_factor_validators_by_length = {
+    6: {
+        'regex_validator': RegexValidator('^[0-9]{6}$',
+                                          _('Two-factor authentication tokens must be 6 decimal digits.')),
+        'verify': lambda code, profile: not pyotp.TOTP(profile.totp_key)
+                                                 .verify(code, valid_window=settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES),
+        'err': _('Invalid two-factor authentication token.'),
+    },
+    16: {
+        'regex_validator': RegexValidator('^[A-Z0-9]{16}$', _('Scratch codes must be 16 base32 characters.')),
+        'verify': lambda code, profile: code not in json.loads(profile.scratch_codes),
+        'err': _('Invalid scratch code.'),
+    },
+}
+
 
 def fix_unicode(string, unsafe=tuple('\u202a\u202b\u202d\u202e')):
     return string + (sum(k in unsafe for k in string) - string.count('\u202c')) * '\u202c'
@@ -166,9 +181,7 @@ class NoAutoCompleteCharField(forms.CharField):
 class TOTPForm(Form):
     TOLERANCE = settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES
 
-    totp_token = NoAutoCompleteCharField(validators=[
-        RegexValidator('^[0-9]{6}$', _('Two-factor authentication tokens must be 6 decimal digits.')),
-    ], required=False)
+    totp_or_scratch_code = NoAutoCompleteCharField(required=False)
     webauthn_response = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def __init__(self, *args, **kwargs):
@@ -176,10 +189,14 @@ class TOTPForm(Form):
         super().__init__(*args, **kwargs)
 
     def clean(self):
-        if (not self.cleaned_data.get('totp_token') or
-                not pyotp.TOTP(self.profile.totp_key).verify(self.cleaned_data['totp_token'],
-                                                             valid_window=self.TOLERANCE)):
-            raise ValidationError(_('Invalid two-factor authentication token.'))
+        totp_or_scratch_code = self.cleaned_data.get('totp_or_scratch_code')
+        try:
+            validator = two_factor_validators_by_length[len(totp_or_scratch_code)]
+        except KeyError:
+            raise ValidationError(_('Invalid code length.'))
+        validator['regex_validator'](totp_or_scratch_code)
+        if validator['verify'](totp_or_scratch_code, self.profile):
+            raise ValidationError(validator['err'])
 
 
 class TwoFactorLoginForm(TOTPForm):
@@ -191,6 +208,7 @@ class TwoFactorLoginForm(TOTPForm):
         super().__init__(*args, **kwargs)
 
     def clean(self):
+        totp_or_scratch_code = self.cleaned_data.get('totp_or_scratch_code')
         if self.profile.is_webauthn_enabled and self.cleaned_data.get('webauthn_response'):
             if len(self.cleaned_data['webauthn_response']) > 65536:
                 raise ValidationError(_('Invalid WebAuthn response.'))
@@ -222,10 +240,16 @@ class TwoFactorLoginForm(TOTPForm):
 
             credential.counter = sign_count
             credential.save(update_fields=['counter'])
-        elif self.profile.is_totp_enabled and self.cleaned_data.get('totp_token'):
-            if pyotp.TOTP(self.profile.totp_key).verify(self.cleaned_data['totp_token'], valid_window=self.TOLERANCE):
+        elif self.profile.is_totp_enabled and totp_or_scratch_code:
+            if pyotp.TOTP(self.profile.totp_key).verify(totp_or_scratch_code, valid_window=self.TOLERANCE):
                 return
-            raise ValidationError(_('Invalid two-factor authentication token.'))
+            elif totp_or_scratch_code in json.loads(self.profile.scratch_codes):
+                scratch_codes = json.loads(self.profile.scratch_codes)
+                scratch_codes.remove(totp_or_scratch_code)
+                self.profile.scratch_codes = json.dumps(scratch_codes)
+                self.profile.save(update_fields=['scratch_codes'])
+                return
+            raise ValidationError(_('Invalid two-factor authentication token or scratch code.'))
         else:
             raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
 

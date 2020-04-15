@@ -53,7 +53,9 @@ class TOTPEnableView(TOTPView):
         profile = self.profile
         if not profile.totp_key:
             profile.totp_key = pyotp.random_base32(length=32)
-            profile.save()
+            profile.save(update_fields=['totp_key'])
+        if not profile.scratch_codes:
+            profile.generate_scratch_codes()
         return self.render_to_response(self.get_context_data())
 
     def check_skip(self):
@@ -67,6 +69,7 @@ class TOTPEnableView(TOTPView):
     def get_context_data(self, **kwargs):
         context = super(TOTPEnableView, self).get_context_data(**kwargs)
         context['totp_key'] = self.profile.totp_key
+        context['scratch_codes'] = json.loads(self.profile.scratch_codes)
         context['qr_code'] = self.render_qr_code(self.request.user.username, self.profile.totp_key)
         return context
 
@@ -104,6 +107,7 @@ class TOTPDisableView(TOTPView):
     def form_valid(self, form):
         self.profile.is_totp_enabled = False
         self.profile.totp_key = None
+        self.profile.scratch_codes = None
         self.profile.save()
         return self.next_page()
 
