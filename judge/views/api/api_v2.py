@@ -398,7 +398,7 @@ class APIUserList(APIListView):
                 latest_volatility=Subquery(latest_rating_subquery.values('volatility')[:1]),
             )
             .order_by('id')
-            .only('points', 'performance_points', 'problem_count', 'display_rank')
+            .only('id', 'points', 'performance_points', 'problem_count', 'display_rank')
         )
 
     def get_object_data(self, profile):
