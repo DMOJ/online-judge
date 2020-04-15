@@ -12,7 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.db.utils import ProgrammingError
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import get_template
 from django.urls import reverse
@@ -49,7 +49,7 @@ def get_contest_problem(problem, profile):
 
 def get_contest_submission_count(problem, profile, virtual):
     return profile.current_contest.submissions.exclude(submission__status__in=['IE']) \
-                  .filter(problem__problem__code=problem, participation__virtual=virtual).count()
+                  .filter(problem__problem=problem, participation__virtual=virtual).count()
 
 
 class ProblemMixin(object):
@@ -177,7 +177,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
             context['submission_limit'] = contest_problem.max_submissions
             if contest_problem.max_submissions:
                 context['submissions_left'] = max(contest_problem.max_submissions -
-                                                  get_contest_submission_count(self.object.code, user.profile,
+                                                  get_contest_submission_count(self.object, user.profile,
                                                                                user.profile.current_contest.virtual), 0)
 
         context['available_judges'] = Judge.objects.filter(online=True, problems=self.object)
@@ -522,28 +522,30 @@ user_logger = logging.getLogger('judge.user')
 
 
 @login_required
-def problem_submit(request, problem=None, submission=None):
+def problem_submit(request, problem, submission=None):
     if submission is not None and not request.user.has_perm('judge.resubmit_other') and \
             get_object_or_404(Submission, id=int(submission)).user.user != request.user:
         raise PermissionDenied()
 
     profile = request.profile
+    problem = get_object_or_404(Problem, code=problem)
+    if not problem.is_accessible_by(request.user):
+        if request.method == 'POST':
+            user_logger.info('Naughty user %s wants to submit to %s without permission',
+                             request.user.username, problem.code)
+            return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
+        raise Http404()
+
     if request.method == 'POST':
-        form = ProblemSubmitForm(request.POST, instance=Submission(user=profile))
+        form = ProblemSubmitForm(request.POST, instance=Submission(user=profile, problem=problem))
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
                     Submission.objects.filter(user=profile, was_rejudged=False)
                               .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() >= settings.DMOJ_SUBMISSION_LIMIT):
                 return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
-            if not form.cleaned_data['problem'].allowed_languages.filter(
-                    id=form.cleaned_data['language'].id).exists():
+            if not problem.allowed_languages.filter(id=form.cleaned_data['language'].id).exists():
                 raise PermissionDenied()
-            if not form.cleaned_data['problem'].is_accessible_by(request.user):
-                user_logger.info('Naughty user %s wants to submit to %s without permission',
-                                 request.user.username, form.cleaned_data['problem'].code)
-                return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
-            if not request.user.is_superuser and form.cleaned_data['problem'].banned_users.filter(
-                    id=profile.id).exists():
+            if not request.user.is_superuser and problem.banned_users.filter(id=profile.id).exists():
                 return generic_message(request, _('Banned from submitting'),
                                        _('You have been declared persona non grata for this problem. '
                                          'You are permanently barred from submitting this problem.'))
@@ -552,7 +554,7 @@ def problem_submit(request, problem=None, submission=None):
                 if profile.current_contest is not None:
                     contest_id = profile.current_contest.contest_id
                     try:
-                        contest_problem = form.cleaned_data['problem'].contests.get(contest_id=contest_id)
+                        contest_problem = problem.contests.get(contest_id=contest_id)
                     except ContestProblem.DoesNotExist:
                         model = form.save()
                     else:
@@ -584,16 +586,8 @@ def problem_submit(request, problem=None, submission=None):
             form_data = form.cleaned_data
             if submission is not None:
                 sub = get_object_or_404(Submission, id=int(submission))
-
-            if 'problem' not in form_data:
-                return HttpResponseBadRequest()
     else:
         initial = {'language': profile.language}
-        if problem is not None:
-            initial['problem'] = get_object_or_404(Problem, code=problem)
-            problem_object = initial['problem']
-            if not problem_object.is_accessible_by(request.user):
-                raise Http404()
         if submission is not None:
             try:
                 sub = get_object_or_404(Submission.objects.select_related('source', 'language'), id=int(submission))
@@ -603,12 +597,10 @@ def problem_submit(request, problem=None, submission=None):
                 raise Http404()
         form = ProblemSubmitForm(initial=initial)
         form_data = initial
-    if 'problem' in form_data:
-        form.fields['language'].queryset = (
-            form_data['problem'].usable_languages.order_by('name', 'key')
-            .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority')))
-        )
-        problem_object = form_data['problem']
+    form.fields['language'].queryset = (
+        problem.usable_languages.order_by('name', 'key')
+        .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority')))
+    )
     if 'language' in form_data:
         form.fields['source'].widget.mode = form_data['language'].ace
     form.fields['source'].widget.theme = profile.ace_theme
@@ -621,7 +613,7 @@ def problem_submit(request, problem=None, submission=None):
     submission_limit = submissions_left = None
     if profile.current_contest is not None:
         try:
-            submission_limit = problem_object.contests.get(contest=profile.current_contest.contest).max_submissions
+            submission_limit = problem.contests.get(contest=profile.current_contest.contest).max_submissions
         except ContestProblem.DoesNotExist:
             pass
         else:
@@ -631,19 +623,18 @@ def problem_submit(request, problem=None, submission=None):
     return render(request, 'problem/submit.html', {
         'form': form,
         'title': _('Submit to %(problem)s') % {
-            'problem': problem_object.translated_name(request.LANGUAGE_CODE),
+            'problem': problem.translated_name(request.LANGUAGE_CODE),
         },
         'content_title': mark_safe(escape(_('Submit to %(problem)s')) % {
             'problem': format_html('<a href="{0}">{1}</a>',
-                                   reverse('problem_detail', args=[problem_object.code]),
-                                   problem_object.translated_name(request.LANGUAGE_CODE)),
+                                   reverse('problem_detail', args=[problem.code]),
+                                   problem.translated_name(request.LANGUAGE_CODE)),
         }),
         'langs': Language.objects.all(),
         'no_judges': not form.fields['language'].queryset,
         'submission_limit': submission_limit,
         'submissions_left': submissions_left,
         'ACE_URL': settings.ACE_URL,
-
         'default_lang': default_lang,
     })
 
