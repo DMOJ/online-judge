@@ -210,11 +210,10 @@ class UserPerformancePointsAjax(UserProblemsPage):
 
 @login_required
 def edit_profile(request):
-    profile = Profile.objects.get(user=request.user)
-    if profile.mute:
+    if request.profile.mute:
         raise Http404()
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile, user=request.user)
+        form = ProfileForm(request.POST, instance=request.profile, user=request.user)
         if form.is_valid():
             with transaction.atomic(), revisions.create_revision():
                 form.save()
@@ -239,7 +238,7 @@ def edit_profile(request):
 
             return HttpResponseRedirect(request.path)
     else:
-        form = ProfileForm(instance=profile, user=request.user)
+        form = ProfileForm(instance=request.profile, user=request.user)
         if newsletter_id is not None:
             try:
                 subscription = Subscription.objects.get(user=request.user, newsletter_id=newsletter_id)
@@ -252,7 +251,7 @@ def edit_profile(request):
     tzmap = settings.TIMEZONE_MAP
     return render(request, 'user/edit-profile.html', {
         'require_staff_2fa': settings.DMOJ_REQUIRE_STAFF_2FA,
-        'form': form, 'title': _('Edit profile'), 'profile': profile,
+        'form': form, 'title': _('Edit profile'), 'profile': request.profile,
         'has_math_config': bool(settings.MATHOID_URL),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',
