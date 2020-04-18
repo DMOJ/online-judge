@@ -37,7 +37,7 @@ class DjangoHandler(ZlibPacketHandler):
         problem = data['problem-id']
         language = data['language']
         source = data['source']
-        judge_id = data['judge_id']
+        judge_id = data['judge-id']
         priority = data['priority']
         if not self.judges.check_priority(priority):
             return {'name': 'bad-request'}
