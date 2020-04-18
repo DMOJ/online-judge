@@ -79,7 +79,7 @@ class ProblemSubmitForm(ModelForm):
 
         if judge_queryset:
             self.fields['judge'].widget = Select2Widget(
-                attrs={'style': 'width:150px', 'data-placeholder': _('Any judge')},
+                attrs={'style': 'width: 150px', 'data-placeholder': _('Any judge')},
             )
             self.fields['judge'].choices = judge_queryset
 
