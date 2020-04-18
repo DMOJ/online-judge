@@ -3,7 +3,6 @@ from django.db.models import Count, Max
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.functional import lazy
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
