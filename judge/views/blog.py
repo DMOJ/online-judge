@@ -3,7 +3,6 @@ from django.db.models import Count, Max
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.functional import lazy
 from django.utils.translation import ugettext as _
 from django.views.generic import ListView
 
@@ -51,10 +50,10 @@ class PostList(ListView):
                 context['has_clarifications'] = clarifications.count() > 0
                 context['clarifications'] = clarifications.order_by('-date')
 
-        context['user_count'] = lazy(Profile.objects.count, int, int)
-        context['problem_count'] = lazy(Problem.get_public_problems().count, int, int)
-        context['submission_count'] = lazy(Submission.objects.count, int, int)
-        context['language_count'] = lazy(Language.objects.count, int, int)
+        context['user_count'] = Profile.objects.count
+        context['problem_count'] = Problem.get_public_problems().count
+        context['submission_count'] = lambda: Submission.objects.aggregate(max_id=Max('id'))['max_id']
+        context['language_count'] = Language.objects.count
 
         context['post_comment_counts'] = {
             int(page[2:]): count for page, count in
