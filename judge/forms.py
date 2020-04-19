@@ -71,17 +71,17 @@ class ProblemSubmitForm(ModelForm):
     source = CharField(max_length=65536, widget=AceWidget(theme='twilight', no_ace_media=True))
     judge = ChoiceField(choices=(), widget=forms.HiddenInput(), required=False)
 
-    def __init__(self, *args, judge_queryset=(), **kwargs):
+    def __init__(self, *args, judge_choices=(), **kwargs):
         super(ProblemSubmitForm, self).__init__(*args, **kwargs)
         self.fields['language'].empty_label = None
         self.fields['language'].label_from_instance = attrgetter('display_name')
         self.fields['language'].queryset = Language.objects.filter(judges__online=True).distinct()
 
-        if judge_queryset:
+        if judge_choices:
             self.fields['judge'].widget = Select2Widget(
                 attrs={'style': 'width: 150px', 'data-placeholder': _('Any judge')},
             )
-            self.fields['judge'].choices = judge_queryset
+            self.fields['judge'].choices = judge_choices
 
     class Meta:
         model = Submission

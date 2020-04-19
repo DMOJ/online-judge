@@ -537,12 +537,12 @@ def problem_submit(request, problem, submission=None):
         raise Http404()
 
     if problem.is_editable_by(request.user):
-        judge_queryset = tuple(Judge.objects.filter(online=True, problems=problem).values_list('name', 'name'))
+        judge_choices = tuple(Judge.objects.filter(online=True, problems=problem).values_list('name', 'name'))
     else:
-        judge_queryset = ()
+        judge_choices = ()
 
     if request.method == 'POST':
-        form = ProblemSubmitForm(request.POST, judge_queryset=judge_queryset,
+        form = ProblemSubmitForm(request.POST, judge_choices=judge_choices,
                                  instance=Submission(user=profile, problem=problem))
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
@@ -601,7 +601,7 @@ def problem_submit(request, problem, submission=None):
                 initial['language'] = sub.language
             except ValueError:
                 raise Http404()
-        form = ProblemSubmitForm(judge_queryset=judge_queryset, initial=initial)
+        form = ProblemSubmitForm(judge_choices=judge_choices, initial=initial)
         form_data = initial
     form.fields['language'].queryset = (
         problem.usable_languages.order_by('name', 'key')
