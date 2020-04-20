@@ -113,8 +113,8 @@ class Submission(models.Model):
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.short_status, '')
 
-    def judge(self, rejudge=False, batch_rejudge=False):
-        judge_submission(self, rejudge, batch_rejudge)
+    def judge(self, *args, **kwargs):
+        judge_submission(self, *args, **kwargs)
 
     judge.alters_data = True
 
@@ -122,6 +122,35 @@ class Submission(models.Model):
         abort_submission(self)
 
     abort.alters_data = True
+
+    def can_see_detail(self, user):
+        profile = user.profile
+        problem = self.problem
+
+        if not user.is_authenticated:
+            return False
+
+        if self.user_id == profile.id:
+            if problem.is_accessible_by(user):
+                return True
+            if self.contest_object is not None and self.contest_object.ended:
+                return True
+
+        if problem.is_editable_by(user):
+            return True
+
+        if user.has_perm('judge.view_all_submission'):
+            if problem.is_public:
+                return True
+            if user.has_perm('judge.see_restricted_problem') or not problem.is_restricted:
+                return True
+
+        if problem.is_public or problem.testers.filter(id=profile.id).exists():
+            if problem.submission_set.filter(user_id=profile.id, result='AC',
+                                             points=problem.points).exists():
+                return True
+
+        return False
 
     def update_contest(self):
         try:
@@ -160,34 +189,6 @@ class Submission(models.Model):
         participation.recompute_results()
 
     update_contest.alters_data = True
-
-    def is_accessible_by(self, user):
-        if not user.is_authenticated:
-            return False
-        profile = user.profile
-        problem = self.problem
-
-        if self.user_id == profile.id:
-            if problem.is_accessible_by(user):
-                return True
-            if self.contest_object is not None and self.contest_object.ended:
-                return True
-
-        if problem.is_editable_by(user):
-            return True
-
-        if user.has_perm('judge.view_all_submission'):
-            if problem.is_public:
-                return True
-            if user.has_perm('judge.see_restricted_problem') or not problem.is_restricted:
-                return True
-
-        if problem.is_public or problem.testers.filter(id=profile.id).exists():
-            if problem.submission_set.filter(user_id=profile.id, result='AC',
-                                             points=problem.points).exists():
-                return True
-
-        return False
 
     @property
     def is_graded(self):

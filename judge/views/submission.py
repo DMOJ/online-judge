@@ -44,9 +44,9 @@ class SubmissionMixin(object):
 class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, DetailView):
     def get_object(self, queryset=None):
         submission = super(SubmissionDetailBase, self).get_object(queryset)
-        if submission.is_accessible_by(self.request.user):
-            return submission
-        raise PermissionDenied()
+        if not submission.can_see_detail(self.request.user):
+            raise PermissionDenied()
+        return submission
 
     def get_title(self):
         submission = self.object
@@ -176,7 +176,7 @@ class SubmissionSourceRaw(SubmissionSource):
 @require_POST
 def abort_submission(request, submission):
     submission = get_object_or_404(Submission, id=int(submission))
-    if not submission.is_accessible_by(request.user):
+    if not submission.can_see_detail(request.user):
         raise Http404()
     if (submission.was_rejudged or request.profile != submission.user) \
             and not request.user.has_perm('abort_any_submission'):

@@ -210,7 +210,7 @@ def api_v1_user_ratings(request, page):
 def api_v1_submission_detail(request, submission):
     submission = get_object_or_404(Submission, id=submission)
 
-    if not submission.is_accessible_by(request.user) or request.profile.current_contest is not None:
+    if not submission.can_see_detail(request.user) or request.profile.current_contest is not None:
         return JsonResponse({})
 
     resp = {
@@ -239,7 +239,7 @@ def api_v1_submission_detail(request, submission):
 def api_v1_submission_source(request, submission):
     submission = get_object_or_404(Submission, id=submission)
 
-    if not submission.is_accessible_by(request.user) or request.profile.current_contest is not None:
+    if not submission.can_see_detail(request.user) or request.profile.current_contest is not None:
         return JsonResponse({})
 
     return JsonResponse({
