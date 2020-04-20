@@ -536,8 +536,14 @@ def problem_submit(request, problem, submission=None):
             return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
         raise Http404()
 
+    if problem.is_editable_by(request.user):
+        judge_choices = tuple(Judge.objects.filter(online=True, problems=problem).values_list('name', 'name'))
+    else:
+        judge_choices = ()
+
     if request.method == 'POST':
-        form = ProblemSubmitForm(request.POST, instance=Submission(user=profile, problem=problem))
+        form = ProblemSubmitForm(request.POST, judge_choices=judge_choices,
+                                 instance=Submission(user=profile, problem=problem))
         if form.is_valid():
             if (not request.user.has_perm('judge.spam_submission') and
                     Submission.objects.filter(user=profile, was_rejudged=False)
@@ -579,7 +585,7 @@ def problem_submit(request, problem, submission=None):
 
             # Save a query
             model.source = source
-            model.judge(rejudge=False)
+            model.judge(rejudge=False, judge_id=form.cleaned_data['judge'])
 
             return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
         else:
@@ -595,7 +601,7 @@ def problem_submit(request, problem, submission=None):
                 initial['language'] = sub.language
             except ValueError:
                 raise Http404()
-        form = ProblemSubmitForm(initial=initial)
+        form = ProblemSubmitForm(judge_choices=judge_choices, initial=initial)
         form_data = initial
     form.fields['language'].queryset = (
         problem.usable_languages.order_by('name', 'key')

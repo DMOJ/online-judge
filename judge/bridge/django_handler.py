@@ -37,10 +37,11 @@ class DjangoHandler(ZlibPacketHandler):
         problem = data['problem-id']
         language = data['language']
         source = data['source']
+        judge_id = data['judge-id']
         priority = data['priority']
         if not self.judges.check_priority(priority):
             return {'name': 'bad-request'}
-        self.judges.judge(id, problem, language, source, priority)
+        self.judges.judge(id, problem, language, source, judge_id, priority)
         return {'name': 'submission-received', 'submission-id': id}
 
     def on_termination(self, data):

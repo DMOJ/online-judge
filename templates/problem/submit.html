@@ -2,8 +2,8 @@
 
 {% block js_media %}
     <script type="text/javascript" src="{{ ACE_URL }}/ace.js"></script>
+    {{ form.media.js }}
     {% compress js %}
-        {{ form.media.js }}
         <script type="text/javascript">
             $(function () {
                 function format(state) {
@@ -81,6 +81,13 @@
                     var dropdown = $('.select2-dropdown');
                     if (!$('#result-version-info').length)
                         dropdown.append($("<span id=\"result-version-info\">"));
+                    dropdown.attr('id', 'language-select2');
+                });
+
+                $('#id_judge').on('select2:open', function (evt) {
+                    var dropdown = $('.select2-dropdown');
+                    $('#result-version-info').remove();
+                    dropdown.attr('id', 'judge-select2');
                 });
 
                 $('#id_language').change(function () {
@@ -121,8 +128,8 @@
 {% endblock %}
 
 {% block media %}
+    {{ form.media.css }}
     {% compress css %}
-        {{ form.media.css }}
         <style media="screen">
             #submit-wrapper {
                 margin-top: 0.7em;
@@ -145,42 +152,42 @@
                 text-align: right;
             }
 
-            .select2-results__message {
+            #language-select2 .select2-results__message {
                 white-space: nowrap
             }
 
-            .select2-dropdown--above {
+            #language-select2 .select2-dropdown--above {
                 display: flex;
                 flex-direction: column-reverse;
             }
 
-            .select2-results__option {
+            #language-select2 .select2-results__option {
                 color: #757575 !important;
                 background: white !important;
             }
 
-            .select2-results__option--highlighted {
+            #language-select2 .select2-results__option--highlighted {
                 text-decoration: underline;
             }
 
-            .select2-results__option[aria-selected=true] {
+            #language-select2 .select2-results__option[aria-selected=true] {
                 font-weight: bold;
                 color: black !important;
             }
 
-            .select2-results__option {
+            #language-select2 .select2-results__option {
                 padding: 4px 0px;
             }
 
-            .select2-results__options {
+            #language-select2 .select2-results__options {
                 overflow-y: visible !important;
             }
 
-            .select2-results__option {
+            #language-select2 .select2-results__option {
                 break-inside: avoid-column;
             }
 
-            .select2-results {
+            #language-select2 .select2-results {
                 -webkit-columns: 10 7em;
                 -moz-columns: 10 7em;
                 columns: 10 7em;
@@ -253,8 +260,11 @@
         {% if no_judges %}
             <span style="color: red">{{ _('No judge is available for this problem.') }}</span>
         {% else %}
-            <input type="submit" value="{{ _('Submit!') }}" class="button"
-                   {% if request.in_contest and submission_limit and not submissions_left %}disabled{% endif %}>
+            <div class="submit-bar">
+                {{ form.judge }}
+                <input type="submit" value="{{ _('Submit!') }}" class="button"
+                       {% if request.in_contest and submission_limit and not submissions_left %}disabled{% endif %}>
+            </div>
         {% endif %}
     </form>
 {% endblock %}

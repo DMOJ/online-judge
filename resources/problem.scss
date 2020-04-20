@@ -222,8 +222,12 @@ ul.problem-list {
     box-sizing: border-box;
 
     .button {
-        float: right;
+        display: inline-block !important;
         padding: 6px 12px;
+    }
+
+    .submit-bar {
+        float: right;
     }
 }
 
