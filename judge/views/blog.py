@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Count, Q
+from django.db.models import Count, Max, Q
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
