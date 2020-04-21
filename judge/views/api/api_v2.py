@@ -1,7 +1,6 @@
 from operator import attrgetter
 
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, F, OuterRef, Prefetch, Q, Subquery
 from django.http import Http404, JsonResponse
@@ -15,6 +14,17 @@ from judge.models import (
 )
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.views.submission import group_test_cases
+
+
+class APILoginRequiredException(Exception):
+    pass
+
+
+class APILoginRequiredMixin:
+    def setup_api(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            raise APILoginRequiredException()
+        super().setup_api(request, *args, **kwargs)
 
 
 class APIMixin:
@@ -45,6 +55,7 @@ class APIMixin:
             ValueError: (400, 'invalid filter value type'),
             ValidationError: (400, 'invalid filter value type'),
             PermissionDenied: (403, 'permission denied'),
+            APILoginRequiredException: (403, 'login required'),
             Http404: (404, 'page/object not found'),
         }
         exception_type = type(exception)
@@ -66,8 +77,12 @@ class APIMixin:
             **response_kwargs,
         )
 
+    def setup_api(self, request, *args, **kwargs):
+        pass
+
     def dispatch(self, request, *args, **kwargs):
         try:
+            self.setup_api(request, *args, **kwargs)
             return super().dispatch(request, *args, **kwargs)
         except Exception as e:
             return self.get_error(e)
@@ -523,7 +538,7 @@ class APISubmissionList(APIListView):
         }
 
 
-class APISubmissionDetail(LoginRequiredMixin, APIDetailView):
+class APISubmissionDetail(APILoginRequiredMixin, APIDetailView):
     model = Submission
     slug_field = 'id'
     slug_url_kwarg = 'submission'
