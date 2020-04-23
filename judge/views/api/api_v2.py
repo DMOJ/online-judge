@@ -60,13 +60,13 @@ class APIMixin:
         }
         exception_type = type(exception)
         if exception_type in caught_exceptions:
-            exception_data = caught_exceptions[exception_type]
+            status_code, message = caught_exceptions[exception_type]
             return JsonResponse(
                 self.get_base_response(error={
-                    'code': exception_data[0],
-                    'message': exception_data[1],
+                    'code': status_code,
+                    'message': message,
                 }),
-                status=exception_data[0],
+                status=status_code,
             )
         else:
             raise exception
