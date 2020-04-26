@@ -94,7 +94,6 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def full_name(self, obj):
         return obj.user.get_full_name()
-    full_name.admin_order_field = 'full_name'
     full_name.short_description = _('Name')
 
     def email(self, obj):
