@@ -261,6 +261,18 @@ urlpatterns = [
         url(r'^user/info/(\w+)$', api.api_v1_user_info),
         url(r'^user/submissions/(\w+)$', api.api_v1_user_submissions),
         url(r'^user/ratings/(\d+)$', api.api_v1_user_ratings),
+        url(r'^v2/', include([
+            url(r'^contests$', api.api_v2.APIContestList.as_view()),
+            url(r'^contest/(?P<contest>\w+)$', api.api_v2.APIContestDetail.as_view()),
+            url(r'^problems$', api.api_v2.APIProblemList.as_view()),
+            url(r'^problem/(?P<problem>\w+)$', api.api_v2.APIProblemDetail.as_view()),
+            url(r'^users$', api.api_v2.APIUserList.as_view()),
+            url(r'^user/(?P<user>\w+)$', api.api_v2.APIUserDetail.as_view()),
+            url(r'^submissions$', api.api_v2.APISubmissionList.as_view()),
+            url(r'^submission/(?P<submission>\d+)$', api.api_v2.APISubmissionDetail.as_view()),
+            url(r'^organizations$', api.api_v2.APIOrganizationList.as_view()),
+            url(r'^participations$', api.api_v2.APIContestParticipationList.as_view()),
+        ])),
     ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),
