@@ -316,6 +316,9 @@ class Contest(models.Model):
         pass
 
     def access_check(self, user):
+        if (not user.is_authenticated or user.profile.is_external_user) and not self.is_external:
+            raise self.Inaccessible()
+
         # If the user can view all contests
         if user.has_perm('judge.see_private_contest'):
             return
@@ -380,10 +383,13 @@ class Contest(models.Model):
     @classmethod
     def get_visible_contests(cls, user):
         if not user.is_authenticated:
-            return cls.objects.filter(is_visible=True, is_organization_private=False, is_private=False) \
+            return cls.objects.filter(is_visible=True, is_organization_private=False,
+                                      is_private=False, is_external=True) \
                               .defer('description', 'registration_page').distinct()
 
         queryset = cls.objects.defer('description', 'registration_page')
+        if user.profile.is_external_user:
+            queryset = queryset.filter(is_external=True)
         if not (user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest')):
             q = Q(is_visible=True)
             q &= (
