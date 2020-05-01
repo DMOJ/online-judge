@@ -532,7 +532,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
     @cached_property
     def remaining_submission_count(self):
-        max_subs = getattr(self.contest_problem, 'max_submissions', None)
+        max_subs = self.contest_problem and self.contest_problem.max_submissions
         if max_subs is None:
             return None
         return max_subs - get_contest_submission_count(
@@ -633,7 +633,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
         context = super().get_context_data(**kwargs)
         context['langs'] = Language.objects.all()
         context['no_judges'] = not context['form'].fields['language'].queryset
-        context['submission_limit'] = getattr(self.contest_problem, 'max_submissions', None)
+        context['submission_limit'] = self.contest_problem and self.contest_problem.max_submissions
         context['submissions_left'] = self.remaining_submission_count
         context['ACE_URL'] = settings.ACE_URL
         context['default_lang'] = self.default_language
