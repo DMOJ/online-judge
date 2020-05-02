@@ -144,3 +144,4 @@ The judge can also grade in the languages listed below. These languages are less
 * Turing
 * V8 JavaScript
 * Brain\*\*\*\*
+* Zig
