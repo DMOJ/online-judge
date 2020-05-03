@@ -155,7 +155,6 @@ urlpatterns = [
     url(r'^submission/(?P<submission>\d+)', include([
         url(r'^$', submission.SubmissionStatus.as_view(), name='submission_status'),
         url(r'^/abort$', submission.abort_submission, name='submission_abort'),
-        url(r'^/html$', submission.single_submission),
     ])),
 
     url(r'^users/', include([
@@ -284,7 +283,7 @@ urlpatterns = [
 
     url(r'^widgets/', include([
         url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
-        url(r'^single_submission$', submission.single_submission_query, name='submission_single_query'),
+        url(r'^single_submission$', submission.single_submission, name='submission_single_query'),
         url(r'^submission_testcases$', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
         url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
         url(r'^status-table$', status.status_table, name='status_table'),
