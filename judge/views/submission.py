@@ -446,11 +446,17 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
         return context
 
 
-def single_submission(request, submission_id, show_problem=True):
+def single_submission(request):
     request.no_profile_update = True
-    authenticated = request.user.is_authenticated
-    submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(submission_id))
+    if 'id' not in request.GET or not request.GET['id'].isdigit():
+        return HttpResponseBadRequest()
+    try:
+        show_problem = int(request.GET.get('show_problem', '1'))
+    except ValueError:
+        return HttpResponseBadRequest()
 
+    authenticated = request.user.is_authenticated
+    submission = get_object_or_404(submission_related(Submission.objects.all()), id=int(request.GET['id']))
     if not submission.problem.is_accessible_by(request.user):
         raise Http404()
 
@@ -463,17 +469,6 @@ def single_submission(request, submission_id, show_problem=True):
         'problem_name': show_problem and submission.problem.translated_name(request.LANGUAGE_CODE),
         'profile_id': request.profile.id if authenticated else 0,
     })
-
-
-def single_submission_query(request):
-    request.no_profile_update = True
-    if 'id' not in request.GET or not request.GET['id'].isdigit():
-        return HttpResponseBadRequest()
-    try:
-        show_problem = int(request.GET.get('show_problem', '1'))
-    except ValueError:
-        return HttpResponseBadRequest()
-    return single_submission(request, int(request.GET['id']), bool(show_problem))
 
 
 class AllSubmissions(SubmissionsListBase):
