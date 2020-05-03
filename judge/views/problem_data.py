@@ -206,6 +206,10 @@ def problem_data_file(request, problem, path):
     if not object.is_editable_by(request.user):
         raise Http404()
 
+    problem_dir = problem_data_storage.path(problem)
+    if os.path.commonpath((problem_data_storage.path(os.path.join(problem, path)), problem_dir)) != problem_dir:
+        raise Http404()
+
     response = HttpResponse()
     if hasattr(settings, 'DMOJ_PROBLEM_DATA_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
         response['X-Accel-Redirect'] = '%s/%s/%s' % (settings.DMOJ_PROBLEM_DATA_INTERNAL, problem, path)
