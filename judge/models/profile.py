@@ -111,8 +111,10 @@ class Profile(models.Model):
     math_engine = models.CharField(verbose_name=_('math engine'), choices=MATH_ENGINES_CHOICES, max_length=4,
                                    default=settings.MATHOID_DEFAULT_TYPE,
                                    help_text=_('the rendering engine used to render math'))
-    is_totp_enabled = models.BooleanField(verbose_name=_('2FA enabled'), default=False,
+    is_totp_enabled = models.BooleanField(verbose_name=_('TOTP 2FA enabled'), default=False,
                                           help_text=_('check to enable TOTP-based two factor authentication'))
+    is_webauthn_enabled = models.BooleanField(verbose_name=_('WebAuthn 2FA enabled'), default=False,
+                                              help_text=_('check to enable WebAuthn-based two factor authentication'))
     totp_key = EncryptedNullCharField(max_length=32, null=True, blank=True, verbose_name=_('TOTP key'),
                                       help_text=_('32 character base32-encoded key for TOTP'),
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
@@ -141,8 +143,8 @@ class Profile(models.Model):
         public_problems = Problem.get_public_problems()
         data = (
             public_problems.filter(submission__user=self, submission__points__isnull=False)
-                           .annotate(max_points=Max('submission__points')).order_by('-max_points')
-                           .values_list('max_points', flat=True).filter(max_points__gt=0)
+                .annotate(max_points=Max('submission__points')).order_by('-max_points')
+                .values_list('max_points', flat=True).filter(max_points__gt=0)
         )
         extradata = (
             public_problems.filter(submission__user=self, submission__result='AC').values('id').distinct().count()
@@ -206,6 +208,15 @@ class Profile(models.Model):
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')
+
+
+class WebAuthnCredential(models.Model):
+    user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='webauthn_credentials',
+                             on_delete=models.CASCADE)
+    name = models.CharField(verbose_name=_('device name'), max_length=100)
+    cred_id = models.CharField(verbose_name=_('credential ID'), max_length=255, unique=True)
+    public_key = models.TextField(verbose_name=_('public key'))
+    counter = models.BigIntegerField(verbose_name=_('sign counter'))
 
 
 class OrganizationRequest(models.Model):
