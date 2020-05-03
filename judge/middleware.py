@@ -34,11 +34,19 @@ class DMOJLoginMiddleware(object):
     def __call__(self, request):
         if request.user.is_authenticated:
             profile = request.profile = request.user.profile
+            logout_path = reverse('auth_logout')
             login_2fa_path = reverse('login_2fa')
+            change_password_path = reverse('password_change')
+            change_password_done_path = reverse('password_change_done')
             if (profile.is_totp_enabled and not request.session.get('2fa_passed', False) and
-                    request.path not in (login_2fa_path, reverse('auth_logout')) and
+                    request.path not in (login_2fa_path, logout_path) and
                     not request.path.startswith(settings.STATIC_URL)):
                 return HttpResponseRedirect(login_2fa_path + '?next=' + urlquote(request.get_full_path()))
+            elif (request.session.get('password_pwned', False) and
+                    request.path not in (change_password_path, change_password_done_path,
+                                         login_2fa_path, logout_path) and
+                    not request.path.startswith(settings.STATIC_URL)):
+                return HttpResponseRedirect(change_password_path + '?next=' + urlquote(request.get_full_path()))
         else:
             request.profile = None
         return self.get_response(request)

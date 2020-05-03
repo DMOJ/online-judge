@@ -82,6 +82,12 @@ class CommentMixin(object):
     pk_url_kwarg = 'id'
     context_object_name = 'comment'
 
+    def get_object(self, queryset=None):
+        comment = super().get_object(queryset)
+        if not comment.is_accessible_by(self.request.user):
+            raise Http404()
+        return comment
+
 
 class CommentRevisionAjax(CommentMixin, DetailView):
     template_name = 'comments/revision-ajax.html'

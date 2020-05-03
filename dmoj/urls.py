@@ -12,7 +12,6 @@ from django.views.generic import RedirectView
 from martor.views import markdown_search_user
 
 from judge.feed import AtomBlogFeed, AtomCommentFeed, AtomProblemFeed, BlogFeed, CommentFeed, ProblemFeed
-from judge.forms import CustomAuthenticationForm
 from judge.sitemap import BlogPostSitemap, ContestSitemap, HomePageSitemap, OrganizationSitemap, ProblemSitemap, \
     SolutionSitemap, UrlSitemap, UserSitemap
 from judge.views import TitledTemplateView, api, blog, comment, contests, language, license, mailgun, organization, \
@@ -51,12 +50,7 @@ register_patterns = [
         TitledTemplateView.as_view(template_name='registration/registration_closed.html',
                                    title='Registration not allowed'),
         name='registration_disallowed'),
-    url(r'^login/$', auth_views.LoginView.as_view(
-        template_name='registration/login.html',
-        extra_context={'title': _('Login')},
-        authentication_form=CustomAuthenticationForm,
-        redirect_authenticated_user=True,
-    ), name='auth_login'),
+    url(r'^login/$', user.CustomLoginView.as_view(), name='auth_login'),
     url(r'^logout/$', user.UserLogoutView.as_view(), name='auth_logout'),
     url(r'^password/change/$', auth_views.PasswordChangeView.as_view(
         template_name='registration/password_change_form.html',
@@ -161,7 +155,6 @@ urlpatterns = [
     url(r'^submission/(?P<submission>\d+)', include([
         url(r'^$', submission.SubmissionStatus.as_view(), name='submission_status'),
         url(r'^/abort$', submission.abort_submission, name='submission_abort'),
-        url(r'^/html$', submission.single_submission),
     ])),
 
     url(r'^users/', include([
@@ -270,6 +263,18 @@ urlpatterns = [
         url(r'^user/ratings/(\d+)$', api.api_v1_user_ratings),
         url(r'^submission/info/(\d+)$', api.api_v1_submission_detail),
         url(r'^submission/source/(\d+)$', api.api_v1_submission_source),
+        url(r'^v2/', include([
+            url(r'^contests$', api.api_v2.APIContestList.as_view()),
+            url(r'^contest/(?P<contest>\w+)$', api.api_v2.APIContestDetail.as_view()),
+            url(r'^problems$', api.api_v2.APIProblemList.as_view()),
+            url(r'^problem/(?P<problem>\w+)$', api.api_v2.APIProblemDetail.as_view()),
+            url(r'^users$', api.api_v2.APIUserList.as_view()),
+            url(r'^user/(?P<user>\w+)$', api.api_v2.APIUserDetail.as_view()),
+            url(r'^submissions$', api.api_v2.APISubmissionList.as_view()),
+            url(r'^submission/(?P<submission>\d+)$', api.api_v2.APISubmissionDetail.as_view()),
+            url(r'^organizations$', api.api_v2.APIOrganizationList.as_view()),
+            url(r'^participations$', api.api_v2.APIContestParticipationList.as_view()),
+        ])),
     ])),
 
     url(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),
@@ -281,7 +286,7 @@ urlpatterns = [
 
     url(r'^widgets/', include([
         url(r'^rejudge$', widgets.rejudge_submission, name='submission_rejudge'),
-        url(r'^single_submission$', submission.single_submission_query, name='submission_single_query'),
+        url(r'^single_submission$', submission.single_submission, name='submission_single_query'),
         url(r'^submission_testcases$', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
         url(r'^detect_timezone$', widgets.DetectTimezone.as_view(), name='detect_timezone'),
         url(r'^status-table$', status.status_table, name='status_table'),
