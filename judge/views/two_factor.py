@@ -18,6 +18,7 @@ from django.views.generic import FormView, View
 from judge.forms import TOTPForm
 from judge.jinja2.gravatar import gravatar
 from judge.models import WebAuthnCredential
+from judge.utils.two_factor import webauthn_encode, WebAuthnJSONEncoder
 from judge.utils.views import TitleMixin
 
 
@@ -113,22 +114,6 @@ class WebAuthnView(LoginRequiredMixin, View):
         return super(WebAuthnView, self).dispatch(request, *args, **kwargs)
 
 
-def webauthn_encode(binary):
-    return base64.urlsafe_b64encode(binary).decode('ascii').rstrip('=')
-
-
-def webauthn_decode(text):
-    text += '=' * (-len(text) % 4)
-    return base64.urlsafe_b64decode(text)
-
-
-class WebAuthnJSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, bytes):
-            return {'_bytes': webauthn_encode(o)}
-        return super().default(o)
-
-
 class WebAuthnAttestationView(WebAuthnView):
     def get(self, request, *args, **kwargs):
         challenge = os.urandom(32)
@@ -187,6 +172,18 @@ class WebAuthnAttestationView(WebAuthnView):
             request.profile.is_webauthn_enabled = True
             request.profile.save(update_fields=['is_webauthn_enabled'])
         return HttpResponse('OK')
+
+
+class WebAuthnAttestView(WebAuthnView):
+    def get(self, request, *args, **kwargs):
+        challenge = os.urandom(32)
+        request.session['webauthn_assert'] = webauthn_encode(challenge)
+        data = webauthn.WebAuthnAssertionOptions(
+            [credential.webauthn_user for credential in
+             request.profile.webauthn_credentials.select_related('user__user')],
+            challenge,
+        ).assertion_dict
+        return JsonResponse(data, encoder=WebAuthnJSONEncoder)
 
 
 class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):

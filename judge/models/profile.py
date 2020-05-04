@@ -4,6 +4,7 @@ import secrets
 import struct
 from operator import mul
 
+import webauthn
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
@@ -20,6 +21,7 @@ from sortedm2m.fields import SortedManyToManyField
 from judge.models.choices import ACE_THEMES, MATH_ENGINES_CHOICES, TIMEZONE
 from judge.models.runtime import Language
 from judge.ratings import rating_class
+from judge.utils.two_factor import webauthn_decode
 
 __all__ = ['Organization', 'Profile', 'OrganizationRequest', 'WebAuthnCredential']
 
@@ -221,6 +223,21 @@ class WebAuthnCredential(models.Model):
     cred_id = models.CharField(verbose_name=_('credential ID'), max_length=255, unique=True)
     public_key = models.TextField(verbose_name=_('public key'))
     counter = models.BigIntegerField(verbose_name=_('sign counter'))
+
+    @cached_property
+    def webauthn_user(self):
+        from judge.jinja2.gravatar import gravatar
+
+        return webauthn.WebAuthnUser(
+            user_id=self.user.webauthn_id,
+            username=self.user.username,
+            display_name=self.user.username,
+            icon_url=gravatar(self.user.user.email),
+            credential_id=webauthn_decode(self.cred_id),
+            public_key=self.public_key,
+            sign_count=self.counter,
+            rp_id=settings.WEBAUTHN_RP_ID,
+        )
 
 
 class OrganizationRequest(models.Model):
