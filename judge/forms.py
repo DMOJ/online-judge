@@ -1,6 +1,8 @@
+import json
 from operator import attrgetter
 
 import pyotp
+import webauthn
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
@@ -12,7 +14,8 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Contest, Language, Organization, PrivateMessage, Problem, Profile, Submission
+from judge.models import Contest, Language, Organization, PrivateMessage, Problem, Profile, Submission, \
+    WebAuthnCredential
 from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
     Select2Widget
@@ -138,13 +141,44 @@ class TOTPForm(Form):
 
     def __init__(self, *args, **kwargs):
         self.profile = kwargs.pop('profile')
+        self.webauthn_challenge = kwargs.pop('webauthn_challenge')
+        self.webauthn_origin = kwargs.pop('webauthn_origin')
         super().__init__(*args, **kwargs)
 
     def clean(self):
         if self.profile.is_webauthn_enabled and self.cleaned_data.get('webauthn_response'):
             if len(self.cleaned_data['webauthn_response']) > 65536:
                 raise ValidationError(_('Invalid WebAuthn response.'))
-            raise NotImplementedError()
+
+            if not self.webauthn_challenge:
+                raise ValidationError(_('No WebAuthn challenge issued.'))
+
+            response = json.loads(self.cleaned_data['webauthn_response'])
+            try:
+                credential = self.profile.webauthn_credentials.get(cred_id=response.get('id', ''))
+            except WebAuthnCredential.DoesNotExist:
+                raise ValidationError(_('Invalid WebAuthn credential ID.'))
+
+            user = credential.webauthn_user
+            # Work around a useless check in the webauthn package.
+            user.credential_id = credential.cred_id
+            assertion = webauthn.WebAuthnAssertionResponse(
+                webauthn_user=user,
+                assertion_response=response.get('response'),
+                challenge=self.webauthn_challenge,
+                origin=self.webauthn_origin,
+                uv_required=False,
+            )
+
+            try:
+                sign_count = assertion.verify()
+            except Exception as e:
+                raise ValidationError(str(e))
+
+            credential.counter = sign_count
+            credential.save(update_fields=['counter'])
+
+            return
 
         if self.profile.is_totp_enabled and self.cleaned_data.get('totp_token'):
             if pyotp.TOTP(self.profile.totp_key).verify(self.cleaned_data['totp_token'], valid_window=self.TOLERANCE):

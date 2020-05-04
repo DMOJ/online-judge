@@ -190,6 +190,12 @@ class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
     title = _('Perform Two Factor Authentication')
     template_name = 'registration/two_factor_auth.html'
 
+    def get_form_kwargs(self):
+        result = super().get_form_kwargs()
+        result['webauthn_challenge'] = self.request.session.get('webauthn_assert')
+        result['webauthn_origin'] = 'https://' + self.request.get_host()
+        return result
+
     def check_skip(self):
         return ((not self.profile.is_totp_enabled and not self.profile.is_webauthn_enabled) or
                 self.request.session.get('2fa_passed', False))
