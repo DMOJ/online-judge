@@ -7,7 +7,7 @@ from django.db.models import Count
 from django.db.models.expressions import F, Value
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
-from django.http import HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
@@ -74,6 +74,8 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
         parent = request.POST.get('parent')
         if parent:
+            if len(parent) > 10:
+                return HttpResponseBadRequest()
             try:
                 parent = int(parent)
             except ValueError:
