@@ -132,7 +132,7 @@ class WebAuthnAttestationView(WebAuthnView):
         ).registration_dict
         data['excludeCredentials'] = [{
             'type': 'public-key',
-            'id': credential.cred_id,
+            'id': {'_bytes': credential.cred_id},
         } for credential in request.profile.webauthn_credentials.all()]
         return JsonResponse(data, encoder=WebAuthnJSONEncoder)
 
