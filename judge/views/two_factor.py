@@ -26,12 +26,12 @@ class TOTPView(TitleMixin, LoginRequiredMixin, FormView):
 
     def get_form_kwargs(self):
         result = super(TOTPView, self).get_form_kwargs()
-        result['totp_key'] = self.profile.totp_key
+        result['profile'] = self.profile
         return result
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            self.profile = request.profile
+            self.profile = self.request.profile
             if self.check_skip():
                 return self.next_page()
         return super(TOTPView, self).dispatch(request, *args, **kwargs)
@@ -191,10 +191,11 @@ class WebAuthnAttestationView(WebAuthnView):
 
 class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
     title = _('Perform Two Factor Authentication')
-    template_name = 'registration/totp_auth.html'
+    template_name = 'registration/two_factor_auth.html'
 
     def check_skip(self):
-        return not self.profile.is_totp_enabled or self.request.session.get('2fa_passed', False)
+        return ((not self.profile.is_totp_enabled and not self.profile.is_webauthn_enabled) or
+                self.request.session.get('2fa_passed', False))
 
     def next_page(self):
         redirect_to = self.request.GET.get('next', '')

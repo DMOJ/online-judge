@@ -133,15 +133,25 @@ class TOTPForm(Form):
 
     totp_token = NoAutoCompleteCharField(validators=[
         RegexValidator('^[0-9]{6}$', _('Two Factor Authentication tokens must be 6 decimal digits.')),
-    ])
+    ], required=False)
+    webauthn_response = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def __init__(self, *args, **kwargs):
-        self.totp_key = kwargs.pop('totp_key')
-        super(TOTPForm, self).__init__(*args, **kwargs)
+        self.profile = kwargs.pop('profile')
+        super().__init__(*args, **kwargs)
 
-    def clean_totp_token(self):
-        if not pyotp.TOTP(self.totp_key).verify(self.cleaned_data['totp_token'], valid_window=self.TOLERANCE):
+    def clean(self):
+        if self.profile.is_webauthn_enabled and self.cleaned_data.get('webauthn_response'):
+            if len(self.cleaned_data['webauthn_response']) > 65536:
+                raise ValidationError(_('Invalid WebAuthn response.'))
+            raise NotImplementedError()
+
+        if self.profile.is_totp_enabled and self.cleaned_data.get('totp_token'):
+            if pyotp.TOTP(self.profile.totp_key).verify(self.cleaned_data['totp_token'], valid_window=self.TOLERANCE):
+                return
             raise ValidationError(_('Invalid Two Factor Authentication token.'))
+
+        raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
 
 
 class ProblemCloneForm(Form):
