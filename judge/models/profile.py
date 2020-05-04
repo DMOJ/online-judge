@@ -145,8 +145,8 @@ class Profile(models.Model):
         public_problems = Problem.get_public_problems()
         data = (
             public_problems.filter(submission__user=self, submission__points__isnull=False)
-                .annotate(max_points=Max('submission__points')).order_by('-max_points')
-                .values_list('max_points', flat=True).filter(max_points__gt=0)
+                           .annotate(max_points=Max('submission__points')).order_by('-max_points')
+                           .values_list('max_points', flat=True).filter(max_points__gt=0)
         )
         extradata = (
             public_problems.filter(submission__user=self, submission__result='AC').values('id').distinct().count()
