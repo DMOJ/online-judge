@@ -239,7 +239,13 @@
 
             $('#show-organizations-checkbox').click(function () {
                 $('.organization-column').toggle();
+                localStorage.setItem('show-organizations', $('.organization-column').is(':visible') ? 'true' : 'false');
             });
+            
+            if (localStorage.getItem('show-organizations') == 'true') {
+                $('.organization-column').show();
+                $('#show-organizations-checkbox').prop('checked', true);
+            }
         });
     </script>
     {% include "contest/media-js.html" %}
