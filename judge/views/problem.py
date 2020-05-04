@@ -6,14 +6,13 @@ from operator import itemgetter
 from random import randrange
 
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
 from django.db.models import Count, F, Prefetch, Q
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 from django.urls import reverse
 from django.utils import timezone, translation
@@ -27,7 +26,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemSubmitForm
-from judge.models import ContestProblem, ContestSubmission, Judge, Language, Problem, ProblemGroup, \
+from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, \
     ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, \
     TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
@@ -521,128 +520,150 @@ class RandomProblem(ProblemList):
 user_logger = logging.getLogger('judge.user')
 
 
-@login_required
-def problem_submit(request, problem, submission=None):
-    if submission is not None and not request.user.has_perm('judge.resubmit_other') and \
-            get_object_or_404(Submission, id=int(submission)).user.user != request.user:
-        raise PermissionDenied()
+class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFormView):
+    template_name = 'problem/submit.html'
+    form_class = ProblemSubmitForm
 
-    profile = request.profile
-    problem = get_object_or_404(Problem, code=problem)
-    if not problem.is_accessible_by(request.user):
-        if request.method == 'POST':
-            user_logger.info('Naughty user %s wants to submit to %s without permission',
-                             request.user.username, problem.code)
-            return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
-        raise Http404()
+    @cached_property
+    def contest_problem(self):
+        if self.request.profile.current_contest is None:
+            return None
+        return get_contest_problem(self.object, self.request.profile)
 
-    if problem.is_editable_by(request.user):
-        judge_choices = tuple(Judge.objects.filter(online=True, problems=problem).values_list('name', 'name'))
-    else:
-        judge_choices = ()
+    @cached_property
+    def remaining_submission_count(self):
+        max_subs = self.contest_problem and self.contest_problem.max_submissions
+        if max_subs is None:
+            return None
+        return max_subs - get_contest_submission_count(
+            self.object, self.request.profile, self.request.profile.current_contest.virtual,
+        )
 
-    if request.method == 'POST':
-        form = ProblemSubmitForm(request.POST, judge_choices=judge_choices,
-                                 instance=Submission(user=profile, problem=problem))
-        if form.is_valid():
-            if (not request.user.has_perm('judge.spam_submission') and
-                    Submission.objects.filter(user=profile, was_rejudged=False)
-                              .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() >= settings.DMOJ_SUBMISSION_LIMIT):
-                return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
-            if not problem.allowed_languages.filter(id=form.cleaned_data['language'].id).exists():
-                raise PermissionDenied()
-            if not request.user.is_superuser and problem.banned_users.filter(id=profile.id).exists():
-                return generic_message(request, _('Banned from submitting'),
-                                       _('You have been declared persona non grata for this problem. '
-                                         'You are permanently barred from submitting this problem.'))
+    @cached_property
+    def default_language(self):
+        # If the old submission exists, use its language, otherwise use the user's default language.
+        if self.old_submission is not None:
+            return self.old_submission.language
+        return self.request.profile.language
 
-            with transaction.atomic():
-                if profile.current_contest is not None:
-                    contest_id = profile.current_contest.contest_id
-                    try:
-                        contest_problem = problem.contests.get(contest_id=contest_id)
-                    except ContestProblem.DoesNotExist:
-                        model = form.save()
-                    else:
-                        max_subs = contest_problem.max_submissions
-                        if max_subs and get_contest_submission_count(problem, profile,
-                                                                     profile.current_contest.virtual) >= max_subs:
-                            return generic_message(request, _('Too many submissions'),
-                                                   _('You have exceeded the submission limit for this problem.'))
-                        model = form.save()
-                        model.contest_object_id = contest_id
+    def get_content_title(self):
+        return mark_safe(
+            escape(_('Submit to %s')) % format_html(
+                '<a href="{0}">{1}</a>',
+                reverse('problem_detail', args=[self.object.code]),
+                self.object.translated_name(self.request.LANGUAGE_CODE),
+            ),
+        )
 
-                        contest = ContestSubmission(submission=model, problem=contest_problem,
-                                                    participation=profile.current_contest)
-                        contest.save()
-                else:
-                    model = form.save()
+    def get_title(self):
+        return _('Submit to %s') % self.object.translated_name(self.request.LANGUAGE_CODE)
 
-                # Create the SubmissionSource object
-                source = SubmissionSource(submission=model, source=form.cleaned_data['source'])
-                source.save()
-                profile.update_contest()
+    def get_initial(self):
+        initial = {'language': self.default_language}
+        if self.old_submission is not None:
+            initial['source'] = self.old_submission.source.source
+        return initial
 
-            # Save a query
-            model.source = source
-            model.judge(rejudge=False, judge_id=form.cleaned_data['judge'])
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = Submission(user=self.request.profile, problem=self.object)
 
-            return HttpResponseRedirect(reverse('submission_status', args=[str(model.id)]))
+        if self.object.is_editable_by(self.request.user):
+            kwargs['judge_choices'] = tuple(
+                Judge.objects.filter(online=True, problems=self.object).values_list('name', 'name'),
+            )
         else:
-            form_data = form.cleaned_data
-            if submission is not None:
-                sub = get_object_or_404(Submission, id=int(submission))
-    else:
-        initial = {'language': profile.language}
-        if submission is not None:
-            try:
-                sub = get_object_or_404(Submission.objects.select_related('source', 'language'), id=int(submission))
-                initial['source'] = sub.source.source
-                initial['language'] = sub.language
-            except ValueError:
-                raise Http404()
-        form = ProblemSubmitForm(judge_choices=judge_choices, initial=initial)
-        form_data = initial
-    form.fields['language'].queryset = (
-        problem.usable_languages.order_by('name', 'key')
-        .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority')))
-    )
-    if 'language' in form_data:
-        form.fields['source'].widget.mode = form_data['language'].ace
-    form.fields['source'].widget.theme = profile.ace_theme
+            kwargs['judge_choices'] = ()
 
-    if submission is not None:
-        default_lang = sub.language
-    else:
-        default_lang = request.profile.language
+        return kwargs
 
-    submission_limit = submissions_left = None
-    if profile.current_contest is not None:
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+
+        form.fields['language'].queryset = (
+            self.object.usable_languages.order_by('name', 'key')
+            .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority')))
+        )
+
+        form_data = getattr(form, 'cleaned_data', form.initial)
+        if 'language' in form_data:
+            form.fields['source'].widget.mode = form_data['language'].ace
+        form.fields['source'].widget.theme = self.request.profile.ace_theme
+
+        return form
+
+    def get_success_url(self):
+        return reverse('submission_status', args=(self.new_submission.id,))
+
+    def form_valid(self, form):
+        if not self.object.allowed_languages.filter(id=form.cleaned_data['language'].id).exists():
+            raise PermissionDenied()
+        if not self.request.user.is_superuser and self.object.banned_users.filter(id=self.request.profile.id).exists():
+            return generic_message(self.request, _('Banned from submitting'),
+                                   _('You have been declared persona non grata for this problem. '
+                                     'You are permanently barred from submitting this problem.'))
+        # Must check for zero and not None. None means infinite submissions remaining.
+        if self.remaining_submission_count == 0:
+            return generic_message(self.request, _('Too many submissions'),
+                                   _('You have exceeded the submission limit for this problem.'))
+
+        with transaction.atomic():
+            self.new_submission = form.save()
+
+            contest_problem = self.contest_problem
+            if contest_problem is not None:
+                self.new_submission.contest_object_id = contest_problem.contest_id
+                ContestSubmission(
+                    submission=self.new_submission,
+                    problem=contest_problem,
+                    participation=self.request.profile.current_contest,
+                ).save()
+
+            source = SubmissionSource(submission=self.new_submission, source=form.cleaned_data['source'])
+            source.save()
+            self.request.profile.update_contest()
+
+        # Save a query.
+        self.new_submission.source = source
+        self.new_submission.judge(judge_id=form.cleaned_data['judge'])
+
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['langs'] = Language.objects.all()
+        context['no_judges'] = not context['form'].fields['language'].queryset
+        context['submission_limit'] = self.contest_problem and self.contest_problem.max_submissions
+        context['submissions_left'] = self.remaining_submission_count
+        context['ACE_URL'] = settings.ACE_URL
+        context['default_lang'] = self.default_language
+        return context
+
+    def post(self, request, *args, **kwargs):
         try:
-            submission_limit = problem.contests.get(contest=profile.current_contest.contest).max_submissions
-        except ContestProblem.DoesNotExist:
-            pass
+            return super().post(request, *args, **kwargs)
+        except Http404:
+            # Is this really necessary? This entire post() method could be removed if we don't log this.
+            user_logger.info(
+                'Naughty user %s wants to submit to %s without permission',
+                request.user.username,
+                kwargs.get(self.slug_url_kwarg),
+            )
+            return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
+
+    def dispatch(self, request, *args, **kwargs):
+        submission_id = kwargs.get('submission')
+        if submission_id is not None:
+            self.old_submission = get_object_or_404(
+                Submission.objects.select_related('source', 'language'),
+                id=submission_id,
+            )
+            if not request.user.has_perm('judge.resubmit_other') and self.old_submission.user != request.profile:
+                raise PermissionDenied()
         else:
-            if submission_limit:
-                submissions_left = submission_limit - get_contest_submission_count(problem, profile,
-                                                                                   profile.current_contest.virtual)
-    return render(request, 'problem/submit.html', {
-        'form': form,
-        'title': _('Submit to %(problem)s') % {
-            'problem': problem.translated_name(request.LANGUAGE_CODE),
-        },
-        'content_title': mark_safe(escape(_('Submit to %(problem)s')) % {
-            'problem': format_html('<a href="{0}">{1}</a>',
-                                   reverse('problem_detail', args=[problem.code]),
-                                   problem.translated_name(request.LANGUAGE_CODE)),
-        }),
-        'langs': Language.objects.all(),
-        'no_judges': not form.fields['language'].queryset,
-        'submission_limit': submission_limit,
-        'submissions_left': submissions_left,
-        'ACE_URL': settings.ACE_URL,
-        'default_lang': default_lang,
-    })
+            self.old_submission = None
+
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
