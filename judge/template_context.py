@@ -63,6 +63,7 @@ def general_info(request):
         'nav_bar': NavigationBar.objects.all(),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path,
         'perms': PermWrapper(request.user),
+        'HAS_WEBAUTHN': bool(settings.WEBAUTHN_RP_ID),
     }
 
 
