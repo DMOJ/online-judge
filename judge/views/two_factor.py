@@ -101,7 +101,7 @@ class TOTPDisableView(TOTPView):
         return self.next_page()
 
 
-class TOTPLoginView(SuccessURLAllowedHostsMixin, TOTPView):
+class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
     title = _('Perform Two Factor Authentication')
     template_name = 'registration/totp_auth.html'
 
