@@ -315,10 +315,16 @@
                             </div>
                             <table class="table">
                                 {% if profile.is_webauthn_enabled %}
+                                    {% for credential in profile.webauthn_credentials.all() %}
+                                        <tr>
+                                            <td>{{ credential.name }}</td>
+                                            <td><button class="webauthn-delete inline-button" data-id="{{ credential.id }}">{{ _('Delete') }}</button></td>
+                                        </tr>
+                                    {% endfor %}
                                 {% endif %}
                                 <tr>
                                     <td><input id="new-webauthn-name" type="text"></td>
-                                    <td><button id="new-webauthn">{{ _('Add') }}</button></td>
+                                    <td><button id="new-webauthn" class="inline-button">{{ _('Add') }}</button></td>
                                 </tr>
                             </table>
                         {% endif %}
