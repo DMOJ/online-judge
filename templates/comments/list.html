@@ -83,6 +83,8 @@
                                                    href="{{ url('comment_edit', node.id) }}" title="{{ _('Edit') }}"
                                                    class="edit-link"><i class="fa fa-pencil fa-fw"></i></a>
                                             {% endif %}
+                                            <a data-featherlight="{{ url('comment_votes_ajax', node.id) }}"
+                                               title="{{ _('Votes') }}" class="votes-link"><i class="fa fa-bar-chart fa-fw"></i></a>
                                             <a href="javascript:" title="{{ _('Hide') }}" data-id="{{ node.id }}"
                                                class="hide-comment"><i class="fa fa-trash fa-fw"></i></a>
                                             <a href="{{ url('admin:judge_comment_change', node.id) }}"
