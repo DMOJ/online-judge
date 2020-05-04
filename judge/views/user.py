@@ -1,18 +1,21 @@
 import itertools
 import json
+import os
 from datetime import datetime
 from operator import attrgetter, itemgetter
 
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
 from django.contrib.auth.views import LoginView, PasswordChangeView, redirect_to_login
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
+from django.core.cache import cache
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Count, Max, Min
-from django.http import Http404, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
@@ -21,22 +24,25 @@ from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.decorators.http import require_POST
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, FormView, ListView, TemplateView, View
 from reversion import revisions
 
-from judge.forms import CustomAuthenticationForm, ProfileForm, newsletter_id
+from judge.forms import CustomAuthenticationForm, DownloadDataForm, ProfileForm, newsletter_id
 from judge.models import Profile, Rating, Submission
 from judge.performance_points import get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
+from judge.tasks import prepare_user_data
+from judge.utils.celery import task_status_by_id, task_status_url_by_id
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.pwned import PwnedPasswordsValidator
 from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
 from judge.utils.unicode import utf8text
-from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, TitleMixin, generic_message
+from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, TitleMixin, add_file_response, generic_message
 from .contests import ContestRanking
 
-__all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'users', 'edit_profile']
+__all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'UserDownloadData', 'UserPrepareData',
+           'users', 'edit_profile']
 
 
 def remap_keys(iterable, mapping):
@@ -236,6 +242,99 @@ class UserPerformancePointsAjax(UserProblemsPage):
         })
 
 
+class UserDataMixin:
+    @cached_property
+    def data_path(self):
+        return os.path.join(settings.DMOJ_USER_DATA_CACHE, '%s.zip' % self.request.profile.id)
+
+    def dispatch(self, request, *args, **kwargs):
+        if not settings.DMOJ_USER_DATA_DOWNLOAD or self.request.profile.mute:
+            raise Http404()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class UserPrepareData(LoginRequiredMixin, UserDataMixin, TitleMixin, FormView):
+    template_name = 'user/prepare-data.html'
+    form_class = DownloadDataForm
+
+    @cached_property
+    def _now(self):
+        return timezone.now()
+
+    @cached_property
+    def can_prepare_data(self):
+        return (
+            self.request.profile.data_last_downloaded is None or
+            self.request.profile.data_last_downloaded + settings.DMOJ_USER_DATA_DOWNLOAD_RATELIMIT < self._now or
+            not os.path.exists(self.data_path)
+        )
+
+    @cached_property
+    def data_cache_key(self):
+        return 'celery_status_id:user_data_download_%s' % self.request.profile.id
+
+    @cached_property
+    def in_progress_url(self):
+        status_id = cache.get(self.data_cache_key)
+        status = task_status_by_id(status_id).status if status_id else None
+        return (
+            self.build_task_url(status_id)
+            if status in ('PENDING', 'PROGRESS', 'STARTED')
+            else None
+        )
+
+    def build_task_url(self, status_id):
+        return task_status_url_by_id(
+            status_id, message=_('Preparing your data...'), redirect=reverse('user_prepare_data'),
+        )
+
+    def get_title(self):
+        return _('Download your data')
+
+    def form_valid(self, form):
+        self.request.profile.data_last_downloaded = self._now
+        self.request.profile.save()
+        status = prepare_user_data.delay(self.request.profile.id, json.dumps(form.cleaned_data))
+        cache.set(self.data_cache_key, status.id)
+        return HttpResponseRedirect(self.build_task_url(status.id))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['can_prepare_data'] = self.can_prepare_data
+        context['can_download_data'] = os.path.exists(self.data_path)
+        context['in_progress_url'] = self.in_progress_url
+        context['ratelimit'] = settings.DMOJ_USER_DATA_DOWNLOAD_RATELIMIT
+
+        if not self.can_prepare_data:
+            context['time_until_can_prepare'] = (
+                settings.DMOJ_USER_DATA_DOWNLOAD_RATELIMIT - (self._now - self.request.profile.data_last_downloaded)
+            )
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if not self.can_prepare_data or self.in_progress_url is not None:
+            raise PermissionDenied()
+        return super().post(request, *args, **kwargs)
+
+
+class UserDownloadData(LoginRequiredMixin, UserDataMixin, View):
+    def get(self, request, *args, **kwargs):
+        if not os.path.exists(self.data_path):
+            raise Http404()
+
+        response = HttpResponse()
+
+        if hasattr(settings, 'DMOJ_USER_DATA_INTERNAL'):
+            url_path = '%s/%s.zip' % (settings.DMOJ_USER_DATA_INTERNAL, self.request.profile.id)
+        else:
+            url_path = None
+        add_file_response(request, response, url_path, self.data_path)
+
+        response['Content-Type'] = 'application/zip'
+        response['Content-Disposition'] = 'attachment; filename=%s-data.zip' % self.request.user.username
+        return response
+
+
 @login_required
 def edit_profile(request):
     if request.profile.mute:
@@ -280,6 +379,7 @@ def edit_profile(request):
     return render(request, 'user/edit-profile.html', {
         'require_staff_2fa': settings.DMOJ_REQUIRE_STAFF_2FA,
         'form': form, 'title': _('Edit profile'), 'profile': request.profile,
+        'can_download_data': bool(settings.DMOJ_USER_DATA_DOWNLOAD),
         'has_math_config': bool(settings.MATHOID_URL),
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',

@@ -21,7 +21,7 @@ from judge.highlight_code import highlight_code
 from judge.models import Problem, ProblemData, ProblemTestCase, Submission, problem_data_storage
 from judge.utils.problem_data import ProblemDataCompiler
 from judge.utils.unicode import utf8text
-from judge.utils.views import TitleMixin
+from judge.utils.views import TitleMixin, add_file_response
 from judge.views.problem import ProblemMixin
 
 mimetypes.init()
@@ -211,14 +211,16 @@ def problem_data_file(request, problem, path):
         raise Http404()
 
     response = HttpResponse()
-    if hasattr(settings, 'DMOJ_PROBLEM_DATA_INTERNAL') and request.META.get('SERVER_SOFTWARE', '').startswith('nginx/'):
-        response['X-Accel-Redirect'] = '%s/%s/%s' % (settings.DMOJ_PROBLEM_DATA_INTERNAL, problem, path)
+
+    if hasattr(settings, 'DMOJ_PROBLEM_DATA_INTERNAL'):
+        url_path = '%s/%s/%s' % (settings.DMOJ_PROBLEM_DATA_INTERNAL, problem, path)
     else:
-        try:
-            with problem_data_storage.open(os.path.join(problem, path), 'rb') as f:
-                response.content = f.read()
-        except IOError:
-            raise Http404()
+        url_path = None
+
+    try:
+        add_file_response(request, response, url_path, os.path.join(problem, path), problem_data_storage)
+    except IOError:
+        raise Http404()
 
     response['Content-Type'] = 'application/octet-stream'
     return response

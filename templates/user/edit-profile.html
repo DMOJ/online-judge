@@ -262,6 +262,13 @@
                                 {{ _('Change your password') }}
                             </a>
                         </td></tr>
+                        {% if can_download_data %}
+                            <tr><td>
+                                <a href="{{ url('user_prepare_data') }}" class="inline-header">
+                                    {{ _('Download your data') }}
+                                </a>
+                            </td></tr>
+                        {% endif %}
                     </table>
                 </div>
                 <div class="pane">
