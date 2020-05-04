@@ -29,6 +29,10 @@
         $(() => {
             {% include "user/webauthn-helpers.js" %}
 
+            function buf2hex(buffer) {
+                return Array.prototype.map.call(new Uint8Array(buffer), x => ('00' + x.toString(16)).slice(-2)).join('');
+            }
+
             $('#use-webauthn').click(event => {
                 event.preventDefault();
 
@@ -47,7 +51,7 @@
                                     response: {
                                         authData: urlSafeBase64Encode(credential.response.authenticatorData),
                                         clientData: urlSafeBase64Encode(credential.response.clientDataJSON),
-                                        signature: urlSafeBase64Encode(credential.response.signature),
+                                        signature: buf2hex(credential.response.signature),
                                     }
                                 };
                                 $('#id_webauthn_response').val(JSON.stringify(credential));
