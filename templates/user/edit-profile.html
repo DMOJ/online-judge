@@ -256,7 +256,7 @@
                                 <td colspan="2"><span class="inline-header">
                                     {% if profile.is_totp_enabled %}
                                         {{ _('Two Factor Authentication is enabled.') }}
-                                        {% if require_staff_2fa and request.user.is_staff %}
+                                        {% if require_staff_2fa and request.user.is_staff and not request.profile.is_webauthn_enabled %}
                                             <a id="disable-2fa-button" class="button inline-button">Disable</a>
                                         {% else %}
                                             <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
