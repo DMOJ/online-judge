@@ -135,7 +135,7 @@ class TOTPForm(Form):
     TOLERANCE = settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES
 
     totp_token = NoAutoCompleteCharField(validators=[
-        RegexValidator('^[0-9]{6}$', _('Two Factor Authentication tokens must be 6 decimal digits.')),
+        RegexValidator('^[0-9]{6}$', _('Two-factor authentication tokens must be 6 decimal digits.')),
     ], required=False)
     webauthn_response = forms.CharField(widget=forms.HiddenInput(), required=False)
 
@@ -147,7 +147,7 @@ class TOTPForm(Form):
         if (not self.cleaned_data.get('totp_token') or
                 not pyotp.TOTP(self.profile.totp_key).verify(self.cleaned_data['totp_token'],
                                                              valid_window=self.TOLERANCE)):
-            raise ValidationError(_('Invalid Two Factor Authentication token.'))
+            raise ValidationError(_('Invalid two-factor authentication token.'))
 
 
 class TwoFactorLoginForm(TOTPForm):
@@ -196,7 +196,7 @@ class TwoFactorLoginForm(TOTPForm):
         if self.profile.is_totp_enabled and self.cleaned_data.get('totp_token'):
             if pyotp.TOTP(self.profile.totp_key).verify(self.cleaned_data['totp_token'], valid_window=self.TOLERANCE):
                 return
-            raise ValidationError(_('Invalid Two Factor Authentication token.'))
+            raise ValidationError(_('Invalid two-factor authentication token.'))
 
         raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
 

@@ -46,7 +46,7 @@ class TOTPView(TitleMixin, LoginRequiredMixin, FormView):
 
 
 class TOTPEnableView(TOTPView):
-    title = _('Enable Two Factor Authentication')
+    title = _('Enable Two-factor Authentication')
     template_name = 'registration/totp_enable.html'
 
     def get(self, request, *args, **kwargs):
@@ -93,7 +93,7 @@ class TOTPEnableView(TOTPView):
 
 
 class TOTPDisableView(TOTPView):
-    title = _('Disable Two Factor Authentication')
+    title = _('Disable Two-factor Authentication')
     template_name = 'registration/totp_disable.html'
 
     def check_skip(self):
@@ -209,7 +209,7 @@ class WebAuthnDeleteView(SingleObjectMixin, WebAuthnView):
 
 class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
     form_class = TwoFactorLoginForm
-    title = _('Perform Two Factor Authentication')
+    title = _('Perform Two-factor Authentication')
     template_name = 'registration/two_factor_auth.html'
 
     def get_form_kwargs(self):

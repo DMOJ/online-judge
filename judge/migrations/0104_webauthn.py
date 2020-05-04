@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='is_webauthn_enabled',
-            field=models.BooleanField(default=False, help_text='check to enable WebAuthn-based two factor authentication', verbose_name='WebAuthn 2FA enabled'),
+            field=models.BooleanField(default=False, help_text='check to enable WebAuthn-based two-factor authentication', verbose_name='WebAuthn 2FA enabled'),
         ),
         migrations.CreateModel(
             name='WebAuthnCredential',
