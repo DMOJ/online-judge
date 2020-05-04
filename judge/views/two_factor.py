@@ -14,6 +14,7 @@ from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.utils.translation import gettext as _
 from django.views.generic import FormView, View
+from django.views.generic.detail import SingleObjectMixin
 
 from judge.forms import TOTPForm
 from judge.jinja2.gravatar import gravatar
@@ -98,7 +99,7 @@ class TOTPDisableView(TOTPView):
     def check_skip(self):
         if not self.profile.is_totp_enabled:
             return True
-        return settings.DMOJ_REQUIRE_STAFF_2FA and self.request.user.is_staff
+        return settings.DMOJ_REQUIRE_STAFF_2FA and self.request.user.is_staff and not self.profile.is_webauthn_enabled
 
     def form_valid(self, form):
         self.profile.is_totp_enabled = False
@@ -184,6 +185,26 @@ class WebAuthnAttestView(WebAuthnView):
             challenge,
         ).assertion_dict
         return JsonResponse(data, encoder=WebAuthnJSONEncoder)
+
+
+class WebAuthnDeleteView(SingleObjectMixin, WebAuthnView):
+    def get_queryset(self):
+        return self.request.profile.webauthn_credentials.all()
+
+    def post(self, request, *args, **kwargs):
+        credential = self.get_object()
+        count = self.get_queryset().count()
+
+        if settings.DMOJ_REQUIRE_STAFF_2FA and self.request.user.is_staff and \
+                count <= 1 and not request.profile.is_totp_enabled:
+            return HttpResponseBadRequest(_('Staff may not disable 2FA'))
+        credential.delete()
+
+        if count <= 1:
+            request.profile.is_webauthn_enabled = False
+            request.profile.save(update_fields=['is_webauthn_enabled'])
+
+        return HttpResponse()
 
 
 class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):

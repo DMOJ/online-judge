@@ -162,6 +162,15 @@
                     })
                     .fail(() => alert('{{ _('Failed to contact server.') }}'));
             });
+
+            $('.webauthn-delete').click(function (event) {
+                event.preventDefault();
+                if (confirm("{{ _('Are you sure you want to delete this security key?') }}")) {
+                    $.post($(this).attr('data-delete-url'))
+                        .then(() => window.location.reload())
+                        .fail((jqXHR) => alert(jqXHR.responseText));
+                }
+            });
         });
     </script>
 {% endblock %}
@@ -290,7 +299,7 @@
                                     {% for credential in profile.webauthn_credentials.all() %}
                                         <tr>
                                             <td>{{ credential.name }}</td>
-                                            <td><button class="webauthn-delete inline-button" data-id="{{ credential.id }}">{{ _('Delete') }}</button></td>
+                                            <td><button class="webauthn-delete inline-button" data-delete-url="{{ url('webauthn_delete', credential.id) }}">{{ _('Delete') }}</button></td>
                                         </tr>
                                     {% endfor %}
                                 {% endif %}

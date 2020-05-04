@@ -80,6 +80,7 @@ register_patterns = [
     url(r'^2fa/disable/$', two_factor.TOTPDisableView.as_view(), name='disable_2fa'),
     url(r'^2fa/webauthn/attest/$', two_factor.WebAuthnAttestationView.as_view(), name='webauthn_attest'),
     url(r'^2fa/webauthn/assert/$', two_factor.WebAuthnAttestView.as_view(), name='webauthn_assert'),
+    url(r'^2fa/webauthn/delete/(?P<pk>\d+)$', two_factor.WebAuthnDeleteView.as_view(), name='webauthn_delete'),
 
     url(r'api/token/generate/$', user.generate_api_token, name='generate_api_token'),
     url(r'api/token/remove/$', user.remove_api_token, name='remove_api_token'),
