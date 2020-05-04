@@ -246,10 +246,21 @@
                         </table>
                     </td>
                     <td>
-                        <div style="padding-bottom:0.4em;margin-top:-2em" class="block-header">
+                        <div style="padding-bottom:0.4em" class="block-header">
                             {{ _('Affiliated organizations') }}:
                         </div>
                         {{ form.organizations }}
+                        <div style="padding-bottom:0.4em" class="block-header">
+                            {{ _('Security keys') }}:
+                        </div>
+                        <table class="table">
+                            {% if profile.is_webauthn_enabled %}
+                            {% endif %}
+                            <tr>
+                                <td><input id="new-webauthn-name" type="text"></td>
+                                <td><button id="new-webauthn">Add</button></td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             </table>
