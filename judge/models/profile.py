@@ -21,7 +21,7 @@ from judge.models.choices import ACE_THEMES, MATH_ENGINES_CHOICES, TIMEZONE
 from judge.models.runtime import Language
 from judge.ratings import rating_class
 
-__all__ = ['Organization', 'Profile', 'OrganizationRequest']
+__all__ = ['Organization', 'Profile', 'OrganizationRequest', 'WebAuthnCredential']
 
 
 class EncryptedNullCharField(EncryptedCharField):

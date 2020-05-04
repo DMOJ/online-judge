@@ -185,7 +185,7 @@
                                     name: $('#new-webauthn-name').val(),
                                 })
                                     .then(() => window.location.reload())
-                                    .fail(() => alert('{{ _('Failed to contact server.') }}'));
+                                    .fail((jqXHR) => alert(jqXHR.responseText));
                             });
                     })
                     .fail(() => alert('{{ _('Failed to contact server.') }}'));

@@ -9,7 +9,7 @@ import webauthn
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
-from django.http import HttpResponseBadRequest, HttpResponseRedirect, JsonResponse, Http404
+from django.http import HttpResponseBadRequest, HttpResponseRedirect, JsonResponse, Http404, HttpResponse
 from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.utils.translation import gettext as _
@@ -17,6 +17,7 @@ from django.views.generic import FormView, View
 
 from judge.forms import TOTPForm
 from judge.jinja2.gravatar import gravatar
+from judge.models import WebAuthnCredential
 from judge.utils.views import TitleMixin
 
 
@@ -116,6 +117,11 @@ def webauthn_encode(binary):
     return base64.urlsafe_b64encode(binary).decode('ascii').rstrip('=')
 
 
+def webauthn_decode(text):
+    text += '=' * (-len(text) % 4)
+    return base64.urlsafe_b64decode(text)
+
+
 class WebAuthnJSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, bytes):
@@ -143,6 +149,44 @@ class WebAuthnAttestationView(WebAuthnView):
             'id': credential.cred_id,
         } for credential in request.profile.webauthn_credentials.all()]
         return JsonResponse(data, encoder=WebAuthnJSONEncoder)
+
+    def post(self, request, *args, **kwargs):
+        if not request.session.get('webauthn_attest'):
+            return HttpResponseBadRequest()
+
+        if 'credential' not in request.POST or len(request.POST['credential']) > 65536:
+            return HttpResponseBadRequest(_('Invalid WebAuthn response'))
+
+        if 'name' not in request.POST or len(request.POST['name']) > 100:
+            return HttpResponseBadRequest(_('Invalid name'))
+
+        credential = json.loads(request.POST['credential'])
+
+        response = webauthn.WebAuthnRegistrationResponse(
+            rp_id=settings.WEBAUTHN_RP_ID,
+            origin='https://' + request.get_host(),
+            registration_response=credential['response'],
+            challenge=request.session['webauthn_attest'],
+            none_attestation_permitted=True,
+        )
+
+        try:
+            credential = response.verify()
+        except Exception as e:
+            return HttpResponseBadRequest(str(e))
+
+        model = WebAuthnCredential(
+            user=request.profile, name=request.POST['name'],
+            cred_id=credential.credential_id.decode('ascii'),
+            public_key=credential.public_key.decode('ascii'),
+            counter=credential.sign_count,
+        )
+        model.save()
+
+        if not request.profile.is_webauthn_enabled:
+            request.profile.is_webauthn_enabled = True
+            request.profile.save(update_fields=['is_webauthn_enabled'])
+        return HttpResponse('OK')
 
 
 class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
