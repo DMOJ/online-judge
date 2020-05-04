@@ -22,8 +22,8 @@ if settings.USE_SELENIUM:
         from selenium.webdriver.support import expected_conditions as EC
         from selenium.webdriver.support.ui import WebDriverWait
         HAS_SELENIUM = True
-    except ImportError as e:
-        logger.warning(e, exc_info=True)
+    except ImportError:
+        logger.warning('Failed to import Selenium')
 
 HAS_PHANTOMJS = os.access(settings.PHANTOMJS, os.X_OK)
 HAS_SLIMERJS = os.access(settings.SLIMERJS, os.X_OK)
