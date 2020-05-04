@@ -16,7 +16,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import FormView, View
 from django.views.generic.detail import SingleObjectMixin
 
-from judge.forms import TOTPForm
+from judge.forms import TOTPForm, TwoFactorLoginForm
 from judge.jinja2.gravatar import gravatar
 from judge.models import WebAuthnCredential
 from judge.utils.two_factor import webauthn_encode, WebAuthnJSONEncoder
@@ -208,6 +208,7 @@ class WebAuthnDeleteView(SingleObjectMixin, WebAuthnView):
 
 
 class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
+    form_class = TwoFactorLoginForm
     title = _('Perform Two Factor Authentication')
     template_name = 'registration/two_factor_auth.html'
 

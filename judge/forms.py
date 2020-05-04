@@ -141,6 +141,19 @@ class TOTPForm(Form):
 
     def __init__(self, *args, **kwargs):
         self.profile = kwargs.pop('profile')
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        if (not self.cleaned_data.get('totp_token') or
+                not pyotp.TOTP(self.profile.totp_key).verify(self.cleaned_data['totp_token'],
+                                                             valid_window=self.TOLERANCE)):
+            raise ValidationError(_('Invalid Two Factor Authentication token.'))
+
+
+class TwoFactorLoginForm(TOTPForm):
+    webauthn_response = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    def __init__(self, *args, **kwargs):
         self.webauthn_challenge = kwargs.pop('webauthn_challenge')
         self.webauthn_origin = kwargs.pop('webauthn_origin')
         super().__init__(*args, **kwargs)
