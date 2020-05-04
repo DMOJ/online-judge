@@ -201,6 +201,10 @@ class Profile(models.Model):
     def css_class(self):
         return self.get_user_css_class(self.display_rank, self.rating)
 
+    @cached_property
+    def webauthn_id(self):
+        return hmac.new(force_bytes(settings.SECRET_KEY), msg=b'webauthn:%d' % (self.id,), digestmod='sha256').digest()
+
     class Meta:
         permissions = (
             ('test_site', 'Shows in-progress development stuff'),

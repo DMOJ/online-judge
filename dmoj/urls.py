@@ -78,6 +78,7 @@ register_patterns = [
     url(r'^2fa/$', two_factor.TwoFactorLoginView.as_view(), name='login_2fa'),
     url(r'^2fa/enable/$', two_factor.TOTPEnableView.as_view(), name='enable_2fa'),
     url(r'^2fa/disable/$', two_factor.TOTPDisableView.as_view(), name='disable_2fa'),
+    url(r'^2fa/webauthn/attest/$', two_factor.WebAuthnAttestationView.as_view(), name='webauthn_attest'),
 
     url(r'api/token/generate/$', user.generate_api_token, name='generate_api_token'),
     url(r'api/token/remove/$', user.remove_api_token, name='remove_api_token'),

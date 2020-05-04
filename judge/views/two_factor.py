@@ -1,18 +1,22 @@
 import base64
+import json
+import os
 from io import BytesIO
 
 import pyotp
 import qrcode
+import webauthn
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import SuccessURLAllowedHostsMixin
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponseBadRequest, HttpResponseRedirect, JsonResponse, Http404
 from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.utils.translation import gettext as _
-from django.views.generic import FormView
+from django.views.generic import FormView, View
 
 from judge.forms import TOTPForm
+from judge.jinja2.gravatar import gravatar
 from judge.utils.views import TitleMixin
 
 
@@ -99,6 +103,46 @@ class TOTPDisableView(TOTPView):
         self.profile.totp_key = None
         self.profile.save()
         return self.next_page()
+
+
+class WebAuthnView(LoginRequiredMixin, View):
+    def dispatch(self, request, *args, **kwargs):
+        if not settings.WEBAUTHN_RP_ID:
+            raise Http404()
+        return super(WebAuthnView, self).dispatch(request, *args, **kwargs)
+
+
+def webauthn_encode(binary):
+    return base64.urlsafe_b64encode(binary).decode('ascii').rstrip('=')
+
+
+class WebAuthnJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, bytes):
+            return {'_bytes': webauthn_encode(o)}
+        return super().default(o)
+
+
+class WebAuthnAttestationView(WebAuthnView):
+    def get(self, request, *args, **kwargs):
+        challenge = os.urandom(32)
+        request.session['webauthn_attest'] = webauthn_encode(challenge)
+        data = webauthn.WebAuthnMakeCredentialOptions(
+            challenge=challenge,
+            rp_id=settings.WEBAUTHN_RP_ID,
+            rp_name=settings.SITE_NAME,
+            user_id=request.profile.webauthn_id,
+            username=request.user.username,
+            display_name=request.user.username,
+            user_verification='discouraged',
+            icon_url=gravatar(request.user.email),
+            attestation='none',
+        ).registration_dict
+        data['excludeCredentials'] = [{
+            'type': 'public-key',
+            'id': credential.cred_id,
+        } for credential in request.profile.webauthn_credentials.all()]
+        return JsonResponse(data, encoder=WebAuthnJSONEncoder)
 
 
 class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
