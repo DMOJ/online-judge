@@ -70,7 +70,13 @@
             {% csrf_token %}
             {% if form.errors %}
                 <div id="form-errors">
-                    <p class="error">{{ ' '.join(form.non_field_errors()) }}</p>
+                    <p class="error">
+                        {%- if form.errors['totp_token'] -%}
+                            {{ ' '.join(form.errors['totp_token']) }}
+                        {%- else -%}
+                            {{ ' '.join(form.non_field_errors()) }}
+                        {%- endif -%}
+                    </p>
                 </div>
             {% endif %}
 
