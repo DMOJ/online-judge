@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import datetime
 import os
 import tempfile
 
@@ -73,6 +74,10 @@ DMOJ_BLOG_NEW_PROBLEM_COUNT = 7
 DMOJ_BLOG_RECENTLY_ATTEMPTED_PROBLEMS_COUNT = 7
 DMOJ_TOTP_TOLERANCE_HALF_MINUTES = 1
 DMOJ_USER_MAX_ORGANIZATION_COUNT = 3
+# Whether to allow users to download their data
+DMOJ_USER_DATA_DOWNLOAD = False
+DMOJ_USER_DATA_CACHE = ''
+DMOJ_USER_DATA_DOWNLOAD_RATELIMIT = datetime.timedelta(days=1)
 DMOJ_COMMENT_VOTE_HIDE_THRESHOLD = -5
 DMOJ_PDF_PROBLEM_CACHE = ''
 DMOJ_PDF_PROBLEM_TEMP_DIR = tempfile.gettempdir()

@@ -167,6 +167,8 @@ urlpatterns = [
 
     url(r'^user$', user.UserAboutPage.as_view(), name='user_page'),
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
+    url(r'^data/prepare/$', user.UserPrepareData.as_view(), name='user_prepare_data'),
+    url(r'^data/download/$', user.UserDownloadData.as_view(), name='user_download_data'),
     url(r'^user/(?P<user>\w+)', include([
         url(r'^$', user.UserAboutPage.as_view(), name='user_page'),
         url(r'^/solved', include([

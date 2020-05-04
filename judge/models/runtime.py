@@ -87,6 +87,53 @@ class Language(models.Model):
         else:
             return self.name
 
+    @cached_property
+    def file_extension(self):
+        # This dictionary only stores the language keys whose file extension are different than the key.
+        # TODO: this should become a configurable field in the admin page in case new runtimes are added.
+        extensions = {
+            'BASH': 'sh',
+            'C': 'c',
+            'C11': 'c',
+            'CLANG': 'cpp',
+            'CLANGX': 'cpp',
+            'CPP03': 'cpp',
+            'CPP11': 'cpp',
+            'CPP14': 'cpp',
+            'CPP17': 'cpp',
+            'F95': 'f95',
+            'FORTH': 'fs',
+            'GAS32': 'asm',
+            'GAS64': 'asm',
+            'GASARM': 'asm',
+            'ICK': 'i',
+            'JAVA8': 'java',
+            'JAVA9': 'java',
+            'JAVA10': 'java',
+            'JAVA11': 'java',
+            'KOTLIN': 'kt',
+            'MONOCS': 'cs',
+            'MONOFS': 'fs',
+            'MONOVB': 'vb',
+            'NASM': 'asm',
+            'NASM64': 'asm',
+            'OBJC': 'm',
+            'OCAML': 'ml',
+            'PERL': 'pl',
+            'PRO': 'pl',
+            'PY2': 'py',
+            'PY3': 'py',
+            'PYPY': 'py',
+            'PYPY3': 'py',
+            'RUBY2': 'rb',
+            'RUST': 'rs',
+            'SBCL': 'cl',
+            'TEXT': 'txt',
+            'TUR': 't',
+            'V8JS': 'js',
+        }
+        return extensions.get(self.key.upper(), self.key.lower())
+
     @classmethod
     def get_python3(cls):
         # We really need a default language, and this app is in Python 3

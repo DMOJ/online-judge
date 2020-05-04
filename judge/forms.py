@@ -1,5 +1,5 @@
 import json
-from operator import attrgetter
+from operator import attrgetter, itemgetter
 
 import pyotp
 import webauthn
@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
-from django.forms import CharField, ChoiceField, Form, ModelForm
+from django.forms import BooleanField, CharField, ChoiceField, Form, ModelForm, MultipleChoiceField
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -68,6 +68,36 @@ class ProfileForm(ModelForm):
             self.fields['organizations'].queryset = Organization.objects.filter(
                 Q(is_open=True) | Q(id__in=user.profile.organizations.all()),
             )
+
+
+class DownloadDataForm(Form):
+    comment_download = BooleanField(required=False, label=_('Download comments?'))
+    submission_download = BooleanField(required=False, label=_('Download submissions?'))
+    submission_problem_glob = CharField(initial='*', label=_('Filter by problem code glob:'))
+    submission_results = MultipleChoiceField(
+        required=False,
+        widget=Select2MultipleWidget(
+            attrs={'style': 'width: 260px', 'data-placeholder': _('Leave empty to include all submissions')},
+        ),
+        choices=sorted(map(itemgetter(0, 0), Submission.RESULT)),
+        label=_('Filter by result:'),
+    )
+
+    def clean(self):
+        can_download = ('comment_download', 'submission_download')
+        if not any(self.cleaned_data[v] for v in can_download):
+            raise ValidationError(_('Please select at least one thing to download.'))
+        return self.cleaned_data
+
+    def clean_submission_problem_glob(self):
+        if not self.cleaned_data['submission_download']:
+            return '*'
+        return self.cleaned_data['submission_problem_glob']
+
+    def clean_submission_result(self):
+        if not self.cleaned_data['submission_download']:
+            return ()
+        return self.cleaned_data['submission_result']
 
 
 class ProblemSubmitForm(ModelForm):

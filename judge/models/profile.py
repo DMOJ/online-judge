@@ -127,6 +127,7 @@ class Profile(models.Model):
                                                             _('API token must be None or hexadecimal'))])
     notes = models.TextField(verbose_name=_('internal notes'), null=True, blank=True,
                              help_text=_('Notes for administrators regarding this user.'))
+    data_last_downloaded = models.DateTimeField(verbose_name=_('last data download time'), null=True, blank=True)
 
     @cached_property
     def organization(self):
