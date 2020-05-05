@@ -183,6 +183,8 @@
                 variant: 'featherlight-edit'
             });
 
+            $('votes-link').find('a[data-featherlight]').featherlight();
+
             var $root = $('html, body');
             $comments.find('a.comment-link').click(function () {
                 var href = $.attr(this, 'href');

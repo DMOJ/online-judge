@@ -29,7 +29,7 @@ def vote_comment(request, delta):
     if request.method != 'POST':
         return HttpResponseForbidden()
 
-    if 'id' not in request.POST:
+    if 'id' not in request.POST or len(request.POST['id']) > 10:
         return HttpResponseBadRequest()
 
     if not request.user.is_staff and not request.profile.submission_set.filter(points=F('problem__points')).exists():

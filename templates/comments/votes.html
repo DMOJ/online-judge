@@ -1,9 +1,9 @@
-<h2>Votes</h2>
-<table class="table">
+<h2 style="text-align: center">{{ _('Votes') }}</h2>
+<table class="table" style="display: table">
     <thead>
     <tr>
-        <th>Voter</th>
-        <th>Score</th>
+        <th>{{ _('Voter') }}</th>
+        <th>{{ _('Score') }}</th>
     </tr>
     </thead>
     <tbody>
@@ -11,6 +11,10 @@
         <tr>
             <td>{{ link_user(vote.voter) }}</td>
             <td>{{ vote.score }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="2">{{ _('No votes') }}</td>
         </tr>
     {% endfor %}
     </tbody>

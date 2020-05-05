@@ -11,14 +11,19 @@ import uuid
 from django.conf import settings
 from django.utils.translation import gettext
 
+logger = logging.getLogger('judge.problem.pdf')
+
 HAS_SELENIUM = False
 if settings.USE_SELENIUM:
-    from selenium import webdriver
-    from selenium.common.exceptions import TimeoutException
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support import expected_conditions as EC
-    from selenium.webdriver.support.ui import WebDriverWait
-    HAS_SELENIUM = True
+    try:
+        from selenium import webdriver
+        from selenium.common.exceptions import TimeoutException
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.support import expected_conditions as EC
+        from selenium.webdriver.support.ui import WebDriverWait
+        HAS_SELENIUM = True
+    except ImportError:
+        logger.warning('Failed to import Selenium', exc_info=True)
 
 HAS_PHANTOMJS = os.access(settings.PHANTOMJS, os.X_OK)
 HAS_SLIMERJS = os.access(settings.SLIMERJS, os.X_OK)
@@ -32,8 +37,6 @@ HAS_PDF = (os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and
 
 EXIFTOOL = settings.EXIFTOOL
 HAS_EXIFTOOL = os.access(EXIFTOOL, os.X_OK)
-
-logger = logging.getLogger('judge.problem.pdf')
 
 
 class BasePdfMaker(object):
