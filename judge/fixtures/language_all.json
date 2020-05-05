@@ -942,5 +942,21 @@
         "description": "",
         "extension": ""
     }
+},
+{
+    "model": "judge.language",
+    "pk": 75,
+    "fields": {
+        "key": "ZIG",
+        "name": "Zig",
+        "short_name": "",
+        "common_name": "Zig",
+        "ace": "zig",
+        "pygments": "zig",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": ""
+    }
 }
 ]

@@ -54,9 +54,10 @@
                 <div class="batch-cases">
             {% endif %}
         <table class="submissions-status-table">{% for case in batch.cases %}
+            {% set print_case_output = case.status != 'AC' and case.output and (prefix_length is none or prefix_length > 0) %}
             <tr id="{{ case.id }}" class="case-row toggle closed">
                 <td>
-                    {%- if case.status != 'AC' and case.output and (prefix_length is none or prefix_length > 0) -%}
+                    {%- if print_case_output or case.extended_feedback -%}
                         <i class="fa fa-chevron-right fa-fw"></i>
                     {%- endif -%}
                     {%- if batch.id -%}
@@ -92,18 +93,20 @@
                 {% endif %}
             </tr>
 
-            {% if case.status != 'AC' and case.output and (prefix_length is none or prefix_length > 0) %}
+            {% if print_case_output or case.extended_feedback %}
                 <tr id="{{ case.id }}-output" style="display:none" class="case-feedback toggled">
-                    <td colspan="5">
-                        <div class="case-info">
-                            <strong>{{ _('Your output (clipped)') }}</strong>
-                            {% if prefix_length is none %}
-                                <pre class="case-output">{{ case.output|linebreaksbr }}</pre>
-                            {% else %}
-                                <pre class="case-output">{{ case.output[:prefix_length]|linebreaksbr }}</pre>
-                            {% endif %}
-                        </div>
-                    </td>
+                    {% if print_case_output %}
+                        <td colspan="5">
+                            <div class="case-info">
+                                <strong>{{ _('Your output (clipped)') }}</strong>
+                                {% if prefix_length is none %}
+                                    <pre class="case-output">{{ case.output|linebreaksbr }}</pre>
+                                {% else %}
+                                    <pre class="case-output">{{ case.output[:prefix_length]|linebreaksbr }}</pre>
+                                {% endif %}
+                            </div>
+                        </td>
+                    {% endif %}
                     {% if case.extended_feedback %}
                         <td colspan="5" class="case-ext-feedback">
                             <div class="case-info">
