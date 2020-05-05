@@ -535,8 +535,14 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
         max_subs = self.contest_problem and self.contest_problem.max_submissions
         if max_subs is None:
             return None
-        return max_subs - get_contest_submission_count(
-            self.object, self.request.profile, self.request.profile.current_contest.virtual,
+        # When an IE submission is rejudged into a non-IE status, it will count towards the
+        # submission limit. We max with 0 to ensure that `remaining_submission_count` returns
+        # a non-negative integer, which is required for future checks in this view.
+        return max(
+            0,
+            max_subs - get_contest_submission_count(
+                self.object, self.request.profile, self.request.profile.current_contest.virtual,
+            ),
         )
 
     @cached_property
