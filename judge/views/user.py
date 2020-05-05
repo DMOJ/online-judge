@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Permission
-from django.contrib.auth.views import LoginView, redirect_to_login
+from django.contrib.auth.views import LoginView, PasswordChangeView, redirect_to_login
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -130,9 +130,18 @@ class CustomLoginView(LoginView):
         validator = PwnedPasswordsValidator()
         try:
             validator.validate(password)
-            self.request.session['password_pwned'] = False
         except ValidationError:
             self.request.session['password_pwned'] = True
+        else:
+            self.request.session['password_pwned'] = False
+        return super().form_valid(form)
+
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'registration/password_change_form.html'
+
+    def form_valid(self, form):
+        self.request.session['password_pwned'] = False
         return super().form_valid(form)
 
 
