@@ -190,15 +190,12 @@ class TwoFactorLoginForm(TOTPForm):
 
             credential.counter = sign_count
             credential.save(update_fields=['counter'])
-
-            return
-
-        if self.profile.is_totp_enabled and self.cleaned_data.get('totp_token'):
+        elif self.profile.is_totp_enabled and self.cleaned_data.get('totp_token'):
             if pyotp.TOTP(self.profile.totp_key).verify(self.cleaned_data['totp_token'], valid_window=self.TOLERANCE):
                 return
             raise ValidationError(_('Invalid two-factor authentication token.'))
-
-        raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
+        else:
+            raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
 
 
 class ProblemCloneForm(Form):
