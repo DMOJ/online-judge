@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0103_contest_participation_tiebreak_field'),
+        ('judge', '0104_contestproblem_maxsubs'),
     ]
 
     operations = [
