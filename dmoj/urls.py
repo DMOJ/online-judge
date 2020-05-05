@@ -15,8 +15,8 @@ from judge.feed import AtomBlogFeed, AtomCommentFeed, AtomProblemFeed, BlogFeed,
 from judge.sitemap import BlogPostSitemap, ContestSitemap, HomePageSitemap, OrganizationSitemap, ProblemSitemap, \
     SolutionSitemap, UrlSitemap, UserSitemap
 from judge.views import TitledTemplateView, api, blog, comment, contests, language, license, mailgun, organization, \
-    preview, problem, problem_manage, ranked_submission, register, stats, status, submission, tasks, ticket, totp, \
-    user, widgets
+    preview, problem, problem_manage, ranked_submission, register, stats, status, submission, tasks, ticket, \
+    two_factor, user, widgets
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
     problem_data_file, problem_init_view
 from judge.views.register import ActivationView, RegistrationView
@@ -73,9 +73,12 @@ register_patterns = [
     ), name='password_reset_done'),
     url(r'^social/error/$', register.social_auth_error, name='social_auth_error'),
 
-    url(r'^2fa/$', totp.TOTPLoginView.as_view(), name='login_2fa'),
-    url(r'^2fa/enable/$', totp.TOTPEnableView.as_view(), name='enable_2fa'),
-    url(r'^2fa/disable/$', totp.TOTPDisableView.as_view(), name='disable_2fa'),
+    url(r'^2fa/$', two_factor.TwoFactorLoginView.as_view(), name='login_2fa'),
+    url(r'^2fa/enable/$', two_factor.TOTPEnableView.as_view(), name='enable_2fa'),
+    url(r'^2fa/disable/$', two_factor.TOTPDisableView.as_view(), name='disable_2fa'),
+    url(r'^2fa/webauthn/attest/$', two_factor.WebAuthnAttestationView.as_view(), name='webauthn_attest'),
+    url(r'^2fa/webauthn/assert/$', two_factor.WebAuthnAttestView.as_view(), name='webauthn_assert'),
+    url(r'^2fa/webauthn/delete/(?P<pk>\d+)$', two_factor.WebAuthnDeleteView.as_view(), name='webauthn_delete'),
 
     url(r'api/token/generate/$', user.generate_api_token, name='generate_api_token'),
     url(r'api/token/remove/$', user.remove_api_token, name='remove_api_token'),
