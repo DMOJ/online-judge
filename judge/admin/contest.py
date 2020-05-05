@@ -121,6 +121,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
+    search_fields = ('key', 'name')
     inlines = [ContestProblemInline]
     actions_on_top = True
     actions_on_bottom = True

@@ -19,6 +19,11 @@ from judge.ratings import rate_contest
 __all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission', 'Rating']
 
 
+class MinValueOrNoneValidator(MinValueValidator):
+    def compare(self, a, b):
+        return a is not None and b is not None and super().compare(a, b)
+
+
 class ContestTag(models.Model):
     color_validator = RegexValidator('^#(?:[A-Fa-f0-9]{3}){1,2}$', _('Invalid colour.'))
 
@@ -436,9 +441,10 @@ class ContestProblem(models.Model):
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
     output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'), null=True, blank=True)
     max_submissions = models.IntegerField(help_text=_('Maximum number of submissions for this problem, '
-                                                      'or 0 for no limit.'), default=0,
-                                          validators=[MinValueValidator(0, _('Why include a problem you '
-                                                                             'can\'t submit to?'))])
+                                                      'or leave blank for no limit.'),
+                                          default=None, null=True, blank=True,
+                                          validators=[MinValueOrNoneValidator(1, _('Why include a problem you '
+                                                                                   'can\'t submit to?'))])
 
     class Meta:
         unique_together = ('problem', 'contest')
