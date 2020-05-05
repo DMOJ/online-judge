@@ -560,8 +560,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
     @cached_property
     def remaining_submission_count(self):
-        max_subs = 1 if self.request.profile.is_external_user else \
-            self.contest_problem and self.contest_problem.max_submissions
+        max_subs = self.contest_problem and self.contest_problem.max_submissions
         if max_subs is None:
             return None
         # When an IE submission is rejudged into a non-IE status, it will count towards the
@@ -631,10 +630,12 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
         return reverse('submission_status', args=(self.new_submission.id,))
 
     def form_valid(self, form):
+        limit = 1 if self.request.profile.is_external_user else settings.DMOJ_SUBMISSION_LIMIT
+
         if (
             not self.request.user.has_perm('judge.spam_submission') and
             Submission.objects.filter(user=self.request.profile, was_rejudged=False)
-                              .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() >= settings.DMOJ_SUBMISSION_LIMIT
+                              .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() >= limit
         ):
             return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
         if not self.object.allowed_languages.filter(id=form.cleaned_data['language'].id).exists():
