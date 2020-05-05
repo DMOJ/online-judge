@@ -73,7 +73,7 @@ class TOTPEnableView(TOTPView):
     def form_valid(self, form):
         self.profile.is_totp_enabled = True
         self.profile.save()
-        # Make sure users don't get prompted to enter code right after enabling:
+        # Make sure users don't get prompted to enter code right after enabling
         self.request.session['2fa_passed'] = True
         return self.next_page()
 
