@@ -153,7 +153,7 @@ class CommentContent(CommentMixin, DetailView):
 
 class CommentVotesAjax(PermissionRequiredMixin, CommentMixin, DetailView):
     template_name = 'comments/votes.html'
-    permission_required = 'judge.change_commentvote'
+    permission_required = 'judge.change_comment'
 
     def get_context_data(self, **kwargs):
         context = super(CommentVotesAjax, self).get_context_data(**kwargs)
