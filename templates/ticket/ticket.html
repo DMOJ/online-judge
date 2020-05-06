@@ -24,13 +24,15 @@
             width: 100%;
             margin: 0 auto;
             display: flex;
-            flex-direction: row-reverse;
+            flex-direction: row;
+            flex-wrap: wrap-reverse;
             max-width: 1000px;
         }
 
         .ticket-sidebar {
             flex: 1;
             padding: 10px 0 0 10px;
+            min-width: 150px;
             max-width: 200px;
         }
 
@@ -130,6 +132,7 @@
             border: 1px #999 solid;
             border-radius: 5px;
             flex: 1;
+            min-width: 200px;
         }
 
         .message .header {
@@ -316,6 +319,35 @@
 
 {% block body %}
     <div class="container">
+        <div class="ticket-messages">
+            <main id="messages" class="messages">
+                {% for message in ticket_messages %}
+                    {% include "ticket/message.html" %}
+                {% endfor %}
+            </main>
+            <hr>
+            <section class="message new-message">
+                <div class="info">
+                    <a href="{{ url('user_page', request.user.username) }}" class="user">
+                        <img src="{{ gravatar(request.user, 135) }}" class="gravatar">
+                        <div class="username {{ request.profile.css_class }}">{{ request.user.username }}</div>
+                    </a>
+                </div>
+                <div class="detail">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        {% if form.non_field_errors() or form.body.errors %}
+                            <div class="form-errors">
+                                {{ form.non_field_errors() }}
+                                {{ form.body.errors }}
+                            </div>
+                        {% endif %}
+                        <div class="body-block">{{ form.body }}</div>
+                        <button type="submit" class="submit">{{ _('Post') }}</button>
+                    </form>
+                </div>
+            </section>
+        </div>
         <aside class="ticket-sidebar">
             <div class="ticket-info">
                 <div class="info-box">
@@ -357,35 +389,5 @@
                 {% endif %}
             </div>
         </aside>
-
-        <div class="ticket-messages">
-            <main id="messages" class="messages">
-                {% for message in ticket_messages %}
-                    {% include "ticket/message.html" %}
-                {% endfor %}
-            </main>
-            <hr>
-            <section class="message new-message">
-                <div class="info">
-                    <a href="{{ url('user_page') }}" class="user">
-                        <img src="{{ gravatar(request.user, 135) }}" class="gravatar">
-                        <div class="username {{ request.profile.css_class }}">{{ request.user.username }}</div>
-                    </a>
-                </div>
-                <div class="detail">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        {% if form.non_field_errors() or form.body.errors %}
-                            <div class="form-errors">
-                                {{ form.non_field_errors() }}
-                                {{ form.body.errors }}
-                            </div>
-                        {% endif %}
-                        <div class="body-block">{{ form.body }}</div>
-                        <button type="submit" class="submit">{{ _('Post') }}</button>
-                    </form>
-                </div>
-            </section>
-        </div>
     </div>
 {% endblock %}
