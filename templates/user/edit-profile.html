@@ -46,12 +46,6 @@
             max-width: 700px;
         }
 
-        #center-float {
-            margin: auto;
-            left: 50%;
-            max-width: 700px;
-        }
-
         .settings {
             display: flex;
             flex-wrap: wrap;
@@ -194,7 +188,7 @@
 {% endblock %}
 
 {% block body %}
-    <div id="center-float">
+    <div class="centered-form">
         <form id="edit-form" action="" method="post" class="form-area">
             {% if form.errors %}
                 <div class="alert alert-danger alert-dismissable">
@@ -335,7 +329,7 @@
             {{ form.user_script }}
             <hr>
 
-            <input type="submit" style="float:right" value="{{ _('Update profile') }}">
+            <input type="submit" class="submit-bar" value="{{ _('Update profile') }}">
         </form>
     </div>
 {% endblock %}
