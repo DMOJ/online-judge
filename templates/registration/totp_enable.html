@@ -74,9 +74,10 @@
                 <code class="totp-code">{{ totp_key }}</code>
             </div>
             <hr>
-            {% if form.totp_token.errors %}
+            {% if form.totp_token.errors or form.non_field_errors() %}
                 <div class="form-errors">
                     {{ form.totp_token.errors }}
+                    {{ form.non_field_errors() }}
                 </div>
             {% endif %}
             <div>

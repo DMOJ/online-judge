@@ -10,7 +10,7 @@ from judge.models.problem import LanguageLimit, License, Problem, ProblemClarifi
     ProblemTranslation, ProblemType, Solution, TranslatedProblemForeignKeyQuerySet, TranslatedProblemQuerySet
 from judge.models.problem_data import CHECKERS, ProblemData, ProblemTestCase, problem_data_storage, \
     problem_directory_file
-from judge.models.profile import Organization, OrganizationRequest, Profile
+from judge.models.profile import Organization, OrganizationRequest, Profile, WebAuthnCredential
 from judge.models.runtime import Judge, Language, RuntimeVersion
 from judge.models.submission import SUBMISSION_RESULT, Submission, SubmissionSource, SubmissionTestCase
 from judge.models.ticket import Ticket, TicketMessage

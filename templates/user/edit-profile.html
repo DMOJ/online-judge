@@ -79,17 +79,11 @@
             $('#ace_user_script').on('ace_load', function (e, editor) {
                 editor.getSession().setMode("ace/mode/javascript");
             });
-        });
-    </script>
-    <script type="text/javascript">
-        $(function () {
+
             $('#disable-2fa-button').click(function () {
                 alert("The administrators for this site require all the staff to have two-factor authentication enabled, so it may not be disabled at this time.");
             });
-        });
-    </script>
-    <script type="text/javascript">
-        $(function () {
+
             $('#generate-api-token-button').click(function (event) {
                 event.preventDefault();
                 if (confirm("{{ _('Are you sure you want to generate or regenerate your API token?') }}\n"
@@ -131,6 +125,52 @@
                             $('#remove-api-token-button').remove();
                         },
                     });
+                }
+            });
+        });
+    </script>
+    <script>
+        // This is basically impossible to write without ES6, hence separate script block.
+        $(() => {
+            {% include "user/webauthn-helpers.js" %}
+
+            $('#new-webauthn').click(event => {
+                event.preventDefault();
+
+                if (typeof window.PublicKeyCredential === 'undefined') {
+                    alert('{{ _('WebAuthn is not supported by your browser.') }}');
+                    return;
+                }
+
+                $.getJSON('{{ url('webauthn_attest') }}')
+                    .done(publicKey => {
+                        decodeJSONBytes(publicKey);
+                        navigator.credentials.create({publicKey})
+                            .then(credential => {
+                                credential = {
+                                    id: credential.id,
+                                    response: {
+                                        attObj: urlSafeBase64Encode(credential.response.attestationObject),
+                                        clientData: urlSafeBase64Encode(credential.response.clientDataJSON),
+                                    }
+                                };
+                                $.post('{{ url('webauthn_attest') }}', {
+                                    credential: JSON.stringify(credential),
+                                    name: $('#new-webauthn-name').val(),
+                                })
+                                    .then(() => window.location.reload())
+                                    .fail((jqXHR) => alert(jqXHR.responseText));
+                            });
+                    })
+                    .fail(() => alert('{{ _('Failed to contact server.') }}'));
+            });
+
+            $('.webauthn-delete').click(function (event) {
+                event.preventDefault();
+                if (confirm("{{ _('Are you sure you want to delete this security key?') }}")) {
+                    $.post($(this).attr('data-delete-url'))
+                        .then(() => window.location.reload())
+                        .fail((jqXHR) => alert(jqXHR.responseText));
                 }
             });
         });
@@ -190,6 +230,25 @@
                             {{ _('Affiliated organizations') }}:
                         </div>
                         {{ form.organizations }}
+                        {% if HAS_WEBAUTHN %}
+                            <div style="padding-bottom:0.4em" class="block-header">
+                                {{ _('Security keys') }}:
+                            </div>
+                            <table class="table">
+                                {% if profile.is_webauthn_enabled %}
+                                    {% for credential in profile.webauthn_credentials.all() %}
+                                        <tr>
+                                            <td>{{ credential.name }}</td>
+                                            <td><button class="webauthn-delete inline-button" data-delete-url="{{ url('webauthn_delete', credential.id) }}">{{ _('Delete') }}</button></td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                <tr>
+                                    <td><input id="new-webauthn-name" type="text" placeholder="{{ _('Enter a name for this key') }}"></td>
+                                    <td><button id="new-webauthn" class="inline-button">{{ _('Add') }}</button></td>
+                                </tr>
+                            </table>
+                        {% endif %}
                     </td>
                 </tr>
             </table>
