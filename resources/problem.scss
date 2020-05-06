@@ -232,19 +232,19 @@ ul.problem-list {
 }
 
 @media (max-width: 550px) {
-    #problem-table tr :nth-child(6) {
+    #problem-table tr .users {
         display: none;
     }
 }
 
 @media (max-width: 450px) {
-    #problem-table tr :nth-child(4) {
+    #problem-table tr .ac-rate {
         display: none;
     }
 }
 
 @media (max-width: 350px) {
-    #problem-table tr :nth-child(3) {
+    #problem-table tr .category {
         display: none;
     }
 }
