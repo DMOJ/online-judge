@@ -47,10 +47,20 @@
         }
 
         #center-float {
-            position: relative;
-            margin: 0 auto auto -28.5em;
+            margin: auto;
             left: 50%;
-            width: 700px;
+            max-width: 700px;
+        }
+
+        .settings {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pane {
+            display: block;
+            width: 337px;
         }
 
         .api-token {
@@ -79,14 +89,14 @@
             });
 
             $('#disable-2fa-button').click(function () {
-                alert("The administrators for this site require all the staff to have two-factor authentication enabled, so it may not be disabled at this time.");
+                alert("The administrators for this site require all the staff to have Two-factor Authentication enabled, so it may not be disabled at this time.");
             });
 
             $('#generate-api-token-button').click(function (event) {
                 event.preventDefault();
                 if (confirm("{{ _('Are you sure you want to generate or regenerate your API token?') }}\n"
                           + "{{ _('This will invalidate any previous API tokens.') }} "
-                          + "{{ _('It also allows access to your account without Two Factor Authentication.') }}\n\n"
+                          + "{{ _('It also allows access to your account without Two-factor Authentication.') }}\n\n"
                           + "{{ _('You will not be able to view your api token after you leave this page!') }}")) {
                     $('#api-token').text("{{ _('Generating...') }}");
 
@@ -199,120 +209,127 @@
             {{ form.about }}
             <hr>
 
-            <table border="0" style="padding-top:0.7em">
-                <tr>
-                    <td style="vertical-align:top;">
-                        <table style="padding-right:0.8em">
-                            <tr title="{{ _('Select your closest major city') }}">
-                                <td><label class="inline-header grayed">{{ _('Timezone') }}:</label></td>
-                                <td><span class="fullwidth">{{ form.timezone }}</span></td>
-                            </tr>
+            <div class="settings" style="padding-top:0.7em">
+                <div class="pane" style="vertical-align:top">
+                    <table style="padding-right:0.8em">
+                        <tr title="{{ _('Select your closest major city') }}">
+                            <td><label class="inline-header grayed">{{ _('Timezone') }}:</label></td>
+                            <td><span class="fullwidth">{{ form.timezone }}</span></td>
+                        </tr>
+                        <tr>
+                            <td><label class="inline-header grayed">{{ _('Language') }}:</label></td>
+                            <td><span class="fullwidth">{{ form.language }}</span></td>
+                        </tr>
+                        <tr>
+                            <td><label class="inline-header grayed">{{ _('Editor theme') }}:</label></td>
+                            <td><span class="fullwidth">{{ form.ace_theme }}</span></td>
+                        </tr>
+                        {% if has_math_config %}
                             <tr>
-                                <td><label class="inline-header grayed">{{ _('Preferred language') }}:</label></td>
-                                <td><span class="fullwidth">{{ form.language }}</span></td>
+                                <td><label class="inline-header grayed">{{ _('Math engine') }}:</label></td>
+                                <td><span class="fullwidth">{{ form.math_engine }}</span></td>
                             </tr>
-                            <tr>
-                                <td><label class="inline-header grayed">{{ _('Editor theme') }}:</label></td>
-                                <td><span class="fullwidth">{{ form.ace_theme }}</span></td>
-                            </tr>
-                            {% if has_math_config %}
-                                <tr>
-                                    <td><label class="inline-header grayed">{{ _('Math engine') }}:</label></td>
-                                    <td><span class="fullwidth">{{ form.math_engine }}</span></td>
-                                </tr>
+                        {% endif %}
+                    </table>
+                </div>
+                <div class="pane">
+                    <div style="padding-bottom:0.3em; margin-top:0.3em" class="block-header">
+                        {{ _('Affiliated organizations') }}:
+                    </div>
+                    {{ form.organizations }}
+                </div>
+            </div>
+            <hr>
+            <div class="settings" style="padding-top:0.7em">
+                <div class="pane">
+                    <table border="0">
+                        {% if form.newsletter %}
+                            <tr><td>
+                                {{ form.newsletter }}
+                                <label for="id_newsletter" style="float: unset" class="inline-header grayed">
+                                        {{- _('Notify me about upcoming contests') -}}
+                                </label>
+                            </td></tr>
+                        {% endif %}
+                        <tr><td>
+                            {{ form.test_site }}
+                            <label for="id_test_site" style="float: unset" class="inline-header grayed">
+                                {{- form.test_site.label -}}
+                            </label>
+                        </td></tr>
+                        <tr><td>
+                            <a href="http://www.gravatar.com/" title="{{ _('Change your avatar') }}"
+                               target="_blank" class="inline-header">
+                                {{ _('Change your avatar') }}
+                            </a>
+                        </td></tr>
+                        <tr><td>
+                            <a href="{{ url('password_change') }}" class="inline-header">
+                                {{ _('Change your password') }}
+                            </a>
+                        </td></tr>
+                    </table>
+                </div>
+                <div class="pane">
+                    <div>
+                        <span class="inline-header grayed">
+                            {% if profile.is_totp_enabled %}
+                                {{ _('Two-factor Authentication is enabled') }}:
+                            {% else %}
+                                {{ _('Two-factor Authentication is disabled') }}:
                             {% endif %}
-                            {% if form.newsletter %}
-                                <tr>
-                                    <td colspan="2">
-                                        {{ form.newsletter }}
-                                        <label for="id_newsletter" style="float: unset" class="inline-header grayed">
-                                            {{- _('Notify me about upcoming contests') -}}
-                                        </label>
-                                    </td>
-                                </tr>
+                        </span>
+                        {% if profile.is_totp_enabled %}
+                            {% if require_staff_2fa and request.user.is_staff %}
+                                <a id="disable-2fa-button" class="button inline-button">{{ _('Disable') }}</a>
+                            {% else %}
+                                <a href="{{ url('disable_2fa') }}" class="button inline-button">{{ _('Disable') }}</a>
+                            {% endif %}
+                        {% else %}
+                            <a href="{{ url('enable_2fa') }}" class="button inline-button">{{ _('Enable') }}</a>
+                        {% endif %}
+                    </div>
+                    <br>
+                    {% if HAS_WEBAUTHN %}
+                        <div style="padding-bottom:0.4em" class="block-header">
+                            {{ _('Security keys') }}:
+                        </div>
+                        <table class="table">
+                            {% if profile.is_webauthn_enabled %}
+                                {% for credential in profile.webauthn_credentials.all() %}
+                                    <tr>
+                                        <td>{{ credential.name }}</td>
+                                        <td>
+                                            <button class="webauthn-delete inline-button"
+                                                    data-delete-url="{{ url('webauthn_delete', credential.id) }}">
+                                                {{ _('Delete') }}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
                             {% endif %}
                             <tr>
-                                <td colspan="2">
-                                    {{ form.test_site }}
-                                    <label for="id_test_site" style="float: unset" class="inline-header grayed">
-                                        {{- form.test_site.label -}}
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <a href="http://www.gravatar.com/" title="{{ _('Change your avatar') }}"
-                                       target="_blank" class="inline-header">{{ _('Change your avatar') }}</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2">
-                                    <a href="{{ url('password_change') }}" class="inline-header">
-                                        {{ _('Change your password') }}
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><span class="inline-header">
-                                    {% if profile.is_totp_enabled %}
-                                        {{ _('Two Factor Authentication is enabled.') }}
-                                        {% if require_staff_2fa and request.user.is_staff and not request.profile.is_webauthn_enabled %}
-                                            <a id="disable-2fa-button" class="button inline-button">Disable</a>
-                                        {% else %}
-                                            <a href="{{ url('disable_2fa') }}" class="button inline-button">Disable</a>
-                                        {% endif %}
-                                    {% else %}
-                                        {{ _('Two Factor Authentication is disabled.') }}
-                                        <a href="{{ url('enable_2fa') }}" class="button inline-button">Enable</a>
-                                    {% endif %}
-                                </span></td>
-                            </tr>
-                            <tr>
-                                <td colspan="2"><span id="api-token-td" class="inline-header">
-                                    {{ _('API Token:') }}
-                                    {% if profile.api_token %}
-                                        <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
-                                           class="button inline-button">{{ _('Regenerate') }}</a>
-                                        <a id="remove-api-token-button" href="{{ url('remove_api_token') }}"
-                                           class="button inline-button ml-5">{{ _('Remove') }}</a>
-                                        <div class="api-token" id="api-token">{{ _('Hidden') }}</div>
-                                    {% else %}
-                                        <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
-                                           class="button inline-button">{{ _('Generate') }}</a>
-                                        <div class="api-token" id="api-token"></div>
-                                    {% endif %}
-                                </span></td>
+                                <td><input id="new-webauthn-name" type="text" placeholder="{{ _('Enter a name for this key') }}"></td>
+                                <td><button id="new-webauthn" class="inline-button">{{ _('Add') }}</button></td>
                             </tr>
                         </table>
-                    </td>
-                    <td>
-                        <div style="padding-bottom:0.4em" class="block-header">
-                            {{ _('Affiliated organizations') }}:
-                        </div>
-                        {{ form.organizations }}
-                        {% if HAS_WEBAUTHN %}
-                            <div style="padding-bottom:0.4em" class="block-header">
-                                {{ _('Security keys') }}:
-                            </div>
-                            <table class="table">
-                                {% if profile.is_webauthn_enabled %}
-                                    {% for credential in profile.webauthn_credentials.all() %}
-                                        <tr>
-                                            <td>{{ credential.name }}</td>
-                                            <td><button class="webauthn-delete inline-button" data-delete-url="{{ url('webauthn_delete', credential.id) }}">{{ _('Delete') }}</button></td>
-                                        </tr>
-                                    {% endfor %}
-                                {% endif %}
-                                <tr>
-                                    <td><input id="new-webauthn-name" type="text" placeholder="{{ _('Enter a name for this key') }}"></td>
-                                    <td><button id="new-webauthn" class="inline-button">{{ _('Add') }}</button></td>
-                                </tr>
-                            </table>
+                    {% endif %}
+                    <span id="api-token-td" class="inline-header grayed">
+                        {{ _('API Token') }}:
+                        {% if profile.api_token %}
+                            <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
+                               class="button inline-button">{{ _('Regenerate') }}</a>
+                            <a id="remove-api-token-button" href="{{ url('remove_api_token') }}"
+                               class="button inline-button ml-5">{{ _('Remove') }}</a>
+                            <div class="api-token" id="api-token">{{ _('Hidden') }}</div>
+                        {% else %}
+                            <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
+                               class="button inline-button">{{ _('Generate') }}</a>
+                            <div class="api-token" id="api-token"></div>
                         {% endif %}
-                    </td>
-                </tr>
-            </table>
-
+                    </span>
+                </div>
+            </div>
             <hr>
             <div class="block-header">{{ _('User-script') }}:</div>
             {{ form.user_script }}
