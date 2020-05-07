@@ -2,6 +2,11 @@
 
 $table_header_rounding: 1px;
 
+.h-scrollable-table {
+    display: block;
+    overflow-x: auto;
+}
+
 .table {
     border-spacing: 0;
     width: 100%;

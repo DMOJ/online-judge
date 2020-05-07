@@ -20,7 +20,7 @@
 
 .wmd-preview {
     background: none;
-    word-wrap: break-word;
+    word-break: break-word;
 }
 
 .wmd-button-row {
