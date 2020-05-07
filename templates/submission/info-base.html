@@ -3,14 +3,16 @@
 {% block header %}
     <span class="submission-info">
         <span class="submission-date">{{ submission.date|date(_("N j, Y, g:i a")) }}
-            {%- if perms.judge.change_submission and submission.judged_on %}
-                on {{ submission.judged_on.name }}
-            {% endif %}
-            <br>
-            <span>{{ submission.language }}</span>
-            {% if perms.judge.change_submission %}
-                [<a href="{{ url('admin:judge_submission_change', submission.id) }}">{{ _('Admin') }}</a>]
-            {% endif %}
+            {% with can_edit=submission.problem.is_editable_by(request.user) %}
+                {%- if can_edit and submission.judged_on %}
+                    on {{ submission.judged_on.name }}
+                {% endif %}
+                <br>
+                <span>{{ submission.language }}</span>
+                {% if can_edit %}
+                    [<a href="{{ url('admin:judge_submission_change', submission.id) }}">{{ _('Admin') }}</a>]
+                {% endif %}
+            {% endwith %}
         </span>
     </span>
 {% endblock %}
