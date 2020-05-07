@@ -91,6 +91,10 @@ class Contest(models.Model):
                                           help_text=_('Whether the scoreboard should remain hidden for the duration '
                                                       'of the contest.'),
                                           default=False)
+    partially_hide_scoreboard = models.BooleanField(verbose_name=_('Partially hide scoreboard'),
+                                                    help_text=_("Whether the scoreboard is hidden until "
+                                                                "the user's contest window ends."),
+                                                    default=False)
     permanently_hide_scoreboard = models.BooleanField(verbose_name=_('permanently hide scoreboard'), default=False,
                                                       help_text=('Whether the scoreboard should remain hidden '
                                                                  'permanently. Requires "hide scoreboard" to be '
@@ -212,6 +216,8 @@ class Contest(models.Model):
             return False
         if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > self._now:
             return False
+        if self.partially_hide_scoreboard and not self.has_completed_contest(user):
+            return False
         return True
 
     def can_see_full_scoreboard(self, user):
@@ -223,7 +229,16 @@ class Contest(models.Model):
             return True
         if not self.show_scoreboard:
             return False
+        if self.partially_hide_scoreboard and not self.has_completed_contest(user):
+            return False
         return True
+
+    def has_completed_contest(self, user):
+        if user.is_authenticated:
+            participation = self.users.filter(virtual=ContestParticipation.LIVE, user=user.profile).first()
+            if participation and participation.ended:
+                return True
+        return False
 
     @property
     def contest_window_length(self):
