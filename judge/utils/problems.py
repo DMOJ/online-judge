@@ -93,18 +93,6 @@ def get_result_data(*args, **kwargs):
     return _get_result_data(defaultdict(int, raw))
 
 
-def editable_problems(user, profile=None):
-    subquery = Problem.objects.all()
-    if profile is None:
-        profile = user.profile
-    if not user.has_perm('judge.edit_all_problem'):
-        subfilter = Q(authors__id=profile.id) | Q(curators__id=profile.id)
-        if user.has_perm('judge.edit_public_problem'):
-            subfilter |= Q(is_public=True)
-        subquery = subquery.filter(subfilter)
-    return subquery
-
-
 def hot_problems(duration, limit):
     cache_key = 'hot_problems:%d:%d' % (duration.total_seconds(), limit)
     qs = cache.get(cache_key)
