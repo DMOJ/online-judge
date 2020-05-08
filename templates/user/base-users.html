@@ -80,6 +80,8 @@
                 </div>
             {% endif %}
 
+            {% block before_users_table %}{% endblock %}
+
             <div class="h-scrollable-table">
                 <table id="users-table" class="table">
                     {% block users_table %}{% endblock %}
