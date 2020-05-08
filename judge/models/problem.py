@@ -261,6 +261,20 @@ class Problem(models.Model):
     def get_public_problems(cls):
         return cls.objects.filter(is_public=True, is_organization_private=False).defer('description')
 
+    @classmethod
+    def get_editable_problems(cls, user):
+        if not user.has_perm('judge.edit_own_problem'):
+            return cls.objects.none()
+        if user.has_perm('judge.edit_all_problem'):
+            return cls.objects.all()
+
+        q = Q(authors=user.profile) | Q(curators=user.profile)
+
+        if user.has_perm('judge.edit_public_problem'):
+            q |= Q(is_public=True)
+
+        return cls.objects.filter(q)
+
     def __str__(self):
         return self.name
 
