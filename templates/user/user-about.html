@@ -91,25 +91,25 @@
                         var chart = this.chart;
                         var yHighlight = chart.config.options.yHighlight;
 
-                        if (yHighlight !== undefined) {
+                        if (yHighlight != null) {
                             var ctx = chart.chart.ctx;
                             var xaxis = chart.scales['x-axis-1'];
                             var yaxis = chart.scales['y-axis-1'];
 
                             ctx.save();
-                            for (var range of yHighlight) {
+                            yHighlight.forEach(range => {
                                 var yRangeBeginPixel = yaxis.getPixelForValue(range.begin);
                                 var yRangeEndPixel = yaxis.getPixelForValue(range.end);
 
                                 if (range.begin >= yaxis.end || range.end <= yaxis.begin) {
-                                    continue;
+                                    return;
                                 }
 
                                 yRangeEndPixel = Math.max(yaxis.top + 1, yRangeEndPixel);
                                 yRangeBeginPixel = Math.min(yaxis.bottom - 1, yRangeBeginPixel);
 
                                 if (yRangeBeginPixel < yRangeEndPixel) {
-                                    continue;
+                                    return;
                                 }
 
                                 ctx.fillStyle = range.color;
@@ -119,7 +119,7 @@
                                     xaxis.right - xaxis.left,
                                     yRangeBeginPixel - yRangeEndPixel,
                                 );
-                            }
+                            });
                             ctx.restore();
                         }
                         originalDraw.apply(this, arguments);
