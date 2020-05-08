@@ -1,4 +1,4 @@
-{% set can_view = submission_layout(submission, profile_id, request.user, completed_problem_ids, editable_problem_ids, tester_problem_ids) %}
+{% set can_view, can_edit = submission_layout(submission, profile_id, request.user, completed_problem_ids, editable_problem_ids, tester_problem_ids) %}
 <div class="sub-result {{ submission.result_class }}">
     <div class="score">
         {%- if submission.is_graded -%}
@@ -48,12 +48,12 @@
         <a href="{{ url('submission_status', submission.id) }}">
             <i class="fa fa-eye fa-fw"></i><span class="label">{{ _('view') }}</span>
         </a>
-        {% if perms.judge.rejudge_submission %} ·
+        {% if perms.judge.rejudge_submission and can_edit %} ·
             <a href="#" onclick="rejudge_submission({{ submission.id }}, event);return false">
                 <i class="fa fa-refresh fa-fw"></i><span class="label">{{ _('rejudge') }}</span>
             </a>
         {% endif %}
-        {% if perms.judge.change_submission %} ·
+        {% if can_edit %} ·
             <a href="{{ url('admin:judge_submission_change', submission.id) }}">
                 <i class="fa fa-cog fa-fw"></i><span class="label">{{ _('admin') }}</span>
             </a>
