@@ -69,14 +69,14 @@
                                             <i class="fa fa-pencil fa-fw"></i>
                                         </a>
                                         {% else %}
-                                            <a href="javascript:comment_set_parent({{ node.id }})"
+                                            <a href="javascript:reply_comment({{ node.id }})"
                                                title="{{ _('Reply') }}">
                                             <i class="fa fa-reply fa-fw"></i>
                                         </a>
                                         {% endif %}
                                         {% if perms.judge.change_comment %}
                                             {% if can_edit %}
-                                                <a href="javascript:comment_set_parent({{ node.id }})"
+                                                <a href="javascript:reply_comment({{ node.id }})"
                                                    title="{{ _('Reply') }}"><i class="fa fa-reply fa-fw"></i></a>
                                             {% else %}
                                                 <a data-featherlight="{{ url('comment_edit_ajax', node.id) }}"
@@ -111,6 +111,7 @@
                         </div>
                     </div>
                 </li>
+                <ul id="comment-{{ node.id }}-reply" class="reply-comment" hidden></ul>
                 {% with children=node.get_children() %}
                     {% if children %}
                         <ul id="comment-{{ node.id }}-children" class="comments">{{ loop(children) }}</ul>
@@ -123,7 +124,7 @@
     {% endif %}
 
     {% if request.user.is_authenticated and comment_form and not comment_lock %}
-        <div class="form-area comment-submit">
+        <div id="new-comment" class="form-area comment-submit">
             {% block comment_submit_title %}
                 <h3>{{ _('New comment') }}</h3>
                 <hr>
@@ -133,7 +134,7 @@
                     {{ _('You need to have solved at least one problem before your voice can be heard.') }}
                 </div>
             {% else %}
-                <form id="comment-submit" action="" method="post">
+                <form class="comment-submit-form" action="" method="post">
                     {% csrf_token %}
                     {% if comment_form.errors %}
                         <div id="form-errors">

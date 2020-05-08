@@ -53,3 +53,12 @@
         padding-top: 4px;
     }
 }
+
+.centered-form {
+    max-width: 700px;
+    margin: auto;
+
+    .submit-bar {
+        float: right;
+    }
+}

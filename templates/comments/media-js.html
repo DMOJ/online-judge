@@ -30,12 +30,26 @@
     {% endif %}
     <script type="text/javascript">
         $(document).ready(function () {
-            window.comment_set_parent = function (parent) {
-                $('form#comment-submit input#id_parent').val(parent);
+            window.reply_comment = function (parent) {
+                var $comment_reply = $('#comment-' + parent + '-reply');
+                var reply_id = 'reply-' + parent;
+                if ($comment_reply.find('#' + reply_id).length == 0) {
+                    var $reply_form = $('#new-comment').clone(true).prop('id', reply_id);
+                    $reply_form.find('h3').html('{{ _('Replying to comment') }}');
+                    $reply_form.prepend('<a class="close">x</a>');
+                    $reply_form.find('form.comment-submit-form input#id_parent').val(parent);
+                    $reply_form.appendTo($comment_reply);
+                }
+                $comment_reply.fadeIn();
+
                 $('html, body').animate({
-                    scrollTop: $('.form-area.comment-submit').offset().top - $('#navigation').height() - 4
+                    scrollTop: $comment_reply.offset().top - $('#navigation').height() - 4
                 }, 500);
             };
+
+            $(document).on('click', '.close', function() {
+                $(this).closest('.reply-comment').fadeOut();
+            });
 
             function update_math($comment) {
                 if ('MathJax' in window) {
