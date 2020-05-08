@@ -56,13 +56,22 @@
 
 {% block media %}
     {% block users_media %}{% endblock %}
+    <style>
+        .user-pagination {
+            margin-bottom: 7px;
+            margin-top: 3px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+    </style>
 {% endblock %}
 
 {% block body %}
     <div id="common-content">
         <div id="content-left" class="users">
             {% if page_obj and page_obj.num_pages > 1 %}
-                <div style="margin-bottom: 7px; margin-top: 3px;">
+                <div class="user-pagination">
                     {% include "list-pages.html" %}
                     <form id="search-form" name="form" action="{{ url('user_ranking_redirect') }}" method="get">
                         <input id="search-handle" type="text" name="search"
