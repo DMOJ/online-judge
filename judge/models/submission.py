@@ -127,13 +127,13 @@ class Submission(models.Model):
         profile = user.profile
         if not user.is_authenticated:
             return False
-        if user.has_perm('judge.view_all_submission'):
+        if self.problem.is_editable_by(user):
             return True
-        if self.user_id == profile.id:
+        elif user.has_perm('judge.view_all_submission'):
             return True
-        if self.problem.is_editor(profile):
+        elif self.user_id == profile.id:
             return True
-        if (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
+        elif (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
                 self.problem.submission_set.filter(user_id=profile.id, result='AC',
                                                    points=self.problem.points).exists():
             return True
