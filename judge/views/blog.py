@@ -81,18 +81,18 @@ class PostList(ListView):
         context['future_contests'] = visible_contests.filter(start_time__gt=now)
 
         if self.request.user.is_authenticated:
-            profile = self.request.profile
-            context['own_open_tickets'] = (Ticket.objects.filter(user=profile, is_open=True).order_by('-id')
-                                           .prefetch_related('linked_item').select_related('user__user'))
+            context['own_open_tickets'] = (
+                Ticket.objects.filter(user=self.request.profile, is_open=True).order_by('-id')
+                              .prefetch_related('linked_item').select_related('user__user')
+            )
         else:
-            profile = None
             context['own_open_tickets'] = []
 
         # Superusers better be staffs, not the spell-casting kind either.
         if self.request.user.is_staff:
             tickets = (Ticket.objects.order_by('-id').filter(is_open=True).prefetch_related('linked_item')
                              .select_related('user__user'))
-            context['open_tickets'] = filter_visible_tickets(tickets, self.request.user, profile)[:10]
+            context['open_tickets'] = filter_visible_tickets(tickets, self.request.user)[:10]
         else:
             context['open_tickets'] = []
         return context
