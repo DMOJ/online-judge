@@ -17,7 +17,9 @@
 {% endblock %}
 
 {% block body %}
-    <table id="judge-status" class="table h-scrollable-table">
-        {% include "status/judge-status-table.html" %}
-    </table>
+    <div class="h-scrollable-table">
+        <table id="judge-status" class="table">
+            {% include "status/judge-status-table.html" %}
+        </table>
+    </div>
 {% endblock %}

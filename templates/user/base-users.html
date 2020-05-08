@@ -71,9 +71,11 @@
                 </div>
             {% endif %}
 
-            <table id="users-table" class="table h-scrollable-table">
-                {% block users_table %}{% endblock %}
-            </table>
+            <div class="h-scrollable-table">
+                <table id="users-table" class="table">
+                    {% block users_table %}{% endblock %}
+                </table>
+            </div>
 
             {% if page_obj and page_obj.num_pages > 1 %}
                 <div style="margin-top:10px;">{% include "list-pages.html" %}</div>
