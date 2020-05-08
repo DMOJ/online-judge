@@ -247,7 +247,7 @@
     {% include "contest/media-js.html" %}
 {% endblock %}
 
-{% block users_table %}
+{% block before_users_table %}
     <div style="margin-bottom: 0.5em">
         {% if tab == 'participation' %}
             {% if contest.start_time <= now or perms.judge.see_private_contest %}
@@ -257,5 +257,8 @@
         <input id="show-organizations-checkbox" type="checkbox" style="vertical-align: bottom">
         <label for="show-organizations-checkbox" style="vertical-align: bottom">{{ _('Show organizations') }}</label>
     </div>
+{% endblock %}
+
+{% block users_table %}
     {% include "contest/ranking-table.html" %}
 {% endblock %}
