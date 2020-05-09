@@ -262,8 +262,6 @@ urlpatterns = [
         url(r'^user/info/(\w+)$', api.api_v1_user_info),
         url(r'^user/submissions/(\w+)$', api.api_v1_user_submissions),
         url(r'^user/ratings/(\d+)$', api.api_v1_user_ratings),
-        url(r'^submission/info/(\d+)$', api.api_v1_submission_detail),
-        url(r'^submission/source/(\d+)$', api.api_v1_submission_source),
         url(r'^v2/', include([
             url(r'^contests$', api.api_v2.APIContestList.as_view()),
             url(r'^contest/(?P<contest>\w+)$', api.api_v2.APIContestDetail.as_view()),
