@@ -180,9 +180,7 @@ class APIContestDetail(APIDetailView):
 
     def get_object_data(self, contest):
         in_contest = contest.is_in_contest(self.request.user)
-        can_see_rankings = contest.can_see_scoreboard(self.request.user)
-        if contest.hide_scoreboard and in_contest:
-            can_see_rankings = False
+        can_see_rankings = contest.can_see_full_scoreboard(self.request.user)
         can_see_problems = (in_contest or contest.ended or contest.is_editable_by(self.request.user))
 
         problems = list(

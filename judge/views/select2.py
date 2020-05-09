@@ -104,8 +104,7 @@ class UserSearchSelect2View(BaseListView):
 class ContestUserSearchSelect2View(UserSearchSelect2View):
     def get_queryset(self):
         contest = get_object_or_404(Contest, key=self.kwargs['contest'])
-        if not contest.can_see_scoreboard(self.request.user) or \
-                contest.hide_scoreboard and contest.is_in_contest(self.request.user):
+        if not contest.is_accessible_by(self.request.user) or not contest.can_see_full_scoreboard(self.request.user):
             raise Http404()
 
         return Profile.objects.filter(contest_history__contest=contest,

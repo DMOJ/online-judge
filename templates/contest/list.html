@@ -114,7 +114,7 @@
 {% endmacro %}
 
 {% macro user_count(contest, user) %}
-    {% if contest.show_scoreboard or contest.can_see_scoreboard(user) %}
+    {% if contest.can_see_own_scoreboard(user) %}
         <a href="{{ url('contest_ranking', contest.key) }}">{{ contest.user_count }}</a>
     {% else %}
         {{ contest.user_count }}

@@ -164,18 +164,31 @@ class Contest(models.Model):
             return profile and profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
-    def can_see_scoreboard(self, user):
+    def can_see_own_scoreboard(self, user):
+        if self.can_see_full_scoreboard(user):
+            return True
+        if not self.can_join:
+            return False
+        if not self.show_scoreboard and not self.is_in_contest(user):
+            return False
+        return True
+
+    def can_see_full_scoreboard(self, user):
+        if self.show_scoreboard:
+            return True
         if user.has_perm('judge.see_private_contest'):
             return True
-        if user.is_authenticated and self.organizers.filter(id=user.profile.id).exists():
+        if self.is_editable_by(user):
             return True
-        if not self.is_visible:
-            return False
-        if self.start_time is not None and self.start_time > timezone.now():
-            return False
         if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
-        if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > timezone.now():
+        return False
+
+    @cached_property
+    def show_scoreboard(self):
+        if not self.can_join:
+            return False
+        if self.hide_scoreboard and not self.ended:
             return False
         return True
 
@@ -221,12 +234,6 @@ class Contest(models.Model):
         self.save()
 
     update_user_count.alters_data = True
-
-    @cached_property
-    def show_scoreboard(self):
-        if self.hide_scoreboard and not self.ended:
-            return False
-        return True
 
     class Inaccessible(Exception):
         pass
