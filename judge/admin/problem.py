@@ -196,7 +196,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def has_change_permission(self, request, obj=None):
         if obj is None:
-            return True
+            return request.user.has_perm('judge.edit_own_problem')
         return obj.is_editable_by(request.user)
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
