@@ -164,7 +164,7 @@ class Contest(models.Model):
             return profile and profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
-    def can_see_scoreboard(self, user):
+    def can_see_own_scoreboard(self, user):
         if self.can_see_full_scoreboard(user):
             return True
         if not self.can_join:
