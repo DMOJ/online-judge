@@ -233,7 +233,7 @@ class Contest(models.Model):
     def show_scoreboard(self):
         if not self.can_join:
             return False
-        if self.partially_hide_scoreboard:
+        if self.partially_hide_scoreboard and not self.ended:
             return False
         if self.hide_scoreboard and not self.ended:
             return False
