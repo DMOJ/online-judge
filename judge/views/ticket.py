@@ -205,12 +205,8 @@ class TicketList(LoginRequiredMixin, ListView):
     paginator_class = DiggPaginator
 
     @cached_property
-    def user(self):
-        return self.request.user
-
-    @cached_property
     def profile(self):
-        return self.user.profile
+        return self.request.profile
 
     @cached_property
     def can_edit_all(self):
@@ -237,7 +233,7 @@ class TicketList(LoginRequiredMixin, ListView):
         if self.GET_with_session('own'):
             queryset = queryset.filter(own_ticket_filter(self.profile.id))
         elif not self.can_edit_all:
-            queryset = filter_visible_tickets(queryset, self.user, self.profile)
+            queryset = filter_visible_tickets(queryset, self.request.user)
         if self.filter_assignees:
             queryset = queryset.filter(assignees__user__username__in=self.filter_assignees)
         if self.filter_users:
