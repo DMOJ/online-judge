@@ -207,29 +207,37 @@ class Contest(models.Model):
             return profile and profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
-    def can_see_scoreboard(self, user):
+    def can_see_own_scoreboard(self, user):
         if self.can_see_full_scoreboard(user):
             return True
-        if not self.is_accessible_by(user):
-            return False
         if not self.can_join:
             return False
-        if self.hide_scoreboard and not self.is_in_contest(user) and self.end_time > self._now:
-            return False
-        if self.partially_hide_scoreboard and not self.has_completed_contest(user):
+        if not self.show_scoreboard and not self.is_in_contest(user):
             return False
         return True
 
     def can_see_full_scoreboard(self, user):
+        if self.show_scoreboard:
+            return True
+        if user.has_perm('judge.see_private_contest'):
+            return True
         if self.is_editable_by(user):
             return True
-        if not self.is_accessible_by(user):
-            return False
         if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
-        if not self.show_scoreboard:
+        if self.partially_hide_scoreboard and self.has_completed_contest(user):
+            return True
+        return False
+
+    @cached_property
+    def show_scoreboard(self):
+        if not self.can_join:
             return False
-        if self.partially_hide_scoreboard and not self.has_completed_contest(user):
+        if self.partially_hide_scoreboard:
+            return False
+        if self.hide_scoreboard and not self.ended:
+            return False
+        if self.hide_scoreboard and self.permanently_hide_scoreboard:
             return False
         return True
 
@@ -282,16 +290,6 @@ class Contest(models.Model):
         self.save()
 
     update_user_count.alters_data = True
-
-    @cached_property
-    def show_scoreboard(self):
-        if not self.can_join:
-            return False
-        if self.hide_scoreboard and not self.ended:
-            return False
-        if self.hide_scoreboard and self.permanently_hide_scoreboard:
-            return False
-        return True
 
     def can_register(self, user):
         if self.require_registration:

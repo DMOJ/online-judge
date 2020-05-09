@@ -130,26 +130,22 @@ class Submission(models.Model):
         if not user.is_authenticated:
             return False
 
-        if self.user_id == profile.id:
-            if problem.is_accessible_by(user):
-                return True
-            if self.contest_object is not None and self.contest_object.ended:
-                return True
-
-        if problem.is_editable_by(user):
+        if self.problem.is_editable_by(user):
             return True
-
         if user.has_perm('judge.view_all_submission'):
             if problem.is_public:
                 return True
             if user.has_perm('judge.see_restricted_problem') or not problem.is_restricted:
                 return True
-
-        if problem.is_public or problem.testers.filter(id=profile.id).exists():
-            if problem.submission_set.filter(user_id=profile.id, result='AC',
-                                             points=problem.points).exists():
+        if self.user_id == profile.id:
+            if problem.is_accessible_by(user):
                 return True
-
+            if self.contest_object is not None and self.contest_object.ended:
+                return True
+        if (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
+                self.problem.submission_set.filter(user_id=profile.id, result='AC',
+                                                   points=self.problem.points).exists():
+            return True
         return False
 
     def update_contest(self):

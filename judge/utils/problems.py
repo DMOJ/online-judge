@@ -2,7 +2,7 @@ from collections import defaultdict
 from math import e
 
 from django.core.cache import cache
-from django.db.models import Case, Count, ExpressionWrapper, F, Max, Q, When
+from django.db.models import Case, Count, ExpressionWrapper, F, Max, When
 from django.db.models.fields import FloatField
 from django.utils import timezone
 from django.utils.translation import gettext as _, gettext_noop
@@ -17,19 +17,7 @@ def user_tester_ids(profile):
 
 
 def user_editable_ids(profile):
-    user = profile.user
-    if not user.has_perm('judge.edit_own_problem'):
-        return set()
-    if user.has_perm('judge.edit_all_problem') and user.has_perm('judge.see_restricted_problem'):
-        return set(Problem.objects.values_list('id', flat=True))
-
-    q = Q(authors=profile) | Q(curators=profile)
-
-    if user.has_perm('judge.edit_all_problem'):
-        q |= Q(is_public=True) | Q(is_restricted=False)
-    elif user.has_perm('judge.edit_public_problem'):
-        q |= Q(is_public=True)
-    return set(Problem.objects.filter(q).values_list('id', flat=True))
+    return set(Problem.get_editable_problems(profile.user).values_list('id', flat=True))
 
 
 def contest_completed_ids(participation):
@@ -103,18 +91,6 @@ def get_result_data(*args, **kwargs):
         submissions = Submission.objects.filter(**kwargs) if kwargs is not None else Submission.objects
     raw = submissions.values('result').annotate(count=Count('result')).values_list('result', 'count')
     return _get_result_data(defaultdict(int, raw))
-
-
-def editable_problems(user, profile=None):
-    subquery = Problem.objects.all()
-    if profile is None:
-        profile = user.profile
-    if not user.has_perm('judge.edit_all_problem'):
-        subfilter = Q(authors__id=profile.id) | Q(curators__id=profile.id)
-        if user.has_perm('judge.edit_public_problem'):
-            subfilter |= Q(is_public=True)
-        subquery = subquery.filter(subfilter)
-    return subquery
 
 
 def hot_problems(duration, limit):

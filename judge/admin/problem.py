@@ -3,7 +3,6 @@ from operator import attrgetter
 from django import forms
 from django.contrib import admin
 from django.db import transaction
-from django.db.models import Q
 from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -219,21 +218,11 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     make_private.short_description = _('Mark problems as private')
 
     def get_queryset(self, request):
-        queryset = Problem.objects.prefetch_related('authors__user')
-        access = Q()
-        if request.user.has_perm('judge.edit_public_problem'):
-            access |= Q(is_public=True)
-        if request.user.has_perm('judge.edit_own_problem'):
-            access |= Q(authors__id=request.profile.id) | Q(curators__id=request.profile.id)
-        if request.user.has_perm('judge.edit_all_problem'):
-            access |= Q(is_restricted=False)
-            if request.user.has_perm('judge.see_restricted_problem'):
-                access |= Q(is_restricted=True)
-        return queryset.filter(access).distinct() if access else queryset.none()
+        return Problem.get_editable_problems(request.user).prefetch_related('authors__user').distinct()
 
     def has_change_permission(self, request, obj=None):
         if obj is None:
-            return True
+            return request.user.has_perm('judge.edit_own_problem')
         return obj.is_editable_by(request.user)
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
