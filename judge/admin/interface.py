@@ -79,7 +79,7 @@ class BlogPostAdmin(VersionAdmin):
 
     def has_change_permission(self, request, obj=None):
         if obj is None:
-            return True
+            return request.user.has_perm('judge.change_blogpost')
         return obj.is_editable_by(request.user)
 
 
