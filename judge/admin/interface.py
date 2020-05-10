@@ -54,7 +54,9 @@ class FlatPageAdmin(VersionAdmin, OldFlatPageAdmin):
 class BlogPostForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(BlogPostForm, self).__init__(*args, **kwargs)
-        self.fields['authors'].widget.can_add_related = False
+        if 'authors' in self.fields:
+            # self.fields['authors'] does not exist when the user has only view permission on the model.
+            self.fields['authors'].widget.can_add_related = False
 
     class Meta:
         widgets = {
