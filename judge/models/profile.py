@@ -96,6 +96,7 @@ class Profile(models.Model):
     points = models.FloatField(default=0, db_index=True)
     performance_points = models.FloatField(default=0, db_index=True)
     problem_count = models.IntegerField(default=0, db_index=True)
+    reputation = models.FloatField(default=0)
     ace_theme = models.CharField(max_length=30, choices=ACE_THEMES, default='github')
     last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
     ip = models.GenericIPAddressField(verbose_name=_('last IP'), blank=True, null=True)
@@ -150,6 +151,25 @@ class Profile(models.Model):
     @cached_property
     def username(self):
         return self.user.username
+
+    _reputation_table = [pow(settings.DMOJ_REPUTATION_STEP, i) for i in range(settings.DMOJ_REPUTATION_ENTRIES)]
+
+    def calculate_reputation(self, table=_reputation_table):
+        from judge.models import Comment
+        scores = (
+            Comment.objects.filter(author=self, hidden=False).order_by('-time').values_list('score', flat=True)
+        )
+        entries = min(len(scores), len(table))
+        reputation = sum(map(
+            mul,
+            table[:entries],
+            map(settings.DMOJ_REPUTATION_FUNCTION, scores[:entries]),
+        ))
+        if self.reputation != reputation:
+            self.reputation = reputation
+            self.save(update_fields=['reputation'])
+
+    calculate_reputation.alters_data = True
 
     _pp_table = [pow(settings.DMOJ_PP_STEP, i) for i in range(settings.DMOJ_PP_ENTRIES)]
 

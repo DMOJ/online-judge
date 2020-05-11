@@ -44,7 +44,9 @@ def vote_comment(request, delta):
     except ValueError:
         return HttpResponseBadRequest()
     else:
-        if not Comment.objects.filter(id=comment_id, hidden=False).exists():
+        try:
+            comment_author = Comment.objects.get(id=comment_id, hidden=False).author
+        except Comment.DoesNotExist:
             raise Http404()
 
     vote = CommentVote()
@@ -69,6 +71,8 @@ def vote_comment(request, delta):
         else:
             Comment.objects.filter(id=comment_id).update(score=F('score') + delta)
         break
+    comment_author._updating_stats_only = True
+    comment_author.calculate_reputation()
     return HttpResponse('success', content_type='text/plain')
 
 

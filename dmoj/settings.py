@@ -47,6 +47,19 @@ DMOJ_PP_STEP = 0.95
 DMOJ_PP_ENTRIES = 100
 DMOJ_PP_BONUS_FUNCTION = lambda n: 300 * (1 - 0.997 ** n)  # noqa: E731
 
+DMOJ_REPUTATION_STEP = 0.98
+DMOJ_REPUTATION_ENTRIES = 20
+
+
+def DMOJ_REPUTATION_FUNCTION(n):
+    import math
+    if n < 0:
+        return -DMOJ_REPUTATION_FUNCTION(-n)
+    elif n <= 1:
+        return 0
+    return (math.tanh(n / 3 - 3) / 1.3 + 1) * 2 * math.log(n)
+
+
 NODEJS = '/usr/bin/node'
 EXIFTOOL = '/usr/bin/exiftool'
 ACE_URL = '//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3'

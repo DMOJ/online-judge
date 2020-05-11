@@ -489,6 +489,7 @@ class APIUserDetail(APIDetailView):
             'username': profile.user.username,
             'points': profile.points,
             'performance_points': profile.performance_points,
+            'reputation': profile.reputation,
             'problem_count': profile.problem_count,
             'solved_problems': solved_problems,
             'rank': profile.display_rank,

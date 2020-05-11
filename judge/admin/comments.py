@@ -61,4 +61,7 @@ class CommentAdmin(VersionAdmin):
     def save_model(self, request, obj, form, change):
         super(CommentAdmin, self).save_model(request, obj, form, change)
         if obj.hidden:
-            obj.get_descendants().update(hidden=obj.hidden)
+            obj.get_descendents().update(hidden=obj.hidden)
+        elif form.changed_data and 'score' in form.changed_data:
+            obj.author._updating_stats_only = True
+            obj.author.calculate_reputation()

@@ -93,6 +93,8 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
                 revisions.set_user(request.user)
                 revisions.set_comment(_('Posted comment'))
                 comment.save()
+            request.profile._updating_stats_only = True
+            request.profile.calculate_reputation()
             return HttpResponseRedirect(request.path)
 
         context = self.get_context_data(object=self.object, comment_form=form)

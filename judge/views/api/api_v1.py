@@ -140,6 +140,7 @@ def api_v1_user_info(request, user):
     resp = {
         'points': profile.points,
         'performance_points': profile.performance_points,
+        'reputation': profile.reputation,
         'rank': profile.display_rank,
         'solved_problems': submissions,
         'organizations': list(profile.organizations.values_list('id', flat=True)),

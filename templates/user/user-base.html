@@ -55,6 +55,14 @@
                     {{ user.performance_points|floatformat(0) }}
                 </span>
             </div>
+            <br>
+
+            <div>
+                <b class="semibold">{{ _('User reputation:') }}</b>
+                <span title="{{ user.reputation|floatformat(2) }}">
+                    {{ user.reputation|floatformat(0) }}
+                </span>
+            </div>
 
             <br>
             <div>
