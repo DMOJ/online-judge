@@ -285,8 +285,8 @@ class ProblemTicketListView(TicketList):
 class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
         try:
-            self.kwargs['pk'] = request.GET['id']
-        except KeyError:
+            self.kwargs['pk'] = int(request.GET['id'])
+        except (KeyError, ValueError):
             return HttpResponseBadRequest()
         ticket = self.get_object()
         message = ticket.messages.first()
@@ -305,8 +305,8 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
 class TicketMessageDataAjax(TicketMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
         try:
-            message_id = request.GET['message']
-        except KeyError:
+            message_id = int(request.GET['message'])
+        except (KeyError, ValueError):
             return HttpResponseBadRequest()
         ticket = self.get_object()
         try:
