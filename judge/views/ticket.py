@@ -104,6 +104,8 @@ class TicketMixin(object):
 
     def get_object(self, queryset=None):
         ticket = super(TicketMixin, self).get_object(queryset)
+        if not self.request.user.is_authenticated:
+            raise PermissionDenied()
         profile_id = self.request.profile.id
         if self.request.user.has_perm('judge.change_ticket'):
             return ticket
