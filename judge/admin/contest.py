@@ -111,7 +111,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers')}),
         (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_scoreboard',
-                                    'run_pretests_only')}),
+                                    'run_pretests_only', 'is_locked')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),
@@ -120,7 +120,8 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
                                   'organizations', 'view_contest_scoreboard')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
-    list_display = ('key', 'name', 'is_visible', 'is_rated', 'start_time', 'end_time', 'time_limit', 'user_count')
+    list_display = ('key', 'name', 'is_visible', 'is_rated', 'is_locked', 'start_time', 'end_time', 'time_limit',
+                    'user_count')
     search_fields = ('key', 'name')
     inlines = [ContestProblemInline]
     actions_on_top = True
@@ -148,7 +149,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
             return queryset.filter(organizers__id=request.profile.id)
 
     def get_readonly_fields(self, request, obj=None):
-        readonly = []
+        readonly = ['is_locked']
         if not request.user.has_perm('judge.contest_rating'):
             readonly += ['is_rated', 'rate_all', 'rate_exclude']
         if not request.user.has_perm('judge.contest_access_code'):
