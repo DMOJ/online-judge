@@ -112,7 +112,7 @@ class TicketCommentForm(forms.Form):
     body = forms.CharField(widget=ticket_widget)
 
 
-class TicketMixin(object):
+class TicketMixin(LoginRequiredMixin):
     model = Ticket
 
     def get_object(self, queryset=None):
@@ -130,7 +130,7 @@ class TicketMixin(object):
         raise PermissionDenied()
 
 
-class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormView):
+class TicketView(TitleMixin, TicketMixin, SingleObjectFormView):
     form_class = TicketCommentForm
     template_name = 'ticket/ticket.html'
     context_object_name = 'ticket'
@@ -165,7 +165,7 @@ class TicketView(TitleMixin, LoginRequiredMixin, TicketMixin, SingleObjectFormVi
         return context
 
 
-class TicketStatusChangeView(LoginRequiredMixin, TicketMixin, SingleObjectMixin, View):
+class TicketStatusChangeView(TicketMixin, SingleObjectMixin, View):
     open = None
 
     def post(self, request, *args, **kwargs):
@@ -192,7 +192,7 @@ class TicketNotesForm(forms.Form):
     notes = forms.CharField(widget=forms.Textarea(), required=False)
 
 
-class TicketNotesEditView(LoginRequiredMixin, TicketMixin, SingleObjectFormView):
+class TicketNotesEditView(TicketMixin, SingleObjectFormView):
     template_name = 'ticket/edit-notes.html'
     form_class = TicketNotesForm
     context_object_name = 'ticket'
@@ -301,8 +301,8 @@ class ProblemTicketListView(TicketList):
 class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
         try:
-            self.kwargs['pk'] = request.GET['id']
-        except KeyError:
+            self.kwargs['pk'] = int(request.GET['id'])
+        except (KeyError, ValueError):
             return HttpResponseBadRequest()
         ticket = self.get_object()
         message = ticket.messages.first()
@@ -321,8 +321,8 @@ class TicketListDataAjax(TicketMixin, SingleObjectMixin, View):
 class TicketMessageDataAjax(TicketMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
         try:
-            message_id = request.GET['message']
-        except KeyError:
+            message_id = int(request.GET['message'])
+        except (KeyError, ValueError):
             return HttpResponseBadRequest()
         ticket = self.get_object()
         try:

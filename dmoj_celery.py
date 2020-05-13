@@ -9,7 +9,7 @@ except ImportError:
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dmoj.settings')
 
 # noinspection PyUnresolvedReferences
-import django_2_2_pymysql_patch  # noqa: I100, F401, I202, imported for side effect
+import django_2_2_pymysql_patch  # noqa: E402, I100, F401, I202, imported for side effect
 
 # noinspection PyUnresolvedReferences
-from dmoj.celery import app  # noqa: F401, imported for side effect
+from dmoj.celery import app  # noqa: E402, F401, imported for side effect
