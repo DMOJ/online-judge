@@ -73,7 +73,7 @@ class ProfileForm(ModelForm):
 class DownloadDataForm(Form):
     comment_download = BooleanField(required=False, label=_('Download comments?'))
     submission_download = BooleanField(required=False, label=_('Download submissions?'))
-    submission_problem_glob = CharField(initial='*', label=_('Filter by problem code glob:'))
+    submission_problem_glob = CharField(initial='*', label=_('Filter by problem code glob:'), max_length=100)
     submission_results = MultipleChoiceField(
         required=False,
         widget=Select2MultipleWidget(
