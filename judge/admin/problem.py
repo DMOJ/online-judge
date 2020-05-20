@@ -115,7 +115,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'code', 'name', 'is_public', 'is_restricted', 'is_manually_managed', 'date', 'authors', 'curators',
+                'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators',
                 'testers', 'is_organization_private', 'organizations', 'description', 'license',
             ),
         }),
@@ -127,23 +127,19 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         (_('Justice'), {'fields': ('banned_users',)}),
         (_('History'), {'fields': ('change_message',)}),
     )
-    list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'is_restricted', 'show_public']
+    list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']
     search_fields = ('code', 'name', 'authors__user__username', 'curators__user__username')
     inlines = [LanguageLimitInline, ProblemClarificationInline, ProblemSolutionInline, ProblemTranslationInline]
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
-    list_filter = ('is_public', 'is_restricted', ProblemCreatorListFilter)
+    list_filter = ('is_public', ProblemCreatorListFilter)
     form = ProblemForm
     date_hierarchy = 'date'
 
     def get_actions(self, request):
         actions = super(ProblemAdmin, self).get_actions(request)
-
-        if request.user.has_perm('judge.change_restricted_field'):
-            func, name, desc = self.get_action('make_restricted')
-            actions[name] = (func, name, desc)
 
         if request.user.has_perm('judge.change_public_visibility'):
             func, name, desc = self.get_action('make_public')
@@ -159,8 +155,6 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         fields = self.readonly_fields
-        if not request.user.has_perm('judge.change_restricted_field'):
-            fields += ('is_restricted',)
         if not request.user.has_perm('judge.change_public_visibility'):
             fields += ('is_public',)
         if not request.user.has_perm('judge.change_manually_managed'):
@@ -188,14 +182,6 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
                                              count) % count)
 
     update_publish_date.short_description = _('Set publish date to now')
-
-    def make_restricted(self, request, queryset):
-        count = queryset.update(is_restricted=True)
-        self.message_user(request, ungettext('%d problem successfully marked as restricted.',
-                                             '%d problems successfully marked as restricted.',
-                                             count) % count)
-
-    make_restricted.short_description = _('Mark problems as restricted')
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)

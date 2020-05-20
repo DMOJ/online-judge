@@ -134,9 +134,6 @@ class Problem(models.Model):
     allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'),
                                                help_text=_('List of allowed submission languages.'))
     is_public = models.BooleanField(verbose_name=_('publicly visible'), db_index=True, default=False)
-    is_restricted = models.BooleanField(verbose_name=_('restricted'), db_index=True, default=False,
-                                        help_text=_('Whether to restrict access to the problem, and require special '
-                                                    'permissions. Set for contest problems, such as LCC problems.'))
     is_manually_managed = models.BooleanField(verbose_name=_('manually managed'), db_index=True, default=False,
                                               help_text=_('Whether judges should be allowed to manage data or not.'))
     date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
@@ -180,8 +177,7 @@ class Problem(models.Model):
             return False
         if user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        if user.has_perm('judge.edit_all_problem') and \
-                (user.has_perm('judge.see_restricted_problem') or not self.is_restricted):
+        if user.has_perm('judge.edit_all_problem'):
             return True
         return user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile)
 
@@ -206,8 +202,7 @@ class Problem(models.Model):
 
         # If the user can view all problems.
         if user.has_perm('judge.see_private_problem'):
-            if user.has_perm('judge.see_restricted_problem') or not self.is_restricted:
-                return True
+            return True
 
         if self.is_editable_by(user):
             return True
@@ -262,12 +257,6 @@ class Problem(models.Model):
             q |= Q(curators=user.profile)
             q |= Q(testers=user.profile)
             queryset = queryset.filter(q)
-        elif not user.has_perm('judge.see_restricted_problem'):
-            q = Q(is_public=True) | Q(is_restricted=False)
-            q |= Q(authors=user.profile)
-            q |= Q(curators=user.profile)
-            q |= Q(testers=user.profile)
-            queryset = queryset.filter(q)
 
         return queryset
 
@@ -279,14 +268,12 @@ class Problem(models.Model):
     def get_editable_problems(cls, user):
         if not user.has_perm('judge.edit_own_problem'):
             return cls.objects.none()
-        if user.has_perm('judge.edit_all_problem') and user.has_perm('judge.see_restricted_problem'):
+        if user.has_perm('judge.edit_all_problem'):
             return cls.objects.all()
 
         q = Q(authors=user.profile) | Q(curators=user.profile)
 
-        if user.has_perm('judge.edit_all_problem'):
-            q |= Q(is_public=True) | Q(is_restricted=False)
-        elif user.has_perm('judge.edit_public_problem'):
+        if user.has_perm('judge.edit_public_problem'):
             q |= Q(is_public=True)
 
         return cls.objects.filter(q)
@@ -412,13 +399,11 @@ class Problem(models.Model):
     class Meta:
         permissions = (
             ('see_private_problem', 'See hidden problems'),
-            ('see_restricted_problem', 'See restricted problems'),
             ('edit_own_problem', 'Edit own problems'),
             ('edit_all_problem', 'Edit all problems'),
             ('edit_public_problem', 'Edit all public problems'),
             ('clone_problem', 'Clone problem'),
             ('change_public_visibility', 'Change is_public field'),
-            ('change_restricted_field', 'Change is_restricted field'),
             ('change_manually_managed', 'Change is_manually_managed field'),
             ('see_organization_problem', 'See organization-private problems'),
         )

@@ -83,7 +83,7 @@
                 {% endfor %}
             </span>
         {% endif %}
-        {% if has_pdf_render and (problem.is_public or not problem.is_restricted or perms.judge.see_restricted_problem) %}
+        {% if has_pdf_render %}
             <span class="spacer"></span>
             <a href="{{ url('problem_pdf', problem.code) }}" class="view-pdf">
                 <span class="pdf-icon">

@@ -241,10 +241,6 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
 
         problem = self.get_object()
 
-        if not problem.is_public and problem.is_restricted and \
-                not request.user.has_perm('judge.see_restricted_problem'):
-            raise Http404()
-
         try:
             trans = problem.translations.get(language=language)
         except ProblemTranslation.DoesNotExist:
@@ -381,17 +377,10 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
 
         if self.request.user.has_perm('judge.see_private_problem'):
             filter = None
-            see_restricted = self.request.user.has_perm('judge.see_restricted_problem')
             if self.problem_visibility == 1:
                 filter = Q(is_public=True)
             elif self.problem_visibility == 2:
                 filter = Q(is_public=False)
-                if see_restricted:
-                    filter &= Q(is_restricted=False)
-            elif self.problem_visibility == 3 and see_restricted:
-                filter = Q(is_restricted=True, is_public=False)
-            elif see_restricted:
-                filter = Q(is_restricted=False) | Q(is_public=True)
 
             if filter is not None:
                 queryset = queryset.filter(filter)
@@ -430,8 +419,6 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             1: 'Public',
             2: 'Private',
         }
-        if self.request.user.has_perm('judge.see_restricted_problem'):
-            context['visibilities'][3] = 'Restricted'
 
         context['category'] = self.category
         context['categories'] = ProblemGroup.objects.all()

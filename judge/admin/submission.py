@@ -139,8 +139,6 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id)).distinct()
-        elif not request.user.has_perm('judge.see_restricted_problem'):
-            queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
         return queryset
 
     def has_add_permission(self, request):
@@ -152,8 +150,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         if obj is None:
             return True
         if request.user.has_perm('judge.edit_all_problem'):
-            if request.user.has_perm('judge.see_restricted_problem') or not obj.problem.is_restricted:
-                return True
+            return True
         return obj.problem.is_editor(request.profile)
 
     def lookup_allowed(self, key, value):
@@ -173,8 +170,6 @@ class SubmissionAdmin(admin.ModelAdmin):
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id))
-        elif not request.user.has_perm('judge.see_restricted_problem'):
-            queryset = queryset.exclude(problem__is_restricted=True, problem__is_public=False)
         judged = len(queryset)
         for model in queryset:
             model.judge(rejudge=True, batch_rejudge=True)
