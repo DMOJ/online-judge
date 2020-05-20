@@ -145,9 +145,6 @@ def api_v1_user_info(request, user):
         'organizations': list(profile.organizations.values_list('id', flat=True)),
     }
 
-    if request.user.has_perm('judge.view_name'):
-        resp['name'] = profile.user.get_full_name()
-
     last_rating = profile.ratings.last()
 
     contest_history = {}
