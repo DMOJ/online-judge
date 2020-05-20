@@ -1,3 +1,4 @@
+from celery.result import AsyncResult
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.http import urlencode
@@ -51,17 +52,25 @@ class Progress:
             self.done = self._total
 
 
-def task_status_url(result, message=None, redirect=None):
+def task_status_url_by_id(result_id, message=None, redirect=None):
     args = {}
     if message:
         args['message'] = message
     if redirect:
         args['redirect'] = redirect
-    url = reverse('task_status', args=[result.id])
+    url = reverse('task_status', args=[result_id])
     if args:
         url += '?' + urlencode(args)
     return url
 
 
+def task_status_url(result, message=None, redirect=None):
+    return task_status_url_by_id(result.id, message, redirect)
+
+
 def redirect_to_task_status(result, message=None, redirect=None):
     return HttpResponseRedirect(task_status_url(result, message, redirect))
+
+
+def task_status_by_id(result_id):
+    return AsyncResult(result_id)

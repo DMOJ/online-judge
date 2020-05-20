@@ -133,6 +133,7 @@ class Profile(models.Model):
     is_external_user = models.BooleanField(verbose_name=_('external user'), default=False,
                                            help_text=_('If set, this account is an external user, and '
                                                        'has extra restrictions.'))
+    data_last_downloaded = models.DateTimeField(verbose_name=_('last data download time'), null=True, blank=True)
 
     @cached_property
     def organization(self):
