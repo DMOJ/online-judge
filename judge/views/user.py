@@ -162,8 +162,6 @@ class UserDashboard(UserPage):
         return _('Dashboard')
 
     def get_context_data(self, **kwargs):
-        if not self.request.user.is_authenticated:
-            raise Http404()
         user = self.request.user
         profile = self.request.profile
         context = super(UserDashboard, self).get_context_data(**kwargs)
