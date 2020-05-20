@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block media %}
+    {{ form.media.css }}
+    <style>
+        .centered-form {
+            padding-top: 15px;
+            max-width: 460px;
+        }
+
+        .form-area {
+            display: block;
+        }
+
+        .form-field {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+
+        #submit-bar {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            flex-direction: row-reverse;
+        }
+
+        .aux-download-action {
+            width: fit-content;
+            margin: auto;
+        }
+
+        @media (max-width: 460px) {
+            .main-download-action {
+                margin-top: 5px;
+                width: 100%;
+            }
+
+            .aux-download-action {
+                width: unset;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}
+    {{ form.media.js }}
+    <script type="text/javascript">
+        $(function () {
+            function check($obj, duration) {
+                var group = $obj.parent().find('.form-group');
+                if ($obj.is(':checked')) {
+                    group.fadeIn(duration);
+                } else {
+                    group.fadeOut(duration);
+                }
+            };
+            check($('#id_submission_download'), 0);
+            $('#id_submission_download').change(function() {
+                check($(this), 300);
+            });
+            $('#prepare-download').click(function() {
+                return confirm("{{ _('Are you sure you want to prepare a download?') }}");
+            });
+        });
+        $(document).ready(function () {
+            $('.time-remaining').each(function () {
+                count_down($(this));
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="centered-form">
+        {% if in_progress_url %}
+            <div class="alert alert-warning">
+                {{ _('We are currently preparing your data.') }}
+            </div>
+            <a class="button aux-download-action" href="{{ in_progress_url }}">{{ _('Track progress') }}</a>
+        {% elif can_prepare_data %}
+            <div class="alert alert-warning">
+                {{ _('You may only prepare a new data download once every %(ratelimit)s.', ratelimit=ratelimit|timedelta) }}
+                <br>
+                {{ _('Once your data is ready, you will find a download link on this page.') }}
+            </div>
+            <form id="download-data-form" action="" method="post" class="form-area">
+                {% if form.non_field_errors() %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <a href="#" class="close">x</a>
+                        {{ form.non_field_errors() }}
+                    </div>
+                {% endif %}
+                {% csrf_token %}
+                <div>
+                    <h3>{{ _('Comments') }}</h3>
+                    <b>{{ form.comment_download.label }}</b>
+                    {{ form.comment_download }}
+                </div>
+                <hr>
+                <div>
+                    <h3>{{ _('Submissions') }}</h3>
+                    <b>{{ form.submission_download.label }}</b>
+                    {{ form.submission_download }}
+                    <div class="form-group">
+                        <div class="form-field">
+                            <div>{{ form.submission_problem_glob.label }}</div>
+                            <div>{{ form.submission_problem_glob }}</div>
+                        </div>
+                        <div class="form-field">
+                            <div>{{ form.submission_results.label }}</div>
+                            <div>{{ form.submission_results }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div id="submit-bar" class="form-submit-group">
+                    <button id="prepare-download" type="submit" class="main-download-action">
+                        {% if can_download_data %}
+                            {{ _('Prepare new download') }}
+                        {% else %}
+                            {{ _('Prepare download') }}
+                        {% endif %}
+                    </button>
+                    {% if can_download_data %}
+                        <a class="button main-download-action" href="{{ url('user_download_data') }}">{{ _('Download prepared data') }}</a>
+                    {% endif %}
+                </div>
+            </form>
+        {% else %}
+            <div class="alert alert-warning">
+                {{ _('Your data is ready!') }}
+                <br>
+                {{ _('You will need to wait %(countdown)s to prepare a new data download.', countdown=time_until_can_prepare|as_countdown) }}
+            </div>
+            <a class="button aux-download-action" href="{{ url('user_download_data') }}">{{ _('Download data') }}</a>
+        {% endif %}
+    </div>
+{% endblock %}
