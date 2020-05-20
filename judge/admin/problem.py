@@ -5,6 +5,7 @@ from django.contrib import admin
 from django.db import transaction
 from django.forms import ModelForm
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
@@ -147,6 +148,9 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
             func, name, desc = self.get_action('make_private')
             actions[name] = (func, name, desc)
 
+        func, name, desc = self.get_action('update_publish_date')
+        actions[name] = (func, name, desc)
+
         return actions
 
     def get_readonly_fields(self, request, obj=None):
@@ -170,6 +174,14 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     def _rescore(self, request, problem_id):
         from judge.tasks import rescore_problem
         transaction.on_commit(rescore_problem.s(problem_id).delay)
+
+    def update_publish_date(self, request, queryset):
+        count = queryset.update(date=timezone.now())
+        self.message_user(request, ungettext("%d problem's publish date successfully updated.",
+                                             "%d problems' publish date successfully updated.",
+                                             count) % count)
+
+    update_publish_date.short_description = _('Set publish date to now')
 
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
