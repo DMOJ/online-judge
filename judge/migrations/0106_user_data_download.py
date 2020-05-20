@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0105_webauthn'),
+        ('judge', '0106_partially_hide_scoreboard'),
     ]
 
     operations = [
