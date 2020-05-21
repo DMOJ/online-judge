@@ -87,7 +87,7 @@
             {% endif %}
             {% if request.profile.is_webauthn_enabled %}
                 {{ form.webauthn_response }}
-                <button style="display: inline" id="use-webauthn">{{ _('Use security key') }}</button>
+                <button style="display: inline" id="use-webauthn" type="button">{{ _('Use security key') }}</button>
             {% endif %}
             {% if request.profile.is_totp_enabled %}
                 <button style="float:right;" type="submit">{{ _('Login!') }}</button>
