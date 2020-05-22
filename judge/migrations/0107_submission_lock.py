@@ -15,7 +15,7 @@ def updatecontestsubmissions(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0106_user_data_download'),
+        ('judge', '0107_restricted_problem'),
     ]
 
     operations = [
