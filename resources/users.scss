@@ -1,21 +1,6 @@
-@media(min-width: 400px) {
-    #content-right {
-        &.users {
-            padding-left: 1.5em;
-        }
-    }
-}
-
-#content-right {
-    &.users {
-        flex: 40%;
-        max-width: 17em;
-    }
-}
-
 #content-left {
     &.users {
-        flex: 60%;
+        flex: unset;
     }
 }
 
