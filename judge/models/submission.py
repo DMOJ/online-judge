@@ -83,6 +83,7 @@ class Submission(models.Model):
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
     contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
                                        on_delete=models.SET_NULL, related_name='+')
+    is_locked = models.BooleanField(verbose_name=_('lock submission'), default=False)
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
@@ -114,7 +115,8 @@ class Submission(models.Model):
         return Submission.USER_DISPLAY_CODES.get(self.short_status, '')
 
     def judge(self, *args, **kwargs):
-        judge_submission(self, *args, **kwargs)
+        if not self.is_locked:
+            judge_submission(self, *args, **kwargs)
 
     judge.alters_data = True
 
@@ -222,6 +224,7 @@ class Submission(models.Model):
             ('spam_submission', 'Submit without limit'),
             ('view_all_submission', 'View all submission'),
             ('resubmit_other', "Resubmit others' submission"),
+            ('lock_submission', 'Change lock status of submission'),
         )
         verbose_name = _('submission')
         verbose_name_plural = _('submissions')

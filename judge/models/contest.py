@@ -162,6 +162,8 @@ class Contest(models.Model):
                                             help_text='A custom Lua function to generate problem labels. Requires a '
                                                       'single function with an integer parameter, the zero-indexed '
                                                       'contest problem index, and returns a string, the label.')
+    is_locked = models.BooleanField(verbose_name=_('contest lock'), default=False,
+                                    help_text=_('Prevent submissions from this contest from being rejudged.'))
 
     @cached_property
     def format_class(self):
@@ -442,6 +444,7 @@ class Contest(models.Model):
             ('create_private_contest', _('Create private contests')),
             ('change_contest_visibility', _('Change contest visibility')),
             ('contest_problem_label', _('Edit contest problem label script')),
+            ('lock_contest', _('Change lock status of contest')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')
