@@ -6,7 +6,7 @@ from django.utils import timezone
 
 def updatecontestsubmissions(apps, schema_editor):
     Contest = apps.get_model('judge', 'Contest')
-    Contest.objects.filter(end_time__lt=timezone.now()).update(is_locked=True)
+    Contest.objects.filter(end_time__lt=timezone.now(), freeze_submissions=True).update(is_locked=True)
 
     Submission = apps.get_model('judge', 'Submission')
     Submission.objects.filter(contest_object__is_locked=True, contest__participation__virtual=0).update(is_locked=True)
