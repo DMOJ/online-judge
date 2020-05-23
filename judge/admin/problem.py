@@ -177,8 +177,8 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def update_publish_date(self, request, queryset):
         count = queryset.update(date=timezone.now())
-        self.message_user(request, ungettext('%d problem\'s publish date successfully updated.',
-                                             '%d problems\' publish date successfully updated.',
+        self.message_user(request, ungettext("%d problem's publish date successfully updated.",
+                                             "%d problems' publish date successfully updated.",
                                              count) % count)
 
     update_publish_date.short_description = _('Set publish date to now')
