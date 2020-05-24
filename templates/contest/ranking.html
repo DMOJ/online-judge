@@ -222,12 +222,17 @@
                     url: '{{ url('contest_user_search_select2_ajax', contest.key) }}'
                 },
                 minimumInputLength: 1,
-                escapeMarkup: function (markup) {
-                    return markup;
-                },
-                templateResult: function (data, container) {
-                    return ('<img class="user-search-image" src="' + data.gravatar_url + '" width="24" height="24">' +
-                        '<span class="' + data.display_rank + ' user-search-name">' + data.text + '</span>');
+                templateResult: function (data) {
+                    return $('<span>')
+                        .append($('<img>', {
+                            class: 'user-search-image',
+                            src: data.gravatar_url,
+                            width: 24,
+                            height: 24,
+                        }))
+                        .append($('<span>', {
+                            class: data.display_rank + ' user-search-name',
+                        }).text(data.text));
                 }
             }).on('change', function () {
                 window.location.href = url.replace('__username__', $(this).val());
