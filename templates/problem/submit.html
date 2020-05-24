@@ -47,7 +47,7 @@
                 function formatSelection(state) {
                     if (!state.id) return state.text; // optgroup
                     var data = makeDisplayData($("option[data-id=" + state.id + "]"));
-                    return "<b>" + state.text + "</b> (" + data + ")";
+                    return $('<span>').append($('<b>').text(state.text), ' (', data, ')');
                 }
 
                 // Terrible hack, adapted from https://github.com/select2/select2/issues/4436
@@ -71,9 +71,6 @@
                 $("#id_language").select2({
                     templateResult: format,
                     templateSelection: formatSelection,
-                    escapeMarkup: function (m) {
-                        return m;
-                    },
                     resultsAdapter: customAdapter
                 });
 
