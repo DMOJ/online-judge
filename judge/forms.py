@@ -74,7 +74,7 @@ class ProfileForm(ModelForm):
                 del self.fields['organizations']
             else:
                 self.fields['organizations'].queryset = filtered_organizations
-   
+
 
 class DownloadDataForm(Form):
     comment_download = BooleanField(required=False, label=_('Download comments?'))
