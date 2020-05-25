@@ -64,11 +64,17 @@ class ProfileForm(ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
-        if not user.has_perm('judge.edit_all_organization'):
-            self.fields['organizations'].queryset = Organization.objects.filter(
+        if not Organization.objects.exists():
+            del self.fields['organizations']
+        elif not user.has_perm('judge.edit_all_organization'):
+            filtered_organizations = Organization.objects.filter(
                 Q(is_open=True) | Q(id__in=user.profile.organizations.all()),
             )
-
+            if not filtered_organizations.exists():
+                del self.fields['organizations']
+            else:
+                self.fields['organizations'].queryset = filtered_organizations            
+        
 
 class DownloadDataForm(Form):
     comment_download = BooleanField(required=False, label=_('Download comments?'))

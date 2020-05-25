@@ -226,12 +226,14 @@
                         {% endif %}
                     </table>
                 </div>
-                <div class="pane">
-                    <div style="padding-bottom:0.3em; margin-top:0.3em" class="block-header">
-                        {{ _('Affiliated organizations') }}:
+                {% if form.organizations %}
+                    <div class="pane">
+                        <div style="padding-bottom:0.3em; margin-top:0.3em" class="block-header">
+                            {{ _('Affiliated organizations') }}:
+                        </div>
+                        {{ form.organizations }}
                     </div>
-                    {{ form.organizations }}
-                </div>
+                {% endif %}
             </div>
             <hr>
             <div class="settings" style="padding-top:0.7em">
