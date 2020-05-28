@@ -238,7 +238,10 @@ class SubmissionAdmin(admin.ModelAdmin):
     language_column.short_description = _('Language')
 
     def judge_column(self, obj):
-        return format_html('<input type="button" value="Rejudge" onclick="location.href=\'{}/judge/\'" />', obj.id)
+        if obj.is_locked:
+            return format_html('<input type="button" disabled value="Locked"/>')
+        else:
+            return format_html('<input type="button" value="Rejudge" onclick="location.href=\'{}/judge/\'" />', obj.id)
     judge_column.short_description = ''
 
     def get_urls(self):

@@ -92,6 +92,11 @@
     display: none;
 }
 
+.sub-prop .grey-label {
+    color: grey;
+    font-style: italic;
+}
+
 label[for="language"], label[for="status"] {
     padding-bottom: 0.25em;
     display: block;
