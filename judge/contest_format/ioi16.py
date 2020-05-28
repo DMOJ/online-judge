@@ -14,8 +14,6 @@ class IOI16ContestFormat(IOIContestFormat):
         cumtime: Specify True if time penalties are to be computed. Defaults to False.
     '''
 
-    def __init__(self, contest, config):
-        super(IOI16ContestFormat, self).__init__(contest, config)
 
     def update_participation(self, participation):
         cumtime = 0
@@ -27,7 +25,7 @@ class IOI16ContestFormat(IOIContestFormat):
                 SELECT *
                 FROM (
                          SELECT q.prob,
-                                q.date,
+                                MIN(q.date) as `date`,
                                 q.batch_points
                          FROM (
                                   SELECT cp.id          as `prob`,
@@ -35,7 +33,7 @@ class IOI16ContestFormat(IOIContestFormat):
                                          sub.date       as `date`,
                                          tc.points      as `points`,
                                          tc.batch       as `batch`,
-                                         Min(tc.points) as `batch_points`
+                                         MIN(tc.points) as `batch_points`
                                   FROM judge_contestproblem cp
                                            INNER JOIN
                                        judge_contestsubmission cs
@@ -47,11 +45,11 @@ class IOI16ContestFormat(IOIContestFormat):
                                   GROUP BY cp.id, tc.batch, sub.id
                               ) q
                                   INNER JOIN (
-                             SELECT prob, batch, MAX(r.batch_points) max_batch_points
+                             SELECT prob, batch, MAX(r.batch_points) as max_batch_points
                              FROM (
                                       SELECT cp.id          as `prob`,
                                              tc.batch       as `batch`,
-                                             Min(tc.points) as `batch_points`
+                                             MIN(tc.points) as `batch_points`
                                       FROM judge_contestproblem cp
                                                INNER JOIN
                                            judge_contestsubmission cs
@@ -69,7 +67,6 @@ class IOI16ContestFormat(IOIContestFormat):
                            AND p.prob = q.prob
                          GROUP BY q.prob, q.batch
                      ) best
-                ORDER BY best.date;
             ''', (participation.id, participation.id))
 
             for problem_id, time, subtask_points in cursor.fetchall():
@@ -82,7 +79,7 @@ class IOI16ContestFormat(IOIContestFormat):
                 if format_data.get(str(problem_id)) is None:
                     format_data[str(problem_id)] = {'points': 0, 'time': 0}
                 format_data[str(problem_id)]['points'] += subtask_points
-                format_data[str(problem_id)]['time'] = dt
+                format_data[str(problem_id)]['time'] = max(dt, format_data[str(problem_id)]['time'])
 
             for problem_id in format_data:
                 penalty = format_data[problem_id]['time']
