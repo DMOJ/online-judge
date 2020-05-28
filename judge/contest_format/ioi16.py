@@ -22,51 +22,48 @@ class IOI16ContestFormat(IOIContestFormat):
 
         with connection.cursor() as cursor:
             cursor.execute('''
-                SELECT *
+                SELECT q.prob,
+                       MIN(q.date) as `date`,
+                       q.batch_points
                 FROM (
-                         SELECT q.prob,
-                                MIN(q.date) as `date`,
-                                q.batch_points
-                         FROM (
-                                  SELECT cp.id          as `prob`,
-                                         sub.id         as `subid`,
-                                         sub.date       as `date`,
-                                         tc.points      as `points`,
-                                         tc.batch       as `batch`,
-                                         MIN(tc.points) as `batch_points`
-                                  FROM judge_contestproblem cp
-                                           INNER JOIN
-                                       judge_contestsubmission cs
-                                       ON (cs.problem_id = cp.id AND cs.participation_id = %s)
-                                           LEFT OUTER JOIN
-                                       judge_submission sub ON (sub.id = cs.submission_id)
-                                           INNER JOIN judge_submissiontestcase tc
-                                                      ON sub.id = tc.submission_id
-                                  GROUP BY cp.id, tc.batch, sub.id
-                              ) q
-                                  INNER JOIN (
-                             SELECT prob, batch, MAX(r.batch_points) as max_batch_points
-                             FROM (
-                                      SELECT cp.id          as `prob`,
-                                             tc.batch       as `batch`,
-                                             MIN(tc.points) as `batch_points`
-                                      FROM judge_contestproblem cp
-                                               INNER JOIN
-                                           judge_contestsubmission cs
-                                           ON (cs.problem_id = cp.id AND cs.participation_id = %s)
-                                               INNER JOIN
-                                           judge_submission sub ON (sub.id = cs.submission_id)
-                                               INNER JOIN judge_submissiontestcase tc
-                                                          ON sub.id = tc.submission_id
-                                      GROUP BY cp.id, tc.batch, sub.id
-                                  ) r
-                             GROUP BY prob, batch
-                         ) p
-                                       ON p.prob = q.prob AND p.batch = q.batch
-                         WHERE p.max_batch_points = q.batch_points
-                           AND p.prob = q.prob
-                         GROUP BY q.prob, q.batch
-                     ) best
+                         SELECT cp.id          as `prob`,
+                                sub.id         as `subid`,
+                                sub.date       as `date`,
+                                tc.points      as `points`,
+                                tc.batch       as `batch`,
+                                MIN(tc.points) as `batch_points`
+                         FROM judge_contestproblem cp
+                                  INNER JOIN
+                              judge_contestsubmission cs
+                              ON (cs.problem_id = cp.id AND cs.participation_id = %s)
+                                  LEFT OUTER JOIN
+                              judge_submission sub ON (sub.id = cs.submission_id)
+                                  INNER JOIN judge_submissiontestcase tc
+                                             ON sub.id = tc.submission_id
+                         GROUP BY cp.id, tc.batch, sub.id
+                     ) q
+                         INNER JOIN (
+                    SELECT prob, batch, MAX(r.batch_points) as max_batch_points
+                    FROM (
+                             SELECT cp.id          as `prob`,
+                                    tc.batch       as `batch`,
+                                    MIN(tc.points) as `batch_points`
+                             FROM judge_contestproblem cp
+                                      INNER JOIN
+                                  judge_contestsubmission cs
+                                  ON (cs.problem_id = cp.id AND cs.participation_id = %s)
+                                      INNER JOIN
+                                  judge_submission sub ON (sub.id = cs.submission_id)
+                                      INNER JOIN judge_submissiontestcase tc
+                                                 ON sub.id = tc.submission_id
+                             GROUP BY cp.id, tc.batch, sub.id
+                         ) r
+                    GROUP BY prob, batch
+                ) p
+                                    ON p.prob = q.prob AND p.batch = q.batch
+                WHERE p.max_batch_points = q.batch_points
+                  AND p.prob = q.prob
+                GROUP BY q.prob, q.batch
             ''', (participation.id, participation.id))
 
             for problem_id, time, subtask_points in cursor.fetchall():
