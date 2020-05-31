@@ -22,6 +22,7 @@ from django.views.generic import DetailView, ListView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Contest, Language, Problem, ProblemTranslation, Profile, Submission
+from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.problems import get_result_data, user_completed_ids, user_editable_ids, user_tester_ids
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.utils.views import DiggPaginatorMixin, TitleMixin
@@ -471,8 +472,12 @@ def single_submission(request):
     })
 
 
-class AllSubmissions(SubmissionsListBase):
+class AllSubmissions(InfinitePaginationMixin, SubmissionsListBase):
     stats_update_interval = 3600
+
+    @property
+    def use_infinite_pagination(self):
+        return not self.in_contest
 
     def get_my_submissions_page(self):
         if self.request.user.is_authenticated:
