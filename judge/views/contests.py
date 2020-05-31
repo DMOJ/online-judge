@@ -217,6 +217,9 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
             .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
                                                     default=0, output_field=IntegerField()))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
+        context['contest_has_public_editorials'] = any(
+            problem.is_public and problem.has_public_editorial for problem in context['contest_problems']
+        )
         return context
 
 

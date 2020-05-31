@@ -84,7 +84,9 @@
                     <th>{{ _('Points') }}</th>
                     <th>{{ _('AC Rate') }}</th>
                     <th>{{ _('Users') }}</th>
-                    <th></th>
+                    {% if contest_has_public_editorials %}
+                        <th>{{ _('Editorials') }}</th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
@@ -106,11 +108,13 @@
                                 {{ problem.user_count }}
                             {% endif %}
                         </td>
-                        <td>
-                            {% if problem.is_public and problem.has_public_editorial %}
-                                <a href="{{ url('problem_editorial', problem.code) }}">{{ _('Editorial') }}</a>
-                            {% endif %}
-                        </td>
+                        {% if contest_has_public_editorials %}
+                            <td>
+                                {% if problem.is_public and problem.has_public_editorial %}
+                                    <a href="{{ url('problem_editorial', problem.code) }}">{{ _('Editorial') }}</a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
