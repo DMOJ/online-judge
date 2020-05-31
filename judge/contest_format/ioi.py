@@ -61,7 +61,7 @@ class IOIContestFormat(LegacyIOIContestFormat):
                          ) r
                     GROUP BY prob, batch
                 ) p
-                ON p.prob = q.prob AND p.batch = q.batch
+                ON p.prob = q.prob AND (p.batch = q.batch OR p.batch is NULL AND q.batch is NULL)
                 WHERE p.max_batch_points = q.batch_points
                 GROUP BY q.prob, q.batch
             ''', (participation.id, participation.id))
