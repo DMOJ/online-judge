@@ -2,7 +2,8 @@ import collections
 import inspect
 from math import ceil
 
-from django.core.paginator import EmptyPage
+from django.core.paginator import EmptyPage, InvalidPage
+from django.http import Http404
 from django.utils.functional import cached_property
 from django.utils.inspect import method_has_no_args
 
@@ -16,7 +17,7 @@ class InfinitePage(collections.abc.Sequence):
         self.pad_pages = pad_pages
 
     def __repr__(self):
-        return '<Page %s of unknown>' % self.number
+        return '<Page %s of many>' % self.number
 
     def __len__(self):
         return len(self.object_list)
@@ -97,3 +98,30 @@ def infinite_paginate(queryset, page, page_size, pad_pages):
     if page > 1 and not sliced:
         raise EmptyPage()
     return InfinitePage(sliced, page, queryset, page_size, pad_pages)
+
+
+class InfinitePaginationMixin:
+    pad_pages = 2
+    use_infinite_pagination = True
+    
+    def get_use_infinite_pagination(self):
+        return self.use_infinite_pagination
+
+    def paginate_queryset(self, queryset, page_size):
+        if not self.get_use_infinite_pagination():
+            return super().paginate_queryset(queryset, page_size)
+
+        page_kwarg = self.page_kwarg
+        page = self.kwargs.get(page_kwarg) or self.request.GET.get(page_kwarg) or 1
+        try:
+            page_number = int(page)
+        except ValueError:
+            raise Http404('Page cannot be converted to an int.')
+        try:
+            page = infinite_paginate(queryset, page_number, page_size, self.pad_pages)
+            return None, page, page.object_list, page.has_other_pages()
+        except InvalidPage as e:
+            raise Http404('Invalid page (%(page_number)s): %(message)s' % {
+                'page_number': page_number,
+                'message': str(e)
+            })
