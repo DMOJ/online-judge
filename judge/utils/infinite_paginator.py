@@ -109,11 +109,12 @@ def infinite_paginate(queryset, page, page_size, pad_pages):
 class InfinitePaginationMixin:
     pad_pages = 2
 
+    @property
     def use_infinite_pagination(self):
         return True
 
     def paginate_queryset(self, queryset, page_size):
-        if not self.use_infinite_pagination():
+        if not self.use_infinite_pagination:
             return super().paginate_queryset(queryset, page_size)
 
         page_kwarg = self.page_kwarg
