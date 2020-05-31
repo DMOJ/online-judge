@@ -92,6 +92,11 @@ class InfinitePage(collections.abc.Sequence):
         return result
 
 
+class DummyPaginator:
+    def __init__(self, per_page):
+        self.per_page = per_page
+
+
 def infinite_paginate(queryset, page, page_size, pad_pages):
     if page < 1:
         raise EmptyPage()
@@ -120,7 +125,7 @@ class InfinitePaginationMixin:
             raise Http404('Page cannot be converted to an int.')
         try:
             page = infinite_paginate(queryset, page_number, page_size, self.pad_pages)
-            return None, page, page.object_list, page.has_other_pages()
+            return DummyPaginator(page_size), page, page.object_list, page.has_other_pages()
         except InvalidPage as e:
             raise Http404('Invalid page (%(page_number)s): %(message)s' % {
                 'page_number': page_number,
