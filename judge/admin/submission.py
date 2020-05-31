@@ -72,7 +72,7 @@ class ContestSubmissionInline(admin.StackedInline):
         fields = self.readonly_fields
         if obj is None:
             return fields
-        if not request.user.has_perm('judge.contest_frozen_state') and obj.participation.contest.freeze_submissions:
+        if obj.participation.contest.is_locked:
             fields += ('points', 'bonus')
         return fields
 

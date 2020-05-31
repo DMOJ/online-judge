@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
-from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating, Submission
+from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
 from judge.ratings import rate_contest
 from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
@@ -112,7 +112,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'organizers')}),
         (_('Settings'), {'fields': ('is_visible', 'is_external', 'is_virtualable', 'use_clarifications',
-                                    'hide_problem_tags', 'freeze_submissions', 'hide_scoreboard',
+                                    'hide_problem_tags', 'hide_scoreboard',
                                     'partially_hide_scoreboard', 'permanently_hide_scoreboard', 'run_pretests_only',
                                     'is_locked', 'access_code')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
@@ -159,8 +159,6 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         readonly = []
-        if not request.user.has_perm('judge.contest_frozen_state') or (obj is not None and obj.freeze_submissions):
-            readonly += ['freeze_submissions']
         if not request.user.has_perm('judge.contest_rating'):
             readonly += ['is_rated', 'rate_all', 'rate_exclude']
         if not request.user.has_perm('judge.contest_lock'):
@@ -251,15 +249,12 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         with transaction.atomic():
             contest.is_locked = is_locked
             contest.save()
-            Submission.objects.filter(contest_object=contest,
-                                      contest__participation__virtual=0).update(is_locked=is_locked)
 
     def get_urls(self):
         return [
             url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
             url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
             url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge'),
-            url(r'^(\d+)/unfreeze/$', self.unfreeze_view, name='judge_contest_unfreeze'),
         ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
@@ -271,20 +266,6 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
                                              '%d submissions were successfully scheduled for rejudging.',
                                              len(queryset)) % len(queryset))
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest_id,)))
-
-    def unfreeze_view(self, request, id):
-        if not request.user.has_perm('judge.contest_frozen_state'):
-            raise PermissionDenied()
-        contest = get_object_or_404(Contest, id=id)
-        if not contest.freeze_submissions:
-            raise Http404()
-        with transaction.atomic():
-            contest.freeze_submissions = False
-            contest.save()
-            for submission in ContestSubmission.objects.filter(updated_frozen=True, participation__contest=contest) \
-                                                       .select_related('submission').defer('submission__source'):
-                submission.submission.update_contest()
-        return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(id,)))
 
     def rate_all_view(self, request):
         if not request.user.has_perm('judge.contest_rating'):

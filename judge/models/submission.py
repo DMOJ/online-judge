@@ -156,7 +156,7 @@ class Submission(models.Model):
         contest_problem = contest.problem
         participation = contest.participation
 
-        if participation.contest.freeze_submissions and participation.live:
+        if participation.contest.is_locked and participation.live:
             contest.updated_frozen = True
             contest.save()
             return

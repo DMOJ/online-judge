@@ -294,7 +294,7 @@
                 <input id="search-contest" type="text" placeholder="{{ _('View user participation') }}">
             {% endif %}
         {% endif %}
-        {% if tab == 'ranking' and contest.freeze_submissions %}
+        {% if tab == 'ranking' and contest.is_locked %}
             <div class="alert alert-warning" style="text-align: center;">
                 {{ _('Scoreboard is frozen for this contest.') }}
             </div>

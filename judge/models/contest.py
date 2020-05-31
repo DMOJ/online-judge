@@ -132,10 +132,6 @@ class Contest(models.Model):
                                                         'testcases. Commonly set during a contest, then unset '
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
-    freeze_submissions = models.BooleanField(verbose_name=_('freeze submissions'), default=False,
-                                             help_text=_('Whether submission updates should be frozen. If frozen, '
-                                                         'rejudging/rescoring will not propagate to related contest '
-                                                         'submissions until after this is unchecked.'))
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may join the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
@@ -162,8 +158,10 @@ class Contest(models.Model):
                                             help_text='A custom Lua function to generate problem labels. Requires a '
                                                       'single function with an integer parameter, the zero-indexed '
                                                       'contest problem index, and returns a string, the label.')
-    is_locked = models.BooleanField(verbose_name=_('contest lock'), default=False,
-                                    help_text=_('Prevent submissions from this contest from being rejudged.'))
+    is_locked = models.BooleanField(verbose_name=_('freeze submissions'), default=False,
+                                    help_text=_('Whether submission updates should be frozen. If frozen, '
+                                                'rejudging/rescoring will not propagate to related contest '
+                                                'submissions until after this is unchecked.'))
 
     @cached_property
     def format_class(self):
@@ -437,7 +435,6 @@ class Contest(models.Model):
             ('edit_own_contest', _('Edit own contests')),
             ('edit_all_contest', _('Edit all contests')),
             ('clone_contest', _('Clone contest')),
-            ('contest_frozen_state', _('Change contest frozen state')),
             ('moss_contest', _('MOSS contest')),
             ('contest_rating', _('Rate contests')),
             ('contest_access_code', _('Contest access codes')),
