@@ -475,7 +475,7 @@ def single_submission(request):
 class AllSubmissions(InfinitePaginationMixin, SubmissionsListBase):
     stats_update_interval = 3600
 
-    def get_use_infinite_pagination(self):
+    def use_infinite_pagination(self):
         return not self.in_contest
 
     def get_my_submissions_page(self):
