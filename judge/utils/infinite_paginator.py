@@ -15,6 +15,7 @@ class InfinitePage(collections.abc.Sequence):
         self.unfiltered_queryset = unfiltered_queryset
         self.page_size = page_size
         self.pad_pages = pad_pages
+        self.num_pages = 1e3000
 
     def __repr__(self):
         return '<Page %s of many>' % self.number
