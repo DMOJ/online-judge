@@ -1,92 +1,93 @@
-from datetime import timedelta
-
-from django.core.exceptions import ValidationError
-from django.db.models import Min, OuterRef, Subquery
-from django.template.defaultfilters import floatformat
-from django.urls import reverse
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
+from django.db import connection
 from django.utils.translation import gettext_lazy
 
-from judge.contest_format.default import DefaultContestFormat
+from judge.contest_format.legacy_ioi import LegacyIOIContestFormat
 from judge.contest_format.registry import register_contest_format
-from judge.utils.timedelta import nice_repr
+from judge.timezone import from_database_time
 
 
-@register_contest_format('ioi')
-class IOIContestFormat(DefaultContestFormat):
+@register_contest_format('ioi16')
+class IOIContestFormat(LegacyIOIContestFormat):
     name = gettext_lazy('IOI')
     config_defaults = {'cumtime': False}
     '''
         cumtime: Specify True if time penalties are to be computed. Defaults to False.
     '''
 
-    @classmethod
-    def validate(cls, config):
-        if config is None:
-            return
-
-        if not isinstance(config, dict):
-            raise ValidationError('IOI-styled contest expects no config or dict as config')
-
-        for key, value in config.items():
-            if key not in cls.config_defaults:
-                raise ValidationError('unknown config key "%s"' % key)
-            if not isinstance(value, type(cls.config_defaults[key])):
-                raise ValidationError('invalid type for config key "%s"' % key)
-
-    def __init__(self, contest, config):
-        self.config = self.config_defaults.copy()
-        self.config.update(config or {})
-        self.contest = contest
-
     def update_participation(self, participation):
         cumtime = 0
         score = 0
         format_data = {}
 
-        queryset = (participation.submissions.values('problem_id')
-                                             .filter(points=Subquery(
-                                                 participation.submissions.filter(problem_id=OuterRef('problem_id'))
-                                                                          .order_by('-points').values('points')[:1]))
-                                             .annotate(time=Min('submission__date'))
-                                             .values_list('problem_id', 'time', 'points'))
+        with connection.cursor() as cursor:
+            cursor.execute('''
+                SELECT q.prob,
+                       MIN(q.date) as `date`,
+                       q.batch_points
+                FROM (
+                         SELECT cp.id          as `prob`,
+                                sub.id         as `subid`,
+                                sub.date       as `date`,
+                                tc.points      as `points`,
+                                tc.batch       as `batch`,
+                                MIN(tc.points) as `batch_points`
+                         FROM judge_contestproblem cp
+                                  INNER JOIN
+                              judge_contestsubmission cs
+                              ON (cs.problem_id = cp.id AND cs.participation_id = %s)
+                                  LEFT OUTER JOIN
+                              judge_submission sub
+                              ON (sub.id = cs.submission_id AND sub.status = 'D')
+                                  INNER JOIN judge_submissiontestcase tc
+                              ON sub.id = tc.submission_id
+                         GROUP BY cp.id, tc.batch, sub.id
+                     ) q
+                         INNER JOIN (
+                    SELECT prob, batch, MAX(r.batch_points) as max_batch_points
+                    FROM (
+                             SELECT cp.id          as `prob`,
+                                    tc.batch       as `batch`,
+                                    MIN(tc.points) as `batch_points`
+                             FROM judge_contestproblem cp
+                                      INNER JOIN
+                                  judge_contestsubmission cs
+                                  ON (cs.problem_id = cp.id AND cs.participation_id = %s)
+                                      LEFT OUTER JOIN
+                                  judge_submission sub
+                                  ON (sub.id = cs.submission_id AND sub.status = 'D')
+                                      INNER JOIN judge_submissiontestcase tc
+                                  ON sub.id = tc.submission_id
+                             GROUP BY cp.id, tc.batch, sub.id
+                         ) r
+                    GROUP BY prob, batch
+                ) p
+                ON p.prob = q.prob AND (p.batch = q.batch OR p.batch is NULL AND q.batch is NULL)
+                WHERE p.max_batch_points = q.batch_points
+                GROUP BY q.prob, q.batch
+            ''', (participation.id, participation.id))
 
-        for problem_id, time, points in queryset:
-            if self.config['cumtime']:
-                dt = (time - participation.start).total_seconds()
-                if points:
-                    cumtime += dt
-            else:
-                dt = 0
+            for problem_id, time, subtask_points in cursor.fetchall():
+                problem_id = str(problem_id)
+                time = from_database_time(time)
+                if self.config['cumtime']:
+                    dt = (time - participation.start).total_seconds()
+                else:
+                    dt = 0
 
-            format_data[str(problem_id)] = {'points': points, 'time': dt}
-            score += points
+                if format_data.get(problem_id) is None:
+                    format_data[problem_id] = {'points': 0, 'time': 0}
+                format_data[problem_id]['points'] += subtask_points
+                format_data[problem_id]['time'] = max(dt, format_data[problem_id]['time'])
+
+            for _, problem_data in format_data.items():
+                penalty = problem_data['time']
+                points = problem_data['points']
+                if self.config['cumtime'] and points:
+                    cumtime += penalty
+                score += points
 
         participation.cumtime = max(cumtime, 0)
         participation.score = score
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
-
-    def display_user_problem(self, participation, contest_problem):
-        format_data = (participation.format_data or {}).get(str(contest_problem.id))
-        if format_data:
-            return format_html(
-                '<td class="{state}"><a href="{url}">{points}<div class="solving-time">{time}</div></a></td>',
-                state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                       self.best_solution_state(format_data['points'], contest_problem.points)),
-                url=reverse('contest_user_submissions',
-                            args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
-                points=floatformat(format_data['points']),
-                time=nice_repr(timedelta(seconds=format_data['time']), 'noday') if self.config['cumtime'] else '',
-            )
-        else:
-            return mark_safe('<td></td>')
-
-    def display_participation_result(self, participation):
-        return format_html(
-            '<td class="user-points">{points}<div class="solving-time">{cumtime}</div></td>',
-            points=floatformat(participation.score),
-            cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday') if self.config['cumtime'] else '',
-        )
