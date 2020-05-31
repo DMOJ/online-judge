@@ -109,7 +109,7 @@ def infinite_paginate(queryset, page, page_size, pad_pages):
 class InfinitePaginationMixin:
     pad_pages = 2
     use_infinite_pagination = True
-    
+
     def get_use_infinite_pagination(self):
         return self.use_infinite_pagination
 
@@ -129,5 +129,5 @@ class InfinitePaginationMixin:
         except InvalidPage as e:
             raise Http404('Invalid page (%(page_number)s): %(message)s' % {
                 'page_number': page_number,
-                'message': str(e)
+                'message': str(e),
             })
