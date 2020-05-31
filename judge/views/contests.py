@@ -238,6 +238,7 @@ class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         contest.pk = None
         contest.is_visible = False
         contest.user_count = 0
+        contest.is_locked = False
         contest.key = form.cleaned_data['key']
         contest.save()
 
