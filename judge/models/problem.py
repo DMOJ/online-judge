@@ -394,14 +394,14 @@ class Problem(models.Model):
 
     class Meta:
         permissions = (
-            ('see_private_problem', 'See hidden problems'),
-            ('edit_own_problem', 'Edit own problems'),
-            ('edit_all_problem', 'Edit all problems'),
-            ('edit_public_problem', 'Edit all public problems'),
-            ('clone_problem', 'Clone problem'),
-            ('change_public_visibility', 'Change is_public field'),
-            ('change_manually_managed', 'Change is_manually_managed field'),
-            ('see_organization_problem', 'See organization-private problems'),
+            ('see_private_problem', _('See hidden problems')),
+            ('edit_own_problem', _('Edit own problems')),
+            ('edit_all_problem', _('Edit all problems')),
+            ('edit_public_problem', _('Edit all public problems')),
+            ('clone_problem', _('Clone problem')),
+            ('change_public_visibility', _('Change is_public field')),
+            ('change_manually_managed', _('Change is_manually_managed field')),
+            ('see_organization_problem', _('See organization-private problems')),
         )
         verbose_name = _('problem')
         verbose_name_plural = _('problems')
@@ -461,7 +461,7 @@ class Solution(models.Model):
 
     class Meta:
         permissions = (
-            ('see_private_solution', 'See hidden solutions'),
+            ('see_private_solution', _('See hidden solutions')),
         )
         verbose_name = _('solution')
         verbose_name_plural = _('solutions')
