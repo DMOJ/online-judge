@@ -36,7 +36,7 @@ def submission_related(queryset):
 
 
 class SubmissionMixin(object):
-    model = Submission
+    queryset = Submission.objects.defer('problem__description', 'problem__summary')
     context_object_name = 'submission'
     pk_url_kwarg = 'submission'
 
