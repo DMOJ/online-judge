@@ -77,8 +77,8 @@ class Organization(models.Model):
     class Meta:
         ordering = ['name']
         permissions = (
-            ('organization_admin', 'Administer organizations'),
-            ('edit_all_organization', 'Edit all organizations'),
+            ('organization_admin', _('Administer organizations')),
+            ('edit_all_organization', _('Edit all organizations')),
         )
         verbose_name = _('organization')
         verbose_name_plural = _('organizations')
@@ -100,7 +100,10 @@ class Profile(models.Model):
     organizations = SortedManyToManyField(Organization, verbose_name=_('organization'), blank=True,
                                           related_name='members', related_query_name='member')
     display_rank = models.CharField(max_length=10, default='user', verbose_name=_('display rank'),
-                                    choices=(('user', 'Normal User'), ('setter', 'Problem Setter'), ('admin', 'Admin')))
+                                    choices=(
+                                        ('user', _('Normal User')),
+                                        ('setter', _('Problem Setter')),
+                                        ('admin', _('Admin'))))
     mute = models.BooleanField(verbose_name=_('comment mute'), help_text=_('Some users are at their best when silent.'),
                                default=False)
     is_unlisted = models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'),
@@ -210,8 +213,8 @@ class Profile(models.Model):
 
     class Meta:
         permissions = (
-            ('test_site', 'Shows in-progress development stuff'),
-            ('totp', 'Edit TOTP settings'),
+            ('test_site', _('Shows in-progress development stuff')),
+            ('totp', _('Edit TOTP settings')),
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')

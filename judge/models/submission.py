@@ -190,13 +190,13 @@ class Submission(models.Model):
 
     class Meta:
         permissions = (
-            ('abort_any_submission', 'Abort any submission'),
-            ('rejudge_submission', 'Rejudge the submission'),
-            ('rejudge_submission_lot', 'Rejudge a lot of submissions'),
-            ('spam_submission', 'Submit without limit'),
-            ('view_all_submission', 'View all submission'),
-            ('resubmit_other', "Resubmit others' submission"),
-            ('lock_submission', 'Change lock status of submission'),
+            ('abort_any_submission', _('Abort any submission')),
+            ('rejudge_submission', _('Rejudge the submission')),
+            ('rejudge_submission_lot', _('Rejudge a lot of submissions')),
+            ('spam_submission', _('Submit without limit')),
+            ('view_all_submission', _('View all submission')),
+            ('resubmit_other', _("Resubmit others' submission")),
+            ('lock_submission', _('Change lock status of submission')),
         )
         verbose_name = _('submission')
         verbose_name_plural = _('submissions')
