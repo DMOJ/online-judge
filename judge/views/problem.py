@@ -365,7 +365,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             filter |= Q(authors=self.profile)
             filter |= Q(curators=self.profile)
             filter |= Q(testers=self.profile)
-        queryset = Problem.objects.filter(filter).select_related('group').defer('description')
+        queryset = Problem.objects.filter(filter).select_related('group').defer('description', 'summary')
         if not self.request.user.has_perm('see_organization_problem'):
             filter = Q(is_organization_private=False)
             if self.profile is not None:
