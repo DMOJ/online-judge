@@ -193,20 +193,22 @@ class Judge(models.Model):
 
     disconnect.alters_data = True
 
-    @cached_property
-    def runtime_versions(self):
-        qs = (self.runtimeversion_set.values('language__key', 'language__name', 'version', 'name')
+    @classmethod
+    def runtime_versions(cls):
+        qs = (RuntimeVersion.objects.filter(judge__online=True)
+              .values('judge__name', 'language__key', 'language__name', 'version', 'name')
               .order_by('language__key', 'priority'))
 
-        ret = OrderedDict()
+        ret = defaultdict(OrderedDict)
 
         for data in qs:
+            judge = data['judge__name']
             key = data['language__key']
             if key not in ret:
-                ret[key] = {'name': data['language__name'], 'runtime': []}
-            ret[key]['runtime'].append((data['name'], (data['version'],)))
+                ret[judge][key] = {'name': data['language__name'], 'runtime': []}
+            ret[judge][key]['runtime'].append((data['name'], (data['version'],)))
 
-        return list(ret.items())
+        return {judge: list(data.items()) for judge, data in ret.items()}
 
     @cached_property
     def uptime(self):
