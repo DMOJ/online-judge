@@ -94,9 +94,9 @@
                     <tr>
                         <td>
                             {% if problem.is_public %}
-                                <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name }}</a>
+                                <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name or problem.name }}</a>
                             {% else %}
-                                {{ problem.i18n_name }}
+                                {{ problem.i18n_name or problem.name }}
                             {% endif %}
                         </td>
                         <td>{{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}</td>
