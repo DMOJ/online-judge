@@ -275,7 +275,7 @@
                             {% endif %}
                         {% endif %}
                         <td class="problem">
-                            <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name }}</a>
+                            <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name or problem.name }}</a>
                         </td>
                         <td class="category">{{ problem.group.full_name }}</td>
                         {% if show_types %}
