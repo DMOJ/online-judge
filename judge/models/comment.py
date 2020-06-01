@@ -61,9 +61,13 @@ class Comment(MPTTModel):
         queryset = cls.objects.filter(hidden=False).select_related('author__user') \
             .defer('author__about', 'body').order_by('-id')
 
-        problem_access = CacheDict(lambda code: Problem.objects.get(code=code).is_accessible_by(user))
-        contest_access = CacheDict(lambda key: Contest.objects.get(key=key).is_accessible_by(user))
-        blog_access = CacheDict(lambda id: BlogPost.objects.get(id=id).can_see(user))
+        problem_cache = CacheDict(lambda code: Problem.objects.defer('description', 'summary').get(code=code))
+        contest_cache = CacheDict(lambda key: Contest.objects.defer('description').get(key=key))
+        blog_cache = CacheDict(lambda id: BlogPost.objects.defer('summary', 'content').get(id=id))
+
+        problem_access = CacheDict(lambda code: problem_cache[code].is_accessible_by(user))
+        contest_access = CacheDict(lambda key: contest_cache[key].is_accessible_by(user))
+        blog_access = CacheDict(lambda id: blog_cache[id].can_see(user))
 
         if user.is_superuser:
             return queryset[:n]
@@ -75,21 +79,25 @@ class Comment(MPTTModel):
             if not slice:
                 break
             for comment in slice:
+                page_key = comment.page[2:]
                 if comment.page.startswith('p:') or comment.page.startswith('s:'):
                     try:
-                        if problem_access[comment.page[2:]]:
+                        if problem_access[page_key]:
+                            comment.page_title = problem_cache[page_key].name
                             output.append(comment)
                     except Problem.DoesNotExist:
                         pass
                 elif comment.page.startswith('c:'):
                     try:
-                        if contest_access[comment.page[2:]]:
+                        if contest_access[page_key]:
+                            comment.page_title = contest_cache[page_key].name
                             output.append(comment)
                     except Contest.DoesNotExist:
                         pass
                 elif comment.page.startswith('b:'):
                     try:
-                        if blog_access[comment.page[2:]]:
+                        if blog_access[page_key]:
+                            comment.page_title = blog_cache[page_key].title
                             output.append(comment)
                     except BlogPost.DoesNotExist:
                         pass
