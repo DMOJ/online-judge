@@ -2,6 +2,7 @@ import hmac
 from hashlib import sha1
 
 from django.test import SimpleTestCase
+from lxml.html import fromstring, tostring, HTMLParser
 
 from judge.utils.camo import CamoClient
 from judge.utils.unicode import utf8bytes
@@ -49,3 +50,43 @@ class CamoClientTestCase(SimpleTestCase):
         self.assertEqual(self.http_camo.rewrite_url(self.test_url), self.camo_image_url)
         self.assertEqual(self.https_camo.rewrite_url(self.test_url), self.https_camo.image_url(self.test_url_https))
         self.assertEqual(self.http_camo.rewrite_url('wss://other.test'), 'wss://other.test')
+
+    def test_update_tree(self):
+        base = '<html><body>%s</body></html>'
+        update_elements = (
+            base % '<img src="{0}">',
+            base % '<img data-src="{0}">',
+            base % '<img src="{0}" data-src="{0}">',
+            base % '<img src="{0}" class="additional">',
+            base % '<object data="{0}"></object>',
+        )
+        ignore_elements = (
+            base % '<link src="{0}">',
+            base % '<script src="{0}">',
+            base % '<a href="{0}">',
+            base % '<video data-src="{0}">',
+        )
+        urls = (
+            self.example_url,
+            self.example_url_http,
+            self.example_url_https,
+            self.http_camo.excluded[0],
+            self.test_url,
+            self.test_url_http,
+            self.test_url_https
+        )
+        for camo in (self.http_camo, self.https_camo):
+            # Test that every element that's supposed to get updated is updated to the rewritten element
+            for element in update_elements:
+                for url in urls:
+                    html = fromstring(element.format(url), parser=HTMLParser())
+                    camo.update_tree(html)
+                    self.assertEqual(tostring(html, encoding='unicode'), element.format(camo.rewrite_url(url)))
+
+            # Test that other elements are left untouched
+            for element in ignore_elements:
+                for url in urls:
+                    html_orig = fromstring(element.format(url), parser=HTMLParser())
+                    html = html_orig
+                    camo.update_tree(html)
+                    self.assertEqual(html, html_orig)
