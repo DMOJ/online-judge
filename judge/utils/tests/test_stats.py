@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 
-from judge.utils.stats import chart_colors, highlight_colors, get_bar_chart, get_pie_chart
+from judge.utils.stats import chart_colors, get_bar_chart, get_pie_chart, highlight_colors
 
 
 class StatsTestCase(SimpleTestCase):
@@ -16,7 +16,7 @@ class StatsTestCase(SimpleTestCase):
                         'data': [],
                     },
                 ],
-            }
+            },
         )
         self.assertEquals(
             get_pie_chart([('label', 10, 'random')]),
@@ -29,7 +29,7 @@ class StatsTestCase(SimpleTestCase):
                         'data': [10],
                     },
                 ],
-            }
+            },
         )
         self.assertEquals(
             get_pie_chart([('label1', 0), ('label2', 10)]),
@@ -42,7 +42,7 @@ class StatsTestCase(SimpleTestCase):
                         'data': [0, 10],
                     },
                 ],
-            }
+            },
         )
 
     def test_get_pie_chart(self):
@@ -60,7 +60,7 @@ class StatsTestCase(SimpleTestCase):
                         'data': [],
                     },
                 ],
-            }
+            },
         )
         self.assertEquals(
             get_bar_chart([('label1', 10, 'random')]),
@@ -76,7 +76,7 @@ class StatsTestCase(SimpleTestCase):
                         'data': [10],
                     },
                 ],
-            }
+            },
         )
         self.assertEquals(
             get_bar_chart(
@@ -98,5 +98,5 @@ class StatsTestCase(SimpleTestCase):
                         'data': [0, 10],
                     },
                 ],
-            }
+            },
         )
