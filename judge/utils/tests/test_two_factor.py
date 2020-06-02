@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 
-from judge.utils.two_factor import webauthn_decode, webauthn_encode
+from judge.utils.two_factor import WebAuthnJSONEncoder, webauthn_decode, webauthn_encode
 
 
 class TwoFactorTestCase(SimpleTestCase):
@@ -19,3 +19,12 @@ class TwoFactorTestCase(SimpleTestCase):
         self.assertEqual(webauthn_encode(b'\x7f\x7f\x7f'), 'f39_')
         self.assertEqual(webauthn_encode(bytes(range(64))),
                          'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0-Pw')
+
+    def test_webauthn_json_encoder(self):
+        self.assertEqual(WebAuthnJSONEncoder().encode({'foo': 'bar'}), '{"foo": "bar"}')
+        self.assertEqual(WebAuthnJSONEncoder().encode({'foo': b''}), '{"foo": {"_bytes": ""}}')
+        self.assertEqual(WebAuthnJSONEncoder().encode({'foo': bytes(range(1))}), '{"foo": {"_bytes": "AA"}}')
+        self.assertEqual(WebAuthnJSONEncoder().encode({'foo': bytes(range(2))}), '{"foo": {"_bytes": "AAE"}}')
+        self.assertEqual(WebAuthnJSONEncoder().encode({'foo': b'\x7f\x7f\x7f'}), '{"foo": {"_bytes": "f39_"}}')
+        self.assertEqual(WebAuthnJSONEncoder().encode({'foo': bytes(range(64))}), '{"foo": {"_bytes": "' +
+                         'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0-Pw"}}')
