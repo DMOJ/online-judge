@@ -49,9 +49,13 @@
             <i class="fa fa-eye fa-fw"></i><span class="label">{{ _('view') }}</span>
         </a>
         {% if perms.judge.rejudge_submission and can_edit %} ·
-            <a href="#" onclick="rejudge_submission({{ submission.id }}, event);return false">
-                <i class="fa fa-refresh fa-fw"></i><span class="label">{{ _('rejudge') }}</span>
-            </a>
+            {% if not submission.is_locked %}
+                <a href="#" onclick="rejudge_submission({{ submission.id }}, event);return false">
+                    <i class="fa fa-refresh fa-fw"></i><span class="label">{{ _('rejudge') }}</span>
+                </a>
+            {% else %}
+                <i class="fa fa-refresh fa-fw"></i><span class="grey-label" title="{{ _('This submission has been locked, and cannot be rejudged.') }}">{{ _('locked') }}</span>
+            {% endif %}
         {% endif %}
         {% if can_edit %} ·
             <a href="{{ url('admin:judge_submission_change', submission.id) }}">
