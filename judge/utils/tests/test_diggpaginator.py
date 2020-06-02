@@ -24,52 +24,52 @@ class CeleryTestCase(SimpleTestCase):
 
     def test_diggpaginator_leading_main_range(self):
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, padding=2, margin=2).page(3)), '1 2 3 4 5 ... 99 100'
+            str(DiggPaginator(range(1, 1000), 10, body=5, padding=2, margin=2).page(3)), '1 2 3 4 5 ... 99 100',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=6, padding=2, margin=2).page(4)), '1 2 3 4 5 6 ... 99 100'
+            str(DiggPaginator(range(1, 1000), 10, body=6, padding=2, margin=2).page(4)), '1 2 3 4 5 6 ... 99 100',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, padding=1, margin=2).page(6)), '1 2 3 4 5 6 7 ... 99 100'
+            str(DiggPaginator(range(1, 1000), 10, body=5, padding=1, margin=2).page(6)), '1 2 3 4 5 6 7 ... 99 100',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, padding=2, margin=2).page(7)), '1 2 ... 5 6 7 8 9 ... 99 100'
+            str(DiggPaginator(range(1, 1000), 10, body=5, padding=2, margin=2).page(7)), '1 2 ... 5 6 7 8 9 ... 99 100',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, padding=1, margin=2).page(7)), '1 2 ... 5 6 7 8 9 ... 99 100'
+            str(DiggPaginator(range(1, 1000), 10, body=5, padding=1, margin=2).page(7)), '1 2 ... 5 6 7 8 9 ... 99 100',
         )
 
     def test_diggpaginator_trailing_range(self):
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, padding=2, margin=2,).page(98)),
-            '1 2 ... 96 97 98 99 100'
+            str(DiggPaginator(range(1, 1000), 10, body=5, padding=2, margin=2).page(98)),
+            '1 2 ... 96 97 98 99 100',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=6, padding=2, margin=2,).page(97)),
-            '1 2 ... 95 96 97 98 99 100'
+            str(DiggPaginator(range(1, 1000), 10, body=6, padding=2, margin=2).page(97)),
+            '1 2 ... 95 96 97 98 99 100',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, padding=1, margin=2,).page(95)),
+            str(DiggPaginator(range(1, 1000), 10, body=5, padding=1, margin=2).page(95)),
             '1 2 ... 94 95 96 97 98 99 100',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, padding=2, margin=2,).page(94)),
+            str(DiggPaginator(range(1, 1000), 10, body=5, padding=2, margin=2).page(94)),
             '1 2 ... 92 93 94 95 96 ... 99 100',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, padding=1, margin=2,).page(94)),
+            str(DiggPaginator(range(1, 1000), 10, body=5, padding=1, margin=2).page(94)),
             '1 2 ... 92 93 94 95 96 ... 99 100',
         )
 
     def test_diggpaginator_all_ranges(self):
         self.assertEqual(
-            str(DiggPaginator(range(1, 151), 10, body=6, padding=2).page(7)), '1 2 3 4 5 6 7 8 9 ... 14 15'
+            str(DiggPaginator(range(1, 151), 10, body=6, padding=2).page(7)), '1 2 3 4 5 6 7 8 9 ... 14 15',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 151), 10, body=6, padding=2).page(8)), '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15'
+            str(DiggPaginator(range(1, 151), 10, body=6, padding=2).page(8)), '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 151), 10, body=6, padding=1).page(8)), '1 2 3 4 5 6 7 8 9 ... 14 15'
+            str(DiggPaginator(range(1, 151), 10, body=6, padding=1).page(8)), '1 2 3 4 5 6 7 8 9 ... 14 15',
         )
 
     def test_diggpaginator_no_range(self):
@@ -80,13 +80,13 @@ class CeleryTestCase(SimpleTestCase):
     def test_diggpaginator_left_align(self):
         self.assertEqual(str(DiggPaginator(range(1, 1000), 10, body=5, align_left=True).page(1)), '1 2 3 4 5')
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, align_left=True).page(50)), '1 2 ... 48 49 50 51 52'
+            str(DiggPaginator(range(1, 1000), 10, body=5, align_left=True).page(50)), '1 2 ... 48 49 50 51 52',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, align_left=True).page(97)), '1 2 ... 95 96 97 98 99'
+            str(DiggPaginator(range(1, 1000), 10, body=5, align_left=True).page(97)), '1 2 ... 95 96 97 98 99',
         )
         self.assertEqual(
-            str(DiggPaginator(range(1, 1000), 10, body=5, align_left=True).page(100)), '1 2 ... 96 97 98 99 100'
+            str(DiggPaginator(range(1, 1000), 10, body=5, align_left=True).page(100)), '1 2 ... 96 97 98 99 100',
         )
 
     def test_diggpaginator_padding_default(self):
