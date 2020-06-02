@@ -33,6 +33,7 @@ jobs:
           ${{ runner.os }}-
     - name: Install unit test dependencies
       run: |
+        pip install wheel
         pip install -r requirements.txt
         pip install mysqlclient coverage
         cp .ci.settings.py dmoj/local_settings.py
