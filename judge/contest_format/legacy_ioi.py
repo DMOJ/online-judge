@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.core.exceptions import ValidationError
-from django.db.models import Min, OuterRef, Subquery
+from django.db.models import Max, Min, OuterRef, Subquery
 from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
@@ -88,8 +88,8 @@ class LegacyIOIContestFormat(DefaultContestFormat):
             return format_html(
                 '<td class="{state}"><a href="{url}">{points}<div class="solving-time">{time}</div></a></td>',
                 state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                       self.best_solution_state(format_data['points'], contest_problem.points)) +
-                       (' first-solve' if format_data['first_solve'] else ''),
+                       self.best_solution_state(format_data['points'], contest_problem.points) +
+                       (' first-solve' if format_data['first_solve'] else '')),
                 url=reverse('contest_user_submissions',
                             args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
                 points=floatformat(format_data['points']),

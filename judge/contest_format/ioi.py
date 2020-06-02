@@ -1,4 +1,5 @@
 from django.db import connection
+from django.db.models import Max, OuterRef, Subquery
 from django.utils.translation import gettext_lazy
 
 from judge.contest_format.legacy_ioi import LegacyIOIContestFormat
