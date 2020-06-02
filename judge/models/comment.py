@@ -69,8 +69,6 @@ class Comment(MPTTModel):
         contest_access = CacheDict(lambda key: contest_cache[key].is_accessible_by(user))
         blog_access = CacheDict(lambda id: blog_cache[id].can_see(user))
 
-        if user.is_superuser:
-            return queryset[:n]
         if batch is None:
             batch = 2 * n
         output = []
