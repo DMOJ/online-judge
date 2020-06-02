@@ -1,7 +1,7 @@
 name: build
 on: [push, pull_request]
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -15,12 +15,23 @@ jobs:
       run: |
         flake8 --version
         flake8
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
     - name: Install unit test dependencies
       run: |
         pip install -r requirements.txt
-        pip install mysqlclient
+        pip install mysqlclient coverage
         cp .ci.settings.py dmoj/local_settings.py
     - name: Start MySQL
       run: sudo systemctl start mysql.service
     - name: Run unit tests
-      run: python manage.py test judge
+      run: coverage run --source=. manage.py test judge
+    - name: Generate coverage report
+      run: coverage xml
+    - uses: codecov/codecov-action@v1
