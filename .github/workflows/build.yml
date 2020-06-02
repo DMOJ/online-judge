@@ -20,5 +20,7 @@ jobs:
         pip install -r requirements.txt
         pip install mysqlclient
         cp .ci.settings.py dmoj/local_settings.py
+    - name: Start MySQL
+      run: sudo systemctl start mysql.service
     - name: Run unit tests
       run: python manage.py test judge
