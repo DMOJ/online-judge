@@ -76,8 +76,7 @@ class TranslatedProblemQuerySet(SearchQuerySet):
     def add_i18n_name(self, language):
         queryset = self._clone()
         alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language)
-        return queryset.annotate(i18n_name=Coalesce(RawSQL('%s.name' % alias, ()), F('name'),
-                                                    output_field=models.CharField()))
+        return queryset.annotate(i18n_name=RawSQL('%s.name' % alias, ()))
 
 
 class TranslatedProblemForeignKeyQuerySet(QuerySet):
@@ -239,7 +238,7 @@ class Problem(models.Model):
         #       - is_public problems
         #           - not is_organization_private or in organization or `judge.see_organization_problem`
         #           - author or curator or tester
-        queryset = cls.objects.defer('description')
+        queryset = cls.objects.defer('description', 'summary')
 
         if not (user.has_perm('judge.see_private_problem') or user.has_perm('judge.edit_all_problem')):
             q = Q(is_public=True)
@@ -396,14 +395,14 @@ class Problem(models.Model):
 
     class Meta:
         permissions = (
-            ('see_private_problem', 'See hidden problems'),
-            ('edit_own_problem', 'Edit own problems'),
-            ('edit_all_problem', 'Edit all problems'),
-            ('edit_public_problem', 'Edit all public problems'),
-            ('clone_problem', 'Clone problem'),
-            ('change_public_visibility', 'Change is_public field'),
-            ('change_manually_managed', 'Change is_manually_managed field'),
-            ('see_organization_problem', 'See organization-private problems'),
+            ('see_private_problem', _('See hidden problems')),
+            ('edit_own_problem', _('Edit own problems')),
+            ('edit_all_problem', _('Edit all problems')),
+            ('edit_public_problem', _('Edit all public problems')),
+            ('clone_problem', _('Clone problem')),
+            ('change_public_visibility', _('Change is_public field')),
+            ('change_manually_managed', _('Change is_manually_managed field')),
+            ('see_organization_problem', _('See organization-private problems')),
         )
         verbose_name = _('problem')
         verbose_name_plural = _('problems')
@@ -463,7 +462,7 @@ class Solution(models.Model):
 
     class Meta:
         permissions = (
-            ('see_private_solution', 'See hidden solutions'),
+            ('see_private_solution', _('See hidden solutions')),
         )
         verbose_name = _('solution')
         verbose_name_plural = _('solutions')
