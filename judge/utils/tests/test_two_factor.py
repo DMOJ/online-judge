@@ -21,6 +21,7 @@ class TwoFactorTestCase(SimpleTestCase):
                          'AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0-Pw')
 
     def test_webauthn_json_encoder(self):
+        self.assertEqual(WebAuthnJSONEncoder().encode({'foo': True}), '{"foo": true}')
         self.assertEqual(WebAuthnJSONEncoder().encode({'foo': 'bar'}), '{"foo": "bar"}')
         self.assertEqual(WebAuthnJSONEncoder().encode({'foo': b''}), '{"foo": {"_bytes": ""}}')
         self.assertEqual(WebAuthnJSONEncoder().encode({'foo': bytes(range(1))}), '{"foo": {"_bytes": "AA"}}')
