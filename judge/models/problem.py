@@ -176,7 +176,7 @@ class Problem(models.Model):
             return False
         if user.has_perm('judge.edit_all_problem') or user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        return user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile)
+        return user.has_perm('judge.edit_own_problem') and user.profile.id in self.editor_ids
 
     def is_accessible_by(self, user, skip_contest_problem_check=False):
         # Problem is public.
@@ -194,15 +194,16 @@ class Problem(models.Model):
                     self.organizations.filter(id__in=user.profile.organizations.all()):
                 return True
 
+        if not user.is_authenticated:
+            return False
+
         # If the user can view all problems.
         if user.has_perm('judge.see_private_problem'):
             return True
 
-        if not user.is_authenticated:
-            return False
-
-        # If the user authored the problem or is a curator.
-        if user.has_perm('judge.edit_own_problem') and self.is_editor(user.profile):
+        # If the user can edit the problem.
+        # We are using self.editor_ids to take advantage of caching.
+        if self.is_editable_by(user) or user.profile.id in self.editor_ids:
             return True
 
         # If user is a tester.
@@ -241,7 +242,7 @@ class Problem(models.Model):
 
         if not (user.has_perm('judge.see_private_problem') or user.has_perm('judge.edit_all_problem')):
             q = Q(is_public=True)
-            if not user.has_perm('judge.see_organization_problem'):
+            if not (user.has_perm('judge.see_organization_problem') or user.has_perm('judge.edit_public_problem')):
                 # Either not organization private or in the organization.
                 q &= (
                     Q(is_organization_private=False) |
