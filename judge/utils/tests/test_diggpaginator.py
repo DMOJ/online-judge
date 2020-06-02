@@ -3,7 +3,7 @@ from django.test import SimpleTestCase
 from judge.utils.diggpaginator import DiggPaginator, ExPaginator, InvalidPage, QuerySetDiggPaginator
 
 
-class CeleryTestCase(SimpleTestCase):
+class DiggpaginatorTestCase(SimpleTestCase):
     """These tests were implemented from DiggPaginator's documentation."""
 
     def test_expaginator(self):
