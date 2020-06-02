@@ -2,7 +2,7 @@ import hmac
 from hashlib import sha1
 
 from django.test import SimpleTestCase
-from lxml.html import fromstring, tostring, HTMLParser
+from lxml.html import HTMLParser, fromstring, tostring
 
 from judge.utils.camo import CamoClient
 from judge.utils.unicode import utf8bytes
@@ -73,7 +73,7 @@ class CamoClientTestCase(SimpleTestCase):
             self.http_camo.excluded[0],
             self.test_url,
             self.test_url_http,
-            self.test_url_https
+            self.test_url_https,
         )
         for camo in (self.http_camo, self.https_camo):
             # Test that every element that's supposed to get updated is updated to the rewritten element
