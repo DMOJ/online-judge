@@ -50,7 +50,7 @@
         </td>
         <td>
             {% if judge.online %}
-                {% for key, info in judge.runtime_versions -%}
+                {% for key, info in runtime_version_data[judge.name] -%}
                     <a href="javascript:void(0)" data-judge="{{ judge.id }}" data-lang="{{ key }}"
                        data-runtime-info="{{ runtime_versions(info.runtime) }}"
                        class="runtime-label">{{ info.name }}</a>
