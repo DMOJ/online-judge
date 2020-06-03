@@ -4,13 +4,30 @@ from django.utils import timezone
 
 from judge.models import Contest, ContestParticipation, ContestTag
 from judge.models.contest import MinValueOrNoneValidator
-from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation
+from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation, create_user
 
 
 class ContestTestCase(CommonDataMixin, TestCase):
     @classmethod
     def setUpTestData(self):
         super().setUpTestData()
+        self.users.update({
+            'staff_contest_edit_own': create_user(
+                username='staff_contest_edit_own',
+                is_staff=True,
+                user_permissions=('edit_own_contest',),
+            ),
+            'staff_contest_see_all': create_user(
+                username='staff_contest_see_all',
+                user_permissions=('see_private_contest',),
+            ),
+            'staff_contest_edit_all': create_user(
+                username='staff_contest_edit_all',
+                is_staff=True,
+                user_permissions=('edit_own_contest', 'edit_all_contest'),
+            ),
+        })
+
         _now = timezone.now()
 
         self.basic_contest = create_contest(
@@ -33,11 +50,11 @@ class ContestTestCase(CommonDataMixin, TestCase):
             ''',
         )
 
-        self.profiles['normal'].current_contest = create_contest_participation(
+        self.users['normal'].profile.current_contest = create_contest_participation(
             contest='hidden_scoreboard',
             user='normal',
         )
-        self.profiles['normal'].save()
+        self.users['normal'].profile.save()
 
         self.hidden_scoreboard_contest.update_user_count()
 
@@ -70,11 +87,11 @@ class ContestTestCase(CommonDataMixin, TestCase):
         )
 
     def setUp(self):
-        self.profiles['normal'].refresh_from_db()
+        self.users['normal'].profile.refresh_from_db()
 
     def test_basic_contest(self):
         self.assertTrue(self.basic_contest.show_scoreboard)
-        self.assertIsInstance(self.basic_contest.contest_window_length, timezone.timedelta)
+        self.assertEqual(self.basic_contest.contest_window_length, timezone.timedelta(days=101))
         self.assertIsInstance(self.basic_contest._now, timezone.datetime)
         self.assertTrue(self.basic_contest.can_join)
         self.assertIsNone(self.basic_contest.time_before_start)
@@ -151,7 +168,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_in_contest': self.assertFalse,
             },
         }
-        self._test_object(self.basic_contest, data)
+        self._test_object_methods_with_users(self.basic_contest, data)
 
     def test_hidden_scoreboard_contest_methods(self):
         data = {
@@ -191,16 +208,16 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_in_contest': self.assertFalse,
             },
         }
-        self._test_object(self.hidden_scoreboard_contest, data)
+        self._test_object_methods_with_users(self.hidden_scoreboard_contest, data)
 
     def test_private_contest_methods(self):
         with self.assertRaises(Contest.PrivateContest):
             self.private_contest.access_check(self.users['normal'])
-        self.private_contest.private_contestants.add(self.profiles['normal'])
+        self.private_contest.private_contestants.add(self.users['normal'].profile)
         with self.assertRaises(Contest.PrivateContest):
             self.private_contest.access_check(self.users['normal'])
         self.private_contest.organizations.add(self.organizations['open'])
-        self.profiles['normal'].organizations.add(self.organizations['open'])
+        self.users['normal'].profile.organizations.add(self.organizations['open'])
 
         data = {
             'normal': {
@@ -225,7 +242,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_in_contest': self.assertFalse,
             },
         }
-        self._test_object(self.private_contest, data)
+        self._test_object_methods_with_users(self.private_contest, data)
 
     def test_organization_private_contest_methods(self):
         data = {
@@ -266,7 +283,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_in_contest': self.assertFalse,
             },
         }
-        self._test_object(self.organization_private_contest, data)
+        self._test_object_methods_with_users(self.organization_private_contest, data)
 
     def test_private_user_contest_methods(self):
         data = {
@@ -292,7 +309,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_in_contest': self.assertFalse,
             },
         }
-        self._test_object(self.private_user_contest, data)
+        self._test_object_methods_with_users(self.private_user_contest, data)
 
     def test_contests_list(self):
         for name, user in self.users.items():
@@ -303,9 +320,9 @@ class ContestTestCase(CommonDataMixin, TestCase):
                     if contest.is_accessible_by(user):
                         contest_keys.append(contest.key)
 
-                self.assertListEqual(
-                    sorted(Contest.get_visible_contests(user).values_list('key', flat=True)),
-                    sorted(contest_keys),
+                self.assertCountEqual(
+                    Contest.get_visible_contests(user).values_list('key', flat=True),
+                    contest_keys,
                 )
 
     def test_contest_clean(self):
@@ -319,6 +336,9 @@ class ContestTestCase(CommonDataMixin, TestCase):
         )
         with self.assertRaisesRegex(ValidationError, 'ended before it starts'):
             contest.full_clean()
+        contest.end_time = _now
+        with self.assertRaisesRegex(ValidationError, 'ended before it starts'):
+            contest.full_clean()
         contest.end_time = _now + timezone.timedelta(days=1)
         with self.assertRaisesRegex(ValidationError, 'default contest expects'):
             contest.full_clean()
@@ -330,7 +350,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 return n
             end
         '''
-        # Test for caching
+        # Test for bad problem label script caching
         with self.assertRaisesRegex(ValidationError, 'Contest problem label script'):
             contest.full_clean()
         del contest.get_label_for_problem
@@ -341,25 +361,25 @@ class ContestTestCase(CommonDataMixin, TestCase):
         contest.full_clean()
 
     def test_normal_user_current_contest(self):
-        current_contest = self.profiles['normal'].current_contest
+        current_contest = self.users['normal'].profile.current_contest
         self.assertIsNotNone(current_contest)
 
         current_contest.set_disqualified(True)
-        self.profiles['normal'].refresh_from_db()
+        self.users['normal'].profile.refresh_from_db()
         self.assertTrue(current_contest.is_disqualified)
-        self.assertIsNone(self.profiles['normal'].current_contest)
+        self.assertIsNone(self.users['normal'].profile.current_contest)
         self.assertEqual(current_contest.score, -9999)
 
         current_contest.set_disqualified(False)
-        self.profiles['normal'].refresh_from_db()
+        self.users['normal'].profile.refresh_from_db()
         self.assertFalse(current_contest.is_disqualified)
-        self.assertIsNone(self.profiles['normal'].current_contest)
+        self.assertIsNone(self.users['normal'].profile.current_contest)
         self.assertEqual(current_contest.score, 0)
 
     def test_live_participation(self):
         participation = ContestParticipation.objects.get(
             contest=self.hidden_scoreboard_contest,
-            user=self.profiles['normal'],
+            user=self.users['normal'].profile,
             virtual=ContestParticipation.LIVE,
         )
         self.assertTrue(participation.live)
@@ -414,19 +434,22 @@ class ContestTagTestCase(TestCase):
 
 
 class MinValueOrNoneValidatorTestCase(SimpleTestCase):
-    def test_success(self):
+    def test_both_integers(self):
         self.assertIsNone(MinValueOrNoneValidator(-1)(100))
         self.assertIsNone(MinValueOrNoneValidator(0)(0))
         self.assertIsNone(MinValueOrNoneValidator(100)(100))
 
+    def test_integer_bound_none_value(self):
         self.assertIsNone(MinValueOrNoneValidator(-100)(None))
         self.assertIsNone(MinValueOrNoneValidator(0)(None))
         self.assertIsNone(MinValueOrNoneValidator(100)(None))
 
+    def test_none_bound_integer_value(self):
         self.assertIsNone(MinValueOrNoneValidator(None)(-100))
         self.assertIsNone(MinValueOrNoneValidator(None)(0))
         self.assertIsNone(MinValueOrNoneValidator(None)(100))
 
+    def test_both_none(self):
         self.assertIsNone(MinValueOrNoneValidator(None)(None))
 
     def test_fail(self):

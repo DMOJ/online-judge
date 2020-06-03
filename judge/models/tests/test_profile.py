@@ -15,25 +15,28 @@ class OrganizationTestCase(CommonDataMixin, TestCase):
     @classmethod
     def setUpTestData(self):
         super().setUpTestData()
-        self.profile = self.profiles['normal']
+        self.profile = self.users['normal'].profile
         self.profile.organizations.add(self.organizations['open'])
 
     def test_contains(self):
         self.assertIn(self.profile, self.organizations['open'])
         self.assertIn(self.profile.id, self.organizations['open'])
 
-        self.assertNotIn(self.profiles['superuser'], self.organizations['open'])
-        self.assertNotIn(self.profiles['superuser'].id, self.organizations['open'])
+        self.assertNotIn(self.users['superuser'].profile, self.organizations['open'])
+        self.assertNotIn(self.users['superuser'].profile.id, self.organizations['open'])
 
         with self.assertRaisesRegex(TypeError, 'Organization membership test'):
             'aaaa' in self.organizations['open']
+
+    def test_str(self):
+        self.assertEqual(str(self.organizations['open']), 'open')
 
 
 class ProfileTestCase(CommonDataMixin, TestCase):
     @classmethod
     def setUpTestData(self):
         super().setUpTestData()
-        self.profile = self.profiles['normal']
+        self.profile = self.users['normal'].profile
         self.profile.organizations.add(self.organizations['open'])
 
     def setUp(self):
@@ -47,7 +50,7 @@ class ProfileTestCase(CommonDataMixin, TestCase):
         self.assertEqual(str(self.profile), self.profile.username)
 
     def test_organization(self):
-        self.assertIsNone(self.profiles['superuser'].organization)
+        self.assertIsNone(self.users['superuser'].profile.organization)
         self.assertEqual(self.profile.organization, self.organizations['open'])
 
     def test_calculate_points(self):

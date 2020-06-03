@@ -41,9 +41,9 @@ class ProblemTestCase(CommonDataMixin, TestCase):
 
     def test_basic_problem(self):
         self.assertEqual(str(self.basic_problem), self.basic_problem.name)
-        self.assertListEqual(
-            sorted(self.basic_problem.languages_list()),
-            sorted(set(Language.objects.values_list('common_name', flat=True))),
+        self.assertCountEqual(
+            self.basic_problem.languages_list(),
+            set(Language.objects.values_list('common_name', flat=True)),
         )
         self.basic_problem.user_count = -1000
         self.basic_problem.ac_rate = -1000
@@ -51,9 +51,9 @@ class ProblemTestCase(CommonDataMixin, TestCase):
         self.assertEqual(self.basic_problem.user_count, 0)
         self.assertEqual(self.basic_problem.ac_rate, 0)
 
-        self.assertListEqual(list(self.basic_problem.author_ids), [self.profiles['normal'].id])
-        self.assertListEqual(list(self.basic_problem.editor_ids), [self.profiles['normal'].id])
-        self.assertListEqual(list(self.basic_problem.tester_ids), [self.profiles['staff_problem_edit_public'].id])
+        self.assertListEqual(list(self.basic_problem.author_ids), [self.users['normal'].profile.id])
+        self.assertListEqual(list(self.basic_problem.editor_ids), [self.users['normal'].profile.id])
+        self.assertListEqual(list(self.basic_problem.tester_ids), [self.users['staff_problem_edit_public'].profile.id])
         self.assertListEqual(list(self.basic_problem.usable_languages), [])
         self.assertListEqual(self.basic_problem.types_list, ['type'])
         self.assertSetEqual(self.basic_problem.usable_common_names, set())
@@ -69,7 +69,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             self.assertEqual(time_limit, 100)
 
     def test_basic_problem_methods(self):
-        self.assertTrue(self.basic_problem.is_editor(self.profiles['normal']))
+        self.assertTrue(self.basic_problem.is_editor(self.users['normal'].profile))
 
         data = {
             'superuser': {
@@ -105,11 +105,11 @@ class ProblemTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertFalse,
             },
         }
-        self._test_object(self.basic_problem, data)
+        self._test_object_methods_with_users(self.basic_problem, data)
 
     def test_organization_private_problem_methods(self):
         self.assertFalse(self.organization_private_problem.is_accessible_by(self.users['normal']))
-        self.profiles['normal'].organizations.add(self.organizations['open'])
+        self.users['normal'].profile.organizations.add(self.organizations['open'])
         self.assertFalse(self.organization_private_problem.is_accessible_by(self.users['normal']))
         self.organization_private_problem.organizations.add(self.organizations['open'])
 
@@ -153,7 +153,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertFalse,
             },
         }
-        self._test_object(self.organization_private_problem, data)
+        self._test_object_methods_with_users(self.organization_private_problem, data)
 
     def test_problems_list(self):
         for name, user in self.users.items():
@@ -165,9 +165,9 @@ class ProblemTestCase(CommonDataMixin, TestCase):
                         if problem.is_accessible_by(user):
                             problem_codes.append(problem.code)
 
-                    self.assertListEqual(
-                        sorted(Problem.get_visible_problems(user).distinct().values_list('code', flat=True)),
-                        sorted(problem_codes),
+                    self.assertCountEqual(
+                        Problem.get_visible_problems(user).distinct().values_list('code', flat=True),
+                        problem_codes,
                     )
 
                 with self.subTest(list='editable problems'):
@@ -177,7 +177,7 @@ class ProblemTestCase(CommonDataMixin, TestCase):
                         if problem.is_editable_by(user):
                             problem_codes.append(problem.code)
 
-                    self.assertListEqual(
-                        sorted(Problem.get_editable_problems(user).distinct().values_list('code', flat=True)),
-                        sorted(problem_codes),
+                    self.assertCountEqual(
+                        Problem.get_editable_problems(user).distinct().values_list('code', flat=True),
+                        problem_codes,
                     )

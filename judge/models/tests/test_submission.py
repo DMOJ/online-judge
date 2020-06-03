@@ -1,8 +1,8 @@
 from django.test import TestCase
 
-from judge.models import ContestSubmission, Language, Submission
+from judge.models import ContestSubmission, Language, Submission, SubmissionSource
 from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation, \
-    create_contest_problem, create_problem
+    create_contest_problem, create_problem, create_user
 
 
 class SubmissionTestCase(CommonDataMixin, TestCase):
@@ -10,8 +10,16 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
     def setUpTestData(self):
         super().setUpTestData()
 
+        self.users.update({
+            'staff_submission_view_all': create_user(
+                username='staff_submission_view_all',
+                is_staff=True,
+                user_permissions=('view_all_submission',),
+            ),
+        })
+
         self.basic_submission = Submission.objects.create(
-            user=self.profiles['normal'],
+            user=self.users['normal'].profile,
             problem=create_problem(code='basic'),
             language=Language.get_python3(),
             result='AC',
@@ -21,8 +29,22 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
             memory=20,
         )
 
+        self.full_ac_submission = Submission.objects.create(
+            user=self.users['normal'].profile,
+            problem=create_problem(code='full_ac'),
+            language=Language.get_python3(),
+            result='AC',
+            status='D',
+            case_points=1,
+            case_total=1,
+        )
+        self.full_ac_submission_source = SubmissionSource.objects.create(
+            submission=self.full_ac_submission,
+            source='',
+        )
+
         self.ie_submission = Submission.objects.create(
-            user=self.profiles['superuser'],
+            user=self.users['superuser'].profile,
             problem=create_problem(
                 code='ie',
                 is_public=True,
@@ -37,7 +59,7 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
         problem = create_problem(code='queued')
         contest = create_contest(key='queued')
         self.queued_submission = Submission.objects.create(
-            user=self.profiles['superuser'],
+            user=self.users['superuser'].profile,
             problem=problem,
             language=Language.get_python3(),
             contest_object=contest,
@@ -59,6 +81,15 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
         self.assertIsNone(self.basic_submission.contest_key)
         self.assertIsNone(self.basic_submission.contest_or_none)
         self.assertEqual(len(self.basic_submission.id_secret), 24)
+
+    def test_full_ac_submission(self):
+        self.assertEqual(self.full_ac_submission.result_class, 'AC')
+        self.assertEqual(self.full_ac_submission.short_status, 'AC')
+
+        self.assertEqual(
+            str(self.full_ac_submission_source),
+            'Source of Submission %d of full_ac by normal' % self.full_ac_submission.id,
+        )
 
     def test_ie_submission(self):
         self.assertEqual(self.ie_submission.result_class, 'IE')
@@ -107,7 +138,7 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
                 'can_see_detail': self.assertFalse,
             },
         }
-        self._test_object(self.basic_submission, data)
+        self._test_object_methods_with_users(self.basic_submission, data)
 
     def test_ie_submission_methods(self):
         data = {
@@ -127,4 +158,4 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
                 'can_see_detail': self.assertFalse,
             },
         }
-        self._test_object(self.ie_submission, data)
+        self._test_object_methods_with_users(self.ie_submission, data)

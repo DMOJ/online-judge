@@ -237,30 +237,6 @@ class CommonDataMixin:
                 is_superuser=True,
                 is_staff=True,
             ),
-            'staff_blogpost_edit_own': create_user(
-                username='staff_blogpost_edit_own',
-                is_staff=True,
-                user_permissions=('change_blogpost',),
-            ),
-            'staff_blogpost_edit_all': create_user(
-                username='staff_blogpost_edit_all',
-                is_staff=True,
-                user_permissions=('change_blogpost', 'edit_all_post'),
-            ),
-            'staff_contest_edit_own': create_user(
-                username='staff_contest_edit_own',
-                is_staff=True,
-                user_permissions=('edit_own_contest',),
-            ),
-            'staff_contest_see_all': create_user(
-                username='staff_contest_see_all',
-                user_permissions=('see_private_contest',),
-            ),
-            'staff_contest_edit_all': create_user(
-                username='staff_contest_edit_all',
-                is_staff=True,
-                user_permissions=('edit_own_contest', 'edit_all_contest'),
-            ),
             'staff_problem_edit_own': create_user(
                 username='staff_problem_edit_own',
                 is_staff=True,
@@ -293,38 +269,25 @@ class CommonDataMixin:
                 username='staff_problem_edit_own_no_staff',
                 user_permissions=('edit_own_problem', 'rejudge_submission'),
             ),
-            'staff_submission_view_all': create_user(
-                username='staff_submission_view_all',
-                is_staff=True,
-                user_permissions=('view_all_submission',),
-            ),
             'normal': create_user(
                 username='normal',
             ),
             'anonymous': AnonymousUser(),
         }
 
-        self.profiles = {
-            # unauthenticated users have no profile
-            username: getattr(user, 'profile', None) for username, user in self.users.items()
-        }
-
         self.organizations = {
             'open': create_organization(
                 name='open',
-                registrant=self.profiles['superuser'],
+                registrant='superuser',
             ),
         }
 
-    def _test_object_user(self, obj, user, methods):
-        for method, func in methods.items():
-            with self.subTest(method=method):
-                func(
-                    getattr(obj, method)(user),
-                    msg='Method "%s" failed for user "%s", object "%s".' % (method, user.username, obj),
-                )
-
-    def _test_object(self, obj, data):
+    def _test_object_methods_with_users(self, obj, data):
         for username, methods in data.items():
             with self.subTest(username=username, object=str(obj)):
-                self._test_object_user(obj, self.users[username], methods)
+                for method, func in methods.items():
+                    with self.subTest(method=method):
+                        func(
+                            getattr(obj, method)(self.users[username]),
+                            msg='Method "%s" failed for user "%s", object "%s".' % (method, username, obj),
+                        )
