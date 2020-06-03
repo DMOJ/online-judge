@@ -382,6 +382,10 @@ class Problem(models.Model):
         cache.set(key, result)
         return result
 
+    @property
+    def markdown_style(self):
+        return 'problem-full' if self.is_full_markup else 'problem'
+
     def save(self, *args, **kwargs):
         super(Problem, self).save(*args, **kwargs)
         if self.code != self.__original_code:
