@@ -73,6 +73,18 @@
     }
 }
 
+.blog-comment-count {
+    font-size: 12px;
+}
+
+.blog-comment-icon {
+    padding: 0.1em 0.2em 0 0.5em;
+}
+
+.blog-comment-count-link {
+    color: #555;
+}
+
 @media (min-width: 800px) {
     .blog-content, .blog-sidebar {
         display: block !important;

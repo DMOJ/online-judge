@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Count, Max
+from django.db.models import Count, Max, Q
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -29,8 +29,15 @@ class PostList(ListView):
                              orphans=orphans, allow_empty_first_page=allow_empty_first_page, **kwargs)
 
     def get_queryset(self):
-        return (BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).order_by('-sticky', '-publish_on')
-                .prefetch_related('authors__user'))
+        queryset = BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()) \
+                                   .order_by('-sticky', '-publish_on') \
+                                   .prefetch_related('authors__user', 'organizations')
+        if not self.request.user.has_perm('judge.edit_all_post'):
+            filter = Q(is_organization_private=False)
+            if self.request.user.is_authenticated:
+                filter |= Q(organizations__in=self.request.profile.organizations.all())
+            queryset = queryset.filter(filter)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(PostList, self).get_context_data(**kwargs)
@@ -102,7 +109,7 @@ class PostView(TitleMixin, CommentedDetailView):
     model = BlogPost
     pk_url_kwarg = 'id'
     context_object_name = 'post'
-    template_name = 'blog/content.html'
+    template_name = 'blog/blog.html'
 
     def get_title(self):
         return self.object.title

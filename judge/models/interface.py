@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from judge.models.profile import Profile
+from judge.models.profile import Organization, Profile
 
 __all__ = ['MiscConfig', 'validate_regex', 'NavigationBar', 'BlogPost']
 
@@ -72,6 +72,9 @@ class BlogPost(models.Model):
     content = models.TextField(verbose_name=_('post content'))
     summary = models.TextField(verbose_name=_('post summary'), blank=True)
     og_image = models.CharField(verbose_name=_('openGraph image'), default='', max_length=150, blank=True)
+    organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
+                                           help_text=_('If private, only these organizations may see the blog post.'))
+    is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     def __str__(self):
         return self.title
@@ -81,7 +84,11 @@ class BlogPost(models.Model):
 
     def can_see(self, user):
         if self.visible and self.publish_on <= timezone.now():
-            return True
+            if not self.is_organization_private:
+                return True
+            if user.is_authenticated and \
+               self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+                return True
         return self.is_editable_by(user)
 
     def is_editable_by(self, user):

@@ -1,6 +1,19 @@
-{% extends "common-content.html" %}
+{% extends "base.html" %}
+{% block title_row %}{% endblock %}
+{% block title_ruler %}{% endblock %}
 
-{% block content_js_media %}
+{% block media %}
+    <style>
+        .post {
+            margin: 0 1.4em;
+        }
+        .post:first-child {
+            margin-top: 0.6em;
+        }
+    </style>
+{% endblock %}
+
+{% block js_media %}
     <script type="text/javascript">
         $(function () {
             $('.leave-organization').click(function () {
@@ -13,51 +26,117 @@
                 );
             });
         });
+
+        $(document).ready(function () {
+            $('.blog-sidebar').hide();
+            $('#info-tab').find('a').click(function (e) {
+                e.preventDefault();
+                $('#info-tab').addClass('active');
+                $('#detail-tab').removeClass('active');
+                $('.blog-content').show();
+                $('.blog-sidebar').hide();
+            });
+            $('#detail-tab').find('a').click(function (e) {
+                e.preventDefault();
+                $('#detail-tab').addClass('active');
+                $('#info-tab').removeClass('active');
+                $('.blog-content').hide();
+                $('.blog-sidebar').show();
+            });
+        });
     </script>
 {% endblock %}
 
-{% block info_float %}
-    {% if request.user.is_authenticated %}
-        {% if request.profile in organization %}
-            <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
-                {% csrf_token %}
-                <input type="submit" class="unselectable button full leave-organization" value="{{ _('Leave organization') }}">
-            </form>
-        {% elif organization.is_open %}
-            <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
-                {% csrf_token %}
-                <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">
-            </form>
-        {% else %}
-            <a href="{{ url('request_organization', organization.id, organization.slug) }}"
-               class="unselectable button full">{{ _('Request membership') }}</a>
-        {% endif %}
-        <hr>
-    {% endif %}
-
-    {% if can_edit %}
-        <div><a href="{{ url('edit_organization', organization.id, organization.slug) }}">{{ _('Edit organization') }}</a></div>
-
-        {% if not organization.is_open %}
-            <div>
-                <a href="{{ url('organization_requests_pending', organization.id, organization.slug) }}">{{ _('View requests') }}</a>
-            </div>
-        {% endif %}
-    {% endif %}
-
-    {% if perms.judge.change_organization %}
-        <div>
-            <a href="{{ url('admin:judge_organization_change', organization.id) }}">{{ _('Admin organization') }}</a>
-        </div>
-    {% endif %}
-
-    <div>
-        <a href="{{ organization.get_users_url() }}">{{ _('View members') }}</a>
+{% block body %}
+    {% block before_posts %}{% endblock %}
+    <div id="mobile" class="tabs">
+        <ul>
+            <li id="info-tab" class="tab active"><a href="#">
+                <i class="tab-icon fa fa-info-circle"></i> {{ _('Info') }}
+            </a></li>
+            <li id="detail-tab" class="tab"><a href="#"><i class="tab-icon fa fa-rss"></i> {{ _('Details') }}</a></li>
+        </ul>
     </div>
-{% endblock %}
+    <div id="blog-container">
+        <div class="blog-content sidebox">
+            <h3>{{ _('About') }} {{ organization.name }} <i class="fa fa-info-circle"></i></h3>
+            <div class="sidebox-content">
+                <div style="margin: 1.4em;">
+                    {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
+                        {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
+                    {% endcache %}
+                </div>
+            </div>
+            {% if is_member or can_edit %}
+                <br>
+                <h3>{{ _('Organization news') }} <i class="fa fa-terminal"></i></h3>
+                <div class="sidebox-content">
+                    {% for post in posts %}
+                        {% include "blog/content.html" %}
+                    {% else %}
+                        <div style="margin: 1.4em;">
+                            <i>{{ _('There is no news at this time.') }}</i>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
 
-{% block description %}
-    {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
-        {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
-    {% endcache %}
+        <div class="blog-sidebar">
+            <div class="blog-sidebox sidebox">
+                <h3>{{ _('Controls') }} <i class="fa fa-cog"></i></h3>
+                <div class="sidebox-content" style="padding: 1em;">
+                    {% if request.user.is_authenticated %}
+                        {% if is_member %}
+                            <form method="post" action="{{ url('leave_organization', organization.id, organization.slug) }}">
+                                {% csrf_token %}
+                                <input type="submit" class="unselectable button full leave-organization" value="{{ _('Leave organization') }}">
+                            </form>
+                        {% elif organization.is_open or can_edit %}
+                            <form method="post" action="{{ url('join_organization', organization.id, organization.slug) }}">
+                                {% csrf_token %}
+                                <input type="submit" class="unselectable button full" value="{{ _('Join organization') }}">
+                            </form>
+                        {% else %}
+                            <a href="{{ url('request_organization', organization.id, organization.slug) }}"
+                               class="unselectable button full">{{ _('Request membership') }}</a>
+                        {% endif %}
+                        <br>
+                    {% endif %}
+                    {% if can_edit %}
+                        <div>
+                            <a href="{{ url('edit_organization', organization.id, organization.slug) }}">{{ _('Edit organization') }}</a>
+                        </div>
+                        {% if not organization.is_open %}
+                            <div>
+                                <a href="{{ url('organization_requests_pending', organization.id, organization.slug) }}">{{ _('View requests') }}</a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    {% if perms.judge.change_organization %}
+                        <div>
+                            <a href="{{ url('admin:judge_organization_change', organization.id) }}">{{ _('Admin organization') }}</a>
+                        </div>
+                    {% endif %}
+                    <div>
+                        <a href="{{ organization.get_users_url() }}">{{ _('View members') }}</a>
+                    </div>
+                </div>
+            </div>
+            {% if (is_member or can_edit) and new_problems %}
+                <div class="blog-sidebox sidebox">
+                    <h3>{{ _('New private problems') }} <i class="fa fa-puzzle-piece"></i>
+                    </h3>
+                    <div class="sidebox-content">
+                        <ul class="problem-list">
+                            {% for problem in new_problems %}
+                                <li><a href="{{ url('problem_detail', problem.code) }}">{{ problem.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% block after_posts %}{% endblock %}
 {% endblock %}

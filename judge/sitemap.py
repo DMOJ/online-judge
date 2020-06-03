@@ -56,7 +56,8 @@ class BlogPostSitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return BlogPost.objects.filter(visible=True, publish_on__lte=timezone.now()).values_list('id', 'slug')
+        return (BlogPost.objects.filter(visible=True, is_organization_private=False, publish_on__lte=timezone.now())
+                .values_list('id', 'slug'))
 
     def location(self, obj):
         return reverse('blog_post', args=obj)
