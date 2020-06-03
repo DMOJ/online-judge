@@ -3,6 +3,7 @@ import re
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 
+import bleach
 import mistune
 from django.conf import settings
 from jinja2 import Markup
@@ -116,6 +117,7 @@ def markdown(value, style, math_engine=None, lazy_load=False):
     nofollow = styles.get('nofollow', True)
     texoid = TEXOID_ENABLED and styles.get('texoid', False)
     math = getattr(settings, 'MATHOID_URL') and styles.get('math', False)
+    bleach_params = styles.get('bleach', {})
 
     post_processors = []
     if styles.get('use_camo', False) and camo_client is not None:
@@ -139,4 +141,6 @@ def markdown(value, style, math_engine=None, lazy_load=False):
         for processor in post_processors:
             processor(tree)
         result = html.tostring(tree, encoding='unicode')
+    if bleach_params:
+        result = bleach.clean(result, **bleach_params)
     return Markup(result)

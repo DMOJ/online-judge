@@ -147,6 +147,7 @@ class Problem(models.Model):
     user_count = models.IntegerField(verbose_name=_('number of users'), default=0,
                                      help_text=_('The number of users who solved the problem.'))
     ac_rate = models.FloatField(verbose_name=_('solve rate'), default=0)
+    is_full_markup = models.BooleanField(verbose_name=_('allow full markdown access'), default=False)
 
     objects = TranslatedProblemQuerySet.as_manager()
     tickets = GenericRelation('Ticket')
@@ -399,6 +400,7 @@ class Problem(models.Model):
             ('edit_own_problem', _('Edit own problems')),
             ('edit_all_problem', _('Edit all problems')),
             ('edit_public_problem', _('Edit all public problems')),
+            ('edit_full_markdown', _('Edit problems with full markup')),
             ('clone_problem', _('Clone problem')),
             ('change_public_visibility', _('Change is_public field')),
             ('change_manually_managed', _('Change is_manually_managed field')),

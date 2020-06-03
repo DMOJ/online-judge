@@ -159,6 +159,10 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
             fields += ('is_public',)
         if not request.user.has_perm('judge.change_manually_managed'):
             fields += ('is_manually_managed',)
+        if not request.user.has_perm('judge.edit_full_markdown'):
+            fields += ('is_full_markup',)
+            if obj and obj.is_full_markup:
+                fields += ('description',)
         return fields
 
     def show_authors(self, obj):
