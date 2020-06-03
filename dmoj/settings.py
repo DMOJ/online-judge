@@ -377,8 +377,8 @@ LANGUAGES = [
 
 BLEACH_USER_SAFE_TAGS = [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'b', 'i', 'strong', 'em', 'tt',
-    'p', 'br',
+    'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's',
+    'p', 'br', 'pre',
     'span', 'div', 'blockquote', 'code', 'hr',
     'ul', 'ol', 'li', 'dd', 'dt',
     'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
