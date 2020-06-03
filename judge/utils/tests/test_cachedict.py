@@ -9,12 +9,12 @@ class CacheDictTestCase(SimpleTestCase):
         self.cache_dict = CacheDict(lambda id: self.test_dict[id])
 
     def test_original_item_in_cachedict(self):
-        self.assertFalse('a' in self.cache_dict)
+        self.assertNotIn('a', self.cache_dict)
         self.assertTrue(self.cache_dict['a'])
-        self.assertTrue('a' in self.cache_dict)
+        self.assertIn('a', self.cache_dict)
 
     def test_new_item_in_cachedict(self):
         self.test_dict['b'] = True
-        self.assertFalse('b' in self.cache_dict)
+        self.assertNotIn('b', self.cache_dict)
         self.assertTrue(self.cache_dict['b'])
-        self.assertTrue('b' in self.cache_dict)
+        self.assertIn('b', self.cache_dict)
