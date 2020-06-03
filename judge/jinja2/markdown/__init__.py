@@ -15,6 +15,7 @@ from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
 from judge.jinja2.markdown.math import MathInlineGrammar, MathInlineLexer, MathRenderer
 from judge.utils.camo import client as camo_client
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
+from .bleach_whitelist import all_styles
 from .. import registry
 
 logger = logging.getLogger('judge.html')
@@ -142,5 +143,7 @@ def markdown(value, style, math_engine=None, lazy_load=False):
             processor(tree)
         result = html.tostring(tree, encoding='unicode')
     if bleach_params:
+        if bleach_params.get('styles') is True:
+            bleach_params['styles'] = all_styles
         result = bleach.clean(result, **bleach_params)
     return Markup(result)

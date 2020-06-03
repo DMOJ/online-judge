@@ -385,6 +385,7 @@ BLEACH_USER_SAFE_TAGS = [
     'img',
     'a',
     'sub', 'sup',
+    'style',
 ]
 
 BLEACH_USER_SAFE_ATTRS = {
@@ -401,6 +402,7 @@ MARKDOWN_STAFF_EDITABLE_STYLE = {
     'bleach': {
         'tags': BLEACH_USER_SAFE_TAGS,
         'attributes': BLEACH_USER_SAFE_ATTRS,
+        'styles': True,
     },
 }
 
