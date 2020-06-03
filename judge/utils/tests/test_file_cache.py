@@ -89,7 +89,7 @@ class FileCacheTestCase(SimpleTestCase):
         self.assertEqual(self.cache.read_data('foo', 'a'), b'bar')
         self.assertEqual(
             self.cache.cache_data('foo', 'b', b'bar', url=True, gzip=False),
-            self.cache.get_url('foo', 'b')
+            self.cache.get_url('foo', 'b'),
         )
 
     def test_cache_data_gzip(self):
@@ -97,7 +97,7 @@ class FileCacheTestCase(SimpleTestCase):
         self.assertEqual(self.gzip_cache.read_data('foo', 'a'), b'bar')
         self.assertEqual(
             self.gzip_cache.cache_data('foo', 'b', b'bar', url=True, gzip=True),
-            self.cache.get_url('foo', 'b')
+            self.cache.get_url('foo', 'b'),
         )
 
         # Test that these files are actually gzip files
