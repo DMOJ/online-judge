@@ -149,14 +149,17 @@ class Comment(MPTTModel):
         return self.get_page_title(self.page)
 
     def is_accessible_by(self, user):
-        if self.page.startswith('p:') or self.page.startswith('s:'):
-            return Problem.objects.get(code=self.page[2:]).is_accessible_by(user)
-        elif self.page.startswith('c:'):
-            return Contest.objects.get(key=self.page[2:]).is_accessible_by(user)
-        elif self.page.startswith('b:'):
-            return BlogPost.objects.get(id=self.page[2:]).can_see(user)
-        else:
-            return True
+        try:
+            if self.page.startswith('p:') or self.page.startswith('s:'):
+                return Problem.objects.get(code=self.page[2:]).is_accessible_by(user)
+            elif self.page.startswith('c:'):
+                return Contest.objects.get(key=self.page[2:]).is_accessible_by(user)
+            elif self.page.startswith('b:'):
+                return BlogPost.objects.get(id=self.page[2:]).can_see(user)
+            else:
+                return True
+        except ObjectDoesNotExist:
+            return False
 
     def get_absolute_url(self):
         return '%s#comment-%d' % (self.link, self.id)
