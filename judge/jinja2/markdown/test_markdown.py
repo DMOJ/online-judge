@@ -11,9 +11,9 @@ MATHML_N = '''\
 </math>
 '''
 
-MATHML_CHUDNOVSKY = '''\
+MATHML_CHUDNOVSKY = r'''
 <math xmlns="http://www.w3.org/1998/Math/MathML"
-      alttext="{\displaystyle {\\frac {1}{\pi }}=12\sum _{k=0}^{\infty }{\\frac {(-1)^{k}(6k)!(545140134k+13591409)}{(3k)!(k!)^{3}\left(640320\\right)^{3k+3/2}}}}">
+      alttext="{\displaystyle {\frac {1}{\pi }}=12\sum _{k=0}^{\infty }{\frac {(-1)^{k}(6k)!(545140134k+13591409)}{(3k)!(k!)^{3}\left(640320\right)^{3k+3/2}}}}">
   <semantics>
     <mrow class="MJX-TeXAtom-ORD">
       <mstyle displaystyle="true" scriptlevel="0">
@@ -97,10 +97,10 @@ MATHML_CHUDNOVSKY = '''\
         </mrow>
       </mstyle>
     </mrow>
-    <annotation encoding="application/x-tex">{\displaystyle {\\frac {1}{\pi }}=12\sum _{k=0}^{\infty }{\\frac {(-1)^{k}(6k)!(545140134k+13591409)}{(3k)!(k!)^{3}\left(640320\\right)^{3k+3/2}}}}</annotation>
+    <annotation encoding="application/x-tex">{\displaystyle {\frac {1}{\pi }}=12\sum _{k=0}^{\infty }{\frac {(-1)^{k}(6k)!(545140134k+13591409)}{(3k)!(k!)^{3}\left(640320\right)^{3k+3/2}}}}</annotation>
   </semantics>
 </math>
-'''
+'''  # noqa: E501
 
 
 class TestMarkdown(SimpleTestCase):
