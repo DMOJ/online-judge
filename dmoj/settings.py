@@ -385,12 +385,12 @@ BLEACH_USER_SAFE_TAGS = [
     'img',
     'a',
     'sub', 'sup',
-    'style',
+    'style', 'noscript', 'center',
 ]
 
 BLEACH_USER_SAFE_ATTRS = {
     '*': ['id', 'class', 'style'],
-    'img': ['src', 'alt', 'title', 'width', 'height'],
+    'img': ['src', 'alt', 'title', 'width', 'height', 'data-src'],
     'a': ['href', 'alt', 'title'],
 }
 
