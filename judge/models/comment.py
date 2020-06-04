@@ -15,7 +15,7 @@ from reversion.models import Version
 
 from judge.models.contest import Contest
 from judge.models.interface import BlogPost
-from judge.models.problem import Problem
+from judge.models.problem import Problem, Solution
 from judge.models.profile import Profile
 from judge.utils.cachedict import CacheDict
 
@@ -62,10 +62,12 @@ class Comment(MPTTModel):
             .defer('author__about', 'body').order_by('-id')
 
         problem_cache = CacheDict(lambda code: Problem.objects.defer('description', 'summary').get(code=code))
+        solution_cache = CacheDict(lambda code: Solution.objects.defer('content').get(problem__code=code))
         contest_cache = CacheDict(lambda key: Contest.objects.defer('description').get(key=key))
         blog_cache = CacheDict(lambda id: BlogPost.objects.defer('summary', 'content').get(id=id))
 
         problem_access = CacheDict(lambda code: problem_cache[code].is_accessible_by(user))
+        solution_access = CacheDict(lambda code: problem_access[code] and solution_cache[code].is_accessible_by(user))
         contest_access = CacheDict(lambda key: contest_cache[key].is_accessible_by(user))
         blog_access = CacheDict(lambda id: blog_cache[id].can_see(user))
 
@@ -78,29 +80,26 @@ class Comment(MPTTModel):
                 break
             for comment in slice:
                 page_key = comment.page[2:]
-                if comment.page.startswith('p:') or comment.page.startswith('s:'):
-                    try:
-                        if problem_access[page_key]:
-                            comment.page_title = problem_cache[page_key].name
-                            output.append(comment)
-                    except Problem.DoesNotExist:
-                        pass
-                elif comment.page.startswith('c:'):
-                    try:
-                        if contest_access[page_key]:
-                            comment.page_title = contest_cache[page_key].name
-                            output.append(comment)
-                    except Contest.DoesNotExist:
-                        pass
-                elif comment.page.startswith('b:'):
-                    try:
-                        if blog_access[page_key]:
-                            comment.page_title = blog_cache[page_key].title
-                            output.append(comment)
-                    except BlogPost.DoesNotExist:
-                        pass
+                try:
+                    if comment.page.startswith('p:'):
+                        has_access = problem_access[page_key]
+                        comment.page_title = problem_cache[page_key].name
+                    elif comment.page.startswith('s:'):
+                        has_access = solution_access[page_key]
+                        comment.page_title = _('Editorial for %s') % problem_cache[page_key].name
+                    elif comment.page.startswith('c:'):
+                        has_access = contest_access[page_key]
+                        comment.page_title = contest_cache[page_key].name
+                    elif comment.page.startswith('b:'):
+                        has_access = blog_access[page_key]
+                        comment.page_title = blog_cache[page_key].title
+                    else:
+                        has_access = True
+                except ObjectDoesNotExist:
+                    pass
                 else:
-                    output.append(comment)
+                    if has_access:
+                        output.append(comment)
                 if len(output) >= n:
                     return output
         return output
@@ -150,8 +149,10 @@ class Comment(MPTTModel):
 
     def is_accessible_by(self, user):
         try:
-            if self.page.startswith('p:') or self.page.startswith('s:'):
+            if self.page.startswith('p:'):
                 return Problem.objects.get(code=self.page[2:]).is_accessible_by(user)
+            elif self.page.startswith('s:'):
+                return Solution.objects.get(problem__code=self.page[2:]).is_accessible_by(user)
             elif self.page.startswith('c:'):
                 return Contest.objects.get(key=self.page[2:]).is_accessible_by(user)
             elif self.page.startswith('b:'):

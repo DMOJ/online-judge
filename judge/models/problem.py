@@ -9,6 +9,7 @@ from django.db.models import CASCADE, F, Q, QuerySet, SET_NULL
 from django.db.models.expressions import RawSQL
 from django.db.models.functions import Coalesce
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -465,6 +466,15 @@ class Solution(models.Model):
 
     def __str__(self):
         return _('Editorial for %s') % self.problem.name
+
+    def is_accessible_by(self, user):
+        if self.is_public and self.publish_on < timezone.now():
+            return True
+        if user.has_perm('judge.see_private_solution'):
+            return True
+        if self.problem.is_editable_by(user):
+            return True
+        return False
 
     class Meta:
         permissions = (
