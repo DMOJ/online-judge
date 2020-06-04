@@ -110,13 +110,20 @@ class ProblemTranslationInline(admin.StackedInline):
     form = ProblemTranslationForm
     extra = 0
 
+    def has_permission_full_markup(self, request, obj=None):
+        if not obj:
+            return True
+        return request.user.has_perm('judge.problem_full_markup') or not obj.is_full_markup
+
+    has_add_permission = has_change_permission = has_delete_permission = has_permission_full_markup
+
 
 class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {
             'fields': (
                 'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
-                'is_organization_private', 'organizations', 'description', 'license',
+                'is_organization_private', 'organizations', 'is_full_markup', 'description', 'license',
             ),
         }),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
@@ -159,6 +166,10 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
             fields += ('is_public',)
         if not request.user.has_perm('judge.change_manually_managed'):
             fields += ('is_manually_managed',)
+        if not request.user.has_perm('judge.problem_full_markup'):
+            fields += ('is_full_markup',)
+            if obj and obj.is_full_markup:
+                fields += ('description',)
         return fields
 
     def show_authors(self, obj):

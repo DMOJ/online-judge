@@ -4,6 +4,7 @@ from html.parser import HTMLParser
 from urllib.parse import urlparse
 
 import mistune
+from bleach.sanitizer import Cleaner
 from django.conf import settings
 from jinja2 import Markup
 from lxml import html
@@ -14,6 +15,7 @@ from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
 from judge.jinja2.markdown.math import MathInlineGrammar, MathInlineLexer, MathRenderer
 from judge.utils.camo import client as camo_client
 from judge.utils.texoid import TEXOID_ENABLED, TexoidRenderer
+from .bleach_whitelist import all_styles, mathml_attrs, mathml_tags
 from .. import registry
 
 logger = logging.getLogger('judge.html')
@@ -109,6 +111,25 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         return super(AwesomeRenderer, self).header(text, level + 2, *args, **kwargs)
 
 
+cleaner_cache = {}
+
+
+def get_cleaner(name, params):
+    if name in cleaner_cache:
+        return cleaner_cache[name]
+
+    if params.get('styles') is True:
+        params['styles'] = all_styles
+
+    if params.pop('mathml', False):
+        params['tags'] = params.get('tags', []) + mathml_tags
+        params['attributes'] = params.get('attributes', {}).copy()
+        params['attributes'].update(mathml_attrs)
+
+    cleaner = cleaner_cache[name] = Cleaner(**params)
+    return cleaner
+
+
 @registry.filter
 def markdown(value, style, math_engine=None, lazy_load=False):
     styles = settings.MARKDOWN_STYLES.get(style, settings.MARKDOWN_DEFAULT_STYLE)
@@ -116,6 +137,7 @@ def markdown(value, style, math_engine=None, lazy_load=False):
     nofollow = styles.get('nofollow', True)
     texoid = TEXOID_ENABLED and styles.get('texoid', False)
     math = getattr(settings, 'MATHOID_URL') and styles.get('math', False)
+    bleach_params = styles.get('bleach', {})
 
     post_processors = []
     if styles.get('use_camo', False) and camo_client is not None:
@@ -139,4 +161,6 @@ def markdown(value, style, math_engine=None, lazy_load=False):
         for processor in post_processors:
             processor(tree)
         result = html.tostring(tree, encoding='unicode')
+    if bleach_params:
+        result = get_cleaner(style, bleach_params).clean(result)
     return Markup(result)

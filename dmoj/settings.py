@@ -375,6 +375,38 @@ LANGUAGES = [
     ('zh-hant', _('Traditional Chinese')),
 ]
 
+BLEACH_USER_SAFE_TAGS = [
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's',
+    'p', 'br', 'pre',
+    'span', 'div', 'blockquote', 'code', 'hr',
+    'ul', 'ol', 'li', 'dd', 'dt',
+    'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+    'img',
+    'a',
+    'sub', 'sup',
+    'style',
+]
+
+BLEACH_USER_SAFE_ATTRS = {
+    '*': ['id', 'class', 'style'],
+    'img': ['src', 'alt', 'title', 'width', 'height'],
+    'a': ['href', 'alt', 'title'],
+}
+
+MARKDOWN_STAFF_EDITABLE_STYLE = {
+    'safe_mode': False,
+    'use_camo': True,
+    'texoid': True,
+    'math': True,
+    'bleach': {
+        'tags': BLEACH_USER_SAFE_TAGS,
+        'attributes': BLEACH_USER_SAFE_ATTRS,
+        'styles': True,
+        'mathml': True,
+    },
+}
+
 MARKDOWN_ADMIN_EDITABLE_STYLE = {
     'safe_mode': False,
     'use_camo': True,
@@ -400,15 +432,16 @@ MARKDOWN_STYLES = {
     'default': MARKDOWN_DEFAULT_STYLE,
     'comment': MARKDOWN_DEFAULT_STYLE,
     'self-description': MARKDOWN_USER_LARGE_STYLE,
-    'problem': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'contest': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'flatpage': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'language': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'license': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'judge': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'blog': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'solution': MARKDOWN_ADMIN_EDITABLE_STYLE,
-    'contest_tag': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'problem': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'problem-full': MARKDOWN_ADMIN_EDITABLE_STYLE,
+    'contest': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'flatpage': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'language': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'license': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'judge': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'blog': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'solution': MARKDOWN_STAFF_EDITABLE_STYLE,
+    'contest_tag': MARKDOWN_STAFF_EDITABLE_STYLE,
     'organization-about': MARKDOWN_USER_LARGE_STYLE,
     'ticket': MARKDOWN_USER_LARGE_STYLE,
 }
