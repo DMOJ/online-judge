@@ -404,7 +404,7 @@ class Problem(models.Model):
             ('edit_own_problem', _('Edit own problems')),
             ('edit_all_problem', _('Edit all problems')),
             ('edit_public_problem', _('Edit all public problems')),
-            ('edit_full_markdown', _('Edit problems with full markup')),
+            ('problem_full_markup', _('Edit problems with full markup')),
             ('clone_problem', _('Clone problem')),
             ('change_public_visibility', _('Change is_public field')),
             ('change_manually_managed', _('Change is_manually_managed field')),
