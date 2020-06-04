@@ -403,6 +403,7 @@ MARKDOWN_STAFF_EDITABLE_STYLE = {
         'tags': BLEACH_USER_SAFE_TAGS,
         'attributes': BLEACH_USER_SAFE_ATTRS,
         'styles': True,
+        'mathml': True,
     },
 }
 
