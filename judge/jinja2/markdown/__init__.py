@@ -3,8 +3,8 @@ import re
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 
-import bleach
 import mistune
+from bleach.sanitizer import Cleaner
 from django.conf import settings
 from jinja2 import Markup
 from lxml import html
@@ -111,6 +111,25 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         return super(AwesomeRenderer, self).header(text, level + 2, *args, **kwargs)
 
 
+cleaner_cache = {}
+
+
+def get_cleaner(name, params):
+    if name in cleaner_cache:
+        return cleaner_cache[name]
+
+    if params.get('styles') is True:
+        params['styles'] = all_styles
+
+    if params.pop('mathml', False):
+        params['tags'] = params.get('tags', []) + mathml_tags
+        params['attributes'] = params.get('attributes', {}).copy()
+        params['attributes'].update(mathml_attrs)
+
+    cleaner = cleaner_cache[name] = Cleaner(**params)
+    return cleaner
+
+
 @registry.filter
 def markdown(value, style, math_engine=None, lazy_load=False):
     styles = settings.MARKDOWN_STYLES.get(style, settings.MARKDOWN_DEFAULT_STYLE)
@@ -143,11 +162,5 @@ def markdown(value, style, math_engine=None, lazy_load=False):
             processor(tree)
         result = html.tostring(tree, encoding='unicode')
     if bleach_params:
-        if bleach_params.get('styles') is True:
-            bleach_params['styles'] = all_styles
-        if bleach_params.pop('mathml', False):
-            bleach_params['tags'] = bleach_params.get('tags', []) + mathml_tags
-            bleach_params['attributes'] = bleach_params.get('attributes', {}).copy()
-            bleach_params['attributes'].update(mathml_attrs)
-        result = bleach.clean(result, **bleach_params)
+        result = get_cleaner(style, bleach_params).clean(result)
     return Markup(result)
