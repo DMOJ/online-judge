@@ -1,0 +1,26 @@
+name: Pull in new changes from DMOJ
+on:
+  schedule:
+    # Mondays at noon
+    - cron: '0 12 * * 1'
+
+jobs:
+  dmoj-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Pull in upstream changes
+        run: |
+          git remote add upstream https://github.com/DMOJ/online-judge.git
+          git fetch upstream master
+          git reset --hard upstream/master
+      - name: Create pull request for the changes
+        uses: peter-evans/create-pull-request@v2
+        with:
+          commit-message: Merge DMOJ into master
+          committer: DMOJ Merge <dmoj-merge@mcpt.ca>
+          title: Pull in latest DMOJ changes
+          body: This PR has been auto-generated to pull in latest changes from [DMOJ](https://github.com/DMOJ/online-judge).
+          assignees: TheAvidDev
+          reviewers: TheAvidDev, 6167656e74323431
+          branch: DMOJ-merge
