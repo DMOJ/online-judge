@@ -16,7 +16,7 @@ def apply_submission_filter(queryset, id_range, languages, results):
         queryset = queryset.filter(language_id__in=languages)
     if results:
         queryset = queryset.filter(result__in=results)
-    queryset = queryset.exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
+    queryset = queryset.filter(is_locked=False).exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
     return queryset
 
 
