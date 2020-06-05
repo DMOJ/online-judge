@@ -152,15 +152,15 @@ def markdown(value, style, math_engine=None, lazy_load=False):
     result = markdown(value)
 
     if post_processors:
+        tree = html.Element('div')
         try:
-            tree = html.fromstring(result, parser=html.HTMLParser(recover=True))
+            tree.extend(html.fragments_fromstring(result, parser=html.HTMLParser(recover=True)))
         except (XMLSyntaxError, ParserError) as e:
             if result and (not isinstance(e, ParserError) or e.args[0] != 'Document is empty'):
                 logger.exception('Failed to parse HTML string')
-            tree = html.Element('div')
         for processor in post_processors:
             processor(tree)
-        result = html.tostring(tree, encoding='unicode')
+        result = html.tostring(tree, encoding='unicode')[len('<div>'):-len('</div>')]
     if bleach_params:
         result = get_cleaner(style, bleach_params).clean(result)
     return Markup(result)
