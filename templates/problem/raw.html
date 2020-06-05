@@ -79,7 +79,7 @@
 </div>
 <hr style="clear: both;">
 <div class="content-description printing">
-    {{ description|markdown('problem', 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
+    {{ description|markdown(problem.markdown_style, 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
 </div>
 {% if math_engine == 'jax' %}
     <script type="text/javascript" src="mathjax_config.js"></script>
