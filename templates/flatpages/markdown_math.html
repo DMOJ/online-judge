@@ -1,7 +1,7 @@
 {% extends "flatpages/markdown.html" %}
 
 {% block body %}
-    <div class="content-description">{{ flatpage.content|markdown('solution', MATH_ENGINE)|reference }}</div>
+    <div class="content-description">{{ flatpage.content|markdown('flatpage', MATH_ENGINE)|reference }}</div>
 {% endblock %}
 
 {% block bodyend %}
