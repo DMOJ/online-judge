@@ -10,5 +10,5 @@
 {% block header %}{% include "flatpages/admin_link.html" %}{% endblock %}
 
 {% block body %}
-    <div class="content-description">{{ flatpage.content|markdown('solution')|reference|str|safe }}</div>
+    <div class="content-description">{{ flatpage.content|markdown('flatpage')|reference|str|safe }}</div>
 {% endblock %}
