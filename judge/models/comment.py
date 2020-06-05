@@ -72,8 +72,6 @@ class Comment(MPTTModel):
         contest_access = CacheDict(lambda key: contest_cache[key].is_accessible_by(user))
         blog_access = CacheDict(lambda id: blog_cache[id].can_see(user))
 
-        if user.is_superuser:
-            return queryset[:n]
         if batch is None:
             batch = 2 * n
         output = []
@@ -154,14 +152,17 @@ class Comment(MPTTModel):
         return self.get_page_title(self.page)
 
     def is_accessible_by(self, user):
-        if self.page.startswith('p:') or self.page.startswith('s:'):
-            return Problem.objects.get(code=self.page[2:]).is_accessible_by(user)
-        elif self.page.startswith('c:'):
-            return Contest.objects.get(key=self.page[2:]).is_accessible_by(user)
-        elif self.page.startswith('b:'):
-            return BlogPost.objects.get(id=self.page[2:]).can_see(user)
-        else:
-            return True
+        try:
+            if self.page.startswith('p:') or self.page.startswith('s:'):
+                return Problem.objects.get(code=self.page[2:]).is_accessible_by(user)
+            elif self.page.startswith('c:'):
+                return Contest.objects.get(key=self.page[2:]).is_accessible_by(user)
+            elif self.page.startswith('b:'):
+                return BlogPost.objects.get(id=self.page[2:]).can_see(user)
+            else:
+                return True
+        except ObjectDoesNotExist:
+            return False
 
     def get_absolute_url(self):
         return '%s#comment-%d' % (self.link, self.id)

@@ -126,18 +126,15 @@ class Submission(models.Model):
     abort.alters_data = True
 
     def can_see_detail(self, user):
-        profile = user.profile
-        problem = self.problem
-
         if not user.is_authenticated:
             return False
-
+        profile = user.profile
         if self.problem.is_editable_by(user):
             return True
         elif user.has_perm('judge.view_all_submission'):
             return True
         if self.user_id == profile.id:
-            if problem.is_accessible_by(user):
+            if self.problem.is_accessible_by(user):
                 return True
             if self.contest_object is not None and self.contest_object.ended:
                 return True
