@@ -5,13 +5,13 @@ Disallow: /admin
 Disallow: /api
 Disallow: /comments
 Disallow: /contest/*/clone
-Disallow: /contest/*/register
 Disallow: /contest/*/join
 Disallow: /contest/*/leave
 Disallow: /contest/*/moss
 Disallow: /contest/*/participation
 Disallow: /contest/*/participations
 Disallow: /contest/*/rank
+Disallow: /contest/*/register
 Disallow: /contests/tag
 Disallow: /contest/*/stats
 Disallow: /contest/*/submissions
