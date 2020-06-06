@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Count, Max
+from django.db.models import Count, F, Max
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -62,8 +62,6 @@ class PostList(ListView):
                    .values_list('page').annotate(count=Count('page')).order_by()
         }
 
-        now = timezone.now()
-
         # Dashboard stuff
         if self.request.user.is_authenticated:
             user = self.request.profile
@@ -77,8 +75,8 @@ class PostList(ListView):
         visible_contests = Contest.get_visible_contests(self.request.user).filter(is_visible=True) \
                                   .order_by('start_time')
 
-        context['current_contests'] = visible_contests.filter(start_time__lte=now, end_time__gt=now)
-        context['future_contests'] = visible_contests.filter(start_time__gt=now)
+        context['current_contests'] = visible_contests.filter(start_time__lte=F('_now'), end_time__gt=F('_now'))
+        context['future_contests'] = visible_contests.filter(start_time__gt=F('_now'))
 
         if self.request.user.is_authenticated:
             context['own_open_tickets'] = (

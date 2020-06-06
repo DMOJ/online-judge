@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models, transaction
 from django.db.models import CASCADE, Q
+from django.db.models.functions import Now
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
@@ -51,6 +52,11 @@ class ContestTag(models.Model):
     class Meta:
         verbose_name = _('contest tag')
         verbose_name_plural = _('contest tags')
+
+
+class ContestManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().annotate(_now=Now())
 
 
 class Contest(models.Model):
@@ -129,6 +135,8 @@ class Contest(models.Model):
     is_locked = models.BooleanField(verbose_name=_('contest lock'), default=False,
                                     help_text=_('Prevent submissions from this contest from being rejudged.'))
 
+    objects = ContestManager()
+
     @cached_property
     def format_class(self):
         return contest_format.formats[self.format_name]
@@ -198,6 +206,7 @@ class Contest(models.Model):
     def contest_window_length(self):
         return self.end_time - self.start_time
 
+    # This property is still required for when a contest is fetched from a related object.
     @cached_property
     def _now(self):
         # This ensures that all methods talk about the same now.

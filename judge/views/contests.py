@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Case, Count, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
+from django.db.models import Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
 from django.db.models.expressions import CombinedExpression
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -69,22 +69,18 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
     title = gettext_lazy('Contests')
     context_object_name = 'past_contests'
 
-    @cached_property
-    def _now(self):
-        return timezone.now()
-
     def _get_queryset(self):
         return super(ContestList, self).get_queryset() \
             .order_by('-start_time', 'key').prefetch_related('tags', 'organizations', 'organizers')
 
     def get_queryset(self):
-        return self._get_queryset().filter(end_time__lt=self._now)
+        return self._get_queryset().filter(end_time__lt=F('_now'))
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
         present, active, future = [], [], []
-        for contest in self._get_queryset().exclude(end_time__lt=self._now):
-            if contest.start_time > self._now:
+        for contest in self._get_queryset().exclude(end_time__lt=F('_now')):
+            if contest.start_time > contest._now:
                 future.append(contest)
             else:
                 present.append(contest)
@@ -102,7 +98,7 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['active_participations'] = active
         context['current_contests'] = present
         context['future_contests'] = future
-        context['now'] = self._now
+        context['now'] = timezone.now()
         context['first_page_href'] = '.'
         return context
 
@@ -150,7 +146,6 @@ class ContestMixin(object):
             context['live_participation'] = None
             context['has_joined'] = False
 
-        context['now'] = timezone.now()
         context['is_organizer'] = self.is_organizer
         context['can_edit'] = self.can_edit
 
@@ -694,7 +689,6 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['has_rating'] = False
-        context['now'] = timezone.now()
         context['rank_header'] = _('Participation')
         return context
 

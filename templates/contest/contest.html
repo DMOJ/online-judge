@@ -37,9 +37,9 @@
                     {{- _('Participating virtually.') -}}
                 {% endif %}
             {%- else -%}
-                {% if contest.start_time > now %}
+                {% if contest.start_time > contest._now %}
                     {{- _('Starting in %(countdown)s', countdown=contest.time_before_start|as_countdown) -}}
-                {% elif contest.end_time < now %}
+                {% elif contest.ended %}
                     {{- _('Contest is over.') -}}
                 {% else %}
                     {%- if has_joined -%}
