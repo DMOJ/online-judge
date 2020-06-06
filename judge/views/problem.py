@@ -15,7 +15,7 @@ from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpRespon
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils import timezone, translation
+from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
@@ -118,10 +118,7 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
 
         solution = get_object_or_404(Solution, problem=self.object)
 
-        if (not solution.is_public or solution.publish_on > timezone.now()) and \
-                not self.request.user.has_perm('judge.see_private_solution') or \
-                (self.request.user.is_authenticated and
-                 self.request.profile.current_contest):
+        if not solution.is_accessible_by(self.request.user) or self.request.in_contest:
             raise Http404()
         context['solution'] = solution
         context['has_solved_problem'] = self.object.id in self.get_completed_problems()
