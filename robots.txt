@@ -5,6 +5,7 @@ Disallow: /admin
 Disallow: /api
 Disallow: /comments
 Disallow: /contest/*/clone
+Disallow: /contest/*/register
 Disallow: /contest/*/join
 Disallow: /contest/*/leave
 Disallow: /contest/*/moss
