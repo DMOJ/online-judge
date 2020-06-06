@@ -377,14 +377,13 @@ LANGUAGES = [
 
 BLEACH_USER_SAFE_TAGS = [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's',
-    'p', 'br', 'pre',
-    'span', 'div', 'blockquote', 'code', 'hr',
-    'ul', 'ol', 'li', 'dd', 'dt',
-    'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
-    'img',
+    'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's', 'abbr', 'cite', 'mark', 'q', 'samp', 'small',
+    'u', 'var', 'wbr', 'dfn', 'ruby', 'rb', 'rp', 'rt', 'rtc', 'sub', 'sup', 'time', 'data',
+    'p', 'br', 'pre', 'span', 'div', 'blockquote', 'code', 'hr',
+    'ul', 'ol', 'li', 'dd', 'dl', 'dt', 'address', 'section',
+    'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col', 'tfoot',
+    'img', 'audio', 'video', 'source',
     'a',
-    'sub', 'sup',
     'style', 'noscript', 'center',
 ]
 
@@ -392,6 +391,15 @@ BLEACH_USER_SAFE_ATTRS = {
     '*': ['id', 'class', 'style'],
     'img': ['src', 'alt', 'title', 'width', 'height', 'data-src'],
     'a': ['href', 'alt', 'title'],
+    'abbr': ['title'],
+    'dfn': ['title'],
+    'time': ['datetime'],
+    'data': ['value'],
+    'td':  ['colspan', 'rowspan'],
+    'th':  ['colspan', 'rowspan'],
+    'audio': ['autoplay', 'controls', 'crossorigin', 'muted', 'loop', 'preload', 'src'],
+    'video': ['autoplay', 'controls', 'crossorigin', 'height', 'muted', 'loop', 'poster', 'preload', 'src', 'width'],
+    'source': ['src', 'srcset', 'type'],
 }
 
 MARKDOWN_STAFF_EDITABLE_STYLE = {
