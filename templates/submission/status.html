@@ -52,6 +52,18 @@
         });
         </script>
     {% endif %}
+    {% if not submission.is_graded %}
+        <script type="text/javascript">
+            $(function () {
+                $(document).keydown(function(e) {
+                    // Ctrl-Enter or Command-Enter
+                    if ((e.metaKey || e.ctrlKey) && e.which == 13) {
+                        $('#abort-button form').submit();
+                    }
+                });
+            });
+        </script>
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -83,7 +95,8 @@
                 <br>
                 <hr class="half-hr">
                 <br>
-                <form action="{{ url('submission_abort', submission.id) }}" method="post">
+                <form action="{{ url('submission_abort', submission.id) }}" method="post"
+                      title="{{ _('Press Ctrl-Enter or Command-Enter to abort.') }}">
                     {% csrf_token %}
                     <input style="float:left" type="submit" value="{{ _('Abort') }}" class="button">
                     <br><br>
