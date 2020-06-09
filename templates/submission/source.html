@@ -27,7 +27,7 @@
     {% if request.user == submission.user.user or perms.judge.resubmit_other %}
         <div><a href="{{ url('problem_submit', submission.problem.code, submission.id) }}">{{ _('Resubmit') }}</a></div>
     {% endif %}
-    {% if perms.judge.rejudge_submission %}
+    {% if perms.judge.rejudge_submission and not submission.is_locked %}
         <div>
             <form action="{{ url('submission_rejudge') }}" method="post">
                 {% csrf_token %}
