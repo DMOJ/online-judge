@@ -1,0 +1,20 @@
+{% from "tabs-base.html" import make_tab with context %}
+
+<div class="tabs">
+    <ul>
+        {{ make_tab('status', 'fa-cube', url('submission_status', submission.id), _('Status'), responsive_text=True) }}
+        {{ make_tab('source', 'fa-code', url('submission_source', submission.id), _('Source code'), responsive_text=True) }}
+        {{ make_tab('raw_source', 'fa-file', url('submission_source_raw', submission.id), _('Raw source'), responsive_text=True) }}
+        {% if request.user == submission.user.user or perms.judge.resubmit_other %}
+            {{ make_tab('resubmit', 'fa-share-square', url('problem_submit', submission.problem.code, submission.id), _('Resubmit'), responsive_text=True) }}
+        {% endif %}
+        {% if perms.judge.rejudge_submission and not submission.is_locked %}
+            <form action="{{ url('submission_rejudge') }}" method="post" class="form-pseudotab unselectable button">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ submission.id }}">
+                <input type="hidden" name="path" value="{{ url('submission_status', submission.id) }}">
+                <input type="submit" value="{{ _('Rejudge') }}">
+            </form>
+        {% endif %}
+    </ul>
+</div>

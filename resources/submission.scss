@@ -340,3 +340,10 @@ label[for="language"], label[for="status"] {
         color: gray;
     }
 }
+
+@media(max-width: 700px) {
+    .submission-info {
+        display: block;
+        float: unset;
+    }
+}
