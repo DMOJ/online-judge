@@ -1,7 +1,8 @@
-{% macro make_tab(name, fa, url, text) %}
+{% macro make_tab(name, fa, url, text, responsive_text=False) %}
     <li class="tab{% if tab == name %} active{% endif %}">
         {%- if url %}<a href="{{ url }}">{% else %}<span>{% endif -%}
-        <i class="tab-icon fa {{ fa }}"></i> {{ text }}
+        <i title="{{ text }}" class="tab-icon fa {{ fa }}"></i>
+        <span{% if responsive_text %} class="tab-responsive-text"{% endif %}> {{ text }}</span>
         {%- if url %}</a>{% else %}</span>{% endif -%}
     </li>
 {% endmacro %}

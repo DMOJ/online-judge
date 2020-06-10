@@ -241,6 +241,12 @@ input {
     }
 }
 
+@media(max-width: 700px) {
+    .tabs .tab-responsive-text {
+        display: none;
+    }
+}
+
 // Bootstrap-y pagination
 ul.pagination a:hover {
     color: #FFF;
