@@ -101,7 +101,10 @@ def post_update(sender, instance, **kwargs):
 @receiver(post_delete, sender=Submission)
 def submission_delete(sender, instance, **kwargs):
     finished_submission(instance)
+    instance.user._updating_stats_only = True
     instance.user.calculate_points()
+    instance.problem._updating_stats_only = True
+    instance.problem.update_stats()
 
 
 @receiver(post_delete, sender=ContestSubmission)
