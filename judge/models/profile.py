@@ -228,6 +228,10 @@ class Profile(models.Model):
     def webauthn_id(self):
         return hmac.new(force_bytes(settings.SECRET_KEY), msg=b'webauthn:%d' % (self.id,), digestmod='sha256').digest()
 
+    @cached_property
+    def is_peg(self):
+        return self.user.email.endswith('@accounts.wcipeg.com')
+
     class Meta:
         permissions = (
             ('test_site', _('Shows in-progress development stuff')),

@@ -1,0 +1,57 @@
+{% extends "common-content.html" %}
+
+{% block js_media %}
+    {% block users_js_media %}{% endblock %}
+    <script>
+        $(function () {
+            $('#search-handle').replaceWith($('<select>').attr({
+                id: 'search-handle',
+                name: 'handle'
+            }));
+            var in_user_redirect = false;
+            $('#search-handle').select2({
+                placeholder: '{{ _('Search by handle...') }}',
+                ajax: {
+                    url: '{{ url('user_search_select2_ajax') }}'
+                },
+                minimumInputLength: 1,
+                templateResult: function (data, container) {
+                    return $('<span>')
+                        .append($('<img>', {
+                            'class': 'user-search-image', src: data.gravatar_url,
+                            width: 24, height: 24
+                        }))
+                        .append($('<span>', {'class': data.display_rank + ' user-search-name'}).text(data.text))
+                        .append($('<a>', {href: '/user/' + data.text, 'class': 'user-redirect'})
+                            .append($('<i>', {'class': 'fa fa-mail-forward'}))
+                            .mouseover(function () {
+                                in_user_redirect = true;
+                            }).mouseout(function () {
+                                in_user_redirect = false;
+                            }));
+                }
+            }).on('select2:selecting', function () {
+                return !in_user_redirect;
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="centered-form">
+        <form id="wcipeg-merge-request" action="" method="post" class="form-area">
+            {% csrf_token %}
+            <p>{{ _('To request a merge of this WCIPEG account to a DMOJ account, please fill in the username of the
+                     DMOJ account. A link will be sent to the email associated with the DMOJ account which can then be
+                     used to complete the merge.') }}</p>
+            {% if form.errors %}
+                <div id="form-errors">
+                    {{ form.handle.errors }}
+                </div>
+            {% endif %}
+            <input id="search-handle" type="text" name="handle" placeholder="{{ _('Search by handle...') }}" required>
+            <hr>
+            <button class="submit-bar" type="submit">{{ _('Submit Request') }}</button>
+        </form>
+    </div>
+{% endblock %}

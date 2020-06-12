@@ -6,6 +6,7 @@ import webauthn
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
@@ -252,6 +253,22 @@ class TwoFactorLoginForm(TOTPForm):
             raise ValidationError(_('Invalid two-factor authentication token or scratch code.'))
         else:
             raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
+
+
+class WCIPEGMergeRequestForm(Form):
+    handle = CharField(max_length=50, validators=[UnicodeUsernameValidator()])
+
+    def clean_handle(self):
+        try:
+            profile = Profile.objects.get(user__username=self.cleaned_data['handle'], user__is_active=True)
+            if profile.is_peg:
+                raise ValidationError(_('Account must be a DMOJ account.'))
+        except Profile.DoesNotExist:
+            raise ValidationError(_("Account doesn't exist."))
+
+    def send_email(self):
+        # TODO: Send email
+        pass
 
 
 class ProblemCloneForm(Form):

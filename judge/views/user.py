@@ -27,7 +27,7 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, FormView, ListView, TemplateView, View
 from reversion import revisions
 
-from judge.forms import CustomAuthenticationForm, DownloadDataForm, ProfileForm, newsletter_id
+from judge.forms import CustomAuthenticationForm, DownloadDataForm, ProfileForm, WCIPEGMergeRequestForm, newsletter_id
 from judge.models import Profile, Rating, Submission
 from judge.performance_points import get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
@@ -333,6 +333,22 @@ class UserDownloadData(LoginRequiredMixin, UserDataMixin, View):
         response['Content-Type'] = 'application/zip'
         response['Content-Disposition'] = 'attachment; filename=%s-data.zip' % self.request.user.username
         return response
+
+
+class WCIPEGMergeActivate(LoginRequiredMixin, TitleMixin, FormView):
+    pass
+
+
+class WCIPEGMergeRequest(LoginRequiredMixin, TitleMixin, FormView):
+    template_name = 'user/wcipeg-merge-request.html'
+    form_class = WCIPEGMergeRequestForm
+
+    def get_title(self):
+        return _('WCIPEG Merge Request')
+
+    def form_valid(self, form):
+        form.send_email()
+        return generic_message(self.request, _('Merge Request Submitted'), _("Please check your DMOJ account's email."))
 
 
 @login_required
