@@ -302,11 +302,11 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             queryset = queryset.add_i18n_name(self.request.LANGUAGE_CODE)
             sort_key = self.order.lstrip('-')
             if sort_key in self.sql_sort:
-                queryset = queryset.order_by(self.order)
+                queryset = queryset.order_by(self.order, 'id')
             elif sort_key == 'name':
-                queryset = queryset.order_by(self.order.replace('name', 'i18n_name'))
+                queryset = queryset.order_by(self.order.replace('name', 'i18n_name'), 'id')
             elif sort_key == 'group':
-                queryset = queryset.order_by(self.order + '__name')
+                queryset = queryset.order_by(self.order + '__name', 'id')
             elif sort_key == 'solved':
                 if self.request.user.is_authenticated:
                     profile = self.request.profile
