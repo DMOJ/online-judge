@@ -296,7 +296,7 @@
 {% endblock %}
 
 {% block body %}
-    {% if page_obj.num_pages > 1 %}
+    {% if page_obj.has_other_pages() %}
         <div style="margin-bottom: 6px; margin-top: 11px">
             {% include "list-pages.html" %}
         </div>
@@ -365,7 +365,7 @@
                     </div>
                 {% endfor %}
             </div>
-            {% if page_obj.num_pages > 1 %}
+            {% if page_obj.has_other_pages() %}
                 <div style="margin-top:10px;">{% include "list-pages.html" %}</div>
             {% endif %}
         </div>
