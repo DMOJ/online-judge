@@ -165,7 +165,7 @@
                                     {% if contest.start_time %}
                                         <br>
                                         {% if contest.time_limit %}
-                                            <span class="time">{{ _('Window ends in %(countdown)s', countdown=participation.time_remaining|as_countdown)}}
+                                            <span class="time">{{ _('Window ends in %(countdown)s', countdown=participation.time_remaining|as_countdown) }}</span>
                                         {% elif contest.time_before_end %}
                                             <span class="time">{{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}</span>
                                         {% endif %}
