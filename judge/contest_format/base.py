@@ -83,11 +83,12 @@ class BaseContestFormat(six.with_metaclass(ABCMeta)):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_contest_problem_label_script(self):
+    def get_label_for_problem(self, index):
         """
-        Returns the default Lua script to generate contest problem labels.
+        Returns the problem label for a given zero-indexed index.
 
-        :return: A string, the Lua script.
+        :param index: The zero-indexed problem index.
+        :return: A string, the problem label.
         """
         raise NotImplementedError()
 
