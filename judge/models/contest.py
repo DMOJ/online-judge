@@ -139,10 +139,13 @@ class Contest(models.Model):
 
     @cached_property
     def get_label_for_problem(self):
+        if not self.problem_label_script:
+            return self.format.get_label_for_problem
+
         def DENY_ALL(obj, attr_name, is_setting):
             raise AttributeError()
         lua = LuaRuntime(attribute_filter=DENY_ALL, register_eval=False, register_builtins=False)
-        return lua.eval(self.problem_label_script or self.format.get_contest_problem_label_script())
+        return lua.eval(self.problem_label_script)
 
     def clean(self):
         # Django will complain if you didn't fill in start_time or end_time, so we don't have to.

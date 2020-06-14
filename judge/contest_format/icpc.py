@@ -115,15 +115,10 @@ class ICPCContestFormat(DefaultContestFormat):
         else:
             return mark_safe('<td></td>')
 
-    def get_contest_problem_label_script(self):
-        return '''
-            function(n)
-                n = n + 1
-                ret = ""
-                while n > 0 do
-                    ret = string.char((n - 1) % 26 + 65) .. ret
-                    n = math.floor((n - 1) / 26)
-                end
-                return ret
-            end
-        '''
+    def get_label_for_problem(self, index):
+        index += 1
+        ret = ''
+        while index > 0:
+            ret += chr((index - 1) % 26 + 65)
+            index = (index - 1) // 26
+        return ret[::-1]
