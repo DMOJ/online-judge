@@ -29,14 +29,21 @@
                                 {% endif %}
                             </div>
                             {% with author=node.author, user=node.author.user %}
-                                <a href="{{ url('user_page', user.username) }}" class="user">
+                                <a href="{{ url('user_page', user.username) }}" class="user gravatar-main">
                                     <img src="{{ gravatar(author, 135) }}" class="gravatar">
                                 </a>
                             {% endwith %}
                         </div>
                         <div class="detail">
                             <div class="header">
-                                {{ link_user(node.author) }}&nbsp;
+                                <span>
+                                    {% with author=node.author, user=node.author.user %}
+                                        <a href="{{ url('user_page', user.username) }}" class="user gravatar-mobile">
+                                            <img src="{{ gravatar(author, 135) }}" class="gravatar">
+                                        </a>
+                                    {% endwith %}
+                                    {{ link_user(node.author) }}&nbsp;
+                                </span>
                                 {{ relative_time(node.time, abs=_('commented on {time}'), rel=_('commented {time}')) }}
                                 <span class="comment-spacer"></span>
                                 <span class="comment-operation">
