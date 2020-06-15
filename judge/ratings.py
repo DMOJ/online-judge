@@ -107,14 +107,12 @@ def rate_contest(contest):
                  judge_rating ON (judge_rating.user_id = judge_contestparticipation.user_id) INNER JOIN
                  judge_contest ON (judge_contest.id = judge_rating.contest_id)
             WHERE judge_contestparticipation.contest_id = %s AND judge_contest.end_time < %s AND
-                  judge_contestparticipation.user_id NOT IN (
-                      SELECT profile_id FROM judge_contest_rate_exclude WHERE contest_id = %s
-                  ) AND judge_contestparticipation.virtual = 0
+                  judge_contestparticipation.virtual = 0
             GROUP BY judge_rating.user_id
             ORDER BY judge_contestparticipation.score DESC, judge_contestparticipation.cumtime ASC,
                      judge_contestparticipation.tiebreaker ASC
         ) AS r ON (judge_rating.user_id = r.id AND judge_contest.end_time = r.last_time)
-    ''', (contest.id, contest.end_time, contest.id))
+    ''', (contest.id, contest.end_time))
     data = {user: (rating, volatility, times) for user, rating, volatility, times in cursor.fetchall()}
     cursor.close()
 
@@ -127,6 +125,7 @@ def rate_contest(contest):
         users = users.exclude(user__rating__lt=contest.rating_floor)
     if contest.rating_ceiling is not None:
         users = users.exclude(user__rating__gt=contest.rating_ceiling)
+
     users = list(tie_ranker(users, key=itemgetter(2, 3)))
     participation_ids = [user[1][0] for user in users]
     user_ids = [user[1][1] for user in users]
@@ -137,21 +136,28 @@ def rate_contest(contest):
     times_ranked = list(map(itemgetter(2), old_data))
     rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked)
 
+    excluded_user_ids = list(
+        contest.users.filter(virtual=0).exclude(id__in=participation_ids).values_list('user_id', flat=True),
+    )
+    excluded_user_rating = [data.get(user, (None,))[0] for user in excluded_user_ids]
+
     now = timezone.now()
     ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
                for id, p, r, v, z in zip(user_ids, participation_ids, rating, volatility, ranking)]
-    cursor = connection.cursor()
-    cursor.execute('CREATE TEMPORARY TABLE _profile_rating_update(id integer, rating integer)')
-    cursor.executemany('INSERT INTO _profile_rating_update VALUES (%s, %s)', list(zip(user_ids, rating)))
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)
-        cursor.execute('''
-            UPDATE `%s` p INNER JOIN `_profile_rating_update` tmp ON (p.id = tmp.id)
-            SET p.rating = tmp.rating
-        ''' % Profile._meta.db_table)
-    cursor.execute('DROP TABLE _profile_rating_update')
-    cursor.close()
+        with connection.cursor() as cursor:
+            cursor.execute('CREATE TEMPORARY TABLE _profile_rating_update(id integer, rating integer)')
+            cursor.executemany(
+                'INSERT INTO _profile_rating_update VALUES (%s, %s)',
+                list(zip(user_ids + excluded_user_ids, rating + excluded_user_rating)),
+            )
+            cursor.execute('''
+                UPDATE `%s` p INNER JOIN `_profile_rating_update` tmp ON (p.id = tmp.id)
+                SET p.rating = tmp.rating
+            ''' % Profile._meta.db_table)
+            cursor.execute('DROP TEMPORARY TABLE _profile_rating_update')
     return old_rating, old_volatility, ranking, times_ranked, rating, volatility
 
 
