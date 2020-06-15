@@ -58,7 +58,7 @@ a {
 }
 
 .comment-operation {
-    float: right;
+    flex: auto;
 
     .fa {
         color: #444;
@@ -102,8 +102,7 @@ a {
 .comment {
     list-style: none none;
     border-radius: $widget_border_radius;
-    margin: (-50px) -4px 10px -40px;
-    padding-top: 50px;
+    margin: 0px -4px 10px -40px;
 
     &:target > .comment-box {
         border-left: 10px solid $highlight_blue;
@@ -116,6 +115,19 @@ a {
         margin-top: -50px;
         height: 50px;
         visibility: hidden;
+    }
+}
+
+.reply-comment {
+    margin: 0 23px 10px -40px;
+}
+
+@media (max-width: 760px) {
+    .comments {
+        padding-inline-start: 5%;
+    }
+    .comment {
+        margin-left: -5%;
     }
 }
 

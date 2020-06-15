@@ -32,7 +32,6 @@
         .new-comments .comment .detail {
             margin: 0px 15px 0px;
             width: 100%;
-            max-width: calc(100% - 134px);
         }
 
         .new-comments .comment-edits {
@@ -41,6 +40,8 @@
 
         .new-comments .comment .detail .header {
             display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
             padding: 2px 0px;
             font-weight: normal;
             border-bottom: 1px #888 solid;
@@ -66,10 +67,37 @@
             max-width: 75px;
         }
 
+        .new-comments .gravatar-mobile {
+            display: none;
+        }
+
+        .new-comments .gravatar-main {
+            display: unset;
+        }
+
         .new-comments .vote {
             margin-right: 1em;
             height: 75px;
             padding-top: 0.4em;
+        }
+
+        @media (max-width: 760px) {
+            .new-comments .gravatar {
+                width: 10px;
+                max-width: 10px;
+            }
+
+            .new-comments .gravatar-mobile {
+                display: unset;
+            }
+
+            .new-comments .gravatar-main {
+                display: none;
+            }
+
+            .new-comments .vote {
+                margin-right: 0em;
+            }
         }
 
         .new-comments .comment-display {
@@ -98,11 +126,6 @@
             -ms-transform: translatez(0);
             -o-transform: translatez(0);
             transform: translatez(0);
-        }
-
-        .reply-comment {
-            margin: -50px 23px 10px -40px;
-            padding-top: 50px;
         }
     </style>
 {% endcompress %}
