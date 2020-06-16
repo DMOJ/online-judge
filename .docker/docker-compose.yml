@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  cptjudge:
+    build:
+      context: judge/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - /code/problems/:/problems/
+      - /code/judge-config/cptjudge.yml:/judge.yml
+    cap_add:
+      - SYS_PTRACE
+    image: cptjudge
+    command: run -c /judge.yml --skip-self-test 165.227.47.244
+
+  mathoid:
+    container_name: mathoid
+    image: mathoid:mathoid
+    build: ./mathoid
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:10044:10044"
+
+  texoid:
+    container_name: texoid
+    image: texoid:texoid
+    build: ./texoid
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8888:8888"
