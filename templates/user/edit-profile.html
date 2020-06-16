@@ -368,11 +368,11 @@ You will not be able to view your scratch codes after you leave this page!') }}"
                                 {% if profile.scratch_codes %}
                                     <a id="generate-scratch-codes-button" href="{{ url('generate_scratch_codes') }}"
                                         class="button inline-button">{{ _('Regenerate') }}</a>
+                                        <div id="hidden-word">{{ _('Hidden') }}</div>
                                 {% else %}
                                     <a id="generate-scratch-codes-button" href="{{ url('generate_scratch_codes') }}"
                                         class="button inline-button">{{ _('Generate') }}</a>
                                 {% endif %}
-                                <div id="hidden-word">{{ _('Hidden') }}</div>
                                 <div id="scratch-codes-text"></div>
                                 <pre><code id="scratch-codes"></code></pre>
                             </span>
