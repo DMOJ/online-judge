@@ -243,7 +243,7 @@ class TwoFactorLoginForm(TOTPForm):
         elif self.profile.is_totp_enabled and totp_or_scratch_code:
             if pyotp.TOTP(self.profile.totp_key).verify(totp_or_scratch_code, valid_window=self.TOLERANCE):
                 return
-            elif totp_or_scratch_code in json.loads(self.profile.scratch_codes):
+            elif self.profile.scratch_codes and totp_or_scratch_code in json.loads(self.profile.scratch_codes):
                 scratch_codes = json.loads(self.profile.scratch_codes)
                 scratch_codes.remove(totp_or_scratch_code)
                 self.profile.scratch_codes = json.dumps(scratch_codes)
