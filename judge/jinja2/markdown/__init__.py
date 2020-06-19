@@ -130,6 +130,26 @@ def get_cleaner(name, params):
     return cleaner
 
 
+def fragments_to_tree(fragment):
+    tree = html.Element('div')
+    try:
+        parsed = html.fragments_fromstring(fragment, parser=html.HTMLParser(recover=True))
+    except (XMLSyntaxError, ParserError) as e:
+        if fragment and (not isinstance(e, ParserError) or e.args[0] != 'Document is empty'):
+            logger.exception('Failed to parse HTML string')
+        return tree
+
+    if parsed and isinstance(parsed[0], str):
+        tree.text = parsed[0]
+        parsed = parsed[1:]
+    tree.extend(parsed)
+    return tree
+
+
+def fragment_tree_to_str(tree):
+    return html.tostring(tree, encoding='unicode')[len('<div>'):-len('</div>')]
+
+
 @registry.filter
 def markdown(value, style, math_engine=None, lazy_load=False):
     styles = settings.MARKDOWN_STYLES.get(style, settings.MARKDOWN_DEFAULT_STYLE)
@@ -152,15 +172,10 @@ def markdown(value, style, math_engine=None, lazy_load=False):
     result = markdown(value)
 
     if post_processors:
-        tree = html.Element('div')
-        try:
-            tree.extend(html.fragments_fromstring(result, parser=html.HTMLParser(recover=True)))
-        except (XMLSyntaxError, ParserError) as e:
-            if result and (not isinstance(e, ParserError) or e.args[0] != 'Document is empty'):
-                logger.exception('Failed to parse HTML string')
+        tree = fragments_to_tree(result)
         for processor in post_processors:
             processor(tree)
-        result = html.tostring(tree, encoding='unicode')[len('<div>'):-len('</div>')]
+        result = fragment_tree_to_str(tree)
     if bleach_params:
         result = get_cleaner(style, bleach_params).clean(result)
     return Markup(result)
