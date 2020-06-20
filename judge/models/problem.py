@@ -178,7 +178,9 @@ class Problem(models.Model):
             return False
         if user.has_perm('judge.edit_all_problem') or user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        return user.has_perm('judge.edit_own_problem') and user.profile.id in self.editor_ids
+        return user.has_perm('judge.edit_own_problem') and \
+            (user.profile.id in self.editor_ids or
+                self.is_organization_private and self.organizations.filter(admins=user.profile).exists())
 
     def is_accessible_by(self, user, skip_contest_problem_check=False):
         # Problem is public.
@@ -237,6 +239,7 @@ class Problem(models.Model):
         #   - otherwise
         #       - not is_public problems
         #           - author or curator or tester
+        #           - is_organization_private and admin of organization
         #       - is_public problems
         #           - not is_organization_private or in organization or `judge.see_organization_problem`
         #           - author or curator or tester
@@ -250,6 +253,9 @@ class Problem(models.Model):
                     Q(is_organization_private=False) |
                     Q(is_organization_private=True, organizations__in=user.profile.organizations.all())
                 )
+
+            if user.has_perm('judge.edit_own_problem'):
+                q |= Q(is_organization_private=True, organizations__in=user.profile.admin_of.all())
 
             # Authors, curators, and testers should always have access, so OR at the very end.
             q |= Q(authors=user.profile)
@@ -271,6 +277,7 @@ class Problem(models.Model):
             return cls.objects.all()
 
         q = Q(authors=user.profile) | Q(curators=user.profile)
+        q |= Q(is_organization_private=True, organizations__in=user.profile.admin_of.all())
 
         if user.has_perm('judge.edit_public_problem'):
             q |= Q(is_public=True)
