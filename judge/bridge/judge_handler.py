@@ -581,7 +581,6 @@ class JudgeHandler(ZlibPacketHandler):
         self._update_ping()
 
     def _free_self(self, packet):
-        self._working = False
         self.judges.on_judge_free(self, packet['submission-id'])
 
     def _ping_thread(self):
