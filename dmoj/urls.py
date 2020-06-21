@@ -85,7 +85,8 @@ register_patterns = [
     url(r'api/token/remove/$', user.remove_api_token, name='remove_api_token'),
 
     url(r'wcipeg_merge/request/$', user.WCIPEGMergeRequest.as_view(), name='wcipeg_merge_request'),
-    url(r'wcipeg_merge/activate/$', user.WCIPEGMergeActivate.as_view(), name='wcipeg_merge_activate'),
+    url(r'wcipeg_merge/activate/(?P<pk>\d+)/(?P<token>[0-9a-f]{64})$', user.WCIPEGMergeActivate.as_view(),
+        name='wcipeg_merge_activate'),
 ]
 
 

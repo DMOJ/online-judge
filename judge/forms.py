@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.forms import BooleanField, CharField, ChoiceField, Form, ModelForm, MultipleChoiceField
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
@@ -255,6 +255,10 @@ class TwoFactorLoginForm(TOTPForm):
             raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
 
 
+class WCIPEGMergeActivationForm(Form):
+    accept = BooleanField(label=_('I understand and would still like to merge my accounts:'))
+
+
 class WCIPEGMergeRequestForm(Form):
     handle = CharField(max_length=50, validators=[UnicodeUsernameValidator()])
 
@@ -267,9 +271,9 @@ class WCIPEGMergeRequestForm(Form):
             raise ValidationError(_("Account doesn't exist."))
         return self.cleaned_data['handle']
 
-    def send_email(self, token):
+    def send_email(self, pk, token):
+        url = reverse('wcipeg_merge_activate', args=[pk, token])
         # TODO: Send email
-        pass
 
 
 class ProblemCloneForm(Form):

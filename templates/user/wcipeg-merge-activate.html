@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <div class="centered-form">
+        <form id="wcipeg-merge-activate" action="" method="post" class="form-area">
+            {% csrf_token %}
+            <p>{{ _('To complete the merging of your accounts, click on the button below. Beware that this action is
+                     irreversible and will move all of the submissions onto the new account. You will be logged out of
+                     your WCIPEG account, after which it will become unnaccessible. You can then login to your native
+                     DMOJ account and should see all of your submissions migrated.') }}</p>
+            <b>{{ form.accept.label }}</b>
+            {{ form.accept }}
+            {% if form.errors %}
+                <div id="form-errors">
+                    {{ form.handle.errors }}
+                </div>
+            {% endif %}
+            <hr>
+            <button class="submit-bar" type="submit">{{ _('Merge Accounts') }}</button>
+        </form>
+    </div>
+{% endblock %}
