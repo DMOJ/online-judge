@@ -345,6 +345,11 @@ class WCIPEGMergeRequest(LoginRequiredMixin, TitleMixin, FormView):
     template_name = 'user/wcipeg-merge-request.html'
     form_class = WCIPEGMergeRequestForm
 
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated and not request.profile.is_peg:
+            raise PermissionDenied()
+        return super(WCIPEGMergeRequest, self).dispatch(request, *args, **kwargs)
+
     def get_title(self):
         return _('WCIPEG Merge Request')
 
