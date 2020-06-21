@@ -263,6 +263,8 @@ class JudgeHandler(ZlibPacketHandler):
 
     def on_submission_wrong_acknowledge(self, packet, expected, got):
         json_log.error(self._make_json_log(packet, action='processing', info='wrong-acknowledge', expected=expected))
+        Submission.objects.filter(id=expected).update(status='IE', result='IE', error=None)
+        Submission.objects.filter(id=got, status='QU').update(status='IE', result='IE', error=None)
 
     def on_submission_acknowledged(self, packet):
         if not packet.get('submission-id', None) == self._working:
