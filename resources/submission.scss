@@ -290,7 +290,7 @@ label[for="language"], label[for="status"] {
         vertical-align: top;
     }
 
-    .case-ext-feedback {
+    td.case-output + td.case-ext-feedback {
         width: 50%;
     }
 }

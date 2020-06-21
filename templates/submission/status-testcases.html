@@ -96,7 +96,7 @@
             {% if print_case_output or case.extended_feedback %}
                 <tr id="{{ case.id }}-output" style="display:none" class="case-feedback toggled">
                     {% if print_case_output %}
-                        <td colspan="5">
+                        <td colspan="5" class="case-output">
                             <div class="case-info">
                                 <strong>{{ _('Your output (clipped)') }}</strong>
                                 {% if prefix_length is none %}
