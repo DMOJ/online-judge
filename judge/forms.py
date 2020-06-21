@@ -267,7 +267,7 @@ class WCIPEGMergeRequestForm(Form):
             raise ValidationError(_("Account doesn't exist."))
         return self.cleaned_data['handle']
 
-    def send_email(self):
+    def send_email(self, token):
         # TODO: Send email
         pass
 

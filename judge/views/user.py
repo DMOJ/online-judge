@@ -1,3 +1,4 @@
+import hmac
 import itertools
 import json
 import os
@@ -19,6 +20,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonRespons
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.encoding import force_bytes
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
@@ -347,7 +349,9 @@ class WCIPEGMergeRequest(LoginRequiredMixin, TitleMixin, FormView):
         return _('WCIPEG Merge Request')
 
     def form_valid(self, form):
-        form.send_email()
+        token = 'wcipeg_%s' % self.request.user.email
+        hmac_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=token.encode('utf-8'), digestmod='sha256')
+        form.send_email(hmac_token.hexdigest())
         return generic_message(self.request, _('Merge Request Submitted'), _("Please check your DMOJ account's email."))
 
 
