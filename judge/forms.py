@@ -265,6 +265,7 @@ class WCIPEGMergeRequestForm(Form):
                 raise ValidationError(_('Account must be a DMOJ account.'))
         except Profile.DoesNotExist:
             raise ValidationError(_("Account doesn't exist."))
+        return self.cleaned_data['handle']
 
     def send_email(self):
         # TODO: Send email
