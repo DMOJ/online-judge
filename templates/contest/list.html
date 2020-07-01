@@ -124,7 +124,7 @@
 {% macro contest_join(contest, request) %}
     {% if not request.in_contest %}
         <td>
-            {% if request.profile in contest.organizers.all() or contest.is_in_contest(request.user) %}
+            {% if request.profile in contest.organizers.all() %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button"
