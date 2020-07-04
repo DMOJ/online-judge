@@ -2,7 +2,7 @@ from django.contrib.auth.models import AnonymousUser, Permission, User
 from django.utils import timezone
 
 from judge.models import BlogPost, Contest, ContestParticipation, ContestProblem, ContestTag, Language, Organization, \
-    Problem, ProblemGroup, ProblemType, Profile
+    Problem, ProblemGroup, ProblemType, Profile, Solution
 
 
 class CreateModel:
@@ -163,6 +163,29 @@ class CreateProblem(CreateModel):
 
 
 create_problem = CreateProblem()
+
+
+class CreateSolution(CreateModel):
+    model = Solution
+    m2m_fields = {
+        'authors': (Profile, 'user__username'),
+    }
+    required_fields = ('problem',)
+
+    def get_defaults(self, required_kwargs, kwargs):
+        _now = timezone.now()
+        return {
+            'is_public': True,
+            'publish_on': _now - timezone.timedelta(days=4),
+            'content': '',
+        }
+
+    def process_related_objects(self, required_kwargs, defaults):
+        if not isinstance(required_kwargs['problem'], Problem):
+            required_kwargs['problem'] = create_problem(required_kwargs['problem'])
+
+
+create_solution = CreateSolution()
 
 
 class CreateContest(CreateModel):
