@@ -21,7 +21,9 @@
 <div class="sub-main">
     <div class="sub-info{% if submission.status == 'G' %} sub-info-grading{% endif %}">
         {% if show_problem %}
-            <div class="name"><a href="{{ url('problem_detail', submission.problem.code) }}">{{ problem_name }}</a></div>
+            <div class="name">
+                <a href="{{ url('problem_detail', submission.problem.code) }}">{{ problem_name }}</a>
+            </div>
         {% endif %}
         <div>
             {{ link_user(submission.user) }}
@@ -57,7 +59,11 @@
                         <i class="fa fa-refresh fa-fw"></i><span class="label">{{ _('rejudge') }}</span>
                     </a>
                 {% else %}
-                    <i class="fa fa-refresh fa-fw grey-icon"></i><span class="label grey-label" title="{{ _('This submission has been locked, and cannot be rejudged.') }}">{{ _('locked') }}</span>
+                    <i class="fa fa-refresh fa-fw grey-icon"></i>
+                    <span class="label grey-label"
+                          title="{{ _('This submission has been locked, and cannot be rejudged.') }}">
+                        {{ _('locked') }}
+                    </span>
                 {% endif %}
             {% endif %}
             {% if can_edit %} ·
