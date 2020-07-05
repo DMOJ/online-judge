@@ -17,53 +17,63 @@
         <span class="language">{{ submission.language.short_display_name }}</span>
     </div>
 </div>
-<div class="sub-info{% if submission.status == 'G' %} sub-info-grading{% endif %}">
-    {% if show_problem %}
-        <div class="name"><a href="{{ url('problem_detail', submission.problem.code) }}">{{ problem_name }}</a></div>
-    {% endif %}
-    <div>
-        {{ link_user(submission.user) }}
-        <span class="time">{{ relative_time(submission.date) }}</span>
-        {% if not request.in_contest and submission.contest_object_id %}
-            <a href="{{ url('contest_view', submission.contest_object.key) }}"
-               class="submission-contest">
-                <i title="{{ submission.contest_object.name }}" class="fa fa-dot-circle-o"></i>
-            </a>
+
+<div class="sub-main">
+    <div class="sub-info{% if submission.status == 'G' %} sub-info-grading{% endif %}">
+        {% if show_problem %}
+            <div class="name">
+                <a href="{{ url('problem_detail', submission.problem.code) }}">{{ problem_name }}</a>
+            </div>
         {% endif %}
-    </div>
-</div>
-
-{% if submission.status == 'G' %}
-    <div class="sub-testcase">
-        {%- if submission.current_testcase > 0 -%}
-            {{ _('Case #%(case)s', case=submission.current_testcase) }}
-        {%- else -%}
-            ...
-        {%- endif -%}
-    </div>
-{% endif %}
-
-{% if can_view %}
-    <div class="sub-prop"><div>
-        <a href="{{ url('submission_status', submission.id) }}">
-            <i class="fa fa-eye fa-fw"></i><span class="label">{{ _('view') }}</span>
-        </a>
-        {% if perms.judge.rejudge_submission and can_edit %} ·
-            {% if not submission.is_locked %}
-                <a href="#" onclick="rejudge_submission({{ submission.id }}, event);return false">
-                    <i class="fa fa-refresh fa-fw"></i><span class="label">{{ _('rejudge') }}</span>
+        <div>
+            {{ link_user(submission.user) }}
+            <br class="xs-br">
+            <span class="time">{{ relative_time(submission.date) }}</span>
+            {% if not request.in_contest and submission.contest_object_id %}
+                <a href="{{ url('contest_view', submission.contest_object.key) }}"
+                   class="submission-contest">
+                    <i title="{{ submission.contest_object.name }}" class="fa fa-dot-circle-o"></i>
                 </a>
-            {% else %}
-                <i class="fa fa-refresh fa-fw grey-icon"></i><span class="label grey-label" title="{{ _('This submission has been locked, and cannot be rejudged.') }}">{{ _('locked') }}</span>
             {% endif %}
-        {% endif %}
-        {% if can_edit %} ·
-            <a href="{{ url('admin:judge_submission_change', submission.id) }}">
-                <i class="fa fa-cog fa-fw"></i><span class="label">{{ _('admin') }}</span>
+        </div>
+    </div>
+
+    {% if submission.status == 'G' %}
+        <div class="sub-testcase">
+            {%- if submission.current_testcase > 0 -%}
+                {{ _('Case #%(case)s', case=submission.current_testcase) }}
+            {%- else -%}
+                ...
+            {%- endif -%}
+        </div>
+    {% endif %}
+
+    {% if can_view %}
+        <div class="sub-prop"><div>
+            <a href="{{ url('submission_status', submission.id) }}">
+                <i class="fa fa-eye fa-fw"></i><span class="label">{{ _('view') }}</span>
             </a>
-        {% endif %}
-    </div></div>
-{% endif %}
+            {% if perms.judge.rejudge_submission and can_edit %} ·
+                {% if not submission.is_locked %}
+                    <a href="#" onclick="rejudge_submission({{ submission.id }}, event);return false">
+                        <i class="fa fa-refresh fa-fw"></i><span class="label">{{ _('rejudge') }}</span>
+                    </a>
+                {% else %}
+                    <i class="fa fa-refresh fa-fw grey-icon"></i>
+                    <span class="label grey-label"
+                          title="{{ _('This submission has been locked, and cannot be rejudged.') }}">
+                        {{ _('locked') }}
+                    </span>
+                {% endif %}
+            {% endif %}
+            {% if can_edit %} ·
+                <a href="{{ url('admin:judge_submission_change', submission.id) }}">
+                    <i class="fa fa-cog fa-fw"></i><span class="label">{{ _('admin') }}</span>
+                </a>
+            {% endif %}
+        </div></div>
+    {% endif %}
+</div>
 
 <div class="sub-usage">
     {% if submission.status in ('QU', 'P', 'G', 'CE', 'IE', 'AB') %}
