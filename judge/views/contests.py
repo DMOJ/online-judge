@@ -104,6 +104,7 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['future_contests'] = future
         context['now'] = self._now
         context['first_page_href'] = '.'
+        context['page_suffix'] = '#past-contests'
         return context
 
 
