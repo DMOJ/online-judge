@@ -257,7 +257,7 @@
         <br>
 
         {% if past_contests %}
-            <h4>{{ _('Past Contests') }}</h4>
+            <h4 id="past-contests">{{ _('Past Contests') }}</h4>
             {% if page_obj and page_obj.has_other_pages() %}
                 <div style="margin-bottom: 4px;">
                     {% include "list-pages.html" %}
