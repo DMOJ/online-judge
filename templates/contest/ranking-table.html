@@ -21,6 +21,16 @@
 {% endblock %}
 
 {% block user_data %}
+    {% if not contest.ended %}
+        {% if not user.participation.ended %}
+            <div class="start-time active">
+                {{ relative_time(user.participation.start, abs=_('Started on {time}'), rel=_('Started {time}')) }}
+            </div>
+        {% else %}
+            <div class="start-time">{{ _('Participation ended.') }}</div>
+        {% endif %}
+    {% endif %}
+
     {% if can_edit %}
         <span class="contest-participation-operation">
             <form action="{{ url('contest_participation_disqualify', contest.key) }}" method="post">

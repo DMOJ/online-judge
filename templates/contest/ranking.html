@@ -177,27 +177,14 @@
             });
         </script>
     {% endif %}
-    {% if perms.judge.change_contestparticipation %}
-        <script type="text/javascript">
-            $(function () {
-                $('td.user').find('a.user-name').click(function (e) {
-                    var data = $(this).siblings('.edit-participation');
-                    if (e.altKey && data.length) {
-                        window.open(data.attr('data-link'), '_blank');
-                        return false;
-                    }
-                });
-            });
-        </script>
-    {% endif %}
     {% if not contest.ended %}
         <script type="text/javascript">
             $(function () {
                 window.install_tooltips = function () {
-                    $('td.user').find('a.user-name').each(function () {
+                    $('td.user-name').find('span.user').each(function () {
                         var link = $(this);
                         link.mouseenter(function (e) {
-                            var start_time = link.siblings('.start-time').text();
+                            var start_time = link.siblings('.start-time').text().trim();
                             link.addClass('tooltipped tooltipped-e').attr('aria-label', start_time);
                         }).mouseleave(function (e) {
                             link.removeClass('tooltipped tooltipped-e').removeAttr('aria-label');
