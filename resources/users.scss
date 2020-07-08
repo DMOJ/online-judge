@@ -1,3 +1,5 @@
+@import "vars";
+
 #content-left {
     &.users {
         flex: unset;
@@ -261,5 +263,102 @@ a.edit-profile {
 
     .rate-group {
         color: white;
+    }
+}
+
+#submission-activity {
+    #submission-activity-actions {
+        text-align: center;
+        #prev-year-action, #next-year-action {
+            font-size: 1.75em;
+        }
+        #year {
+            font-size: 1.25em;
+            color: #444;
+        }
+    }
+
+    #submission-activity-display {
+        border: 1px solid $border_gray;
+        border-radius: $table_header_rounding;
+
+        .info-bar {
+            display: flex;
+            justify-content: space-between;
+
+            .info-table {
+                width: 15%;
+                min-width: 130px;
+
+                .info-table-text {
+                    width: 8%;
+                }
+            }
+        }
+
+        .info-text {
+            font-size: 0.75em;
+            line-height: 1;
+            font-weight: 100;
+            color: #444;
+        }
+
+        #submission-total-count {
+            align-self: center;
+            padding-left: 8%;
+            font-size: 0.85em;
+        }
+
+        @media(max-width: 1000px) {
+            #submission-total-count {
+                padding-left: 5px;
+            }
+        }
+
+        table {
+            width: 100%;
+            padding: 5px;
+
+            th.submission-date-col {
+                width: 8%;
+            }
+
+            @media (max-width: 1000px) {
+                th.submission-date-col {
+                    display: none;
+                }
+            }
+            td {
+                border-radius: 20%;
+
+                div {
+                    margin-top: 100%;
+                }
+
+                &.activity-label {
+                    position: relative;
+                    white-space: nowrap;
+                }
+
+                &.activity-blank {
+                    background-color: white;
+                }
+                &.activity-0 {
+                    background-color: #ddd;
+                }
+                &.activity-1 {
+                    background-color: #9be9a8;
+                }
+                &.activity-2 {
+                    background-color: #40c463;
+                }
+                &.activity-3 {
+                    background-color: #2f9c4c;
+                }
+                &.activity-4 {
+                    background-color: #216e39;
+                }
+            }
+        }
     }
 }
