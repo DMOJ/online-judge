@@ -215,6 +215,8 @@ urlpatterns = [
         url(r'^/rank/(?P<problem>\w+)/',
             paged_list_view(ranked_submission.ContestRankedSubmission, 'contest_ranked_submissions')),
 
+        url(r'^/submissions/(?P<user>\w+)/',
+            paged_list_view(submission.UserAllContestSubmissions, 'contest_all_user_submissions')),
         url(r'^/submissions/(?P<user>\w+)/(?P<problem>\w+)/',
             paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
 
