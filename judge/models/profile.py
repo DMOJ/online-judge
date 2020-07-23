@@ -230,7 +230,7 @@ class Profile(models.Model):
 
     @cached_property
     def is_peg(self):
-        return self.user.email.endswith('@accounts.wcipeg.com')
+        return PEGUser.objects.filter(user=self).exists()
 
     class Meta:
         permissions = (
@@ -239,6 +239,12 @@ class Profile(models.Model):
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')
+
+
+class PEGUser(models.Model):
+    user = models.OneToOneField(Profile, verbose_name=_('user'), related_name='peg_user', on_delete=models.CASCADE)
+    merge_user = models.OneToOneField(Profile, verbose_name=_('user'), related_name='peg_merge_user', null=True,
+            on_delete=models.CASCADE)
 
 
 class WebAuthnCredential(models.Model):
