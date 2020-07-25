@@ -1,14 +1,10 @@
 [
   {
+    "quote": "<a href=\"https://youtu.be/dQw4w9WgXcQ\">Click Me!</a>",
+    "tooltip": "Did you click yet?"
+  },
+  {
     "quote": "A leader leads by example not by force.",
-    "tooltip": "Sun Tzu said that!"
-  },
-  {
-    "quote": "All warfare is based on deception.",
-    "tooltip": "Sun Tzu said that!"
-  },
-  {
-    "quote": "To know your Enemy, you must become your Enemy.",
     "tooltip": "Sun Tzu said that!"
   },
   {
@@ -16,24 +12,40 @@
     "tooltip": "Sun Tzu said that!"
   },
   {
-    "quote": "Pretend inferiority and encourage his arrogance.",
+    "quote": "All warfare is based on deception.",
     "tooltip": "Sun Tzu said that!"
   },
   {
-    "quote": "Opportunities multiply as they are seized.",
-    "tooltip": "Sun Tzu said that!"
+    "quote": "Avidly exploring a more thrilling side to coding!",
+    "tooltip": "Nayaab, 2020"
   },
   {
     "quote": "BTW I use arch.",
     "tooltip": null
   },
   {
+    "quote": "Don't fear the OOP!",
+    "tooltip": null
+  },
+  {
+    "quote": "Opportunities multiply as they are seized.",
+    "tooltip": "Sun Tzu said that!"
+  },
+  {
+    "quote": "Powered by PHP!",
+    "tooltip": null
+  },
+  {
+    "quote": "Pretend inferiority and encourage his arrogance.",
+    "tooltip": "Sun Tzu said that!"
+  },
+  {
     "quote": "Real programmers count from zero.",
     "tooltip": "Unless you use turing."
   },
   {
-    "quote": "Don't fear the OOP!",
-    "tooltip": null
+    "quote": "To know your Enemy, you must become your Enemy.",
+    "tooltip": "Sun Tzu said that!"
   },
   {
     "quote": "Turing > Ruby > C > Java > C++ > Python",
@@ -42,17 +54,5 @@
   {
     "quote": "¯\\_(ツ)_/¯",
     "tooltip": "🤷"
-  },
-  {
-    "quote": "Avidly exploring a more thrilling side to coding!",
-    "tooltip": "Nayaab, 2020"
-  },
-  {
-    "quote": "<a href=\"https://youtu.be/dQw4w9WgXcQ\">Click Me!</a>",
-    "tooltip": "Did you click yet?"
-  },
-  {
-    "quote": "Powered by PHP!",
-    "tooltip": null
   }
 ]
