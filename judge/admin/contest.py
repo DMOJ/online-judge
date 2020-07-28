@@ -139,7 +139,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
             for action in ('make_visible', 'make_hidden'):
                 actions[action] = self.get_action(action)
 
-        if request.user.has_perm('judge.contest_lock'):
+        if request.user.has_perm('judge.lock_contest'):
             for action in ('set_locked', 'set_unlocked'):
                 actions[action] = self.get_action(action)
 
@@ -156,7 +156,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         readonly = []
         if not request.user.has_perm('judge.contest_rating'):
             readonly += ['is_rated', 'rate_all', 'rate_exclude']
-        if not request.user.has_perm('judge.contest_lock'):
+        if not request.user.has_perm('judge.lock_contest'):
             readonly += ['is_locked']
         if not request.user.has_perm('judge.contest_access_code'):
             readonly += ['access_code']
