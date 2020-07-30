@@ -6,7 +6,7 @@ from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Count, Q
+from django.db.models import Count, F, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.urls import reverse
@@ -114,6 +114,10 @@ class OrganizationMembershipChange(LoginRequiredMixin, OrganizationMixin, Single
 
 class JoinOrganization(OrganizationMembershipChange):
     def handle(self, request, org, profile):
+        if not profile.submission_set.filter(points=F('problem__points')).exists():
+            return generic_message(request, _('Joining organization'),
+                                   _('You must solve at least one problem before you can join an organization.'))
+
         if profile.organizations.filter(id=org.id).exists():
             return generic_message(request, _('Joining organization'), _('You are already in the organization.'))
 

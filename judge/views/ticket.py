@@ -3,6 +3,7 @@ import json
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied, ValidationError
+from django.db.models import F
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import truncatechars
@@ -44,6 +45,9 @@ class TicketForm(forms.Form):
             profile = self.request.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
+            elif not self.request.user.is_staff and not profile.current_contest and \
+                    not profile.submission_set.filter(points=F('problem__points')).exists():
+                raise ValidationError(_('You must solve at least one problem before you can make a ticket.'))
         return super(TicketForm, self).clean()
 
 

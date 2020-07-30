@@ -14,8 +14,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Count, Max, Min
-from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.db.models import Count, F, Max, Min
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
@@ -340,6 +340,10 @@ def edit_profile(request):
     if request.profile.mute:
         raise Http404()
     if request.method == 'POST':
+        if not request.user.is_staff and \
+                not request.profile.submission_set.filter(points=F('problem__points')).exists():
+            raise HttpResponseBadRequest(_('You must solve at least one problem before you can edit your profile.'),
+                                         content_type='text/plain')
         form = ProfileForm(request.POST, instance=request.profile, user=request.user)
         if form.is_valid():
             with transaction.atomic(), revisions.create_revision():
