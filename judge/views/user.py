@@ -31,7 +31,7 @@ from reversion import revisions
 
 from judge.forms import CustomAuthenticationForm, DownloadDataForm, ProfileForm, WCIPEGMergeActivationForm, \
     WCIPEGMergeRequestForm, newsletter_id
-from judge.models import Profile, Rating, Submission
+from judge.models import Comment, CommentVote, Profile, Rating, Submission
 from judge.performance_points import get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
 from judge.tasks import prepare_user_data
@@ -343,8 +343,12 @@ class WCIPEGMergeActivate(LoginRequiredMixin, TitleMixin, FormView):
     form_class = WCIPEGMergeActivationForm
 
     def merge(self, from_user, to_user):
-        # TODO: Merge
-        pass
+        from_user.merge_user = to_user
+        from_user.save()
+        with transaction.atomic():
+            Submission.objects.filter(user=from_user).update(user=to_user)
+            Comment.objects.filter(user=from_user).update(user=to_user)
+            CommentVote.objects.filter(voter=from_user).update(voter=to_user)
 
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
