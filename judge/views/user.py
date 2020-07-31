@@ -363,7 +363,7 @@ class WCIPEGMergeActivate(LoginRequiredMixin, TitleMixin, FormView):
         self.request.user.is_active = False
         self.request.user.save()
         auth_logout(self.request)
-        return generic_message(self.request, _('Merge Successful'), _('Thanmks!'))
+        return generic_message(self.request, _('Merge Successful'), _('Thanks!'))
 
     def get_title(self):
         return _('WCIPEG Merge Activation')
@@ -387,7 +387,8 @@ class WCIPEGMergeRequest(LoginRequiredMixin, TitleMixin, FormView):
         hmac_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=token.encode('utf-8'), digestmod='sha256')
         form.send_email(pk, hmac_token.hexdigest())
         # TODO: Replace with redirect to login page with message
-        return generic_message(self.request, _('Merge Complete'), _('You can now login as your native DMOJ account.'))
+        return generic_message(self.request, _('Merge Requested'), _('You can now login as your native DMOJ account '
+                               'and click on the link sent to your email.'))
 
 
 @login_required
