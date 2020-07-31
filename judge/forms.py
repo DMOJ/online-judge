@@ -17,6 +17,7 @@ from django.utils.translation import gettext_lazy as _
 from django_ace import AceWidget
 from judge.models import Contest, Language, Organization, PrivateMessage, Problem, Profile, Submission, \
     WebAuthnCredential
+from judge.utils.recaptcha import ReCaptchaField, ReCaptchaWidget
 from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
     Select2Widget
@@ -261,6 +262,9 @@ class WCIPEGMergeActivationForm(Form):
 
 class WCIPEGMergeRequestForm(Form):
     handle = CharField(max_length=50, validators=[UnicodeUsernameValidator()])
+
+    if ReCaptchaField is not None:
+        captcha = ReCaptchaField(widget=ReCaptchaWidget())
 
     def clean_handle(self):
         try:

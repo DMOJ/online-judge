@@ -35,6 +35,9 @@
             });
         });
     </script>
+    {% if form.captcha %}
+        {{ recptcha_init(LANGUAGE_CODE) }}
+    {% endif %}
 {% endblock %}
 
 {% block body %}
@@ -50,6 +53,12 @@
                 </div>
             {% endif %}
             <input id="search-handle" type="text" name="handle" placeholder="{{ _('Search by handle...') }}" required>
+            {% if form.captcha %}
+                <div style="margin-top: 0.5em">{{ form.captcha }}</div>
+                {% if form.captcha.errors %}
+                    <div class="form-field-error">{{ form.captcha.errors }}</div>
+                {% endif %}
+            {% endif %}
             <hr>
             <button class="submit-bar" type="submit">{{ _('Submit Request') }}</button>
         </form>
