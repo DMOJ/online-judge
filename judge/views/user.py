@@ -382,10 +382,10 @@ class WCIPEGMergeRequest(LoginRequiredMixin, TitleMixin, FormView):
         return _('WCIPEG Merge Request')
 
     def form_valid(self, form):
-        pk = User.objects.get(username=form.cleaned_data['handle']).pk
-        token = 'wcipeg_%d_%s' % (pk, self.request.user.email)
+        user = User.objects.get(username=form.cleaned_data['handle'])
+        token = 'wcipeg_%d_%s' % (user.pk, self.request.user.email)
         hmac_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=token.encode('utf-8'), digestmod='sha256')
-        form.send_email(pk, hmac_token.hexdigest())
+        form.send_email(user, hmac_token.hexdigest())
         # TODO: Replace with redirect to login page with message
         return generic_message(self.request, _('Merge Requested'), _('You can now login as your native DMOJ account '
                                'and click on the link sent to your email.'))

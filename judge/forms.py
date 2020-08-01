@@ -275,9 +275,13 @@ class WCIPEGMergeRequestForm(Form):
             raise ValidationError(_("Account doesn't exist."))
         return self.cleaned_data['handle']
 
-    def send_email(self, pk, token):
+    def send_email(self, user, token):
         url = reverse('wcipeg_merge_activate', args=[pk, token])
-        # TODO: Send email
+        email = EmailMessage(
+            subject='WCIPEG Account Merge Request',
+            message='To authenticate the merge, login as your DMOJ account, then use the link below:\n\n%s' % url,
+            to=[user.email],
+        ).send()
 
 
 class ProblemCloneForm(Form):
