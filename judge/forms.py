@@ -269,10 +269,11 @@ class WCIPEGMergeRequestForm(Form):
     def clean_handle(self):
         try:
             profile = Profile.objects.get(user__username=self.cleaned_data['handle'], user__is_active=True)
-            if profile.is_peg:
-                raise ValidationError(_('Account must be a DMOJ account.'))
         except Profile.DoesNotExist:
             raise ValidationError(_("Account doesn't exist."))
+        else:
+            if profile.is_peg:
+                raise ValidationError(_('Account must be a DMOJ account.'))
         return self.cleaned_data['handle']
 
     def send_email(self, user, token):
