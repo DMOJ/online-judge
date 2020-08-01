@@ -33,6 +33,19 @@
             }).on('select2:selecting', function () {
                 return !in_user_redirect;
             });
+
+            $('#wcipeg-merge-submit').click(function () {
+                handle = $('#search-handle').val();
+                check_handle = prompt(
+                    '{{ _('WARNING!\\n') }}' +
+                    '{{ _('This will permanently move all your comments and submissions to the DMOJ account: ')}}' +
+                    handle + '{{ _('\\n\\nThis action is IRREVERSIBLE. Are you sure you want to do this? ') }}' +
+                    '{{ _('If so, enter the username to merge into again, for confirmation:') }}');
+                if (handle !== check_handle) {
+                    alert("{{ _('The selected username and the one you entered do not match! Please try again.') }}");
+                    return false;
+                }
+            });
         });
     </script>
     {% if form.captcha %}
@@ -60,7 +73,7 @@
                 {% endif %}
             {% endif %}
             <hr>
-            <button class="submit-bar" type="submit">{{ _('Submit Request') }}</button>
+            <button id="wcipeg-merge-submit" class="submit-bar" type="submit">{{ _('Submit Request') }}</button>
         </form>
     </div>
 {% endblock %}
