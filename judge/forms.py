@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
+from django.core.mail import EmailMessage
 from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.forms import BooleanField, CharField, ChoiceField, Form, ModelForm, MultipleChoiceField
@@ -256,35 +257,6 @@ class TwoFactorLoginForm(TOTPForm):
             raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
 
 
-class WCIPEGMergeActivationForm(Form):
-    accept = BooleanField(label=_('I understand and would still like to merge my accounts:'))
-
-
-class WCIPEGMergeRequestForm(Form):
-    handle = CharField(max_length=50, validators=[UnicodeUsernameValidator()])
-
-    if ReCaptchaField is not None:
-        captcha = ReCaptchaField(widget=ReCaptchaWidget())
-
-    def clean_handle(self):
-        try:
-            profile = Profile.objects.get(user__username=self.cleaned_data['handle'], user__is_active=True)
-        except Profile.DoesNotExist:
-            raise ValidationError(_("Account doesn't exist."))
-        else:
-            if profile.is_peg:
-                raise ValidationError(_('Account must be a DMOJ account.'))
-        return self.cleaned_data['handle']
-
-    def send_email(self, user, token):
-        url = reverse('wcipeg_merge_activate', args=[pk, token])
-        email = EmailMessage(
-            subject='WCIPEG Account Merge Request',
-            message='To authenticate the merge, login as your DMOJ account, then use the link below:\n\n%s' % url,
-            to=[user.email],
-        ).send()
-
-
 class ProblemCloneForm(Form):
     code = CharField(max_length=20, validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))])
 
@@ -303,3 +275,31 @@ class ContestCloneForm(Form):
         if Contest.objects.filter(key=key).exists():
             raise ValidationError(_('Contest with key already exists.'))
         return key
+
+
+class WCIPEGMergeRequestForm(Form):
+    handle = CharField(max_length=50, validators=[UnicodeUsernameValidator()])
+
+    if ReCaptchaField is not None:
+        captcha = ReCaptchaField(widget=ReCaptchaWidget())
+
+    def clean_handle(self):
+        try:
+            profile = Profile.objects.get(user__username=self.cleaned_data['handle'], user__is_active=True)
+        except Profile.DoesNotExist:
+            raise ValidationError(_("Account doesn't exist."))
+        else:
+            if profile.is_peg:
+                raise ValidationError(_('Account must be a DMOJ account.'))
+        return self.cleaned_data['handle']
+
+    def send_email(self, url, email):
+        email = EmailMessage(
+            subject='WCIPEG Account Merge Request',
+            body='To authenticate the merge, login as your DMOJ account, then use the link below:\n\n%s' % url,
+            to=[email],
+        ).send()
+
+
+class WCIPEGMergeActivationForm(Form):
+    accept = BooleanField(label=_('I understand and would still like to merge my accounts:'))

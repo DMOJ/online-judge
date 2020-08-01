@@ -241,12 +241,6 @@ class Profile(models.Model):
         verbose_name_plural = _('user profiles')
 
 
-class PEGUser(models.Model):
-    user = models.OneToOneField(Profile, verbose_name=_('user'), related_name='peg_user', on_delete=models.CASCADE)
-    merge_user = models.OneToOneField(Profile, verbose_name=_('user'), related_name='peg_merge_user', null=True,
-            on_delete=models.CASCADE)
-
-
 class WebAuthnCredential(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='webauthn_credentials',
                              on_delete=models.CASCADE)
@@ -286,3 +280,8 @@ class OrganizationRequest(models.Model):
     class Meta:
         verbose_name = _('organization join request')
         verbose_name_plural = _('organization join requests')
+
+
+class PEGUser(models.Model):
+    user = models.OneToOneField(Profile, related_name='peg_user', on_delete=models.PROTECT)
+    merge_into = models.OneToOneField(Profile, related_name='peg_merge_into', null=True, on_delete=models.PROTECT)
