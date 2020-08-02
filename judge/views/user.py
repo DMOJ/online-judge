@@ -1,4 +1,3 @@
-import hmac
 import itertools
 import json
 import os
@@ -9,7 +8,7 @@ from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.contrib.auth.views import LoginView, PasswordChangeView, redirect_to_login
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
@@ -20,7 +19,6 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonRespons
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.encoding import force_bytes
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.safestring import mark_safe
@@ -29,9 +27,8 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, FormView, ListView, TemplateView, View
 from reversion import revisions
 
-from judge.forms import CustomAuthenticationForm, DownloadDataForm, ProfileForm, WCIPEGMergeActivationForm, \
-    WCIPEGMergeRequestForm, newsletter_id
-from judge.models import Comment, CommentVote, Profile, Rating, Submission
+from judge.forms import CustomAuthenticationForm, DownloadDataForm, ProfileForm, newsletter_id
+from judge.models import Profile, Rating, Submission
 from judge.performance_points import get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
 from judge.tasks import prepare_user_data
@@ -489,6 +486,14 @@ class UserLogoutView(TitleMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         auth_logout(request)
         return HttpResponseRedirect(request.get_full_path())
+
+
+import hmac
+from django.contrib.auth.models import User
+from django.utils.encoding import force_bytes
+
+from judge.forms import WCIPEGMergeActivationForm, WCIPEGMergeRequestForm
+from judge.models import Comment, CommentVote
 
 
 class WCIPEGMergeRequest(LoginRequiredMixin, TitleMixin, FormView):

@@ -230,7 +230,7 @@ class Profile(models.Model):
 
     @cached_property
     def is_peg(self):
-        from peg_merge.models import PegUser
+        from peg_merge.models import PEGUser
         return PEGUser.objects.filter(user=self).exists()
 
     class Meta:

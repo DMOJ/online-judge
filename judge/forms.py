@@ -6,19 +6,16 @@ import webauthn
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.exceptions import ValidationError
-from django.core.mail import EmailMessage
 from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.forms import BooleanField, CharField, ChoiceField, Form, ModelForm, MultipleChoiceField
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
 from judge.models import Contest, Language, Organization, PrivateMessage, Problem, Profile, Submission, \
     WebAuthnCredential
-from judge.utils.recaptcha import ReCaptchaField, ReCaptchaWidget
 from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
     Select2Widget
@@ -275,6 +272,12 @@ class ContestCloneForm(Form):
         if Contest.objects.filter(key=key).exists():
             raise ValidationError(_('Contest with key already exists.'))
         return key
+
+
+from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.mail import EmailMessage
+
+from judge.utils.recaptcha import ReCaptchaField, ReCaptchaWidget
 
 
 class WCIPEGMergeRequestForm(Form):
