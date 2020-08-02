@@ -635,7 +635,11 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
         # Save a query.
         self.new_submission.source = source
-        self.new_submission.judge(judge_id=form.cleaned_data['judge'])
+
+        judge_kwargs = {}
+        if form.cleaned_data['judge']:
+            judge_kwargs['judge_ids'] = (form.cleaned_data['judge'],)
+        self.new_submission.judge(**judge_kwargs)
 
         return super().form_valid(form)
 
