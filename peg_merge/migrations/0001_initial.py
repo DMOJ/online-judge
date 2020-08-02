@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('judge', '0110_auto_20200802_0129'),
+        ('judge', '0109_scratch_codes'),
     ]
 
     operations = [
