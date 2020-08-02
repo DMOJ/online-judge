@@ -501,8 +501,8 @@ class WCIPEGMergeRequest(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, Fo
     template_name = 'user/wcipeg-merge-request.html'
     form_class = WCIPEGMergeRequestForm
 
-    def test_func(self, *args, **kwargs):
-        return request.profile.is_peg
+    def test_func(self):
+        return self.request.profile.is_peg
 
     def get_title(self):
         return _('WCIPEG Merge Request')
@@ -521,10 +521,10 @@ class WCIPEGMergeActivate(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, F
     template_name = 'user/wcipeg-merge-activate.html'
     form_class = WCIPEGMergeActivationForm
 
-    def test_func(self, *args, **kwargs):
-        token = 'wcipeg_%s_%s' % (kwargs['pk'], self.request.user.email)
+    def test_func(self):
+        token = 'wcipeg_%s_%s' % (self.kwargs['pk'], self.request.user.email)
         hmac_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=token.encode('utf-8'), digestmod='sha256')
-        return hmac.compare_digest(hmac_token.hexdigest(), kwargs['token'])
+        return hmac.compare_digest(hmac_token.hexdigest(), self.kwargs['token'])
 
     def merge(self, from_user, to_user):
         with transaction.atomic():
