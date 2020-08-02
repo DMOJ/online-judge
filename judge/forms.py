@@ -300,8 +300,8 @@ class WCIPEGMergeRequestForm(Form):
         print(url)
         EmailMessage(
             subject='WCIPEG Account Merge Request',
-            body='To authenticate the merge, then use the link below:\n\n%s\n\n' % url +
-                 'You may then login as your native DMOJ account',
+            body='To authenticate the merge, please use the link below:\n\n%s\n\n' % url +
+                 'You may then login to your native DMOJ account.',
             to=[email],
         ).send()
 
