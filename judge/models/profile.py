@@ -230,6 +230,7 @@ class Profile(models.Model):
 
     @cached_property
     def is_peg(self):
+        from peg_merge.models import PegUser
         return PEGUser.objects.filter(user=self).exists()
 
     class Meta:
@@ -280,8 +281,3 @@ class OrganizationRequest(models.Model):
     class Meta:
         verbose_name = _('organization join request')
         verbose_name_plural = _('organization join requests')
-
-
-class PEGUser(models.Model):
-    user = models.OneToOneField(Profile, related_name='peg_user', on_delete=models.PROTECT)
-    merge_into = models.OneToOneField(Profile, related_name='peg_merge_into', null=True, on_delete=models.PROTECT)
