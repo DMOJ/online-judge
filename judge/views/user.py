@@ -489,6 +489,7 @@ class UserLogoutView(TitleMixin, TemplateView):
 
 
 import hmac
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.utils.encoding import force_bytes
 
@@ -496,14 +497,12 @@ from judge.forms import WCIPEGMergeActivationForm, WCIPEGMergeRequestForm
 from judge.models import Comment, CommentVote
 
 
-class WCIPEGMergeRequest(LoginRequiredMixin, TitleMixin, FormView):
+class WCIPEGMergeRequest(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, FormView):
     template_name = 'user/wcipeg-merge-request.html'
     form_class = WCIPEGMergeRequestForm
 
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated and not request.profile.is_peg:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
+    def test_func(self, *args, **kwargs):
+        return request.profile.is_peg
 
     def get_title(self):
         return _('WCIPEG Merge Request')
@@ -514,14 +513,18 @@ class WCIPEGMergeRequest(LoginRequiredMixin, TitleMixin, FormView):
         hmac_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=token.encode('utf-8'), digestmod='sha256')
         url = self.request.build_absolute_uri(reverse('wcipeg_merge_activate', args=[user.pk, hmac_token.hexdigest()]))
         form.send_email(url, user.email)
-        # TODO: Replace with redirect to login page with message
         return generic_message(self.request, _('Merge Requested'), _('Please click on the link sent to your email to '
                                'authorize the merge.'))
 
 
-class WCIPEGMergeActivate(LoginRequiredMixin, TitleMixin, FormView):
+class WCIPEGMergeActivate(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, FormView):
     template_name = 'user/wcipeg-merge-activate.html'
     form_class = WCIPEGMergeActivationForm
+
+    def test_func(self, *args, **kwargs):
+        token = 'wcipeg_%s_%s' % (kwargs['pk'], self.request.user.email)
+        hmac_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=token.encode('utf-8'), digestmod='sha256')
+        return hmac.compare_digest(hmac_token.hexdigest(), kwargs['token'])
 
     def merge(self, from_user, to_user):
         with transaction.atomic():
@@ -530,14 +533,6 @@ class WCIPEGMergeActivate(LoginRequiredMixin, TitleMixin, FormView):
             Submission.objects.filter(user=from_user).update(user=to_user)
             Comment.objects.filter(author=from_user).update(author=to_user)
             CommentVote.objects.filter(voter=from_user).update(voter=to_user)
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            token = 'wcipeg_%s_%s' % (kwargs['pk'], request.user.email)
-            hmac_token = hmac.new(force_bytes(settings.SECRET_KEY), msg=token.encode('utf-8'), digestmod='sha256')
-            if not hmac.compare_digest(hmac_token.hexdigest(), kwargs['token']):
-                raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         self.merge(Profile.objects.get(user=self.request.user), Profile.objects.get(user__pk=self.kwargs['pk']))
