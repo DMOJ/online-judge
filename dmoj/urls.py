@@ -83,9 +83,12 @@ register_patterns = [
 
     url(r'api/token/generate/$', user.generate_api_token, name='generate_api_token'),
     url(r'api/token/remove/$', user.remove_api_token, name='remove_api_token'),
+]
 
-    url(r'wcipeg_merge/request/$', user.WCIPEGMergeRequest.as_view(), name='wcipeg_merge_request'),
-    url(r'wcipeg_merge/activate/(?P<pk>\d+)/(?P<token>[0-9a-f]{64})$', user.WCIPEGMergeActivate.as_view(),
+from peg_merge.views import WCIPEGMergeRequest, WCIPEGMergeActivate
+register_patterns += [
+    url(r'wcipeg_merge/request/$', WCIPEGMergeRequest.as_view(), name='wcipeg_merge_request'),
+    url(r'wcipeg_merge/activate/(?P<pk>\d+)/(?P<token>[0-9a-f]{64})$', WCIPEGMergeActivate.as_view(),
         name='wcipeg_merge_activate'),
 ]
 
