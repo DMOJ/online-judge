@@ -1,4 +1,5 @@
 import hmac
+
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -8,8 +9,8 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.translation import gettext as _
 from django.views.generic import FormView
-
 from peg_merge.forms import WCIPEGMergeActivationForm, WCIPEGMergeRequestForm
+
 from judge.models import Comment, CommentVote, Profile, Submission
 from judge.utils.views import TitleMixin, generic_message
 

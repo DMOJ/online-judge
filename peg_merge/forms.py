@@ -1,5 +1,5 @@
-from django.conf import settings
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
 from django.forms import BooleanField, CharField, Form
 from django.utils.translation import gettext as _

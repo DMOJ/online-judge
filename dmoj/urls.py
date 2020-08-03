@@ -85,7 +85,7 @@ register_patterns = [
     url(r'api/token/remove/$', user.remove_api_token, name='remove_api_token'),
 ]
 
-from peg_merge.views import WCIPEGMergeRequest, WCIPEGMergeActivate
+from peg_merge.views import WCIPEGMergeActivate, WCIPEGMergeRequest  # noqa: E402, I100
 register_patterns += [
     url(r'wcipeg_merge/request/$', WCIPEGMergeRequest.as_view(), name='wcipeg_merge_request'),
     url(r'wcipeg_merge/activate/(?P<pk>\d+)/(?P<token>[0-9a-f]{64})$', WCIPEGMergeActivate.as_view(),
