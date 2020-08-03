@@ -31,6 +31,12 @@
 {% endblock %}
 
 {% block body %}
+    {% if request.profile == user and request.profile.is_peg %}
+        <div class="alert alert-info">
+            This account was migrated from WCIPEG.
+            Click <a href="{{ url('wcipeg_merge_request') }}">here</a> to merge with a DMOJ account.
+        </div>
+    {% endif %}
     <div class="user-info-page">
         <div class="user-sidebar">
             <div class="user-gravatar">
