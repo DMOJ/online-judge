@@ -75,15 +75,15 @@ class JudgeList(object):
         return iter(self.judges)
 
     def on_judge_free(self, judge, submission):
+        logger.info('Judge available after grading %d: %s', submission, judge.name)
         with self.lock:
-            logger.info('Judge available after grading %d: %s', submission, judge.name)
             del self.submission_map[submission]
             judge._working = False
             self._handle_free_judge(judge)
 
     def abort(self, submission):
+        logger.info('Abort request: %d', submission)
         with self.lock:
-            logger.info('Abort request: %d', submission)
             try:
                 self.submission_map[submission].abort()
                 return True
