@@ -99,7 +99,7 @@ The DMOJ admin interface is highly versatile, and can be efficiently used for an
 
 ## Supported Languages
 
-Check out [**DMOJ/judge**](https://github.com/DMOJ/judge) for more judging backend details.
+Check out [**DMOJ/judge**](https://github.com/DMOJ/judge-server) for more judging backend details.
 
 Supported languages include:
 * C++ 11/14/17 (GCC and Clang)
