@@ -46,17 +46,20 @@ class WCIPEGMergeActivate(LoginRequiredMixin, UserPassesTestMixin, TitleMixin, F
 
     def merge(self, from_user, to_user):
         with transaction.atomic():
-            from_user.peg_user.merge_into = to_user
-            from_user.peg_user.save()
             Submission.objects.filter(user=from_user).update(user=to_user)
             Comment.objects.filter(author=from_user).update(author=to_user)
             CommentVote.objects.filter(voter=from_user).update(voter=to_user)
-            user = from_user.user
-            user.is_active = False
-            user.save()
+
+            # Update user models
+            from_user.peg_user.merge_into = to_user
+            from_user.peg_user.save()
+            from_user.is_unlisted = True
+            from_user.save()
+            from_user.user.is_active = False
+            from_user.user.save()
 
     def form_valid(self, form):
-        self.merge(Profile.objects.get(user=self.request.user), Profile.objects.get(user__pk=self.kwargs['pk']))
+        self.merge(self.request.profile, Profile.objects.get(user__pk=self.kwargs['pk']))
         logout(self.request)
         return generic_message(self.request, _('Merge Successful'), _('Thanks! You can now login to your native DMOJ '
                                'account.'))

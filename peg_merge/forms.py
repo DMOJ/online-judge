@@ -25,11 +25,11 @@ class WCIPEGMergeRequestForm(Form):
         return self.cleaned_data['handle']
 
     def send_email(self, url, email):
-        print(url)
         EmailMessage(
             subject=_('WCIPEG Account Merge Request'),
             body=_('To authenticate the merge, please use the link below:\n\n%s\n\n') % url +
-            _('You may then login to your native DMOJ account.'),
+            _('You may then login to your native DMOJ account.\n\n') +
+            _('If you did not request this merge, you can safely ignore this email.'),
             to=[email],
         ).send()
 
