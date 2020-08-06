@@ -1,9 +1,9 @@
-import hmac
 import json
 import logging
 import threading
 import time
 from collections import deque, namedtuple
+from hashlib import sha256
 from operator import itemgetter
 
 from django import db
@@ -94,17 +94,10 @@ class JudgeHandler(ZlibPacketHandler):
             Submission.objects.filter(id=self._working).update(status='IE', result='IE', error='')
             json_log.error(self._make_json_log(sub=self._working, action='close', info='IE due to shutdown on grading'))
 
-    def _authenticate(self, id, key):
-        try:
-            judge = Judge.objects.get(name=id, is_blocked=False)
-        except Judge.DoesNotExist:
-            result = False
-        else:
-            result = hmac.compare_digest(judge.auth_key, key)
-
-        if not result:
-            json_log.warning(self._make_json_log(action='auth', judge=id, info='judge failed authentication'))
-        return result
+    def _authenticate(self, id):
+        if id != sha256(self.client_address.encode()).hexdigest()[:8]:
+            return False
+        return Judge.objects.filter(name=id, last_ip=self.client_address[0], is_blocked=False).exists()
 
     def _connected(self):
         judge = self.judge = Judge.objects.get(name=self.name)
@@ -144,12 +137,12 @@ class JudgeHandler(ZlibPacketHandler):
         super().send(json.dumps(data, separators=(',', ':')))
 
     def on_handshake(self, packet):
-        if 'id' not in packet or 'key' not in packet:
+        if 'id' not in packet:
             logger.warning('Malformed handshake: %s', self.client_address)
             self.close()
             return
 
-        if not self._authenticate(packet['id'], packet['key']):
+        if not self._authenticate(packet['id']):
             logger.warning('Authentication failure: %s', self.client_address)
             self.close()
             return
