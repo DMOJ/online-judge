@@ -638,7 +638,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
         judge_kwargs = {}
         if form.cleaned_data['judge']:
-            judge_kwargs['judge_ids'] = (form.cleaned_data['judge'],)
+            judge_kwargs['judge_names'] = (form.cleaned_data['judge'],)
         self.new_submission.judge(**judge_kwargs)
 
         return super().form_valid(form)

@@ -29,8 +29,8 @@ class JudgeList(object):
             node = self.queue.first
             while node:
                 if not isinstance(node.value, PriorityMarker):
-                    id, problem, language, source, judge_ids = node.value
-                    if judge.can_judge(problem, language, judge_ids):
+                    id, problem, language, source, judge_names = node.value
+                    if judge.can_judge(problem, language, judge_names):
                         self.submission_map[id] = judge
                         try:
                             judge.submit(id, problem, language, source)
@@ -100,7 +100,7 @@ class JudgeList(object):
     def check_priority(self, priority):
         return 0 <= priority < self.priorities
 
-    def judge(self, id, problem, language, source, judge_ids, priority):
+    def judge(self, id, problem, language, source, judge_names, priority):
         with self.lock:
             if id in self.submission_map or id in self.node_map:
                 # Already judging, don't queue again. This can happen during batch rejudges, rejudges should be
@@ -108,10 +108,10 @@ class JudgeList(object):
                 return
 
             candidates = [
-                judge for judge in self.judges if not judge.working and judge.can_judge(problem, language, judge_ids)
+                judge for judge in self.judges if not judge.working and judge.can_judge(problem, language, judge_names)
             ]
-            if judge_ids:
-                logger.info('Specified judge(s): %s', judge_ids)
+            if judge_names:
+                logger.info('Specified judge(s): %s', judge_names)
             logger.info('Free judges: %d', len(candidates))
             if candidates:
                 # Schedule the submission on the judge reporting least load.
@@ -123,10 +123,10 @@ class JudgeList(object):
                 except Exception:
                     logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
                     self.judges.discard(judge)
-                    return self.judge(id, problem, language, source, judge_ids, priority)
+                    return self.judge(id, problem, language, source, judge_names, priority)
             else:
                 self.node_map[id] = self.queue.insert(
-                    (id, problem, language, source, judge_ids),
+                    (id, problem, language, source, judge_names),
                     self.priority[priority],
                 )
                 logger.info('Queued submission: %d', id)

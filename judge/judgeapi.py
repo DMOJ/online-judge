@@ -48,7 +48,7 @@ def judge_request(packet, reply=True):
         return result
 
 
-def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_ids=()):
+def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_names=()):
     from .models import ContestSubmission, Submission, SubmissionTestCase
 
     CONTEST_SUBMISSION_PRIORITY = 0
@@ -88,7 +88,7 @@ def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_ids=(
             'problem-id': submission.problem.code,
             'language': submission.language.key,
             'source': submission.source.source,
-            'judge-ids': judge_ids,
+            'judge-names': judge_names,
             'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else REJUDGE_PRIORITY if rejudge else priority,
         })
     except BaseException:
