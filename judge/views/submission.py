@@ -177,7 +177,7 @@ class SubmissionSourceRaw(SubmissionSource):
 def abort_submission(request, submission):
     submission = get_object_or_404(Submission, id=int(submission))
     if (not request.user.is_authenticated or (submission.was_rejudged or (request.profile != submission.user)) and
-            not request.user.has_perm('abort_any_submission')):
+            not request.user.has_perm('judge.abort_any_submission')):
         raise PermissionDenied()
     submission.abort()
     return HttpResponseRedirect(reverse('submission_status', args=(submission.id,)))
