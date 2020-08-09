@@ -229,7 +229,7 @@ class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
             allowed_hosts=self.get_success_url_allowed_hosts(),
             require_https=self.request.is_secure(),
         )
-        return HttpResponseRedirect((redirect_to if url_is_safe else '') or reverse('user_page'))
+        return HttpResponseRedirect((redirect_to if url_is_safe else '') or reverse('user_dashboard'))
 
     def form_valid(self, form):
         self.request.session['2fa_passed'] = True
