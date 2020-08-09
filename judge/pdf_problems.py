@@ -254,8 +254,8 @@ puppeteer.launch().then(browser => Promise.resolve()
 
     def get_render_script(self):
         return self.template.replace('{params}', json.dumps({
-            'input': 'file://' + os.path.abspath(os.path.join(self.dir, 'input.html')),
-            'output': os.path.abspath(os.path.join(self.dir, 'output.pdf')),
+            'input': 'file://%s' % self.htmlfile,
+            'output': self.pdffile,
             'paper': settings.PUPPETEER_PAPER_SIZE,
             'footer': gettext('Page [page] of [topage]'),
         }))
@@ -293,7 +293,7 @@ class SeleniumPDFRender(BasePdfMaker):
         options.binary_location = settings.SELENIUM_CUSTOM_CHROME_PATH
 
         browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_PATH, options=options)
-        browser.get('file://' + os.path.abspath(os.path.join(self.dir, 'input.html')))
+        browser.get('file://%s' % self.htmlfile)
         self.log = self.get_log(browser)
 
         try:
@@ -308,7 +308,7 @@ class SeleniumPDFRender(BasePdfMaker):
         if not response:
             return
 
-        with open(os.path.abspath(os.path.join(self.dir, 'output.pdf')), 'wb') as f:
+        with open(self.pdffile, 'wb') as f:
             f.write(base64.b64decode(response['data']))
 
         self.success = True
