@@ -95,7 +95,7 @@ class JudgeHandler(ZlibPacketHandler):
             json_log.error(self._make_json_log(sub=self._working, action='close', info='IE due to shutdown on grading'))
 
     def _authenticate(self, id):
-        if id != sha256(self.client_address.encode()).hexdigest()[:8]:
+        if id != sha256(self.client_address[0].encode()).hexdigest()[:8]:
             return False
         return Judge.objects.filter(name=id, last_ip=self.client_address[0], is_blocked=False).exists()
 
