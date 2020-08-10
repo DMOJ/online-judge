@@ -38,7 +38,8 @@ from judge.utils.opengraph import generate_opengraph
 from judge.utils.problems import _get_result_data
 from judge.utils.ranker import ranker
 from judge.utils.stats import get_bar_chart, get_pie_chart
-from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMixin, generic_message
+from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, SingleObjectFormView, TitleMixin, \
+    generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'ContestClone', 'ContestStats', 'ContestMossView', 'ContestMossDelete', 'contest_ranking_ajax',
@@ -62,23 +63,25 @@ class ContestListMixin(object):
         return Contest.get_visible_contests(self.request.user)
 
 
-class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
+class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
     model = Contest
     paginate_by = 20
     template_name = 'contest/list.html'
     title = gettext_lazy('Contests')
     context_object_name = 'past_contests'
+    all_sorts = frozenset(('name', 'user_count', 'start_time'))
+    default_desc = frozenset(('name', 'user_count'))
+    default_sort = '-start_time'
 
     @cached_property
     def _now(self):
         return timezone.now()
 
     def _get_queryset(self):
-        return super(ContestList, self).get_queryset() \
-            .order_by('-start_time', 'key').prefetch_related('tags', 'organizations', 'organizers')
+        return super(ContestList, self).get_queryset().prefetch_related('tags', 'organizations', 'organizers')
 
     def get_queryset(self):
-        return self._get_queryset().filter(end_time__lt=self._now)
+        return self._get_queryset().order_by(self.order, 'key').filter(end_time__lt=self._now)
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -97,7 +100,8 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
                     active.append(participation)
                     present.remove(participation.contest)
 
-        active.sort(key=attrgetter('end_time'))
+        active.sort(key=attrgetter('end_time', 'key'))
+        present.sort(key=attrgetter('end_time', 'key'))
         future.sort(key=attrgetter('start_time'))
         context['active_participations'] = active
         context['current_contests'] = present
@@ -105,6 +109,8 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['now'] = self._now
         context['first_page_href'] = '.'
         context['page_suffix'] = '#past-contests'
+        context.update(self.get_sort_context())
+        context.update(self.get_sort_paginate_context())
         return context
 
 
