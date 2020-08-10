@@ -2,7 +2,8 @@ from django.test import TestCase
 from django.utils import timezone
 
 from judge.models import Language, LanguageLimit, Problem
-from judge.models.tests.util import CommonDataMixin, create_problem, create_problem_type, create_solution, create_user
+from judge.models.tests.util import CommonDataMixin, create_organization, create_problem, create_problem_type, \
+    create_solution, create_user
 
 
 class ProblemTestCase(CommonDataMixin, TestCase):
@@ -38,6 +39,21 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             is_public=True,
             is_organization_private=True,
             curators=('staff_problem_edit_own', 'staff_problem_edit_own_no_staff'),
+        )
+
+        self.problem_organization = create_organization(
+            name='problem organization',
+            registrant='superuser',
+            admins=('normal', 'staff_problem_edit_public'),
+        )
+        self.organization_admin_private_problem = create_problem(
+            code='org_admin_private',
+            is_organization_private=True,
+            organizations=('problem organization',),
+        )
+        self.organization_admin_problem = create_problem(
+            code='organization_admin',
+            organizations=('problem organization',),
         )
 
     def test_basic_problem(self):
@@ -155,6 +171,70 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.organization_private_problem, data)
+
+    def test_organization_admin_private_problem_methods(self):
+        data = {
+            'staff_problem_edit_own': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_subs_manageable_by': self.assertFalse,
+            },
+            'staff_problem_see_all': {
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_subs_manageable_by': self.assertFalse,
+            },
+            'staff_problem_edit_all': {
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+            },
+            'staff_problem_edit_public': {
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+            },
+            'staff_problem_see_organization': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+            },
+            'staff_organization_admin': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+            },
+            'normal': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+            },
+            'anonymous': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.organization_admin_private_problem, data)
+
+    def test_organization_admin_problem_methods(self):
+        data = {
+            'staff_problem_edit_all': {
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+            },
+            'staff_problem_edit_public': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+            },
+            'staff_organization_admin': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+            },
+            'normal': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+            },
+            'anonymous': {
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.organization_admin_problem, data)
 
     def test_problems_list(self):
         for name, user in self.users.items():
