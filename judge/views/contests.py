@@ -351,6 +351,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                         defaults={'real_start': timezone.now()},
                     )[0]
 
+        participation.recompute_results() # Need to do this so that team is updated upon joining of new member
         profile.current_contest = participation
         profile.save()
         contest._updating_stats_only = True
