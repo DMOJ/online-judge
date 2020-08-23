@@ -82,7 +82,7 @@ Announcements from administrators, ongoing contests, recent comments and new pro
 
 
 ### Internationalized interface
-Use the site in whatever language you're most comfortable in &mdash; currently fully supporting English, Simplified Chinese, and Romanian. Problem authors can provide statements in multiple languages, and DMOJ will display the most relevant one to a reader.
+Use the site in whatever language you're most comfortable in &mdash; visit [translate.dmoj.ca](https://translate.dmoj.ca/) to check the translation status of your preferred language. Problem authors can provide statements in multiple languages, and DMOJ will display the most relevant one to a reader.
 
 
 ![](https://i.imgur.com/OeuI0o5.png)
@@ -99,7 +99,7 @@ The DMOJ admin interface is highly versatile, and can be efficiently used for an
 
 ## Supported Languages
 
-Check out [**DMOJ/judge**](https://github.com/DMOJ/judge-server) for more judging backend details.
+Check out [**DMOJ/judge-server**](https://github.com/DMOJ/judge-server) for more judging backend details.
 
 Supported languages include:
 * C++ 11/14/17 (GCC and Clang)
