@@ -5,756 +5,743 @@ msgstr ""
 "POT-Creation-Date: 2020-08-19 18:29+0000\n"
 "PO-Revision-Date: 2020-08-23 18:58\n"
 "Last-Translator: \n"
-"Language-Team: Serbian (Latin)\n"
-"Language: sr_CS\n"
+"Language-Team: Catalan\n"
+"Language: ca_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: dmoj\n"
 "X-Crowdin-Project-ID: 142963\n"
-"X-Crowdin-Language: sr-CS\n"
+"X-Crowdin-Language: ca\n"
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 
 #: dmoj/settings.py:361
 msgid "German"
-msgstr ""
+msgstr "Alemany"
 
 #: dmoj/settings.py:362
 msgid "English"
-msgstr ""
+msgstr "Anglès"
 
 #: dmoj/settings.py:363
 msgid "Spanish"
-msgstr ""
+msgstr "Castellà"
 
 #: dmoj/settings.py:364
 msgid "French"
-msgstr ""
+msgstr "Francès"
 
 #: dmoj/settings.py:365
 msgid "Croatian"
-msgstr ""
+msgstr "Croat"
 
 #: dmoj/settings.py:366
 msgid "Hungarian"
-msgstr ""
+msgstr "Hongarès"
 
 #: dmoj/settings.py:367
 msgid "Japanese"
-msgstr ""
+msgstr "Japonès"
 
 #: dmoj/settings.py:368
 msgid "Korean"
-msgstr ""
+msgstr "Coreà"
 
 #: dmoj/settings.py:369
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Portuguès (Brasil)"
 
 #: dmoj/settings.py:370
 msgid "Romanian"
-msgstr ""
+msgstr "Romanès"
 
 #: dmoj/settings.py:371
 msgid "Russian"
-msgstr ""
+msgstr "Rus"
 
 #: dmoj/settings.py:372
 msgid "Serbian (Latin)"
-msgstr ""
+msgstr "Serbi (llatí)"
 
 #: dmoj/settings.py:373
 msgid "Turkish"
-msgstr ""
+msgstr "Turc"
 
 #: dmoj/settings.py:374
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamita"
 
 #: dmoj/settings.py:375
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "Xinès simplificat"
 
 #: dmoj/settings.py:376
 msgid "Traditional Chinese"
-msgstr ""
+msgstr "Xinès tradicional"
 
 #: dmoj/urls.py:103 templates/base.html:190
 msgid "Home"
-msgstr ""
+msgstr "Inici"
 
 #: judge/admin/comments.py:40
 #, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Comentari %d ocultat amb èxit"
+msgstr[1] "Comentaris %d ocultats amb èxit"
 
 #: judge/admin/comments.py:43
 msgid "Hide comments"
-msgstr ""
+msgstr "Amagar comentaris"
 
 #: judge/admin/comments.py:47
 #, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Comentari %d mostrat amb èxit"
+msgstr[1] "Comentaris %d mostrats amb èxit"
 
 #: judge/admin/comments.py:50
 msgid "Unhide comments"
-msgstr ""
+msgstr "Deixa d'amagar els comentaris"
 
 #: judge/admin/comments.py:58
 msgid "Associated page"
-msgstr ""
+msgstr "Pàgina associada"
 
 #: judge/admin/contest.py:30
 msgid "Included contests"
-msgstr ""
+msgstr "Concursos inclosos"
 
 #: judge/admin/contest.py:64 templates/contest/contest.html:83
 #: templates/contest/moss.html:43 templates/problem/list.html:206
 #: templates/problem/list.html:221 templates/user/user-problems.html:56
 #: templates/user/user-problems.html:98
 msgid "Problem"
-msgstr ""
+msgstr "Problema"
 
 #: judge/admin/contest.py:113
 msgid "Settings"
-msgstr ""
+msgstr "Ajustaments"
 
 #: judge/admin/contest.py:115
 msgid "Scheduling"
-msgstr ""
+msgstr "Planificador"
 
 #: judge/admin/contest.py:116
 msgid "Details"
-msgstr ""
+msgstr "Detalls"
 
 #: judge/admin/contest.py:117
 msgid "Format"
-msgstr ""
+msgstr "Format"
 
 #: judge/admin/contest.py:118 templates/contest/ranking-table.html:5
 msgid "Rating"
-msgstr ""
+msgstr "Puntuació"
 
 #: judge/admin/contest.py:119
 msgid "Access"
-msgstr ""
+msgstr "Accés"
 
 #: judge/admin/contest.py:121 judge/admin/problem.py:134
 msgid "Justice"
-msgstr ""
+msgstr "Justícia"
 
 #: judge/admin/contest.py:210
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Concurs %d marcat com a visible amb èxit"
+msgstr[1] "Concursos %d marcats com a visibles amb èxit"
 
 #: judge/admin/contest.py:213
 msgid "Mark contests as visible"
-msgstr ""
+msgstr "Fer els concursos visibles"
 
 #: judge/admin/contest.py:219
 #, python-format
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Concurs %d marcat com a ocult amb èxit"
+msgstr[1] "Concursos %d marcats com a ocults amb èxit"
 
 #: judge/admin/contest.py:222
 msgid "Mark contests as hidden"
-msgstr ""
+msgstr "Fer els concursos invisibles"
 
 #: judge/admin/contest.py:228
 #, python-format
 msgid "%d contest successfully locked."
 msgid_plural "%d contests successfully locked."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Concurs %d bloquejat amb èxit"
+msgstr[1] "Concursos %d bloquejats amb èxit"
 
 #: judge/admin/contest.py:231
 msgid "Lock contest submissions"
-msgstr ""
+msgstr "Bloqueja els envíaments al concurs"
 
 #: judge/admin/contest.py:237
 #, python-format
 msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Concurs %d desbloquejat amb èxit"
+msgstr[1] "Concursos %d desbloquejats amb èxit"
 
 #: judge/admin/contest.py:240
 msgid "Unlock contest submissions"
-msgstr ""
+msgstr "Desbloqueja els envíaments al concurs"
 
 #: judge/admin/contest.py:261 judge/admin/submission.py:170
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "enviament %d s'ha planificat per a ser rejutjat amb èxit."
+msgstr[1] "enviaments %d s'han planificat per a ser rejutjats amb èxit."
 
 #: judge/admin/contest.py:336
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Participació %d recalculada"
+msgstr[1] "Participacions %d recalculades"
 
 #: judge/admin/contest.py:339
 msgid "Recalculate results"
-msgstr ""
+msgstr "Recalcular els resultats"
 
 #: judge/admin/contest.py:343 judge/admin/organization.py:64
 msgid "username"
-msgstr ""
+msgstr "nom d'usuari"
 
 #: judge/admin/contest.py:348 templates/base.html:258
 msgid "virtual"
-msgstr ""
+msgstr "Virtual"
 
 #: judge/admin/interface.py:29 judge/models/interface.py:46
 msgid "link path"
-msgstr ""
+msgstr "path a l'enllaç"
 
 #: judge/admin/interface.py:72
 msgid "Content"
-msgstr ""
+msgstr "Contingut"
 
 #: judge/admin/interface.py:73
 msgid "Summary"
-msgstr ""
+msgstr "Resum"
 
 #: judge/admin/interface.py:113 judge/models/contest.py:361
 #: judge/models/contest.py:486 judge/models/profile.py:241
 #: judge/models/profile.py:265
 msgid "user"
-msgstr ""
+msgstr "usuari"
 
 #: judge/admin/interface.py:154
 msgid "object"
-msgstr ""
+msgstr "objecte"
 
 #: judge/admin/organization.py:33 judge/admin/problem.py:181
 #: judge/admin/profile.py:82
 msgid "View on site"
-msgstr ""
+msgstr "Veure-ho al lloc web"
 
 #: judge/admin/problem.py:29
 msgid "Describe the changes you made (optional)"
-msgstr ""
+msgstr "Descriu els canvis que has fet (opcional)"
 
 #: judge/admin/problem.py:129
 msgid "Social Media"
-msgstr ""
+msgstr "Xarxes Socials"
 
 #: judge/admin/problem.py:130
 msgid "Taxonomy"
-msgstr ""
+msgstr "Taxonomia"
 
 #: judge/admin/problem.py:131 templates/contest/contest.html:84
 #: templates/problem/data.html:394 templates/problem/list.html:211
 #: templates/problem/list.html:232 templates/user/base-users-table.html:10
 #: templates/user/user-problems.html:58
 msgid "Points"
-msgstr ""
+msgstr "Punts"
 
 #: judge/admin/problem.py:132
 msgid "Limits"
-msgstr ""
+msgstr "Límits"
 
 #: judge/admin/problem.py:133 judge/admin/submission.py:238
 #: templates/stats/base.html:14 templates/submission/list.html:322
 #: templates/user/edit-profile.html:291
 msgid "Language"
-msgstr ""
+msgstr "Llenguatge"
 
 #: judge/admin/problem.py:135
 msgid "History"
-msgstr ""
+msgstr "Historial"
 
 #: judge/admin/problem.py:178
 msgid "Authors"
-msgstr ""
+msgstr "Autors/es"
 
 #: judge/admin/problem.py:191
 #, python-format
 msgid "%d problem's publish date successfully updated."
 msgid_plural "%d problems' publish date successfully updated."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "La data de publicació del problema %d ha estat actualitzada correctament"
+msgstr[1] "La data de publicació dels problemes %d ha estat actualitzada correctament"
 
 #: judge/admin/problem.py:195
 msgid "Set publish date to now"
-msgstr ""
+msgstr "Posa la data de publicació a ara"
 
 #: judge/admin/problem.py:201
 #, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "problema %d marcat com a públic amb èxit."
+msgstr[1] "problemes %d marcats com a públic amb èxit."
 
 #: judge/admin/problem.py:205
 msgid "Mark problems as public"
-msgstr ""
+msgstr "Marca els problemes com a públics"
 
 #: judge/admin/problem.py:211
 #, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "problema %d marcat com a privat amb èxit."
+msgstr[1] "problemes %d marcats com a privats amb èxit."
 
 #: judge/admin/problem.py:215
 msgid "Mark problems as private"
-msgstr ""
+msgstr "Marca els problemes com a privats"
 
 #: judge/admin/profile.py:35
 msgid "timezone"
-msgstr ""
+msgstr "zona horària"
 
 #: judge/admin/profile.py:88 judge/admin/submission.py:217
 #: templates/organization/requests/log.html:9
 #: templates/organization/requests/pending.html:12
 #: templates/ticket/list.html:261
 msgid "User"
-msgstr ""
+msgstr "Usuari"
 
 #: judge/admin/profile.py:93 templates/registration/registration_form.html:145
 msgid "Email"
-msgstr ""
+msgstr "Correu electrònic"
 
 #: judge/admin/profile.py:98 judge/views/register.py:29
 #: templates/registration/registration_form.html:173
 #: templates/user/edit-profile.html:287
 msgid "Timezone"
-msgstr ""
+msgstr "Zona Horària"
 
 #: judge/admin/profile.py:103
 msgid "date joined"
-msgstr ""
+msgstr "Data quan es va unir"
 
 #: judge/admin/profile.py:110
 #, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "s'ha recalculat la puntuació de l'usuari %d"
+msgstr[1] "s'ha recalculat la puntuació dels usuaris %d"
 
 #: judge/admin/profile.py:113
 msgid "Recalculate scores"
-msgstr ""
+msgstr "Recalcular els resultats"
 
 #: judge/admin/runtime.py:19
 msgid "Disallowed problems"
-msgstr ""
+msgstr "Problemes no autoritzats"
 
 #: judge/admin/runtime.py:22
 msgid "These problems are NOT allowed to be submitted in this language"
-msgstr ""
+msgstr "Aquests problemes NO poden ser enviats en aquest llenguatge"
 
 #: judge/admin/runtime.py:80
 msgid "Description"
-msgstr ""
+msgstr "Descripció"
 
 #: judge/admin/runtime.py:81
 msgid "Information"
-msgstr ""
+msgstr "Informació"
 
 #: judge/admin/runtime.py:82
 msgid "Capabilities"
-msgstr ""
+msgstr "Caracterí­stiques"
 
 #: judge/admin/submission.py:23 judge/admin/submission.py:42
 #: judge/admin/submission.py:227
 msgid "None"
-msgstr ""
+msgstr "Cap"
 
 #: judge/admin/submission.py:23
 msgid "Not done"
-msgstr ""
+msgstr "No Fet"
 
 #: judge/admin/submission.py:23
 msgid "Exceptional"
-msgstr ""
+msgstr "Excepcional"
 
 #: judge/admin/submission.py:42
 msgid "Unaccepted"
-msgstr ""
+msgstr "No acceptat"
 
 #: judge/admin/submission.py:89
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
-msgstr ""
+msgstr "%(problem)s en %(contest)s"
 
 #: judge/admin/submission.py:155 judge/admin/submission.py:177
 msgid "You do not have the permission to rejudge submissions."
-msgstr ""
+msgstr "No tens permís per rejutjar enviaments"
 
 #: judge/admin/submission.py:161
 msgid "You do not have the permission to rejudge THAT many submissions."
-msgstr ""
+msgstr "No tens permís per rejutjar TANTS enviaments"
 
 #: judge/admin/submission.py:173
 msgid "Rejudge the selected submissions"
-msgstr ""
+msgstr "Rejutja els enviaments seleccionats"
 
 #: judge/admin/submission.py:199 judge/views/problem_manage.py:128
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "enviament %d ha estat requalificat amb èxit."
+msgstr[1] "enviaments %d han estat requalificats amb èxit."
 
 #: judge/admin/submission.py:202
 msgid "Rescore the selected submissions"
-msgstr ""
+msgstr "Requalifica els enviaments seleccionats"
 
 #: judge/admin/submission.py:206
 msgid "Problem code"
-msgstr ""
+msgstr "Codi del problema"
 
 #: judge/admin/submission.py:211
 msgid "Problem name"
-msgstr ""
+msgstr "Nom del problema"
 
 #: judge/admin/submission.py:221 templates/organization/requests/log.html:10
 #: templates/organization/requests/pending.html:13
 msgid "Time"
-msgstr ""
+msgstr "Temps"
 
 #: judge/admin/submission.py:229
 #, python-format
 msgid "%d KB"
-msgstr ""
+msgstr "%d KB"
 
 #: judge/admin/submission.py:231
 #, python-format
 msgid "%.2f MB"
-msgstr ""
+msgstr "%.2f MB"
 
 #: judge/admin/submission.py:233
 msgid "Memory"
-msgstr ""
+msgstr "Memòria"
 
 #: judge/admin/taxon.py:11 judge/admin/taxon.py:34
 msgid "Included problems"
-msgstr ""
+msgstr "Problemes inclosos"
 
 #: judge/admin/taxon.py:14
 msgid "These problems are included in this group of problems"
-msgstr ""
+msgstr "Aquests problemes estan inclosos en aquest Grup"
 
 #: judge/admin/taxon.py:37
 msgid "These problems are included in this type of problems"
-msgstr ""
+msgstr "Aquests problemes estan inclosos en aquest Tipus"
 
 #: judge/apps.py:8
 msgid "Online Judge"
-msgstr ""
+msgstr "Jutge Online"
 
 #: judge/comments.py:41
 msgid "Comment body"
-msgstr ""
+msgstr "Cos del comentari"
 
 #: judge/comments.py:47 judge/views/ticket.py:46
 msgid "Your part is silent, little toad."
-msgstr ""
+msgstr "No se suposa que hagis de parlar, patufet."
 
 #: judge/comments.py:50 templates/comments/list.html:142
 msgid "You need to have solved at least one problem before your voice can be heard."
-msgstr ""
+msgstr "Has de resoldre un problema com a mínim abans de que em pensi si et deixo parlar."
 
 #: judge/comments.py:94
 msgid "Posted comment"
-msgstr ""
+msgstr "Comentari publicat"
 
 #: judge/contest_format/atcoder.py:19
 msgid "AtCoder"
-msgstr ""
+msgstr "AtCoder"
 
 #: judge/contest_format/default.py:18
 msgid "Default"
-msgstr ""
+msgstr "Predeterminat"
 
 #: judge/contest_format/ecoo.py:18
 msgid "ECOO"
-msgstr ""
+msgstr "ECOO"
 
 #: judge/contest_format/icpc.py:19
 msgid "ICPC"
-msgstr ""
+msgstr "ICPC"
 
 #: judge/contest_format/ioi.py:11
 msgid "IOI"
-msgstr ""
+msgstr "IOI"
 
 #: judge/contest_format/legacy_ioi.py:18
 msgid "IOI (pre-2016)"
-msgstr ""
+msgstr "IOI (abans del 2016)"
 
 #: judge/forms.py:26
 msgid "Two-factor authentication tokens must be 6 decimal digits."
-msgstr ""
+msgstr "els tokens de la l'autenticació en dos passos han de ser de 6 dígits decimals"
 
 #: judge/forms.py:29
 msgid "Invalid two-factor authentication token."
-msgstr ""
+msgstr "token d'autenticació en dos passos invàlid."
 
 #: judge/forms.py:32
 msgid "Scratch codes must be 16 base32 characters."
-msgstr ""
+msgstr "Els codis Scratch han de ser de 16 caràcters en base32"
 
 #: judge/forms.py:34
 msgid "Invalid scratch code."
-msgstr ""
+msgstr "El codi Scratch no és vàlid"
 
 #: judge/forms.py:45
 msgid "Subscribe to contest updates"
-msgstr ""
+msgstr "Subscriure's als canvis en els concursos"
 
 #: judge/forms.py:46
 msgid "Enable experimental features"
-msgstr ""
+msgstr "Activa les actualitzacions experimentals"
 
 #: judge/forms.py:75 judge/views/organization.py:127
 #, python-brace-format
 msgid "You may not be part of more than {count} public organizations."
-msgstr ""
+msgstr "No pots formar part de més de {count} organitzacions públiques"
 
 #: judge/forms.py:91
 msgid "Download comments?"
-msgstr ""
+msgstr "Baixar-se els comentaris?"
 
 #: judge/forms.py:92
 msgid "Download submissions?"
-msgstr ""
+msgstr "Descarregar enviaments?"
 
 #: judge/forms.py:93
 msgid "Filter by problem code glob:"
-msgstr ""
+msgstr "Filtrar per el glob del codi de problema"
 
 #: judge/forms.py:97
 msgid "Leave empty to include all submissions"
-msgstr ""
+msgstr "Deixar-ho buit per a incluir tots els enviaments"
 
 #: judge/forms.py:100 templates/problem/manage_submission.html:142
 msgid "Filter by result:"
-msgstr ""
+msgstr "Filtra per resultats:"
 
 #: judge/forms.py:106
 msgid "Please select at least one thing to download."
-msgstr ""
+msgstr "Siusplau, seleccioneu com a mínim una cosa a descarregar."
 
 #: judge/forms.py:132
 msgid "Any judge"
-msgstr ""
+msgstr "Qualsevol jutge"
 
 #: judge/forms.py:162 judge/views/register.py:26
 #: templates/registration/registration_form.html:139
 #: templates/user/base-users-table.html:5
 msgid "Username"
-msgstr ""
+msgstr "Nom d'usuari"
 
 #: judge/forms.py:163 templates/registration/registration_form.html:151
 #: templates/registration/registration_form.html:165
 msgid "Password"
-msgstr ""
+msgstr "Contrasenya"
 
 #: judge/forms.py:196
 msgid "Invalid code length."
-msgstr ""
+msgstr "Longitud del codi invàlida"
 
 #: judge/forms.py:214
 msgid "Invalid WebAuthn response."
-msgstr ""
+msgstr "Resposta WebAuthn invàlida"
 
 #: judge/forms.py:217
 msgid "No WebAuthn challenge issued."
-msgstr ""
+msgstr "No hi ha hagut resposta WebAuthn"
 
 #: judge/forms.py:223
 msgid "Invalid WebAuthn credential ID."
-msgstr ""
+msgstr "Credencial WebAuthn invàlida"
 
 #: judge/forms.py:252
 msgid "Invalid two-factor authentication token or scratch code."
-msgstr ""
+msgstr "token d'autenticació en dos passos invàlid."
 
 #: judge/forms.py:254
 msgid "Must specify either totp_token or webauthn_response."
-msgstr ""
+msgstr "S'ha d'especificar un totp_token o una webauthn_response."
 
 #: judge/forms.py:258 judge/models/problem.py:97
 msgid "Problem code must be ^[a-z0-9]+$"
-msgstr ""
+msgstr "El codi del problema ha de ser ^[a-z0-9]+$"
 
 #: judge/forms.py:263
 msgid "Problem with code already exists."
-msgstr ""
+msgstr "Ja existeix un problema amb aquest codi."
 
 #: judge/forms.py:268 judge/models/contest.py:58
 msgid "Contest id must be ^[a-z0-9]+$"
-msgstr ""
+msgstr "la id del concurs ha de ser ^[a-z0-9]+$"
 
 #: judge/forms.py:273
 msgid "Contest with key already exists."
-msgstr ""
+msgstr "Ja existeix un concurs amb aquesta clau."
 
 #: judge/jinja2/datetime.py:26 templates/blog/content.html:27
 #: templates/blog/dashboard.html:21
 msgid "N j, Y, g:i a"
-msgstr ""
+msgstr "N j, Y, g:i a"
 
 #: judge/jinja2/datetime.py:26
 #, python-brace-format
 msgid "{time}"
-msgstr ""
+msgstr "{time}"
 
 #: judge/jinja2/datetime.py:26
 #, python-brace-format
 msgid "on {time}"
-msgstr ""
+msgstr "en {time}"
 
 #: judge/models/choices.py:59
 msgid "Leave as LaTeX"
-msgstr ""
+msgstr "Deixar-ho com LaTeX"
 
 #: judge/models/choices.py:60
 msgid "SVG with PNG fallback"
-msgstr ""
+msgstr "SVG amb PNG en cas d'errada"
 
 #: judge/models/choices.py:61
 msgid "MathML only"
-msgstr ""
+msgstr "Només MathML"
 
 #: judge/models/choices.py:62
 msgid "MathJax with SVG/PNG fallback"
-msgstr ""
+msgstr "MathJax amb SVG/PNG en cas d'errada"
 
 #: judge/models/choices.py:63
 msgid "Detect best quality"
-msgstr ""
+msgstr "Detectar la millor qualitat"
 
 #: judge/models/comment.py:25
 msgid "Page code must be ^[pcs]:[a-z0-9]+$|^b:\\d+$"
-msgstr ""
+msgstr "El codi de la pàgina ha de ser ^[pcs]:[a-z0-9]+$|^b:\\d+$"
 
 #: judge/models/comment.py:41
 msgid "commenter"
-msgstr ""
+msgstr "Comentarista"
 
 #: judge/models/comment.py:42
 msgid "posted time"
-msgstr ""
+msgstr "Publicat a les"
 
 #: judge/models/comment.py:43 judge/models/comment.py:196
 msgid "associated page"
-msgstr ""
+msgstr "Pàgina associada"
 
 #: judge/models/comment.py:45
 msgid "votes"
-msgstr ""
+msgstr "vots"
 
 #: judge/models/comment.py:46
 msgid "body of comment"
-msgstr ""
+msgstr "cos del comentari"
 
 #: judge/models/comment.py:47
 msgid "hide the comment"
-msgstr ""
+msgstr "Oculta comentari"
 
 #: judge/models/comment.py:48
 msgid "parent"
-msgstr ""
+msgstr "Pare"
 
 #: judge/models/comment.py:53
 msgid "comment"
-msgstr ""
+msgstr "Comentari"
 
 #: judge/models/comment.py:54
 msgid "comments"
-msgstr ""
+msgstr "comentaris"
 
 #: judge/models/comment.py:89 judge/models/comment.py:141
 #: judge/models/problem.py:475
 #, python-format
 msgid "Editorial for %s"
-msgstr ""
+msgstr "Editorial de %s"
 
 #: judge/models/comment.py:191
 msgid "comment vote"
-msgstr ""
+msgstr "vot del comentari"
 
 #: judge/models/comment.py:192
 msgid "comment votes"
-msgstr ""
+msgstr "vots del comentari"
 
 #: judge/models/comment.py:201
 msgid "Override comment lock"
-msgstr ""
+msgstr "Ignora el bloqueig del comentari"
 
 #: judge/models/contest.py:28
 msgid "Invalid colour."
-msgstr ""
+msgstr "Color invàlid"
 
 #: judge/models/contest.py:30
 msgid "tag name"
-msgstr ""
+msgstr "Nom d'etiqueta:"
 
 #: judge/models/contest.py:31
 msgid "Lowercase letters and hyphens only."
-msgstr ""
+msgstr "Només lletres minúscules i guions"
 
 #: judge/models/contest.py:32
 msgid "tag colour"
-msgstr ""
+msgstr "Color d'etiqueta"
 
 #: judge/models/contest.py:33
 msgid "tag description"
-msgstr ""
+msgstr "Descripció d'etiqueta"
 
 #: judge/models/contest.py:52
 msgid "contest tag"
-msgstr ""
+msgstr "Etiqueta de concurs"
 
 #: judge/models/contest.py:53 judge/models/contest.py:110
 msgid "contest tags"
-msgstr ""
+msgstr "Etiquetes de concurs"
 
 #: judge/models/contest.py:57
 msgid "contest id"
-msgstr ""
+msgstr "Id de concurs"
 
 #: judge/models/contest.py:59
 msgid "contest name"
-msgstr ""
+msgstr "Nom del concurs"
 
 #: judge/models/contest.py:60
 msgid "These people will be able to edit the contest."
-msgstr ""
+msgstr "Aquestes persones podran editar el concurs"
 
 #: judge/models/contest.py:62 judge/models/runtime.py:183
 #: src/dmoj-wpadmin/test_project/apps/books/admin.py:20
@@ -765,1030 +752,1030 @@ msgstr ""
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:13
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:27
 msgid "description"
-msgstr ""
+msgstr "Descripció"
 
 #: judge/models/contest.py:63 judge/models/problem.py:422
 #: judge/models/runtime.py:185
 msgid "problems"
-msgstr ""
+msgstr "Problemes"
 
 #: judge/models/contest.py:64 judge/models/contest.py:362
 msgid "start time"
-msgstr ""
+msgstr "Hora d'inici"
 
 #: judge/models/contest.py:65
 msgid "end time"
-msgstr ""
+msgstr "Hora de finalització"
 
 #: judge/models/contest.py:66 judge/models/problem.py:118
 #: judge/models/problem.py:446
 msgid "time limit"
-msgstr ""
+msgstr "Límit de temps"
 
 #: judge/models/contest.py:67 judge/models/problem.py:136
 msgid "publicly visible"
-msgstr ""
+msgstr "visible públicament"
 
 #: judge/models/contest.py:68
 msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
-msgstr ""
+msgstr "Ha de posar-se fins i tot per a concursos privats per a organitzacions, ja que determina si el concurs és visible als membres de les organitzacions específiques"
 
 #: judge/models/contest.py:71
 msgid "contest rated"
-msgstr ""
+msgstr "concurs qualificat"
 
 #: judge/models/contest.py:71
 msgid "Whether this contest can be rated."
-msgstr ""
+msgstr "Si aquest concurs es pot qualificar"
 
 #: judge/models/contest.py:73
 msgid "hide scoreboard"
-msgstr ""
+msgstr "amagar la taula de puntuacions"
 
 #: judge/models/contest.py:74
 msgid "Whether the scoreboard should remain hidden for the duration of the contest."
-msgstr ""
+msgstr "Si la taula de puntuacions ha d'amagar-se durant la duració del concurs"
 
 #: judge/models/contest.py:77
 msgid "view contest scoreboard"
-msgstr ""
+msgstr "veure la taula de puntuacions del concurs"
 
 #: judge/models/contest.py:79
 msgid "These users will be able to view the scoreboard."
-msgstr ""
+msgstr "Aquests usuaris podran veure la taula de puntuacions"
 
 #: judge/models/contest.py:80
 msgid "no comments"
-msgstr ""
+msgstr "sense comentaris"
 
 #: judge/models/contest.py:81
 msgid "Use clarification system instead of comments."
-msgstr ""
+msgstr "Fes servir un sistema de clarificacions en comptes de comentaris"
 
 #: judge/models/contest.py:83
 msgid "Rating floor for contest"
-msgstr ""
+msgstr "Qualificació mínima per al concurs"
 
 #: judge/models/contest.py:85
 msgid "Rating ceiling for contest"
-msgstr ""
+msgstr "Qualificació màxima per al concurs"
 
 #: judge/models/contest.py:87
 msgid "rate all"
-msgstr ""
+msgstr "qualificar tots"
 
 #: judge/models/contest.py:87
 msgid "Rate all users who joined."
-msgstr ""
+msgstr "Qualificar tots els usuaris que s'han unit"
 
 #: judge/models/contest.py:88
 msgid "exclude from ratings"
-msgstr ""
+msgstr "Exclou de les qualificacions"
 
 #: judge/models/contest.py:90
 msgid "private to specific users"
-msgstr ""
+msgstr "privat per a usuaris específics"
 
 #: judge/models/contest.py:91
 msgid "private contestants"
-msgstr ""
+msgstr "concursants privats"
 
 #: judge/models/contest.py:92
 msgid "If private, only these users may see the contest"
-msgstr ""
+msgstr "Si està en privat, només aquests usuaris podran veure el concurs"
 
 #: judge/models/contest.py:94
 msgid "hide problem tags"
-msgstr ""
+msgstr "amagar etiquets dels problemes"
 
 #: judge/models/contest.py:95
 msgid "Whether problem tags should be hidden by default."
-msgstr ""
+msgstr "Si les etiquetes dels problemes han d'estar amagades per defecte"
 
 #: judge/models/contest.py:97
 msgid "run pretests only"
-msgstr ""
+msgstr "executa només els casos de prova preliminars"
 
 #: judge/models/contest.py:98
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
-msgstr ""
+msgstr "Si els jutges han de jutjar només els casos de prova preliminars o tots els casos de prova. Generalment es posa en un concurs online, i després es treu per a jutjar tots els enviaments a l'acabament del concurs"
 
 #: judge/models/contest.py:102 judge/models/problem.py:158
 msgid "private to organizations"
-msgstr ""
+msgstr "privat per a organitzacions"
 
 #: judge/models/contest.py:103 judge/models/problem.py:156
 #: judge/models/profile.py:86
 msgid "organizations"
-msgstr ""
+msgstr "Organitzacions"
 
 #: judge/models/contest.py:104
 msgid "If private, only these organizations may see the contest"
-msgstr ""
+msgstr "Si està en privat, només aquestes organitzacions podran veure el concurs"
 
 #: judge/models/contest.py:105 judge/models/problem.py:145
 msgid "OpenGraph image"
-msgstr ""
+msgstr "imatge OpenGraph"
 
 #: judge/models/contest.py:106 judge/models/profile.py:57
 msgid "Logo override image"
-msgstr ""
+msgstr "imatge que sobrescriu el Logo"
 
 #: judge/models/contest.py:108
 msgid "This image will replace the default site logo for users inside the contest."
-msgstr ""
+msgstr "Aquesta imatge reemplaçarà el logo per defecte a tots els usuaris en el concurs"
 
 #: judge/models/contest.py:111
 msgid "the amount of live participants"
-msgstr ""
+msgstr "La quantitat de participans en viu"
 
 #: judge/models/contest.py:112
 msgid "contest summary"
-msgstr ""
+msgstr "Resum del concurs"
 
 #: judge/models/contest.py:113 judge/models/problem.py:147
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
-msgstr ""
+msgstr "Text pla, que surt en l'etiqueta de meta descripció, per exemple per Xarxes Socials"
 
 #: judge/models/contest.py:114 judge/models/profile.py:56
 msgid "access code"
-msgstr ""
+msgstr "Codi d'accés"
 
 #: judge/models/contest.py:115
 msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
-msgstr ""
+msgstr "Un codi opcional que se li demana als concursants abans de que se'ls permeti participar. Deixa-ho buit per a desactivar-ho."
 
 #: judge/models/contest.py:117 judge/models/problem.py:141
 msgid "personae non gratae"
-msgstr ""
+msgstr "Persones non grates"
 
 #: judge/models/contest.py:118
 msgid "Bans the selected users from joining this contest."
-msgstr ""
+msgstr "Baneja als usuaris per a unir-se al concurs"
 
 #: judge/models/contest.py:119
 msgid "contest format"
-msgstr ""
+msgstr "Format del concurs"
 
 #: judge/models/contest.py:120
 msgid "The contest format module to use."
-msgstr ""
+msgstr "el Modul de format del concurs que es farà servir"
 
 #: judge/models/contest.py:121
 msgid "contest format configuration"
-msgstr ""
+msgstr "Configuració del format del concurs"
 
 #: judge/models/contest.py:122
 msgid "A JSON object to serve as the configuration for the chosen contest format module. Leave empty to use None. Exact format depends on the contest format selected."
-msgstr ""
+msgstr "Un objecte JSON que es fa servir com la configuració per al mòdul de format del concurs seleccionat. Deixa-ho buit per fer servir None. El format exacte depèn del format del concurs seleccionat."
 
 #: judge/models/contest.py:129
 msgid "contest lock"
-msgstr ""
+msgstr "bloqueig del concurs"
 
 #: judge/models/contest.py:130
 msgid "Prevent submissions from this contest from being rejudged."
-msgstr ""
+msgstr "Evita que els enviaments en aquest concurs siguin rejutjats"
 
 #: judge/models/contest.py:340
 msgid "See private contests"
-msgstr ""
+msgstr "Veure concursos privats"
 
 #: judge/models/contest.py:341
 msgid "Edit own contests"
-msgstr ""
+msgstr "Editar els concursos propis"
 
 #: judge/models/contest.py:342
 msgid "Edit all contests"
-msgstr ""
+msgstr "Editar tots els concursos"
 
 #: judge/models/contest.py:343
 msgid "Clone contest"
-msgstr ""
+msgstr "Clonar concurs"
 
 #: judge/models/contest.py:344 templates/contest/moss.html:74
 msgid "MOSS contest"
-msgstr ""
+msgstr "Passar el MOSS al concurs"
 
 #: judge/models/contest.py:345
 msgid "Rate contests"
-msgstr ""
+msgstr "Puntuar concursos"
 
 #: judge/models/contest.py:346
 msgid "Contest access codes"
-msgstr ""
+msgstr "Codi d'accès al concurs"
 
 #: judge/models/contest.py:347
 msgid "Create private contests"
-msgstr ""
+msgstr "Crear concursos privats"
 
 #: judge/models/contest.py:348
 msgid "Change contest visibility"
-msgstr ""
+msgstr "Canviar la visibilitat d'un concurs"
 
 #: judge/models/contest.py:349
 msgid "Edit contest problem label script"
-msgstr ""
+msgstr "Editar el script d'etiquetat del problema d'un concurs"
 
 #: judge/models/contest.py:350
 msgid "Change lock status of contest"
-msgstr ""
+msgstr "Canviar el estatus de bloqueig del concurs"
 
 #: judge/models/contest.py:352 judge/models/contest.py:450
 #: judge/models/contest.py:487 judge/models/contest.py:509
 #: judge/models/submission.py:84
 msgid "contest"
-msgstr ""
+msgstr "concurs"
 
 #: judge/models/contest.py:353
 msgid "contests"
-msgstr ""
+msgstr "concursos"
 
 #: judge/models/contest.py:360
 msgid "associated contest"
-msgstr ""
+msgstr "concurs associat"
 
 #: judge/models/contest.py:363
 msgid "score"
-msgstr ""
+msgstr "puntuació"
 
 #: judge/models/contest.py:364
 msgid "cumulative time"
-msgstr ""
+msgstr "temps acumulat"
 
 #: judge/models/contest.py:365
 msgid "is disqualified"
-msgstr ""
+msgstr "està desqualificat"
 
 #: judge/models/contest.py:366
 msgid "Whether this participation is disqualified."
-msgstr ""
+msgstr "Si aquest participant ha estat desqualificat."
 
 #: judge/models/contest.py:367
 msgid "tie-breaking field"
-msgstr ""
+msgstr "camp de desempat"
 
 #: judge/models/contest.py:368
 msgid "virtual participation id"
-msgstr ""
+msgstr "id de participació virtual"
 
 #: judge/models/contest.py:369
 msgid "0 means non-virtual, otherwise the n-th virtual participation."
-msgstr ""
+msgstr "0 significa no virtual. En cas contrari la n-èssima participació virtual"
 
 #: judge/models/contest.py:370
 msgid "contest format specific data"
-msgstr ""
+msgstr "dades específiques del format del concurs"
 
 #: judge/models/contest.py:436
 #, python-format
 msgid "%s spectating in %s"
-msgstr ""
+msgstr "%s espectant en %s"
 
 #: judge/models/contest.py:438
 #, python-format
 msgid "%s in %s, v%d"
-msgstr ""
+msgstr "%s en %s, v%d"
 
 #: judge/models/contest.py:439
 #, python-format
 msgid "%s in %s"
-msgstr ""
+msgstr "%s en %s"
 
 #: judge/models/contest.py:442
 msgid "contest participation"
-msgstr ""
+msgstr "participació al concurs"
 
 #: judge/models/contest.py:443
 msgid "contest participations"
-msgstr ""
+msgstr "participacions al concurs"
 
 #: judge/models/contest.py:449 judge/models/contest.py:471
 #: judge/models/contest.py:510 judge/models/problem.py:421
 #: judge/models/problem.py:426 judge/models/problem.py:444
 #: judge/models/problem_data.py:35
 msgid "problem"
-msgstr ""
+msgstr "problema"
 
 #: judge/models/contest.py:451 judge/models/contest.py:475
 #: judge/models/problem.py:129
 msgid "points"
-msgstr ""
+msgstr "punts"
 
 #: judge/models/contest.py:452
 msgid "partial"
-msgstr ""
+msgstr "parcial"
 
 #: judge/models/contest.py:453 judge/models/contest.py:476
 msgid "is pretested"
-msgstr ""
+msgstr "s'han passat els casos de prova preliminars"
 
 #: judge/models/contest.py:454 judge/models/interface.py:43
 msgid "order"
-msgstr ""
+msgstr "ordre"
 
 #: judge/models/contest.py:455
 msgid "output prefix length override"
-msgstr ""
+msgstr "Sobreescriptura de la longitud de prefix de sortida"
 
 #: judge/models/contest.py:456
 msgid "Maximum number of submissions for this problem, or leave blank for no limit."
-msgstr ""
+msgstr "Nombre màxim d'enviaments per a aquest problema, o deixa-ho en blanc per a no posar límit."
 
 #: judge/models/contest.py:459
 msgid "Why include a problem you can't submit to?"
-msgstr ""
+msgstr "Per què incloure un problema al que no pots fer enviaments?"
 
 #: judge/models/contest.py:464
 msgid "contest problem"
-msgstr ""
+msgstr "problema del concurs"
 
 #: judge/models/contest.py:465
 msgid "contest problems"
-msgstr ""
+msgstr "problemes del concurs"
 
 #: judge/models/contest.py:469 judge/models/submission.py:201
 msgid "submission"
-msgstr ""
+msgstr "enviament"
 
 #: judge/models/contest.py:473 judge/models/contest.py:488
 msgid "participation"
-msgstr ""
+msgstr "participació"
 
 #: judge/models/contest.py:477
 msgid "Whether this submission was ran only on pretests."
-msgstr ""
+msgstr "Si aquest enviament ha estat provat només en casos preliminars"
 
 #: judge/models/contest.py:481
 msgid "contest submission"
-msgstr ""
+msgstr "enviament de concurs"
 
 #: judge/models/contest.py:482
 msgid "contest submissions"
-msgstr ""
+msgstr "enviaments de concurs"
 
 #: judge/models/contest.py:490
 msgid "rank"
-msgstr ""
+msgstr "classificació"
 
 #: judge/models/contest.py:491
 msgid "rating"
-msgstr ""
+msgstr "puntuació"
 
 #: judge/models/contest.py:492
 msgid "volatility"
-msgstr ""
+msgstr "volatilitat"
 
 #: judge/models/contest.py:493
 msgid "last rated"
-msgstr ""
+msgstr "última puntuació"
 
 #: judge/models/contest.py:497
 msgid "contest rating"
-msgstr ""
+msgstr "puntuació del concurs"
 
 #: judge/models/contest.py:498
 msgid "contest ratings"
-msgstr ""
+msgstr "puntuacions del concurs"
 
 #: judge/models/contest.py:517
 msgid "contest moss result"
-msgstr ""
+msgstr "resultat del MOSS del concurs"
 
 #: judge/models/contest.py:518
 msgid "contest moss results"
-msgstr ""
+msgstr "resultats del MOSS del concurs"
 
 #: judge/models/interface.py:24
 msgid "configuration item"
-msgstr ""
+msgstr "ítem de configuració"
 
 #: judge/models/interface.py:25
 msgid "miscellaneous configuration"
-msgstr ""
+msgstr "altres configuracions"
 
 #: judge/models/interface.py:37
 msgid "navigation item"
-msgstr ""
+msgstr "ítem de navegació"
 
 #: judge/models/interface.py:38
 msgid "navigation bar"
-msgstr ""
+msgstr "barra de navegació"
 
 #: judge/models/interface.py:44
 msgid "identifier"
-msgstr ""
+msgstr "Identificador"
 
 #: judge/models/interface.py:45
 msgid "label"
-msgstr ""
+msgstr "Etiqueta"
 
 #: judge/models/interface.py:47
 msgid "highlight regex"
-msgstr ""
+msgstr "subratllar expressions regulars (regex)"
 
 #: judge/models/interface.py:48
 msgid "parent item"
-msgstr ""
+msgstr "Ítem pare"
 
 #: judge/models/interface.py:66
 msgid "post title"
-msgstr ""
+msgstr "Títol de l'entrada"
 
 #: judge/models/interface.py:67 judge/models/problem.py:464
 msgid "authors"
-msgstr ""
+msgstr "Autors/es"
 
 #: judge/models/interface.py:68
 msgid "slug"
-msgstr ""
+msgstr "Identificador únic"
 
 #: judge/models/interface.py:69 judge/models/problem.py:462
 msgid "public visibility"
-msgstr ""
+msgstr "visibilitat pública"
 
 #: judge/models/interface.py:70
 msgid "sticky"
-msgstr ""
+msgstr "Fixat"
 
 #: judge/models/interface.py:71
 msgid "publish after"
-msgstr ""
+msgstr "publicar després de"
 
 #: judge/models/interface.py:72
 msgid "post content"
-msgstr ""
+msgstr "Publicar un contingut"
 
 #: judge/models/interface.py:73
 msgid "post summary"
-msgstr ""
+msgstr "Resum de l'entrada"
 
 #: judge/models/interface.py:74
 msgid "openGraph image"
-msgstr ""
+msgstr "imatge OpenGraph"
 
 #: judge/models/interface.py:96
 msgid "Edit all posts"
-msgstr ""
+msgstr "Editar totes les entrades"
 
 #: judge/models/interface.py:98
 msgid "blog post"
-msgstr ""
+msgstr "Entrada del Blog"
 
 #: judge/models/interface.py:99
 msgid "blog posts"
-msgstr ""
+msgstr "Entrades del Blog"
 
 #: judge/models/message.py:11
 msgid "message title"
-msgstr ""
+msgstr "Títol del missatge"
 
 #: judge/models/message.py:12 judge/models/ticket.py:29
 msgid "message body"
-msgstr ""
+msgstr "Cos del missatge"
 
 #: judge/models/message.py:13
 msgid "sender"
-msgstr ""
+msgstr "Remitent"
 
 #: judge/models/message.py:14
 msgid "target"
-msgstr ""
+msgstr "Objectiu"
 
 #: judge/models/message.py:15
 msgid "message timestamp"
-msgstr ""
+msgstr "Data i hora del missatge"
 
 #: judge/models/message.py:16
 msgid "read"
-msgstr ""
+msgstr "Llegeix"
 
 #: judge/models/message.py:20
 msgid "messages in the thread"
-msgstr ""
+msgstr "missatges en el fil"
 
 #: judge/models/problem.py:27
 msgid "problem category ID"
-msgstr ""
+msgstr "ID de la categoria del problema"
 
 #: judge/models/problem.py:28
 msgid "problem category name"
-msgstr ""
+msgstr "nom de la categoria del problema"
 
 #: judge/models/problem.py:35
 msgid "problem type"
-msgstr ""
+msgstr "tipus del problema"
 
 #: judge/models/problem.py:36 judge/models/problem.py:113
 msgid "problem types"
-msgstr ""
+msgstr "tipus del problema"
 
 #: judge/models/problem.py:40
 msgid "problem group ID"
-msgstr ""
+msgstr "ID del grup del problema"
 
 #: judge/models/problem.py:41
 msgid "problem group name"
-msgstr ""
+msgstr "nom del grup del problema"
 
 #: judge/models/problem.py:48 judge/models/problem.py:116
 msgid "problem group"
-msgstr ""
+msgstr "grup del problema"
 
 #: judge/models/problem.py:49
 msgid "problem groups"
-msgstr ""
+msgstr "grups del problema"
 
 #: judge/models/problem.py:53
 msgid "key"
-msgstr ""
+msgstr "clau"
 
 #: judge/models/problem.py:55
 msgid "link"
-msgstr ""
+msgstr "Enllaç"
 
 #: judge/models/problem.py:56
 msgid "full name"
-msgstr ""
+msgstr "Nom complet"
 
 #: judge/models/problem.py:57 judge/models/profile.py:42
 #: judge/models/runtime.py:24
 msgid "short name"
-msgstr ""
+msgstr "Nom curt"
 
 #: judge/models/problem.py:58
 msgid "Displayed on pages under this license"
-msgstr ""
+msgstr "Mostrat en pàgines sota aquesta llicència"
 
 #: judge/models/problem.py:59
 msgid "icon"
-msgstr ""
+msgstr "icona"
 
 #: judge/models/problem.py:59
 msgid "URL to the icon"
-msgstr ""
+msgstr "URL de l'icona"
 
 #: judge/models/problem.py:60
 msgid "license text"
-msgstr ""
+msgstr "text de la llicència"
 
 #: judge/models/problem.py:69
 msgid "license"
-msgstr ""
+msgstr "Llicècia"
 
 #: judge/models/problem.py:70
 msgid "licenses"
-msgstr ""
+msgstr "Llicències"
 
 #: judge/models/problem.py:96
 msgid "problem code"
-msgstr ""
+msgstr "Codi del problema"
 
 #: judge/models/problem.py:98
 msgid "A short, unique code for the problem, used in the url after /problem/"
-msgstr ""
+msgstr "Un codi únic i curt per al problema, usat en la url després de /problem/"
 
 #: judge/models/problem.py:100
 msgid "problem name"
-msgstr ""
+msgstr "Nom del problema"
 
 #: judge/models/problem.py:101
 msgid "The full name of the problem, as shown in the problem list."
-msgstr ""
+msgstr "El nom complet del problema, tal i com es mostra en la llista de problemes"
 
 #: judge/models/problem.py:103
 msgid "problem body"
-msgstr ""
+msgstr "Cos del problema"
 
 #: judge/models/problem.py:104
 msgid "creators"
-msgstr ""
+msgstr "Creadors/es"
 
 #: judge/models/problem.py:105
 msgid "These users will be able to edit the problem, and be listed as authors."
-msgstr ""
+msgstr "Aquests usuaris seran capaços d'editar el problema i seran mostrats com els seus autors"
 
 #: judge/models/problem.py:107
 msgid "curators"
-msgstr ""
+msgstr "Conservadors/es"
 
 #: judge/models/problem.py:108
 msgid "These users will be able to edit the problem, but not be listed as authors."
-msgstr ""
+msgstr "Aquests usuaris seran capaços d'editar el problema però no seran mostrats com els seus autors"
 
 #: judge/models/problem.py:110
 msgid "testers"
-msgstr ""
+msgstr "Testers"
 
 #: judge/models/problem.py:112
 msgid "These users will be able to view the private problem, but not edit it."
-msgstr ""
+msgstr "Aquests usuaris podran veure el problema privat, però no editar-lo"
 
 #: judge/models/problem.py:114
 msgid "The type of problem, as shown on the problem's page."
-msgstr ""
+msgstr "El tipus del problema, tal i com es mostra en la llista de problemes"
 
 #: judge/models/problem.py:117
 msgid "The group of problem, shown under Category in the problem list."
-msgstr ""
+msgstr "El grup del problema, tal i com es mostra en la llista de problemes com a Categoria"
 
 #: judge/models/problem.py:119
 msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
-msgstr ""
+msgstr "El temps límit per aquest problema, en segons. Les fraccions (1.5) estan permeses."
 
 #: judge/models/problem.py:123 judge/models/problem.py:449
 msgid "memory limit"
-msgstr ""
+msgstr "Límit de memòria"
 
 #: judge/models/problem.py:124
 msgid "The memory limit for this problem, in kilobytes (e.g. 64mb = 65536 kilobytes)."
-msgstr ""
+msgstr "El límit de memòria per aquest problema, en kilobytes (p.e. 64mb = 65536 kilobytes)."
 
 #: judge/models/problem.py:130
 msgid "Points awarded for problem completion. Points are displayed with a 'p' suffix if partial."
-msgstr ""
+msgstr "Punts otorgats per completar el problema. Els punts es mostren amb un sufix 'p' si son parcials (és a dir, cada cas completat otorga punts tot i que no es completin tots els casos)"
 
 #: judge/models/problem.py:133
 msgid "allows partial points"
-msgstr ""
+msgstr "permetre punts parcials"
 
 #: judge/models/problem.py:134
 msgid "allowed languages"
-msgstr ""
+msgstr "Llenguatges permesos"
 
 #: judge/models/problem.py:135
 msgid "List of allowed submission languages."
-msgstr ""
+msgstr "Llista de llenguatges d'enviament permesos"
 
 #: judge/models/problem.py:137
 msgid "manually managed"
-msgstr ""
+msgstr "operat manualment"
 
 #: judge/models/problem.py:138
 msgid "Whether judges should be allowed to manage data or not."
-msgstr ""
+msgstr "Si els jutges poden modificar les dades manualment o no"
 
 #: judge/models/problem.py:139
 msgid "date of publishing"
-msgstr ""
+msgstr "Data de publicació"
 
 #: judge/models/problem.py:140
 msgid "Doesn't have magic ability to auto-publish due to backward compatibility"
-msgstr ""
+msgstr "No té l'habilitat màgica d'autopublicar per a preservar la compatibilitat amb versions anteriors"
 
 #: judge/models/problem.py:142
 msgid "Bans the selected users from submitting to this problem."
-msgstr ""
+msgstr "Baneja als usuaris seleccionats de fer enviaments per aquest problema"
 
 #: judge/models/problem.py:144
 msgid "The license under which this problem is published."
-msgstr ""
+msgstr "La llicència sota la qual aquest problema ha estat publicat"
 
 #: judge/models/problem.py:146
 msgid "problem summary"
-msgstr ""
+msgstr "Resum del problema"
 
 #: judge/models/problem.py:148
 msgid "number of users"
-msgstr ""
+msgstr "Nombre d'usuaris"
 
 #: judge/models/problem.py:149
 msgid "The number of users who solved the problem."
-msgstr ""
+msgstr "El nombre d'usuaris que ha resolt aquest problema"
 
 #: judge/models/problem.py:150
 msgid "solve rate"
-msgstr ""
+msgstr "Percetatge d'usuaris que han resolt el problema"
 
 #: judge/models/problem.py:151
 msgid "allow full markdown access"
-msgstr ""
+msgstr "Permet fer servir la llibreria sencera de Markdown"
 
 #: judge/models/problem.py:157
 msgid "If private, only these organizations may see the problem."
-msgstr ""
+msgstr "Si està en privat, només aquestes organitzacions podran veure el problema"
 
 #: judge/models/problem.py:411
 msgid "See hidden problems"
-msgstr ""
+msgstr "Veure problemes ocults"
 
 #: judge/models/problem.py:412
 msgid "Edit own problems"
-msgstr ""
+msgstr "Editar problemes propis"
 
 #: judge/models/problem.py:413
 msgid "Edit all problems"
-msgstr ""
+msgstr "Editar tots els problemes"
 
 #: judge/models/problem.py:414
 msgid "Edit all public problems"
-msgstr ""
+msgstr "Editar tots els problemes públics"
 
 #: judge/models/problem.py:415
 msgid "Edit problems with full markup"
-msgstr ""
+msgstr "Editar problemes amb accés total a Markup"
 
 #: judge/models/problem.py:416 templates/problem/problem.html:161
 msgid "Clone problem"
-msgstr ""
+msgstr "Clonar problema"
 
 #: judge/models/problem.py:417
 msgid "Change is_public field"
-msgstr ""
+msgstr "Cambiar camp is_public "
 
 #: judge/models/problem.py:418
 msgid "Change is_manually_managed field"
-msgstr ""
+msgstr "Cambiar camp is_manually_managed"
 
 #: judge/models/problem.py:419
 msgid "See organization-private problems"
-msgstr ""
+msgstr "Veure els problemes privats per a organitzacions"
 
 #: judge/models/problem.py:427 judge/models/problem.py:445
 #: judge/models/runtime.py:158
 msgid "language"
-msgstr ""
+msgstr "Llenguatge"
 
 #: judge/models/problem.py:428
 msgid "translated name"
-msgstr ""
+msgstr "Nom traduït"
 
 #: judge/models/problem.py:429
 msgid "translated description"
-msgstr ""
+msgstr "Descripció traduïda"
 
 #: judge/models/problem.py:433
 msgid "problem translation"
-msgstr ""
+msgstr "Traducció del problema"
 
 #: judge/models/problem.py:434
 msgid "problem translations"
-msgstr ""
+msgstr "Traduccions del problema"
 
 #: judge/models/problem.py:438
 msgid "clarified problem"
-msgstr ""
+msgstr "Problema aclarit"
 
 #: judge/models/problem.py:439
 msgid "clarification body"
-msgstr ""
+msgstr "Cos de l'aclariment"
 
 #: judge/models/problem.py:440
 msgid "clarification timestamp"
-msgstr ""
+msgstr "Marca de temps de l'aclariment"
 
 #: judge/models/problem.py:455
 msgid "language-specific resource limit"
-msgstr ""
+msgstr "Límit de Recursos Específics per Llenguatge"
 
 #: judge/models/problem.py:456
 msgid "language-specific resource limits"
-msgstr ""
+msgstr "Límits de Recursos Específics per Llenguatge"
 
 #: judge/models/problem.py:460
 msgid "associated problem"
-msgstr ""
+msgstr "Problema associat"
 
 #: judge/models/problem.py:463
 msgid "publish date"
-msgstr ""
+msgstr "Data de publicació"
 
 #: judge/models/problem.py:465
 msgid "editorial content"
-msgstr ""
+msgstr "Contingut de l'editorial"
 
 #: judge/models/problem.py:488
 msgid "See hidden solutions"
-msgstr ""
+msgstr "Veure solucions ocultes"
 
 #: judge/models/problem.py:490
 msgid "solution"
-msgstr ""
+msgstr "solució"
 
 #: judge/models/problem.py:491
 msgid "solutions"
-msgstr ""
+msgstr "solucions"
 
 #: judge/models/problem_data.py:23
 msgid "Standard"
-msgstr ""
+msgstr "Estàndard"
 
 #: judge/models/problem_data.py:24
 msgid "Floats"
-msgstr ""
+msgstr "Floats"
 
 #: judge/models/problem_data.py:25
 msgid "Floats (absolute)"
-msgstr ""
+msgstr "Floats (absoluts)"
 
 #: judge/models/problem_data.py:26
 msgid "Floats (relative)"
-msgstr ""
+msgstr "Floats (relatius)"
 
 #: judge/models/problem_data.py:27
 msgid "Non-trailing spaces"
-msgstr ""
+msgstr "espais que no estan al principi ni al final"
 
 #: judge/models/problem_data.py:28
 msgid "Unordered"
-msgstr ""
+msgstr "No-ordenat"
 
 #: judge/models/problem_data.py:29
 msgid "Byte identical"
-msgstr ""
+msgstr "Idèntic byte a byte"
 
 #: judge/models/problem_data.py:30
 msgid "Line-by-line"
-msgstr ""
+msgstr "Línea a Línea amb retroacció"
 
 #: judge/models/problem_data.py:37
 msgid "data zip file"
-msgstr ""
+msgstr "fitxer zip amb les dades del problema"
 
 #: judge/models/problem_data.py:39
 msgid "generator file"
-msgstr ""
+msgstr "fitxer amb el generador"
 
 #: judge/models/problem_data.py:41 judge/models/problem_data.py:90
 msgid "output prefix length"
-msgstr ""
+msgstr "Longitud de prefix de sortida"
 
 #: judge/models/problem_data.py:42 judge/models/problem_data.py:91
 msgid "output limit length"
-msgstr ""
+msgstr "Longitud de límit de sortida"
 
 #: judge/models/problem_data.py:43
 msgid "init.yml generation feedback"
-msgstr ""
+msgstr "init.yml de generació de resultats"
 
 #: judge/models/problem_data.py:44 judge/models/problem_data.py:92
 msgid "checker"
-msgstr ""
+msgstr "verificador"
 
 #: judge/models/problem_data.py:45 judge/models/problem_data.py:93
 msgid "checker arguments"
-msgstr ""
+msgstr "arguments del verificador"
 
 #: judge/models/problem_data.py:46 judge/models/problem_data.py:94
 msgid "checker arguments as a JSON object"
-msgstr ""
+msgstr "arguments del verificador como un objecte JSON"
 
 #: judge/models/problem_data.py:77
 msgid "problem data set"
-msgstr ""
+msgstr "conjunt de dades del problema"
 
 #: judge/models/problem_data.py:79
 msgid "case position"
-msgstr ""
+msgstr "posició del cas de proves"
 
 #: judge/models/problem_data.py:80
 msgid "case type"
-msgstr ""
+msgstr "tipus del cas de proves"
 
 #: judge/models/problem_data.py:81
 msgid "Normal case"
-msgstr ""
+msgstr "Cas normal"
 
 #: judge/models/problem_data.py:82
 msgid "Batch start"
-msgstr ""
+msgstr "Inici del lot (Batch)"
 
 #: judge/models/problem_data.py:83
 msgid "Batch end"
-msgstr ""
+msgstr "Final del lot (Batch)"
 
 #: judge/models/problem_data.py:85
 msgid "input file name"
-msgstr ""
+msgstr "nom del fitxer d'entrada"
 
 #: judge/models/problem_data.py:86
 msgid "output file name"
-msgstr ""
+msgstr "nom del fitxer de sortida"
 
 #: judge/models/problem_data.py:87
 msgid "generator arguments"
-msgstr ""
+msgstr "arguments del generador"
 
 #: judge/models/problem_data.py:88
 msgid "point value"
-msgstr ""
+msgstr "nombre de punts"
 
 #: judge/models/problem_data.py:89
 msgid "case is pretest?"
-msgstr ""
+msgstr "és un cas preliminar?"
 
 #: judge/models/profile.py:39
 msgid "organization title"
-msgstr ""
+msgstr "títol de l'organització"
 
 #: judge/models/profile.py:40
 msgid "organization slug"
-msgstr ""
+msgstr "identificador únic de l'organització"
 
 #: judge/models/profile.py:41
 msgid "Organization name shown in URL"
-msgstr ""
+msgstr "Nom de l'organització tal i com es mostra en l'URL"
 
 #: judge/models/profile.py:43
 msgid "Displayed beside user name during contests"
-msgstr ""
+msgstr "Mostrat al costat del nom de l'usuari durant els concursos"
 
 #: judge/models/profile.py:44
 msgid "organization description"
-msgstr ""
+msgstr "Descripció de l'organització"
 
 #: judge/models/profile.py:45
 msgid "registrant"
-msgstr ""
+msgstr "registrant"
 
 #: judge/models/profile.py:46
 msgid "User who registered this organization"
-msgstr ""
+msgstr "Usuari que ha registrat aquesta organització"
 
 #: judge/models/profile.py:47
 msgid "administrators"
-msgstr ""
+msgstr "Administradors"
 
 #: judge/models/profile.py:48
 msgid "Those who can edit this organization"
-msgstr ""
+msgstr "Aquells qui poden editar aquesta organització"
 
 #: judge/models/profile.py:49
 msgid "creation date"
-msgstr ""
+msgstr "Data de creació"
 
 #: judge/models/profile.py:50
 msgid "is open organization?"
-msgstr ""
+msgstr "És una organització oberta?"
 
 #: judge/models/profile.py:51
 msgid "Allow joining organization"
-msgstr ""
+msgstr "Permet unir-se a l'organització"
 
 #: judge/models/profile.py:52
 msgid "maximum size"
-msgstr ""
+msgstr "Mida màxima"
 
 #: judge/models/profile.py:53
 msgid "Maximum amount of users in this organization, only applicable to private organizations"
-msgstr ""
+msgstr "Màxima quantitat d'usuaris en aquesta organiztació, només aplicable per a organitzacions privades"
 
 #: judge/models/profile.py:55
 msgid "Student access code"
-msgstr ""
+msgstr "Codi d'accès de l'estudiant"
 
 #: judge/models/profile.py:59
 msgid "This image will replace the default site logo for users viewing the organization."
-msgstr ""
+msgstr "Aquesta imatge reemplaçarà el logo per defecte a tots els usuaris mirant aquesta organització"
 
 #: judge/models/profile.py:82
 msgid "Administer organizations"
-msgstr ""
+msgstr "Administrar organitzacions"
 
 #: judge/models/profile.py:83
 msgid "Edit all organizations"
-msgstr ""
+msgstr "Edita totes les organitzacions"
 
 #: judge/models/profile.py:85 judge/models/profile.py:102
 #: judge/models/profile.py:266
 msgid "organization"
-msgstr ""
+msgstr "organització"
 
 #: judge/models/profile.py:90
 msgid "user associated"
-msgstr ""
+msgstr "usuari associat"
 
 #: judge/models/profile.py:91
 msgid "self-description"
-msgstr ""
+msgstr "auto-descripció"
 
 #: judge/models/profile.py:92
 msgid "location"
-msgstr ""
+msgstr "Localització"
 
 #: judge/models/profile.py:94
 msgid "preferred language"
-msgstr ""
+msgstr "Llenguatge preferit"
 
 #: judge/models/profile.py:100
 msgid "last access time"
-msgstr ""
+msgstr "Data últim accés"
 
 #: judge/models/profile.py:101
 msgid "last IP"
-msgstr ""
+msgstr "Última IP"
 
 #: judge/models/profile.py:104
 msgid "display rank"
-msgstr ""
+msgstr "mostrar rang"
 
 #: judge/models/profile.py:106
 msgid "Normal User"
-msgstr ""
+msgstr "Usuari normal"
 
 #: judge/models/profile.py:107
 msgid "Problem Setter"
-msgstr ""
+msgstr "Creador de Problemes"
 
 #: judge/models/profile.py:108 templates/base.html:220
 #: templates/comments/list.html:99 templates/contest/contest-list-tabs.html:24
@@ -1797,1590 +1784,1584 @@ msgstr ""
 #: templates/submission/info-base.html:13
 #: templates/submission/submission-list-tabs.html:15
 msgid "Admin"
-msgstr ""
+msgstr "Administrador"
 
 #: judge/models/profile.py:109
 msgid "comment mute"
-msgstr ""
+msgstr "silenciar el comentari"
 
 #: judge/models/profile.py:109
 msgid "Some users are at their best when silent."
-msgstr ""
+msgstr "Alguns usuaris son més macos callats."
 
 #: judge/models/profile.py:111
 msgid "unlisted user"
-msgstr ""
+msgstr "usuari desllistat"
 
 #: judge/models/profile.py:111
 msgid "User will not be ranked."
-msgstr ""
+msgstr "Aquest usuari no serà classificat"
 
 #: judge/models/profile.py:114
 msgid "user script"
-msgstr ""
+msgstr "script d'usuari"
 
 #: judge/models/profile.py:115
 msgid "User-defined JavaScript for site customization."
-msgstr ""
+msgstr "JavaScript definit per l'usuari per a la personalització del lloc."
 
 #: judge/models/profile.py:116
 msgid "current contest"
-msgstr ""
+msgstr "concurs actual"
 
 #: judge/models/profile.py:118
 msgid "math engine"
-msgstr ""
+msgstr "motor matemàtic"
 
 #: judge/models/profile.py:120
 msgid "the rendering engine used to render math"
-msgstr ""
+msgstr "el motor fet servir per a representar les matemàtiques"
 
 #: judge/models/profile.py:121
 msgid "TOTP 2FA enabled"
-msgstr ""
+msgstr "TOTP 2FA activat"
 
 #: judge/models/profile.py:122
 msgid "check to enable TOTP-based two-factor authentication"
-msgstr ""
+msgstr "fes click per a activar l'Autenticació de dos passos basada en TOTP"
 
 #: judge/models/profile.py:123
 msgid "WebAuthn 2FA enabled"
-msgstr ""
+msgstr "WebAuthn 2FA activat"
 
 #: judge/models/profile.py:124
 msgid "check to enable WebAuthn-based two-factor authentication"
-msgstr ""
+msgstr "fes click per a activar l'Autenticació de dos passos basada en WebAuthn"
 
 #: judge/models/profile.py:125
 msgid "TOTP key"
-msgstr ""
+msgstr "clau TOTP"
 
 #: judge/models/profile.py:126
 msgid "32 character base32-encoded key for TOTP"
-msgstr ""
+msgstr "clau de 32 caràcters en base32 per a TOTP"
 
 #: judge/models/profile.py:128
 msgid "TOTP key must be empty or base32"
-msgstr ""
+msgstr "la clau TOTP ha d'estar buida o ser base32"
 
 #: judge/models/profile.py:129
 msgid "scratch codes"
-msgstr ""
+msgstr "codis Scratch"
 
 #: judge/models/profile.py:130
 msgid "JSON array of 16 character base32-encoded codes                                                         for scratch codes"
-msgstr ""
+msgstr "Array JSON de codis de 16 caràcters en base32"
 
 #: judge/models/profile.py:134
 msgid "Scratch codes must be empty or a JSON array of                                                                  16-character base32 codes"
-msgstr ""
+msgstr "Els codis Scratch han de estar buits o ser un Array JSON de codis de 16 caràcters en base32"
 
 #: judge/models/profile.py:136
 msgid "API token"
-msgstr ""
+msgstr "Token de l'API"
 
 #: judge/models/profile.py:137
 msgid "64 character hex-encoded API access token"
-msgstr ""
+msgstr "token d'accès a l'API de 64 caràcters hexadecimals"
 
 #: judge/models/profile.py:139
 msgid "API token must be None or hexadecimal"
-msgstr ""
+msgstr "el token de l'API ha d'estar buit o ser hexadecimal"
 
 #: judge/models/profile.py:140
 msgid "internal notes"
-msgstr ""
+msgstr "notes internes"
 
 #: judge/models/profile.py:141
 msgid "Notes for administrators regarding this user."
-msgstr ""
+msgstr "Notes dels administradors sobre aquest usuari."
 
 #: judge/models/profile.py:142
 msgid "last data download time"
-msgstr ""
+msgstr "última data de descàrrega de dades"
 
 #: judge/models/profile.py:233
 msgid "Shows in-progress development stuff"
-msgstr ""
+msgstr "Mostra coses de desenvolupament en progrès"
 
 #: judge/models/profile.py:234
 msgid "Edit TOTP settings"
-msgstr ""
+msgstr "Editar ajustos de TOTP"
 
 #: judge/models/profile.py:236
 msgid "user profile"
-msgstr ""
+msgstr "perfil d'usuari"
 
 #: judge/models/profile.py:237
 msgid "user profiles"
-msgstr ""
+msgstr "perfils d'usuaris"
 
 #: judge/models/profile.py:243
 msgid "device name"
-msgstr ""
+msgstr "nom de dispositiu"
 
 #: judge/models/profile.py:244
 msgid "credential ID"
-msgstr ""
+msgstr "ID de la credencial"
 
 #: judge/models/profile.py:245
 msgid "public key"
-msgstr ""
+msgstr "clau pública"
 
 #: judge/models/profile.py:246
 msgid "sign counter"
-msgstr ""
+msgstr "comptador de firmes"
 
 #: judge/models/profile.py:268
 msgid "request time"
-msgstr ""
+msgstr "data de solicitud"
 
 #: judge/models/profile.py:269
 msgid "state"
-msgstr ""
+msgstr "estat"
 
 #: judge/models/profile.py:274
 msgid "reason"
-msgstr ""
+msgstr "motiu"
 
 #: judge/models/profile.py:277
 msgid "organization join request"
-msgstr ""
+msgstr "petició d'unir-se a organització"
 
 #: judge/models/profile.py:278
 msgid "organization join requests"
-msgstr ""
+msgstr "peticions d'unir-se a organització"
 
 #: judge/models/runtime.py:19
 msgid "short identifier"
-msgstr ""
+msgstr "identificador curt"
 
 #: judge/models/runtime.py:20
 msgid "The identifier for this language; the same as its executor id for judges."
-msgstr ""
+msgstr "El identificador per a aquest llenguatge; el mateix que la id d'execució per a jutges."
 
 #: judge/models/runtime.py:22
 msgid "long name"
-msgstr ""
+msgstr "nom llarg"
 
 #: judge/models/runtime.py:23
 msgid "Longer name for the language, e.g. \"Python 2\" or \"C++11\"."
-msgstr ""
+msgstr "Nom llarg per al llenguatge, p ex \"Python 2\" o \"C++11\""
 
 #: judge/models/runtime.py:25
 msgid "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C++11\". If left blank, it will default to the short identifier."
-msgstr ""
+msgstr "Un nom més llegible, pero curt, per a ser mostrat públicament. p ex \"PY2\"o \"C++11\". Si es deixa en blanc serà l'identificador curt"
 
 #: judge/models/runtime.py:29
 msgid "common name"
-msgstr ""
+msgstr "nom comú"
 
 #: judge/models/runtime.py:30
 msgid "Common name for the language. For example, the common name for C++03, C++11, and C++14 would be \"C++\""
-msgstr ""
+msgstr "Nom comú per al llenguatge. Per exemple, el nom comú per a C++03, C++11 i C++14 és \"C++\""
 
 #: judge/models/runtime.py:32
 msgid "ace mode name"
-msgstr ""
+msgstr "nom del mode Ace"
 
 #: judge/models/runtime.py:33
 msgid "Language ID for Ace.js editor highlighting, appended to \"mode-\" to determine the Ace JavaScript file to use, e.g., \"python\"."
-msgstr ""
+msgstr "ID de llenguatge per al linting de l'editor Ace.js, appendat a \"mode-\" per a determinar el fitxer JavaScript Ace que s'ha de fer servir, p ex \"python\""
 
 #: judge/models/runtime.py:35
 msgid "pygments name"
-msgstr ""
+msgstr "nom de pygments"
 
 #: judge/models/runtime.py:36
 msgid "Language ID for Pygments highlighting in source windows."
-msgstr ""
+msgstr "ID d'idioma per al linting de Pygments "
 
 #: judge/models/runtime.py:37
 msgid "code template"
-msgstr ""
+msgstr "plantilla de codi"
 
 #: judge/models/runtime.py:38
 msgid "Code template to display in submission editor."
-msgstr ""
+msgstr "Plantilla de codi per a mostrar en l'editor d'enviaments"
 
 #: judge/models/runtime.py:39
 msgid "runtime info override"
-msgstr ""
+msgstr "Sobreescritura de l'informació de runtime"
 
 #: judge/models/runtime.py:40
 msgid "Do not set this unless you know what you're doing! It will override the usually more specific, judge-provided runtime info!"
-msgstr ""
+msgstr "No configuris això a no ser que sàpigues perfectament què estas fent! Sobreescriurà la configuració del jutge que sol ser més específica!"
 
 #: judge/models/runtime.py:42
 msgid "language description"
-msgstr ""
+msgstr "descripció del llenguatge"
 
 #: judge/models/runtime.py:43
 msgid "Use this field to inform users of quirks with your environment, additional restrictions, etc."
-msgstr ""
+msgstr "Fes servir aquest camp per a informar als usuaris de particularitats amb el teu entorn, restriccions addicionals, etc."
 
 #: judge/models/runtime.py:45
 msgid "extension"
-msgstr ""
+msgstr "extensió"
 
 #: judge/models/runtime.py:46
 msgid "The extension of source files, e.g., \"py\" or \"cpp\"."
-msgstr ""
+msgstr "L'extensió dels archius de codi, per exemple, \"py\" o \"cpp\"."
 
 #: judge/models/runtime.py:159
 msgid "languages"
-msgstr ""
+msgstr "Llenguatges"
 
 #: judge/models/runtime.py:163
 msgid "language to which this runtime belongs"
-msgstr ""
+msgstr "llenguatge al que pertany aquest temps d'execució"
 
 #: judge/models/runtime.py:164
 msgid "judge on which this runtime exists"
-msgstr ""
+msgstr "Jutge en la que existeix aquesta execució"
 
 #: judge/models/runtime.py:165
 msgid "runtime name"
-msgstr ""
+msgstr "Nom de l'execució"
 
 #: judge/models/runtime.py:166
 msgid "runtime version"
-msgstr ""
+msgstr "versió de l'execució"
 
 #: judge/models/runtime.py:167
 msgid "order in which to display this runtime"
-msgstr ""
+msgstr "ordre en el que es mostra aquesta execució"
 
 #: judge/models/runtime.py:171
 msgid "Server name, hostname-style"
-msgstr ""
+msgstr "Nom del servidor, en estil de host-name"
 
 #: judge/models/runtime.py:172
 msgid "time of creation"
-msgstr ""
+msgstr "Data de creació"
 
 #: judge/models/runtime.py:173
 msgid "A key to authenticate this judge"
-msgstr ""
+msgstr "Clau per a autenticar aquest jutge"
 
 #: judge/models/runtime.py:174
 msgid "authentication key"
-msgstr ""
+msgstr "clau d'autenticació"
 
 #: judge/models/runtime.py:175
 msgid "block judge"
-msgstr ""
+msgstr "bloquejar jutge"
 
 #: judge/models/runtime.py:176
 msgid "Whether this judge should be blocked from connecting, even if its key is correct."
-msgstr ""
+msgstr "Si aquest jutge se li ha d'impedir connectar-se, tot i que poseeixi una clau correcta."
 
 #: judge/models/runtime.py:178
 msgid "judge online status"
-msgstr ""
+msgstr "estatus del jutge en linea"
 
 #: judge/models/runtime.py:179
 msgid "judge start time"
-msgstr ""
+msgstr "data d'inici del jutge"
 
 #: judge/models/runtime.py:180
 msgid "response time"
-msgstr ""
+msgstr "temps de resposta"
 
 #: judge/models/runtime.py:181
 msgid "system load"
-msgstr ""
+msgstr "càrrega del sistema"
 
 #: judge/models/runtime.py:182
 msgid "Load for the last minute, divided by processors to be fair."
-msgstr ""
+msgstr "Càrrega per l'últim minut, dividida per el nombre de processadors"
 
 #: judge/models/runtime.py:186 judge/models/runtime.py:228
 msgid "judges"
-msgstr ""
+msgstr "jutges"
 
 #: judge/models/runtime.py:227
 msgid "judge"
-msgstr ""
+msgstr "jutge"
 
 #: judge/models/submission.py:20 judge/models/submission.py:47
 #: judge/utils/problems.py:74
 msgid "Accepted"
-msgstr ""
+msgstr "Acceptat"
 
 #: judge/models/submission.py:21 judge/models/submission.py:48
 msgid "Wrong Answer"
-msgstr ""
+msgstr "Resposta errònia"
 
 #: judge/models/submission.py:22 judge/models/submission.py:50
 msgid "Time Limit Exceeded"
-msgstr ""
+msgstr "Temps Límit excedit"
 
 #: judge/models/submission.py:23 judge/models/submission.py:51
 msgid "Memory Limit Exceeded"
-msgstr ""
+msgstr "Límit de memòria excedit"
 
 #: judge/models/submission.py:24 judge/models/submission.py:52
 msgid "Output Limit Exceeded"
-msgstr ""
+msgstr "Límit de dades de sortida excedit"
 
 #: judge/models/submission.py:25 judge/models/submission.py:53
 msgid "Invalid Return"
-msgstr ""
+msgstr "Retorn invàlid (El programa ha tingut un retorn no-estàndard. Això sol implicar una excepció en llenguatges interpretats)"
 
 #: judge/models/submission.py:26 judge/models/submission.py:54
 msgid "Runtime Error"
-msgstr ""
+msgstr "Errors en temps d'execució"
 
 #: judge/models/submission.py:27 judge/models/submission.py:41
 #: judge/models/submission.py:55 judge/utils/problems.py:76
 msgid "Compile Error"
-msgstr ""
+msgstr "Error de compilació"
 
 #: judge/models/submission.py:28 judge/models/submission.py:40
 msgid "Internal Error"
-msgstr ""
+msgstr "Error intern"
 
 #: judge/models/submission.py:29
 msgid "Short circuit"
-msgstr ""
+msgstr "Curt Circuit"
 
 #: judge/models/submission.py:30 judge/models/submission.py:42
 #: judge/models/submission.py:61
 msgid "Aborted"
-msgstr ""
+msgstr "Avortat"
 
 #: judge/models/submission.py:36 judge/models/submission.py:57
 msgid "Queued"
-msgstr ""
+msgstr "En cua"
 
 #: judge/models/submission.py:37 judge/models/submission.py:58
 msgid "Processing"
-msgstr ""
+msgstr "Processant"
 
 #: judge/models/submission.py:38 judge/models/submission.py:59
 msgid "Grading"
-msgstr ""
+msgstr "Avaluant"
 
 #: judge/models/submission.py:39 judge/models/submission.py:60
 msgid "Completed"
-msgstr ""
+msgstr "Completat"
 
 #: judge/models/submission.py:56
 msgid "Internal Error (judging server error)"
-msgstr ""
+msgstr "Error Intern (error en el servidor del jutge)"
 
 #: judge/models/submission.py:66
 msgid "submission time"
-msgstr ""
+msgstr "Temps d'enviament"
 
 #: judge/models/submission.py:67 judge/models/submission.py:221
 msgid "execution time"
-msgstr ""
+msgstr "Temps d'execució"
 
 #: judge/models/submission.py:68 judge/models/submission.py:222
 msgid "memory usage"
-msgstr ""
+msgstr "Ús de memòria"
 
 #: judge/models/submission.py:69 judge/models/submission.py:223
 msgid "points granted"
-msgstr ""
+msgstr "Punts atorgats"
 
 #: judge/models/submission.py:70
 msgid "submission language"
-msgstr ""
+msgstr "llenguatge de l'enviament"
 
 #: judge/models/submission.py:71
 msgid "status"
-msgstr ""
+msgstr "estat"
 
 #: judge/models/submission.py:72
 msgid "result"
-msgstr ""
+msgstr "resultat"
 
 #: judge/models/submission.py:74
 msgid "compile errors"
-msgstr ""
+msgstr "errors de compilació"
 
 #: judge/models/submission.py:76
 msgid "batched cases"
-msgstr ""
+msgstr "casos en lot (batch)"
 
 #: judge/models/submission.py:77
 msgid "test case points"
-msgstr ""
+msgstr "punts del cas de proves"
 
 #: judge/models/submission.py:78
 msgid "test case total points"
-msgstr ""
+msgstr "punts totals del cas de proves"
 
 #: judge/models/submission.py:79
 msgid "judged on"
-msgstr ""
+msgstr "jutjat en:"
 
 #: judge/models/submission.py:81
 msgid "submission judge time"
-msgstr ""
+msgstr "temps per a jutjar l'enviament"
 
 #: judge/models/submission.py:82
 msgid "was rejudged by admin"
-msgstr ""
+msgstr "ha estat rejutjat per un administrador"
 
 #: judge/models/submission.py:83
 msgid "was ran on pretests only"
-msgstr ""
+msgstr "només s'han passat casos de proves preliminars"
 
 #: judge/models/submission.py:86
 msgid "lock submission"
-msgstr ""
+msgstr "bloquejar enviament"
 
 #: judge/models/submission.py:193
 msgid "Abort any submission"
-msgstr ""
+msgstr "Avortar qualsevol enviament"
 
 #: judge/models/submission.py:194
 msgid "Rejudge the submission"
-msgstr ""
+msgstr "Rejutjar l'enviament"
 
 #: judge/models/submission.py:195
 msgid "Rejudge a lot of submissions"
-msgstr ""
+msgstr "Rejutjar molts enviaments"
 
 #: judge/models/submission.py:196
 msgid "Submit without limit"
-msgstr ""
+msgstr "Enviar sense límit"
 
 #: judge/models/submission.py:197
 msgid "View all submission"
-msgstr ""
+msgstr "Veure tots els enviaments"
 
 #: judge/models/submission.py:198
 msgid "Resubmit others' submission"
-msgstr ""
+msgstr "Reenviar l'enviament d'un altre"
 
 #: judge/models/submission.py:199
 msgid "Change lock status of submission"
-msgstr ""
+msgstr "Canviar l'estat de bloqueig d'un enviament"
 
 #: judge/models/submission.py:202 templates/contest/moss.html:58
 msgid "submissions"
-msgstr ""
+msgstr "enviaments"
 
 #: judge/models/submission.py:206 judge/models/submission.py:217
 msgid "associated submission"
-msgstr ""
+msgstr "enviament associat"
 
 #: judge/models/submission.py:208
 msgid "source code"
-msgstr ""
+msgstr "Codi font"
 
 #: judge/models/submission.py:219
 msgid "test case ID"
-msgstr ""
+msgstr "Id del cas de proves"
 
 #: judge/models/submission.py:220
 msgid "status flag"
-msgstr ""
+msgstr "flag d'estat"
 
 #: judge/models/submission.py:224
 msgid "points possible"
-msgstr ""
+msgstr "punts possibles"
 
 #: judge/models/submission.py:225
 msgid "batch number"
-msgstr ""
+msgstr "nombre de lot (batch)"
 
 #: judge/models/submission.py:226
 msgid "judging feedback"
-msgstr ""
+msgstr "resultat del jutge"
 
 #: judge/models/submission.py:227
 msgid "extended judging feedback"
-msgstr ""
+msgstr "resultat extés del jutge"
 
 #: judge/models/submission.py:228
 msgid "program output"
-msgstr ""
+msgstr "sortida del programa"
 
 #: judge/models/submission.py:236
 msgid "submission test case"
-msgstr ""
+msgstr "cas de prova de l'enviament"
 
 #: judge/models/submission.py:237
 msgid "submission test cases"
-msgstr ""
+msgstr "casos de prova de l'enviament"
 
 #: judge/models/ticket.py:10
 msgid "ticket title"
-msgstr ""
+msgstr "títol del ticket"
 
 #: judge/models/ticket.py:11
 msgid "ticket creator"
-msgstr ""
+msgstr "creador del ticket"
 
 #: judge/models/ticket.py:13
 msgid "creation time"
-msgstr ""
+msgstr "hora de creació"
 
 #: judge/models/ticket.py:14
 msgid "assignees"
-msgstr ""
+msgstr "destinataris"
 
 #: judge/models/ticket.py:15
 msgid "quick notes"
-msgstr ""
+msgstr "notes ràpides"
 
 #: judge/models/ticket.py:16
 msgid "Staff notes for this issue to aid in processing."
-msgstr ""
+msgstr "notes del personal sobre aquest problema per a ajudar a la resolució"
 
 #: judge/models/ticket.py:17
 msgid "linked item type"
-msgstr ""
+msgstr "tipus d'entitat vinculada"
 
 #: judge/models/ticket.py:19
 msgid "linked item ID"
-msgstr ""
+msgstr "Id d'entitat vinculada"
 
 #: judge/models/ticket.py:21
 msgid "is ticket open?"
-msgstr ""
+msgstr "està el ticket obert?"
 
 #: judge/models/ticket.py:25
 msgid "ticket"
-msgstr ""
+msgstr "ticket"
 
 #: judge/models/ticket.py:27
 msgid "poster"
-msgstr ""
+msgstr "publicador"
 
 #: judge/models/ticket.py:30
 msgid "message time"
-msgstr ""
+msgstr "data del missatge"
 
 #: judge/pdf_problems.py:147 judge/pdf_problems.py:200
 #: judge/pdf_problems.py:260
 msgid "Page [page] of [topage]"
-msgstr ""
+msgstr "Pàgina [page] de [topage]"
 
 #: judge/pdf_problems.py:282
 #, python-format
 msgid "Page %s of %s"
-msgstr ""
+msgstr "Pàgina %s de %s"
 
 #: judge/tasks/contest.py:19
 msgid "Recalculating contest scores"
-msgstr ""
+msgstr "Recalculant puntuacions del concurs"
 
 #: judge/tasks/contest.py:40
 msgid "Running MOSS"
-msgstr ""
+msgstr "Executant sistema anticòpia MOSS"
 
 #: judge/tasks/submission.py:43
 msgid "Modifying submissions"
-msgstr ""
+msgstr "Modificant enviaments"
 
 #: judge/tasks/submission.py:56
 msgid "Recalculating user points"
-msgstr ""
+msgstr "Recalculant punts d'usuari"
 
 #: judge/tasks/user.py:50
 msgid "Preparing your submission data"
-msgstr ""
+msgstr "Preparant les dades del teu enviament"
 
 #: judge/tasks/user.py:81
 msgid "Preparing your comment data"
-msgstr ""
+msgstr "Preparant les dades del teu comentari"
 
 #: judge/utils/problem_data.py:63
 msgid "Empty batches not allowed."
-msgstr ""
+msgstr "No es permeten lots buits."
 
 #: judge/utils/problem_data.py:82
 #, python-format
 msgid "Points must be defined for non-batch case #%d."
-msgstr ""
+msgstr "Els punts han de ser definits per a aquest cas #%d que no és d'un lot."
 
 #: judge/utils/problem_data.py:87
 #, python-format
 msgid "Input file for case %d does not exist: %s"
-msgstr ""
+msgstr "L'arxiu d'entrada per el cas %d no existeix: %s"
 
 #: judge/utils/problem_data.py:90
 #, python-format
 msgid "Output file for case %d does not exist: %s"
-msgstr ""
+msgstr "L'arxiu de sortida per el cas %d no existeix: %s"
 
 #: judge/utils/problem_data.py:115
 #, python-format
 msgid "Batch start case #%d requires points."
-msgstr ""
+msgstr "El cas #%d d'inici de lot necessita punts."
 
 #: judge/utils/problem_data.py:136
 #, python-format
 msgid "Attempt to end batch outside of one in case #%d"
-msgstr ""
+msgstr "Intent d'acabar un batch fora d'un en el cas #%d"
 
 #: judge/utils/problem_data.py:154
 msgid "How did you corrupt the zip path?"
-msgstr ""
+msgstr "Com has corromput el path al zip?"
 
 #: judge/utils/problem_data.py:160
 msgid "How did you corrupt the generator path?"
-msgstr ""
+msgstr "Com has corromput el path al generador?"
 
 #: judge/utils/problems.py:75
 msgid "Wrong"
-msgstr ""
+msgstr "Erroni"
 
 #: judge/utils/problems.py:77
 msgid "Timeout"
-msgstr ""
+msgstr "Temps exhaurit"
 
 #: judge/utils/problems.py:78
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: judge/utils/problems.py:89
 msgid "Can't pass both queryset and keyword filters"
-msgstr ""
+msgstr "No pots passar un queryset i filtres de teclat al mateix temps"
 
 #: judge/utils/pwned.py:101
 msgid "Your password can't be a commonly used password."
-msgstr ""
+msgstr "La teva contrassenya no pot ser una contrassenya comuna"
 
 #: judge/utils/pwned.py:102
 msgid "This password is too common."
-msgstr ""
+msgstr "La contrasenya és massa comuna"
 
 #: judge/utils/timedelta.py:49
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d dia %h:%m:%s"
+msgstr[1] "%d dies %h:%m:%s"
 
 #: judge/utils/timedelta.py:53
 msgctxt "time format without day"
 msgid "%h:%m:%s"
-msgstr ""
+msgstr "%h:%m:%s"
 
 #: judge/utils/timedelta.py:59
 msgctxt "time format no seconds with day"
 msgid "%d day %h:%m"
 msgid_plural "%d days %h:%m"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d dia %h:%m"
+msgstr[1] "%d dies %h:%m"
 
 #: judge/utils/timedelta.py:61
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d dia"
+msgstr[1] "%d dies"
 
 #: judge/utils/timedelta.py:63
 msgctxt "hours and minutes"
 msgid "%h:%m"
-msgstr ""
+msgstr "%h:%m"
 
 #: judge/views/blog.py:37
 #, python-format
 msgid "Page %d of Posts"
-msgstr ""
+msgstr "Pàgina %d d'entradres"
 
 #: judge/views/comment.py:27
 msgid "Messing around, are we?"
-msgstr ""
+msgstr "Toquetejant-me el programa, eh?"
 
 #: judge/views/comment.py:36
 msgid "You must solve at least one problem before you can vote."
-msgstr ""
+msgstr "Has de resoldre com a mínim un problema abans de poder votar"
 
 #: judge/views/comment.py:63
 msgid "You already voted."
-msgstr ""
+msgstr "Ja has votat"
 
 #: judge/views/comment.py:126 judge/views/organization.py:299
 msgid "Edited from site"
-msgstr ""
+msgstr "Editat des de'l lloc web"
 
 #: judge/views/comment.py:147
 msgid "Editing comment"
-msgstr ""
+msgstr "Editant comentari"
 
 #: judge/views/contests.py:56 judge/views/contests.py:201
 #: judge/views/contests.py:204 judge/views/contests.py:382
 msgid "No such contest"
-msgstr ""
+msgstr "No es troba aquest concurs"
 
 #: judge/views/contests.py:57 judge/views/contests.py:202
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
-msgstr ""
+msgstr "No s'ha pogut trobar un concurs amb la clau \"%s\"."
 
 #: judge/views/contests.py:70
 msgid "Contests"
-msgstr ""
+msgstr "Concursos"
 
 #: judge/views/contests.py:205
 msgid "Could not find such contest."
-msgstr ""
+msgstr "No es troba aquest concurs"
 
 #: judge/views/contests.py:208
 #, python-format
 msgid "Access to contest \"%s\" denied"
-msgstr ""
+msgstr "S'ha denegat l'accés al concurs %s"
 
 #: judge/views/contests.py:235
 msgid "Clone Contest"
-msgstr ""
+msgstr "Clonar concurs"
 
 #: judge/views/contests.py:301
 msgid "Contest not ongoing"
-msgstr ""
+msgstr "El concurs no està en curs"
 
 #: judge/views/contests.py:302
 #, python-format
 msgid "\"%s\" is not currently ongoing."
-msgstr ""
+msgstr "\"%s\" no està en curs actualment"
 
 #: judge/views/contests.py:306
 msgid "Already in contest"
-msgstr ""
+msgstr "Ja està en el concurs"
 
 #: judge/views/contests.py:307
 #, python-format
 msgid "You are already in a contest: \"%s\"."
-msgstr ""
+msgstr "Ja estàs en el concurs \"%s\"."
 
 #: judge/views/contests.py:310
 msgid "Banned from joining"
-msgstr ""
+msgstr "BANEJAT"
 
 #: judge/views/contests.py:311
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
-msgstr ""
+msgstr "Has estat declarat persona non grata per aquest concurs. Estas vetat permanentment."
 
 #: judge/views/contests.py:372
 #, python-format
 msgid "Enter access code for \"%s\""
-msgstr ""
+msgstr "Entra el codi d'accés per a \"%s\""
 
 #: judge/views/contests.py:383
 #, python-format
 msgid "You are not in contest \"%s\"."
-msgstr ""
+msgstr "No estas en el concurs \"%s\"."
 
 #: judge/views/contests.py:402
 msgid "ContestCalendar requires integer year and month"
-msgstr ""
+msgstr "ContestCalendar necessita un any i mes enters"
 
 #: judge/views/contests.py:442
 #, python-format
 msgid "Contests in %(month)s"
-msgstr ""
+msgstr "Concursos en %(month)s"
 
 #: judge/views/contests.py:442
 msgid "F Y"
-msgstr ""
+msgstr "F Y"
 
 #: judge/views/contests.py:489
 #, python-format
 msgid "%s Statistics"
-msgstr ""
+msgstr "Estadístiques de %s "
 
 #: judge/views/contests.py:662
 #, python-format
 msgid "%s Rankings"
-msgstr ""
+msgstr "Classificacions de %s"
 
 #: judge/views/contests.py:670
 msgid "???"
-msgstr ""
+msgstr "???"
 
 #: judge/views/contests.py:686
 #, python-format
 msgid "Your participation in %s"
-msgstr ""
+msgstr "La teva participació en %s"
 
 #: judge/views/contests.py:687
 #, python-format
 msgid "%s's participation in %s"
-msgstr ""
+msgstr "participació de %s en %s"
 
 #: judge/views/contests.py:694
 msgid "Live"
-msgstr ""
+msgstr "En directe"
 
 #: judge/views/contests.py:706 templates/contest/contest-tabs.html:13
 msgid "Participation"
-msgstr ""
+msgstr "Participació"
 
 #: judge/views/contests.py:750
 #, python-format
 msgid "%s MOSS Results"
-msgstr ""
+msgstr "Resultats del MOSS per a %s"
 
 #: judge/views/contests.py:777
 #, python-format
 msgid "Running MOSS for %s..."
-msgstr ""
+msgstr "Executant sistema anticòpia MOSS per a %s..."
 
 #: judge/views/contests.py:800
 #, python-format
 msgid "Contest tag: %s"
-msgstr ""
+msgstr "etiqueta de Concurs: %s"
 
 #: judge/views/error.py:14
 msgid "404 error"
-msgstr ""
+msgstr "Error 404"
 
 #: judge/views/error.py:15
 #, python-format
 msgid "Could not find page \"%s\""
-msgstr ""
+msgstr "No s'ha pogut trobar la pàgina \"%s\""
 
 #: judge/views/error.py:22
 #, python-format
 msgid "no permission for %s"
-msgstr ""
+msgstr "Sense permís per a %s"
 
 #: judge/views/error.py:30
 #, python-format
 msgid "corrupt page %s"
-msgstr ""
+msgstr "pàgina corrupta %s"
 
 #: judge/views/language.py:12 templates/status/judge-status-table.html:9
 #: templates/status/status-tabs.html:5
 msgid "Runtimes"
-msgstr ""
+msgstr "Execucions"
 
 #: judge/views/organization.py:44 judge/views/organization.py:47
 msgid "No such organization"
-msgstr ""
+msgstr "No s'ha trobat aquesta organització"
 
 #: judge/views/organization.py:45
 #, python-format
 msgid "Could not find an organization with the key \"%s\"."
-msgstr ""
+msgstr "No s'ha pogut trobar una organització amb la clau \"%s\"."
 
 #: judge/views/organization.py:48
 msgid "Could not find such organization."
-msgstr ""
+msgstr "No s'ha trobat aquesta organització"
 
 #: judge/views/organization.py:72 judge/views/register.py:34
 #: templates/organization/list.html:15 templates/user/user-list-tabs.html:5
 msgid "Organizations"
-msgstr ""
+msgstr "Organitzacions"
 
 #: judge/views/organization.py:93
 #, python-format
 msgid "%s Members"
-msgstr ""
+msgstr "Membres de %s"
 
 #: judge/views/organization.py:118 judge/views/organization.py:121
 #: judge/views/organization.py:126
 msgid "Joining organization"
-msgstr ""
+msgstr "Unint-se a l'organització"
 
 #: judge/views/organization.py:118
 msgid "You are already in the organization."
-msgstr ""
+msgstr "Ja estàs en l'organització"
 
 #: judge/views/organization.py:121
 msgid "This organization is not open."
-msgstr ""
+msgstr "Aquesta organització no està oberta."
 
 #: judge/views/organization.py:138
 msgid "Leaving organization"
-msgstr ""
+msgstr "Abandonant l'organització"
 
 #: judge/views/organization.py:138
 #, python-format
 msgid "You are not in \"%s\"."
-msgstr ""
+msgstr "No estas en \"%s\"."
 
 #: judge/views/organization.py:162
 #, python-format
 msgid "Request to join %s"
-msgstr ""
+msgstr "Sol·licitud d'unir-se a %s"
 
 #: judge/views/organization.py:180
 msgid "Join request detail"
-msgstr ""
+msgstr "Detall de la sol·licitud"
 
 #: judge/views/organization.py:209
 #, python-format
 msgid "Managing join requests for %s"
-msgstr ""
+msgstr "Administrants sol·licituds per a %s"
 
 #: judge/views/organization.py:240
 #, python-format
 msgid "Your organization can only receive %d more members. You cannot approve %d users."
-msgstr ""
+msgstr "La teva organització només por tenir %d membres més. No pots aprovar %d usuaris."
 
 #: judge/views/organization.py:252
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d usuari aprovat"
+msgstr[1] "%d usuaris aprovats"
 
 #: judge/views/organization.py:253
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d usuari denegat,"
+msgstr[1] "%d usuaris denegats."
 
 #: judge/views/organization.py:283
 #, python-format
 msgid "Editing %s"
-msgstr ""
+msgstr "Editant %s"
 
 #: judge/views/organization.py:307 judge/views/organization.py:315
 msgid "Can't edit organization"
-msgstr ""
+msgstr "No es pot editar l'organització"
 
 #: judge/views/organization.py:308
 msgid "You are not allowed to edit this organization."
-msgstr ""
+msgstr "No tens permisos per editar aquesta organització"
 
 #: judge/views/organization.py:316
 msgid "You are not allowed to kick people from this organization."
-msgstr ""
+msgstr "No tens permisos per fer fora a gent d'aquesta organització"
 
 #: judge/views/organization.py:321 judge/views/organization.py:325
 msgid "Can't kick user"
-msgstr ""
+msgstr "No pots fer fora a aquest usuari"
 
 #: judge/views/organization.py:322
 msgid "The user you are trying to kick does not exist!"
-msgstr ""
+msgstr "L'usuari que estas intentant expulsar no existeix!"
 
 #: judge/views/organization.py:326
 #, python-format
 msgid "The user you are trying to kick is not in organization: %s."
-msgstr ""
+msgstr "L'usuari que estas intentant expulsar no està en l'organització: %s."
 
 #: judge/views/problem.py:67
 msgid "No such problem"
-msgstr ""
+msgstr "No existeix aquest problema"
 
 #: judge/views/problem.py:68
 #, python-format
 msgid "Could not find a problem with the code \"%s\"."
-msgstr ""
+msgstr "No s'ha pogut trobar un problema amb la clau \"%s\"."
 
 #: judge/views/problem.py:110
 #, python-brace-format
 msgid "Editorial for {0}"
-msgstr ""
+msgstr "Editorial per a {0}"
 
 #: judge/views/problem.py:113
 #, python-brace-format
 msgid "Editorial for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "Editorial per a <a href=\"{1}\">{0}</a>"
 
 #: judge/views/problem.py:283 templates/contest/contest.html:79
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
-msgstr ""
+msgstr "Problemes"
 
 #: judge/views/problem.py:555 judge/views/problem.py:563
 #, python-format
 msgid "Submit to %s"
-msgstr ""
+msgstr "Enviar a %s"
 
 #: judge/views/problem.py:612
 msgid "Banned from submitting"
-msgstr ""
+msgstr "Banejat de fer enviaments"
 
 #: judge/views/problem.py:613
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting this problem."
-msgstr ""
+msgstr "Has estat declarat persona non grata per aquest problema. Estas vetat permanentment de fer enviaments."
 
 #: judge/views/problem.py:617
 msgid "Too many submissions"
-msgstr ""
+msgstr "Masses enviaments"
 
 #: judge/views/problem.py:618
 msgid "You have exceeded the submission limit for this problem."
-msgstr ""
+msgstr "Has superat el límit d'enviaments per a aquest problema"
 
 #: judge/views/problem.py:680
 msgid "Clone Problem"
-msgstr ""
+msgstr "Clonar problema"
 
 #: judge/views/problem_data.py:37
 msgid "Checker arguments must be a JSON object"
-msgstr ""
+msgstr "els arguments del verificador han de ser un objecte JSON"
 
 #: judge/views/problem_data.py:39
 msgid "Checker arguments is invalid JSON"
-msgstr ""
+msgstr "els arguments del verificador es un objecte JSON invàlid"
 
 #: judge/views/problem_data.py:46
 msgid "Your zip file is invalid!"
-msgstr ""
+msgstr "Aquest arxiu zip es invàlid!"
 
 #: judge/views/problem_data.py:104
 #, python-brace-format
 msgid "Comparing submissions for {0}"
-msgstr ""
+msgstr "Comparant enviaments per a {0}"
 
 #: judge/views/problem_data.py:107
 #, python-brace-format
 msgid "Comparing submissions for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "Comparant enviaments per a <a href=\"{1}\">{0}</a>"
 
 #: judge/views/problem_data.py:142
 #, python-brace-format
 msgid "Editing data for {0}"
-msgstr ""
+msgstr "Editant dades per a {0}"
 
 #: judge/views/problem_data.py:145
 #, python-format
 msgid "Editing data for %s"
-msgstr ""
+msgstr "Editant dades per a %s"
 
 #: judge/views/problem_data.py:243 judge/views/problem_data.py:244
 #, python-format
 msgid "Generated init.yml for %s"
-msgstr ""
+msgstr "init.yml generat per a %s"
 
 #: judge/views/problem_manage.py:50 judge/views/problem_manage.py:53
 #, python-format
 msgid "Managing submissions for %s"
-msgstr ""
+msgstr "Administrant enviaments per a %s"
 
 #: judge/views/problem_manage.py:95
 #, python-format
 msgid "Rejudging selected submissions for %s..."
-msgstr ""
+msgstr "Rejutjant enviaments seleccionats per a %s..."
 
 #: judge/views/problem_manage.py:110
 #, python-format
 msgid "Rescoring all submissions for %s..."
-msgstr ""
+msgstr "Requalificant enviaments seleccionats per a %s..."
 
 #: judge/views/problem_manage.py:119
 #, python-format
 msgid "Successfully scheduled %d submission for rejudging."
 msgid_plural "Successfully scheduled %d submissions for rejudging."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Enviament %d temporitzat per a ser rejutjat amb èxit"
+msgstr[1] "Enviaments %d temporitzats per a ser rejutjats amb èxit"
 
 #: judge/views/ranked_submission.py:57
 #, python-format
 msgid "Best solutions for %s"
-msgstr ""
+msgstr "Millor solucions per a %s"
 
 #: judge/views/ranked_submission.py:60
 #, python-brace-format
 msgid "Best solutions for <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "Millor solucions per a <a href=\"{1}\">{0}</a>"
 
 #: judge/views/ranked_submission.py:70
 #, python-format
 msgid "Best solutions for %(problem)s in %(contest)s"
-msgstr ""
+msgstr "Millor solucions per a %(problem)s en %(contest)s"
 
 #: judge/views/ranked_submission.py:73
 #, python-format
 msgid "Best solutions for problem %(number)s in %(contest)s"
-msgstr ""
+msgstr "Millor solucions per al problema %(number)s en %(contest)s"
 
 #: judge/views/ranked_submission.py:79
 #, python-brace-format
 msgid "Best solutions for <a href=\"{1}\">{0}</a> in <a href=\"{3}\">{2}</a>"
-msgstr ""
+msgstr "Millor solucions per a <a href=\"{1}\">{0}</a> en <a href=\"{3}\">{2}</a>"
 
 #: judge/views/ranked_submission.py:82
 #, python-brace-format
 msgid "Best solutions for problem {0} in <a href=\"{2}\">{1}</a>"
-msgstr ""
+msgstr "Millor solucions per al problema {0} en <a href=\"{2}\">{1}</a>"
 
 #: judge/views/register.py:27
 msgid "A username must contain letters, numbers, or underscores"
-msgstr ""
+msgstr "El nom d'usuàri només pot contenir lletres, números i guions baixos"
 
 #: judge/views/register.py:31
 msgid "Preferred language"
-msgstr ""
+msgstr "Llenguatge preferit"
 
 #: judge/views/register.py:38
 msgid "Subscribe to newsletter?"
-msgstr ""
+msgstr "Subscriu-te al nostre butlletí?"
 
 #: judge/views/register.py:45
 #, python-format
 msgid "The email address \"%s\" is already taken. Only one registration is allowed per address."
-msgstr ""
+msgstr "El correu electrònic \"%s\" ja existeix. Només es permet un registre per correu"
 
 #: judge/views/register.py:51
 msgid "Your email provider is not allowed due to history of abuse. Please use a reputable email provider."
-msgstr ""
+msgstr "El teu proveïdor de correu electrònic no està permés degut a un historial d'abús. Siusplau fes servir un proveïdor fiable."
 
 #: judge/views/register.py:57 judge/views/register.py:95
 msgid "Registration"
-msgstr ""
+msgstr "Registre"
 
 #: judge/views/register.py:106
 msgid "Authentication failure"
-msgstr ""
+msgstr "Error d'autenticació"
 
 #: judge/views/stats.py:67
 msgid "Language statistics"
-msgstr ""
+msgstr "Estadístiques de Llenguatge"
 
 #: judge/views/status.py:24 templates/submission/list.html:313
 msgid "Status"
-msgstr ""
+msgstr "Estat"
 
 #: judge/views/status.py:109
 msgid "Version matrix"
-msgstr ""
+msgstr "Matriu de versions"
 
 #: judge/views/submission.py:53 judge/views/submission.py:60
 #, python-format
 msgid "Submission of %(problem)s by %(user)s"
-msgstr ""
+msgstr "Enviament de %(problem)s per %(user)s"
 
 #: judge/views/submission.py:200 judge/views/submission.py:201
 #: templates/problem/problem.html:127
 msgid "All submissions"
-msgstr ""
+msgstr "Tots els enviaments"
 
 #: judge/views/submission.py:346
 msgid "All my submissions"
-msgstr ""
+msgstr "Tots els meus enviaments"
 
 #: judge/views/submission.py:347
 #, python-format
 msgid "All submissions by %s"
-msgstr ""
+msgstr "Tots els enviaments per %s"
 
 #: judge/views/submission.py:378
 #, python-format
 msgid "All submissions for %s"
-msgstr ""
+msgstr "Tots els enviaments per a %s"
 
 #: judge/views/submission.py:397
 msgid "Must pass a problem"
-msgstr ""
+msgstr "Ha de passar un problema"
 
 #: judge/views/submission.py:436
 #, python-format
 msgid "My submissions for %(problem)s"
-msgstr ""
+msgstr "Els meus enviaments per a %(problem)s"
 
 #: judge/views/submission.py:437
 #, python-format
 msgid "%(user)s's submissions for %(problem)s"
-msgstr ""
+msgstr "Els enviaments de %(user)s per a %(problem)s"
 
 #: judge/views/submission.py:533
 msgid "Must pass a contest"
-msgstr ""
+msgstr "Ha de passar un concurs"
 
 #: judge/views/submission.py:541
 #, python-format
 msgid "My submissions in %(contest)s"
-msgstr ""
+msgstr "Els meus enviaments per a %(contest)s"
 
 #: judge/views/submission.py:542
 #, python-format
 msgid "%(user)s's submissions in %(contest)s"
-msgstr ""
+msgstr "Els enviaments de %(user)s per a %(contest)s"
 
 #: judge/views/submission.py:556
 #, python-brace-format
 msgid "My submissions in <a href=\"{1}\">{0}</a>"
-msgstr ""
+msgstr "Els meus enviaments en <a href=\"{1}\">{0}</a>"
 
 #: judge/views/submission.py:558
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions in <a href=\"{3}\">{2}</a>"
-msgstr ""
+msgstr "Els enviaments de <a href=\"{1}\">{0}</a> en <a href=\"{3}\">{2}</a>"
 
 #: judge/views/submission.py:582
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for <a href=\"{3}\">{2}</a> in <a href=\"{5}\">{4}</a>"
-msgstr ""
+msgstr "Els enviaments de <a href=\"{1}\">{0}</a> per <a href=\"{3}\">{2}</a> en <a href=\"{5}\">{4}</a>"
 
 #: judge/views/submission.py:587
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for problem {2} in <a href=\"{4}\">{3}</a>"
-msgstr ""
+msgstr "Els enviaments de <a href=\"{1}\">{0}</a> per al problema {2} en <a href=\"{4}\">{3}</a>"
 
 #: judge/views/ticket.py:33 judge/views/ticket.py:39
 msgid "Ticket title"
-msgstr ""
+msgstr "Títol del ticket"
 
 #: judge/views/ticket.py:40
 msgid "Issue description"
-msgstr ""
+msgstr "Descripció del problema"
 
 #: judge/views/ticket.py:85 judge/views/ticket.py:88
 #, python-format
 msgid "New ticket for %s"
-msgstr ""
+msgstr "Nou ticket per a %s"
 
 #: judge/views/ticket.py:142
 #, python-format
 msgid "%(title)s - Ticket %(id)d"
-msgstr ""
+msgstr "%(title)s - Ticket %(id)d"
 
 #: judge/views/ticket.py:247
 #, python-format
 msgid "Tickets - Page %(number)d of %(total)d"
-msgstr ""
+msgstr "Tickets - Pàgina %(number)d de %(total)d"
 
 #: judge/views/ticket.py:296
 #, python-format
 msgid "New Ticket: %s"
-msgstr ""
+msgstr "Nou Ticket: %s"
 
 #: judge/views/ticket.py:297
 #, python-format
 msgid "#%(id)d, assigned to: %(users)s"
-msgstr ""
+msgstr "#%(id)d, assignat a: %(users)s"
 
 #: judge/views/ticket.py:299
 msgid ", "
-msgstr ""
+msgstr ", "
 
 #: judge/views/ticket.py:299
 msgid "no one"
-msgstr ""
+msgstr "Ningú"
 
 #: judge/views/ticket.py:319
 #, python-format
 msgid "New Ticket Message For: %s"
-msgstr ""
+msgstr "Nou missatge de Ticket per a: %s"
 
 #: judge/views/two_factor.py:49
 msgid "Enable Two-factor Authentication"
-msgstr ""
+msgstr "Activar autenticació en dos passos"
 
 #: judge/views/two_factor.py:99
 msgid "Disable Two-factor Authentication"
-msgstr ""
+msgstr "Deshabilitar l'autenticació en dos passos"
 
 #: judge/views/two_factor.py:148
 msgid "Invalid WebAuthn response"
-msgstr ""
+msgstr "Resposta WebAuthn invàlida"
 
 #: judge/views/two_factor.py:151
 msgid "Invalid name"
-msgstr ""
+msgstr "Nom invàlid"
 
 #: judge/views/two_factor.py:204
 msgid "Staff may not disable 2FA"
-msgstr ""
+msgstr "Els usuaris amb permisos elevats no poden desactivar l'autenticació en dos passos"
 
 #: judge/views/two_factor.py:216
 msgid "Perform Two-factor Authentication"
-msgstr ""
+msgstr "Activar autenticació en dos passos"
 
 #: judge/views/user.py:77
 msgid "No such user"
-msgstr ""
+msgstr "No hi ha tal usuari"
 
 #: judge/views/user.py:77
 #, python-format
 msgid "No user handle \"%s\"."
-msgstr ""
+msgstr "No hi ha cap usuari amb la id \"%s\"."
 
 #: judge/views/user.py:81
 msgid "My account"
-msgstr ""
+msgstr "El meu compte"
 
 #: judge/views/user.py:82
 #, python-format
 msgid "User %s"
-msgstr ""
+msgstr "Usuari %s"
 
 #: judge/views/user.py:130
 msgid "Login"
-msgstr ""
+msgstr "Iniciar sessió"
 
 #: judge/views/user.py:171
 msgid "M j, Y, G:i"
-msgstr ""
+msgstr "M j, Y, G:i"
 
 #: judge/views/user.py:288
 msgid "Preparing your data..."
-msgstr ""
+msgstr "Preparant les teves dates..."
 
 #: judge/views/user.py:292 templates/user/edit-profile.html:347
 msgid "Download your data"
-msgstr ""
+msgstr "Descarrega les teves dades"
 
 #: judge/views/user.py:348
 msgid "Updated on site"
-msgstr ""
+msgstr "Actualitzat al lloc web"
 
 #: judge/views/user.py:381 templates/admin/auth/user/change_form.html:14
 #: templates/admin/auth/user/change_form.html:17 templates/base.html:222
 #: templates/user/user-tabs.html:10
 msgid "Edit profile"
-msgstr ""
+msgstr "Edita el perfil"
 
 #: judge/views/user.py:395
 msgid "Generated API token for user"
-msgstr ""
+msgstr "token API de l'usuari generat"
 
 #: judge/views/user.py:407
 msgid "Removed API token for user"
-msgstr ""
+msgstr "token API de l'usuari esborrat"
 
 #: judge/views/user.py:417
 msgid "Generated scratch codes for user"
-msgstr ""
+msgstr "codis Scratch de l'usuari generat"
 
 #: judge/views/user.py:423 templates/user/user-list-tabs.html:4
 msgid "Leaderboard"
-msgstr ""
+msgstr "Taula de classificació"
 
 #: judge/views/widgets.py:52 judge/views/widgets.py:62
 #, python-format
 msgid "Invalid upstream data: %s"
-msgstr ""
+msgstr "dades de upstream invàlides: %s"
 
 #: judge/views/widgets.py:72
 msgid "Bad latitude or longitude"
-msgstr ""
+msgstr "Latitud o longitud no vàlida"
 
 #: src/django-sortedm2m/sortedm2m_tests/migrations_tests/models.py:13
 #: src/django-sortedm2m/sortedm2m_tests/migrations_tests/models.py:27
 msgid "Photo"
-msgstr ""
+msgstr "Foto"
 
 #: src/django-sortedm2m/sortedm2m_tests/migrations_tests/models.py:14
 #: src/django-sortedm2m/sortedm2m_tests/migrations_tests/models.py:28
 msgid "Photos"
-msgstr ""
+msgstr "Fotos"
 
 #: src/dmoj-wpadmin/test_project/apps/authors/models.py:9
 msgid "first name"
-msgstr ""
+msgstr "Nom"
 
 #: src/dmoj-wpadmin/test_project/apps/authors/models.py:10
 msgid "last name"
-msgstr ""
+msgstr "Cognom"
 
 #: src/dmoj-wpadmin/test_project/apps/authors/models.py:11
 msgid "biography"
-msgstr ""
+msgstr "Biografia"
 
 #: src/dmoj-wpadmin/test_project/apps/books/admin.py:24
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:30
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:30
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:30
 msgid "owner"
-msgstr ""
+msgstr "propietari"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:12
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:12
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:12
 msgid "name"
-msgstr ""
+msgstr "Nom"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:19
 msgid "Category of Books"
-msgstr ""
+msgstr "Categoria de Llibres"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:20
 msgid "Categories of Books"
-msgstr ""
+msgstr "Categories de Llibres"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:26
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:26
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:26
 msgid "title"
-msgstr ""
+msgstr "títol"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:28
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:28
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:28
 msgid "category"
-msgstr ""
+msgstr "categoria"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:29
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:29
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:29
 msgid "author"
-msgstr ""
+msgstr "autor/a"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:31
 msgid "publication date"
-msgstr ""
+msgstr "data de publicació"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:37
 msgid "Book"
-msgstr ""
+msgstr "Llibre"
 
 #: src/dmoj-wpadmin/test_project/apps/books/models.py:38
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:136
 msgid "Books"
-msgstr ""
+msgstr "Llibres"
 
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:19
 msgid "Category of CDs"
-msgstr ""
+msgstr "Categoria de CDs"
 
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:20
 msgid "Categories of CDs"
-msgstr ""
+msgstr "Categories de CDs"
 
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:36
 msgid "CD"
-msgstr ""
+msgstr "CD"
 
 #: src/dmoj-wpadmin/test_project/apps/cds/models.py:37
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:141
 msgid "CDs"
-msgstr ""
+msgstr "CDs"
 
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:19
 msgid "Category of DVDs"
-msgstr ""
+msgstr "Categoria de DVDs"
 
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:20
 msgid "Categories of DVDs"
-msgstr ""
+msgstr "Categories de DVDs"
 
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:36
 msgid "DVD"
-msgstr ""
+msgstr "DVD"
 
 #: src/dmoj-wpadmin/test_project/apps/dvds/models.py:37
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:146
 msgid "DVDs"
-msgstr ""
+msgstr "DVDs"
 
 #: src/dmoj-wpadmin/test_project/templates/admin/base_site.html:7
 msgid "Django administration"
-msgstr ""
+msgstr "Administració Django"
 
 #: src/dmoj-wpadmin/test_project/test_project/forms.py:12
 #, python-format
 msgid "Please enter the correct %(username)s and password for an admin account. Note that both fields may be case-sensitive."
-msgstr ""
+msgstr "Siusplau introdueic el %(username)s i contrasenya correctes per a una compta d'admin. Els dos camps son sensibles a majúscules."
 
 #: src/dmoj-wpadmin/test_project/test_project/forms.py:32
 #, python-format
 msgid "Please enter the correct %(username)s and password for an user account. Note that both fields may be case-sensitive."
-msgstr ""
+msgstr "Siusplau introdueic el %(username)s i contrasenya correctes per a una compta d'usuari. Els dos camps son sensibles a majúscules."
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:27
 msgid "Site"
-msgstr ""
+msgstr "Lloc web"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:38
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:41
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:130
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:133
 msgid "Dashboard"
-msgstr ""
+msgstr "Panell de control"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:48
 msgid "Applications"
-msgstr ""
+msgstr "Aplicacions"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:53
 msgid "Administration"
-msgstr ""
+msgstr "Administració"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:64
 msgid "Color theme"
-msgstr ""
+msgstr "Tema de color"
 
 #: src/dmoj-wpadmin/test_project/test_project/wp.py:66
 msgid "Change color theme"
-msgstr ""
+msgstr "Canvia el tema de color"
 
 #: templates/admin/judge/contest/change_form.html:9
 msgid "Are you sure you want to rejudge ALL the submissions?"
-msgstr ""
+msgstr "Esteu segur que voleu rejutjar TOTS els enviaments?"
 
 #: templates/admin/judge/contest/change_form.html:17
 #: templates/admin/judge/contest/change_form.html:20
 msgid "Rate"
-msgstr ""
+msgstr "Puntua"
 
 #: templates/admin/judge/contest/change_list.html:9
 msgid "Rate all ratable contests"
-msgstr ""
+msgstr "Puntua tots els concursos puntuables"
 
 #: templates/admin/judge/judge/change_form.html:15
 #: templates/admin/judge/judge/change_form.html:18
 msgid "Disconnect"
-msgstr ""
+msgstr "Desconnecta"
 
 #: templates/admin/judge/judge/change_form.html:20
 #: templates/admin/judge/judge/change_form.html:23
 msgid "Terminate"
-msgstr ""
+msgstr "Acaba"
 
 #: templates/admin/judge/problem/change_form.html:14
 msgid "View Submissions"
-msgstr ""
+msgstr "Veure els enviaments"
 
 #: templates/admin/judge/problem/change_form.html:17
 #: templates/user/user-base.html:61
 msgid "View submissions"
-msgstr ""
+msgstr "Veure els enviaments"
 
 #: templates/admin/judge/profile/change_form.html:14
 #: templates/admin/judge/profile/change_form.html:17
 msgid "Edit user"
-msgstr ""
+msgstr "Editar usuari"
 
 #: templates/admin/judge/submission/change_form.html:14
 #: templates/admin/judge/submission/change_form.html:17
 #: templates/submission/source.html:34 templates/submission/status.html:80
 msgid "Rejudge"
-msgstr ""
+msgstr "Rejutjar"
 
 #: templates/base.html:214
 #, python-format
 msgid "Hello, <b>%(username)s</b>."
-msgstr ""
+msgstr "Hola, <b>%(username)s</b>."
 
 #: templates/base.html:229
 msgid "Log out"
-msgstr ""
+msgstr "Tanca la sessió"
 
 #: templates/base.html:238
 #: templates/registration/password_reset_complete.html:4
 msgid "Log in"
-msgstr ""
+msgstr "Iniciar sessió"
 
 #: templates/base.html:239 templates/registration/registration_form.html:177
 msgid "or"
-msgstr ""
+msgstr "o"
 
 #: templates/base.html:240
 msgid "Sign up"
-msgstr ""
+msgstr "Registra't"
 
 #: templates/base.html:252
 msgid "spectating"
-msgstr ""
+msgstr "espectador"
 
 #: templates/base.html:265
 msgid "This site works best with JavaScript enabled."
-msgstr ""
+msgstr "Aquesta aplicació funciona millor amb JavaScript activat."
 
 #: templates/blog/content.html:13 templates/comments/list.html:75
 #: templates/comments/list.html:90 templates/contest/contest-tabs.html:23
@@ -3388,108 +3369,112 @@ msgstr ""
 #: templates/license.html:10 templates/problem/data.html:437
 #: templates/problem/editorial.html:14
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: templates/blog/content.html:27
 #, python-format
 msgid "\n"
 "                    posted on %(time)s\n"
 "                "
-msgstr ""
+msgstr "\n"
+"                    publicat a les %(time)s\n"
+"                "
 
 #: templates/blog/dashboard.html:21
 #, python-format
 msgid "\n"
 "                                    on %(time)s\n"
 "                                "
-msgstr ""
+msgstr "\n"
+"                                    en %(time)s\n"
+"                                "
 
 #: templates/blog/list.html:85
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #: templates/blog/list.html:87
 msgid "Events"
-msgstr ""
+msgstr "Esdeveniments"
 
 #: templates/blog/list.html:92
 msgid "News"
-msgstr ""
+msgstr "Notícies"
 
 #: templates/blog/list.html:106
 #, python-brace-format
 msgid "posted on {time}"
-msgstr ""
+msgstr "publicat a les {time}"
 
 #: templates/blog/list.html:130 templates/problem/problem.html:309
 msgid "Clarifications"
-msgstr ""
+msgstr "Aclariments"
 
 #: templates/blog/list.html:146 templates/problem/problem.html:320
 msgid "No clarifications have been made at this time."
-msgstr ""
+msgstr "No s'han fet aclariments de moment."
 
 #: templates/blog/list.html:154
 msgid "Ongoing contests"
-msgstr ""
+msgstr "Concursos en curs"
 
 #: templates/blog/list.html:172
 msgid "Upcoming contests"
-msgstr ""
+msgstr "Concursos propers"
 
 #: templates/blog/list.html:189
 msgid "Comment stream"
-msgstr ""
+msgstr "Fil de comentaris"
 
 #: templates/blog/list.html:209
 msgid "New problems"
-msgstr ""
+msgstr "Problemes nous"
 
 #: templates/blog/list.html:226
 msgid "My open tickets"
-msgstr ""
+msgstr "Els meus tickets oberts"
 
 #: templates/blog/list.html:247
 msgid "New tickets"
-msgstr ""
+msgstr "Tickets nous"
 
 #: templates/comments/list.html:2 templates/user/prepare-data.html:97
 msgid "Comments"
-msgstr ""
+msgstr "Comentaris"
 
 #: templates/comments/list.html:18 templates/comments/list.html:27
 msgid "Please login to vote"
-msgstr ""
+msgstr "Inicieu la sessió per votar."
 
 #: templates/comments/list.html:47
 #, python-brace-format
 msgid "commented on {time}"
-msgstr ""
+msgstr "comentat a les {time}"
 
 #: templates/comments/list.html:56
 #, python-format
 msgid "edit %(edits)s"
-msgstr ""
+msgstr "edició %(edits)s"
 
 #: templates/comments/list.html:58 templates/comments/media-js.html:91
 msgid "edited"
-msgstr ""
+msgstr "editat"
 
 #: templates/comments/list.html:67
 msgid "Link"
-msgstr ""
+msgstr "Enllaç"
 
 #: templates/comments/list.html:80 templates/comments/list.html:87
 msgid "Reply"
-msgstr ""
+msgstr "Respon"
 
 #: templates/comments/list.html:95 templates/comments/votes.html:1
 msgid "Votes"
-msgstr ""
+msgstr "Vots"
 
 #: templates/comments/list.html:96
 msgid "Hide"
-msgstr ""
+msgstr "Amaga"
 
 #: templates/comments/list.html:111
 #, python-format
@@ -3497,365 +3482,368 @@ msgid "\n"
 "                                                This comment is hidden due to too much negative feedback.\n"
 "                                                Click <a href=\"javascript:comment_show_content(%(id)s)\">here</a> to view it.\n"
 "                                            "
-msgstr ""
+msgstr "\n"
+"                                                Aquest comentari està ocult degut a que té massa vots negatius.\n"
+"                                                Fes Click <a href=\"javascript:comment_show_content(%(id)s)\">aquí</a> per a veure'l.\n"
+"                                            "
 
 #: templates/comments/list.html:131
 msgid "There are no comments at the moment."
-msgstr ""
+msgstr "En aquests moments no hi ha comentaris."
 
 #: templates/comments/list.html:137
 msgid "New comment"
-msgstr ""
+msgstr "Nou comentari"
 
 #: templates/comments/list.html:151
 msgid "Invalid comment body."
-msgstr ""
+msgstr "cos de comentari invàlid."
 
 #: templates/comments/list.html:159
 msgid "Post!"
-msgstr ""
+msgstr "Publica"
 
 #: templates/comments/list.html:167
 msgid "Comments are disabled on this page."
-msgstr ""
+msgstr "No es permeten comentaris en aquesta entrada"
 
 #: templates/comments/media-js.html:38
 msgid "Replying to comment"
-msgstr ""
+msgstr "Contestant a comentari"
 
 #: templates/comments/media-js.html:86
 #, python-brace-format
 msgid "edit {edits}"
-msgstr ""
+msgstr "edició {edits}"
 
 #: templates/comments/media-js.html:89
 msgid "original"
-msgstr ""
+msgstr "original"
 
 #: templates/comments/votes.html:5
 msgid "Voter"
-msgstr ""
+msgstr "Votant"
 
 #: templates/comments/votes.html:6 templates/user/user-problems.html:99
 msgid "Score"
-msgstr ""
+msgstr "Puntuació"
 
 #: templates/comments/votes.html:17
 msgid "No votes"
-msgstr ""
+msgstr "Sense vots"
 
 #: templates/contest/access_code.html:26
 msgid "Invalid access code."
-msgstr ""
+msgstr "Codi d'accés inválid"
 
 #: templates/contest/access_code.html:29
 msgid "Please enter your access code:"
-msgstr ""
+msgstr "Introduïu el vostre codi d'accés:"
 
 #: templates/contest/access_code.html:32
 msgid "Join Contest"
-msgstr ""
+msgstr "Unir-se al Concurs"
 
 #: templates/contest/calendar.html:12
 msgid "Sunday"
-msgstr ""
+msgstr "Diumenge"
 
 #: templates/contest/calendar.html:13
 msgid "Monday"
-msgstr ""
+msgstr "Dilluns"
 
 #: templates/contest/calendar.html:14
 msgid "Tuesday"
-msgstr ""
+msgstr "Dimarts"
 
 #: templates/contest/calendar.html:15
 msgid "Wednesday"
-msgstr ""
+msgstr "Dimecres"
 
 #: templates/contest/calendar.html:16
 msgid "Thursday"
-msgstr ""
+msgstr "Dijous"
 
 #: templates/contest/calendar.html:17
 msgid "Friday"
-msgstr ""
+msgstr "Divendres"
 
 #: templates/contest/calendar.html:18
 msgid "Saturday"
-msgstr ""
+msgstr "Dissabte"
 
 #: templates/contest/clone.html:37
 msgid "Enter a new key for the cloned contest:"
-msgstr ""
+msgstr "Entra una nova clau per al concurs clonat:"
 
 #: templates/contest/clone.html:40 templates/problem/clone.html:40
 msgid "Clone!"
-msgstr ""
+msgstr "Clona!"
 
 #: templates/contest/contest-list-tabs.html:7
 msgid "Prev"
-msgstr ""
+msgstr "Anterior"
 
 #: templates/contest/contest-list-tabs.html:10
 msgid "Today"
-msgstr ""
+msgstr "Avui"
 
 #: templates/contest/contest-list-tabs.html:13
 msgid "Next"
-msgstr ""
+msgstr "Següent"
 
 #: templates/contest/contest-list-tabs.html:21
 #: templates/problem/problem-list-tabs.html:5
 msgid "List"
-msgstr ""
+msgstr "Llista"
 
 #: templates/contest/contest-list-tabs.html:22
 msgid "Calendar"
-msgstr ""
+msgstr "Calendari"
 
 #: templates/contest/contest-tabs.html:4
 msgid "Info"
-msgstr ""
+msgstr "Informació"
 
 #: templates/contest/contest-tabs.html:6 templates/stats/base.html:9
 #: templates/submission/list.html:339
 msgid "Statistics"
-msgstr ""
+msgstr "Estadístiques"
 
 #: templates/contest/contest-tabs.html:11
 msgid "Rankings"
-msgstr ""
+msgstr "Classificacions"
 
 #: templates/contest/contest-tabs.html:16
 msgid "Hidden Rankings"
-msgstr ""
+msgstr "Clasificacions ocultes"
 
 #: templates/contest/contest-tabs.html:21
 msgid "MOSS"
-msgstr ""
+msgstr "Sistema anticòpia MOSS"
 
 #: templates/contest/contest-tabs.html:26
 msgid "Clone"
-msgstr ""
+msgstr "Clonar"
 
 #: templates/contest/contest-tabs.html:38
 #: templates/contest/contest-tabs.html:58
 msgid "Leave contest"
-msgstr ""
+msgstr "Deixar concurs"
 
 #: templates/contest/contest-tabs.html:45 templates/contest/list.html:296
 msgid "Virtual join"
-msgstr ""
+msgstr "Unir-se virtualment"
 
 #: templates/contest/contest-tabs.html:56
 msgid "Stop spectating"
-msgstr ""
+msgstr "Deixar d'espectar"
 
 #: templates/contest/contest-tabs.html:65
 msgid "Spectate contest"
-msgstr ""
+msgstr "Espectar concurs"
 
 #: templates/contest/contest-tabs.html:72
 msgid "Join contest"
-msgstr ""
+msgstr "Unir-se al Concurs"
 
 #: templates/contest/contest-tabs.html:81
 msgid "Log in to participate"
-msgstr ""
+msgstr "Inicia sessió per a participar"
 
 #: templates/contest/contest.html:37
 msgid "Participating virtually."
-msgstr ""
+msgstr "Participant virtualment."
 
 #: templates/contest/contest.html:43
 msgid "Contest is over."
-msgstr ""
+msgstr "El Concurs s'ha acabat."
 
 #: templates/contest/contest.html:59 templates/contest/contest.html:63
 msgid "F j, Y, G:i T"
-msgstr ""
+msgstr "F j, Y, G:i T"
 
 #: templates/contest/contest.html:59
 #, python-format
 msgid "<b>%(time_limit)s</b> window between <b>%(start_time)s</b> and <b>%(end_time)s</b>"
-msgstr ""
+msgstr "Hi ha una finestra de <b>%(time_limit)s</b> entre <b>%(start_time)s</b> i <b>%(end_time)s</b>"
 
 #: templates/contest/contest.html:63
 #, python-format
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
-msgstr ""
+msgstr "<b>%(length)s</b> de llarg, començant en <b>%(start_time)s</b>"
 
 #: templates/contest/contest.html:85
 msgid "AC Rate"
-msgstr ""
+msgstr "Tasa de AC"
 
 #: templates/contest/contest.html:86 templates/contest/list.html:152
 #: templates/contest/list.html:194 templates/contest/list.html:273
 #: templates/problem/list.html:212 templates/problem/list.html:238
 msgid "Users"
-msgstr ""
+msgstr "Usuaris"
 
 #: templates/contest/contest.html:88
 msgid "Editorials"
-msgstr ""
+msgstr "Editorials"
 
 #: templates/contest/contest.html:114
 msgid "Editorial"
-msgstr ""
+msgstr "Editorial"
 
 #: templates/contest/list.html:31 templates/contest/media-js.html:9
 msgid "Are you sure you want to join?"
-msgstr ""
+msgstr "Estàs segur que vols unir-te?"
 
 #: templates/contest/list.html:32
 msgid "Joining a contest for the first time starts your timer, after which it becomes unstoppable."
-msgstr ""
+msgstr "Unir-se a un concurs per primer cop inicia el cronòmetre, i després ja no es pot aturar."
 
 #: templates/contest/list.html:65
 msgid "hidden"
-msgstr ""
+msgstr "ocult"
 
 #: templates/contest/list.html:78
 msgid "private"
-msgstr ""
+msgstr "privat"
 
 #: templates/contest/list.html:83
 msgid "rated"
-msgstr ""
+msgstr "classificatori"
 
 #: templates/contest/list.html:131
 msgid "Spectate"
-msgstr ""
+msgstr "Espectar"
 
 #: templates/contest/list.html:137
 msgid "Join"
-msgstr ""
+msgstr "Unir-se"
 
 #: templates/contest/list.html:147
 msgid "Active Contests"
-msgstr ""
+msgstr "Concursos actius"
 
 #: templates/contest/list.html:151 templates/contest/list.html:193
 #: templates/contest/list.html:231 templates/contest/list.html:270
 msgid "Contest"
-msgstr ""
+msgstr "Concurs"
 
 #: templates/contest/list.html:189
 msgid "Ongoing Contests"
-msgstr ""
+msgstr "Concursos en curs"
 
 #: templates/contest/list.html:226
 msgid "Upcoming Contests"
-msgstr ""
+msgstr "Concursos propers"
 
 #: templates/contest/list.html:254
 msgid "There are no scheduled contests at this time."
-msgstr ""
+msgstr "en aquests moments no hi ha concursos."
 
 #: templates/contest/list.html:260
 msgid "Past Contests"
-msgstr ""
+msgstr "Concursos anteriors"
 
 #: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
-msgstr ""
+msgstr "Estàs segur que vols sortir?"
 
 #: templates/contest/media-js.html:5
 msgid "You cannot come back to a virtual participation. You will have to start a new one."
-msgstr ""
+msgstr "No pots tornar a una participació virtual. Hauràs de començar una de nova."
 
 #: templates/contest/media-js.html:10
 msgid "Joining a contest starts your timer, after which it becomes unstoppable."
-msgstr ""
+msgstr "Unir-se a un concurs inicia el cronòmetre, i després ja no es pot aturar."
 
 #: templates/contest/moss.html:28
 msgid "Are you sure you want MOSS the contest?"
-msgstr ""
+msgstr "Estàs segur que vols passar el sistema anticòpies MOSS al concurs?"
 
 #: templates/contest/moss.html:33
 msgid "Are you sure you want to delete the MOSS results?"
-msgstr ""
+msgstr "Segur que vols suprimir aquests resultats del MOSS?"
 
 #: templates/contest/moss.html:60
 msgid "No submissions"
-msgstr ""
+msgstr "Sense enviaments"
 
 #: templates/contest/moss.html:74
 msgid "Re-MOSS contest"
-msgstr ""
+msgstr "Tornar a passar el MOSS al concurs"
 
 #: templates/contest/moss.html:82
 msgid "Delete MOSS results"
-msgstr ""
+msgstr "Esborrar els resultats del MOSS"
 
 #: templates/contest/private.html:5
 msgid "This contest is private to specific users."
-msgstr ""
+msgstr "Aquest concurs es privat a usuaris específics"
 
 #: templates/contest/private.html:10
 msgid "Additionally, only the following organizations may access this contest:"
-msgstr ""
+msgstr "Adicionalment, només les següents organitzacions poden accedir a aquest concurs"
 
 #: templates/contest/private.html:12
 msgid "Only the following organizations may access this contest:"
-msgstr ""
+msgstr "Només les següents organitzacions poden accedir a aquest concurs"
 
 #: templates/contest/ranking-table.html:7
 msgid "Organization"
-msgstr ""
+msgstr "Organització"
 
 #: templates/contest/ranking-table.html:27
 #, python-brace-format
 msgid "Started on {time}"
-msgstr ""
+msgstr "Iniciat a les {time}"
 
 #: templates/contest/ranking-table.html:30
 msgid "Participation ended."
-msgstr ""
+msgstr "Participació finalitzada."
 
 #: templates/contest/ranking-table.html:40
 msgid "Un-Disqualify"
-msgstr ""
+msgstr "Eliminar la Descalificació"
 
 #: templates/contest/ranking-table.html:43
 msgid "Disqualify"
-msgstr ""
+msgstr "Descalificar"
 
 #: templates/contest/ranking.html:169
 msgid "Are you sure you want to disqualify this participation?"
-msgstr ""
+msgstr "Estàs segur que vols descalificar aquesta participació?"
 
 #: templates/contest/ranking.html:174
 msgid "Are you sure you want to un-disqualify this participation?"
-msgstr ""
+msgstr "Estàs segur que vols eliminar la descalificació d'aquesta participació?"
 
 #: templates/contest/ranking.html:246
 msgid "View user participation"
-msgstr ""
+msgstr "Veure la participació de l'usuari"
 
 #: templates/contest/ranking.html:250
 msgid "Show organizations"
-msgstr ""
+msgstr "Mostrar organitzacions"
 
 #: templates/contest/stats.html:38
 msgid "Problem Status Distribution"
-msgstr ""
+msgstr "Distribució de l'Estatus dels Problemes"
 
 #: templates/contest/stats.html:43
 msgid "Problem AC Rate"
-msgstr ""
+msgstr "Percentatge d'AC del Problema"
 
 #: templates/contest/stats.html:48 templates/stats/language.html:16
 msgid "Submissions by Language"
-msgstr ""
+msgstr "Enviaments per llenguatge"
 
 #: templates/contest/stats.html:54 templates/stats/language.html:26
 msgid "Language AC Rate"
-msgstr ""
+msgstr "Percentatge d'AC per Llenguatge"
 
 #: templates/license.html:12
 msgid "Source:"
-msgstr ""
+msgstr "Font:"
 
 #: templates/newsletter/common.html:6
 #: templates/newsletter/subscription_unsubscribe_activated.html:3
@@ -3863,505 +3851,501 @@ msgstr ""
 #: templates/newsletter/subscription_update_activated.html:3
 #: templates/newsletter/subscription_update_activated.html:6
 msgid "Newsletter"
-msgstr ""
+msgstr "Butlletí de noticies"
 
 #: templates/newsletter/subscription_unsubscribe_activated.html:3
 #: templates/newsletter/subscription_unsubscribe_activated.html:6
 #: templates/newsletter/subscription_update_activated.html:3
 #: templates/newsletter/subscription_update_activated.html:6
 msgid "activate"
-msgstr ""
+msgstr "activar"
 
 #: templates/newsletter/subscription_unsubscribe_activated.html:8
 msgid "You have successfully been unsubscribed."
-msgstr ""
+msgstr "Heu anul·lat la subscripció amb èxit"
 
 #: templates/newsletter/subscription_unsubscribe_email_sent.html:3
 #: templates/newsletter/subscription_unsubscribe_email_sent.html:6
 #: templates/newsletter/subscription_unsubscribe_user.html:3
 #: templates/newsletter/subscription_unsubscribe_user.html:6
 msgid "Newsletter unsubscribe"
-msgstr ""
+msgstr "Anul·lar subscripció al Butlletí"
 
 #: templates/newsletter/subscription_unsubscribe_email_sent.html:8
 msgid "Your unsubscription request has successfully been received. An email has been sent to you with a link you need to follow in order to confirm your unsubscription."
-msgstr ""
+msgstr "La teva solicitud de dessuscripció s'ha rebut amb èxit. S'ha enviat un correu electrònic amb un enllaç que has de seguir per a confirmar la cancelació."
 
 #: templates/newsletter/subscription_unsubscribe_user.html:17
 msgid "Do you want to unsubscribe from this newsletter?"
-msgstr ""
+msgstr "Vols donar-te de baixa d'aquest butlletí?"
 
 #: templates/newsletter/subscription_unsubscribe_user.html:21
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Anul·la subscripció"
 
 #: templates/newsletter/subscription_update.html:3
 #: templates/newsletter/subscription_update.html:6
 #: templates/newsletter/subscription_update_email_sent.html:3
 #: templates/newsletter/subscription_update_email_sent.html:6
 msgid "Newsletter update"
-msgstr ""
+msgstr "Actualització del Butlletí"
 
 #: templates/newsletter/subscription_update.html:9
 msgid "Due to a technical error we were not able to submit your confirmation email. This could be because your email address is invalid."
-msgstr ""
+msgstr "Degut a un error tècnic no hem pogut enviar el correu de confirmació. Això podria deure's a que el teu correu es invàlid."
 
 #: templates/newsletter/subscription_update.html:14
 msgid "Update subscription"
-msgstr ""
+msgstr "Actualitza la subscripció"
 
 #: templates/newsletter/subscription_update_activated.html:8
 msgid "Your subscription has successfully been updated."
-msgstr ""
+msgstr "La teva suscripció ha estat actualitzada amb èxit."
 
 #: templates/newsletter/subscription_update_email_sent.html:8
 msgid "Your update request was successfully received and an activation email has been sent to you. In that email you will find a link which you need to follow in order to update your subscription."
-msgstr ""
+msgstr "La teva solicitud d'actualització ha estat rebut amb èxit i se t'ha enviat un correu d'activació. En aquest correu podràs trobar un link que has de seguir per a actualitzar la teva suscripció"
 
 #: templates/organization/edit.html:47
 #: templates/organization/requests/pending.html:34
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
-msgstr ""
+msgstr "Actualitzar"
 
 #: templates/organization/home.html:7
 msgid "Are you sure you want to leave this organization?"
-msgstr ""
+msgstr "Esteu segur que voleu abandonar aquesta organització?"
 
 #: templates/organization/home.html:9
 msgid "You will have to rejoin to show up on the organization leaderboard."
-msgstr ""
+msgstr "Hauràs de tornar-te a unir per a aparèixer en la Taula classificatoria de l'organització"
 
 #: templates/organization/home.html:11
 msgid "You will have to request membership in order to join again."
-msgstr ""
+msgstr "Hauras de solicitar membresia per a tornar-te a unir."
 
 #: templates/organization/home.html:24
 msgid "Leave organization"
-msgstr ""
+msgstr "Abandona l'organització"
 
 #: templates/organization/home.html:29
 msgid "Join organization"
-msgstr ""
+msgstr "Uneix-te a l'organització"
 
 #: templates/organization/home.html:33
 msgid "Request membership"
-msgstr ""
+msgstr "Sol·licitar membresia"
 
 #: templates/organization/home.html:39
 msgid "Edit organization"
-msgstr ""
+msgstr "Edita organització"
 
 #: templates/organization/home.html:43
 msgid "View requests"
-msgstr ""
+msgstr "Veure les sol·licituds"
 
 #: templates/organization/home.html:50
 msgid "Admin organization"
-msgstr ""
+msgstr "Administrar organització"
 
 #: templates/organization/home.html:55
 msgid "View members"
-msgstr ""
+msgstr "Veure tots els membres"
 
 #: templates/organization/list.html:23 templates/status/language-list.html:35
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: templates/organization/list.html:24
 msgid "Members"
-msgstr ""
+msgstr "Membres"
 
 #: templates/organization/new.html:10 templates/ticket/new.html:38
 msgid "Create"
-msgstr ""
+msgstr "Crear"
 
 #: templates/organization/requests/detail.html:13
 msgid "User:"
-msgstr ""
+msgstr "Usuari:"
 
 #: templates/organization/requests/detail.html:17
 msgid "Organization:"
-msgstr ""
+msgstr "Organització:"
 
 #: templates/organization/requests/detail.html:25
 msgid "Time:"
-msgstr ""
+msgstr "Data:"
 
 #: templates/organization/requests/detail.html:29
 msgid "Reason:"
-msgstr ""
+msgstr "Motiu:"
 
 #: templates/organization/requests/log.html:11
 #: templates/organization/requests/pending.html:14
 msgid "State"
-msgstr ""
+msgstr "Estat"
 
 #: templates/organization/requests/log.html:12
 #: templates/organization/requests/pending.html:15
 msgid "Reason"
-msgstr ""
+msgstr "Motiu"
 
 #: templates/organization/requests/log.html:28
 #: templates/organization/requests/pending.html:37
 msgid "There are no requests to approve."
-msgstr ""
+msgstr "No hi ha cap solicitud per a aprovar."
 
 #: templates/organization/requests/pending.html:17
 #: templates/problem/data.html:401
 msgid "Delete?"
-msgstr ""
+msgstr "Esborrar?"
 
 #: templates/organization/requests/request.html:18
 msgid "Your reason for joining:"
-msgstr ""
+msgstr "El teu motiu per a unir-te:"
 
 #: templates/organization/requests/request.html:20
 msgid "Request"
-msgstr ""
+msgstr "Sol·licitud"
 
 #: templates/organization/requests/tabs.html:4
 msgid "Pending"
-msgstr ""
+msgstr "Pendent"
 
 #: templates/organization/requests/tabs.html:7
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 #: templates/organization/requests/tabs.html:10
 msgid "Approved"
-msgstr ""
+msgstr "Aprovat"
 
 #: templates/organization/requests/tabs.html:13
 msgid "Rejected"
-msgstr ""
+msgstr "Rebutjat"
 
 #: templates/organization/users-table.html:15
 msgid "Kick"
-msgstr ""
+msgstr "Expulsar"
 
 #: templates/organization/users.html:34
 msgid "Are you sure you want to kick this user?"
-msgstr ""
+msgstr "Estàs segur de que vols expulsar aquest usuari?"
 
 #: templates/problem/clone.html:37
 msgid "Enter a new code for the cloned problem:"
-msgstr ""
+msgstr "Entra un nou codi per al problema clonat:"
 
 #: templates/problem/data.html:353
 msgid "View YAML"
-msgstr ""
+msgstr "Veure el YAML"
 
 #: templates/problem/data.html:369
 msgid "Show columns:"
-msgstr ""
+msgstr "Mostra les columnes"
 
 #: templates/problem/data.html:372 templates/problem/data.html:396
 msgid "Output prefix"
-msgstr ""
+msgstr "Prefixe de sortida"
 
 #: templates/problem/data.html:376 templates/problem/data.html:397
 msgid "Output limit"
-msgstr ""
+msgstr "Límit de sortida"
 
 #: templates/problem/data.html:380 templates/problem/data.html:398
 msgid "Checker"
-msgstr ""
+msgstr "Verificador"
 
 #: templates/problem/data.html:384 templates/problem/data.html:399
 msgid "Generator args"
-msgstr ""
+msgstr "Arguments del generador"
 
 #: templates/problem/data.html:391
 msgid "Type"
-msgstr ""
+msgstr "Tipus"
 
 #: templates/problem/data.html:392
 msgid "Input file"
-msgstr ""
+msgstr "Fitxer d'entrada"
 
 #: templates/problem/data.html:393
 msgid "Output file"
-msgstr ""
+msgstr "Fitxer de sortida"
 
 #: templates/problem/data.html:395
 msgid "Pretest?"
-msgstr ""
+msgstr "Casos de Prova preliminars?"
 
 #: templates/problem/data.html:447 templates/problem/submit.html:262
 msgid "Submit!"
-msgstr ""
+msgstr "Envia!"
 
 #: templates/problem/data.html:448
 msgid "Add new case"
-msgstr ""
+msgstr "Afegeix nou cas"
 
 #: templates/problem/editorial.html:22
 msgid "Remember to use this editorial <b>only</b> when stuck, and <b>not to copy-paste code from it</b>. Please be respectful to the problem author and editorialist. <br><br> <b>Submitting an official solution before solving the problem yourself is a bannable offence.</b>"
-msgstr ""
+msgstr "Recorda: fes servir aquesta editorial <b>només</b> si estàs encallat, i <b>no facis un còpia-enganxa del codi</b>. Siusplau, sigues respectuós amb l'autor/a del problema i l'editorialista. <br><br> <b>Enviar una solució oficial abans de resoldre el problema per un mateix és motiu de Baneig.</b>"
 
 #: templates/problem/editorial.html:27 templates/problem/problem.html:209
 msgid "Author:"
 msgid_plural "Authors:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Autor/a:"
+msgstr[1] "Autors/es:"
 
 #: templates/problem/list.html:62
 msgid "Filter by type..."
-msgstr ""
+msgstr "Filtra per tipus..."
 
 #: templates/problem/list.html:185
 msgid "Hot problems"
-msgstr ""
+msgstr "Problemes populars"
 
 #: templates/problem/list.html:207 templates/problem/list.html:224
 #: templates/problem/search-form.html:30 templates/user/user-problems.html:57
 msgid "Category"
-msgstr ""
+msgstr "Categoria"
 
 #: templates/problem/list.html:209 templates/problem/list.html:228
 msgid "Types"
-msgstr ""
+msgstr "Tipus"
 
 #: templates/problem/list.html:235
 #, python-format
 msgid "AC %%"
-msgstr ""
+msgstr "AC %%"
 
 #: templates/problem/manage_submission.html:55
 msgid "Leave empty to not filter by language"
-msgstr ""
+msgstr "Deixa-ho buit per no filtrar per llenguatge"
 
 #: templates/problem/manage_submission.html:60
 msgid "Leave empty to not filter by result"
-msgstr ""
+msgstr "Deixa-ho buit per no filtrar per resultat"
 
 #: templates/problem/manage_submission.html:79
 msgid "Need valid values for both start and end IDs."
-msgstr ""
+msgstr "Es necessiten valors vàlids per les ID d'inici i de finalització"
 
 #: templates/problem/manage_submission.html:82
 msgid "End ID must be after start ID."
-msgstr ""
+msgstr "La ID de finalització ha de ser posterior a la d'inici"
 
 #: templates/problem/manage_submission.html:90
 #, python-brace-format
 msgid "You are about to rejudge {count} submissions. Are you sure you want to do this?"
-msgstr ""
+msgstr "Esteu a punt de rejutjar {count} enviaments. Segur?"
 
 #: templates/problem/manage_submission.html:96
 msgid "You are about to rejudge a few submissions. Are you sure you want to do this?"
-msgstr ""
+msgstr "Esteu a punt de rejutjar uns quants enviaments. Segur?"
 
 #: templates/problem/manage_submission.html:115
 msgid "Rejudge Submissions"
-msgstr ""
+msgstr "Rejutjar enviaments"
 
 #: templates/problem/manage_submission.html:120
 msgid "Filter by ID:"
-msgstr ""
+msgstr "Filtra per ID:"
 
 #: templates/problem/manage_submission.html:123
 msgid "Starting ID:"
-msgstr ""
+msgstr "ID d'inici:"
 
 #: templates/problem/manage_submission.html:127
 msgid "Ending ID:"
-msgstr ""
+msgstr "ID de final:"
 
 #: templates/problem/manage_submission.html:131
 msgid "This range includes both endpoints."
-msgstr ""
+msgstr "Aquest rang inclou ambdós punts."
 
 #: templates/problem/manage_submission.html:134
 msgid "Filter by language:"
-msgstr ""
+msgstr "Filtra per llenguatge:"
 
 #: templates/problem/manage_submission.html:150
 msgid "Rejudge selected submissions"
-msgstr ""
+msgstr "Rejutja els enviaments seleccionats"
 
 #: templates/problem/manage_submission.html:157
 msgid "Rescore Everything"
-msgstr ""
+msgstr "Recalifica tot."
 
 #: templates/problem/manage_submission.html:158
 #, python-format
 msgid "This will rescore %(count)d submissions."
-msgstr ""
+msgstr "Això repuntuarà %(count)d enviaments"
 
 #: templates/problem/manage_submission.html:162
 #, python-format
 msgid "Are you sure you want to rescore %(count)d submissions?"
-msgstr ""
+msgstr "Estas segur que vols repuntuar %(count)d enviaments?"
 
 #: templates/problem/manage_submission.html:163
 msgid "Rescore all submissions"
-msgstr ""
+msgstr "Repuntua tots els enviaments"
 
 #: templates/problem/problem.html:91
 msgid "View as PDF"
-msgstr ""
+msgstr "Veure com a PDF"
 
 #: templates/problem/problem.html:101 templates/problem/problem.html:111
 #: templates/problem/problem.html:116
 msgid "Submit solution"
-msgstr ""
+msgstr "Enviar solució"
 
 #: templates/problem/problem.html:104
 #, python-format
 msgid "%(counter)s submission left"
 msgid_plural "%(counter)s submissions left"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(counter)s enviament restant"
+msgstr[1] "%(counter)s enviaments restants"
 
 #: templates/problem/problem.html:112
 msgid "0 submissions left"
-msgstr ""
+msgstr "0 enviaments pendents"
 
 #: templates/problem/problem.html:124
 msgid "My submissions"
-msgstr ""
+msgstr "Els meus enviaments"
 
 #: templates/problem/problem.html:128
 msgid "Best submissions"
-msgstr ""
+msgstr "Millors enviaments"
 
 #: templates/problem/problem.html:131
 msgid "Read editorial"
-msgstr ""
+msgstr "Llegir editorial"
 
 #: templates/problem/problem.html:136
 msgid "Manage tickets"
-msgstr ""
+msgstr "Gestionar tickets"
 
 #: templates/problem/problem.html:140
 msgid "Edit problem"
-msgstr ""
+msgstr "Editar problema"
 
 #: templates/problem/problem.html:142
 msgid "Edit test data"
-msgstr ""
+msgstr "Edita els casos de prova"
 
 #: templates/problem/problem.html:147
 msgid "My tickets"
-msgstr ""
+msgstr "El meus tickets"
 
 #: templates/problem/problem.html:155
 msgid "Manage submissions"
-msgstr ""
+msgstr "Administra enviaments"
 
 #: templates/problem/problem.html:168
 msgid "Points:"
-msgstr ""
+msgstr "Punts:"
 
 #: templates/problem/problem.html:171 templates/problem/problem.html:173
 msgid "(partial)"
-msgstr ""
+msgstr "(parcial)"
 
 #: templates/problem/problem.html:178
 msgid "Time limit:"
-msgstr ""
+msgstr "Temps Límit:"
 
 #: templates/problem/problem.html:190
 msgid "Memory limit:"
-msgstr ""
+msgstr "Límit de memòria:"
 
 #: templates/problem/problem.html:224
 msgid "Problem type"
 msgid_plural "Problem types"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "tipus del problema"
+msgstr[1] "tipus del problema"
 
 #: templates/problem/problem.html:237
 msgid "Allowed languages"
-msgstr ""
+msgstr "Llenguatges permesos"
 
 #: templates/problem/problem.html:245
 #, python-format
 msgid "No %(lang)s judge online"
-msgstr ""
+msgstr "No hi ha cap jutge per a %(lang)s"
 
 #: templates/problem/problem.html:256
 msgid "Judge:"
 msgid_plural "Judges:"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Jutge:"
+msgstr[1] "Jutges:"
 
 #: templates/problem/problem.html:273
 msgid "none available"
-msgstr ""
+msgstr "cap disponible"
 
 #: templates/problem/problem.html:298
 msgid "Request clarification"
-msgstr ""
+msgstr "Demanar aclariment"
 
 #: templates/problem/problem.html:300
 msgid "Report an issue"
-msgstr ""
+msgstr "Notifica un problema"
 
 #: templates/problem/raw.html:62
 msgid "Time Limit:"
-msgstr ""
+msgstr "Temps Límit:"
 
 #: templates/problem/raw.html:71
 msgid "Memory Limit:"
-msgstr ""
+msgstr "Límit de memòria:"
 
 #: templates/problem/search-form.html:2
 msgid "Problem search"
-msgstr ""
+msgstr "Cerca de problema"
 
 #: templates/problem/search-form.html:8
 msgid "Search problems..."
-msgstr ""
+msgstr "Cerca problemes..."
 
 #: templates/problem/search-form.html:14
 msgid "Full text search"
-msgstr ""
+msgstr "Text de la cerca"
 
 #: templates/problem/search-form.html:21
 msgid "Hide solved problems"
-msgstr ""
+msgstr "Oculta problemes resolts"
 
 #: templates/problem/search-form.html:27
 msgid "Show problem types"
-msgstr ""
+msgstr "Mostra els tipus de problema"
 
 #: templates/problem/search-form.html:33 templates/problem/search-form.html:35
 #: templates/submission/submission-list-tabs.html:4
 msgid "All"
-msgstr ""
+msgstr "Tots"
 
 #: templates/problem/search-form.html:46
 msgid "Problem types"
-msgstr ""
+msgstr "Tipus de problemes"
 
 #: templates/problem/search-form.html:57
 msgid "Point range"
-msgstr ""
+msgstr "Rang de punts"
 
 #: templates/problem/search-form.html:63 templates/submission/list.html:331
 #: templates/ticket/list.html:245
 msgid "Go"
-msgstr ""
+msgstr "Vés"
 
 #: templates/problem/search-form.html:64
 msgid "Random"
-msgstr ""
+msgstr "Aleatori"
 
 #: templates/problem/submit.html:117
 msgid "Your source code must contain at most 65536 characters."
-msgstr ""
+msgstr "El teu codi pot contenir com a màxim 65536 caràcters"
 
 #: templates/problem/submit.html:204
 #, python-format
 msgid "<b>Warning!</b> Your default language, <b>%(default_language)s</b>, is unavailable for this problem and has been deselected."
-msgstr ""
+msgstr "<b>Atenció!</b> El teu llenguatge per defecte, <b>%(default_language)s</b>, no està disponible per aquest problema i ha estat deseleccionat."
 
 #: templates/problem/submit.html:215
 #, python-format
@@ -4371,772 +4355,776 @@ msgid "\n"
 msgid_plural "\n"
 "                        You have %(left)s submissions left\n"
 "                    "
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "\n"
+"                        Tens %(left)s enviament restant\n"
+"                        "
+msgstr[1] "\n"
+"                        Tens %(left)s enviaments restants\n"
+"                        "
 
 #: templates/problem/submit.html:224
 msgid "You have 0 submissions left"
-msgstr ""
+msgstr "Tens 0 enviaments disponibles"
 
 #: templates/problem/submit.html:258
 msgid "No judge is available for this problem."
-msgstr ""
+msgstr "No hi ha cap jutge disponible per a aquest problema."
 
 #: templates/registration/activate.html:3
 #, python-format
 msgid "%(key)s is an invalid activation key."
-msgstr ""
+msgstr "%(key)s es una clau d'activació invàlida."
 
 #: templates/registration/activation_complete.html:3
 msgid "Your account has been successfully activated."
-msgstr ""
+msgstr "El teu compte s'ha activat amb èxit."
 
 #: templates/registration/login.html:43
 msgid "Invalid username or password."
-msgstr ""
+msgstr "Nom d'usurari o contrasenya incorrecte."
 
 #: templates/registration/login.html:61
 #: templates/registration/two_factor_auth.html:93
 msgid "Login!"
-msgstr ""
+msgstr "Iniciar sessió!"
 
 #: templates/registration/login.html:64
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Contrasenya perduda?"
 
 #: templates/registration/login.html:67
 msgid "Or log in with..."
-msgstr ""
+msgstr "O inicia amb..."
 
 #: templates/registration/logout.html:3
 msgid "See you later!"
-msgstr ""
+msgstr "A reveure!"
 
 #: templates/registration/password_change_done.html:3
 msgid "Your password was sucessfully changed."
-msgstr ""
+msgstr "La contrasenya s'ha modificat correctament"
 
 #: templates/registration/password_change_form.html:13
 msgid "Change Password"
-msgstr ""
+msgstr "Canvia la contrasenya"
 
 #: templates/registration/password_reset.html:7
 msgid "Send Reset Email"
-msgstr ""
+msgstr "Envia un correu de reinici."
 
 #: templates/registration/password_reset_complete.html:3
 msgid "Your password has been set.  You may go ahead and log in now"
-msgstr ""
+msgstr "La teva contrassenya ha estat establerta. Pots iniciar sessió ja."
 
 #: templates/registration/password_reset_confirm.html:9
 msgid "Reset Password"
-msgstr ""
+msgstr "Restablir la Contrasenya"
 
 #: templates/registration/password_reset_done.html:4
 msgid "We've emailed you instructions for setting your password. You should be receiving them shortly."
-msgstr ""
+msgstr "T'hem enviat un correu amb instruccions per reestablir la contrassenya. L'hauries de rebre aviat"
 
 #: templates/registration/password_reset_done.html:5
 msgid "If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder."
-msgstr ""
+msgstr "Si no reps un e-mail, comprova que hagis introduït l'adreça amb què t'has registrat i revisa la carpeta de correu brossa."
 
 #: templates/registration/password_reset_email.txt:1
 #, python-format
 msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
-msgstr ""
+msgstr "Has rebut aquest correu perque has solicitat un reinici de contrassenya per la teva compta d'usuari a %(site_name)s."
 
 #: templates/registration/password_reset_email.txt:3
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Siusplau, ves a la següent pàgina i tria una nova contrasenya"
 
 #: templates/registration/password_reset_email.txt:7
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "El teu nom d'usuari, en cas que t'hagis oblidat:"
 
 #: templates/registration/password_reset_email.txt:9
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Gràcies per utilitzar la nostra pàgina web!"
 
 #: templates/registration/password_reset_email.txt:11
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "L'equip de %(site_name)s"
 
 #: templates/registration/password_reset_subject.txt:1
 #, python-format
 msgid "Password reset on %(site_name)s"
-msgstr ""
+msgstr "Reinici de Contrasenya en %(site_name)s"
 
 #: templates/registration/profile_creation.html:36
 #: templates/registration/username_select.html:7
 msgid "Continue >"
-msgstr ""
+msgstr "Continua >"
 
 #: templates/registration/registration_closed.html:3
 msgid "Registration is currently closed. Please contact an administrator."
-msgstr ""
+msgstr "El registre està tancat actualment. Siusplau contacta amb un administrador."
 
 #: templates/registration/registration_complete.html:3
 msgid "You have successfully been registered. An email has been sent to the email address you provided to confirm your registration."
-msgstr ""
+msgstr "T'has registrat amb èxit. Un correu ha estat enviat a l'adreça que has proporcionat per a confirmar el teu registre."
 
 #: templates/registration/registration_form.html:166
 msgid "(again, for confirmation)"
-msgstr ""
+msgstr "(de nou, per confirmar)"
 
 #: templates/registration/registration_form.html:173
 msgid "(select your closest major city)"
-msgstr ""
+msgstr "(tria la ciutat més propera)"
 
 #: templates/registration/registration_form.html:178
 msgid "pick from map"
-msgstr ""
+msgstr "tria del mapa"
 
 #: templates/registration/registration_form.html:183
 msgid "Default language"
-msgstr ""
+msgstr "Llenguatge per defecte"
 
 #: templates/registration/registration_form.html:186
 #: templates/user/edit-profile.html:309
 msgid "Affiliated organizations"
-msgstr ""
+msgstr "Organitzacions afiliades"
 
 #: templates/registration/registration_form.html:192
 #: templates/user/edit-profile.html:323
 msgid "Notify me about upcoming contests"
-msgstr ""
+msgstr "Avisa'm sobre concursos vinents"
 
 #: templates/registration/registration_form.html:206
 msgid "By registering, you agree to our"
-msgstr ""
+msgstr "En registrar-te, dones la teva conformitat a estar legalment obligats per els nostres"
 
 #: templates/registration/registration_form.html:207
 msgid "Terms & Conditions"
-msgstr ""
+msgstr "Termes i condicions"
 
 #: templates/registration/registration_form.html:210
 msgid "Register!"
-msgstr ""
+msgstr "Registra't!"
 
 #: templates/registration/totp_disable.html:38
 msgid "To protect your account, you must first authenticate before you can disable Two Factor Authentication."
-msgstr ""
+msgstr "Per protegir la teva compta, t'has d'autenticar abans de poder desactivar l'Autenticació en dos passos"
 
 #: templates/registration/totp_disable.html:45
 msgid "Enter the 6-digit code generated by your app or one of your 16-digit scratch codes:"
-msgstr ""
+msgstr "Entra el codi de 6 dígits generat per la teva app o un dels teus codis scratch de 16 dígits"
 
 #: templates/registration/totp_disable.html:48
 msgid "Disable Two Factor Authentication"
-msgstr ""
+msgstr "Deshabilitar l'autenticació en dos passos"
 
 #: templates/registration/totp_enable.html:75
 msgid "Scan this code with your authenticator app:"
-msgstr ""
+msgstr "Escanegeu aquest codi QR amb l'aplicació autenticadora"
 
 #: templates/registration/totp_enable.html:76
 msgid "QR code"
-msgstr ""
+msgstr "Codi QR"
 
 #: templates/registration/totp_enable.html:77
 msgid "Or enter this code manually:"
-msgstr ""
+msgstr "O entra aquest codi a ma:"
 
 #: templates/registration/totp_enable.html:88
 msgid "Enter the 6-digit code generated by your app:"
-msgstr ""
+msgstr "Entra el codi de 6 dígits generat per la teva app:"
 
 #: templates/registration/totp_enable.html:91
 msgid "Enable Two Factor Authentication"
-msgstr ""
+msgstr "Activar autenticació en dos passos"
 
 #: templates/registration/two_factor_auth.html:40
 #: templates/user/edit-profile.html:161
 msgid "WebAuthn is not supported by your browser."
-msgstr ""
+msgstr "WebAuthn no és suportat pel teu navegador."
 
 #: templates/registration/two_factor_auth.html:61
 #: templates/user/edit-profile.html:185
 msgid "Failed to contact server."
-msgstr ""
+msgstr "No s'ha pogut connectar amb el servidor."
 
 #: templates/registration/two_factor_auth.html:84
 msgid "Enter the 6-digit code generated by your app or one of your 16-character scratch codes:"
-msgstr ""
+msgstr "Entra el codi de 6 dígits generat per la teva app o un dels teus codis scratch de 16 dígits:"
 
 #: templates/registration/two_factor_auth.html:90
 msgid "Use security key"
-msgstr ""
+msgstr "Fes servir la clau de seguretat"
 
 #: templates/registration/two_factor_auth.html:96
 #, python-format
 msgid "If you lost your authentication device and are unable to use your scratch codes, please contact us at %(email)s."
-msgstr ""
+msgstr "Si has perdut el teu dispositiu d'autenticació i no pots fer servir els teus codis scratch, contacta'ns a %(email)s"
 
 #: templates/stats/language.html:11
 msgid "Submission Statistics"
-msgstr ""
+msgstr "Estadístiques del enviament"
 
 #: templates/stats/language.html:21
 msgid "AC Submissions by Language"
-msgstr ""
+msgstr "Enviaments AC per llenguatge"
 
 #: templates/status/judge-status-table.html:2
 msgid "Judge"
-msgstr ""
+msgstr "Jutge"
 
 #: templates/status/judge-status-table.html:4
 msgid "Online"
-msgstr ""
+msgstr "Online"
 
 #: templates/status/judge-status-table.html:6
 msgid "Uptime"
-msgstr ""
+msgstr "Temps en funcionament"
 
 #: templates/status/judge-status-table.html:7
 msgid "Ping"
-msgstr ""
+msgstr "Ping"
 
 #: templates/status/judge-status-table.html:8
 msgid "Load"
-msgstr ""
+msgstr "Càrrega"
 
 #: templates/status/judge-status-table.html:34
 #: templates/status/judge-status-table.html:41
 #: templates/status/judge-status-table.html:48
 #: templates/status/judge-status-table.html:59
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: templates/status/judge-status-table.html:64
 msgid "There are no judges available at this time."
-msgstr ""
+msgstr "No hi ha jutges disponibles en aquest moment."
 
 #: templates/status/language-list.html:34 templates/ticket/list.html:259
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: templates/status/language-list.html:36
 msgid "Runtime Info"
-msgstr ""
+msgstr "Informació de l'Execució"
 
 #: templates/status/status-tabs.html:4
 msgid "Judges"
-msgstr ""
+msgstr "Jutges"
 
 #: templates/status/status-tabs.html:6
 msgid "Version Matrix"
-msgstr ""
+msgstr "Matriu de versions"
 
 #: templates/submission/internal-error-message.html:8
 msgid "An internal error occurred while grading."
-msgstr ""
+msgstr "S'ha produït un error intern mentres es puntuava."
 
 #: templates/submission/internal-error-message.html:15
 msgid "Error information"
-msgstr ""
+msgstr "Informació d'Error"
 
 #: templates/submission/list.html:76
 msgid "Filter by status..."
-msgstr ""
+msgstr "Filtra per estat..."
 
 #: templates/submission/list.html:82
 msgid "Filter by language..."
-msgstr ""
+msgstr "Filtra per llenguatge..."
 
 #: templates/submission/list.html:309
 msgid "Filter submissions"
-msgstr ""
+msgstr "Filtra enviaments"
 
 #: templates/submission/list.html:345
 msgid "Total:"
-msgstr ""
+msgstr "Total:"
 
 #: templates/submission/list.html:355
 msgid "You were disconnected. Refresh to show latest updates."
-msgstr ""
+msgstr "Has estat desconnectat. Actualitza la pàgina per mostrar les últimes actualitzacions."
 
 #: templates/submission/row.html:44
 #, python-format
 msgid "Case #%(case)s"
-msgstr ""
+msgstr "Cas #%(case)s"
 
 #: templates/submission/row.html:54
 msgid "view"
-msgstr ""
+msgstr "veure"
 
 #: templates/submission/row.html:59
 msgid "rejudge"
-msgstr ""
+msgstr "rejutjar"
 
 #: templates/submission/row.html:64
 msgid "This submission has been locked, and cannot be rejudged."
-msgstr ""
+msgstr "Aquest enviament ha estat bloquejat i no pot ser rejutjat."
 
 #: templates/submission/row.html:65
 msgid "locked"
-msgstr ""
+msgstr "bloquejat"
 
 #: templates/submission/row.html:71
 msgid "admin"
-msgstr ""
+msgstr "admin"
 
 #: templates/submission/source.html:25
 msgid "View status"
-msgstr ""
+msgstr "Mostra l'estat"
 
 #: templates/submission/source.html:26
 msgid "View raw source"
-msgstr ""
+msgstr "Veure el codi font"
 
 #: templates/submission/source.html:28 templates/submission/status.html:74
 msgid "Resubmit"
-msgstr ""
+msgstr "Torna-ho a enviar"
 
 #: templates/submission/status-testcases.html:10
 msgid "We are waiting for a suitable judge to process your submission..."
-msgstr ""
+msgstr "Estem esperant a que un jutge adequat processi el teu enviament..."
 
 #: templates/submission/status-testcases.html:12
 msgid "Your submission is being processed..."
-msgstr ""
+msgstr "El teu enviament s'està processant..."
 
 #: templates/submission/status-testcases.html:14
 msgid "Compilation Error"
-msgstr ""
+msgstr "Error de compilació"
 
 #: templates/submission/status-testcases.html:18
 msgid "Compilation Warnings"
-msgstr ""
+msgstr "Warnings en la compilació"
 
 #: templates/submission/status-testcases.html:23
 msgid "Pretest Execution Results"
-msgstr ""
+msgstr "Resultats dels casos de prova preliminars"
 
 #: templates/submission/status-testcases.html:25
 msgid "Execution Results"
-msgstr ""
+msgstr "Resultats de l'Execució"
 
 #: templates/submission/status-testcases.html:51
 msgid "Batch "
-msgstr ""
+msgstr "Lot (Batch)"
 
 #: templates/submission/status-testcases.html:64
 msgid "Case"
-msgstr ""
+msgstr "Cas"
 
 #: templates/submission/status-testcases.html:66
 msgid "Pretest"
-msgstr ""
+msgstr "Casos de Prova preliminars"
 
 #: templates/submission/status-testcases.html:68
 msgid "Test case"
-msgstr ""
+msgstr "Casos de prova"
 
 #: templates/submission/status-testcases.html:101
 msgid "Your output (clipped)"
-msgstr ""
+msgstr "La teva sortida (retallada)"
 
 #: templates/submission/status-testcases.html:113
 msgid "Judge feedback"
-msgstr ""
+msgstr "Resposta del jutge"
 
 #: templates/submission/status-testcases.html:129
 msgid "Resources:"
-msgstr ""
+msgstr "Recursos:"
 
 #: templates/submission/status-testcases.html:138
 msgid "Final pretest score:"
-msgstr ""
+msgstr "Puntuació Final dels casos de prova preliminars:"
 
 #: templates/submission/status-testcases.html:140
 msgid "Final score:"
-msgstr ""
+msgstr "Puntuació final:"
 
 #: templates/submission/status-testcases.html:154
 msgid "Passing pretests does not guarantee a full score on system tests."
-msgstr ""
+msgstr "Passar les proves preliminars no guaranteix el mateix resultat en els casos de prova reals."
 
 #: templates/submission/status-testcases.html:157
 msgid "Submission aborted!"
-msgstr ""
+msgstr "Enviament avortat!"
 
 #: templates/submission/status.html:72
 msgid "View source"
-msgstr ""
+msgstr "Veure el codi font"
 
 #: templates/submission/status.html:100
 msgid "Press Ctrl-Enter or Command-Enter to abort."
-msgstr ""
+msgstr "Prem Ctrl-Enter o Command-Enter per a avortar."
 
 #: templates/submission/status.html:102
 msgid "Abort"
-msgstr ""
+msgstr "Avorta"
 
 #: templates/submission/submission-list-tabs.html:6
 msgid "Mine"
-msgstr ""
+msgstr "Meu"
 
 #: templates/submission/submission-list-tabs.html:9
 msgid "Best"
-msgstr ""
+msgstr "Millor"
 
 #: templates/submission/submission-list-tabs.html:12
 #, python-format
 msgid "%(user)s's"
-msgstr ""
+msgstr "De %(user)s"
 
 #: templates/ticket/list.html:135 templates/ticket/ticket.html:260
 msgid "Reopened: "
-msgstr ""
+msgstr "Reobert:"
 
 #: templates/ticket/list.html:138 templates/ticket/ticket.html:261
 msgid "Closed: "
-msgstr ""
+msgstr "Tancat:"
 
 #: templates/ticket/list.html:218
 msgid "Use desktop notification"
-msgstr ""
+msgstr "Activar les notificacions d'escriptori"
 
 #: templates/ticket/list.html:224
 msgid "Show my tickets only"
-msgstr ""
+msgstr "Mostra només els meus tickets"
 
 #: templates/ticket/list.html:228
 msgid "Filing user"
-msgstr ""
+msgstr "Usuari remitent"
 
 #: templates/ticket/list.html:237
 msgid "Assignee"
-msgstr ""
+msgstr "Destinatari"
 
 #: templates/ticket/list.html:260
 msgid "Title"
-msgstr ""
+msgstr "Títol"
 
 #: templates/ticket/list.html:262 templates/ticket/ticket.html:360
 msgid "Assignees"
-msgstr ""
+msgstr "Destinataris"
 
 #: templates/ticket/new_problem.html:7
 msgid "Thanks for opening a ticket!"
-msgstr ""
+msgstr "Gràcies per obrir un ticket!"
 
 #: templates/ticket/new_problem.html:9
 msgid "Please keep in mind that this form is for reporting issues with a problem statement, and not for asking for help. If you require assistance on solving a problem, ask in the comments instead."
-msgstr ""
+msgstr "Recorda que aquest formulari es per a comentar problemes amb el problema, i no per a demanar ajuda. Si vols ajuda fes servir els comentaris."
 
 #: templates/ticket/ticket.html:346
 msgid "Post"
-msgstr ""
+msgstr "Publicar"
 
 #: templates/ticket/ticket.html:354
 msgid "Associated object"
-msgstr ""
+msgstr "Objecte associat"
 
 #: templates/ticket/ticket.html:365
 msgid "No one is assigned."
-msgstr ""
+msgstr "Ningú assignat."
 
 #: templates/ticket/ticket.html:371
 msgid "Close ticket"
-msgstr ""
+msgstr "Tancar ticket."
 
 #: templates/ticket/ticket.html:373
 msgid "Reopen ticket"
-msgstr ""
+msgstr "Reobrir ticket"
 
 #: templates/ticket/ticket.html:377
 msgid "Assignee notes"
-msgstr ""
+msgstr "Notes de la persona assignada."
 
 #: templates/ticket/ticket.html:384 templates/widgets/select_all.html:4
 msgid "Nothing here."
-msgstr ""
+msgstr "Aquí no hi ha res."
 
 #: templates/user/base-users-table.html:3
 msgid "Rank"
-msgstr ""
+msgstr "Classificació"
 
 #: templates/user/base-users.html:14 templates/user/base-users.html:75
 msgid "Search by handle..."
-msgstr ""
+msgstr "Cerca per l'adreça..."
 
 #: templates/user/edit-profile.html:109
 msgid "Are you sure you want to generate or regenerate your API token?"
-msgstr ""
+msgstr "Esteu segur que voleu generar o regenerar el token API?"
 
 #: templates/user/edit-profile.html:110
 msgid "This will invalidate any previous API tokens."
-msgstr ""
+msgstr "Això invalidarà qualsevol token API anterior."
 
 #: templates/user/edit-profile.html:111
 msgid "It also allows access to your account without Two-factor Authentication."
-msgstr ""
+msgstr "També permet accés a la compta sense l'Autenticació de dos passos."
 
 #: templates/user/edit-profile.html:112
 msgid "You will not be able to view your api token after you leave this page!"
-msgstr ""
+msgstr "No podràs veure el teu token API després de que deixis aquesta pàgina!"
 
 #: templates/user/edit-profile.html:113 templates/user/edit-profile.html:207
 msgid "Generating..."
-msgstr ""
+msgstr "Generant..."
 
 #: templates/user/edit-profile.html:121 templates/user/edit-profile.html:243
 #: templates/user/edit-profile.html:370 templates/user/edit-profile.html:389
 msgid "Regenerate"
-msgstr ""
+msgstr "Regenera"
 
 #: templates/user/edit-profile.html:127 templates/user/edit-profile.html:391
 msgid "Remove"
-msgstr ""
+msgstr "Elimina"
 
 #: templates/user/edit-profile.html:137
 msgid "Are you sure you want to remove your API token?"
-msgstr ""
+msgstr "Estàs segur que vols suprimir el teu token API?"
 
 #: templates/user/edit-profile.html:144 templates/user/edit-profile.html:374
 #: templates/user/edit-profile.html:395
 msgid "Generate"
-msgstr ""
+msgstr "Generar"
 
 #: templates/user/edit-profile.html:190
 msgid "Are you sure you want to delete this security key?"
-msgstr ""
+msgstr "Segur que vols suprimir aquesta clau de seguretat?"
 
 #: templates/user/edit-profile.html:279
 msgid "Self-description"
-msgstr ""
+msgstr "Auto-descripció"
 
 #: templates/user/edit-profile.html:286
 msgid "Select your closest major city"
-msgstr ""
+msgstr "Tria la ciutat més propera"
 
 #: templates/user/edit-profile.html:295
 msgid "Editor theme"
-msgstr ""
+msgstr "Tema de l'editor"
 
 #: templates/user/edit-profile.html:300
 msgid "Math engine"
-msgstr ""
+msgstr "Motor matemàtic"
 
 #: templates/user/edit-profile.html:334 templates/user/edit-profile.html:336
 msgid "Change your avatar"
-msgstr ""
+msgstr "Canviar avatar"
 
 #: templates/user/edit-profile.html:341
 msgid "Change your password"
-msgstr ""
+msgstr "Canvia la teva contrasenya"
 
 #: templates/user/edit-profile.html:355
 msgid "Two-factor Authentication is enabled"
-msgstr ""
+msgstr "S'ha activat l'autenticació de dos passos"
 
 #: templates/user/edit-profile.html:357
 msgid "Two-factor Authentication is disabled"
-msgstr ""
+msgstr "S'ha desactivat l'autenticació de dos passos"
 
 #: templates/user/edit-profile.html:362 templates/user/edit-profile.html:364
 msgid "Disable"
-msgstr ""
+msgstr "Inhabilita"
 
 #: templates/user/edit-profile.html:367
 msgid "Scratch Codes:"
-msgstr ""
+msgstr "Codis Scratch:"
 
 #: templates/user/edit-profile.html:371 templates/user/edit-profile.html:392
 msgid "Hidden"
-msgstr ""
+msgstr "Ocult"
 
 #: templates/user/edit-profile.html:380
 msgid "Enable"
-msgstr ""
+msgstr "Habilita"
 
 #: templates/user/edit-profile.html:386
 msgid "API Token"
-msgstr ""
+msgstr "Token de l'API"
 
 #: templates/user/edit-profile.html:403
 msgid "Security keys"
-msgstr ""
+msgstr "Claus de seguretat"
 
 #: templates/user/edit-profile.html:413
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
 #: templates/user/edit-profile.html:420
 msgid "Enter a name for this key"
-msgstr ""
+msgstr "Entreu un nom per a aquesta clau"
 
 #: templates/user/edit-profile.html:421
 msgid "Add"
-msgstr ""
+msgstr "Afegir"
 
 #: templates/user/edit-profile.html:429
 msgid "User-script"
-msgstr ""
+msgstr "Script d'usuari"
 
 #: templates/user/edit-profile.html:433
 msgid "Update profile"
-msgstr ""
+msgstr "Actualitzar perfil"
 
 #: templates/user/pp-row.html:24
 #, python-format
 msgid "\n"
 "            weighted <b>%(weight)s%%</b>\n"
 "        "
-msgstr ""
+msgstr "\n"
+"            ponderat <b>%(weight)s%%</b>\n"
+"        "
 
 #: templates/user/pp-row.html:29
 #, python-format
 msgid "%(pp).1fpp"
-msgstr ""
+msgstr "%(pp).1fpp"
 
 #: templates/user/pp-row.html:31
 #, python-format
 msgid "%(pp).0fpp"
-msgstr ""
+msgstr "%(pp).0fpp"
 
 #: templates/user/prepare-data.html:64
 msgid "Are you sure you want to prepare a download?"
-msgstr ""
+msgstr "Segur que vols preparar una descàrrega?"
 
 #: templates/user/prepare-data.html:79
 msgid "We are currently preparing your data."
-msgstr ""
+msgstr "Estem preparant les teves dades actualment."
 
 #: templates/user/prepare-data.html:81
 msgid "Track progress"
-msgstr ""
+msgstr "Segueix el progrès"
 
 #: templates/user/prepare-data.html:86
 msgid "Once your data is ready, you will find a download link on this page."
-msgstr ""
+msgstr "Un cop les teves dades estiguin llestes, trobaràs un enllaç de descàrrega en aquesta pàgina."
 
 #: templates/user/prepare-data.html:103
 msgid "Submissions"
-msgstr ""
+msgstr "Enviaments"
 
 #: templates/user/prepare-data.html:120
 msgid "Prepare new download"
-msgstr ""
+msgstr "Preparar una nova descàrrega"
 
 #: templates/user/prepare-data.html:122
 msgid "Prepare download"
-msgstr ""
+msgstr "Preparar una descàrrega"
 
 #: templates/user/prepare-data.html:126
 msgid "Download prepared data"
-msgstr ""
+msgstr "Descarregar dades preparades"
 
 #: templates/user/prepare-data.html:132
 msgid "Your data is ready!"
-msgstr ""
+msgstr "Les teves dades estan llestes!"
 
 #: templates/user/prepare-data.html:136
 msgid "Download data"
-msgstr ""
+msgstr "Descarregar dades"
 
 #: templates/user/user-about.html:14
 msgid "From"
-msgstr ""
+msgstr "Des de"
 
 #: templates/user/user-about.html:25
 msgid "Admin Notes"
-msgstr ""
+msgstr "Notes de l'administrador"
 
 #: templates/user/user-about.html:33 templates/user/user-tabs.html:4
 msgid "About"
-msgstr ""
+msgstr "Quant a"
 
 #: templates/user/user-about.html:40
 msgid "You have not shared any information."
-msgstr ""
+msgstr "Encara no has introduït cap informació."
 
 #: templates/user/user-about.html:42
 msgid "This user has not shared any information."
-msgstr ""
+msgstr "Aquest usuari encara no ha introduït cap informació."
 
 #: templates/user/user-base.html:42
 #, python-format
 msgid "%(counter)s problem solved"
 msgid_plural "%(counter)s problems solved"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(counter)s problema resolt"
+msgstr[1] "%(counter)s problemes resolts"
 
 #: templates/user/user-base.html:50
 msgid "Rank by points:"
-msgstr ""
+msgstr "Ordenar per punts:"
 
 #: templates/user/user-base.html:53
 msgid "Total points:"
-msgstr ""
+msgstr "Punts totals:"
 
 #: templates/user/user-base.html:68
 msgid "Rank by rating:"
-msgstr ""
+msgstr "Ordenar per puntuació:"
 
 #: templates/user/user-base.html:70
 msgid "Rating:"
-msgstr ""
+msgstr "Puntuació:"
 
 #: templates/user/user-base.html:71
 msgid "Volatility:"
-msgstr ""
+msgstr "Volatilitat:"
 
 #: templates/user/user-base.html:72
 msgid "Min. rating:"
-msgstr ""
+msgstr "Puntuació Mínima:"
 
 #: templates/user/user-base.html:73
 msgid "Max rating:"
-msgstr ""
+msgstr "Puntuació Màxima:"
 
 #: templates/user/user-problems.html:35
 msgid "Points Breakdown"
-msgstr ""
+msgstr "Desglossament dels punts"
 
 #: templates/user/user-problems.html:41
 msgid "Load more..."
-msgstr ""
+msgstr "Carrega'n més..."
 
 #: templates/user/user-problems.html:45
 msgid "This user has not yet solved any problems."
-msgstr ""
+msgstr "Aquest usuari encara no ha resolt cap problema."
 
 #: templates/user/user-problems.html:51
 msgid "Authored Problems"
-msgstr ""
+msgstr "Problemes creats"
 
 #: templates/user/user-problems.html:83
 msgid "Hide problems I've solved"
-msgstr ""
+msgstr "Amaga els problemes que ja he resolt"
 
 #: templates/user/user-problems.html:93
 #, python-format
 msgid "%(points).1f points"
-msgstr ""
+msgstr "%(points).1f punts"
 
 #: templates/user/user-problems.html:110
 #, python-format
 msgid "%(points)s / %(total)s"
-msgstr ""
+msgstr "%(points)s / %(total)s"
 
 #: templates/user/user-tabs.html:7
 msgid "Impersonate"
-msgstr ""
+msgstr "Suplantar"
 
 #: templates/user/user-tabs.html:13
 msgid "Admin User"
-msgstr ""
+msgstr "Usuari administador"
 
 #: templates/user/user-tabs.html:16
 msgid "Admin Profile"
-msgstr ""
+msgstr "Perfil d'Admin"
 
 #: templates/widgets/select_all.html:8
 msgid "Check all"
-msgstr ""
+msgstr "Comprova-ho tot"
 
