@@ -119,7 +119,7 @@
         "name": "Pascal",
         "short_name": "",
         "common_name": "Pascal",
-        "ace": "pas",
+        "ace": "pascal",
         "pygments": "pascal",
         "template": "",
         "info": "",
@@ -937,7 +937,7 @@
         "common_name": "Java",
         "ace": "java",
         "pygments": "java",
-        "template": "",
+        "template": "import java.io.*;\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n    }\r\n}",
         "info": "",
         "description": "",
         "extension": ""
