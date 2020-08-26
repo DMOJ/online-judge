@@ -134,7 +134,7 @@ class APIListView(APIMixin, InfinitePaginationMixin, BaseListView):
             'current_object_count': len(objects),
             'objects_per_page': page.paginator.per_page,
             'page_index': page.number,
-            'has_next': page.has_next(),
+            'has_more': page.has_next(),
             'objects': [self.get_object_data(obj) for obj in objects],
         }
         if not page.paginator.is_infinite:
