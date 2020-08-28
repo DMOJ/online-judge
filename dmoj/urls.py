@@ -122,7 +122,7 @@ urlpatterns = [
 
         url(r'^/rank/', paged_list_view(ranked_submission.RankedSubmissions, 'ranked_submissions')),
         url(r'^/submissions/', paged_list_view(submission.ProblemSubmissions, 'chronological_submissions')),
-        url(r'^/submissions/(?P<user>\w+)/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
+        url(r'^/submissions/(?P<user>[\w-]+)/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
 
         url(r'^/$', lambda _, problem: HttpResponsePermanentRedirect(reverse('problem_detail', args=[problem]))),
 
@@ -149,7 +149,7 @@ urlpatterns = [
     ])),
 
     url(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
-    url(r'^submissions/user/(?P<user>\w+)/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
+    url(r'^submissions/user/(?P<user>[\w-]+)/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
 
     url(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
     url(r'^src/(?P<submission>\d+)/raw$', submission.SubmissionSourceRaw.as_view(), name='submission_source_raw'),
@@ -170,7 +170,7 @@ urlpatterns = [
     url(r'^edit/profile/$', user.edit_profile, name='user_edit_profile'),
     url(r'^data/prepare/$', user.UserPrepareData.as_view(), name='user_prepare_data'),
     url(r'^data/download/$', user.UserDownloadData.as_view(), name='user_download_data'),
-    url(r'^user/(?P<user>\w+)', include([
+    url(r'^user/(?P<user>[\w-]+)', include([
         url(r'^$', user.UserAboutPage.as_view(), name='user_page'),
         url(r'^/solved', include([
             url(r'^$', user.UserProblemsPage.as_view(), name='user_problems'),
@@ -215,13 +215,13 @@ urlpatterns = [
         url(r'^/rank/(?P<problem>\w+)/',
             paged_list_view(ranked_submission.ContestRankedSubmission, 'contest_ranked_submissions')),
 
-        url(r'^/submissions/(?P<user>\w+)/',
+        url(r'^/submissions/(?P<user>[\w-]+)/',
             paged_list_view(submission.UserAllContestSubmissions, 'contest_all_user_submissions')),
-        url(r'^/submissions/(?P<user>\w+)/(?P<problem>\w+)/',
+        url(r'^/submissions/(?P<user>[\w-]+)/(?P<problem>\w+)/',
             paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
 
         url(r'^/participations$', contests.ContestParticipationList.as_view(), name='contest_participation_own'),
-        url(r'^/participations/(?P<user>\w+)$',
+        url(r'^/participations/(?P<user>[\w-]+)$',
             contests.ContestParticipationList.as_view(), name='contest_participation'),
         url(r'^/participation/disqualify$', contests.ContestParticipationDisqualify.as_view(),
             name='contest_participation_disqualify'),
@@ -263,8 +263,8 @@ urlpatterns = [
         url(r'^problem/list$', api.api_v1_problem_list),
         url(r'^problem/info/(\w+)$', api.api_v1_problem_info),
         url(r'^user/list$', api.api_v1_user_list),
-        url(r'^user/info/(\w+)$', api.api_v1_user_info),
-        url(r'^user/submissions/(\w+)$', api.api_v1_user_submissions),
+        url(r'^user/info/([\w-]+)$', api.api_v1_user_info),
+        url(r'^user/submissions/([\w-]+)$', api.api_v1_user_submissions),
         url(r'^user/ratings/(\d+)$', api.api_v1_user_ratings),
         url(r'^v2/', include([
             url(r'^contests$', api.api_v2.APIContestList.as_view()),
@@ -272,7 +272,7 @@ urlpatterns = [
             url(r'^problems$', api.api_v2.APIProblemList.as_view()),
             url(r'^problem/(?P<problem>\w+)$', api.api_v2.APIProblemDetail.as_view()),
             url(r'^users$', api.api_v2.APIUserList.as_view()),
-            url(r'^user/(?P<user>\w+)$', api.api_v2.APIUserDetail.as_view()),
+            url(r'^user/(?P<user>[\w-]+)$', api.api_v2.APIUserDetail.as_view()),
             url(r'^submissions$', api.api_v2.APISubmissionList.as_view()),
             url(r'^submission/(?P<submission>\d+)$', api.api_v2.APISubmissionDetail.as_view()),
             url(r'^organizations$', api.api_v2.APIOrganizationList.as_view()),
