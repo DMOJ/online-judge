@@ -2,9 +2,12 @@
 <tr>
     <th class="header rank">{{ rank_header or _("Rank") }}</th>
     {% block after_rank_head %}{% endblock %}
-    <th class="header username">{{ _('Username') }}</th>
+    <th class="header username">
+        {% if sort_links %}<a href="{{ sort_links.user__username }}">{% endif %}
+        {{ _('Username') }}
+        {%- if sort_links %}{{ sort_order.user__username }}</a>{% endif %}
+    </th>
     {% block before_point_head %}{% endblock %}
-
     <th class="header points">
         {% if sort_links %}<a href="{{ sort_links.performance_points }}">{% endif %}
         {{ _('Points') }}

@@ -424,7 +424,7 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
     context_object_name = 'users'
     template_name = 'user/list.html'
     paginate_by = 100
-    all_sorts = frozenset(('points', 'problem_count', 'rating', 'performance_points'))
+    all_sorts = frozenset(('points', 'problem_count', 'rating', 'performance_points', 'user__username'))
     default_desc = all_sorts
     default_sort = '-performance_points'
 
