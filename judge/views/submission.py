@@ -122,8 +122,11 @@ def group_test_cases(cases):
     result = []
     status = []
     buf = []
+    max_execution_time = 0.0
     last = None
     for case in cases:
+        if case.time:
+            max_execution_time = max(max_execution_time, case.time)
         if case.batch != last and buf:
             result.append(make_batch(last, buf))
             status.extend(get_statuses(last, buf))
@@ -133,7 +136,7 @@ def group_test_cases(cases):
     if buf:
         result.append(make_batch(last, buf))
         status.extend(get_statuses(last, buf))
-    return result, status
+    return result, status, max_execution_time
 
 
 class SubmissionStatus(SubmissionDetailBase):
@@ -144,7 +147,7 @@ class SubmissionStatus(SubmissionDetailBase):
         submission = self.object
         context['last_msg'] = event.last()
 
-        context['batches'], statuses = group_test_cases(submission.test_cases.all())
+        context['batches'], statuses, context['max_execution_time'] = group_test_cases(submission.test_cases.all())
         context['statuses'] = combine_statuses(statuses, submission)
 
         context['time_limit'] = submission.problem.time_limit
