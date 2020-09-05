@@ -227,7 +227,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
     def _get_queryset(self):
         queryset = Submission.objects.all()
         use_straight_join(queryset)
-        queryset = submission_related(queryset.order_by('-id'))
+        queryset = submission_related(queryset.order_by('-date', '-id'))
         if self.show_problem:
             queryset = queryset.prefetch_related(Prefetch('problem__translations',
                                                           queryset=ProblemTranslation.objects.filter(
