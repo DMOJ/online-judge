@@ -473,7 +473,7 @@ class JudgeHandler(ZlibPacketHandler):
         logger.info('%s: Submission aborted: %s', self.name, packet['submission-id'])
         self._free_self(packet)
 
-        if Submission.objects.filter(id=packet['submission-id']).update(status='AB', result='AB'):
+        if Submission.objects.filter(id=packet['submission-id']).update(status='AB', result='AB', points=0):
             event.post('sub_%s' % Submission.get_id_secret(packet['submission-id']), {'type': 'aborted-submission'})
             self._post_update_submission(packet['submission-id'], 'terminated', done=True)
             json_log.info(self._make_json_log(packet, action='aborted', finish=True, result='AB'))
