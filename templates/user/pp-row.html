@@ -7,11 +7,13 @@
     </div>
 </div>
 
-<div class="sub-info">
-    <div class="name">
-        <a href="{{ url('problem_detail', breakdown.problem_code) }}">{{ breakdown.problem_name }}</a>
+<div class="sub-main">
+    <div class="sub-info">
+        <div class="name">
+            <a href="{{ url('problem_detail', breakdown.problem_code) }}">{{ breakdown.problem_name }}</a>
+        </div>
+        <div class="time">{{ relative_time(breakdown.sub_date) }}</div>
     </div>
-    <div class="time">{{ relative_time(breakdown.sub_date) }}</div>
 </div>
 
 <div class="sub-pp sub-usage">

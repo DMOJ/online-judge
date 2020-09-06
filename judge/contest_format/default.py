@@ -62,7 +62,9 @@ class DefaultContestFormat(BaseContestFormat):
 
     def display_participation_result(self, participation):
         return format_html(
-            u'<td class="user-points">{points}<div class="solving-time">{cumtime}</div></td>',
+            u'<td class="user-points"><a href="{url}">{points}<div class="solving-time">{cumtime}</div></a></td>',
+            url=reverse('contest_all_user_submissions',
+                        args=[self.contest.key, participation.user.user.username]),
             points=floatformat(participation.score),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday'),
         )

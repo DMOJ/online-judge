@@ -10,7 +10,8 @@ from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
 
 from judge.models import (
-    Contest, ContestParticipation, ContestTag, Organization, Problem, ProblemType, Profile, Rating, Submission,
+    Contest, ContestParticipation, ContestTag, Judge, Language, Organization, Problem, ProblemType, Profile, Rating,
+    Submission,
 )
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.views.submission import group_test_cases
@@ -608,4 +609,38 @@ class APIOrganizationList(APIListView):
             'short_name': organization.short_name,
             'is_open': organization.is_open,
             'member_count': organization.member_count,
+        }
+
+
+class APILanguageList(APIListView):
+    model = Language
+    basic_filters = (
+        ('common_name', 'common_name'),
+    )
+
+    def get_object_data(self, language):
+        return {
+            'id': language.id,
+            'key': language.key,
+            'short_name': language.short_name,
+            'common_name': language.common_name,
+            'ace_mode_name': language.ace,
+            'pygments_name': language.pygments,
+            'code_template': language.template,
+        }
+
+
+class APIJudgeList(APIListView):
+    model = Judge
+
+    def get_unfiltered_queryset(self):
+        return Judge.objects.filter(online=True).prefetch_related('runtimes').order_by('name')
+
+    def get_object_data(self, judge):
+        return {
+            'name': judge.name,
+            'start_time': judge.start_time.isoformat(),
+            'ping': judge.ping_ms,
+            'load': judge.load,
+            'languages': list(judge.runtimes.values_list('key', flat=True)),
         }

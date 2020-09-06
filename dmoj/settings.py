@@ -365,6 +365,7 @@ LOCALE_PATHS = [
 ]
 
 LANGUAGES = [
+    ('ca', _('Catalan')),
     ('de', _('German')),
     ('en', _('English')),
     ('es', _('Spanish')),

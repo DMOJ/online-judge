@@ -190,7 +190,7 @@
 {% macro contest_join(contest, request) %}
     {% if not request.in_contest %}
         <td>
-            {% if request.profile in contest.organizers.all() or contest.is_in_contest(request.user) %}
+            {% if request.profile in contest.organizers.all() %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button"
@@ -341,8 +341,12 @@
                 <table class="contest-list table striped">
                     <thead>
                     <tr>
-                        <th style="width:90%">{{ _('Contest') }}</th>
-                        <th>{{ _('Users') }}</th>
+                        <th style="width:90%">
+                            <a href="{{ sort_links.name }}" class="contest-sort-link">{{ _('Contest') }}{{ sort_order.name }}</a>
+                        </th>
+                        <th>
+                            <a href="{{ sort_links.user_count }}" class="contest-sort-link">{{ _('Users') }}{{ sort_order.user_count }}</a>
+                        </th>
                         {% if not request.in_contest %}
                             <th style="width:15%"></th>
                         {% endif %}

@@ -1,7 +1,8 @@
 from django.test import TestCase
+from django.utils import timezone
 
 from judge.models import Language, LanguageLimit, Problem
-from judge.models.tests.util import CommonDataMixin, create_problem, create_problem_type
+from judge.models.tests.util import CommonDataMixin, create_problem, create_problem_type, create_solution, create_user
 
 
 class ProblemTestCase(CommonDataMixin, TestCase):
@@ -181,3 +182,109 @@ class ProblemTestCase(CommonDataMixin, TestCase):
                         Problem.get_editable_problems(user).distinct().values_list('code', flat=True),
                         problem_codes,
                     )
+
+
+class SolutionTestCase(CommonDataMixin, TestCase):
+    @classmethod
+    def setUpTestData(self):
+        super().setUpTestData()
+        self.users.update({
+            'staff_solution_see_all': create_user(
+                username='staff_solution_see_all',
+                user_permissions=('see_private_solution',),
+            ),
+        })
+
+        _now = timezone.now()
+
+        self.basic_solution = create_solution(problem='basic')
+
+        self.private_solution = create_solution(
+            problem='private',
+            is_public=False,
+            publish_on=_now - timezone.timedelta(days=100),
+        )
+
+        self.unpublished_problem = create_problem(
+            code='unpublished',
+            name='Unpublished',
+            authors=('staff_problem_edit_own',),
+        )
+        self.unpublished_solution = create_solution(
+            problem=self.unpublished_problem,
+            is_public=False,
+            publish_on=_now + timezone.timedelta(days=100),
+            authors=('normal',),
+        )
+
+    def test_unpublished_solution(self):
+        self.assertEqual(str(self.unpublished_solution), 'Editorial for Unpublished')
+
+    def test_basic_solution_methods(self):
+        data = {
+            'superuser': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'staff_solution_see_all': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'normal': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'anonymous': {
+                'is_accessible_by': self.assertTrue,
+            },
+        }
+        self._test_object_methods_with_users(self.basic_solution, data)
+
+    def test_private_solution_methods(self):
+        data = {
+            'superuser': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'staff_solution_see_all': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'staff_problem_edit_own': {
+                'is_accessible_by': self.assertFalse,
+            },
+            'staff_problem_see_all': {
+                'is_accessible_by': self.assertFalse,
+            },
+            'staff_problem_edit_all': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'staff_problem_edit_public': {
+                'is_accessible_by': self.assertFalse,
+            },
+            'normal': {
+                'is_accessible_by': self.assertFalse,
+            },
+            'anonymous': {
+                'is_accessible_by': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.private_solution, data)
+
+    def test_unpublished_solution_methods(self):
+        data = {
+            'staff_solution_see_all': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'staff_problem_edit_own': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'staff_problem_edit_all': {
+                'is_accessible_by': self.assertTrue,
+            },
+            'staff_problem_edit_public': {
+                'is_accessible_by': self.assertFalse,
+            },
+            'normal': {
+                'is_accessible_by': self.assertFalse,
+            },
+            'anonymous': {
+                'is_accessible_by': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.unpublished_solution, data)

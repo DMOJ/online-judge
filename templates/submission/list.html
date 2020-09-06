@@ -157,7 +157,7 @@
                         first = id;
                         row = $('<div>', {id: id, 'class': 'submission-row'}).hide().prependTo(table);
                         if (table.find('>div').length >= {{ paginator.per_page }})
-                            table.find('>div:last-child').hide('slow', function () {
+                            table.find('>div:last-child').slideUp('slow', function () {
                                 $(this).remove();
                             });
                     }

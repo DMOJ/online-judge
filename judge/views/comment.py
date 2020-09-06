@@ -41,7 +41,7 @@ def vote_comment(request, delta):
     except ValueError:
         return HttpResponseBadRequest()
     else:
-        if not Comment.objects.filter(id=comment_id).exists():
+        if not Comment.objects.filter(id=comment_id, hidden=False).exists():
             raise Http404()
 
     vote = CommentVote()
