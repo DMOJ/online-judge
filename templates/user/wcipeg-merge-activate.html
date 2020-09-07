@@ -6,8 +6,8 @@
             {% csrf_token %}
             <p>{{ _('To complete the merging of your accounts, click on the button below. Beware that this action is
                      irreversible and will move all of the submissions onto the new account. You will be logged out of
-                     your WCIPEG account, after which it will become unnaccessible. You can then login to your native
-                     DMOJ account and should see all of your submissions migrated.') }}</p>
+                     your WCIPEG account, after which it will become unnaccessible. You will then be able to log in to
+                     your native DMOJ account.') }}</p>
             <b>{{ form.accept.label }}</b>
             {{ form.accept }}
             {% if form.errors %}
@@ -16,7 +16,7 @@
                 </div>
             {% endif %}
             <hr>
-            <button class="submit-bar" type="submit">{{ _('Merge Accounts') }}</button>
+            <button class="submit-bar" type="submit">{{ _('Merge accounts') }}</button>
         </form>
     </div>
 {% endblock %}

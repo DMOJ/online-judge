@@ -270,7 +270,7 @@ You will not be able to view your scratch codes after you leave this page!') }}"
             {% if request.profile.is_peg %}
                 <div class="alert alert-info">
                     This account was migrated from WCIPEG.
-                    Click <a href="{{ url('wcipeg_merge_request') }}">here</a> to merge with a DMOJ account.
+                    Click <b><a href="{{ url('wcipeg_merge_request') }}">here</a></b> to merge with a DMOJ account.
                 </div>
             {% endif %}
             {% if form.errors %}
