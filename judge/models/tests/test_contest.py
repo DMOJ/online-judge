@@ -203,7 +203,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'anonymous': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
             },
