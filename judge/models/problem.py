@@ -220,12 +220,10 @@ class Problem(models.Model):
 
         # If user is currently in a contest containing that problem.
         current = user.profile.current_contest_id
-        if current is not None:
-            from judge.models import ContestProblem
-            if ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists():
-                return True
-
-        return False
+        if current is None:
+            return False
+        from judge.models import ContestProblem
+        return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
 
     def is_subs_manageable_by(self, user):
         return user.is_staff and user.has_perm('judge.rejudge_submission') and self.is_editable_by(user)
