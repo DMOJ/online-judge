@@ -292,6 +292,11 @@ class CommonDataMixin:
                 username='staff_problem_edit_own_no_staff',
                 user_permissions=('edit_own_problem', 'rejudge_submission'),
             ),
+            'staff_organization_admin': create_user(
+                username='staff_organization_admin',
+                is_staff=True,
+                user_permissions=('organization_admin',),
+            ),
             'normal': create_user(
                 username='normal',
             ),
@@ -302,6 +307,7 @@ class CommonDataMixin:
             'open': create_organization(
                 name='open',
                 registrant='superuser',
+                admins=('staff_organization_admin',),
             ),
         }
 
