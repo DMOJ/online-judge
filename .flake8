@@ -14,12 +14,10 @@ per-file-ignores =
     ./*/__init__.py:F401,F403
     # F405: name comes from import *
     ./judge/management/commands/runmoss.py:F403,F405
+    # E121: continuation line under-indented for hanging indent, ignore in all migrations
+    # E126: continuation line over-indented for hanging indent, ignore in all migrations
     # E501: line too long, ignore in migrations
-    ./judge/migrations/*.py:E501
-    # E126 continuation line over-indented for hanging indent
-    ./judge/migrations/*.py:E126
-    # E121 continuation line under-indented for hanging indent
-    ./judge/migrations/*.py:E121
+    ./judge/migrations/*.py:E121,E126,E501
     # E303: too many blank lines
     # PyCharm likes to have double lines between class/def in an if statement.
     ./judge/widgets/pagedown.py:E303
