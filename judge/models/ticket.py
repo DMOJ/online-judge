@@ -11,7 +11,8 @@ class Ticket(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('ticket creator'), related_name='tickets',
                              on_delete=models.CASCADE)
     time = models.DateTimeField(verbose_name=_('creation time'), auto_now_add=True)
-    assignees = models.ManyToManyField(Profile, verbose_name=_('assignees'), related_name='assigned_tickets')
+    assignees = models.ManyToManyField(Profile, verbose_name=_('assignees'), related_name='assigned_tickets',
+                                       blank=True)
     notes = models.TextField(verbose_name=_('quick notes'), blank=True,
                              help_text=_('Staff notes for this issue to aid in processing.'))
     content_type = models.ForeignKey(ContentType, verbose_name=_('linked item type'),
