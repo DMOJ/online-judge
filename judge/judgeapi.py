@@ -57,7 +57,7 @@ def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=No
     BATCH_REJUDGE_PRIORITY = 3
 
     updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'error': None,
-               'was_rejudged': rejudge, 'status': 'QU'}
+               'was_rejudged': rejudge or batch_rejudge, 'status': 'QU'}
     try:
         # This is set proactively; it might get unset in judgecallback's on_grading_begin if the problem doesn't
         # actually have pretests stored on the judge.
@@ -89,7 +89,7 @@ def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=No
             'language': submission.language.key,
             'source': submission.source.source,
             'judge-id': judge_id,
-            'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else REJUDGE_PRIORITY if rejudge else priority,
+            'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else (REJUDGE_PRIORITY if rejudge else priority),
         })
     except BaseException:
         logger.exception('Failed to send request to judge')

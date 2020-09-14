@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Case, Count, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
+from django.db.models import Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
 from django.db.models.expressions import CombinedExpression
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -40,8 +40,8 @@ from judge.utils.problems import _get_result_data
 from judge.utils.ranker import ranker
 from judge.utils.stats import get_bar_chart, get_pie_chart
 from judge.utils.strings import safe_int_or_none
-from judge.utils.views import DiggPaginatorMixin, SingleObjectFormView, TitleMixin, generic_message, \
-    paginate_query_context
+from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, SingleObjectFormView, TitleMixin, \
+    generic_message
 
 __all__ = ['ContestList', 'ContestDetail', 'ContestRanking', 'ContestJoin', 'ContestLeave', 'ContestCalendar',
            'ContestClone', 'ContestStats', 'ContestMossView', 'ContestMossDelete', 'contest_ranking_ajax',
@@ -65,20 +65,22 @@ class ContestListMixin(object):
         return Contest.get_visible_contests(self.request.user)
 
 
-class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
+class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
     model = Contest
     paginate_by = 20
     template_name = 'contest/list.html'
     title = gettext_lazy('Contests')
     context_object_name = 'past_contests'
+    all_sorts = frozenset(('name', 'user_count', 'start_time'))
+    default_desc = frozenset(('name', 'user_count'))
+    default_sort = '-start_time'
 
     @cached_property
     def _now(self):
         return timezone.now()
 
     def _get_queryset(self):
-        queryset = super(ContestList, self).get_queryset() \
-            .order_by('-start_time', 'key').prefetch_related('tags', 'organizations', 'organizers')
+        queryset = super(ContestList, self).get_queryset().prefetch_related('tags', 'organizations', 'organizers')
 
         if self.search_query:
             queryset = queryset.filter(Q(key__icontains=self.search_query) | Q(name__icontains=self.search_query))
@@ -98,7 +100,7 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         return queryset.distinct()
 
     def get_queryset(self):
-        return self._get_queryset().filter(end_time__lt=self._now)
+        return self._get_queryset().order_by(self.order, 'key').filter(end_time__lt=self._now)
 
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
@@ -112,18 +114,21 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         if self.request.user.is_authenticated:
             for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.profile,
                                                                      contest_id__in=present) \
-                    .select_related('contest').prefetch_related('contest__organizers'):
+                    .select_related('contest').prefetch_related('contest__organizers') \
+                    .annotate(key=F('contest__key')):
                 if not participation.ended:
                     active.append(participation)
                     present.remove(participation.contest)
 
-        active.sort(key=attrgetter('end_time'))
+        active.sort(key=attrgetter('end_time', 'key'))
+        present.sort(key=attrgetter('end_time', 'key'))
         future.sort(key=attrgetter('start_time'))
         context['active_participations'] = active
         context['current_contests'] = present
         context['future_contests'] = future
         context['now'] = self._now
         context['first_page_href'] = '.'
+        context['page_suffix'] = '#past-contests'
 
         context['rated_state'] = self.rated_state
         context['rated_states'] = {
@@ -144,7 +149,8 @@ class ContestList(DiggPaginatorMixin, TitleMixin, ContestListMixin, ListView):
         context['contest_organizations'] = organization_names
         context['selected_organizations'] = self.selected_organizations
 
-        context.update(paginate_query_context(self.request))
+        context.update(self.get_sort_context())
+        context.update(self.get_sort_paginate_context())
         return context
 
     def setup_contest_list(self, request):

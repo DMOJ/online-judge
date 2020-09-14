@@ -1,6 +1,7 @@
 from django.test import SimpleTestCase
+from lxml import html
 
-from . import get_cleaner, markdown
+from . import fragment_tree_to_str, fragments_to_tree, get_cleaner, markdown
 
 MATHML_N = '''\
 <math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -123,3 +124,33 @@ class TestMarkdown(SimpleTestCase):
     def test_no_bleach(self):
         self.assertHTMLEqual(markdown('<script>void(0)</script>', self.UNBLEACHED_STYLE),
                              '<script>void(0)</script>')
+
+    def test_post_process(self):
+        self.assertHTMLEqual(markdown('<img src="test.png">', self.UNBLEACHED_STYLE, lazy_load=True),
+                             '<p><noscript><img src="test.png"></noscript>'
+                             '<img src="/static/blank.gif" data-src="test.png" class="unveil"></p>')
+
+
+class TestFragmentUtils(SimpleTestCase):
+    def test_simple(self):
+        tree = fragments_to_tree('<p>a</p><p>b</p>')
+        self.assertIsInstance(tree, html.HtmlElement)
+        self.assertEqual(len(tree.getchildren()), 2)
+
+        self.assertIsInstance(tree[0], html.HtmlElement)
+        self.assertEqual(tree[0].tag, 'p')
+        self.assertEqual(tree[0].text, 'a')
+
+        self.assertIsInstance(tree[1], html.HtmlElement)
+        self.assertEqual(tree[1].tag, 'p')
+        self.assertEqual(tree[1].text, 'b')
+
+        self.assertHTMLEqual(fragment_tree_to_str(tree), '<p>a</p><p>b</p>')
+
+    def test_text_prefix(self):
+        tree = fragments_to_tree('z<p>a</p><p>b</p>')
+        self.assertIsInstance(tree, html.HtmlElement)
+        self.assertEqual(len(tree.getchildren()), 2)
+        self.assertEqual(tree.text, 'z')
+
+        self.assertHTMLEqual(fragment_tree_to_str(tree), 'z<p>a</p><p>b</p>')

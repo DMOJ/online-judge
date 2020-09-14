@@ -173,10 +173,13 @@ class Contest(models.Model):
 
     @cached_property
     def get_label_for_problem(self):
+        if not self.problem_label_script:
+            return self.format.get_label_for_problem
+
         def DENY_ALL(obj, attr_name, is_setting):
             raise AttributeError()
         lua = LuaRuntime(attribute_filter=DENY_ALL, register_eval=False, register_builtins=False)
-        return lua.eval(self.problem_label_script or self.format.get_contest_problem_label_script())
+        return lua.eval(self.problem_label_script)
 
     def clean(self):
         # Django will complain if you didn't fill in start_time or end_time, so we don't have to.
@@ -561,7 +564,8 @@ class ContestProblem(models.Model):
     partial = models.BooleanField(default=True, verbose_name=_('partial'))
     is_pretested = models.BooleanField(default=False, verbose_name=_('is pretested'))
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
-    output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'), null=True, blank=True)
+    output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'),
+                                                 default=0, null=True, blank=True)
     max_submissions = models.IntegerField(help_text=_('Maximum number of submissions for this problem, '
                                                       'or leave blank for no limit.'),
                                           default=None, null=True, blank=True,

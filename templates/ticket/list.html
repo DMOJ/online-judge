@@ -248,7 +248,7 @@
         </aside>
 
         <main>
-            {% if page_obj.num_pages > 1 %}
+            {% if page_obj.has_other_pages() %}
                 <div style="margin-bottom:6px; margin-top:3px">{% include "list-pages.html" %}</div>
             {% endif %}
             <div class="h-scrollable-table">
@@ -269,7 +269,7 @@
                     </tbody>
                 </table>
             </div>
-            {% if page_obj.num_pages > 1 %}
+            {% if page_obj.has_other_pages() %}
                 <div style="margin-top:10px">{% include "list-pages.html" %}</div>
             {% endif %}
         </main>

@@ -71,6 +71,7 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
             fields = list(fieldsets[2][1]['fields'])
             if 'totp_key' not in fields:
                 fields.insert(fields.index('is_totp_enabled') + 1, 'totp_key')
+                fields.insert(fields.index('totp_key') + 1, 'scratch_codes')
             fieldsets[2][1]['fields'] = tuple(fields)
             return fieldsets
         else:

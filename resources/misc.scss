@@ -62,3 +62,9 @@
         float: right;
     }
 }
+
+@media (min-width: 700px) {
+    .xs-br {
+        display: none;
+    }
+}

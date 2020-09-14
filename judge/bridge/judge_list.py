@@ -32,13 +32,13 @@ class JudgeList(object):
                     id, problem, language, source, judge_id = node.value
                     if judge.can_judge(problem, language, judge_id):
                         self.submission_map[id] = judge
-                        logger.info('Dispatched queued submission %d: %s', id, judge.name)
                         try:
                             judge.submit(id, problem, language, source)
                         except Exception:
                             logger.exception('Failed to dispatch %d (%s, %s) to %s', id, problem, language, judge.name)
                             self.judges.remove(judge)
                             return
+                        logger.info('Dispatched queued submission %d: %s', id, judge.name)
                         self.queue.remove(node)
                         del self.node_map[id]
                         break
@@ -75,14 +75,15 @@ class JudgeList(object):
         return iter(self.judges)
 
     def on_judge_free(self, judge, submission):
+        logger.info('Judge available after grading %d: %s', submission, judge.name)
         with self.lock:
-            logger.info('Judge available after grading %d: %s', submission, judge.name)
             del self.submission_map[submission]
+            judge._working = False
             self._handle_free_judge(judge)
 
     def abort(self, submission):
+        logger.info('Abort request: %d', submission)
         with self.lock:
-            logger.info('Abort request: %d', submission)
             try:
                 self.submission_map[submission].abort()
                 return True
