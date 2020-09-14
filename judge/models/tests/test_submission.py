@@ -132,7 +132,7 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
                 'can_see_detail': self.assertTrue,
             },
             'normal': {
-                'can_see_detail': self.assertTrue,
+                'can_see_detail': self.assertFalse,
             },
             'anonymous': {
                 'can_see_detail': self.assertFalse,
