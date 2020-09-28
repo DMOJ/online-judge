@@ -74,6 +74,10 @@
                 var revision_ajax = $comment.attr("data-revision-ajax");
                 var show_revision = cur_revision + offset;
 
+                // Do nothing if desired revision is out of buonds
+                if (show_revision < 0 || show_revision > max_revision)
+                    return;
+
                 $comment.attr("data-revision", show_revision);
 
                 $.get(revision_ajax, {
