@@ -357,7 +357,13 @@
                     </div>
                 </div>
                 <div class="info-box">
-                    <div class="info-title">{{ _('Assignees') }}</div>
+                    <div class="info-title">
+                        {% trans trimmed count=assignees|length %}
+                            Assignee
+                        {% pluralize %}
+                            Assignees
+                        {% endtrans %}
+                    </div>
                     <div class="info-data">
                         {% if assignees %}
                             {{ link_users(assignees) }}
