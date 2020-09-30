@@ -63,7 +63,13 @@
 
             {% if ratings %}
                 <br>
-                <div><b>{{ ratings|length }} contests written</b></div>
+                <div><b>
+                    {%- trans trimmed counter=ratings|length %}
+                        {{ counter }} contest written
+                    {% pluralize %}
+                        {{ counter }} contests written
+                    {% endtrans -%}
+                </b></div>
                 {% if not user.is_unlisted %}
                     <div><b class="semibold">{{ _('Rank by rating:') }}</b> #{{ rating_rank }}</div>
                 {% endif %}
