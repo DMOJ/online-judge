@@ -65,11 +65,21 @@
             });
         </script>
     {% endif %}
+    <script type="text/javascript">
+        $(function () {
+            $("#view-source-link").on("click", function(e) {
+                if (e.metaKey || e.ctrlKey) {
+                    window.open("{{ url('submission_source_raw', submission.id) }}", "_blank");
+                    return false;
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block body %}
     <br>
-    <div><a href="{{ url('submission_source', submission.id) }}">{{ _('View source') }}</a></div>
+    <div><a id="view-source-link" href="{{ url('submission_source', submission.id) }}">{{ _('View source') }}</a></div>
     {% if request.user == submission.user.user or perms.judge.resubmit_other %}
         <div><a href="{{ url('problem_submit', submission.problem.code, submission.id) }}">{{ _('Resubmit') }}</a></div>
     {% endif %}
