@@ -35,6 +35,8 @@ def vote_comment(request, delta):
     if not request.user.is_staff and not request.profile.submission_set.filter(points=F('problem__points')).exists():
         return HttpResponseBadRequest(_('You must solve at least one problem before you can vote.'),
                                       content_type='text/plain')
+    if request.profile.mute:
+        return HttpResponseBadRequest(_('Your part is silent, little toad.'), content_type='text/plain')
 
     try:
         comment_id = int(request.POST['id'])
