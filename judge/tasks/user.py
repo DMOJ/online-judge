@@ -63,7 +63,7 @@ def prepare_user_data(self, profile_id, options):
                         'case_total': submission.case_total,
                     }
                     with data_file.open(
-                        'submissions/%s.%s' % (submission.id, submission.language.file_extension),
+                        'submissions/%s.%s' % (submission.id, submission.language.extension),
                         'w',
                     ) as f:
                         f.write(utf8bytes(submission.source.source))
