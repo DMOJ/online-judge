@@ -709,6 +709,7 @@ class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObje
 
         languages = problem.allowed_languages.all()
         language_limits = problem.language_limits.all()
+        organizations = problem.organizations.all()
         types = problem.types.all()
         problem.pk = None
         problem.is_public = False
@@ -719,6 +720,7 @@ class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         problem.authors.add(self.request.profile)
         problem.allowed_languages.set(languages)
         problem.language_limits.set(language_limits)
+        problem.organizations.set(organizations)
         problem.types.set(types)
 
         return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))

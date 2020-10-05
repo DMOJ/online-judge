@@ -39,6 +39,7 @@
                     $reply_form.prepend('<a class="close">x</a>');
                     $reply_form.find('form.comment-submit-form input#id_parent').val(parent);
                     $reply_form.appendTo($comment_reply);
+                    register_dmmd_preview($('#' + reply_id + ' #id_body-preview'));
                 }
                 $comment_reply.fadeIn();
 

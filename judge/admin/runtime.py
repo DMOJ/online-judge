@@ -27,7 +27,7 @@ class LanguageForm(ModelForm):
 
 
 class LanguageAdmin(VersionAdmin):
-    fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'description',
+    fields = ('key', 'name', 'short_name', 'common_name', 'ace', 'pygments', 'info', 'extension', 'description',
               'template', 'problems')
     list_display = ('key', 'name', 'common_name', 'info')
     form = LanguageForm
