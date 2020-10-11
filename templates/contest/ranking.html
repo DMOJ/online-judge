@@ -181,7 +181,7 @@
         <script type="text/javascript">
             $(function () {
                 window.install_tooltips = function () {
-                    $('td.user-name').find('span:first-child').each(function () {
+                    $('td.user-name').find('> span:first-child').each(function () {
                         var link = $(this);
                         link.mouseenter(function (e) {
                             var start_time = link.siblings('.start-time').text().trim();
