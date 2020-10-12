@@ -160,6 +160,13 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
             },
+            'external': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
             'anonymous': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
