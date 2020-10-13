@@ -20,7 +20,7 @@
 {% block body %}
     <form action="" method="post" class="form-area">
         {% csrf_token %}
-        {{ contest.registration_page|markdown('solution', MATH_ENGINE)|reference }}
+        {{ contest.registration_page|markdown('contest', MATH_ENGINE)|reference }}
         <p class="button-line">
             <button id="register-link" type="submit">{{ _('Register') }}</button>
         </p>
