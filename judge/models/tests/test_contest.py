@@ -85,7 +85,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             is_visible=True,
             is_private=True,
         )
-        
+
         self.external_contest = create_contest(
             key='external',
             start_time=_now - timezone.timedelta(days=1),
