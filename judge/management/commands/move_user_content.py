@@ -27,5 +27,5 @@ class Command(BaseCommand):
 
         with transaction.atomic():
             Submission.objects.filter(user=source).update(user=target)
-            Comment.objects.filter(user=source).update(user=target)
+            Comment.objects.filter(author=source).update(author=target)
             CommentVote.objects.filter(voter=source).update(voter=target)
