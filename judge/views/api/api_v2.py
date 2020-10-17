@@ -392,6 +392,7 @@ class APIProblemDetail(APIDetailView):
             'organizations': list(
                 problem.organizations.values_list('id', flat=True) if problem.is_organization_private else [],
             ),
+            'is_public': problem.is_public,
         }
 
 
