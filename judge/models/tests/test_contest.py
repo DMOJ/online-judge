@@ -86,6 +86,14 @@ class ContestTestCase(CommonDataMixin, TestCase):
             is_private=True,
         )
 
+        self.external_contest = create_contest(
+            key='external',
+            start_time=_now - timezone.timedelta(days=1),
+            end_time=_now + timezone.timedelta(days=100),
+            organizers=('superuser', 'staff_contest_edit_own'),
+            is_external=True,
+        )
+
     def setUp(self):
         self.users['normal'].profile.refresh_from_db()
 
@@ -154,6 +162,13 @@ class ContestTestCase(CommonDataMixin, TestCase):
             },
             'normal': {
                 # scoreboard checks don't do accessibility checks
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'external': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
                 'is_accessible_by': self.assertFalse,
@@ -310,6 +325,63 @@ class ContestTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.private_user_contest, data)
+
+    def test_external_contest_methods(self):
+        with self.assertRaises(Contest.Inaccessible):
+            self.basic_contest.access_check(self.users['normal'])
+
+        data = {
+            'superuser': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+                'is_in_contest': self.assertFalse,
+            },
+            'staff_contest_edit_own': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+                'is_in_contest': self.assertFalse,
+            },
+            'staff_contest_see_all': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'staff_contest_edit_all': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+                'is_in_contest': self.assertFalse,
+            },
+            'normal': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'external': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'anonymous': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.external_contest, data)
 
     def test_contests_list(self):
         for name, user in self.users.items():

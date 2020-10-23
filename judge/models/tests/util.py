@@ -300,8 +300,15 @@ class CommonDataMixin:
             'normal': create_user(
                 username='normal',
             ),
+            'external': create_user(
+                username='external',
+            ),
             'anonymous': AnonymousUser(),
         }
+
+        external_user = Profile.objects.get(user__username='external')
+        external_user.is_external_user = True
+        external_user.save()
 
         self.organizations = {
             'open': create_organization(
