@@ -36,8 +36,71 @@
             <br>
         {% endif %}
 
+        <h4 id="submission-activity-header"></h4>
+        <div id="submission-activity" style="display: none;">
+            <div id="submission-activity-actions">
+                <a href="javascript:void(0)" id="prev-year-action">&laquo;</a>
+                &nbsp;<span id="year"></span>&nbsp;
+                <a href="javascript:void(0)" id="next-year-action">&raquo;</a>
+            </div>
+            <div id="submission-activity-display">
+                <table id="submission-activity-table">
+                    <tr id="submission-0">
+                        <th class="submission-date-col info-text">
+                            {{ _('Mon') }}
+                        </th>
+                    </tr>
+                    <tr id="submission-1">
+                        <th class="submission-date-col info-text">
+                            {{ _('Tues') }}
+                        </th>
+                    </tr>
+                    <tr id="submission-2">
+                        <th class="submission-date-col info-text">
+                            {{ _('Wed') }}
+                        </th>
+                    </tr>
+                    <tr id="submission-3">
+                        <th class="submission-date-col info-text">
+                            {{ _('Thurs') }}
+                        </th>
+                    </tr>
+                    <tr id="submission-4">
+                        <th class="submission-date-col info-text">
+                            {{ _('Fri') }}
+                        </th>
+                    </tr>
+                    <tr id="submission-5">
+                        <th class="submission-date-col info-text">
+                            {{ _('Sat') }}
+                        </th>
+                    </tr>
+                    <tr id="submission-6">
+                        <th class="submission-date-col info-text">
+                            {{ _('Sun') }}
+                        </th>
+                    </tr>
+                </table>
+                <div class="info-bar">
+                    <span id="submission-total-count" class="info-text">
+                    </span>
+                    <table class="info-table">
+                        <tr>
+                            <th class="info-table-text info-text">{{ _('Less') }}</th>
+                            <td class="activity-0"><div></div></td>
+                            <td class="activity-1"><div></div></td>
+                            <td class="activity-2"><div></div></td>
+                            <td class="activity-3"><div></div></td>
+                            <td class="activity-4"><div></div></td>
+                            <th class="info-table-text info-text">{{ _('More') }}</th>
+                        <tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         {% if rating %}
-            <h4>Rating History</h4>
+            <h4>Rating history</h4>
             <div id="rating-chart">
                 <canvas></canvas>
             </div>
@@ -69,10 +132,133 @@
         {% include "mathjax-load.html" %}
     {% endif %}
 
+    <script type="text/javascript">
+        var submission_activity = {{ submission_data }};
+        var metadata = {{ submission_metadata }};
+        const activity_levels = 5; // 5 levels of activity
+
+        $(function () {
+            var active_tooltip = null;
+
+            function display_tooltip(where) {
+                if (active_tooltip !== null) {
+                    active_tooltip.removeClass(['tooltipped', 'tooltipped-e', 'tooltipped-w']).removeAttr('aria-label');
+                }
+                if (where !== null) {
+                    var day_num = parseInt(where.attr('data-day'));
+                    var tooltip_direction = day_num < 183 ? 'tooltipped-e' : 'tooltipped-w';
+                    where.addClass(['tooltipped', tooltip_direction])
+                         .attr('aria-label', where.attr('data-submission-activity'));
+                }
+                active_tooltip = where;
+            }
+
+            function install_tooltips () {
+                display_tooltip(null);
+                $('.activity-label').each(function () {
+                    var link = $(this);
+                    link.hover(
+                        function(e) {
+                            display_tooltip(link);
+                        },
+                        function(e) {
+                            display_tooltip(null);
+                        }
+                    );
+                });
+            }
+
+            var current_year = new Date().getFullYear();
+            var $div = $('#submission-activity');
+
+            function draw_contribution(year) {
+                $div.find('#submission-activity-table td').remove();
+                $div.find('#year').attr('data-year', year);
+                $div.find('#prev-year-action').css('display', year > metadata.min_year ? '' : 'none');
+                $div.find('#next-year-action').css('display', year < current_year ? '' : 'none');
+                var current_weekday = 0;
+                var start_day = new Date(year, 0, 1)
+                var end_day = new Date(year + 1, 0, 0);
+                if (year == current_year) {
+                    end_day = new Date();
+                    start_day = new Date(end_day.getFullYear() - 1, end_day.getMonth(), end_day.getDate() + 1);
+                    $div.find('#year').text("{{ _('past year') }}");
+                } else {
+                    $div.find('#year').text(year);
+                }
+                var days = [];
+                for (var day = start_day, day_num = 1; day <= end_day; day.setDate(day.getDate() + 1), day_num++) {
+                    var isodate = day.toISOString().split('T')[0];
+                    days.push({
+                        date: new Date(day),
+                        weekday: day.getDay(),
+                        day_num: day_num,
+                        activity: submission_activity[isodate] || 0,
+                    });
+                }
+
+                var sum_activity = days.map(obj => obj.activity).reduce((a, b) => a + b, 0);
+                $div.find('#submission-total-count').text(
+                    ngettext("%(cnt)d total submission", "%(cnt)d total submissions", sum_activity)
+                        .replace("%(cnt)d", sum_activity)
+                )
+                if (year == current_year) {
+                    $('#submission-activity-header').text(
+                        ngettext("%(cnt)d submission in the last year", "%(cnt)d submissions in the last year", sum_activity)
+                            .replace("%(cnt)d", sum_activity)
+                    )
+                }
+
+                var max_activity = Math.max.apply(null, days.map(obj => obj.activity));
+                var diff = max_activity / (activity_levels - 1);
+                var activity_breakdown = [...Array(activity_levels).keys()].map(x => diff * x);
+
+                for (; current_weekday < days[0].weekday; current_weekday++) {
+                    $div.find('#submission-' + current_weekday)
+                        .append($('<td>').addClass('activity-blank').append('<div>'));
+                }
+
+                days.forEach(obj => {
+                    var level = activity_breakdown.findIndex(x => x >= obj.activity);
+                    var text =
+                        ngettext("%(cnt)d submission on %(date)s", "%(cnt)d submissions on %(date)s", obj.activity)
+                            .replace('%(cnt)d', obj.activity)
+                            .replace(
+                                '%(date)s',
+                                obj.date.toLocaleDateString(
+                                    "{{ LANGUAGE_CODE }}",
+                                    {month: 'short', year: 'numeric', day: 'numeric'}
+                                )
+                            )
+
+                    $div.find('#submission-' + obj.weekday)
+                        .append(
+                            $('<td>').addClass(['activity-label', 'activity-' + level])
+                                          .attr('data-submission-activity', text)
+                                          .attr('data-day', obj.day_num)
+                                          .append('<div>')
+                        );
+                });
+
+                install_tooltips();
+            }
+
+            $('#prev-year-action').click(function () {
+                draw_contribution(parseInt($div.find('#year').attr('data-year')) - 1);
+            });
+            $('#next-year-action').click(function () {
+                draw_contribution(parseInt($div.find('#year').attr('data-year')) + 1);
+            });
+
+            draw_contribution(current_year);
+            $('#submission-activity').css('display', '');
+        });
+    </script>
+
     {% if ratings %}
         <script type="text/javascript" src="{{ static('libs/chart.js/Chart.js') }}"></script>
         <script type="text/javascript">
-            var rating_history = {{rating_data}};
+            var rating_history = {{ rating_data }};
 
             $.each(rating_history, function (index, item) {
                 item.x = new Date(item.timestamp);

@@ -134,6 +134,11 @@
                 {% endif %}
                 {{ submission.memory|kbdetailformat }}
                 <br>
+                {% if submission.result == "AC" %}
+                    <b>{{ _('Maximum runtime on single test case:') }}</b>
+                    <span title="{{ max_execution_time }}s">{{ max_execution_time|floatformat(3) }}s</span>
+                    <br>
+                {% endif %}
                 {% if is_pretest %}
                     <b>{{ _('Final pretest score:') }}</b>
                 {% else %}

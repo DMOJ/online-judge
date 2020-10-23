@@ -15,6 +15,8 @@ from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Count, Max, Min
+from django.db.models.fields import DateField
+from django.db.models.functions import Cast, ExtractYear
 from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -206,6 +208,23 @@ class UserAboutPage(UserPage):
             ratio = (max_ever - max_user) / (max_ever - min_ever) if max_ever != min_ever else 1.0
             context['max_graph'] = max_user + ratio * delta
             context['min_graph'] = min_user + ratio * delta - delta
+
+        submissions = (
+            self.object.submission_set
+            .annotate(date_only=Cast('date', DateField()))
+            .values('date_only').annotate(cnt=Count('id'))
+        )
+
+        context['submission_data'] = mark_safe(json.dumps({
+            date_counts['date_only'].isoformat(): date_counts['cnt'] for date_counts in submissions
+        }))
+        context['submission_metadata'] = mark_safe(json.dumps({
+            'min_year': (
+                self.object.submission_set
+                .annotate(year_only=ExtractYear('date'))
+                .aggregate(min_year=Min('year_only'))['min_year']
+            ),
+        }))
         return context
 
 
@@ -405,6 +424,7 @@ def edit_profile(request):
         'form': form, 'title': _('Edit profile'), 'profile': request.profile,
         'can_download_data': bool(settings.DMOJ_USER_DATA_DOWNLOAD),
         'has_math_config': bool(settings.MATHOID_URL),
+        'ignore_user_script': True,
         'TIMEZONE_MAP': tzmap or 'http://momentjs.com/static/img/world.png',
         'TIMEZONE_BG': settings.TIMEZONE_BG if tzmap else '#4E7CAD',
     })
