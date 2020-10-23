@@ -65,5 +65,5 @@ class ICS3UContestFormat(DefaultContestFormat):
     def display_participation_result(self, participation):
         return format_html(
             '<td class="user-points">{points}</td>',
-            points=floatformat(participation.score),
+            points=floatformat(participation.score, -self.contest.points_precision),
         )
