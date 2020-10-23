@@ -13,6 +13,7 @@ from judge.models import (
     Contest, ContestParticipation, ContestTag, Judge, Language, Organization, Problem, ProblemType, Profile, Rating,
     Submission,
 )
+from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.views.submission import group_test_cases
 
@@ -89,21 +90,29 @@ class APIMixin:
             return self.get_error(e)
 
 
-class APIListView(APIMixin, BaseListView):
+class APIListView(APIMixin, InfinitePaginationMixin, BaseListView):
     paginate_by = settings.DMOJ_API_PAGE_SIZE
     basic_filters = ()
     list_filters = ()
+
+    @property
+    def use_infinite_pagination(self):
+        return False
 
     def get_unfiltered_queryset(self):
         return super().get_queryset()
 
     def filter_queryset(self, queryset):
+        self.used_basic_filters = set()
+        self.used_list_filters = set()
+
         for key, filter_name in self.basic_filters:
             if key in self.request.GET:
                 # May raise ValueError or ValidationError, but is caught in APIMixin
                 queryset = queryset.filter(**{
                     filter_name: self.request.GET.get(key),
                 })
+                self.used_basic_filters.add(key)
 
         for key, filter_name in self.list_filters:
             if key in self.request.GET:
@@ -111,6 +120,7 @@ class APIListView(APIMixin, BaseListView):
                 queryset = queryset.filter(**{
                     filter_name + '__in': self.request.GET.getlist(key),
                 })
+                self.used_list_filters.add(key)
 
         return queryset
 
@@ -120,14 +130,17 @@ class APIListView(APIMixin, BaseListView):
     def get_api_data(self, context):
         page = context['page_obj']
         objects = context['object_list']
-        return {
+        result = {
             'current_object_count': len(objects),
             'objects_per_page': page.paginator.per_page,
-            'total_objects': page.paginator.count,
             'page_index': page.number,
-            'total_pages': page.paginator.num_pages,
+            'has_more': page.has_next(),
             'objects': [self.get_object_data(obj) for obj in objects],
         }
+        if not page.paginator.is_infinite:
+            result['total_objects'] = page.paginator.count
+            result['total_pages'] = page.paginator.num_pages
+        return result
 
 
 class APIDetailView(APIMixin, BaseDetailView):
@@ -392,6 +405,7 @@ class APIProblemDetail(APIDetailView):
             'organizations': list(
                 problem.organizations.values_list('id', flat=True) if problem.is_organization_private else [],
             ),
+            'is_public': problem.is_public,
         }
 
 
@@ -495,6 +509,10 @@ class APISubmissionList(APIListView):
         ('language', 'language__key'),
         ('result', 'result'),
     )
+
+    @property
+    def use_infinite_pagination(self):
+        return not self.used_basic_filters
 
     def get_unfiltered_queryset(self):
         queryset = Submission.objects.all()

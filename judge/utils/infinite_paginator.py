@@ -9,13 +9,14 @@ from django.utils.inspect import method_has_no_args
 
 
 class InfinitePage(collections.abc.Sequence):
-    def __init__(self, object_list, number, unfiltered_queryset, page_size, pad_pages):
+    def __init__(self, object_list, number, unfiltered_queryset, page_size, pad_pages, paginator):
         self.object_list = list(object_list)
         self.number = number
         self.unfiltered_queryset = unfiltered_queryset
         self.page_size = page_size
         self.pad_pages = pad_pages
         self.num_pages = 1e3000
+        self.paginator = paginator
 
     def __repr__(self):
         return '<Page %s of many>' % self.number
@@ -93,17 +94,19 @@ class InfinitePage(collections.abc.Sequence):
 
 
 class DummyPaginator:
+    is_infinite = True
+
     def __init__(self, per_page):
         self.per_page = per_page
 
 
-def infinite_paginate(queryset, page, page_size, pad_pages):
+def infinite_paginate(queryset, page, page_size, pad_pages, paginator=None):
     if page < 1:
         raise EmptyPage()
     sliced = queryset[(page - 1) * page_size:page * page_size]
     if page > 1 and not sliced:
         raise EmptyPage()
-    return InfinitePage(sliced, page, queryset, page_size, pad_pages)
+    return InfinitePage(sliced, page, queryset, page_size, pad_pages, paginator)
 
 
 class InfinitePaginationMixin:
@@ -115,7 +118,9 @@ class InfinitePaginationMixin:
 
     def paginate_queryset(self, queryset, page_size):
         if not self.use_infinite_pagination:
-            return super().paginate_queryset(queryset, page_size)
+            paginator, page, object_list, has_other = super().paginate_queryset(queryset, page_size)
+            paginator.is_infinite = False
+            return paginator, page, object_list, has_other
 
         page_kwarg = self.page_kwarg
         page = self.kwargs.get(page_kwarg) or self.request.GET.get(page_kwarg) or 1
@@ -124,8 +129,9 @@ class InfinitePaginationMixin:
         except ValueError:
             raise Http404('Page cannot be converted to an int.')
         try:
-            page = infinite_paginate(queryset, page_number, page_size, self.pad_pages)
-            return DummyPaginator(page_size), page, page.object_list, page.has_other_pages()
+            paginator = DummyPaginator(page_size)
+            page = infinite_paginate(queryset, page_number, page_size, self.pad_pages, paginator)
+            return paginator, page, page.object_list, page.has_other_pages()
         except InvalidPage as e:
             raise Http404('Invalid page (%(page_number)s): %(message)s' % {
                 'page_number': page_number,
