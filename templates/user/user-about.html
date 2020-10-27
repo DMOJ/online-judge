@@ -23,7 +23,7 @@
             {% with notes=user.notes %}
                 {% if notes %}
                     <p style="margin-top: 0"><b>{{ _('Admin Notes') }}: </b>
-                        {{ notes }}
+                        <pre>{{ notes }}</pre>
                     </p>
                 {% endif %}
             {% endwith %}
