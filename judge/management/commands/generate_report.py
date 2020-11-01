@@ -5,7 +5,6 @@ import sys
 from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.template.loader import get_template
-from django.utils import translation
 from django.core.mail import EmailMessage
 
 from judge.models import Contest
@@ -14,8 +13,8 @@ from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, PuppeteerPDFR
 
 
 def generate_scoreboard(contest, period):
-    # return "<div>WIP</div>"
     return ""
+
 
 class Command(BaseCommand):
     help = 'generates a report for an ICS3U contest'
@@ -23,7 +22,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('key', help='key of the contest to generate a report for')
         parser.add_argument('--period', help='ics3u class period of the contest', type=int)
-        parser.add_argument('--dry-run', help='use this option if the report should not be emailed', action='store_true')
+        parser.add_argument('--dry-run', help='don\'t actually email the report', action='store_true')
         parser.add_argument('--directory', help='specify where to store the report')
         parser.add_argument('-p', '--phantomjs', action='store_const', const=PhantomJSPdfMaker,
                             default=DefaultPdfMaker, dest='engine')
@@ -41,8 +40,8 @@ class Command(BaseCommand):
 
         directory = options['directory']
         scoreboard = generate_scoreboard(contest, options['period'])
-        if options['period'] != None:
-            teacher = settings.DMOJ_ICS_REPORT_PERIODS[options['period']-1]
+        if options['period'] is not None:
+            teacher = settings.DMOJ_ICS_REPORT_PERIODS[options['period'] - 1]
         else:
             teacher = None
         with options['engine'](directory, clean_up=directory is None) as maker:
@@ -63,10 +62,12 @@ class Command(BaseCommand):
             elif directory is None:
                 shutil.move(maker.pdffile, contest.key + '.pdf')
 
-            if options['period'] != None and not options['dry_run']:
+            if options['period'] is not None and not options['dry_run']:
                 email = EmailMessage(
                     'ICS3U Contest Report',
-                    f'Dear {teacher[0]},\n\nHere are the results, problems, and editorials of this week\'s ICS3U Contest.',
+                    f'Dear {teacher[0]},\n\nHere are the results, '
+                    'problems, and editorials of this week\'s '
+                    'ICS3U Contest.',
                     to=[teacher[1]],
                 )
                 email.attach_file(contest.key + '.pdf')
