@@ -7,13 +7,36 @@ from django.core.management.base import BaseCommand
 from django.template.loader import get_template
 from django.core.mail import EmailMessage
 
-from judge.models import Contest
+from judge.models import Contest, ContestParticipation
 from judge.pdf_problems import DefaultPdfMaker, PhantomJSPdfMaker, PuppeteerPDFRender, SeleniumPDFRender, \
     SlimerJSPdfMaker
 
 
 def generate_scoreboard(contest, period):
-    return ""
+    problem_ids = [str(prob.id) for prob in contest.contest_problems.all().order_by('order')]
+    out = ''
+
+    for registrant in contest.registrants.all().order_by('user__user__last_name'):
+        if period and int(registrant.data['class-period']) != period:
+            continue
+
+        participation = ContestParticipation.objects.filter(contest=contest, user=registrant.user).first()
+        if not participation:
+            continue  # joined, but didn't participate
+
+        row = ''
+        for pid in problem_ids:
+            if participation.format_data and pid in participation.format_data:
+                row += '<td>%.0f</td>\n' % participation.format_data[pid]['points']
+            else:
+                row += '<td></td>\n'
+        row += '<td>%.0f</td>\n' % participation.score
+
+        out += '<tr>\n'
+        out += '<th>%s</th>\n' % registrant.user.user.get_full_name()
+        out += row
+        out += '</tr>\n'
+    return out
 
 
 class Command(BaseCommand):
