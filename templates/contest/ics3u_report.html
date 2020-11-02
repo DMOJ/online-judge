@@ -1,104 +1,107 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link rel="stylesheet" href="style.css">
-        <link rel="stylesheet" href="pygment-github.css" type="text/css">
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <style>
-html {
-    background: white;
-}
-body {
-    overflow: hidden;
-    page-break-after: always;
-    background: white;
-}
-* {
-    font-family: sans-serif;
-}
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-tr:nth-child(even) {
-    background-color: #dddddd;
-}
-        </style>
-    </head>
-    <body>
-        <h2>
-            ICS3U Contest ({{ contest.key }}) Report{% if teacher != None %} for {{ teacher.0 }}{% endif %}
-        </h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Real Name</th>
-                    {% for problem in contest_problems %}
-                    <th>Problem {{ loop.index }}
-                        <div>Out of {{ problem.points }}</div>
-                    </th>
-                    {% endfor %}
-                    <th>Points</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{ scoreboard|safe }}
-            </tbody>
-        </table>
-        <br><br>
-        {% for contest_problem in contest_problems %}
+<head>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="pygment-github.css" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        html {
+            background: white;
+        }
+
+        body {
+            page-break-after: always;
+            background: white;
+        }
+
+        * {
+            font-family: sans-serif;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>{{ contest.name }} ({{ contest.key }}) {% if teacher != None %} - {{ teacher.0 }}{% endif %}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Real Name</th>
+                {% for problem in contest_problems %}
+                <th>Problem {{ loop.index }}
+                    <div>Out of {{ problem.points }}</div>
+                </th>
+                {% endfor %}
+                <th>Points</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ scoreboard|safe }}
+        </tbody>
+    </table>
+    <br><br>
+    {% for contest_problem in contest_problems %}
         {% with problem=contest_problem.problem, problem_name=contest_problem.problem.name, description=contest_problem.problem.description, url="" %}
-        <h2 style="color:#393630; display: inline-block;">{{ problem_name }}</h2>
-        <hr>
-        <div align="center" style="position: relative;">
-            <div class="problem-info-entry">
-                <b>{{ _('Time Limit:') }}</b> {{ problem.time_limit }}s
-                {% for name, limit in problem.language_time_limit %}
-                <div class="lang-limit">
-                    <span class="lang-name">{{ name }}</span>
-                    <span>{{ limit }}s</span>
+            <h2 style="color:#393630; display: inline-block;">{{ problem_name }}</h2>
+            <hr>
+            <div align="center" style="position: relative;">
+                <div class="problem-info-entry">
+                    <b>{{ _('Time Limit:') }}</b> {{ problem.time_limit }}s
+                    {% for name, limit in problem.language_time_limit %}
+                    <div class="lang-limit">
+                        <span class="lang-name">{{ name }}</span>
+                        <span>{{ limit }}s</span>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
-            </div>
-            <div class="problem-info-entry">
-                <b>{{ _('Memory Limit:') }}</b> {{ problem.memory_limit|kbsimpleformat}}
-                {% for name, limit in problem.language_memory_limit %}
-                <div class="lang-limit">
-                    <span class="lang-name">{{ name }}</span>
-                    <span>{{ limit|kbsimpleformat }}</span>
+                <div class="problem-info-entry">
+                    <b>{{ _('Memory Limit:') }}</b> {{ problem.memory_limit|kbsimpleformat}}
+                    {% for name, limit in problem.language_memory_limit %}
+                    <div class="lang-limit">
+                        <span class="lang-name">{{ name }}</span>
+                        <span>{{ limit|kbsimpleformat }}</span>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
-        </div>
-        <hr style="clear: both;">
-        <div class="content-description printing">
-            {{ description|markdown(problem.markdown_style, 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
-        </div>
-        <br>
-        {% if problem.solution %}
-        <h3>Editorial for {{ problem_name }}</h3>
-        <div class="content-description printing">
-            {{ problem.solution.content|markdown('solution', MATH_ENGINE)|reference|str|safe }}
-        </div>
-        {% endif %}
+            <hr style="clear: both;">
+            <div class="content-description printing">
+                {{ description|markdown(problem.markdown_style, 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
+            </div>
+            <br>
+            {% if problem.solution %}
+                <h3>Editorial for {{ problem_name }}</h3>
+                <div class="content-description printing">
+                    {{ problem.solution.content|markdown('solution', MATH_ENGINE)|reference|str|safe }}
+                </div>
+            {% endif %}
         {% endwith %}
         <br>
-        {% endfor %}
-        <script type="text/javascript" src="mathjax_config.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
-        <script type="text/javascript">
-            MathJax.Hub.Register.StartupHook("End", function () {
-                if (typeof window.callPhantom === 'function')
-                    window.callPhantom({'action': 'snapshot'});
-                document.body.classList.add('math-loaded');
-            });
-        </script>
-    </body>
-
+    {% endfor %}
+    <script type="text/javascript" src="mathjax_config.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+    <script type="text/javascript">
+        MathJax.Hub.Register.StartupHook("End", function() {
+            if (typeof window.callPhantom === 'function')
+                window.callPhantom({
+                    'action': 'snapshot'
+                });
+            document.body.classList.add('math-loaded');
+        });
+    </script>
+</body>
 </html>
-
