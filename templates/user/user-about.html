@@ -205,6 +205,12 @@
                         ngettext("%(cnt)d submission in the last year", "%(cnt)d submissions in the last year", sum_activity)
                             .replace("%(cnt)d", sum_activity)
                     )
+                } else {
+                    $('#submission-activity-header').text(
+                        ngettext("%(cnt)d submission in %(year)d", "%(cnt)d submissions in %(year)d", sum_activity)
+                            .replace("%(cnt)d", sum_activity)
+                            .replace("%(year)d", year)
+                    )
                 }
 
                 var max_activity = Math.max.apply(null, days.map(obj => obj.activity));
