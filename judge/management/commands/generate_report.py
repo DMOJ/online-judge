@@ -44,8 +44,8 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('key', help='key of the contest to generate a report for')
-        parser.add_argument('--period', help='ics3u class period of the contest', type=int)
-        parser.add_argument('--dry-run', help="don't actually email the report", action='store_true')
+        parser.add_argument('--period', type=int, help='ics3u class period of the contest')
+        parser.add_argument('--dry-run', action='store_true', help="don't actually email the report")
         parser.add_argument('-p', '--phantomjs', action='store_const', const=PhantomJSPdfMaker,
                             default=DefaultPdfMaker, dest='engine')
         parser.add_argument('-s', '--slimerjs', action='store_const', const=SlimerJSPdfMaker, dest='engine')
