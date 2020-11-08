@@ -62,7 +62,7 @@ class Command(BaseCommand):
 
         scoreboard = generate_scoreboard(contest, options['period'])
         if options['period'] is not None:
-            teacher = settings.DMOJ_ICS_REPORT_PERIODS[options['period'] - 1]
+            teacher = settings.DMOJ_ICS_REPORT_PERIODS[options['period']]
         else:
             teacher = None
         with options['engine'](None, clean_up=None is None) as maker:
@@ -86,9 +86,9 @@ class Command(BaseCommand):
             if options['period'] is not None and not options['dry_run']:
                 email = EmailMessage(
                     f'{contest.name} Report',
-                    f'Dear {teacher[0]},\n\nAttached are the results, '
+                    f'Dear {teacher["name"]},\n\nAttached are the results, '
                     'problems, and editorials for the {contest.name}.',
-                    to=[teacher[1]],
+                    to=[teacher["email"]],
                 )
                 email.attach_file(contest.key + '.pdf')
                 email.send()
