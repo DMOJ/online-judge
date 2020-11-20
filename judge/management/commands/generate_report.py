@@ -17,7 +17,7 @@ def generate_scoreboard(contest, period):
     out = ''
 
     for registrant in contest.registrants.all().order_by('user__user__last_name'):
-        if period and int(registrant.data['class-period']) != period:
+        if period is not None and int(registrant.data['class-period']) != period:
             continue
 
         participation = ContestParticipation.objects.filter(contest=contest, user=registrant.user).first()
@@ -87,7 +87,9 @@ class Command(BaseCommand):
                 email = EmailMessage(
                     f'{contest.name} Report',
                     f'Dear {teacher["name"]},\n\nAttached are the results, '
-                    'problems, and editorials for the {contest.name}.',
+                    f'problems, and editorials for the {contest.name}.\n\n'
+                    'This is an automated email. If there are any issues, '
+                    'please contact us at presidents@mcpt.ca.',
                     to=[teacher["email"]],
                 )
                 email.attach_file(contest.key + '.pdf')
