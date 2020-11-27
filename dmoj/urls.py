@@ -400,7 +400,7 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
 
 for favicon in favicon_paths:
     urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(
-        url=lazystr(lambda: static('icons/' + favicon)),
+        url=lazystr(static('icons/' + favicon)),
     )))
 
 handler404 = 'judge.views.error.error404'
