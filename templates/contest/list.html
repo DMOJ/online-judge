@@ -176,14 +176,16 @@
 {% endmacro %}
 
 {% macro contest_register(contest, user) %}
-    {% if contest.require_registration and contest.is_registered(user) %}
-        <a class="unselectable button full participate-button" style="pointer-events: none;">
-            {{ _('Registered') }}
-        </a>
-    {% elif contest.can_register(user) %}
-        <a href="{{ url('contest_register', contest.key) }}" class="unselectable button full participate-button">
-            {{ _('Register') }}
-        </a>
+    {% if contest.can_register(user) %}
+        {% if contest.require_registration and contest.is_registered(user) %}
+            <a class="unselectable button full participate-button" style="pointer-events: none;">
+                {{ _('Registered') }}
+            </a>
+        {% else %}
+            <a href="{{ url('contest_register', contest.key) }}" class="unselectable button full participate-button">
+                {{ _('Register') }}
+            </a>
+        {% endif %}
     {% endif %}
 {% endmacro %}
 
