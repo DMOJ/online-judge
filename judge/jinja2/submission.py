@@ -2,7 +2,8 @@ from . import registry
 
 
 @registry.function
-def submission_layout(submission, profile_id, user, completed_problem_ids, editable_problem_ids, tester_problem_ids, private_submission):
+def submission_layout(submission, profile_id, user, completed_problem_ids,
+                      editable_problem_ids, tester_problem_ids, private_submission):
     problem_id = submission.problem_id
     can_view = False
     can_edit = False
