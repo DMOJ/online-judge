@@ -1,9 +1,10 @@
+from django.conf import settings
+
 from . import registry
 
 
 @registry.function
-def submission_layout(submission, profile_id, user, completed_problem_ids,
-                      editable_problem_ids, tester_problem_ids, private_submission):
+def submission_layout(submission, profile_id, user, completed_problem_ids, editable_problem_ids, tester_problem_ids):
     problem_id = submission.problem_id
     can_view = False
     can_edit = False
@@ -17,7 +18,7 @@ def submission_layout(submission, profile_id, user, completed_problem_ids,
         can_view = True
     elif submission.problem_id in completed_problem_ids:
         can_view = submission.problem_id in tester_problem_ids
-        if not private_submission:
+        if not settings.DMOJ_PRIVATE_SUBMISSION:
             can_view = can_view or submission.problem.is_public
 
     return can_view, can_edit
