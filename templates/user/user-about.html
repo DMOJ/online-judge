@@ -19,7 +19,15 @@
                 </p>
             {% endif %}
         {% endwith %}
-
+        {% if perms.judge.change_profile %}
+            {% with notes=user.notes %}
+                {% if notes %}
+                    <p style="margin-top: 0"><b>{{ _('Admin Notes') }}: </b>
+                        <pre>{{ notes }}</pre>
+                    </p>
+                {% endif %}
+            {% endwith %}
+        {% endif%}
         {% if user.about %}
             <h4>{{ _('About') }}</h4>
             {% cache 86400 'user_about' user.id MATH_ENGINE %}
@@ -47,37 +55,37 @@
                 <table id="submission-activity-table">
                     <tr id="submission-0">
                         <th class="submission-date-col info-text">
-                            {{ _('Mon') }}
+                            {{ _('Sun') }}
                         </th>
                     </tr>
                     <tr id="submission-1">
                         <th class="submission-date-col info-text">
-                            {{ _('Tues') }}
+                            {{ _('Mon') }}
                         </th>
                     </tr>
                     <tr id="submission-2">
                         <th class="submission-date-col info-text">
-                            {{ _('Wed') }}
+                            {{ _('Tues') }}
                         </th>
                     </tr>
                     <tr id="submission-3">
                         <th class="submission-date-col info-text">
-                            {{ _('Thurs') }}
+                            {{ _('Wed') }}
                         </th>
                     </tr>
                     <tr id="submission-4">
                         <th class="submission-date-col info-text">
-                            {{ _('Fri') }}
+                            {{ _('Thurs') }}
                         </th>
                     </tr>
                     <tr id="submission-5">
                         <th class="submission-date-col info-text">
-                            {{ _('Sat') }}
+                            {{ _('Fri') }}
                         </th>
                     </tr>
                     <tr id="submission-6">
                         <th class="submission-date-col info-text">
-                            {{ _('Sun') }}
+                            {{ _('Sat') }}
                         </th>
                     </tr>
                 </table>
@@ -100,7 +108,7 @@
         </div>
 
         {% if rating %}
-            <h4>Rating history</h4>
+            <h4>{{ _('Rating history') }}</h4>
             <div id="rating-chart">
                 <canvas></canvas>
             </div>
@@ -174,7 +182,7 @@
             function draw_contribution(year) {
                 $div.find('#submission-activity-table td').remove();
                 $div.find('#year').attr('data-year', year);
-                $div.find('#prev-year-action').css('display', year > metadata.min_year ? '' : 'none');
+                $div.find('#prev-year-action').css('display', year > (metadata.min_year || current_year) ? '' : 'none');
                 $div.find('#next-year-action').css('display', year < current_year ? '' : 'none');
                 var current_weekday = 0;
                 var start_day = new Date(year, 0, 1)
@@ -206,6 +214,12 @@
                     $('#submission-activity-header').text(
                         ngettext("%(cnt)d submission in the last year", "%(cnt)d submissions in the last year", sum_activity)
                             .replace("%(cnt)d", sum_activity)
+                    )
+                } else {
+                    $('#submission-activity-header').text(
+                        ngettext("%(cnt)d submission in %(year)d", "%(cnt)d submissions in %(year)d", sum_activity)
+                            .replace("%(cnt)d", sum_activity)
+                            .replace("%(year)d", year)
                     )
                 }
 

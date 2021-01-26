@@ -12,7 +12,9 @@
                 start: window.show_pp_base * 10,
                 end: (window.show_pp_base + 1) * 10
             }).done(function (data) {
-                $('.pp-table').append(data['results']);
+                var results = $(data['results']);
+                $('.pp-table').append(results);
+                register_time(results.find('.time-with-rel'));
                 window.show_pp_base++;
                 if (!data['has_more']) {
                     $("#pp-load-link-wrapper").hide();

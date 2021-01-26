@@ -28,7 +28,7 @@
             font-style: italic;
         }
 
-        .open-tickets .user {
+        .open-tickets .author {
             margin-left: 1em;
         }
 
@@ -222,7 +222,7 @@
                                         <a href="{{ ticket.linked_item.get_absolute_url() }}">
                                             {{ ticket.linked_item|item_title }}</a>
                                     </div>
-                                    <div>{{ link_user(ticket.user) }}</div>
+                                    <div class="author">{{ link_user(ticket.user) }}</div>
                                 </li>
                             {% endfor %}
                         </ul>
