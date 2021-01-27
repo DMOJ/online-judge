@@ -121,17 +121,6 @@
                 </div>
             </div>
         {% endif %}
-
-        {% if perms.judge.change_profile %}
-            {% with notes=user.notes %}
-                {% if notes %}
-                    <div style="padding-top: 2em;">
-                        <h4>Administrator Notes</h4>
-                        {{ notes|str|linebreaks }}
-                    </div>
-                {% endif %}
-            {% endwith %}
-        {% endif %}
     </div>
 {% endblock %}
 
