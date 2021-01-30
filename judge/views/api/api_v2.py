@@ -221,6 +221,10 @@ class APIContestDetail(APIDetailView):
             .order_by('-score', 'cumtime', 'tiebreaker')
         )
 
+        # Setting contest attribute to reduce db queries in .start and .end_time
+        for participation in participations:
+            participation.contest = contest
+
         return {
             'key': contest.key,
             'name': contest.name,
@@ -257,6 +261,8 @@ class APIContestDetail(APIDetailView):
             'rankings': [
                 {
                     'user': participation.username,
+                    'start_time': participation.start.isoformat(),
+                    'end_time': participation.end_time.isoformat(),
                     'score': participation.score,
                     'cumulative_time': participation.cumtime,
                     'tiebreaker': participation.tiebreaker,
@@ -303,6 +309,10 @@ class APIContestParticipationList(APIListView):
             .only(
                 'user__user__username',
                 'contest__key',
+                'contest__start_time',
+                'contest__end_time',
+                'contest__time_limit',
+                'real_start',
                 'score',
                 'cumtime',
                 'tiebreaker',
@@ -315,6 +325,8 @@ class APIContestParticipationList(APIListView):
         return {
             'user': participation.user.username,
             'contest': participation.contest.key,
+            'start_time': participation.start.isoformat(),
+            'end_time': participation.end_time.isoformat(),
             'score': participation.score,
             'cumulative_time': participation.cumtime,
             'tiebreaker': participation.tiebreaker,
