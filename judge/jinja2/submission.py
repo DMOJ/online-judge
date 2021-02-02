@@ -18,7 +18,9 @@ def submission_layout(submission, profile_id, user, completed_problem_ids, edita
         can_view = True
     elif submission.problem_id in completed_problem_ids:
         can_view = submission.problem_id in tester_problem_ids
-        if not settings.DMOJ_PRIVATE_SUBMISSION:
+        if settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'all-solved':
             can_view = can_view or submission.problem.is_public
+        elif settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'only-own':
+            can_view = can_view
 
     return can_view, can_edit
