@@ -259,9 +259,7 @@
         {% if past_contests %}
             <h4 id="past-contests">{{ _('Past Contests') }}</h4>
             {% if page_obj and page_obj.has_other_pages() %}
-                <div style="margin-bottom: 4px;">
-                    {% include "list-pages.html" %}
-                </div>
+                <div class="top-pagination-bar">{% include "list-pages.html" %}</div>
             {% endif %}
             <table class="contest-list table striped">
                 <thead>
@@ -301,9 +299,7 @@
                 </tbody>
             </table>
             {% if page_obj and page_obj.has_other_pages() %}
-                <div style="margin-top: 10px;">
-                    {% include "list-pages.html" %}
-                </div>
+                <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
             {% endif %}
         {% endif %}
     </div>
