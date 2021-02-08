@@ -5,7 +5,7 @@
     font-size: 1.9em;
 }
 
-.facebook-this, .tweet-this, .gplus-this {
+.facebook-this, .tweet-this {
     display: inline;
 }
 
@@ -15,10 +15,6 @@
 
 .facebook-this it {
     color: #133783;
-}
-
-.gplus-this i {
-    color: #DD4B38;
 }
 
 .social {
@@ -96,9 +92,9 @@ input {
     &[type=number] {
         padding: 2px 0 2px 5px;
     }
-    
+
     &[type=checkbox] {
-        vertical-align: middle;   
+        vertical-align: middle;
     }
 }
 
