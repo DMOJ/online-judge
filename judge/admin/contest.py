@@ -7,6 +7,7 @@ from django.forms import ModelForm, ModelMultipleChoiceField
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
@@ -270,7 +271,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
             with connection.cursor() as cursor:
                 cursor.execute('TRUNCATE TABLE `%s`' % Rating._meta.db_table)
             Profile.objects.update(rating=None)
-            for contest in Contest.objects.filter(is_rated=True).order_by('end_time'):
+            for contest in Contest.objects.filter(is_rated=True, end_time__lte=timezone.now()).order_by('end_time'):
                 rate_contest(contest)
         return HttpResponseRedirect(reverse('admin:judge_contest_changelist'))
 
@@ -278,7 +279,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         if not request.user.has_perm('judge.contest_rating'):
             raise PermissionDenied()
         contest = get_object_or_404(Contest, id=id)
-        if not contest.is_rated:
+        if not contest.is_rated or not contest.ended:
             raise Http404()
         with transaction.atomic():
             contest.rate()
