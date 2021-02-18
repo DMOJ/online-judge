@@ -5,7 +5,6 @@ import secrets
 import struct
 from operator import mul
 
-import pyotp
 import webauthn
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -191,7 +190,9 @@ class Profile(models.Model):
     generate_api_token.alters_data = True
 
     def generate_scratch_codes(self):
-        codes = [pyotp.random_base32(length=16) for i in range(settings.DMOJ_SCRATCH_CODES_COUNT)]
+        def generate_scratch_code():
+            return "".join(secrets.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567") for _ in range(16))
+        codes = [generate_scratch_code() for _ in range(settings.DMOJ_SCRATCH_CODES_COUNT)]
         self.scratch_codes = json.dumps(codes)
         self.save(update_fields=['scratch_codes'])
         return codes

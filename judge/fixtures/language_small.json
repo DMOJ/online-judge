@@ -270,5 +270,21 @@
             "description": "Classical [brain\\*\\*\\*\\*][1] with as many byte-sized cells as there are bytes in the memory limit.\r\n\r\n  [1]: http://www.muppetlabs.com/~breadbox/bf/",
             "extension": "c"
         }
+    },
+    {
+        "model": "judge.language",
+        "pk": 18,
+        "fields": {
+            "key": "CPP20",
+            "name": "C++20",
+            "short_name": "C++20",
+            "common_name": "C++",
+            "ace": "c_cpp",
+            "pygments": "cpp",
+            "template": "",
+            "info": "",
+            "description": "Compile options: `g++ -std=c++20 -Wall -DONLINE_JUDGE -O2 -lm -fmax-errors=5 -march=native -s`",
+            "extension": "cpp"
+        }
     }
 ]
