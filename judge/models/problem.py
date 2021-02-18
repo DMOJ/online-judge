@@ -183,6 +183,15 @@ class Problem(models.Model):
                 self.is_organization_private and self.organizations.filter(admins=user.profile).exists())
 
     def is_accessible_by(self, user, skip_contest_problem_check=False):
+        # If we don't want to check if the user is in a contest containing that problem.
+        if not skip_contest_problem_check and user.is_authenticated:
+            # If user is currently in a contest containing that problem.
+            current = user.profile.current_contest_id
+            if current is not None:
+                from judge.models import ContestProblem
+                if ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists():
+                    return True
+
         # Problem is public.
         if self.is_public:
             # Problem is not private to an organization.
@@ -214,16 +223,7 @@ class Problem(models.Model):
         if self.testers.filter(id=user.profile.id).exists():
             return True
 
-        # If we don't want to check if the user is in a contest containing that problem.
-        if skip_contest_problem_check:
-            return False
-
-        # If user is currently in a contest containing that problem.
-        current = user.profile.current_contest_id
-        if current is None:
-            return False
-        from judge.models import ContestProblem
-        return ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists()
+        return False
 
     def is_subs_manageable_by(self, user):
         return user.is_staff and user.has_perm('judge.rejudge_submission') and self.is_editable_by(user)
@@ -292,15 +292,16 @@ class Problem(models.Model):
 
     @cached_property
     def author_ids(self):
-        return self.authors.values_list('id', flat=True)
+        return Problem.authors.through.objects.filter(problem=self).values_list('profile_id', flat=True)
 
     @cached_property
     def editor_ids(self):
-        return self.author_ids | self.curators.values_list('id', flat=True)
+        return self.author_ids.union(
+            Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True))
 
     @cached_property
     def tester_ids(self):
-        return self.testers.values_list('id', flat=True)
+        return Problem.testers.through.objects.filter(problem=self).values_list('profile_id', flat=True)
 
     @cached_property
     def usable_common_names(self):

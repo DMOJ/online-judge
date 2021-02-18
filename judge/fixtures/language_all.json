@@ -958,5 +958,21 @@
         "description": "",
         "extension": "zig"
     }
+},
+{
+    "model": "judge.language",
+    "pk": 76,
+    "fields": {
+        "key": "CPP20",
+        "name": "C++20",
+        "short_name": "C++20",
+        "common_name": "C++",
+        "ace": "c_cpp",
+        "pygments": "cpp",
+        "template": "#include <bits/stdc++.h>\r\n\r\nusing namespace std;\r\n\r\nint main() {\r\n    return 0;\r\n}",
+        "info": "",
+        "description": "",
+        "extension": "cpp"
+    }
 }
 ]

@@ -11,14 +11,6 @@
     <script type="text/javascript" src="{{ static('libs/featherlight/featherlight.min.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            function update_select2() {
-                $('tbody:not(.extra-row-body) .type-column select').select2({
-                    minimumResultsForSearch: -1
-                });
-            }
-
-            update_select2();
-
             function autofill_if_exists($select, file) {
                 if (!$select.val() && ~window.valid_files.indexOf(file))
                     $select.val(file).trigger('change');
@@ -26,7 +18,6 @@
 
             var $table = $('#case-table');
             $table.on('add-row', function (e, $tr) {
-                update_select2();
                 $tr.find('input').filter('[id$=file]').each(function () {
                     var $select, val = $(this).replaceWith($select = $('<select>').attr({
                         id: $(this).attr('id'),
@@ -447,5 +438,5 @@
         <input type="submit" value="{{ _('Submit!') }}" class="button">
         <a id="add-case-row" href="#"><i class="fa fa-plus"></i> {{ _('Add new case') }}</a>
     </form>
-    <div style="display: none" class="generator-args-editor"><textarea></textarea><a class="button">Save</a></div>
+    <div style="display: none" class="generator-args-editor"><textarea></textarea><a class="button">{{ _('Save') }}</a></div>
 {% endblock %}
