@@ -308,6 +308,7 @@ class APIContestParticipationList(APIListView):
                 'tiebreaker',
                 'is_disqualified',
                 'virtual',
+                'real_start', 
             )
         )
 
@@ -320,6 +321,7 @@ class APIContestParticipationList(APIListView):
             'tiebreaker': participation.tiebreaker,
             'is_disqualified': participation.is_disqualified,
             'virtual_participation_number': participation.virtual,
+            'real_start': participation.real_start,
         }
 
 
