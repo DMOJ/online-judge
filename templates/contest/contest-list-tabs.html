@@ -20,7 +20,7 @@
 {% block tabs %}
     {{ make_tab('list', 'fa-list', url('contest_list'), _('List')) }}
     {{ make_tab('calendar', 'fa-calendar', url('contest_calendar', now.year, now.month), _('Calendar')) }}
-    {% if perms.judge.change_contest %}
+    {% if perms.judge.edit_all_contest or perms.judge.edit_own_contest %}
         {{ make_tab('admin', 'fa-edit', url('admin:judge_contest_changelist'), _('Admin')) }}
     {% endif %}
 {% endblock %}
