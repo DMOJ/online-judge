@@ -135,9 +135,15 @@ class Submission(models.Model):
             return True
         elif self.user_id == profile.id:
             return True
-        elif (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
+        elif settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'all':
+            return True
+        elif settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'all-solved' and \
+                (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
                 self.problem.submission_set.filter(user_id=profile.id, result='AC',
                                                    points=self.problem.points).exists():
+            return True
+        elif settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'only-own' and \
+                self.problem.testers.filter(id=profile.id).exists():
             return True
         return False
 
