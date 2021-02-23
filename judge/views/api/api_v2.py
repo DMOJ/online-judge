@@ -221,6 +221,9 @@ class APIContestDetail(APIDetailView):
             .order_by('-score', 'cumtime', 'tiebreaker')
         )
 
+        for participation in participations:
+            participation.contest = contest
+
         return {
             'key': contest.key,
             'name': contest.name,
