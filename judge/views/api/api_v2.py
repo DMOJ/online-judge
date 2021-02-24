@@ -221,6 +221,7 @@ class APIContestDetail(APIDetailView):
             .order_by('-score', 'cumtime', 'tiebreaker')
         )
 
+        # Setting contest attribute to reduce db queries in .start and .end_time
         for participation in participations:
             participation.contest = contest
 
