@@ -13,7 +13,7 @@
 {% endblock extrahead %}
 
 {% block after_field_sets %}{{ block.super }}
-    {% if original and original.is_rated and perms.judge.contest_rating %}
+    {% if original and original.is_rated and original.ended and perms.judge.contest_rating %}
         <a style="display: none" title="{% trans "Rate" %}" href="{% url 'admin:judge_contest_rate' original.pk %}"
            class="button rerate-link">
             <i class="fa fa-lg fa-signal"></i>
