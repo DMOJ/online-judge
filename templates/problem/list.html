@@ -300,10 +300,9 @@
                 {% endfor %}
                 </tbody>
             </table>
-            {% if page_obj.has_other_pages() %}
-                <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
-            {% endif %}
         </div>
     </div>
-    <br>
+   {% if page_obj.has_other_pages() %}
+       <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
+   {% endif %}
 {% endblock %}

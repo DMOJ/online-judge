@@ -82,10 +82,9 @@
                     {% block users_table %}{% endblock %}
                 </table>
             </div>
-
-            {% if page_obj and page_obj.has_other_pages() %}
-                <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
-            {% endif %}
         </div>
     </div>
+    {% if page_obj and page_obj.has_other_pages() %}
+        <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
+    {% endif %}
 {% endblock %}
