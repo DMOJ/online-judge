@@ -35,7 +35,7 @@ def WP(RA, RB, VA, VB):
     return (math.erf((RB - RA) / math.sqrt(2 * (VA * VA + VB * VB))) + 1) / 2.0
 
 
-def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
+def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated, is_disqualified):
     # actual_rank: 1 is first place, N is last place
     # if there are ties, use the average of places (if places 2, 3, 4, 5 tie, use 3.5 for all of them)
 
@@ -76,6 +76,12 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated):
         else:
             new_volatility[i] = math.sqrt(((new_rating[i] - old_rating[i]) ** 2) / Weight +
                                           (old_volatility[i] ** 2) / (Weight + 1))
+
+        if is_disqualified[i]:
+            # DQed users can manipulate TopCoder ratings to get higher volatility in order to increase their rating
+            # later on, prohibit this by ensuring their volatility never increases in this situation
+            new_volatility[i] = min(new_volatility[i], old_volatility[i])
+
         if abs(old_rating[i] - new_rating[i]) > Cap:
             if old_rating[i] < new_rating[i]:
                 new_rating[i] = old_rating[i] + Cap
@@ -120,7 +126,7 @@ def rate_contest(contest):
 
     users = contest.users.order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker') \
         .annotate(submissions=Count('submission')).exclude(user_id__in=contest.rate_exclude.all()) \
-        .filter(virtual=0, user__is_unlisted=False).values_list('id', 'user_id', 'score', 'cumtime')
+        .filter(virtual=0, user__is_unlisted=False).values_list('id', 'user_id', 'score', 'cumtime', 'is_disqualified')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
     if contest.rating_floor is not None:
@@ -129,13 +135,14 @@ def rate_contest(contest):
         users = users.exclude(user__rating__gt=contest.rating_ceiling)
     users = list(tie_ranker(users, key=itemgetter(2, 3)))
     participation_ids = [user[1][0] for user in users]
+    is_disqualified = [user[1][4] for user in users]
     user_ids = [user[1][1] for user in users]
     ranking = list(map(itemgetter(0), users))
     old_data = [data.get(user, (1200, 535, 0)) for user in user_ids]
     old_rating = list(map(itemgetter(0), old_data))
     old_volatility = list(map(itemgetter(1), old_data))
     times_ranked = list(map(itemgetter(2), old_data))
-    rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked)
+    rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked, is_disqualified)
 
     now = timezone.now()
     ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
