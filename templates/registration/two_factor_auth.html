@@ -2,13 +2,6 @@
 
 {% block media %}
     <style>
-        #login-panel-2fa {
-            position: relative;
-            margin: 5em auto auto -10em;
-            top: 40%;
-            left: 50%;
-        }
-
         #totp-or-scratch-code-container {
             margin: 0.5em 0;
         }
@@ -65,7 +58,7 @@
 {% endblock %}
 
 {% block body %}
-    <div id="login-panel-2fa">
+    <div class="auth-flow-form">
         <form action="" method="post" class="form-area" id="2fa-form">
             {% csrf_token %}
             {% if form.errors %}
