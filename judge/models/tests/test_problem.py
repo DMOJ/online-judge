@@ -1,7 +1,9 @@
-from django.test import TestCase
+from django.core.exceptions import ValidationError
+from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 
 from judge.models import Language, LanguageLimit, Problem
+from judge.models.problem import disallowed_characters_validator
 from judge.models.tests.util import CommonDataMixin, create_organization, create_problem, create_problem_type, \
     create_solution, create_user
 
@@ -367,3 +369,21 @@ class SolutionTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.unpublished_solution, data)
+
+
+class DisallowedCharactersValidatorTestCase(SimpleTestCase):
+    def test_valid(self):
+        with self.settings(DMOJ_PROBLEM_STATEMENT_DISALLOWED_CHARACTERS={'“', '”', '‘', '’'}):
+            self.assertIsNone(disallowed_characters_validator(''))
+            self.assertIsNone(disallowed_characters_validator('"\'string\''))
+
+        with self.settings(DMOJ_PROBLEM_STATEMENT_DISALLOWED_CHARACTERS=set()):
+            self.assertIsNone(disallowed_characters_validator(''))
+            self.assertIsNone(disallowed_characters_validator('“”‘’'))
+
+    def test_invalid(self):
+        with self.settings(DMOJ_PROBLEM_STATEMENT_DISALLOWED_CHARACTERS={'“', '”', '‘', '’'}):
+            with self.assertRaises(ValidationError, msg='Disallowed characters: “'):
+                disallowed_characters_validator('“')
+            with self.assertRaisesRegex(ValidationError, 'Disallowed characters: (?=.*‘)(?=.*’)'):
+                disallowed_characters_validator('‘’')
