@@ -54,6 +54,11 @@ class ContestTag(models.Model):
 
 
 class Contest(models.Model):
+    SCOREBOARD = (
+        ('V', _('Visible')),
+        ('C', _('Hidden for duration of contest')),
+        ('P', _('Hidden for duration of participation')),
+    )
     key = models.CharField(max_length=20, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
@@ -73,12 +78,9 @@ class Contest(models.Model):
     view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
                                                      related_name='view_contest_scoreboard',
                                                      help_text=_('These users will be able to view the scoreboard.'))
-    scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default='Visible', max_length=32,
+    scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default='Visible', max_length=1,
                                              help_text=_("Scoreboard visibility through the duration of the contest"),
-                                             choices=[
-                                                 ('Visible', _('Visible')),
-                                                 ('Contest', _('Hidden for duration of contest')),
-                                                 ('Participation', _('Hidden for duration of participation'))])
+                                             choices=SCOREBOARD)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -181,7 +183,7 @@ class Contest(models.Model):
             return False
         if not self.show_scoreboard and not self.is_in_contest(user):
             return False
-        if self.scoreboard_visibility == 'Participation' and not self.is_in_contest(user):
+        if self.scoreboard_visibility == 'P' and not self.is_in_contest(user):
             return False
         return True
 
@@ -194,7 +196,7 @@ class Contest(models.Model):
             return True
         if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
-        if self.scoreboard_visibility == 'Participation' and self.has_completed_contest(user):
+        if self.scoreboard_visibility == 'P' and self.has_completed_contest(user):
             return True
         return False
 
@@ -209,8 +211,7 @@ class Contest(models.Model):
     def show_scoreboard(self):
         if not self.can_join:
             return False
-        if ((self.scoreboard_visibility == 'Contest' or self.scoreboard_visibility == 'Participation') and
-                not self.ended):
+        if self.scoreboard_visibility in ('C', 'P') and not self.ended:
             return False
         return True
 
