@@ -186,7 +186,7 @@ class Contest(models.Model):
             return False
         if not self.show_scoreboard and not self.is_in_contest(user):
             return False
-        if self.scoreboard_visibility == SCOREBOARD_PARTICIPATION and not self.is_in_contest(user):
+        if self.scoreboard_visibility == self.SCOREBOARD_PARTICIPATION and not self.is_in_contest(user):
             return False
         return True
 
@@ -199,7 +199,7 @@ class Contest(models.Model):
             return True
         if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
-        if self.scoreboard_visibility == SCOREBOARD_PARTICIPATION and self.has_completed_contest(user):
+        if self.scoreboard_visibility == self.SCOREBOARD_PARTICIPATION and self.has_completed_contest(user):
             return True
         return False
 
@@ -214,7 +214,7 @@ class Contest(models.Model):
     def show_scoreboard(self):
         if not self.can_join:
             return False
-        if self.scoreboard_visibility in (SCOREBOARD_CONTEST, SCOREBOARD_PARTICIPATION) and not self.ended:
+        if self.scoreboard_visibility in (self.SCOREBOARD_CONTEST, self.SCOREBOARD_PARTICIPATION) and not self.ended:
             return False
         return True
 
