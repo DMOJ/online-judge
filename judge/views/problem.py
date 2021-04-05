@@ -422,7 +422,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         else:
             context['hot_problems'] = None
             context['point_start'], context['point_end'], context['point_values'] = 0, 0, {}
-            context['hide_contest_scoreboard'] = self.contest.scoreboard_visibility == "V"
+            context['hide_contest_scoreboard'] = self.contest.scoreboard_visibility == 'V'
         return context
 
     def get_noui_slider_points(self):

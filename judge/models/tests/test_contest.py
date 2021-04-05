@@ -42,7 +42,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
             is_visible=True,
-            scoreboard_visibility="C",
+            scoreboard_visibility='C',
             problem_label_script='''
                 function(n)
                     return tostring(math.floor(n))

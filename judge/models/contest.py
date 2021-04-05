@@ -54,7 +54,7 @@ class ContestTag(models.Model):
 
 
 class Contest(models.Model):
-    SCOREBOARD = (
+    SCOREBOARD_VISIBILITY = (
         ('V', _('Visible')),
         ('C', _('Hidden for duration of contest')),
         ('P', _('Hidden for duration of participation')),
@@ -79,7 +79,7 @@ class Contest(models.Model):
                                                      related_name='view_contest_scoreboard',
                                                      help_text=_('These users will be able to view the scoreboard.'))
     scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default='V', max_length=1,
-                                             help_text=_("Scoreboard visibility through the duration of the contest"),
+                                             help_text=_('Scoreboard visibility through the duration of the contest'),
                                              choices=SCOREBOARD)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
