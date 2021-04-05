@@ -209,7 +209,7 @@ class Contest(models.Model):
     def show_scoreboard(self):
         if not self.can_join:
             return False
-        if ((self.scoreboard_visibility == 'Contest' or self.scoreboard_visibility == 'Participation') and
+        if (self.scoreboard_visibility in ('Contest', 'Participation') and
                 not self.ended):
             return False
         return True
