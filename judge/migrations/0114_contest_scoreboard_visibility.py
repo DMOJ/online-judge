@@ -10,7 +10,7 @@ def hide_scoreboard_eq_true(apps, schema_editor):
 
 def scoreboard_visibility_eq_contest(apps, schema_editor):
     Contest = apps.get_model('judge', 'Contest')
-    Contest.objects.filter(scoreboard_visibility='C').update(hide_scoreboard=True)
+    Contest.objects.filter(scoreboard_visibility__in=('C','P')).update(hide_scoreboard=True)
 
 
 class Migration(migrations.Migration):
