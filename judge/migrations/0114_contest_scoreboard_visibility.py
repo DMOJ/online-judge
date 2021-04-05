@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 def hide_scoreboard_eq_true(apps, schema_editor):
     Contest = apps.get_model('judge', 'Contest')
-    Contest.objects.filter(hide_scoreboard=True).update(scoreboard_visibility='Contest')
+    Contest.objects.filter(hide_scoreboard=True).update(scoreboard_visibility='C')
 
 
 class Migration(migrations.Migration):
