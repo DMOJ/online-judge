@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='scoreboard_visibility',
-            field=models.CharField(choices=[('V', 'Visible'), ('C', 'Hidden for duration of contest'), ('P', 'Hidden for duration of participation')], default='Visible', help_text='Scoreboard visibility through the duration of the contest', max_length=64, verbose_name='scoreboard visibility'),
+            field=models.CharField(choices=[('V', 'Visible'), ('C', 'Hidden for duration of contest'), ('P', 'Hidden for duration of participation')], default='V', help_text='Scoreboard visibility through the duration of the contest', max_length=64, verbose_name='scoreboard visibility'),
         ),
         migrations.RunPython(hide_scoreboard_eq_true, atomic=True),
         migrations.RemoveField(
