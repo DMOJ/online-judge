@@ -70,17 +70,17 @@ class Contest(models.Model):
                                                  'specified organizations.'))
     is_rated = models.BooleanField(verbose_name=_('contest rated'), help_text=_('Whether this contest can be rated.'),
                                    default=False)
-    hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
-                                          help_text=_('Whether the scoreboard should remain hidden for the duration '
-                                                      'of the contest.'),
-                                          default=False)
     view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
                                                      related_name='view_contest_scoreboard',
                                                      help_text=_('These users will be able to view the scoreboard.'))
-    partially_hide_scoreboard = models.BooleanField(verbose_name=_('Partially hide scoreboard'),
-                                                    help_text=_("Whether the scoreboard is hidden until "
-                                                                "the user's contest window ends."),
-                                                    default=False)
+    scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default='Visible', max_length=32,
+                                             help_text=_("Scoreboard visibility through the duration of the contest"),
+                                             choices=[
+                                                 ('Visible', _('Visible')),
+                                                 ('Contest', _('Hidden for duration of contest')),
+                                                 ('Participation', _('Hidden for duration of participation')),
+                                                 ('Hidden', _('Hidden')),
+                                             ])
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -183,7 +183,7 @@ class Contest(models.Model):
             return False
         if not self.show_scoreboard and not self.is_in_contest(user):
             return False
-        if self.partially_hide_scoreboard and not self.is_in_contest(user):
+        if self.scoreboard_visibility == 'Participation' and not self.is_in_contest(user):
             return False
         return True
 
@@ -196,8 +196,8 @@ class Contest(models.Model):
             return True
         if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
-        if self.partially_hide_scoreboard and self.has_completed_contest(user):
-            return True
+        if self.scoreboard_visibility == 'Participation' and self.has_completed_contest(user):
+            return True 
         return False
 
     def has_completed_contest(self, user):
@@ -211,7 +211,7 @@ class Contest(models.Model):
     def show_scoreboard(self):
         if not self.can_join:
             return False
-        if (self.hide_scoreboard or self.partially_hide_scoreboard) and not self.ended:
+        if (self.scoreboard_visibility == 'Contest' or self.scoreboard_visibility == 'Participation') and not self.ended:
             return False
         return True
 
