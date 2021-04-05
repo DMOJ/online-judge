@@ -2,9 +2,6 @@
 
 from django.db import migrations, models
 
-import judge.models.contest
-
-
 def hide_scoreboard_eq_true(apps, schema_editor):
     Contest = apps.get_model('judge', 'Contest')
     Contest.objects.filter(hide_scoreboard=True).update(scoreboard_visibility='Contest')
@@ -22,5 +19,5 @@ class Migration(migrations.Migration):
             name='scoreboard_visibility',
             field=models.CharField(choices=[('Visible', 'Visible'), ('Hidden_for_duration_of_contest', 'Hidden for duration of contest'), ('Hidden_for_duration_of_participation', 'Hidden for duration of participation')], default='Visible', help_text='Scoreboard visibility through the duration of the contest', max_length=64, verbose_name='scoreboard visibility'),
         ),
-        migrations.RunPython(hide_scoreboard_eq_true, atomic=True)
+        migrations.RunPython(hide_scoreboard_eq_true, atomic=True),
     ]

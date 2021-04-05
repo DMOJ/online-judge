@@ -78,8 +78,7 @@ class Contest(models.Model):
                                              choices=[
                                                  ('Visible', _('Visible')),
                                                  ('Contest', _('Hidden for duration of contest')),
-                                                 ('Participation', _('Hidden for duration of participation')),
-                                             ])
+                                                 ('Participation', _('Hidden for duration of participation'))])
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -196,7 +195,7 @@ class Contest(models.Model):
         if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
         if self.scoreboard_visibility == 'Participation' and self.has_completed_contest(user):
-            return True 
+            return True
         return False
 
     def has_completed_contest(self, user):
@@ -210,7 +209,8 @@ class Contest(models.Model):
     def show_scoreboard(self):
         if not self.can_join:
             return False
-        if (self.scoreboard_visibility == 'Contest' or self.scoreboard_visibility == 'Participation') and not self.ended:
+        if ((self.scoreboard_visibility == 'Contest' or self.scoreboard_visibility == 'Participation') and
+                not self.ended):
             return False
         return True
 
