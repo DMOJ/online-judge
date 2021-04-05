@@ -79,7 +79,6 @@ class Contest(models.Model):
                                                  ('Visible', _('Visible')),
                                                  ('Contest', _('Hidden for duration of contest')),
                                                  ('Participation', _('Hidden for duration of participation')),
-                                                 ('Hidden', _('Hidden')),
                                              ])
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
