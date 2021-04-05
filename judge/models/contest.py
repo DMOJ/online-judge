@@ -77,6 +77,10 @@ class Contest(models.Model):
     view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
                                                      related_name='view_contest_scoreboard',
                                                      help_text=_('These users will be able to view the scoreboard.'))
+    partially_hide_scoreboard = models.BooleanField(verbose_name=_('Partially hide scoreboard'),
+                                                    help_text=_("Whether the scoreboard is hidden until "
+                                                                "the user's contest window ends."),
+                                                    default=False)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -179,6 +183,8 @@ class Contest(models.Model):
             return False
         if not self.show_scoreboard and not self.is_in_contest(user):
             return False
+        if self.partially_hide_scoreboard and not self.is_in_contest(user):
+            return False
         return True
 
     def can_see_full_scoreboard(self, user):
@@ -190,13 +196,22 @@ class Contest(models.Model):
             return True
         if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
+        if self.partially_hide_scoreboard and self.has_completed_contest(user):
+            return True
+        return False
+
+    def has_completed_contest(self, user):
+        if user.is_authenticated:
+            participation = self.users.filter(virtual=ContestParticipation.LIVE, user=user.profile).first()
+            if participation and participation.ended:
+                return True
         return False
 
     @cached_property
     def show_scoreboard(self):
         if not self.can_join:
             return False
-        if self.hide_scoreboard and not self.ended:
+        if (self.hide_scoreboard or self.partially_hide_scoreboard) and not self.ended:
             return False
         return True
 
