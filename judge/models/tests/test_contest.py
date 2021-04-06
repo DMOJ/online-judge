@@ -50,6 +50,27 @@ class ContestTestCase(CommonDataMixin, TestCase):
             ''',
         )
 
+        self.particip_hidden_scoreboard_contest = create_contest(
+            key='particip_scoreboard',
+            start_time=_now - timezone.timedelta(days=10),
+            end_time=_now + timezone.timedelta(days=100),
+            time_limit=timezone.timedelta(minutes=1),
+            is_visible=True,
+            scoreboard_visibility=Contest.SCOREBOARD_AFTER_PARTICIPATION,
+            problem_label_script='''
+                function(n)
+                    return tostring(math.floor(n))
+                end
+            ''',
+        )
+
+        create_contest_participation(
+            contest='particip_scoreboard',
+            user='normal',
+            real_start=_now - timezone.timedelta(days=1),
+            virtual=ContestParticipation.LIVE,
+        ).save()
+
         self.users['normal'].profile.current_contest = create_contest_participation(
             contest='hidden_scoreboard',
             user='normal',
@@ -209,6 +230,51 @@ class ContestTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.hidden_scoreboard_contest, data)
+
+    def test_particip_hidden_scoreboard_contest_methods(self):
+        data = {
+            'staff_contest_edit_own': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
+            'staff_contest_see_all': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
+            'staff_contest_edit_all': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+                'is_in_contest': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
+            'normal': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+                'has_completed_contest': self.assertTrue,
+            },
+            'anonymous': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.particip_hidden_scoreboard_contest, data)
 
     def test_private_contest_methods(self):
         with self.assertRaises(Contest.PrivateContest):
