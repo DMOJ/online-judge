@@ -186,8 +186,6 @@ class Contest(models.Model):
             return False
         if not self.show_scoreboard and not self.is_in_contest(user):
             return False
-        if self.scoreboard_visibility == self.SCOREBOARD_AFTER_PARTICIPATION and not self.is_in_contest(user):
-            return False
         return True
 
     def can_see_full_scoreboard(self, user):
