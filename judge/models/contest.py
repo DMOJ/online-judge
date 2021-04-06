@@ -55,12 +55,12 @@ class ContestTag(models.Model):
 
 class Contest(models.Model):
     SCOREBOARD_VISIBLE = 'V'
-    SCOREBOARD_CONTEST = 'C'
-    SCOREBOARD_PARTICIPATION = 'P'
+    SCOREBOARD_AFTER_CONTEST = 'C'
+    SCOREBOARD_AFTER_PARTICIPATION = 'P'
     SCOREBOARD_VISIBILITY = (
         (SCOREBOARD_VISIBLE, _('Visible')),
-        (SCOREBOARD_CONTEST, _('Hidden for duration of contest')),
-        (SCOREBOARD_PARTICIPATION, _('Hidden for duration of participation')),
+        (SCOREBOARD_AFTER_CONTEST, _('Hidden for duration of contest')),
+        (SCOREBOARD_AFTER_PARTICIPATION, _('Hidden for duration of participation')),
     )
     key = models.CharField(max_length=20, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
@@ -186,7 +186,7 @@ class Contest(models.Model):
             return False
         if not self.show_scoreboard and not self.is_in_contest(user):
             return False
-        if self.scoreboard_visibility == self.SCOREBOARD_PARTICIPATION and not self.is_in_contest(user):
+        if self.scoreboard_visibility == self.SCOREBOARD_AFTER_PARTICIPATION and not self.is_in_contest(user):
             return False
         return True
 
@@ -199,7 +199,7 @@ class Contest(models.Model):
             return True
         if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
-        if self.scoreboard_visibility == self.SCOREBOARD_PARTICIPATION and self.has_completed_contest(user):
+        if self.scoreboard_visibility == self.SCOREBOARD_AFTER_PARTICIPATION and self.has_completed_contest(user):
             return True
         return False
 
@@ -214,7 +214,8 @@ class Contest(models.Model):
     def show_scoreboard(self):
         if not self.can_join:
             return False
-        if self.scoreboard_visibility in (self.SCOREBOARD_CONTEST, self.SCOREBOARD_PARTICIPATION) and not self.ended:
+        if (self.scoreboard_visibility in (self.SCOREBOARD_AFTER_CONTEST, self.SCOREBOARD_AFTER_PARTICIPATION) and
+                not self.ended):
             return False
         return True
 
