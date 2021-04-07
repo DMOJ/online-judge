@@ -37,8 +37,8 @@ class ContestTestCase(CommonDataMixin, TestCase):
             organizers=('superuser', 'staff_contest_edit_own'),
         )
 
-        self.hidden_scoreboard_contest = create_contest(
-            key='hidden_scoreboard',
+        self.contest_hidden_scoreboard_contest = create_contest(
+            key='contest_scoreboard',
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
             is_visible=True,
@@ -72,12 +72,12 @@ class ContestTestCase(CommonDataMixin, TestCase):
         ).save()
 
         self.users['normal'].profile.current_contest = create_contest_participation(
-            contest='hidden_scoreboard',
+            contest='contest_scoreboard',
             user='normal',
         )
         self.users['normal'].profile.save()
 
-        self.hidden_scoreboard_contest.update_user_count()
+        self.contest_hidden_scoreboard_contest.update_user_count()
 
         self.private_contest = create_contest(
             key='private',
@@ -121,12 +121,12 @@ class ContestTestCase(CommonDataMixin, TestCase):
         self.assertEqual(str(self.basic_contest), self.basic_contest.name)
         self.assertEqual(self.basic_contest.get_label_for_problem(0), '1')
 
-    def test_hidden_scoreboard_contest(self):
-        self.assertFalse(self.hidden_scoreboard_contest.show_scoreboard)
+    def test_contest_hidden_scoreboard_contest(self):
+        self.assertFalse(self.contest_hidden_scoreboard_contest.show_scoreboard)
         for i in range(3):
             with self.subTest(contest_problem_index=i):
-                self.assertEqual(self.hidden_scoreboard_contest.get_label_for_problem(i), str(i))
-        self.assertEqual(self.hidden_scoreboard_contest.user_count, 1)
+                self.assertEqual(self.contest_hidden_scoreboard_contest.get_label_for_problem(i), str(i))
+        self.assertEqual(self.contest_hidden_scoreboard_contest.user_count, 1)
 
     def test_private_contest(self):
         self.assertTrue(self.private_contest.can_join)
@@ -191,7 +191,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
         }
         self._test_object_methods_with_users(self.basic_contest, data)
 
-    def test_hidden_scoreboard_contest_methods(self):
+    def test_contest_hidden_scoreboard_contest_methods(self):
         data = {
             'staff_contest_edit_own': {
                 'can_see_own_scoreboard': self.assertFalse,
@@ -229,7 +229,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_in_contest': self.assertFalse,
             },
         }
-        self._test_object_methods_with_users(self.hidden_scoreboard_contest, data)
+        self._test_object_methods_with_users(self.contest_hidden_scoreboard_contest, data)
 
     def test_particip_hidden_scoreboard_contest_methods(self):
         data = {
@@ -444,7 +444,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
 
     def test_live_participation(self):
         participation = ContestParticipation.objects.get(
-            contest=self.hidden_scoreboard_contest,
+            contest=self.contest_hidden_scoreboard_contest,
             user=self.users['normal'].profile,
             virtual=ContestParticipation.LIVE,
         )
