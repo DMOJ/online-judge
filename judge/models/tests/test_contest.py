@@ -89,11 +89,6 @@ class ContestTestCase(CommonDataMixin, TestCase):
         for contest_key in ('contest_scoreboard', 'particip_scoreboard', 'visible_scoreboard'):
             create_contest_participation(
                 contest=contest_key,
-                user='normal_before_window',
-            ).save()
-
-            create_contest_participation(
-                contest=contest_key,
                 user='normal_during_window',
                 real_start=_now - timezone.timedelta(hours=1),
                 virtual=ContestParticipation.LIVE,
@@ -105,6 +100,20 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 real_start=_now - timezone.timedelta(days=3),
                 virtual=ContestParticipation.LIVE,
             ).save()
+
+        create_contest_participation(
+            contest='particip_scoreboard',
+            user='normal',
+            real_start=_now - timezone.timedelta(days=3),
+            virtual=ContestParticipation.LIVE,
+        ).save()
+
+        create_contest_participation(
+            contest='particip_scoreboard',
+            user='normal',
+            real_start=_now + timezone.timedelta(days=101),
+            virtual=-1,
+        ).save()
 
         self.users['normal'].profile.current_contest = create_contest_participation(
             contest='hidden_scoreboard',
@@ -370,6 +379,14 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'has_completed_contest': self.assertFalse,
             },
             'normal_after_window': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+                'has_completed_contest': self.assertTrue,
+            },
+            'normal': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
                 'is_accessible_by': self.assertTrue,
