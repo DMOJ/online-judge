@@ -41,8 +41,6 @@ class Organization(models.Model):
     short_name = models.CharField(max_length=20, verbose_name=_('short name'),
                                   help_text=_('Displayed beside user name during contests'))
     about = models.TextField(verbose_name=_('organization description'))
-    registrant = models.ForeignKey('Profile', verbose_name=_('registrant'), on_delete=models.CASCADE,
-                                   related_name='registrant+', help_text=_('User who registered this organization'))
     admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='admin_of',
                                     help_text=_('Those who can edit this organization'))
     creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
