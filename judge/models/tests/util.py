@@ -100,10 +100,6 @@ class CreateOrganization(CreateModel):
             'short_name': required_kwargs['name'],
         }
 
-    def process_related_objects(self, required_kwargs, defaults):
-        if not isinstance(defaults['registrant'], Profile):
-            defaults['registrant'] = create_user(defaults['registrant']).profile
-
 
 create_organization = CreateOrganization()
 
@@ -306,7 +302,6 @@ class CommonDataMixin:
         self.organizations = {
             'open': create_organization(
                 name='open',
-                registrant='superuser',
                 admins=('staff_organization_admin',),
             ),
         }
