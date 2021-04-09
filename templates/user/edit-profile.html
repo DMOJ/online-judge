@@ -271,6 +271,7 @@ You will not be able to view your scratch codes after you leave this page!') }}"
                 <div class="alert alert-danger alert-dismissable">
                     <a href="#" class="close">x</a>
                     {{ form.non_field_errors() }}
+                    {{ form.about.errors }}
                 </div>
             {% endif %}
 
