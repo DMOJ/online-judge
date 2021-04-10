@@ -92,28 +92,28 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 user='normal_during_window',
                 real_start=_now - timezone.timedelta(hours=1),
                 virtual=ContestParticipation.LIVE,
-            ).save()
+            )
 
             create_contest_participation(
                 contest=contest_key,
                 user='normal_after_window',
                 real_start=_now - timezone.timedelta(days=3),
                 virtual=ContestParticipation.LIVE,
-            ).save()
+            )
 
         create_contest_participation(
             contest='particip_scoreboard',
             user='normal',
             real_start=_now - timezone.timedelta(days=3),
             virtual=ContestParticipation.LIVE,
-        ).save()
+        )
 
         create_contest_participation(
             contest='particip_scoreboard',
             user='normal',
             real_start=_now + timezone.timedelta(days=101),
-            virtual=-1,
-        ).save()
+            virtual=ContestParticipation.SPECTATE,
+        )
 
         self.users['normal'].profile.current_contest = create_contest_participation(
             contest='hidden_scoreboard',
@@ -277,191 +277,65 @@ class ContestTestCase(CommonDataMixin, TestCase):
 
     def test_contest_hidden_scoreboard_contest_methods(self):
         data = {
-            'staff_contest_edit_own': {
-                'can_see_own_scoreboard': self.assertFalse,
-                'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
-            'staff_contest_see_all': {
-                'can_see_own_scoreboard': self.assertTrue,
-                'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
-            'staff_contest_edit_all': {
-                'can_see_own_scoreboard': self.assertTrue,
-                'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertTrue,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
             'normal_before_window': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertFalse,
             },
             'normal_during_window': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertFalse,
             },
             'normal_after_window': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertTrue,
-            },
-            'anonymous': {
-                'can_see_own_scoreboard': self.assertFalse,
-                'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
             },
         }
         self._test_object_methods_with_users(self.contest_hidden_scoreboard_contest, data)
 
     def test_particip_hidden_scoreboard_contest_methods(self):
         data = {
-            'staff_contest_edit_own': {
-                'can_see_own_scoreboard': self.assertFalse,
-                'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
-            'staff_contest_see_all': {
-                'can_see_own_scoreboard': self.assertTrue,
-                'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
-            'staff_contest_edit_all': {
-                'can_see_own_scoreboard': self.assertTrue,
-                'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertTrue,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
             'normal_before_window': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertFalse,
             },
             'normal_during_window': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertFalse,
             },
             'normal_after_window': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertTrue,
             },
             'normal': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertTrue,
-            },
-            'anonymous': {
-                'can_see_own_scoreboard': self.assertFalse,
-                'can_see_full_scoreboard': self.assertFalse,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
             },
         }
         self._test_object_methods_with_users(self.particip_hidden_scoreboard_contest, data)
 
     def test_visible_scoreboard_contest_methods(self):
         data = {
-            'staff_contest_edit_own': {
-                'can_see_own_scoreboard': self.assertTrue,
-                'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
-            'staff_contest_see_all': {
-                'can_see_own_scoreboard': self.assertTrue,
-                'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
-            'staff_contest_edit_all': {
-                'can_see_own_scoreboard': self.assertTrue,
-                'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertTrue,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
-            },
             'normal_before_window': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertFalse,
             },
             'normal_during_window': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertFalse,
             },
             'normal_after_window': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
                 'has_completed_contest': self.assertTrue,
-            },
-            'anonymous': {
-                'can_see_own_scoreboard': self.assertTrue,
-                'can_see_full_scoreboard': self.assertTrue,
-                'is_accessible_by': self.assertTrue,
-                'is_editable_by': self.assertFalse,
-                'is_in_contest': self.assertFalse,
-                'has_completed_contest': self.assertFalse,
             },
         }
         self._test_object_methods_with_users(self.visible_scoreboard_contest, data)
