@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db.models import Count
-from django.db.models.expressions import F, Value
+from django.db.models.expressions import Value
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, HttpResponseRedirect
@@ -45,8 +45,7 @@ class CommentForm(ModelForm):
             profile = self.request.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
-            elif (not self.request.user.is_staff and
-                  not profile.submission_set.filter(points=F('problem__points')).exists()):
+            elif not self.request.user.is_staff and not profile.has_any_solves:
                 raise ValidationError(_('You need to have solved at least one problem '
                                         'before your voice can be heard.'))
         return super(CommentForm, self).clean()
@@ -116,8 +115,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
             queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
             profile = self.request.profile
             unique_together_left_join(queryset, CommentVote, 'comment', 'voter', profile.id)
-            context['is_new_user'] = (not self.request.user.is_staff and
-                                      not profile.submission_set.filter(points=F('problem__points')).exists())
+            context['is_new_user'] = not self.request.user.is_staff and not profile.has_any_solves
         context['comment_list'] = queryset
         context['vote_hide_threshold'] = settings.DMOJ_COMMENT_VOTE_HIDE_THRESHOLD
 

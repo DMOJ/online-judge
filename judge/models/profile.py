@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Max
+from django.db.models import F, Max
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.functional import cached_property
@@ -41,8 +41,6 @@ class Organization(models.Model):
     short_name = models.CharField(max_length=20, verbose_name=_('short name'),
                                   help_text=_('Displayed beside user name during contests'))
     about = models.TextField(verbose_name=_('organization description'))
-    registrant = models.ForeignKey('Profile', verbose_name=_('registrant'), on_delete=models.CASCADE,
-                                   related_name='registrant+', help_text=_('User who registered this organization'))
     admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='admin_of',
                                     help_text=_('Those who can edit this organization'))
     creation_date = models.DateTimeField(verbose_name=_('creation date'), auto_now_add=True)
@@ -149,6 +147,10 @@ class Profile(models.Model):
     @cached_property
     def username(self):
         return self.user.username
+
+    @cached_property
+    def has_any_solves(self):
+        return self.submission_set.filter(points=F('problem__points')).exists()
 
     _pp_table = [pow(settings.DMOJ_PP_STEP, i) for i in range(settings.DMOJ_PP_ENTRIES)]
 
