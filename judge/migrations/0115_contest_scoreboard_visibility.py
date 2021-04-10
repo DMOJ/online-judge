@@ -16,7 +16,7 @@ def scoreboard_visibility_eq_contest(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0113_contest_decimal_points'),
+        ('judge', '0114_remove_org_registrant'),
     ]
 
     operations = [
