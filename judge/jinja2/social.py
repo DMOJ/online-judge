@@ -32,4 +32,6 @@ for name, template, url_func in SHARES:
 
 @registry.function
 def recaptcha_init(language=None):
-    return get_template('snowpenguin/recaptcha/recaptcha_init.html').render({'explicit': False, 'language': language})
+    from snowpenguin.django.recaptcha2.templatetags.recaptcha2 import recaptcha_common_init
+    return get_template('snowpenguin/recaptcha/recaptcha_init.html').render(
+        recaptcha_common_init(language, {'explicit': False}))
