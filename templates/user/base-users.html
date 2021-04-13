@@ -55,8 +55,6 @@
     {% block users_media %}{% endblock %}
     <style>
         .user-pagination {
-            margin-bottom: 7px;
-            margin-top: 3px;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
@@ -65,18 +63,18 @@
 {% endblock %}
 
 {% block body %}
+    {% if page_obj and page_obj.has_other_pages() %}
+        <div class="top-pagination-bar user-pagination">
+            {% include "list-pages.html" %}
+            <form id="search-form" name="form" action="{{ url('user_ranking_redirect') }}" method="get">
+                <input id="search-handle" type="text" name="search"
+                       placeholder="{{ _('Search by handle...') }}">
+            </form>
+        </div>
+    {% endif %}
+
     <div id="common-content">
         <div id="content-left" class="users">
-            {% if page_obj and page_obj.has_other_pages() %}
-                <div class="user-pagination">
-                    {% include "list-pages.html" %}
-                    <form id="search-form" name="form" action="{{ url('user_ranking_redirect') }}" method="get">
-                        <input id="search-handle" type="text" name="search"
-                               placeholder="{{ _('Search by handle...') }}">
-                    </form>
-                </div>
-            {% endif %}
-
             {% block before_users_table %}{% endblock %}
 
             <div class="h-scrollable-table">
@@ -84,10 +82,9 @@
                     {% block users_table %}{% endblock %}
                 </table>
             </div>
-
-            {% if page_obj and page_obj.has_other_pages() %}
-                <div style="margin-top:10px;">{% include "list-pages.html" %}</div>
-            {% endif %}
         </div>
     </div>
+    {% if page_obj and page_obj.has_other_pages() %}
+        <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
+    {% endif %}
 {% endblock %}

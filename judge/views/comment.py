@@ -32,7 +32,7 @@ def vote_comment(request, delta):
     if 'id' not in request.POST or len(request.POST['id']) > 10:
         return HttpResponseBadRequest()
 
-    if not request.user.is_staff and not request.profile.submission_set.filter(points=F('problem__points')).exists():
+    if not request.user.is_staff and not request.profile.has_any_solves:
         return HttpResponseBadRequest(_('You must solve at least one problem before you can vote.'),
                                       content_type='text/plain')
 

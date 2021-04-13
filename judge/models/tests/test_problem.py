@@ -43,7 +43,6 @@ class ProblemTestCase(CommonDataMixin, TestCase):
 
         self.problem_organization = create_organization(
             name='problem organization',
-            registrant='superuser',
             admins=('normal', 'staff_problem_edit_public'),
         )
         self.organization_admin_private_problem = create_problem(

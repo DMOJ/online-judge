@@ -210,6 +210,9 @@
 {% endblock %}
 
 {% block body %}
+    {% if page_obj.has_other_pages() %}
+        <div class="top-pagination-bar">{% include "list-pages.html" %}</div>
+    {% endif %}
     <div id="container">
         <aside>
             <div>
@@ -248,9 +251,6 @@
         </aside>
 
         <main>
-            {% if page_obj.has_other_pages() %}
-                <div style="margin-bottom:6px; margin-top:3px">{% include "list-pages.html" %}</div>
-            {% endif %}
             <div class="h-scrollable-table">
                 <table id="ticket-list" class="table">
                     <thead>
@@ -269,9 +269,9 @@
                     </tbody>
                 </table>
             </div>
-            {% if page_obj.has_other_pages() %}
-                <div style="margin-top:10px">{% include "list-pages.html" %}</div>
-            {% endif %}
         </main>
     </div>
+    {% if page_obj.has_other_pages() %}
+        <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
+    {% endif %}
 {% endblock %}

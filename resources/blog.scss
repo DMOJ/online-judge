@@ -71,6 +71,11 @@
             }
         }
     }
+
+    .sidebox-ongoing-contest {
+        overflow-y: auto;
+        max-height: 23em;
+    }
 }
 
 .blog-comment-count {
