@@ -28,8 +28,9 @@
         {% block guideline_message %}{% endblock %}
         {% csrf_token %}
         <div class="title-block{% if form.title.errors %} error{% endif %}">{{ form.title }}</div>
-        {% if form.title.errors or form.body.errors %}
+        {% if form.errors %}
             <div class="form-errors">
+                {{ form.non_field_errors() }}
                 {{ form.title.errors }}
                 {{ form.body.errors }}
             </div>

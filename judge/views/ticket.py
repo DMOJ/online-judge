@@ -44,6 +44,8 @@ class TicketForm(forms.Form):
             profile = self.request.profile
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
+            if not self.request.in_contest and not profile.has_any_solves:
+                raise ValidationError(_('You must solve at least one problem before you can create a ticket.'))
         return super(TicketForm, self).clean()
 
 
