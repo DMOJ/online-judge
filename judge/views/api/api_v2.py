@@ -236,7 +236,9 @@ class APIContestDetail(APIDetailView):
             'has_rating': contest.ratings.exists(),
             'rating_floor': contest.rating_floor,
             'rating_ceiling': contest.rating_ceiling,
-            'hidden_scoreboard': contest.hide_scoreboard,
+            'hidden_scoreboard': contest.scoreboard_visibility in (contest.SCOREBOARD_AFTER_CONTEST,
+                                                                   contest.SCOREBOARD_AFTER_PARTICIPATION),
+            'scoreboard_visibility': contest.scoreboard_visibility,
             'is_organization_private': contest.is_organization_private,
             'organizations': list(
                 contest.organizations.values_list('id', flat=True) if contest.is_organization_private else [],

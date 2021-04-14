@@ -26,6 +26,15 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 is_staff=True,
                 user_permissions=('edit_own_contest', 'edit_all_contest'),
             ),
+            'normal_during_window': create_user(
+                username='normal_during_window',
+            ),
+            'normal_after_window': create_user(
+                username='normal_after_window',
+            ),
+            'normal_before_window': create_user(
+                username='normal_before_window',
+            ),
         })
 
         _now = timezone.now()
@@ -42,12 +51,68 @@ class ContestTestCase(CommonDataMixin, TestCase):
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
             is_visible=True,
-            hide_scoreboard=True,
+            scoreboard_visibility=Contest.SCOREBOARD_AFTER_CONTEST,
             problem_label_script='''
                 function(n)
                     return tostring(math.floor(n))
                 end
             ''',
+        )
+
+        self.contest_hidden_scoreboard_contest = create_contest(
+            key='contest_scoreboard',
+            start_time=_now - timezone.timedelta(days=10),
+            end_time=_now + timezone.timedelta(days=100),
+            time_limit=timezone.timedelta(days=1),
+            is_visible=True,
+            scoreboard_visibility=Contest.SCOREBOARD_AFTER_CONTEST,
+        )
+
+        self.particip_hidden_scoreboard_contest = create_contest(
+            key='particip_scoreboard',
+            start_time=_now - timezone.timedelta(days=10),
+            end_time=_now + timezone.timedelta(days=100),
+            time_limit=timezone.timedelta(days=1),
+            is_visible=True,
+            scoreboard_visibility=Contest.SCOREBOARD_AFTER_PARTICIPATION,
+        )
+
+        self.visible_scoreboard_contest = create_contest(
+            key='visible_scoreboard',
+            start_time=_now - timezone.timedelta(days=10),
+            end_time=_now + timezone.timedelta(days=100),
+            time_limit=timezone.timedelta(days=1),
+            is_visible=True,
+            scoreboard_visibility=Contest.SCOREBOARD_VISIBLE,
+        )
+
+        for contest_key in ('contest_scoreboard', 'particip_scoreboard', 'visible_scoreboard'):
+            create_contest_participation(
+                contest=contest_key,
+                user='normal_during_window',
+                real_start=_now - timezone.timedelta(hours=1),
+                virtual=ContestParticipation.LIVE,
+            )
+
+            create_contest_participation(
+                contest=contest_key,
+                user='normal_after_window',
+                real_start=_now - timezone.timedelta(days=3),
+                virtual=ContestParticipation.LIVE,
+            )
+
+        create_contest_participation(
+            contest='particip_scoreboard',
+            user='normal',
+            real_start=_now - timezone.timedelta(days=3),
+            virtual=ContestParticipation.LIVE,
+        )
+
+        create_contest_participation(
+            contest='particip_scoreboard',
+            user='normal',
+            real_start=_now + timezone.timedelta(days=101),
+            virtual=ContestParticipation.SPECTATE,
         )
 
         self.users['normal'].profile.current_contest = create_contest_participation(
@@ -209,6 +274,71 @@ class ContestTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.hidden_scoreboard_contest, data)
+
+    def test_contest_hidden_scoreboard_contest_methods(self):
+        data = {
+            'normal_before_window': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
+            'normal_during_window': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
+            'normal_after_window': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'has_completed_contest': self.assertTrue,
+            },
+        }
+        self._test_object_methods_with_users(self.contest_hidden_scoreboard_contest, data)
+
+    def test_particip_hidden_scoreboard_contest_methods(self):
+        data = {
+            'normal_before_window': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
+            'normal_during_window': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
+            'normal_after_window': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'has_completed_contest': self.assertTrue,
+            },
+            'normal': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'has_completed_contest': self.assertTrue,
+            },
+        }
+        self._test_object_methods_with_users(self.particip_hidden_scoreboard_contest, data)
+
+    def test_visible_scoreboard_contest_methods(self):
+        data = {
+            'normal_before_window': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'has_completed_contest': self.assertFalse,
+            },
+            'normal_during_window': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'has_completed_contest': self.assertFalse,
+            },
+            'normal_after_window': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'has_completed_contest': self.assertTrue,
+            },
+        }
+        self._test_object_methods_with_users(self.visible_scoreboard_contest, data)
 
     def test_private_contest_methods(self):
         with self.assertRaises(Contest.PrivateContest):
