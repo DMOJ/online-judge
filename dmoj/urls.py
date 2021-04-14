@@ -6,7 +6,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.templatetags.static import static
 from django.urls import path, reverse
-from django.utils.functional import lazystr
+from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
 from martor.views import markdown_search_user
@@ -398,9 +398,10 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
                  'mstile-310x150.png', 'apple-touch-icon-144x144.png', 'browserconfig.xml', 'manifest.json',
                  'apple-touch-icon-120x120.png', 'mstile-310x310.png']
 
+static_lazy = lazy(static, str)
 for favicon in favicon_paths:
     urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(
-        url=lazystr(lambda: static('icons/' + favicon)),
+        url=static_lazy('icons/' + favicon),
     )))
 
 handler404 = 'judge.views.error.error404'
