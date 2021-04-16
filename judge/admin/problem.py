@@ -234,7 +234,10 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def save_model(self, request, obj, form, change):
         super(ProblemAdmin, self).save_model(request, obj, form, change)
-        if form.changed_data and any(f in form.changed_data for f in ('is_public', 'points', 'partial')):
+        if (
+            form.changed_data and
+            any(f in form.changed_data for f in ('is_public', 'is_organization_private', 'points', 'partial'))
+        ):
             self._rescore(request, obj.id)
 
     def construct_change_message(self, request, form, *args, **kwargs):
