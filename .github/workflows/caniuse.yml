@@ -15,6 +15,7 @@ jobs:
       uses: peter-evans/create-pull-request@v2
       with:
         token: ${{ secrets.REPO_SCOPED_TOKEN }}
+        author: dmoj-build <build@dmoj.ca>
         committer: dmoj-build <build@dmoj.ca>
         title: Import latest Can I use... data
         commit-message: Import latest Can I use... data
