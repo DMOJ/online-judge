@@ -1,6 +1,6 @@
 import logging
 from collections import namedtuple
-from operator import attrgetter
+from random import random
 from threading import RLock
 
 try:
@@ -116,7 +116,7 @@ class JudgeList(object):
                 logger.info('Free judges: %d', len(candidates))
             if candidates:
                 # Schedule the submission on the judge reporting least load.
-                judge = min(candidates, key=attrgetter('load'))
+                judge = min(candidates, key=lambda judge: (judge.load, random()))
                 logger.info('Dispatched submission %d to: %s', id, judge.name)
                 self.submission_map[id] = judge
                 try:
