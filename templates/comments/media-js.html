@@ -86,7 +86,7 @@
                 }).done(function (body) {
                     $comment.find('.previous-revision').css({visibility: show_revision == 0 ? 'hidden' : ''});
                     $comment.find('.next-revision').css({visibility: show_revision == max_revision ? 'hidden' : ''});
-                    $comment.find('.content').html(body);
+                    var $content = $comment.find('.content').html(body);
 
                     var edit_text = '{{ _('edit {edits}') }}'.replace("{edits}", show_revision);
 
@@ -97,7 +97,9 @@
                     }
 
                     $comment.find('.comment-edit-text').text(' ' + edit_text + ' ');
-                    update_math($comment);
+                    update_math($content);
+                    if (window.add_code_copy_buttons)
+                        window.add_code_copy_buttons($content);
                 });
             };
 
@@ -191,6 +193,8 @@
                                 var $area = $comment.find('.comment-body').first();
                                 $area.html(data);
                                 update_math($comment);
+                                if (window.add_code_copy_buttons)
+                                    window.add_code_copy_buttons($area);
                                 var $edits = $comment.find('.comment-edits').first();
                                 $edits.text('updated');
                             }).fail(function () {
