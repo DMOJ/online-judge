@@ -20,16 +20,10 @@ def apply_submission_filter(queryset, options):
     if options['submission_results']:
         queryset = queryset.filter(result__in=options['submission_results'])
 
-    problem_code_glob_cache = {}
+    if options['submission_problem_glob'] != '*':
+        queryset = queryset.filter(problem__code__regex=fnmatch.translate(options['submission_problem_glob']))
 
-    def problem_code_glob_match(obj):
-        code = obj.problem.code
-        result = problem_code_glob_cache.get(code)
-        if result is None:
-            result = problem_code_glob_cache[code] = fnmatch.fnmatch(code, options['submission_problem_glob'])
-        return result
-
-    return list(filter(problem_code_glob_match, queryset))
+    return list(queryset)
 
 
 def apply_comment_filter(queryset, options):
@@ -41,8 +35,17 @@ def apply_comment_filter(queryset, options):
 @shared_task(bind=True)
 def prepare_user_data(self, profile_id, options):
     options = json.loads(options)
-    submissions = apply_submission_filter(Submission.objects.filter(user_id=profile_id), options)
-    comments = apply_comment_filter(Comment.objects.filter(author_id=profile_id), options)
+    with Progress(self, 2, stage=_('Applying filters')) as p:
+        # Force an update so that we get a progress bar.
+        p.done = 0
+        submissions = apply_submission_filter(
+            Submission.objects.select_related('problem', 'language', 'source').filter(user_id=profile_id),
+            options,
+        )
+        p.did(1)
+        comments = apply_comment_filter(Comment.objects.filter(author_id=profile_id), options)
+        p.did(1)
+
     with zipfile.ZipFile(os.path.join(settings.DMOJ_USER_DATA_CACHE, '%s.zip' % profile_id), mode='w') as data_file:
         submission_count = len(submissions)
         if submission_count:
