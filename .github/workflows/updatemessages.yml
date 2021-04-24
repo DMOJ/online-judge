@@ -23,6 +23,11 @@ jobs:
         sudo dpkg -i crowdin.deb
         pip install -r requirements.txt
         pip install pymysql
+    - name: Update English source strings
+      run: |
+        echo "STATIC_ROOT = '/tmp'" > dmoj/local_settings.py
+        python manage.py makemessages -l en -e py,html,txt
+        python manage.py makemessages -l en -d djangojs
     - name: Download strings from Crowdin
       env:
         CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
