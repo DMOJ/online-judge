@@ -1,6 +1,7 @@
 import fnmatch
 import json
 import os
+import re
 import zipfile
 
 from celery import shared_task
@@ -13,6 +14,7 @@ from judge.utils.raw_sql import use_straight_join
 from judge.utils.unicode import utf8bytes
 
 __all__ = ('prepare_user_data',)
+rewildcard = re.compile(r'\*+')
 
 
 def apply_submission_filter(queryset, options):
@@ -24,9 +26,12 @@ def apply_submission_filter(queryset, options):
     if options['submission_results']:
         queryset = queryset.filter(result__in=options['submission_results'])
 
-    if options['submission_problem_glob'] != '*':
+    # Compress wildcards to avoid exponential complexity on certain glob patterns before Python 3.9.
+    # For details, see <https://bugs.python.org/issue40480>.
+    problem_glob = rewildcard.sub('*', options['submission_problem_glob'])
+    if problem_glob != '*':
         queryset = queryset.filter(
-            problem__in=Problem.objects.filter(code__regex=fnmatch.translate(options['submission_problem_glob'])),
+            problem__in=Problem.objects.filter(code__regex=fnmatch.translate(problem_glob)),
         )
 
     return list(queryset)
