@@ -7,8 +7,9 @@ from celery import shared_task
 from django.conf import settings
 from django.utils.translation import gettext as _
 
-from judge.models import Comment, Submission
+from judge.models import Comment, Problem, Submission
 from judge.utils.celery import Progress
+from judge.utils.raw_sql import use_straight_join
 from judge.utils.unicode import utf8bytes
 
 __all__ = ('prepare_user_data',)
@@ -17,11 +18,16 @@ __all__ = ('prepare_user_data',)
 def apply_submission_filter(queryset, options):
     if not options['submission_download']:
         return []
+
+    use_straight_join(queryset)
+
     if options['submission_results']:
         queryset = queryset.filter(result__in=options['submission_results'])
 
     if options['submission_problem_glob'] != '*':
-        queryset = queryset.filter(problem__code__regex=fnmatch.translate(options['submission_problem_glob']))
+        queryset = queryset.filter(
+            problem__in=Problem.objects.filter(code__regex=fnmatch.translate(options['submission_problem_glob'])),
+        )
 
     return list(queryset)
 
