@@ -80,7 +80,7 @@ class Submission(models.Model):
     judged_on = models.ForeignKey('Judge', verbose_name=_('judged on'), null=True, blank=True,
                                   on_delete=models.SET_NULL)
     judged_date = models.DateTimeField(verbose_name=_('submission judge time'), default=None, null=True)
-    was_rejudged = models.BooleanField(verbose_name=_('was rejudged by admin'), default=False)
+    rejudged_date = models.DateTimeField(verbose_name=_('last rejudge date by admin'), null=True, blank=True)
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
     contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
                                        on_delete=models.SET_NULL, related_name='+')
