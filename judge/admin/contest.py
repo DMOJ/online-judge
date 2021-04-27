@@ -114,7 +114,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers')}),
         (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'run_pretests_only',
-                                    'is_locked', 'scoreboard_visibility', 'points_precision')}),
+                                    'locked_after', 'scoreboard_visibility', 'points_precision')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),
@@ -123,7 +123,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
                                   'organizations', 'view_contest_scoreboard')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
-    list_display = ('key', 'name', 'is_visible', 'is_rated', 'is_locked', 'start_time', 'end_time', 'time_limit',
+    list_display = ('key', 'name', 'is_visible', 'is_rated', 'locked_after', 'start_time', 'end_time', 'time_limit',
                     'user_count')
     search_fields = ('key', 'name')
     inlines = [ContestProblemInline]
@@ -160,7 +160,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         if not request.user.has_perm('judge.contest_rating'):
             readonly += ['is_rated', 'rate_all', 'rate_exclude']
         if not request.user.has_perm('judge.lock_contest'):
-            readonly += ['is_locked']
+            readonly += ['locked_after']
         if not request.user.has_perm('judge.contest_access_code'):
             readonly += ['access_code']
         if not request.user.has_perm('judge.create_private_contest'):
@@ -186,8 +186,8 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
             self._rescore(obj.key)
             self._rescored = True
 
-        if form.changed_data and 'is_locked' in form.changed_data:
-            self.set_is_locked(obj, form.cleaned_data['is_locked'])
+        if form.changed_data and 'locked_after' in form.changed_data:
+            self.set_locked_after(obj, form.cleaned_data['locked_after'])
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
@@ -226,7 +226,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def set_locked(self, request, queryset):
         for row in queryset:
-            self.set_is_locked(row, True)
+            self.set_locked_after(row, timezone.now())
         count = queryset.count()
         self.message_user(request, ungettext('%d contest successfully locked.',
                                              '%d contests successfully locked.',
@@ -235,19 +235,19 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def set_unlocked(self, request, queryset):
         for row in queryset:
-            self.set_is_locked(row, False)
+            self.set_locked_after(row, None)
         count = queryset.count()
         self.message_user(request, ungettext('%d contest successfully unlocked.',
                                              '%d contests successfully unlocked.',
                                              count) % count)
     set_unlocked.short_description = _('Unlock contest submissions')
 
-    def set_is_locked(self, contest, is_locked):
+    def set_locked_after(self, contest, locked_after):
         with transaction.atomic():
-            contest.is_locked = is_locked
+            contest.locked_after = locked_after
             contest.save()
             Submission.objects.filter(contest_object=contest,
-                                      contest__participation__virtual=0).update(is_locked=is_locked)
+                                      contest__participation__virtual=0).update(locked_after=locked_after)
 
     def get_urls(self):
         return [

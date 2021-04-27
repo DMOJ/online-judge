@@ -1,5 +1,6 @@
 from celery import shared_task
 from django.core.cache import cache
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from judge.models import Problem, Profile, Submission
@@ -16,7 +17,8 @@ def apply_submission_filter(queryset, id_range, languages, results):
         queryset = queryset.filter(language_id__in=languages)
     if results:
         queryset = queryset.filter(result__in=results)
-    queryset = queryset.filter(is_locked=False).exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
+    queryset = queryset.exclude(locked_after__lt=timezone.now()) \
+                       .exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
     return queryset
 
 

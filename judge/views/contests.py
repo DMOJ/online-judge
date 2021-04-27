@@ -259,7 +259,7 @@ class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         contest.pk = None
         contest.is_visible = False
         contest.user_count = 0
-        contest.is_locked = False
+        contest.locked_after = None
         contest.key = form.cleaned_data['key']
         with transaction.atomic(), revisions.create_revision():
             contest.save()
