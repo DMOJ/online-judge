@@ -604,7 +604,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
     def form_valid(self, form):
         if (
             not self.request.user.has_perm('judge.spam_submission') and
-            Submission.objects.filter(user=self.request.profile, was_rejudged=False)
+            Submission.objects.filter(user=self.request.profile, rejudged_date__isnull=True)
                               .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() >= settings.DMOJ_SUBMISSION_LIMIT
         ):
             return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
