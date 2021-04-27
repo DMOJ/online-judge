@@ -139,8 +139,9 @@ class Contest(models.Model):
                                             help_text='A custom Lua function to generate problem labels. Requires a '
                                                       'single function with an integer parameter, the zero-indexed '
                                                       'contest problem index, and returns a string, the label.')
-    is_locked = models.BooleanField(verbose_name=_('contest lock'), default=False,
-                                    help_text=_('Prevent submissions from this contest from being rejudged.'))
+    locked_after = models.DateTimeField(verbose_name=_('contest lock'), null=True, blank=True,
+                                        help_text=_('Prevent submissions from this contest '
+                                                    'from being rejudged after this date.'))
     points_precision = models.IntegerField(verbose_name=_('precision points'), default=3,
                                            validators=[MinValueValidator(0), MaxValueValidator(10)],
                                            help_text=_('Number of digits to round points to.'))

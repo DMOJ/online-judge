@@ -620,24 +620,30 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
                                    _('You have exceeded the submission limit for this problem.'))
 
         with transaction.atomic():
-            self.new_submission = form.save()
+            self.new_submission = form.save(commit=False)
 
             contest_problem = self.contest_problem
             if contest_problem is not None:
-                # See ContestSubmission post_save hook in judge/signals.py
-                self.new_submission.contest_object_id = contest_problem.contest_id
+                # Use the contest object from current_contest.contest because we already use it
+                # in profile.update_contest().
+                self.new_submission.contest_object = self.request.profile.current_contest.contest
+                if self.request.profile.current_contest.live:
+                    self.new_submission.locked_after = self.new_submission.contest_object.locked_after
+                self.new_submission.save()
                 ContestSubmission(
                     submission=self.new_submission,
                     problem=contest_problem,
                     participation=self.request.profile.current_contest,
                 ).save()
+            else:
+                self.new_submission.save()
 
             source = SubmissionSource(submission=self.new_submission, source=form.cleaned_data['source'])
             source.save()
 
         # Save a query.
         self.new_submission.source = source
-        self.new_submission.judge(judge_id=form.cleaned_data['judge'])
+        self.new_submission.judge(force_judge=True, judge_id=form.cleaned_data['judge'])
 
         return super().form_valid(form)
 
