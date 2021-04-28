@@ -22,5 +22,3 @@ sass resources:sass_processed
 
 echo
 postcss "${FILES[@]}" --verbose --use autoprefixer -d resources
-
-cp -r resources/* /home/dmoj/share/resources/
