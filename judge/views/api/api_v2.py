@@ -422,6 +422,8 @@ class APIProblemList(APIListView):
             'group': problem.group.full_name,
             'points': problem.points,
             'partial': problem.partial,
+            'is_organization_private': problem.is_organization_private,
+            'is_public': problem.is_public,
         }
 
 
