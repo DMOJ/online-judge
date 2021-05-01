@@ -2,6 +2,7 @@ import errno
 import os
 
 from django.conf import settings
+from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.models import Site
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
@@ -153,3 +154,8 @@ def misc_config_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=ContestSubmission)
 def contest_submission_update(sender, instance, **kwargs):
     Submission.objects.filter(id=instance.submission_id).update(contest_object_id=instance.participation.contest_id)
+
+
+@receiver(post_save, sender=FlatPage)
+def flatpage_update(sender, instance, **kwargs):
+    cache.delete(make_template_fragment_key('flatpage', (instance.url, )))
