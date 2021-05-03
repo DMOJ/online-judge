@@ -70,5 +70,5 @@ jobs:
         title: Update translations from Crowdin
         body: This PR has been auto-generated to pull in latest translations from [Crowdin](https://translate.dmoj.ca).
         labels: i18n, enhancement
-        assignees: Xyene, quantum5
+        reviewers: Xyene, quantum5
         branch: update-i18n
