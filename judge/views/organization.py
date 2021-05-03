@@ -56,7 +56,7 @@ class OrganizationMixin(object):
         if self.request.user.has_perm('judge.edit_all_organization'):
             return True
         profile_id = self.request.profile.id
-        return org.admins.filter(id=profile_id).exists() or org.registrant_id == profile_id
+        return org.admins.filter(id=profile_id).exists()
 
 
 class OrganizationDetailView(OrganizationMixin, DetailView):
@@ -224,8 +224,7 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
-        if not (organization.admins.filter(id=self.request.profile.id).exists() or
-                organization.registrant_id == self.request.profile.id):
+        if not organization.admins.filter(id=self.request.profile.id).exists():
             raise PermissionDenied()
         return organization
 

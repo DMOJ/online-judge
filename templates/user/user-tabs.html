@@ -9,14 +9,13 @@
     {% if request.user.is_superuser and user.user != request.user and not user.user.is_superuser %}
         {{ make_tab('impersonate', 'fa-eye', url('impersonate-start', user.user.id), _('Impersonate')) }}
     {% endif %}
+    {% if perms.auth.change_user %}
+        {{ make_tab('admin', 'fa-edit', url('admin:auth_user_change', user.user.id), _('Admin User')) }}
+    {% endif %}
+    {% if perms.judge.change_profile %}
+        {{ make_tab('admin', 'fa-edit', url('admin:judge_profile_change', user.id), _('Admin Profile')) }}
+    {% endif %}
     {% if user.user == request.user %}
         {{ make_tab('edit', 'fa-edit', url('user_edit_profile'), _('Edit profile')) }}
-    {% else %}
-        {% if perms.auth.change_user %}
-            {{ make_tab('edit', 'fa-edit', url('admin:auth_user_change', user.user.id), _('Admin User')) }}
-        {% endif %}
-        {% if perms.judge.change_profile %}
-            {{ make_tab('edit', 'fa-edit', url('admin:judge_profile_change', user.id), _('Admin Profile')) }}
-        {% endif %}
     {% endif %}
 {% endblock %}

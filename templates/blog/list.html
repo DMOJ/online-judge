@@ -85,7 +85,7 @@
                 {% endfor %}
             </div>
             {% if page_obj.has_other_pages() %}
-                <div style="margin-bottom:10px;margin-top:10px">{% include "list-pages.html" %}</div>
+                <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
             {% endif %}
         </div>
 
@@ -118,7 +118,7 @@
             {% if current_contests %}
                 <div class="blog-sidebox sidebox">
                     <h3>{{ _('Ongoing contests') }} <i class="fa fa-trophy"></i></h3>
-                    <div class="sidebox-content">
+                    <div class="sidebox-content sidebox-ongoing-contest">
                         {% for contest in current_contests %}
                             <div class="contest">
                                 <div class="contest-list-title">

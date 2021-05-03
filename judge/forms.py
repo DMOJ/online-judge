@@ -66,6 +66,11 @@ class ProfileForm(ModelForm):
                 attrs={'style': 'max-width:700px;min-width:700px;width:700px'},
             )
 
+    def clean_about(self):
+        if 'about' in self.changed_data and not self.instance.has_any_solves:
+            raise ValidationError(_('You must solve at least one problem before you can update your profile.'))
+        return self.cleaned_data['about']
+
     def clean(self):
         organizations = self.cleaned_data.get('organizations') or []
         max_orgs = settings.DMOJ_USER_MAX_ORGANIZATION_COUNT

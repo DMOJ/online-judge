@@ -297,9 +297,7 @@
 
 {% block body %}
     {% if page_obj.has_other_pages() %}
-        <div style="margin-bottom: 6px; margin-top: 11px">
-            {% include "list-pages.html" %}
-        </div>
+        <div class="top-pagination-bar">{% include "list-pages.html" %}</div>
     {% endif %}
 
     <div id="common-content">
@@ -365,11 +363,11 @@
                     </div>
                 {% endfor %}
             </div>
-            {% if page_obj.has_other_pages() %}
-                <div style="margin-top:10px;">{% include "list-pages.html" %}</div>
-            {% endif %}
         </div>
     </div>
+    {% if page_obj.has_other_pages() %}
+        <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
+    {% endif %}
 {% endblock %}
 
 {% block bodyend %}

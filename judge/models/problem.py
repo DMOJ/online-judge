@@ -337,12 +337,12 @@ class Problem(models.Model):
         return ProblemClarification.objects.filter(problem=self)
 
     def update_stats(self):
-        self.user_count = self.submission_set.filter(points__gte=self.points, result='AC',
-                                                     user__is_unlisted=False).values('user').distinct().count()
-        submissions = self.submission_set.count()
+        all_queryset = self.submission_set.filter(user__is_unlisted=False)
+        ac_queryset = all_queryset.filter(points__gte=self.points, result='AC')
+        self.user_count = ac_queryset.values('user').distinct().count()
+        submissions = all_queryset.count()
         if submissions:
-            self.ac_rate = 100.0 * self.submission_set.filter(points__gte=self.points, result='AC',
-                                                              user__is_unlisted=False).count() / submissions
+            self.ac_rate = 100.0 * ac_queryset.count() / submissions
         else:
             self.ac_rate = 0
         self.save()

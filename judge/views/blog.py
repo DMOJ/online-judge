@@ -57,7 +57,7 @@ class PostList(ListView):
 
         context['user_count'] = Profile.objects.count
         context['problem_count'] = Problem.get_public_problems().count
-        context['submission_count'] = lambda: Submission.objects.aggregate(max_id=Max('id'))['max_id']
+        context['submission_count'] = lambda: Submission.objects.aggregate(max_id=Max('id'))['max_id'] or 0
         context['language_count'] = Language.objects.count
 
         context['post_comment_counts'] = {
