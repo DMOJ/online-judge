@@ -12,7 +12,7 @@ jobs:
       run: |
         curl -o resources/caniuse.json https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json
     - name: Create pull request
-      uses: peter-evans/create-pull-request@v2
+      uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.REPO_SCOPED_TOKEN }}
         author: dmoj-build <build@dmoj.ca>
@@ -21,5 +21,5 @@ jobs:
         commit-message: Import latest Can I use... data
         body: This PR has been auto-generated to pull in the latest copy of Can I use... `data.json` from [upstream](https://github.com/Fyrd/caniuse/blob/master/data.json).
         labels: compat
-        assignees: Xyene, quantum5
+        reviewers: Xyene, quantum5
         branch: update-caniuse
