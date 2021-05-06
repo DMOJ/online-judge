@@ -623,6 +623,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
             contest_problem = self.contest_problem
             if contest_problem is not None:
+                # See ContestSubmission post_save hook in judge/signals.py
                 self.new_submission.contest_object_id = contest_problem.contest_id
                 ContestSubmission(
                     submission=self.new_submission,
