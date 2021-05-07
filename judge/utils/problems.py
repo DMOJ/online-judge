@@ -13,7 +13,7 @@ __all__ = ['contest_completed_ids', 'get_result_data', 'user_completed_ids', 'us
 
 
 def user_tester_ids(profile):
-    return set(Problem.objects.filter(testers=profile).values_list('id', flat=True))
+    return set(Problem.testers.through.objects.filter(profile=profile).values_list('problem_id', flat=True))
 
 
 def user_editable_ids(profile):
