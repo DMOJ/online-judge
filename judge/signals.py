@@ -111,6 +111,7 @@ def submission_delete(sender, instance, **kwargs):
 def contest_submission_delete(sender, instance, **kwargs):
     participation = instance.participation
     participation.recompute_results()
+    Submission.objects.filter(id=instance.submission_id).update(contest_object=None)
 
 
 @receiver(post_save, sender=Organization)
