@@ -215,8 +215,8 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             category['name'] = _(category['name'])
         return result
 
-    def _get_result_data(self):
-        return get_result_data(self.get_queryset().order_by())
+    def _get_result_data(self, queryset=None):
+        return get_result_data((queryset or self.get_queryset()).order_by())
 
     def access_check(self, request):
         pass
@@ -504,15 +504,15 @@ class AllSubmissions(InfinitePaginationMixin, SubmissionsListBase):
         context['stats_update_interval'] = self.stats_update_interval
         return context
 
-    def _get_result_data(self):
-        if self.in_contest or self.selected_languages or self.selected_statuses:
-            return super(AllSubmissions, self)._get_result_data()
+    def _get_result_data(self, queryset=None):
+        if queryset or self.in_contest or self.selected_languages or self.selected_statuses:
+            return super(AllSubmissions, self)._get_result_data(queryset)
 
         key = 'global_submission_result_data'
         result = cache.get(key)
         if result:
             return result
-        result = super(AllSubmissions, self)._get_result_data()
+        result = super(AllSubmissions, self)._get_result_data(Submission.objects.all())
         cache.set(key, result, self.stats_update_interval)
         return result
 
