@@ -73,7 +73,7 @@
         {% endcache %}
     </div>
 
-    {% if contest.ended or request.user.is_superuser or is_organizer %}
+    {% if contest.ended or request.user.is_superuser or is_editor or is_tester %}
         <hr>
         <div class="contest-problems">
             <h2 style="margin-bottom: 0.2em"><i class="fa fa-fw fa-question-circle"></i>{{ _('Problems') }} </h2>
