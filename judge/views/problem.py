@@ -633,7 +633,6 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
             source = SubmissionSource(submission=self.new_submission, source=form.cleaned_data['source'])
             source.save()
-            self.request.profile.update_contest()
 
         # Save a query.
         self.new_submission.source = source
