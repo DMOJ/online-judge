@@ -35,6 +35,14 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'normal_before_window': create_user(
                 username='normal_before_window',
             ),
+            'non_staff_author': create_user(
+                username='non_staff_author',
+                is_staff=False,
+            ),
+            'non_staff_tester': create_user(
+                username='non_staff_tester',
+                is_staff=False,
+            ),
         })
 
         _now = timezone.now()
@@ -43,7 +51,8 @@ class ContestTestCase(CommonDataMixin, TestCase):
             key='basic',
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
-            organizers=('superuser', 'staff_contest_edit_own'),
+            authors=('superuser', 'staff_contest_edit_own'),
+            testers=('non_staff_tester',),
         )
 
         self.hidden_scoreboard_contest = create_contest(
@@ -59,6 +68,16 @@ class ContestTestCase(CommonDataMixin, TestCase):
             ''',
         )
 
+        self.hidden_scoreboard_non_staff_author = create_contest(
+            key='non_staff_author',
+            start_time=_now - timezone.timedelta(days=1),
+            end_time=_now + timezone.timedelta(days=100),
+            is_visible=True,
+            scoreboard_visibility=Contest.SCOREBOARD_AFTER_CONTEST,
+            authors=('non_staff_author',),
+            curators=('staff_contest_edit_own',),
+        )
+
         self.contest_hidden_scoreboard_contest = create_contest(
             key='contest_scoreboard',
             start_time=_now - timezone.timedelta(days=10),
@@ -66,6 +85,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             time_limit=timezone.timedelta(days=1),
             is_visible=True,
             scoreboard_visibility=Contest.SCOREBOARD_AFTER_CONTEST,
+            testers=('non_staff_tester',),
         )
 
         self.particip_hidden_scoreboard_contest = create_contest(
@@ -75,6 +95,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             time_limit=timezone.timedelta(days=1),
             is_visible=True,
             scoreboard_visibility=Contest.SCOREBOARD_AFTER_PARTICIPATION,
+            testers=('non_staff_tester',),
         )
 
         self.visible_scoreboard_contest = create_contest(
@@ -84,6 +105,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             time_limit=timezone.timedelta(days=1),
             is_visible=True,
             scoreboard_visibility=Contest.SCOREBOARD_VISIBLE,
+            testers=('non_staff_tester',),
         )
 
         for contest_key in ('contest_scoreboard', 'particip_scoreboard', 'visible_scoreboard'):
@@ -131,16 +153,29 @@ class ContestTestCase(CommonDataMixin, TestCase):
             is_private=True,
             is_organization_private=True,
             private_contestants=('staff_contest_edit_own',),
+            testers=('non_staff_tester',),
         )
 
         self.organization_private_contest = create_contest(
             key='organization_private',
+            start_time=_now - timezone.timedelta(days=5),
+            end_time=_now + timezone.timedelta(days=6),
+            is_visible=True,
+            is_organization_private=True,
+            organizations=('open',),
+            view_contest_scoreboard=('normal',),
+            testers=('non_staff_tester',),
+        )
+
+        self.future_organization_private_contest = create_contest(
+            key='future_org_private',
             start_time=_now + timezone.timedelta(days=3),
             end_time=_now + timezone.timedelta(days=6),
             is_visible=True,
             is_organization_private=True,
             organizations=('open',),
             view_contest_scoreboard=('normal',),
+            testers=('non_staff_tester',),
         )
 
         self.private_user_contest = create_contest(
@@ -149,6 +184,22 @@ class ContestTestCase(CommonDataMixin, TestCase):
             end_time=_now + timezone.timedelta(days=6),
             is_visible=True,
             is_private=True,
+            testers=('non_staff_tester',),
+        )
+
+        self.non_visible_contest = create_contest(
+            key='non_visible_contest',
+            start_time=_now - timezone.timedelta(days=3),
+            end_time=_now + timezone.timedelta(days=6),
+            is_visible=False,
+        )
+
+        self.non_visible_contest_with_tester = create_contest(
+            key='non_visible_w_tester',
+            start_time=_now - timezone.timedelta(days=3),
+            end_time=_now + timezone.timedelta(days=6),
+            is_visible=False,
+            testers=('non_staff_tester',),
         )
 
     def setUp(self):
@@ -178,11 +229,18 @@ class ContestTestCase(CommonDataMixin, TestCase):
         self.assertIsNone(self.private_contest.time_before_end)
 
     def test_organization_private_contest(self):
-        self.assertFalse(self.organization_private_contest.can_join)
-        self.assertFalse(self.organization_private_contest.show_scoreboard)
+        self.assertTrue(self.organization_private_contest.can_join)
+        self.assertTrue(self.organization_private_contest.show_scoreboard)
         self.assertFalse(self.organization_private_contest.ended)
-        self.assertIsInstance(self.organization_private_contest.time_before_start, timezone.timedelta)
+        self.assertIsNone(self.organization_private_contest.time_before_start)
         self.assertIsInstance(self.organization_private_contest.time_before_end, timezone.timedelta)
+
+    def test_future_organization_private_contest(self):
+        self.assertFalse(self.future_organization_private_contest.can_join)
+        self.assertFalse(self.future_organization_private_contest.show_scoreboard)
+        self.assertFalse(self.future_organization_private_contest.ended)
+        self.assertIsInstance(self.future_organization_private_contest.time_before_start, timezone.timedelta)
+        self.assertIsInstance(self.future_organization_private_contest.time_before_end, timezone.timedelta)
 
     def test_basic_contest_methods(self):
         with self.assertRaises(Contest.Inaccessible):
@@ -222,6 +280,13 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
                 'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
             },
@@ -275,6 +340,25 @@ class ContestTestCase(CommonDataMixin, TestCase):
         }
         self._test_object_methods_with_users(self.hidden_scoreboard_contest, data)
 
+    def test_contest_hidden_scoreboard_non_staff_author_contest_methods(self):
+        data = {
+            'staff_contest_edit_own': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+                'is_in_contest': self.assertFalse,
+            },
+            'non_staff_author': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.hidden_scoreboard_non_staff_author, data)
+
     def test_contest_hidden_scoreboard_contest_methods(self):
         data = {
             'normal_before_window': {
@@ -291,6 +375,11 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
                 'has_completed_contest': self.assertTrue,
+            },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
             },
         }
         self._test_object_methods_with_users(self.contest_hidden_scoreboard_contest, data)
@@ -317,6 +406,11 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'can_see_full_scoreboard': self.assertTrue,
                 'has_completed_contest': self.assertTrue,
             },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'has_completed_contest': self.assertFalse,
+            },
         }
         self._test_object_methods_with_users(self.particip_hidden_scoreboard_contest, data)
 
@@ -336,6 +430,11 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
                 'has_completed_contest': self.assertTrue,
+            },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'has_completed_contest': self.assertFalse,
             },
         }
         self._test_object_methods_with_users(self.visible_scoreboard_contest, data)
@@ -371,10 +470,65 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
             },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
         }
         self._test_object_methods_with_users(self.private_contest, data)
 
     def test_organization_private_contest_methods(self):
+        data = {
+            'staff_contest_edit_own': {
+                # scoreboard checks don't do accessibility checks
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'staff_contest_see_all': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'staff_contest_edit_all': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+                'is_in_contest': self.assertFalse,
+            },
+            'normal': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'anonymous': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.organization_private_contest, data)
+
+    def test_future_organization_private_contest_methods(self):
         data = {
             'staff_contest_edit_own': {
                 'can_see_own_scoreboard': self.assertFalse,
@@ -404,6 +558,14 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
             },
+            'non_staff_tester': {
+                # False because contest has not begun
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
             'anonymous': {
                 # False because contest has not begun
                 'can_see_own_scoreboard': self.assertFalse,
@@ -413,7 +575,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_in_contest': self.assertFalse,
             },
         }
-        self._test_object_methods_with_users(self.organization_private_contest, data)
+        self._test_object_methods_with_users(self.future_organization_private_contest, data)
 
     def test_private_user_contest_methods(self):
         data = {
@@ -431,6 +593,13 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
             },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
             'anonymous': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
@@ -441,12 +610,79 @@ class ContestTestCase(CommonDataMixin, TestCase):
         }
         self._test_object_methods_with_users(self.private_user_contest, data)
 
+    def test_non_visible_contest_contest_methods(self):
+        data = {
+            'superuser': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+                'is_in_contest': self.assertFalse,
+            },
+            'normal': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            # not set as tester, in case something silly is happening
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'anonymous': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.non_visible_contest, data)
+
+    def test_non_visible_contest_with_tester_contest_methods(self):
+        data = {
+            'superuser': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertTrue,
+                'is_in_contest': self.assertFalse,
+            },
+            'normal': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+            'anonymous': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertFalse,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.non_visible_contest_with_tester, data)
+
     def test_contests_list(self):
         for name, user in self.users.items():
             with self.subTest(user=name):
                 # We only care about consistency between Contest.is_accessible_by and Contest.get_visible_contests
                 contest_keys = []
-                for contest in Contest.objects.prefetch_related('organizers', 'private_contestants', 'organizations'):
+                for contest in Contest.objects.prefetch_related('testers', 'private_contestants', 'organizations'):
                     if contest.is_accessible_by(user):
                         contest_keys.append(contest.key)
 
