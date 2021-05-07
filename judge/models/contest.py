@@ -65,8 +65,14 @@ class Contest(models.Model):
     key = models.CharField(max_length=20, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
-    organizers = models.ManyToManyField(Profile, help_text=_('These people will be able to edit the contest.'),
-                                        related_name='organizers+')
+    authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
+                                     related_name='authors+')
+    curators = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest, '
+                                                           'but will not be listed as authors.'),
+                                      related_name='curators+', blank=True)
+    testers = models.ManyToManyField(Profile, help_text=_('These users will be able to view the contest, '
+                                                          'but not edit it.'),
+                                     blank=True, related_name='testers+')
     description = models.TextField(verbose_name=_('description'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
     start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
@@ -191,11 +197,13 @@ class Contest(models.Model):
     def can_see_full_scoreboard(self, user):
         if self.show_scoreboard:
             return True
-        if user.has_perm('judge.see_private_contest'):
+        if not user.is_authenticated:
+            return False
+        if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
             return True
-        if self.is_editable_by(user):
+        if user.profile.id in self.editor_ids:
             return True
-        if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+        if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
         if self.scoreboard_visibility == self.SCOREBOARD_AFTER_PARTICIPATION and self.has_completed_contest(user):
             return True
@@ -248,6 +256,19 @@ class Contest(models.Model):
     def ended(self):
         return self.end_time < self._now
 
+    @cached_property
+    def author_ids(self):
+        return Contest.authors.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+
+    @cached_property
+    def editor_ids(self):
+        return self.author_ids.union(
+            Contest.curators.through.objects.filter(contest=self).values_list('profile_id', flat=True))
+
+    @cached_property
+    def tester_ids(self):
+        return Contest.testers.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+
     def __str__(self):
         return self.name
 
@@ -267,12 +288,25 @@ class Contest(models.Model):
         pass
 
     def access_check(self, user):
-        # If the user can view all contests
-        if user.has_perm('judge.see_private_contest'):
+        # Do unauthenticated check here so we can skip authentication checks later on.
+        if not user.is_authenticated:
+            # Unauthenticated users can only see visible, non-private contests
+            if not self.is_visible:
+                raise self.Inaccessible()
+            if self.is_private or self.is_organization_private:
+                raise self.PrivateContest()
             return
 
-        # User can edit the contest
-        if self.is_editable_by(user):
+        # If the user can view or edit all contests
+        if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
+            return
+
+        # User is organizer or curator for contest
+        if user.profile.id in self.editor_ids:
+            return
+
+        # User is tester for contest
+        if user.profile.id in self.tester_ids:
             return
 
         # Contest is not publicly visible
@@ -283,15 +317,11 @@ class Contest(models.Model):
         if not self.is_private and not self.is_organization_private:
             return
 
-        if user.is_authenticated:
-            if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
-                return
+        if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+            return
 
-            in_org = self.organizations.filter(id__in=user.profile.organizations.all()).exists()
-            in_users = self.private_contestants.filter(id=user.profile.id).exists()
-        else:
-            in_org = False
-            in_users = False
+        in_org = self.organizations.filter(id__in=user.profile.organizations.all()).exists()
+        in_users = self.private_contestants.filter(id=user.profile.id).exists()
 
         if not self.is_private and self.is_organization_private:
             if in_org:
@@ -321,9 +351,8 @@ class Contest(models.Model):
         if user.has_perm('judge.edit_all_contest'):
             return True
 
-        # If the user is a contest organizer
-        if user.has_perm('judge.edit_own_contest') and \
-                self.organizers.filter(id=user.profile.id).exists():
+        # If the user is a contest organizer or curator
+        if user.has_perm('judge.edit_own_contest') and user.profile.id in self.editor_ids:
             return True
 
         return False
@@ -346,7 +375,9 @@ class Contest(models.Model):
                   private_contestants=user.profile)
             )
 
-            q |= Q(organizers=user.profile)
+            q |= Q(authors=user.profile)
+            q |= Q(curators=user.profile)
+            q |= Q(testers=user.profile)
             queryset = queryset.filter(q)
         return queryset.distinct()
 
