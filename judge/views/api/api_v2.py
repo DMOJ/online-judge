@@ -336,13 +336,14 @@ class APIContestParticipationList(APIListView):
         # "Contest.get_visible_contests" only gets which contests the user can *see*.
         # Conditions for participation scoreboard access:
         #   1. Contest has ended
-        #   2. User is the organizer of the contest
+        #   2. User is the organizer or curator of the contest
         #   3. User is specified to be able to "view contest scoreboard"
         if not self.request.user.has_perm('judge.see_private_contest'):
             q = Q(end_time__lt=self._now)
             if self.request.user.is_authenticated:
                 if self.request.user.has_perm('judge.edit_own_contest'):
-                    q |= Q(organizers=self.request.profile)
+                    q |= Q(authors=self.request.profile)
+                    q |= Q(curators=self.request.profile)
                 q |= Q(view_contest_scoreboard=self.request.profile)
             visible_contests = visible_contests.filter(q)
 
