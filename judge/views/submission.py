@@ -393,7 +393,7 @@ class ProblemSubmissionsBase(SubmissionsListBase):
 
     def access_check(self, request):
         # FIXME: This should be rolled into the `is_accessible_by` check when implementing #1509
-        if self.contest and request.user.is_authenticated and request.profile.id in self.contest.editor_ids:
+        if self.in_contest and request.user.is_authenticated and request.profile.id in self.contest.editor_ids:
             return
 
         if not self.problem.is_accessible_by(request.user):
