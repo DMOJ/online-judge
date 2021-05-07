@@ -27,7 +27,7 @@
     {% endif %}
 
     {% if request.user.is_authenticated %}
-        {% if contest.can_join or is_organizer %}
+        {% if contest.can_join or is_editor or is_tester %}
             {% set in_contest = contest.is_in_contest(request.user) %}
             {% if contest.ended %}
                 {# Allow users to leave the virtual contest #}
@@ -58,7 +58,7 @@
                                 {{- _('Leave contest') -}}
                             {% endif %}">
                     </form>
-                {% elif is_organizer or live_participation.ended %}
+                {% elif is_editor or is_tester or live_participation.ended %}
                     <form action="{{ url('contest_join', contest.key) }}" method="post"
                           class="contest-join-pseudotab unselectable button">
                         {% csrf_token %}
