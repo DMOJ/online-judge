@@ -145,6 +145,11 @@ class Submission(models.Model):
         elif settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'only-own' and \
                 self.problem.testers.filter(id=profile.id).exists():
             return True
+
+        # If user is an author or curator of the contest the submission was made in
+        if self.contest_object is not None and user.profile.id in self.contest_object.editor_ids:
+            return True
+
         return False
 
     def update_contest(self):
