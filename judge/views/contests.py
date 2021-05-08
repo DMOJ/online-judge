@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError
 from django.db.models import Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
 from django.db.models.expressions import CombinedExpression
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
@@ -261,7 +261,7 @@ class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         contest.user_count = 0
         contest.is_locked = False
         contest.key = form.cleaned_data['key']
-        with transaction.atomic(), revisions.create_revision():
+        with revisions.create_revision(atomic=True):
             contest.save()
             contest.tags.set(tags)
             contest.organizations.set(organizations)
