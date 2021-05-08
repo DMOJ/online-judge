@@ -11,7 +11,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.db.models import Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
 from django.db.models.expressions import CombinedExpression
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
@@ -26,6 +26,7 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView, SingleObjectMixin, View
+from reversion import revisions
 
 from judge import event_poster as event
 from judge.comments import CommentedDetailView
@@ -253,24 +254,28 @@ class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         private_contestants = contest.private_contestants.all()
         view_contest_scoreboard = contest.view_contest_scoreboard.all()
         contest_problems = contest.contest_problems.all()
+        old_key = contest.key
 
         contest.pk = None
         contest.is_visible = False
         contest.user_count = 0
         contest.is_locked = False
         contest.key = form.cleaned_data['key']
-        contest.save()
+        with transaction.atomic(), revisions.create_revision():
+            contest.save()
+            contest.tags.set(tags)
+            contest.organizations.set(organizations)
+            contest.private_contestants.set(private_contestants)
+            contest.view_contest_scoreboard.set(view_contest_scoreboard)
+            contest.authors.add(self.request.profile)
 
-        contest.tags.set(tags)
-        contest.organizations.set(organizations)
-        contest.private_contestants.set(private_contestants)
-        contest.view_contest_scoreboard.set(view_contest_scoreboard)
-        contest.authors.add(self.request.profile)
+            for problem in contest_problems:
+                problem.contest = contest
+                problem.pk = None
+            ContestProblem.objects.bulk_create(contest_problems)
 
-        for problem in contest_problems:
-            problem.contest = contest
-            problem.pk = None
-        ContestProblem.objects.bulk_create(contest_problems)
+            revisions.set_user(self.request.user)
+            revisions.set_comment(_('Cloned contest from %s') % old_key)
 
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest.id,)))
 
