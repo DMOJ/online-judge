@@ -704,7 +704,7 @@ class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         problem.ac_rate = 0
         problem.user_count = 0
         problem.code = form.cleaned_data['code']
-        with transaction.atomic(), revisions.create_revision():
+        with revisions.create_revision(atomic=True):
             problem.save()
             problem.authors.add(self.request.profile)
             problem.allowed_languages.set(languages)
