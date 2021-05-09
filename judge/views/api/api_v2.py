@@ -255,7 +255,7 @@ class APIContestDetail(APIDetailView):
         )
         participations = (
             contest.users
-            .filter(virtual=ContestParticipation.LIVE, user__is_unlisted=False)
+            .filter(virtual=ContestParticipation.LIVE)
             .annotate(
                 username=F('user__user__username'),
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
