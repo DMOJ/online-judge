@@ -126,7 +126,7 @@ def rate_contest(contest):
 
     users = contest.users.order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker') \
         .annotate(submissions=Count('submission')).exclude(user_id__in=contest.rate_exclude.all()) \
-        .filter(virtual=0, user__is_unlisted=False).values_list('id', 'user_id', 'score', 'cumtime', 'is_disqualified')
+        .filter(virtual=0).values_list('id', 'user_id', 'score', 'cumtime', 'is_disqualified')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
     if contest.rating_floor is not None:
