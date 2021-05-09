@@ -71,7 +71,9 @@ class RankedSubmissions(ProblemSubmissions):
                            reverse('problem_detail', args=[self.problem.code]))
 
     def _get_result_data(self, queryset=None):
-        return get_result_data((queryset or super(RankedSubmissions, self).get_queryset()).order_by())
+        if queryset is None:
+            queryset = super(RankedSubmissions, self).get_queryset()
+        return get_result_data(queryset.order_by())
 
 
 class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
