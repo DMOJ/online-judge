@@ -216,7 +216,9 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         return result
 
     def _get_result_data(self, queryset=None):
-        return get_result_data((queryset or self.get_queryset()).order_by())
+        if queryset is None:
+            queryset = self.get_queryset()
+        return get_result_data(queryset.order_by())
 
     def access_check(self, request):
         pass
@@ -505,7 +507,7 @@ class AllSubmissions(InfinitePaginationMixin, SubmissionsListBase):
         return context
 
     def _get_result_data(self, queryset=None):
-        if queryset or self.in_contest or self.selected_languages or self.selected_statuses:
+        if queryset is not None or self.in_contest or self.selected_languages or self.selected_statuses:
             return super(AllSubmissions, self)._get_result_data(queryset)
 
         key = 'global_submission_result_data'
