@@ -1,12 +1,30 @@
 import math
 from bisect import bisect
-from operator import itemgetter
+from operator import attrgetter, itemgetter
 
 from django.db import connection, transaction
-from django.db.models import Count
+from django.db.models import Count, OuterRef, Subquery
 from django.utils import timezone
 
-from judge.utils.ranker import tie_ranker
+
+def tie_ranker(iterable, key=attrgetter('points')):
+    rank = 0
+    delta = 1
+    last = None
+    buf = []
+    for item in iterable:
+        new = key(item)
+        if new != last:
+            for _ in buf:
+                yield rank + (delta - 1) / 2.0
+            rank += delta
+            delta = 0
+            buf = []
+        delta += 1
+        buf.append(item)
+        last = key(item)
+    for _ in buf:
+        yield rank + (delta - 1) / 2.0
 
 
 def rational_approximation(t):
@@ -102,51 +120,35 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated, is
 def rate_contest(contest):
     from judge.models import Rating, Profile
 
-    cursor = connection.cursor()
-    cursor.execute('''
-        SELECT judge_rating.user_id, judge_rating.rating, judge_rating.volatility, r.times
-        FROM judge_rating INNER JOIN
-             judge_contest ON (judge_contest.id = judge_rating.contest_id) INNER JOIN (
-            SELECT judge_rating.user_id AS id, MAX(judge_contest.end_time) AS last_time,
-                   COUNT(judge_rating.user_id) AS times
-            FROM judge_contestparticipation INNER JOIN
-                 judge_rating ON (judge_rating.user_id = judge_contestparticipation.user_id) INNER JOIN
-                 judge_contest ON (judge_contest.id = judge_rating.contest_id)
-            WHERE judge_contestparticipation.contest_id = %s AND judge_contest.end_time < %s AND
-                  judge_contestparticipation.user_id NOT IN (
-                      SELECT profile_id FROM judge_contest_rate_exclude WHERE contest_id = %s
-                  ) AND judge_contestparticipation.virtual = 0
-            GROUP BY judge_rating.user_id
-            ORDER BY judge_contestparticipation.score DESC, judge_contestparticipation.cumtime ASC,
-                     judge_contestparticipation.tiebreaker ASC
-        ) AS r ON (judge_rating.user_id = r.id AND judge_contest.end_time = r.last_time)
-    ''', (contest.id, contest.end_time, contest.id))
-    data = {user: (rating, volatility, times) for user, rating, volatility, times in cursor.fetchall()}
-    cursor.close()
-
+    rating_subquery = Rating.objects.filter(user=OuterRef('user'))
+    rating_sorted = rating_subquery.order_by('-contest__end_time')
     users = contest.users.order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker') \
-        .annotate(submissions=Count('submission')).exclude(user_id__in=contest.rate_exclude.all()) \
-        .filter(virtual=0).values_list('id', 'user_id', 'score', 'cumtime', 'is_disqualified')
+        .annotate(submissions=Count('submission'), last_rating=Subquery(rating_sorted.values('rating')[:1]),
+                  volatility=Subquery(rating_sorted.values('volatility')[:1]),
+                  times=Subquery(rating_subquery.values('user_id').annotate(count=Count('id')).values('count'))) \
+        .exclude(user_id__in=contest.rate_exclude.all()) \
+        .filter(virtual=0).values('id', 'user_id', 'score', 'cumtime', 'tiebreaker', 'is_disqualified',
+                                  'last_rating', 'volatility', 'times')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
     if contest.rating_floor is not None:
-        users = users.exclude(user__rating__lt=contest.rating_floor)
+        users = users.exclude(last_rating__lt=contest.rating_floor)
     if contest.rating_ceiling is not None:
-        users = users.exclude(user__rating__gt=contest.rating_ceiling)
-    users = list(tie_ranker(users, key=itemgetter(2, 3)))
-    participation_ids = [user[1][0] for user in users]
-    is_disqualified = [user[1][4] for user in users]
-    user_ids = [user[1][1] for user in users]
-    ranking = list(map(itemgetter(0), users))
-    old_data = [data.get(user, (1200, 535, 0)) for user in user_ids]
-    old_rating = list(map(itemgetter(0), old_data))
-    old_volatility = list(map(itemgetter(1), old_data))
-    times_ranked = list(map(itemgetter(2), old_data))
+        users = users.exclude(last_rating__gt=contest.rating_ceiling)
+
+    users = list(users)
+    participation_ids = list(map(itemgetter('id'), users))
+    user_ids = list(map(itemgetter('user_id'), users))
+    is_disqualified = list(map(itemgetter('is_disqualified'), users))
+    ranking = list(tie_ranker(users, key=itemgetter('score', 'cumtime', 'tiebreaker')))
+    old_rating = [1200 if user['last_rating'] is None else user['last_rating'] for user in users]
+    old_volatility = [525 if user['volatility'] is None else user['volatility'] for user in users]
+    times_ranked = [user['times'] or 0 for user in users]
     rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked, is_disqualified)
 
     now = timezone.now()
-    ratings = [Rating(user_id=id, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
-               for id, p, r, v, z in zip(user_ids, participation_ids, rating, volatility, ranking)]
+    ratings = [Rating(user_id=i, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
+               for i, p, r, v, z in zip(user_ids, participation_ids, rating, volatility, ranking)]
     cursor = connection.cursor()
     cursor.execute('CREATE TEMPORARY TABLE _profile_rating_update(id integer, rating integer)')
     cursor.executemany('INSERT INTO _profile_rating_update VALUES (%s, %s)', list(zip(user_ids, rating)))
