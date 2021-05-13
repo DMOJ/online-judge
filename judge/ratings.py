@@ -4,6 +4,7 @@ from operator import attrgetter, itemgetter
 
 from django.db import connection, transaction
 from django.db.models import Count, OuterRef, Subquery
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 
@@ -123,9 +124,11 @@ def rate_contest(contest):
     rating_subquery = Rating.objects.filter(user=OuterRef('user'))
     rating_sorted = rating_subquery.order_by('-contest__end_time')
     users = contest.users.order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker') \
-        .annotate(submissions=Count('submission'), last_rating=Subquery(rating_sorted.values('rating')[:1]),
-                  volatility=Subquery(rating_sorted.values('volatility')[:1]),
-                  times=Subquery(rating_subquery.values('user_id').annotate(count=Count('id')).values('count'))) \
+        .annotate(submissions=Count('submission'),
+                  last_rating=Coalesce(Subquery(rating_sorted.values('rating')[:1]), 1200),
+                  volatility=Coalesce(Subquery(rating_sorted.values('volatility')[:1]), 535),
+                  times=Coalesce(Subquery(rating_subquery.order_by().values('user_id')
+                                          .annotate(count=Count('id')).values('count')), 0)) \
         .exclude(user_id__in=contest.rate_exclude.all()) \
         .filter(virtual=0).values('id', 'user_id', 'score', 'cumtime', 'tiebreaker', 'is_disqualified',
                                   'last_rating', 'volatility', 'times')
@@ -141,9 +144,9 @@ def rate_contest(contest):
     user_ids = list(map(itemgetter('user_id'), users))
     is_disqualified = list(map(itemgetter('is_disqualified'), users))
     ranking = list(tie_ranker(users, key=itemgetter('score', 'cumtime', 'tiebreaker')))
-    old_rating = [1200 if user['last_rating'] is None else user['last_rating'] for user in users]
-    old_volatility = [525 if user['volatility'] is None else user['volatility'] for user in users]
-    times_ranked = [user['times'] or 0 for user in users]
+    old_rating = list(map(itemgetter('last_rating'), users))
+    old_volatility = list(map(itemgetter('volatility'), users))
+    times_ranked = list(map(itemgetter('times'), users))
     rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked, is_disqualified)
 
     now = timezone.now()
