@@ -195,6 +195,9 @@ class APIDetailView(APIMixin, BaseDetailView):
 
 class APIContestList(APIListView):
     model = Contest
+    basic_filters = (
+        ('is_rated', 'is_rated'),
+    )
     list_filters = (
         ('tag', 'tags__name'),
         ('organization', 'organizations'),
@@ -220,6 +223,8 @@ class APIContestList(APIListView):
             'start_time': contest.start_time.isoformat(),
             'end_time': contest.end_time.isoformat(),
             'time_limit': contest.time_limit and contest.time_limit.total_seconds(),
+            'is_rated': contest.is_rated,
+            'rate_all': contest.is_rated and contest.rate_all,
             'tags': list(map(attrgetter('name'), contest.tag_list)),
         }
 
