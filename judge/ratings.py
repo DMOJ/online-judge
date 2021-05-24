@@ -155,8 +155,10 @@ def rate_contest(contest):
     with transaction.atomic():
         Rating.objects.filter(contest=contest).delete()
         Rating.objects.bulk_create(ratings)
-        Profile.objects.filter(contest_history__contest=contest, contest_history__virtual=0) \
-            .update(rating=Subquery(rating_sorted.values('rating')[:1]))
+
+        Profile.objects.filter(contest_history__contest=contest, contest_history__virtual=0).update(
+            rating=Subquery(Rating.objects.filter(user=OuterRef('id'))
+                            .order_by('-contest__end_time').values('rating')[:1]))
     return old_rating, old_volatility, ranking, times_ranked, rating, volatility
 
 
