@@ -2,18 +2,18 @@
 {% block js_media %}
     <script type="text/javascript">
         {% if dynamic_update and last_msg %}
-            {% if request.in_contest %}
-                window.current_contest = '{{request.participation.contest.key}}';
+            {% if dynamic_contest_id %}
+                window.dynamic_contest_id = {{ dynamic_contest_id }};
             {% else %}
-                window.current_contest = null;
+                window.dynamic_contest_id = null;
             {% endif %}
             {% if dynamic_user_id %}
-                window.dynamic_user_id = {{dynamic_user_id}};
+                window.dynamic_user_id = {{ dynamic_user_id }};
             {% else %}
                 window.dynamic_user_id = null;
             {% endif %}
             {% if dynamic_problem_id %}
-                window.dynamic_problem_id = {{dynamic_problem_id}};
+                window.dynamic_problem_id = {{ dynamic_problem_id }};
             {% else %}
                 window.dynamic_problem_id = null;
             {% endif %}
@@ -212,10 +212,9 @@
                 var receiver = new EventReceiver(
                     "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                     ['submissions'], last_msg, function (message) {
-                        if (current_contest && message.contest != current_contest)
-                            return;
                         if (dynamic_user_id && message.user != dynamic_user_id ||
-                            dynamic_problem_id && message.problem != dynamic_problem_id)
+                            dynamic_problem_id && message.problem != dynamic_problem_id ||
+                            dynamic_contest_id && message.contest != dynamic_contest_id)
                             return;
                         if (message.type == 'update-submission') {
                             if (message.state == 'test-case' && $body.hasClass('window-hidden'))
