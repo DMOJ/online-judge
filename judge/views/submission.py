@@ -286,8 +286,7 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         context = super(SubmissionsListBase, self).get_context_data(**kwargs)
         authenticated = self.request.user.is_authenticated
         context['dynamic_update'] = False
-        if self.in_contest:
-            context['dynamic_contest_id'] = self.contest.id
+        context['dynamic_contest_id'] = self.in_contest and self.contest.id
         context['show_problem'] = self.show_problem
         context['completed_problem_ids'] = user_completed_ids(self.request.profile) if authenticated else []
         context['editable_problem_ids'] = user_editable_ids(self.request.profile) if authenticated else []
