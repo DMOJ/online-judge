@@ -383,11 +383,12 @@ class Contest(models.Model):
         return queryset.distinct()
 
     def rate(self):
-        Rating.objects.filter(contest__end_time__range=(self.end_time, self._now)).delete()
-        for contest in Contest.objects.filter(
-            is_rated=True, end_time__range=(self.end_time, self._now),
-        ).order_by('end_time'):
-            rate_contest(contest)
+        with transaction.atomic():
+            Rating.objects.filter(contest__end_time__range=(self.end_time, self._now)).delete()
+            for contest in Contest.objects.filter(
+                is_rated=True, end_time__range=(self.end_time, self._now),
+            ).order_by('end_time'):
+                rate_contest(contest)
 
     class Meta:
         permissions = (

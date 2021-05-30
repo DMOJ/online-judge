@@ -159,7 +159,6 @@ def rate_contest(contest):
         Profile.objects.filter(contest_history__contest=contest, contest_history__virtual=0).update(
             rating=Subquery(Rating.objects.filter(user=OuterRef('id'))
                             .order_by('-contest__end_time').values('rating')[:1]))
-    return old_rating, old_volatility, ranking, times_ranked, rating, volatility
 
 
 RATING_LEVELS = ['Newbie', 'Amateur', 'Expert', 'Candidate Master', 'Master', 'Grandmaster', 'Target']
