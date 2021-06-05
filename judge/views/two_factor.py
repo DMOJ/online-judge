@@ -16,7 +16,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import FormView, View
 from django.views.generic.detail import SingleObjectMixin
 
-from judge.forms import TOTPForm, TwoFactorLoginForm
+from judge.forms import TOTPEnableForm, TOTPForm, TwoFactorLoginForm
 from judge.jinja2.gravatar import gravatar
 from judge.models import WebAuthnCredential
 from judge.utils.two_factor import WebAuthnJSONEncoder, webauthn_encode
@@ -47,37 +47,44 @@ class TOTPView(TitleMixin, LoginRequiredMixin, FormView):
 
 class TOTPEnableView(TOTPView):
     title = _('Enable Two-factor Authentication')
+    form_class = TOTPEnableForm
     template_name = 'registration/totp_enable.html'
 
     def get(self, request, *args, **kwargs):
         profile = self.profile
-        if not profile.totp_key:
-            profile.totp_key = pyotp.random_base32(length=32)
-            profile.save(update_fields=['totp_key'])
+        if 'totp_enable_key' not in request.session:
+            request.session['totp_enable_key'] = pyotp.random_base32(length=32)
         if not profile.scratch_codes:
             profile.generate_scratch_codes()
         return self.render_to_response(self.get_context_data())
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['totp_key'] = self.request.session['totp_enable_key']
+        return kwargs
 
     def check_skip(self):
         return self.profile.is_totp_enabled
 
     def post(self, request, *args, **kwargs):
-        if not self.profile.totp_key:
+        if not request.session['totp_enable_key']:
             return HttpResponseBadRequest('No TOTP key generated on server side?')
         return super(TOTPEnableView, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(TOTPEnableView, self).get_context_data(**kwargs)
-        context['totp_key'] = self.profile.totp_key
+        context['totp_key'] = self.request.session['totp_enable_key']
         context['scratch_codes'] = json.loads(self.profile.scratch_codes)
-        context['qr_code'] = self.render_qr_code(self.request.user.username, self.profile.totp_key)
+        context['qr_code'] = self.render_qr_code(self.request.user.username, context['totp_key'])
         return context
 
     def form_valid(self, form):
         self.profile.is_totp_enabled = True
-        self.profile.save()
+        self.profile.totp_key = self.request.session['totp_enable_key']
+        self.profile.save(update_fields=['is_totp_enabled', 'totp_key'])
         # Make sure users don't get prompted to enter code right after enabling
         self.request.session['2fa_passed'] = True
+        del self.request.session['totp_enable_key']
         return self.next_page()
 
     @classmethod
