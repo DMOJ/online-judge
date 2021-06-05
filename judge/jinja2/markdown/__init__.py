@@ -1,6 +1,6 @@
 import logging
 import re
-from html.parser import HTMLParser
+from html import unescape
 from urllib.parse import urlparse
 
 import mistune
@@ -40,7 +40,6 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
     def __init__(self, *args, **kwargs):
         self.nofollow = kwargs.pop('nofollow', True)
         self.texoid = TexoidRenderer() if kwargs.pop('texoid', False) else None
-        self.parser = HTMLParser()
         super(AwesomeRenderer, self).__init__(*args, **kwargs)
 
     def _link_rel(self, href):
@@ -82,7 +81,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         if self.texoid and html.startswith('<latex'):
             attr = html[6:html.index('>')]
             latex = html[html.index('>') + 1:html.rindex('<')]
-            latex = self.parser.unescape(latex)
+            latex = unescape(latex)
             result = self.texoid.get_result(latex)
             if not result:
                 return '<pre>%s</pre>' % mistune.escape(latex, smart_amp=False)
