@@ -263,6 +263,13 @@ class WebAuthnCredential(models.Model):
             rp_id=settings.WEBAUTHN_RP_ID,
         )
 
+    def __str__(self):
+        return f'WebAuthn credential: {self.name}'
+
+    class Meta:
+        verbose_name = _('WebAuthn credential')
+        verbose_name_plural = _('WebAuthn credentials')
+
 
 class OrganizationRequest(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='requests', on_delete=models.CASCADE)
