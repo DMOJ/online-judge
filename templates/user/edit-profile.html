@@ -358,7 +358,7 @@ You will not be able to view your scratch codes after you leave this page!') }}"
                         {% if profile.is_totp_enabled %}
                             <div class="block-header grayed">{{ _('Two-factor Authentication is enabled') }}:</div>
                             <div class="block-buttons">
-                                {% if require_staff_2fa and request.user.is_staff %}
+                                {% if require_staff_2fa and request.user.is_staff and not profile.is_webauthn_enabled %}
                                     <a id="disable-2fa-button" class="button inline-button">{{ _('Disable') }}</a>
                                 {% else %}
                                     <a href="{{ url('disable_2fa') }}"
