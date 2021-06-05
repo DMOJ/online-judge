@@ -16,13 +16,6 @@
             padding-top: 0.5em;
         }
 
-        #center-float {
-            position: relative;
-            margin: 0 auto auto -28.5em;
-            left: 50%;
-            width: 700px;
-        }
-
         #totp-disable-form {
             border: unset;
             background: unset;
@@ -32,7 +25,7 @@
 {% endblock %}
 
 {% block body %}
-    <div id="center-float">
+    <div class="auth-flow-form" style="padding-top: 0;">
         <form id="totp-disable-form" action="" method="post" class="form-area">
             {% csrf_token %}
             <div class="block-header">{{ _('To protect your account, you must first authenticate before you can disable Two Factor Authentication.') }}</div>
