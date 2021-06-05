@@ -35,6 +35,10 @@
             font-size: 1.1em;
         }
 
+        .block-buttons {
+            margin: 0.5em 0 0.8em;
+        }
+
         .fullwidth {
             display: block;
             overflow: hidden;
@@ -351,34 +355,35 @@ You will not be able to view your scratch codes after you leave this page!') }}"
                         {% endif %}
                     </table>
                     <div>
-                        <span class="inline-header grayed">
-                            {% if profile.is_totp_enabled %}
-                                {{ _('Two-factor Authentication is enabled') }}:
-                            {% else %}
-                                {{ _('Two-factor Authentication is disabled') }}:
-                            {% endif %}
-                        </span>
                         {% if profile.is_totp_enabled %}
-                            {% if require_staff_2fa and request.user.is_staff %}
-                                <a id="disable-2fa-button" class="button inline-button">{{ _('Disable') }}</a>
-                            {% else %}
-                                <a href="{{ url('disable_2fa') }}" class="button inline-button">{{ _('Disable') }}</a>
-                            {% endif %}
-                            <span class="inline-header grayed">
+                            <div class="block-header grayed">{{ _('Two-factor Authentication is enabled') }}:</div>
+                            <div class="block-buttons">
+                                {% if require_staff_2fa and request.user.is_staff %}
+                                    <a id="disable-2fa-button" class="button inline-button">{{ _('Disable') }}</a>
+                                {% else %}
+                                    <a href="{{ url('disable_2fa') }}"
+                                       class="button inline-button">{{ _('Disable') }}</a>
+                                {% endif %}
+                                <a href="{{ url('refresh_2fa') }}" class="button inline-button">{{ _('Refresh') }}</a>
+                            </div>
+                            <div class="block-header grayed">
                                 {{ _('Scratch Codes:') }}
                                 {% if profile.scratch_codes %}
                                     <a id="generate-scratch-codes-button" href="{{ url('generate_scratch_codes') }}"
-                                        class="button inline-button">{{ _('Regenerate') }}</a>
-                                        <div id="hidden-word">{{ _('Hidden') }}</div>
+                                       class="button inline-button">{{ _('Regenerate') }}</a>
+                                    <div id="hidden-word">{{ _('Hidden') }}</div>
                                 {% else %}
                                     <a id="generate-scratch-codes-button" href="{{ url('generate_scratch_codes') }}"
-                                        class="button inline-button">{{ _('Generate') }}</a>
+                                       class="button inline-button">{{ _('Generate') }}</a>
                                 {% endif %}
                                 <div id="scratch-codes-text"></div>
                                 <pre><code id="scratch-codes"></code></pre>
-                            </span>
+                            </div>
                         {% else %}
-                            <a href="{{ url('enable_2fa') }}" class="button inline-button">{{ _('Enable') }}</a>
+                            <span class="inline-header grayed">
+                                {{ _('Two-factor Authentication is disabled') }}:
+                                <a href="{{ url('enable_2fa') }}" class="button inline-button">{{ _('Enable') }}</a>
+                            </span>
                         {% endif %}
                     </div>
                 </div>

@@ -49,6 +49,7 @@ class TOTPEnableView(TOTPView):
     title = _('Enable Two-factor Authentication')
     form_class = TOTPEnableForm
     template_name = 'registration/totp_enable.html'
+    is_refresh = False
 
     def get(self, request, *args, **kwargs):
         profile = self.profile
@@ -74,8 +75,9 @@ class TOTPEnableView(TOTPView):
     def get_context_data(self, **kwargs):
         context = super(TOTPEnableView, self).get_context_data(**kwargs)
         context['totp_key'] = self.request.session['totp_enable_key']
-        context['scratch_codes'] = json.loads(self.profile.scratch_codes)
+        context['scratch_codes'] = [] if self.is_refresh else json.loads(self.profile.scratch_codes)
         context['qr_code'] = self.render_qr_code(self.request.user.username, context['totp_key'])
+        context['is_refresh'] = self.is_refresh
         return context
 
     def form_valid(self, form):
@@ -100,6 +102,14 @@ class TOTPEnableView(TOTPView):
         buf = BytesIO()
         image.save(buf, format='PNG')
         return 'data:image/png;base64,' + base64.b64encode(buf.getvalue()).decode('ascii')
+
+
+class TOTPRefreshView(TOTPEnableView):
+    title = _('Refresh Two-factor Authentication')
+    is_refresh = True
+
+    def check_skip(self):
+        return not self.profile.is_totp_enabled
 
 
 class TOTPDisableView(TOTPView):
