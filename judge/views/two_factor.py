@@ -221,10 +221,6 @@ class WebAuthnDeleteView(SingleObjectMixin, WebAuthnView):
             return HttpResponseBadRequest(_('Staff may not disable 2FA'))
         credential.delete()
 
-        if count <= 1:
-            request.profile.is_webauthn_enabled = False
-            request.profile.save(update_fields=['is_webauthn_enabled'])
-
         return HttpResponse()
 
 
