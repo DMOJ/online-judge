@@ -128,6 +128,11 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
     def get_comment_page(self):
         return 's:' + self.object.code
 
+    def no_such_problem(self):
+        code = self.kwargs.get(self.slug_url_kwarg, None)
+        return generic_message(self.request, _('No such editorial'),
+                               _('Could not find an editorial with the code "%s".') % code, status=404)
+
 
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
     context_object_name = 'problem'
