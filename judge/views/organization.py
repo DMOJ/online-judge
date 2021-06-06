@@ -5,7 +5,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
-from django.db import transaction
 from django.db.models import Count, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
@@ -319,7 +318,7 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
         return form
 
     def form_valid(self, form):
-        with transaction.atomic(), revisions.create_revision():
+        with revisions.create_revision(atomic=True):
             revisions.set_comment(_('Edited from site'))
             revisions.set_user(self.request.user)
             return super(EditOrganization, self).form_valid(form)

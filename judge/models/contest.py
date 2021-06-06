@@ -54,7 +54,7 @@ class ContestTag(models.Model):
 
 
 class Contest(models.Model):
-    SOCREBOARD_HIDDEN = 'H'
+    SCOREBOARD_HIDDEN = 'H'
     SCOREBOARD_VISIBLE = 'V'
     SCOREBOARD_AFTER_CONTEST = 'C'
     SCOREBOARD_AFTER_PARTICIPATION = 'P'
@@ -377,8 +377,8 @@ class Contest(models.Model):
             return
 
         # External user but internal contest
-        if user.profile.is_external_user and not self.is_external
-                raise self.Inaccessible()
+        if user.profile.is_external_user and not self.is_external:
+            raise self.Inaccessible()
 
         # If the user can view or edit all contests
         if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
@@ -468,11 +468,12 @@ class Contest(models.Model):
         return queryset.distinct()
 
     def rate(self):
-        Rating.objects.filter(contest__end_time__range=(self.end_time, self._now)).delete()
-        for contest in Contest.objects.filter(
-            is_rated=True, end_time__range=(self.end_time, self._now),
-        ).order_by('end_time'):
-            rate_contest(contest)
+        with transaction.atomic():
+            Rating.objects.filter(contest__end_time__range=(self.end_time, self._now)).delete()
+            for contest in Contest.objects.filter(
+                is_rated=True, end_time__range=(self.end_time, self._now),
+            ).order_by('end_time'):
+                rate_contest(contest)
 
     class Meta:
         permissions = (

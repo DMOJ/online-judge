@@ -13,7 +13,6 @@ from django.contrib.auth.views import LoginView, PasswordChangeView, redirect_to
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.db import transaction
 from django.db.models import Count, Max, Min
 from django.db.models.fields import DateField
 from django.db.models.functions import Cast, ExtractYear
@@ -385,7 +384,7 @@ def edit_profile(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=request.profile, user=request.user)
         if form.is_valid():
-            with transaction.atomic(), revisions.create_revision():
+            with revisions.create_revision(atomic=True):
                 form.save()
                 revisions.set_user(request.user)
                 revisions.set_comment(_('Updated on site'))
@@ -434,7 +433,7 @@ def edit_profile(request):
 @login_required
 def generate_api_token(request):
     profile = request.profile
-    with transaction.atomic(), revisions.create_revision():
+    with revisions.create_revision(atomic=True):
         revisions.set_user(request.user)
         revisions.set_comment(_('Generated API token for user'))
         return JsonResponse({'data': {'token': profile.generate_api_token()}})
@@ -444,7 +443,7 @@ def generate_api_token(request):
 @login_required
 def remove_api_token(request):
     profile = request.profile
-    with transaction.atomic(), revisions.create_revision():
+    with revisions.create_revision(atomic=True):
         profile.api_token = None
         profile.save()
         revisions.set_user(request.user)
@@ -456,7 +455,7 @@ def remove_api_token(request):
 @login_required
 def generate_scratch_codes(request):
     profile = request.profile
-    with transaction.atomic(), revisions.create_revision():
+    with revisions.create_revision(atomic=True):
         revisions.set_user(request.user)
         revisions.set_comment(_('Generated scratch codes for user'))
     return JsonResponse({'data': {'codes': profile.generate_scratch_codes()}})

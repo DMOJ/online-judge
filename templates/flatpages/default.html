@@ -11,5 +11,5 @@
 {% endblock %}
 
 {% block body %}
-    {{ render_django(flatpage.content) }}
+    {{ render_django(flatpage.content, request=request) }}
 {% endblock %}

@@ -128,6 +128,11 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
     def get_comment_page(self):
         return 's:' + self.object.code
 
+    def no_such_problem(self):
+        code = self.kwargs.get(self.slug_url_kwarg, None)
+        return generic_message(self.request, _('No such editorial'),
+                               _('Could not find an editorial with the code "%s".') % code, status=404)
+
 
 class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
     context_object_name = 'problem'
@@ -620,7 +625,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
         if (
             not self.request.user.has_perm('judge.spam_submission') and
-            Submission.objects.filter(user=self.request.profile, was_rejudged=False)
+            Submission.objects.filter(user=self.request.profile, rejudged_date__isnull=True)
                               .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() >= limit
         ):
             return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
@@ -720,7 +725,7 @@ class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         problem.ac_rate = 0
         problem.user_count = 0
         problem.code = form.cleaned_data['code']
-        with transaction.atomic(), revisions.create_revision():
+        with revisions.create_revision(atomic=True):
             problem.save()
             problem.authors.add(self.request.profile)
             problem.allowed_languages.set(languages)

@@ -6,11 +6,15 @@ from django.db import migrations, models
 def hide_scoreboard_eq_true(apps, schema_editor):
     Contest = apps.get_model('judge', 'Contest')
     Contest.objects.filter(hide_scoreboard=True).update(scoreboard_visibility='C')
+    Contest.objects.filter(hide_scoreboard=True, permanently_hide_scoreboard=True).update(scoreboard_visibility='H')
+    Contest.objects.filter(hide_scoreboard=True, partially_hide_scoreboard=True).update(scoreboard_visibility='P')
 
 
 def scoreboard_visibility_eq_contest(apps, schema_editor):
     Contest = apps.get_model('judge', 'Contest')
-    Contest.objects.filter(scoreboard_visibility__in=('C', 'P')).update(hide_scoreboard=True)
+    Contest.objects.filter(scoreboard_visibility='C').update(hide_scoreboard=True)
+    Contest.objects.filter(scoreboard_visibility='H').update(hide_scoreboard=True, permanently_hide_scoreboard=True)
+    Contest.objects.filter(scoreboard_visibility='P').update(hide_scoreboard=True, partially_hide_scoreboard=True)
 
 
 class Migration(migrations.Migration):
@@ -23,11 +27,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='scoreboard_visibility',
-            field=models.CharField(choices=[('V', 'Visible'), ('C', 'Hidden for duration of contest'), ('P', 'Hidden for duration of participation')], default='V', help_text='Scoreboard visibility through the duration of the contest', max_length=1, verbose_name='scoreboard visibility'),
+            field=models.CharField(choices=[('H', 'Hidden'), ('V', 'Visible'), ('C', 'Hidden for duration of contest'), ('P', 'Hidden for duration of participation')], default='V', help_text='Scoreboard visibility through the duration of the contest', max_length=1, verbose_name='scoreboard visibility'),
         ),
         migrations.RunPython(hide_scoreboard_eq_true, scoreboard_visibility_eq_contest, atomic=True),
         migrations.RemoveField(
             model_name='contest',
             name='hide_scoreboard',
+        ),
+        migrations.RemoveField(
+            model_name='contest',
+            name='partially_hide_scoreboard',
+        ),
+        migrations.RemoveField(
+            model_name='contest',
+            name='permanently_hide_scoreboard',
         ),
     ]

@@ -206,7 +206,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             key='external',
             start_time=_now - timezone.timedelta(days=1),
             end_time=_now + timezone.timedelta(days=100),
-            organizers=('superuser', 'staff_contest_edit_own'),
+            authors=('superuser', 'staff_contest_edit_own'),
             is_external=True,
         )
 

@@ -18,12 +18,16 @@ from judge.models import Contest, Language, Organization, Problem, Profile, Subm
 from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, Select2MultipleWidget, Select2Widget
 
+TOTP_CODE_LENGTH = 6
+
 two_factor_validators_by_length = {
-    6: {
-        'regex_validator': RegexValidator('^[0-9]{6}$',
-                                          _('Two-factor authentication tokens must be 6 decimal digits.')),
-        'verify': lambda code, profile: not pyotp.TOTP(profile.totp_key)
-                                                 .verify(code, valid_window=settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES),
+    TOTP_CODE_LENGTH: {
+        'regex_validator': RegexValidator(
+            f'^[0-9]{{{TOTP_CODE_LENGTH}}}$',
+            _(f'Two-factor authentication tokens must be {TOTP_CODE_LENGTH} decimal digits.'),
+        ),
+        'verify': lambda code, profile:
+            not pyotp.TOTP(profile.totp_key).verify(code, valid_window=settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES),
         'err': _('Invalid two-factor authentication token.'),
     },
     16: {
@@ -181,7 +185,6 @@ class TOTPForm(Form):
     TOLERANCE = settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES
 
     totp_or_scratch_code = NoAutoCompleteCharField(required=False)
-    webauthn_response = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     def __init__(self, *args, **kwargs):
         self.profile = kwargs.pop('profile')
@@ -196,6 +199,19 @@ class TOTPForm(Form):
         validator['regex_validator'](totp_or_scratch_code)
         if validator['verify'](totp_or_scratch_code, self.profile):
             raise ValidationError(validator['err'])
+
+
+class TOTPEnableForm(TOTPForm):
+    def __init__(self, *args, **kwargs):
+        self.totp_key = kwargs.pop('totp_key')
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        totp_validate = two_factor_validators_by_length[TOTP_CODE_LENGTH]
+        code = self.cleaned_data.get('totp_or_scratch_code')
+        totp_validate['regex_validator'](code)
+        if not pyotp.TOTP(self.totp_key).verify(code, valid_window=settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES):
+            raise ValidationError(totp_validate['err'])
 
 
 class TwoFactorLoginForm(TOTPForm):
