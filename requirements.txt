@@ -35,3 +35,4 @@ martor @ git+git://github.com/DMOJ/martor.git
 netaddr
 webauthn
 bleach
+django-admin-sortable2

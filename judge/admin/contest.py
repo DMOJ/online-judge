@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.conf.urls import url
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
@@ -60,7 +61,7 @@ class ContestProblemInlineForm(ModelForm):
         widgets = {'problem': AdminHeavySelect2Widget(data_view='problem_select2')}
 
 
-class ContestProblemInline(admin.TabularInline):
+class ContestProblemInline(SortableInlineAdminMixin, admin.TabularInline):
     model = ContestProblem
     verbose_name = _('Problem')
     verbose_name_plural = 'Problems'
