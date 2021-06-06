@@ -1,7 +1,7 @@
 from operator import attrgetter
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.db.models import Count, F, OuterRef, Prefetch, Q, Subquery
 from django.http import Http404, JsonResponse
 from django.utils import timezone
@@ -16,6 +16,43 @@ from judge.models import (
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
 from judge.views.submission import group_test_cases
+
+
+class BaseSimpleFilter:
+    def __init__(self, lookup):
+        self.lookup = lookup
+
+    def get_object(self, key):
+        raise NotImplementedError()
+
+    def to_filter(self, key):
+        try:
+            return {self.lookup: self.get_object(key)}
+        except ObjectDoesNotExist:
+            return {self.lookup: None}
+
+
+class ProfileSimpleFilter(BaseSimpleFilter):
+    def get_object(self, key):
+        return Profile.objects.get(user__username=key)
+
+
+class ProblemSimpleFilter(BaseSimpleFilter):
+    def get_object(self, key):
+        return Problem.objects.get(code=key)
+
+
+class BaseListFilter:
+    def to_filter(self, key_list):
+        raise NotImplementedError()
+
+
+class LanguageListFilter(BaseListFilter):
+    def __init__(self, lookup):
+        self.lookup = lookup
+
+    def to_filter(self, key_list):
+        return {f'{self.lookup}_id__in': Language.objects.filter(key__in=key_list).values_list('id', flat=True)}
 
 
 class APILoginRequiredException(Exception):
@@ -108,18 +145,24 @@ class APIListView(APIMixin, InfinitePaginationMixin, BaseListView):
 
         for key, filter_name in self.basic_filters:
             if key in self.request.GET:
-                # May raise ValueError or ValidationError, but is caught in APIMixin
-                queryset = queryset.filter(**{
-                    filter_name: self.request.GET.get(key),
-                })
+                if isinstance(filter_name, BaseSimpleFilter):
+                    queryset = queryset.filter(**filter_name.to_filter(self.request.GET.get(key)))
+                else:
+                    # May raise ValueError or ValidationError, but is caught in APIMixin
+                    queryset = queryset.filter(**{
+                        filter_name: self.request.GET.get(key),
+                    })
                 self.used_basic_filters.add(key)
 
         for key, filter_name in self.list_filters:
             if key in self.request.GET:
-                # May raise ValueError or ValidationError, but is caught in APIMixin
-                queryset = queryset.filter(**{
-                    filter_name + '__in': self.request.GET.getlist(key),
-                })
+                if isinstance(filter_name, BaseListFilter):
+                    queryset = queryset.filter(**filter_name.to_filter(self.request.GET.getlist(key)))
+                else:
+                    # May raise ValueError or ValidationError, but is caught in APIMixin
+                    queryset = queryset.filter(**{
+                        filter_name + '__in': self.request.GET.getlist(key),
+                    })
                 self.used_list_filters.add(key)
 
         return queryset
@@ -236,7 +279,9 @@ class APIContestDetail(APIDetailView):
             'has_rating': contest.ratings.exists(),
             'rating_floor': contest.rating_floor,
             'rating_ceiling': contest.rating_ceiling,
-            'hidden_scoreboard': contest.hide_scoreboard,
+            'hidden_scoreboard': contest.scoreboard_visibility in (contest.SCOREBOARD_AFTER_CONTEST,
+                                                                   contest.SCOREBOARD_AFTER_PARTICIPATION),
+            'scoreboard_visibility': contest.scoreboard_visibility,
             'is_organization_private': contest.is_organization_private,
             'organizations': list(
                 contest.organizations.values_list('id', flat=True) if contest.is_organization_private else [],
@@ -291,13 +336,14 @@ class APIContestParticipationList(APIListView):
         # "Contest.get_visible_contests" only gets which contests the user can *see*.
         # Conditions for participation scoreboard access:
         #   1. Contest has ended
-        #   2. User is the organizer of the contest
+        #   2. User is the organizer or curator of the contest
         #   3. User is specified to be able to "view contest scoreboard"
         if not self.request.user.has_perm('judge.see_private_contest'):
             q = Q(end_time__lt=self._now)
             if self.request.user.is_authenticated:
                 if self.request.user.has_perm('judge.edit_own_contest'):
-                    q |= Q(organizers=self.request.profile)
+                    q |= Q(authors=self.request.profile)
+                    q |= Q(curators=self.request.profile)
                 q |= Q(view_contest_scoreboard=self.request.profile)
             visible_contests = visible_contests.filter(q)
 
@@ -377,6 +423,8 @@ class APIProblemList(APIListView):
             'group': problem.group.full_name,
             'points': problem.points,
             'partial': problem.partial,
+            'is_organization_private': problem.is_organization_private,
+            'is_public': problem.is_public,
         }
 
 
@@ -514,11 +562,11 @@ class APIUserDetail(APIDetailView):
 class APISubmissionList(APIListView):
     model = Submission
     basic_filters = (
-        ('user', 'user__user__username'),
-        ('problem', 'problem__code'),
+        ('user', ProfileSimpleFilter('user')),
+        ('problem', ProblemSimpleFilter('problem')),
     )
     list_filters = (
-        ('language', 'language__key'),
+        ('language', LanguageListFilter('language')),
         ('result', 'result'),
     )
 

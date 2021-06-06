@@ -23,6 +23,11 @@ jobs:
         sudo dpkg -i crowdin.deb
         pip install -r requirements.txt
         pip install pymysql
+    - name: Update English source strings
+      run: |
+        echo "STATIC_ROOT = '/tmp'" > dmoj/local_settings.py
+        python manage.py makemessages -l en -e py,html,txt
+        python manage.py makemessages -l en -d djangojs
     - name: Download strings from Crowdin
       env:
         CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
@@ -59,10 +64,11 @@ jobs:
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.REPO_SCOPED_TOKEN }}
-        committer: dmoj-build <build@dmoj.ca> 
+        author: dmoj-build <build@dmoj.ca>
+        committer: dmoj-build <build@dmoj.ca>
         commit-message: 'i18n: update translations from Crowdin'
         title: Update translations from Crowdin
         body: This PR has been auto-generated to pull in latest translations from [Crowdin](https://translate.dmoj.ca).
         labels: i18n, enhancement
-        assignees: Xyene, quantum5
+        reviewers: Xyene, quantum5
         branch: update-i18n

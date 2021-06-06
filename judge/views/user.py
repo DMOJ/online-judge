@@ -130,7 +130,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
-    extra_context = {'title': _('Login')}
+    extra_context = {'title': gettext_lazy('Login')}
     authentication_form = CustomAuthenticationForm
     redirect_authenticated_user = True
 
@@ -528,7 +528,7 @@ def user_ranking_redirect(request):
 
 class UserLogoutView(TitleMixin, TemplateView):
     template_name = 'registration/logout.html'
-    title = 'You have been successfully logged out.'
+    title = gettext_lazy('You have been successfully logged out.')
 
     def post(self, request, *args, **kwargs):
         auth_logout(request)

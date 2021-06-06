@@ -14,11 +14,9 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from django_ace import AceWidget
-from judge.models import Contest, Language, Organization, PrivateMessage, Problem, Profile, Submission, \
-    WebAuthnCredential
+from judge.models import Contest, Language, Organization, Problem, Profile, Submission, WebAuthnCredential
 from judge.utils.subscription import newsletter_id
-from judge.widgets import HeavyPreviewPageDownWidget, MathJaxPagedownWidget, PagedownWidget, Select2MultipleWidget, \
-    Select2Widget
+from judge.widgets import HeavyPreviewPageDownWidget, Select2MultipleWidget, Select2Widget
 
 two_factor_validators_by_length = {
     6: {
@@ -155,15 +153,6 @@ class EditOrganizationForm(ModelForm):
         widgets = {'admins': Select2MultipleWidget(attrs={'style': 'width: 200px'})}
         if HeavyPreviewPageDownWidget is not None:
             widgets['about'] = HeavyPreviewPageDownWidget(preview=reverse_lazy('organization_preview'))
-
-
-class NewMessageForm(ModelForm):
-    class Meta:
-        model = PrivateMessage
-        fields = ['title', 'content']
-        widgets = {}
-        if PagedownWidget is not None:
-            widgets['content'] = MathJaxPagedownWidget()
 
 
 class CustomAuthenticationForm(AuthenticationForm):

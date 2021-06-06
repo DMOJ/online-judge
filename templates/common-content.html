@@ -24,32 +24,34 @@
                     }
                 }
 
-                var copyButton;
-                $('pre code').each(function () {
-                    $(this).parent().before($('<div>', {'class': 'copy-clipboard'})
-                        .append(copyButton = $('<span>', {
-                            'class': 'btn-clipboard',
-                            'data-clipboard-text': $(this).text(),
-                            'title': 'Click to copy'
-                        }).text('Copy')));
+                window.add_code_copy_buttons = function ($container) {
+                    $container.find('pre code').each(function () {
+                        var copyButton;
+                        $(this).parent().before($('<div>', {'class': 'copy-clipboard'})
+                            .append(copyButton = $('<span>', {
+                                'class': 'btn-clipboard',
+                                'data-clipboard-text': $(this).text(),
+                                'title': 'Click to copy'
+                            }).text('Copy')));
 
-                    $(copyButton.get(0)).mouseleave(function () {
-                        $(this).attr('class', 'btn-clipboard');
-                        $(this).removeAttr('aria-label');
+                        $(copyButton.get(0)).mouseleave(function () {
+                            $(this).attr('class', 'btn-clipboard');
+                            $(this).removeAttr('aria-label');
+                        });
+
+                        var curClipboard = new Clipboard(copyButton.get(0));
+
+                        curClipboard.on('success', function (e) {
+                            e.clearSelection();
+                            showTooltip(e.trigger, 'Copied!');
+                        });
+
+                        curClipboard.on('error', function (e) {
+                            showTooltip(e.trigger, fallbackMessage(e.action));
+                        });
                     });
-
-                    var curClipboard = new Clipboard(copyButton.get(0));
-
-                    curClipboard.on('success', function (e) {
-                        e.clearSelection();
-                        showTooltip(e.trigger, 'Copied!');
-                    });
-
-                    curClipboard.on('error', function (e) {
-                        showTooltip(e.trigger, fallbackMessage(e.action));
-                    });
-
-                });
+                }
+                window.add_code_copy_buttons($(document));
             });
         </script>
     {% endcompress %}

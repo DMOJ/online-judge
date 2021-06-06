@@ -1,35 +1,40 @@
 import fnmatch
 import json
 import os
+import re
 import zipfile
 
 from celery import shared_task
 from django.conf import settings
 from django.utils.translation import gettext as _
 
-from judge.models import Comment, Submission
+from judge.models import Comment, Problem, Submission
 from judge.utils.celery import Progress
+from judge.utils.raw_sql import use_straight_join
 from judge.utils.unicode import utf8bytes
 
 __all__ = ('prepare_user_data',)
+rewildcard = re.compile(r'\*+')
 
 
 def apply_submission_filter(queryset, options):
     if not options['submission_download']:
         return []
+
+    use_straight_join(queryset)
+
     if options['submission_results']:
         queryset = queryset.filter(result__in=options['submission_results'])
 
-    problem_code_glob_cache = {}
+    # Compress wildcards to avoid exponential complexity on certain glob patterns before Python 3.9.
+    # For details, see <https://bugs.python.org/issue40480>.
+    problem_glob = rewildcard.sub('*', options['submission_problem_glob'])
+    if problem_glob != '*':
+        queryset = queryset.filter(
+            problem__in=Problem.objects.filter(code__regex=fnmatch.translate(problem_glob)),
+        )
 
-    def problem_code_glob_match(obj):
-        code = obj.problem.code
-        result = problem_code_glob_cache.get(code)
-        if result is None:
-            result = problem_code_glob_cache[code] = fnmatch.fnmatch(code, options['submission_problem_glob'])
-        return result
-
-    return list(filter(problem_code_glob_match, queryset))
+    return list(queryset)
 
 
 def apply_comment_filter(queryset, options):
@@ -41,8 +46,17 @@ def apply_comment_filter(queryset, options):
 @shared_task(bind=True)
 def prepare_user_data(self, profile_id, options):
     options = json.loads(options)
-    submissions = apply_submission_filter(Submission.objects.filter(user_id=profile_id), options)
-    comments = apply_comment_filter(Comment.objects.filter(author_id=profile_id), options)
+    with Progress(self, 2, stage=_('Applying filters')) as p:
+        # Force an update so that we get a progress bar.
+        p.done = 0
+        submissions = apply_submission_filter(
+            Submission.objects.select_related('problem', 'language', 'source').filter(user_id=profile_id),
+            options,
+        )
+        p.did(1)
+        comments = apply_comment_filter(Comment.objects.filter(author_id=profile_id), options)
+        p.did(1)
+
     with zipfile.ZipFile(os.path.join(settings.DMOJ_USER_DATA_CACHE, '%s.zip' % profile_id), mode='w') as data_file:
         submission_count = len(submissions)
         if submission_count:

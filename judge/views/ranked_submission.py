@@ -29,8 +29,9 @@ class RankedSubmissions(ProblemSubmissions):
 
         if self.selected_languages:
             lang_ids = Language.objects.filter(key__in=self.selected_languages).values_list('id', flat=True)
-            constraint += f' AND sub.language_id IN ({", ".join(["%s"] * len(lang_ids))})'
-            params.extend(lang_ids)
+            if lang_ids:
+                constraint += f' AND sub.language_id IN ({", ".join(["%s"] * len(lang_ids))})'
+                params.extend(lang_ids)
             self.selected_languages = set()
 
         queryset = super(RankedSubmissions, self).get_queryset().filter(user__is_unlisted=False)

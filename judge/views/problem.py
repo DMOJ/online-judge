@@ -23,6 +23,7 @@ from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, View
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
+from reversion import revisions
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemSubmitForm
@@ -434,7 +435,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         else:
             context['hot_problems'] = None
             context['point_start'], context['point_end'], context['point_values'] = 0, 0, {}
-            context['hide_contest_scoreboard'] = self.contest.hide_scoreboard
+            context['hide_contest_scoreboard'] = self.contest.scoreboard_visibility in \
+                (self.contest.SCOREBOARD_AFTER_CONTEST, self.contest.SCOREBOARD_AFTER_PARTICIPATION)
         return context
 
     def get_noui_slider_points(self):
@@ -638,6 +640,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
             contest_problem = self.contest_problem
             if contest_problem is not None:
+                # See ContestSubmission post_save hook in judge/signals.py
                 self.new_submission.contest_object_id = contest_problem.contest_id
                 ContestSubmission(
                     submission=self.new_submission,
@@ -647,7 +650,6 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
             source = SubmissionSource(submission=self.new_submission, source=form.cleaned_data['source'])
             source.save()
-            self.request.profile.update_contest()
 
         # Save a query.
         self.new_submission.source = source
@@ -711,16 +713,21 @@ class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         language_limits = problem.language_limits.all()
         organizations = problem.organizations.all()
         types = problem.types.all()
+        old_code = problem.code
+
         problem.pk = None
         problem.is_public = False
         problem.ac_rate = 0
         problem.user_count = 0
         problem.code = form.cleaned_data['code']
-        problem.save()
-        problem.authors.add(self.request.profile)
-        problem.allowed_languages.set(languages)
-        problem.language_limits.set(language_limits)
-        problem.organizations.set(organizations)
-        problem.types.set(types)
+        with transaction.atomic(), revisions.create_revision():
+            problem.save()
+            problem.authors.add(self.request.profile)
+            problem.allowed_languages.set(languages)
+            problem.language_limits.set(language_limits)
+            problem.organizations.set(organizations)
+            problem.types.set(types)
+            revisions.set_user(self.request.user)
+            revisions.set_comment(_('Cloned problem from %s') % old_code)
 
         return HttpResponseRedirect(reverse('admin:judge_problem_change', args=(problem.id,)))

@@ -31,9 +31,10 @@ from judge.utils.views import DiggPaginatorMixin, TitleMixin
 def submission_related(queryset):
     return queryset.select_related('user__user', 'problem', 'language') \
         .only('id', 'user__user__username', 'user__display_rank', 'user__rating', 'problem__name',
-              'problem__code', 'problem__is_public', 'language__short_name',
-              'language__key', 'date', 'time', 'memory', 'points', 'result', 'status', 'case_points',
-              'case_total', 'current_testcase', 'contest_object')
+              'problem__code', 'problem__is_public', 'language__short_name', 'language__key', 'date', 'time', 'memory',
+              'points', 'result', 'status', 'case_points', 'case_total', 'current_testcase', 'contest_object',
+              'is_locked') \
+        .prefetch_related('contest_object__authors', 'contest_object__curators')
 
 
 class SubmissionMixin(object):
@@ -244,11 +245,15 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             queryset = queryset.select_related('contest_object').defer('contest_object__description')
 
             if not self.request.user.has_perm('judge.see_private_contest'):
-                # Show submissions for any contest you can edit, finished, or visible scoreboard
-                contest_queryset = Contest.objects.filter(Q(organizers=self.request.profile) |
-                                                          Q(hide_scoreboard=False) |
-                                                          Q(end_time__lte=timezone.now(),
-                                                            permanently_hide_scoreboard=False)).distinct()
+                # Show submissions for any contest you can edit or visible scoreboard
+                contest_queryset = Contest.objects.filter(Q(authors=self.request.profile) |
+                                                          Q(curators=self.request.profile) |
+                                                          Q(scoreboard_visibility=Contest.SCOREBOARD_VISIBLE) |
+                                                          Q(end_time__lt=timezone.now(),
+                                                            scoreboard_visibility=Contest.SCOREBOARD_AFTER_CONTEST) |
+                                                          Q(end_time__lt=timezone.now(),
+                                                            scoreboard_visibility=Contest.SCOREBOARD_AFTER_PARTICIPATION)
+                                                         ).distinct()
                 queryset = queryset.filter(Q(user=self.request.profile) |
                                            Q(contest_object__in=contest_queryset) |
                                            Q(contest_object__isnull=True))
@@ -391,6 +396,10 @@ class ProblemSubmissionsBase(SubmissionsListBase):
             raise Http404()
 
     def access_check(self, request):
+        # FIXME: This should be rolled into the `is_accessible_by` check when implementing #1509
+        if self.in_contest and request.user.is_authenticated and request.profile.id in self.contest.editor_ids:
+            return
+
         if not self.problem.is_accessible_by(request.user):
             raise Http404()
 
@@ -566,7 +575,9 @@ class UserAllContestSubmissions(ForceContestMixin, AllUserSubmissions):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        filter_submissions_by_visible_problems(queryset, self.request.user)
+        # FIXME: fix this line of code when #1509 is implemented
+        if not self.request.user.is_authenticated or self.request.profile.id not in self.contest.editor_ids:
+            filter_submissions_by_visible_problems(queryset, self.request.user)
         return queryset
 
 
