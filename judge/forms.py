@@ -26,8 +26,7 @@ two_factor_validators_by_length = {
             f'^[0-9]{{{TOTP_CODE_LENGTH}}}$',
             _(f'Two-factor authentication tokens must be {TOTP_CODE_LENGTH} decimal digits.'),
         ),
-        'verify': lambda code, profile:
-            not pyotp.TOTP(profile.totp_key).verify(code, valid_window=settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES),
+        'verify': lambda code, profile: not profile.check_totp_code(code),
         'err': _('Invalid two-factor authentication token.'),
     },
     16: {
@@ -251,8 +250,7 @@ class TwoFactorLoginForm(TOTPForm):
             credential.counter = sign_count
             credential.save(update_fields=['counter'])
         elif totp_or_scratch_code:
-            if (self.profile.is_totp_enabled and
-                    pyotp.TOTP(self.profile.totp_key).verify(totp_or_scratch_code, valid_window=self.TOLERANCE)):
+            if self.profile.is_totp_enabled and self.profile.check_totp_code(totp_or_scratch_code):
                 return
             elif self.profile.scratch_codes and totp_or_scratch_code in json.loads(self.profile.scratch_codes):
                 scratch_codes = json.loads(self.profile.scratch_codes)
