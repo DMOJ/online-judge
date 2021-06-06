@@ -81,6 +81,10 @@ class NewProblemTicketView(ProblemMixin, TitleMixin, NewTicketView):
     template_name = 'ticket/new_problem.html'
 
     def get_assignees(self):
+        if self.request.in_contest:
+            contest = self.request.participation.contest
+            if self.object.contests.filter(contest=contest).exists():
+                return contest.authors.all()
         return self.object.authors.all()
 
     def get_title(self):
