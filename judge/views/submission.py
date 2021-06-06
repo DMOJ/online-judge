@@ -33,7 +33,7 @@ def submission_related(queryset):
         .only('id', 'user__user__username', 'user__display_rank', 'user__rating', 'problem__name',
               'problem__code', 'problem__is_public', 'language__short_name', 'language__key', 'date', 'time', 'memory',
               'points', 'result', 'status', 'case_points', 'case_total', 'current_testcase', 'contest_object',
-              'locked_after') \
+              'is_locked') \
         .prefetch_related('contest_object__authors', 'contest_object__curators')
 
 

@@ -5,7 +5,6 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.urls import reverse
-from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
@@ -84,7 +83,7 @@ class Submission(models.Model):
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
     contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
                                        on_delete=models.SET_NULL, related_name='+')
-    locked_after = models.DateTimeField(verbose_name=_('submission lock'), null=True, blank=True)
+    is_locked = models.BooleanField(verbose_name=_('lock submission'), default=False)
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
@@ -115,12 +114,8 @@ class Submission(models.Model):
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.short_status, '')
 
-    @cached_property
-    def is_locked(self):
-        return self.locked_after is not None and self.locked_after < timezone.now()
-
-    def judge(self, *args, force_judge=False, **kwargs):
-        if force_judge or not self.is_locked:
+    def judge(self, *args, **kwargs):
+        if not self.is_locked:
             judge_submission(self, *args, **kwargs)
 
     judge.alters_data = True

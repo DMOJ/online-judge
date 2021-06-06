@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.utils import timezone
 
 from judge.models import ContestSubmission, Language, Submission, SubmissionSource
 from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation, \
@@ -28,7 +27,6 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
             case_points=99,
             case_total=100,
             memory=20,
-            locked_after=None,
         )
 
         self.full_ac_submission = Submission.objects.create(
@@ -43,28 +41,6 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
         self.full_ac_submission_source = SubmissionSource.objects.create(
             submission=self.full_ac_submission,
             source='',
-        )
-
-        self.locked_submission = Submission.objects.create(
-            user=self.users['normal'].profile,
-            problem=create_problem(code='locked'),
-            language=Language.get_python3(),
-            result='WA',
-            status='D',
-            case_points=1,
-            case_total=1,
-            locked_after=timezone.now() - timezone.timedelta(days=100),
-        )
-
-        self.future_locked_submission = Submission.objects.create(
-            user=self.users['normal'].profile,
-            problem=create_problem(code='future_locked'),
-            language=Language.get_python3(),
-            result='WA',
-            status='D',
-            case_points=1,
-            case_total=1,
-            locked_after=timezone.now() + timezone.timedelta(days=100),
         )
 
         self.ie_submission = Submission.objects.create(
@@ -105,7 +81,6 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
         self.assertIsNone(self.basic_submission.contest_key)
         self.assertIsNone(self.basic_submission.contest_or_none)
         self.assertEqual(len(self.basic_submission.id_secret), 24)
-        self.assertFalse(self.basic_submission.is_locked)
 
     def test_full_ac_submission(self):
         self.assertEqual(self.full_ac_submission.result_class, 'AC')
@@ -115,10 +90,6 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
             str(self.full_ac_submission_source),
             'Source of Submission %d of full_ac by normal' % self.full_ac_submission.id,
         )
-
-    def test_submission_lock(self):
-        self.assertTrue(self.locked_submission.is_locked)
-        self.assertFalse(self.future_locked_submission.is_locked)
 
     def test_ie_submission(self):
         self.assertEqual(self.ie_submission.result_class, 'IE')
