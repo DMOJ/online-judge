@@ -5,6 +5,7 @@ import secrets
 import struct
 from operator import mul
 
+import pyotp
 import webauthn
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -210,6 +211,11 @@ class Profile(models.Model):
             self.remove_contest()
 
     update_contest.alters_data = True
+
+    def check_totp_code(self, code):
+        return pyotp.TOTP(self.totp_key).verify(code, valid_window=settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES)
+
+    check_totp_code.alters_data = True
 
     def get_absolute_url(self):
         return reverse('user_page', args=(self.user.username,))
