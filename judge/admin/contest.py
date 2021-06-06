@@ -113,8 +113,9 @@ class ContestForm(ModelForm):
 class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers')}),
-        (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'run_pretests_only',
-                                    'locked_after', 'scoreboard_visibility', 'points_precision')}),
+        (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_problem_authors',
+                                    'run_pretests_only', 'locked_after', 'scoreboard_visibility',
+                                    'points_precision')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),

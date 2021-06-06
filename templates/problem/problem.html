@@ -201,21 +201,23 @@
 
     <hr style="padding-top: 0.7em">
 
-    {% cache 86400 'problem_authors' problem.id LANGUAGE_CODE %}
-        {% with authors=problem.authors.all() %}
-            {% if authors %}
-                <div class="problem-info-entry">
-                    <i class="fa fa-pencil-square-o fa-fw"></i><span
-                        class="pi-name">{% trans trimmed count=authors|length %}
-                    Author:
-                    {% pluralize count %}
-                    Authors:
-                {% endtrans %}</span>
-                    <div class="pi-value authors-value">{{ link_users(authors) }}</div>
-                </div>
-            {% endif %}
-        {% endwith %}
-    {% endcache %}
+    {% if not contest_problem or not contest_problem.contest.hide_problem_authors %}
+        {% cache 86400 'problem_authors' problem.id LANGUAGE_CODE %}
+            {% with authors=problem.authors.all() %}
+                {% if authors %}
+                    <div class="problem-info-entry">
+                        <i class="fa fa-pencil-square-o fa-fw"></i><span
+                            class="pi-name">{% trans trimmed count=authors|length %}
+                        Author:
+                        {% pluralize count %}
+                        Authors:
+                    {% endtrans %}</span>
+                        <div class="pi-value authors-value">{{ link_users(authors) }}</div>
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endcache %}
+    {% endif %}
 
     {% if not contest_problem or not contest_problem.contest.hide_problem_tags %}
         <div id="problem-types">
