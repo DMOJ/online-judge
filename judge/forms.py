@@ -250,8 +250,9 @@ class TwoFactorLoginForm(TOTPForm):
 
             credential.counter = sign_count
             credential.save(update_fields=['counter'])
-        elif self.profile.is_totp_enabled and totp_or_scratch_code:
-            if pyotp.TOTP(self.profile.totp_key).verify(totp_or_scratch_code, valid_window=self.TOLERANCE):
+        elif totp_or_scratch_code:
+            if (self.profile.is_totp_enabled and
+                    pyotp.TOTP(self.profile.totp_key).verify(totp_or_scratch_code, valid_window=self.TOLERANCE)):
                 return
             elif self.profile.scratch_codes and totp_or_scratch_code in json.loads(self.profile.scratch_codes):
                 scratch_codes = json.loads(self.profile.scratch_codes)
@@ -259,7 +260,10 @@ class TwoFactorLoginForm(TOTPForm):
                 self.profile.scratch_codes = json.dumps(scratch_codes)
                 self.profile.save(update_fields=['scratch_codes'])
                 return
-            raise ValidationError(_('Invalid two-factor authentication token or scratch code.'))
+            elif self.profile.is_totp_enabled:
+                raise ValidationError(_('Invalid two-factor authentication token or scratch code.'))
+            else:
+                raise ValidationError(_('Invalid scratch code.'))
         else:
             raise ValidationError(_('Must specify either totp_token or webauthn_response.'))
 
