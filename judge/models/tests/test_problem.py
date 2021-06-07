@@ -13,6 +13,14 @@ class ProblemTestCase(CommonDataMixin, TestCase):
     def setUpTestData(self):
         super().setUpTestData()
 
+        self.users.update({
+            'staff_problem_edit_only_all': create_user(
+                username='staff_problem_edit_only_all',
+                is_staff=True,
+                user_permissions=('edit_all_problem',),
+            ),
+        })
+
         create_problem_type(name='type')
 
         self.basic_problem = create_problem(
