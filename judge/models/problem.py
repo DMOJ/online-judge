@@ -184,11 +184,15 @@ class Problem(models.Model):
     def is_editable_by(self, user):
         if not user.is_authenticated:
             return False
+        if not user.has_perm('judge.edit_own_problem'):
+            return False
         if user.has_perm('judge.edit_all_problem') or user.has_perm('judge.edit_public_problem') and self.is_public:
             return True
-        return user.has_perm('judge.edit_own_problem') and \
-            (user.profile.id in self.editor_ids or
-                self.is_organization_private and self.organizations.filter(admins=user.profile).exists())
+        if user.profile.id in self.editor_ids:
+            return True
+        if self.is_organization_private and self.organizations.filter(admins=user.profile).exists():
+            return True
+        return False
 
     def is_accessible_by(self, user, skip_contest_problem_check=False):
         # If we don't want to check if the user is in a contest containing that problem.
@@ -253,16 +257,20 @@ class Problem(models.Model):
         #           - author or curator or tester
         queryset = cls.objects.defer('description')
 
-        if not (user.has_perm('judge.see_private_problem') or user.has_perm('judge.edit_all_problem')):
+        edit_own_problem = user.has_perm('judge.edit_own_problem')
+        edit_public_problem = edit_own_problem and user.has_perm('judge.edit_public_problem')
+        edit_all_problem = edit_own_problem and user.has_perm('judge.edit_all_problem')
+
+        if not (user.has_perm('judge.see_private_problem') or edit_all_problem):
             q = Q(is_public=True)
-            if not (user.has_perm('judge.see_organization_problem') or user.has_perm('judge.edit_public_problem')):
+            if not (user.has_perm('judge.see_organization_problem') or edit_public_problem):
                 # Either not organization private or in the organization.
                 q &= (
                     Q(is_organization_private=False) |
                     Q(is_organization_private=True, organizations__in=user.profile.organizations.all())
                 )
 
-            if user.has_perm('judge.edit_own_problem'):
+            if edit_own_problem:
                 q |= Q(is_organization_private=True, organizations__in=user.profile.admin_of.all())
 
             # Authors, curators, and testers should always have access, so OR at the very end.
