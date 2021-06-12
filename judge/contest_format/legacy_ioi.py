@@ -64,7 +64,7 @@ class LegacyIOIContestFormat(DefaultContestFormat):
             score += points
 
         participation.cumtime = max(cumtime, 0)
-        participation.score = score
+        participation.score = round(score, self.contest.points_precision)
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()

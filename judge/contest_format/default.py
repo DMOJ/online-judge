@@ -40,7 +40,7 @@ class DefaultContestFormat(BaseContestFormat):
             points += result['points']
 
         participation.cumtime = max(cumtime, 0)
-        participation.score = points
+        participation.score = round(points, self.contest.points_precision)
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
