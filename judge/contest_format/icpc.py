@@ -92,7 +92,7 @@ class ICPCContestFormat(DefaultContestFormat):
                 score += points
 
         participation.cumtime = cumtime + penalty
-        participation.score = score
+        participation.score = round(score, self.contest.points_precision)
         participation.tiebreaker = last  # field is sorted from least to greatest
         participation.format_data = format_data
         participation.save()

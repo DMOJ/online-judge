@@ -90,7 +90,7 @@ class AtCoderContestFormat(DefaultContestFormat):
                 points += score
 
         participation.cumtime = cumtime + penalty
-        participation.score = points
+        participation.score = round(points, self.contest.points_precision)
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
