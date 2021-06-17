@@ -134,21 +134,21 @@ class Submission(models.Model):
         if not user.is_authenticated:
             return False
         profile = user.profile
-        source_access = self.problem.submission_source_visibility_mode
+        source_visibility = self.problem.submission_source_visibility
         if self.problem.is_editable_by(user):
             return True
         elif user.has_perm('judge.view_all_submission'):
             return True
         elif self.user_id == profile.id:
             return True
-        elif source_access == SubmissionSourceAccess.ALWAYS:
+        elif source_visibility == SubmissionSourceAccess.ALWAYS:
             return True
-        elif source_access == SubmissionSourceAccess.SOLVED and \
+        elif source_visibility == SubmissionSourceAccess.SOLVED and \
                 (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
                 self.problem.submission_set.filter(user_id=profile.id, result='AC',
                                                    points=self.problem.points).exists():
             return True
-        elif source_access == SubmissionSourceAccess.ONLY_OWN and \
+        elif source_visibility == SubmissionSourceAccess.ONLY_OWN and \
                 self.problem.testers.filter(id=profile.id).exists():
             return True
 
