@@ -20,8 +20,8 @@ from judge.models.runtime import Language
 from judge.user_translations import gettext as user_gettext
 from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 
-__all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification',
-           'License', 'Solution', 'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet']
+__all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification', 'License',
+           'Solution', 'SubmissionSourceAccess', 'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet']
 
 
 def disallowed_characters_validator(text):
@@ -100,7 +100,21 @@ class TranslatedProblemForeignKeyQuerySet(QuerySet):
         return queryset.annotate(**kwargs)
 
 
+class SubmissionSourceAccess:
+    ALWAYS = 'A'
+    SOLVED = 'S'
+    ONLY_OWN = 'O'
+    FOLLOW = 'F'
+
+
 class Problem(models.Model):
+    SUBMISSION_SOURCE_ACCESS = (
+        (SubmissionSourceAccess.FOLLOW, _('Follow global setting')),
+        (SubmissionSourceAccess.ALWAYS, _('Always visible')),
+        (SubmissionSourceAccess.SOLVED, _('Visible if problem solved')),
+        (SubmissionSourceAccess.ONLY_OWN, _('Only own submissions')),
+    )
+
     code = models.CharField(max_length=20, verbose_name=_('problem code'), unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))],
                             help_text=_('A short, unique code for the problem, '
@@ -157,6 +171,9 @@ class Problem(models.Model):
                                      help_text=_('The number of users who solved the problem.'))
     ac_rate = models.FloatField(verbose_name=_('solve rate'), default=0)
     is_full_markup = models.BooleanField(verbose_name=_('allow full markdown access'), default=False)
+    submission_source_visibility_mode = models.CharField(verbose_name=_('submission source visibility'), max_length=1,
+                                                         default=SubmissionSourceAccess.FOLLOW,
+                                                         choices=SUBMISSION_SOURCE_ACCESS)
 
     objects = TranslatedProblemQuerySet.as_manager()
     tickets = GenericRelation('Ticket')
@@ -343,6 +360,16 @@ class Problem(models.Model):
     @property
     def clarifications(self):
         return ProblemClarification.objects.filter(problem=self)
+
+    @cached_property
+    def submission_source_visibility(self):
+        if self.submission_source_visibility_mode == SubmissionSourceAccess.FOLLOW:
+            return {
+                'all': SubmissionSourceAccess.ALWAYS,
+                'all-solved': SubmissionSourceAccess.SOLVED,
+                'only-own': SubmissionSourceAccess.ONLY_OWN,
+            }[settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY]
+        return self.submission_source_visibility_mode
 
     def update_stats(self):
         all_queryset = self.submission_set.filter(user__is_unlisted=False)
