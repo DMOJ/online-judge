@@ -65,6 +65,115 @@
                 {% endtrans %}
             {% endif %}
         </div>
+        {% if contest.show_short_display %}
+            <div id="details">
+                <ul>
+                    {% with authors=contest.authors.all() %}
+                        {% if authors %}
+                            <li>
+                                {% trans trimmed count=authors|length, link_authors=link_users(authors) %}
+                                    The author of this contest is {{ link_authors }}.
+                                {% pluralize count %}
+                                    The authors of this contest are {{ link_authors }}.
+                                {% endtrans %}
+                            </li>
+                        {% endif %}
+                    {% endwith %}
+                    {% with testers=contest.testers.all() %}
+                        {% if testers %}
+                            <li>
+                                {% trans trimmed count=testers|length, link_testers=link_users(testers) %}
+                                    Special thanks to {{ link_testers }} for testing and feedback on the problems.
+                                {% pluralize count %}
+                                    Special thanks to {{ link_testers }} for testing and feedback on the problems.
+                                {% endtrans %}
+                            </li>
+                        {% endif %}
+                    {% endwith %}
+                    <li>
+                        {% if contest.is_rated %}
+                            {% if contest.rate_all %}
+                                {% if contest.rating_floor is not none and contest.rating_ceiling is not none %}
+                                    {{ _('This contest will be **rated** for **all** participants who have a rating between **%(rating_floor)d** and **%(rating_ceiling)d**, inclusive.', rating_floor=contest.rating_floor, rating_ceiling=contest.rating_ceiling)|markdown('default') }}
+                                {% elif contest.rating_floor is not none and contest.rating_ceiling is none %}
+                                    {{ _('This contest will be **rated** for **all** participants who have a rating of at least **%(rating_floor)d**.', rating_floor=contest.rating_floor)|markdown('default') }}
+                                {% elif contest.rating_floor is none and contest.rating_ceiling is not none %}
+                                    {{ _('This contest will be **rated** for **all** participants who have a rating of at most **%(rating_ceiling)d**.', rating_ceiling=contest.rating_ceiling)|markdown('default') }}
+                                {% else %}
+                                    {{ _('This contest will be **rated** for **all** participants.')|markdown('default') }}
+                                {% endif %}
+                            {% else %}
+                                {% if contest.rating_floor is not none and contest.rating_ceiling is not none %}
+                                    {{ _('This contest will be **rated** for participants who submit at least once and have a rating between **%(rating_floor)d** and **%(rating_ceiling)d**, inclusive.', rating_floor=contest.rating_floor, rating_ceiling=contest.rating_ceiling)|markdown('default') }}
+                                {% elif contest.rating_floor is not none and contest.rating_ceiling is none %}
+                                    {{ _('This contest will be **rated** for participants who submit at least once and have a rating of at least **%(rating_floor)d**.', rating_floor=contest.rating_floor)|markdown('default') }}
+                                {% elif contest.rating_floor is none and contest.rating_ceiling is not none %}
+                                    {{ _('This contest will be **rated** for participants who submit at least once and have a rating of at most **%(rating_ceiling)d**.', rating_ceiling=contest.rating_ceiling)|markdown('default') }}
+                                {% else %}
+                                    {{ _('This contest will be **rated** for participants who submit at least once.')|markdown('default') }}
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            {{ _('This contest will **not** be rated.')|markdown('default') }}
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% filter markdown('default') %}
+                            {% trans trimmed count=metadata.problem_count %}
+                                There is **{{ count }}** problem in this contest.
+                            {% pluralize count %}
+                                There are **{{ count }}** problems in this contest.
+                            {% endtrans %}
+                        {% endfilter %}
+                        <ul>
+                            <li>
+                                {% if metadata.has_partials %}
+                                    {{ _('**Partial scoring is enabled** for some or all of these problems.')|markdown('default') }}
+                                {% else %}
+                                    {{ _('This contest **will not use partial scoring**.')|markdown('default') }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if metadata.has_pretests %}
+                                    {{ _('The pretest system **will be used** for some or all of these problems.')|markdown('default') }}
+                                {% else %}
+                                    {{ _('The pretest system **will not be used** for this contest.')|markdown('default') }}
+                                {% endif %}
+                            </li>
+                            <li>
+                                {% if metadata.has_submission_cap %}
+                                    {{ _('Some or all of these problems **have a submission limit**.')|markdown('default') }}
+                                {% else %}
+                                    {{ _('There is **no submission limit** for any of these problems.')|markdown('default') }}
+                                {% endif %}
+                            </li>
+                        </ul>
+                    <li>
+                    <li>
+                        {{ _('The contest format is **%(format)s**.', format=contest.format.name)|markdown('default') }}
+                        <ul>
+                            {% for line in contest.format.get_short_form_display() %}
+                                <li>{{ line|markdown('default') }}</li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li>
+                        {% if contest.scoreboard_visibility == contest.SCOREBOARD_VISIBLE %}
+                            {{ _('The scoreboard will be **visible** for the duration of the contest.')|markdown('default') }}
+                        {% elif contest.scoreboard_visibility == contest.SCOREBOARD_AFTER_PARTICIPATION %}
+                            {{ _('The scoreboard will be **hidden** until your window is over.')|markdown('default') }}
+                        {% elif contest.scoreboard_visibility == contest.SCOREBOARD_AFTER_CONTEST %}
+                            {{ _('The scoreboard will be **hidden** for the entire duration of the contest.')|markdown('default') }}
+                        {% endif %}
+                    </li>
+                    {% if contest.access_code %}
+                        <li>
+                            {{ _('An **access code is required** to join the contest.')|markdown('default') }}
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
     </div>
 
     <div class="content-description">
@@ -84,7 +193,7 @@
                     <th>{{ _('Points') }}</th>
                     <th>{{ _('AC Rate') }}</th>
                     <th>{{ _('Users') }}</th>
-                    {% if contest_has_public_editorials %}
+                    {% if metadata.has_public_editorials %}
                         <th>{{ _('Editorials') }}</th>
                     {% endif %}
                 </tr>
@@ -108,7 +217,7 @@
                                 {{ problem.user_count }}
                             {% endif %}
                         </td>
-                        {% if contest_has_public_editorials %}
+                        {% if metadata.has_public_editorials %}
                             <td>
                                 {% if problem.is_public and problem.has_public_editorial %}
                                     <a href="{{ url('problem_editorial', problem.code) }}">{{ _('Editorial') }}</a>

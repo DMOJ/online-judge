@@ -92,6 +92,15 @@ class BaseContestFormat(six.with_metaclass(ABCMeta)):
         """
         raise NotImplementedError()
 
+    @abstractmethod
+    def get_short_form_display(self):
+        """
+        Returns a generator of Markdown strings to display the contest format's settings in short form.
+
+        :return: A generator, where each item is an individual line.
+        """
+        raise NotImplementedError()
+
     @classmethod
     def best_solution_state(cls, points, total):
         if not points:

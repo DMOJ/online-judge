@@ -115,6 +115,10 @@ class Contest(models.Model):
                                                         'testcases. Commonly set during a contest, then unset '
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
+    show_short_display = models.BooleanField(verbose_name=_('show short form settings display'),
+                                             help_text=_('Whether to show a section containing contest settings '
+                                                         'on the contest page or not.'),
+                                             default=False)
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))

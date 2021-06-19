@@ -6,7 +6,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, ungettext
 
 from judge.contest_format.default import DefaultContestFormat
 from judge.contest_format.registry import register_contest_format
@@ -122,3 +122,17 @@ class ICPCContestFormat(DefaultContestFormat):
             ret += chr((index - 1) % 26 + 65)
             index = (index - 1) // 26
         return ret[::-1]
+
+    def get_short_form_display(self):
+        yield _('The maximum score submission for each problem will be used.')
+
+        penalty = self.config['penalty']
+        if penalty:
+            yield ungettext(
+                'Each submission before the first maximum score submission will incur a **penalty of %d minute**.',
+                'Each submission before the first maximum score submission will incur a **penalty of %d minutes**.',
+                penalty,
+            ) % penalty
+
+        yield _('Ties will be broken by the sum of the last score altering submission time on problems with a non-zero '
+                'score, followed by the time of the last score altering submission.')
