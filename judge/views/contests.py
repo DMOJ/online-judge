@@ -234,8 +234,23 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
             .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
                                                     default=0, output_field=IntegerField()))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
-        context['contest_has_public_editorials'] = any(
-            problem.is_public and problem.has_public_editorial for problem in context['contest_problems']
+        context['metadata'] = {
+            'has_public_editorials': any(
+                problem.is_public and problem.has_public_editorial for problem in context['contest_problems']
+            ),
+        }
+        context['metadata'].update(
+            **self.object.contest_problems
+            .annotate(
+                partials_enabled=F('partial').bitand(F('problem__partial')),
+                pretests_enabled=F('is_pretested').bitand(F('contest__run_pretests_only')),
+            )
+            .aggregate(
+                has_partials=Sum('partials_enabled'),
+                has_pretests=Sum('pretests_enabled'),
+                has_submission_cap=Sum('max_submissions'),
+                problem_count=Count('id'),
+            ),
         )
         return context
 
