@@ -319,7 +319,7 @@
 {% block body %}
     <div class="container">
         <div class="ticket-messages">
-            <main id="messages" class="messages">
+            <main id="messages">
                 {% for message in ticket_messages %}
                     {% include "ticket/message.html" %}
                 {% endfor %}
