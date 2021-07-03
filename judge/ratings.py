@@ -90,6 +90,12 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated, is
 
         new_rating[i] = (old_rating[i] + Weight * PerfAs) / (1.0 + Weight)
 
+        if abs(old_rating[i] - new_rating[i]) > Cap:
+            if old_rating[i] < new_rating[i]:
+                new_rating[i] = old_rating[i] + Cap
+            else:
+                new_rating[i] = old_rating[i] - Cap
+
         if times_rated[i] == 0:
             new_volatility[i] = 385
         else:
@@ -100,12 +106,6 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated, is
             # DQed users can manipulate TopCoder ratings to get higher volatility in order to increase their rating
             # later on, prohibit this by ensuring their volatility never increases in this situation
             new_volatility[i] = min(new_volatility[i], old_volatility[i])
-
-        if abs(old_rating[i] - new_rating[i]) > Cap:
-            if old_rating[i] < new_rating[i]:
-                new_rating[i] = old_rating[i] + Cap
-            else:
-                new_rating[i] = old_rating[i] - Cap
 
     # try to keep the sum of ratings constant
     adjust = float(sum(old_rating) - sum(new_rating)) / N
