@@ -305,7 +305,7 @@
                 <div class="sidebox">
                     <h3>{{ _('Filter submissions') }} <i class="fa fa-search"></i></h3>
                     <div class="sidebox-content">
-                        <form id="filter-form" name="form" action="" method="get">
+                        <form id="filter-form" name="form" action="{{ first_page_href }}" method="get">
                             <div class="filter-form-group">
                                 <label for="status"><i>{{ _('Status') }}</i></label>
                                 <select id="status" name="status" multiple>
