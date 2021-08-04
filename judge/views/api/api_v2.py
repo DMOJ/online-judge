@@ -265,6 +265,8 @@ class APIContestDetail(APIDetailView):
                 username=F('user__user__username'),
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
                 new_rating=Subquery(new_ratings_subquery.values('rating')[:1]),
+                old_volatility=Subquery(old_ratings_subquery.values('volatility')[:1]),
+                new_volatility=Subquery(new_ratings_subquery.values('volatility')[:1]),
             )
             .order_by('-score', 'cumtime', 'tiebreaker')
         )
@@ -318,6 +320,8 @@ class APIContestDetail(APIDetailView):
                     'tiebreaker': participation.tiebreaker,
                     'old_rating': participation.old_rating,
                     'new_rating': participation.new_rating,
+                    'old_volatility': participation.old_volatility,
+                    'new_volatility': participation.new_volatility,
                     'is_disqualified': participation.is_disqualified,
                     'solutions': contest.format.get_problem_breakdown(participation, problems),
                 } for participation in participations
