@@ -329,7 +329,7 @@
                 <div class="info">
                     <a href="{{ url('user_page', request.user.username) }}" class="user">
                         <img src="{{ gravatar(request.user, 135) }}" class="gravatar">
-                        <div class="username {{ request.profile.css_class }}">{{ request.user.username }}</div>
+                        <div class="username {{ request.profile.css_class }}">{{ request.profile.display_name }}</div>
                     </a>
                 </div>
                 <div class="detail">
