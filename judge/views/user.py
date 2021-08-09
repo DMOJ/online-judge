@@ -80,7 +80,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
     def get_title(self):
         return (_('My account') if self.request.user == self.object.user else
-                _('User %s') % self.object.user.username)
+                _('User %s') % self.object.display_name)
 
     # TODO: the same code exists in problem.py, maybe move to problems.py?
     @cached_property

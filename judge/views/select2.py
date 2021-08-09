@@ -82,18 +82,19 @@ class UserSearchSelect2View(BaseListView):
         self.gravatar_size = request.GET.get('gravatar_size', 128)
         self.gravatar_default = request.GET.get('gravatar_default', None)
 
-        self.object_list = self.get_queryset().values_list('pk', 'user__username', 'user__email', 'display_rank')
+        self.object_list = self.get_queryset().values_list('pk', 'user__username', 'user__email', 'display_rank',
+                                                           'username_display_override')
 
         context = self.get_context_data()
 
         return JsonResponse({
             'results': [
                 {
-                    'text': username,
+                    'text': username_override or username,
                     'id': username,
                     'gravatar_url': gravatar(email, self.gravatar_size, self.gravatar_default),
                     'display_rank': display_rank,
-                } for pk, username, email, display_rank in context['object_list']],
+                } for pk, username, email, display_rank, username_override in context['object_list']],
             'more': context['page_obj'].has_next(),
         })
 

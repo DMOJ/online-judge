@@ -141,6 +141,8 @@ class Profile(models.Model):
     notes = models.TextField(verbose_name=_('internal notes'), null=True, blank=True,
                              help_text=_('Notes for administrators regarding this user.'))
     data_last_downloaded = models.DateTimeField(verbose_name=_('last data download time'), null=True, blank=True)
+    username_display_override = models.CharField(max_length=100, blank=True, verbose_name=_('display name override'),
+                                                 help_text=_('name displayed in place of username'))
 
     @cached_property
     def organization(self):
@@ -151,6 +153,10 @@ class Profile(models.Model):
     @cached_property
     def username(self):
         return self.user.username
+
+    @cached_property
+    def display_name(self):
+        return self.username_display_override or self.username
 
     @cached_property
     def has_any_solves(self):
