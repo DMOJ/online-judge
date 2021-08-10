@@ -579,7 +579,6 @@ class APIUserDetail(APIDetailView):
         for participation in participations:
             contest_history.append({
                 'key': participation.contest.key,
-                'user': participation.username,
                 'start_time': participation.start.isoformat(),
                 'end_time': participation.end_time.isoformat(),
                 'score': participation.score,
