@@ -1,5 +1,10 @@
+import math
+
 from django.db import migrations, models
-from operator import attrgetter
+from django.db.models import Count, OuterRef, Subquery
+from django.db.models.functions import Coalesce
+from django.utils import timezone
+from operator import attrgetter, itemgetter
 
 
 def tie_ranker(iterable, key=attrgetter('points')):
@@ -112,7 +117,7 @@ def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated, is
     return list(map(int, map(round, new_rating))), list(map(int, map(round, new_volatility)))
 
 
-def rate_contest(contest, Rating, Profile):
+def tc_rate_contest(contest, Rating, Profile):
     rating_subquery = Rating.objects.filter(user=OuterRef('user'))
     rating_sorted = rating_subquery.order_by('-contest__end_time')
     users = contest.users.order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker') \
@@ -144,29 +149,36 @@ def rate_contest(contest, Rating, Profile):
     now = timezone.now()
     ratings = [Rating(user_id=i, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
                for i, p, r, v, z in zip(user_ids, participation_ids, rating, volatility, ranking)]
-    with transaction.atomic():
-        Rating.objects.bulk_create(ratings)
 
-        Profile.objects.filter(contest_history__contest=contest, contest_history__virtual=0).update(
-            rating=Subquery(Rating.objects.filter(user=OuterRef('id'))
-                            .order_by('-contest__end_time').values('rating')[:1]))
+    Rating.objects.bulk_create(ratings)
+
+    Profile.objects.filter(contest_history__contest=contest, contest_history__virtual=0).update(
+        rating=Subquery(Rating.objects.filter(user=OuterRef('id'))
+                        .order_by('-contest__end_time').values('rating')[:1]))
 
 
+# inspired by rate_all_view
 def rate_tc(apps, schema_editor):
     Contest = apps.get_model('judge', 'Contest')
     Rating = apps.get_model('judge', 'Rating')
     Profile = apps.get_model('judge', 'Profile')
 
-    # copy of rate_all_view
-    with connection.cursor() as cursor:
+    with schema_editor.connection.cursor() as cursor:
         cursor.execute('TRUNCATE TABLE `%s`' % Rating._meta.db_table)
     Profile.objects.update(rating=None)
     for contest in Contest.objects.filter(is_rated=True, end_time__lte=timezone.now()).order_by('end_time'):
-        rate_contest(contest, Rating, Profile)
+        tc_rate_contest(contest, Rating, Profile)
 
 
+# inspired by rate_all_view
 def rate_elo_mmr(apps, schema_editor):
-    pass
+    Rating = apps.get_model('judge', 'Rating')
+    Profile = apps.get_model('judge', 'Profile')
+
+    with schema_editor.connection.cursor() as cursor:
+        cursor.execute('TRUNCATE TABLE `%s`' % Rating._meta.db_table)
+    Profile.objects.update(rating=None)
+    # Don't populate Rating
 
 
 class Migration(migrations.Migration):
@@ -190,6 +202,7 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name='rating',
             name='volatility',
+            field=models.IntegerField(verbose_name='volatility'),
         ),
         migrations.RunPython(rate_elo_mmr, migrations.RunPython.noop, atomic=True),
     ]
