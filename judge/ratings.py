@@ -8,6 +8,37 @@ from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 
+BETA2 = 102400.
+VAR_INIT = 350. ** 2 * (BETA2 / 212**2)
+VAR_PER_CONTEST = 1219.047619 * (BETA2 / 212**2)
+VAR_LIM = ((VAR_PER_CONTEST**2 + 4*BETA2*VAR_PER_CONTEST) ** .5 - VAR_PER_CONTEST) / 2
+MEAN_INIT = 1500.
+VALID_RANGE = MEAN_INIT - 20*VAR_INIT, MEAN_INIT + 20*VAR_INIT
+TANH_C = 3 ** .5 / math.pi
+
+
+def eval_tanhs(tanh_terms, x):
+    return sum((wt / (TANH_C * sd)) * math.tanh((x - mu) / (2 * TANH_C * sd)) for mu, sd, wt in tanh_terms)
+
+
+def eval_tanhs_grad(tanh_terms, x):
+    return sum(0.5 * wt * (TANH_C * sd * math.cosh((x - mu) / (2 * TANH_C * sd))) ** -2 for mu, sd, wt in tanh_terms)
+
+
+def solve(tanh_terms, y_tg=0, lin_factor=0, bounds=VALID_RANGE):
+    L,R = bounds
+    while R-L > 1e-5*VAR_INIT:
+        x = 0.5 * (L + R)
+        y = lin_factor * x + eval_tanhs(tanh_terms, x)
+        if y > y_tg:
+            R = x
+        elif y < y_tg:
+            L = x
+        else:
+            return x
+    return (L + R) / 2
+
+
 def tie_ranker(iterable, key=attrgetter('points')):
     rank = 0
     delta = 1
@@ -28,94 +59,58 @@ def tie_ranker(iterable, key=attrgetter('points')):
         yield rank + (delta - 1) / 2.0
 
 
-def rational_approximation(t):
-    # Abramowitz and Stegun formula 26.2.23.
-    # The absolute value of the error should be less than 4.5 e-4.
-    c = [2.515517, 0.802853, 0.010328]
-    d = [1.432788, 0.189269, 0.001308]
-    numerator = (c[2] * t + c[1]) * t + c[0]
-    denominator = ((d[2] * t + d[1]) * t + d[0]) * t + 1.0
-    return t - numerator / denominator
+def get_var(times_ranked, cache):
+    while times_ranked >= len(cache):
+        next_var = 1. / (1. / (cache[-1] + VAR_PER_CONTEST) + 1. / BETA2)
+        cache.append(next_var)
+    return cache[times_ranked]
 
 
-def normal_CDF_inverse(p):
-    assert 0.0 < p < 1
+def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
+    n = len(ranking)
+    cache = [VAR_INIT]
 
-    # See article above for explanation of this section.
-    if p < 0.5:
-        # F^-1(p) = - G^-1(p)
-        return -rational_approximation(math.sqrt(-2.0 * math.log(p)))
-    else:
-        # F^-1(p) = G^-1(1-p)
-        return rational_approximation(math.sqrt(-2.0 * math.log(1.0 - p)))
+    delta = [(get_var(t, cache) + VAR_PER_CONTEST + BETA2) ** .5 for t in times_ranked]
 
+    new_p = [0.] * n
+    new_mean = [0.] * n
+    new_rating = [0] * n
 
-def WP(RA, RB, VA, VB):
-    return (math.erf((RB - RA) / math.sqrt(2 * (VA * VA + VB * VB))) + 1) / 2.0
+    # Calculate performances.
+    for i, r in enumerate(ranking):
+        tanh_terms = []
+        y_tg = 0
+        for j, s in enumerate(ranking):
+            tanh_terms.append((old_mean[j], delta[j], 1))
+            if s > r:       # j loses to i
+                y_tg += 1. / (TANH_C * delta[j])
+            elif s < r:     # j beats i
+                y_tg -= 1. / (TANH_C * delta[j])
+            # Otherwise, this is a tie that counts as half a win, as per Elo-MMR.
+        new_p[i] = round(solve(tanh_terms, y_tg))
+        historical_p[i] = [new_p[i]] + historical_p[i]
 
+    # Calculate mean and rating.
+    for i, r in enumerate(ranking):
+        tanh_terms = []
+        w_prev = 1.
+        w_sum = 0.
+        for j, h in enumerate(historical_p[i]):
+            gamma2 = (VAR_PER_CONTEST if j > 0 else 0)
+            h_var = get_var(times_ranked[i]+1-j, cache)
+            k = h_var / (h_var + gamma2)
+            w = w_prev * k**2
+            # Note: If j is around 20, then w < 1e-3 and it is possible to break early.
+            #if w < 1e-3: break
+            tanh_terms.append((h, BETA2 ** .5, w))
+            w_prev = w
+            w_sum += w / BETA2
+        w0 = 1. / get_var(times_ranked[i]+1, cache) - w_sum
+        p0 = eval_tanhs(tanh_terms[1:], old_mean[i]) / w0 + old_mean[i]
+        new_mean[i] = solve(tanh_terms, w0*p0, lin_factor=w0)
+        new_rating[i] = round(new_mean[i] - 2 * (get_var(times_ranked[i]+1, cache)**.5 - VAR_LIM**.5))
 
-def recalculate_ratings(old_rating, old_volatility, actual_rank, times_rated, is_disqualified):
-    # actual_rank: 1 is first place, N is last place
-    # if there are ties, use the average of places (if places 2, 3, 4, 5 tie, use 3.5 for all of them)
-
-    N = len(old_rating)
-    new_rating = old_rating[:]
-    new_volatility = old_volatility[:]
-    if N <= 1:
-        return new_rating, new_volatility
-
-    ranking = list(range(N))
-    ranking.sort(key=old_rating.__getitem__, reverse=True)
-
-    ave_rating = float(sum(old_rating)) / N
-    sum1 = sum(i * i for i in old_volatility) / N
-    sum2 = sum((i - ave_rating) ** 2 for i in old_rating) / (N - 1)
-    CF = math.sqrt(sum1 + sum2)
-
-    for i in range(N):
-        ERank = 0.5
-        for j in range(N):
-            ERank += WP(old_rating[i], old_rating[j], old_volatility[i], old_volatility[j])
-
-        EPerf = -normal_CDF_inverse((ERank - 0.5) / N)
-        APerf = -normal_CDF_inverse((actual_rank[i] - 0.5) / N)
-        PerfAs = old_rating[i] + CF * (APerf - EPerf)
-        Weight = 1.0 / (1 - (0.42 / (times_rated[i] + 1) + 0.18)) - 1.0
-        if old_rating[i] > 2500:
-            Weight *= 0.8
-        elif old_rating[i] >= 2000:
-            Weight *= 0.9
-
-        Cap = 150.0 + 1500.0 / (times_rated[i] + 2)
-
-        new_rating[i] = (old_rating[i] + Weight * PerfAs) / (1.0 + Weight)
-
-        if abs(old_rating[i] - new_rating[i]) > Cap:
-            if old_rating[i] < new_rating[i]:
-                new_rating[i] = old_rating[i] + Cap
-            else:
-                new_rating[i] = old_rating[i] - Cap
-
-        if times_rated[i] == 0:
-            new_volatility[i] = 385
-        else:
-            new_volatility[i] = math.sqrt(((new_rating[i] - old_rating[i]) ** 2) / Weight +
-                                          (old_volatility[i] ** 2) / (Weight + 1))
-
-        if is_disqualified[i]:
-            # DQed users can manipulate TopCoder ratings to get higher volatility in order to increase their rating
-            # later on, prohibit this by ensuring their volatility never increases in this situation
-            new_volatility[i] = min(new_volatility[i], old_volatility[i])
-
-    # try to keep the sum of ratings constant
-    adjust = float(sum(old_rating) - sum(new_rating)) / N
-    new_rating = list(map(adjust.__add__, new_rating))
-    # inflate a little if we have to so people who placed first don't lose rating
-    best_rank = min(actual_rank)
-    for i in range(N):
-        if abs(actual_rank[i] - best_rank) <= 1e-3 and new_rating[i] < old_rating[i] + 1:
-            new_rating[i] = old_rating[i] + 1
-    return list(map(int, map(round, new_rating))), list(map(int, map(round, new_volatility)))
+    return new_rating, new_mean, new_p
 
 
 def rate_contest(contest):
@@ -125,13 +120,11 @@ def rate_contest(contest):
     rating_sorted = rating_subquery.order_by('-contest__end_time')
     users = contest.users.order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker') \
         .annotate(submissions=Count('submission'),
-                  last_rating=Coalesce(Subquery(rating_sorted.values('rating')[:1]), 1200),
-                  volatility=Coalesce(Subquery(rating_sorted.values('volatility')[:1]), 535),
+                  last_mean=Coalesce(Subquery(rating_sorted.values('mean')[:1]), MEAN_INIT),
                   times=Coalesce(Subquery(rating_subquery.order_by().values('user_id')
                                           .annotate(count=Count('id')).values('count')), 0)) \
         .exclude(user_id__in=contest.rate_exclude.all()) \
-        .filter(virtual=0).values('id', 'user_id', 'score', 'cumtime', 'tiebreaker', 'is_disqualified',
-                                  'last_rating', 'volatility', 'times')
+        .filter(virtual=0).values('id', 'user_id', 'score', 'cumtime', 'tiebreaker', 'last_mean', 'times')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
     if contest.rating_floor is not None:
@@ -142,16 +135,24 @@ def rate_contest(contest):
     users = list(users)
     participation_ids = list(map(itemgetter('id'), users))
     user_ids = list(map(itemgetter('user_id'), users))
-    is_disqualified = list(map(itemgetter('is_disqualified'), users))
     ranking = list(tie_ranker(users, key=itemgetter('score', 'cumtime', 'tiebreaker')))
-    old_rating = list(map(itemgetter('last_rating'), users))
-    old_volatility = list(map(itemgetter('volatility'), users))
+    old_mean = list(map(itemgetter('last_mean'), users))
     times_ranked = list(map(itemgetter('times'), users))
-    rating, volatility = recalculate_ratings(old_rating, old_volatility, ranking, times_ranked, is_disqualified)
+    historical_p = [[] for _ in users]
+
+    user_id_to_idx = {uid: i for i, uid in enumerate(user_ids)}
+    for h in Rating.objects.filter(user_id__in=user_ids) \
+            .order_by('-contest__end_time') \
+            .values('user_id', 'performance'):
+        idx = user_id_to_idx[h['user_id']]
+        historical_p[idx].append(h['performance'])
+
+    rating, mean, performance = recalculate_ratings(ranking, old_mean, times_ranked, historical_p)
 
     now = timezone.now()
-    ratings = [Rating(user_id=i, contest=contest, rating=r, volatility=v, last_rated=now, participation_id=p, rank=z)
-               for i, p, r, v, z in zip(user_ids, participation_ids, rating, volatility, ranking)]
+    ratings = [Rating(user_id=i, contest=contest, rating=r, mean=m, performance=perf,
+                      last_rated=now, participation_id=pid, rank=z)
+               for i, pid, r, m, perf, z in zip(user_ids, participation_ids, rating, mean, performance, ranking)]
     with transaction.atomic():
         Rating.objects.bulk_create(ratings)
 
@@ -161,6 +162,7 @@ def rate_contest(contest):
 
 
 RATING_LEVELS = ['Newbie', 'Amateur', 'Expert', 'Candidate Master', 'Master', 'Grandmaster', 'Target']
+# TODO: adjust RATING_VALUES later
 RATING_VALUES = [1000, 1200, 1500, 1800, 2200, 3000]
 RATING_CLASS = ['rate-newbie', 'rate-amateur', 'rate-expert', 'rate-candidate-master',
                 'rate-master', 'rate-grandmaster', 'rate-target']

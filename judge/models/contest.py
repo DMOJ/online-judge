@@ -549,7 +549,8 @@ class Rating(models.Model):
                                          related_name='rating', on_delete=CASCADE)
     rank = models.IntegerField(verbose_name=_('rank'))
     rating = models.IntegerField(verbose_name=_('rating'))
-    volatility = models.IntegerField(verbose_name=_('volatility'))
+    mean = models.FloatField(verbose_name=_('raw rating'))
+    performance = models.FloatField(verbose_name=_('contest performance'))
     last_rated = models.DateTimeField(db_index=True, verbose_name=_('last rated'))
 
     class Meta:
