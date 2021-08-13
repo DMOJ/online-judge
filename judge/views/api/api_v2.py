@@ -488,7 +488,6 @@ class APIUserList(APIListView):
             .annotate(
                 username=F('user__username'),
                 latest_rating=Subquery(latest_rating_subquery.values('rating')[:1]),
-                latest_volatility=Subquery(latest_rating_subquery.values('volatility')[:1]),
             )
             .order_by('id')
             .only('id', 'points', 'performance_points', 'problem_count', 'display_rank')
@@ -503,7 +502,6 @@ class APIUserList(APIListView):
             'problem_count': profile.problem_count,
             'rank': profile.display_rank,
             'rating': profile.latest_rating,
-            'volatility': profile.latest_volatility,
         }
 
 
@@ -538,15 +536,15 @@ class APIUserDetail(APIDetailView):
             )
             .order_by('contest__end_time')
         )
-        for contest_key, score, cumtime, rating, volatility in participations.values_list(
-            'contest__key', 'score', 'cumtime', 'rating__rating', 'rating__volatility',
+        for contest_key, score, cumtime, rating, performance in participations.values_list(
+            'contest__key', 'score', 'cumtime', 'rating__rating', 'rating__performance',
         ):
             contest_history.append({
                 'key': contest_key,
                 'score': score,
                 'cumulative_time': cumtime,
                 'rating': rating,
-                'volatility': volatility,
+                'performance': round(performance),
             })
 
         return {
@@ -558,7 +556,6 @@ class APIUserDetail(APIDetailView):
             'solved_problems': solved_problems,
             'rank': profile.display_rank,
             'rating': last_rating.rating if last_rating is not None else None,
-            'volatility': last_rating.volatility if last_rating is not None else None,
             'organizations': list(profile.organizations.values_list('id', flat=True)),
             'contests': contest_history,
         }

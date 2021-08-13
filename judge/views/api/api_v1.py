@@ -151,16 +151,15 @@ def api_v1_user_info(request, user):
     participations = ContestParticipation.objects.filter(user=profile, virtual=0, contest__is_visible=True,
                                                          contest__is_private=False,
                                                          contest__is_organization_private=False)
-    for contest_key, rating, volatility in participations.values_list('contest__key', 'rating__rating',
-                                                                      'rating__volatility'):
+    for contest_key, rating, performance in participations.values_list('contest__key', 'rating__rating',
+                                                                       'rating__performance'):
         contest_history[contest_key] = {
             'rating': rating,
-            'volatility': volatility,
+            'performance': round(performance),
         }
 
     resp['contests'] = {
         'current_rating': last_rating.rating if last_rating else None,
-        'volatility': last_rating.volatility if last_rating else None,
         'history': contest_history,
     }
 

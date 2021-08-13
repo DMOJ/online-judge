@@ -87,7 +87,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
             elif s < r:     # j beats i
                 y_tg -= 1. / (TANH_C * delta[j])
             # Otherwise, this is a tie that counts as half a win, as per Elo-MMR.
-        new_p[i] = round(solve(tanh_terms, y_tg))
+        new_p[i] = solve(tanh_terms, y_tg)
         historical_p[i] = [new_p[i]] + historical_p[i]
 
     # Calculate mean and rating.
