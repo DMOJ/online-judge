@@ -8,7 +8,7 @@ from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 
-BETA2 = 102400.
+BETA2 = 320. ** 2
 VAR_INIT = 350. ** 2 * (BETA2 / 212**2)
 VAR_PER_CONTEST = 1219.047619 * (BETA2 / 212**2)
 VAR_LIM = ((VAR_PER_CONTEST**2 + 4*BETA2*VAR_PER_CONTEST) ** .5 - VAR_PER_CONTEST) / 2
@@ -108,7 +108,10 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
         w0 = 1. / get_var(times_ranked[i]+1, cache) - w_sum
         p0 = eval_tanhs(tanh_terms[1:], old_mean[i]) / w0 + old_mean[i]
         new_mean[i] = solve(tanh_terms, w0*p0, lin_factor=w0)
-        new_rating[i] = round(new_mean[i] - 2 * (get_var(times_ranked[i]+1, cache)**.5 - VAR_LIM**.5))
+
+        # Display a slightly lower rating to incentivize participation.
+        # As times_ranked increases, new_rating converges to new_mean.
+        new_rating[i] = round(new_mean[i] - (get_var(times_ranked[i]+1, cache)**.5 - VAR_LIM**.5))
 
     return new_rating, new_mean, new_p
 

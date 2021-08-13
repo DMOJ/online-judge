@@ -536,15 +536,16 @@ class APIUserDetail(APIDetailView):
             )
             .order_by('contest__end_time')
         )
-        for contest_key, score, cumtime, rating, performance in participations.values_list(
-            'contest__key', 'score', 'cumtime', 'rating__rating', 'rating__performance',
+        for contest_key, score, cumtime, rating, mean, performance in participations.values_list(
+            'contest__key', 'score', 'cumtime', 'rating__rating', 'rating__mean', 'rating__performance',
         ):
             contest_history.append({
                 'key': contest_key,
                 'score': score,
                 'cumulative_time': cumtime,
                 'rating': rating,
-                'performance': round(performance),
+                'raw_rating': mean,
+                'performance': performance,
             })
 
         return {
