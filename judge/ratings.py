@@ -34,12 +34,16 @@ def solve(tanh_terms, y_tg, lin_factor=0, bounds=VALID_RANGE):
             L, Ly = x, y
         else:
             return x
+    # Use linear interpolation to be slightly more accurate.
     if Ly is None:
         Ly = lin_factor * L + eval_tanhs(tanh_terms, L)
+    if y_tg <= Ly:
+        return L
     if Ry is None:
         Ry = lin_factor * R + eval_tanhs(tanh_terms, R)
-    # Use linear interpolation to be slightly more accurate.
-    ratio = (y_tg-Ly) / (Ry-Ly) if Ly < y_tg < Ry else 0.5
+    if y_tg >= Ry:
+        return R
+    ratio = (y_tg-Ly) / (Ry-Ly)
     return L*(1-ratio) + R*ratio
 
 
