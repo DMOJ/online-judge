@@ -9,13 +9,14 @@ from django.utils import timezone
 
 
 BETA2 = 328.33 ** 2
-VAR_INIT = 350. ** 2 * (BETA2 / 212**2)
-VAR_PER_CONTEST = 1219.047619 * (BETA2 / 212**2)
-VAR_LIM = ((VAR_PER_CONTEST ** 2 + 4 * BETA2 * VAR_PER_CONTEST) ** .5 - VAR_PER_CONTEST) / 2
 MEAN_INIT = 1500.
-SD_INIT = VAR_INIT ** .5
+VAR_INIT = 350**2 * (BETA2 / 212**2)
+SD_INIT = math.sqrt(VAR_INIT)
 VALID_RANGE = MEAN_INIT - 20 * SD_INIT, MEAN_INIT + 20 * SD_INIT
-TANH_C = 3 ** .5 / math.pi
+VAR_PER_CONTEST = 1219.047619 * (BETA2 / 212**2)
+VAR_LIM = (math.sqrt(VAR_PER_CONTEST**2 + 4 * BETA2 * VAR_PER_CONTEST) - VAR_PER_CONTEST) / 2
+SD_LIM = math.sqrt(VAR_LIM)
+TANH_C = math.sqrt(3) / math.pi
 
 
 def eval_tanhs(tanh_terms, x):
@@ -67,7 +68,7 @@ def tie_ranker(iterable, key=attrgetter('points')):
         yield rank + (delta - 1) / 2.0
 
 
-def get_var(times_ranked, cache):
+def get_var(times_ranked, cache=[VAR_INIT]):
     while times_ranked >= len(cache):
         next_var = 1. / (1. / (cache[-1] + VAR_PER_CONTEST) + 1. / BETA2)
         cache.append(next_var)
@@ -76,9 +77,8 @@ def get_var(times_ranked, cache):
 
 def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
     n = len(ranking)
-    cache = [VAR_INIT]
 
-    delta = [(get_var(t, cache) + VAR_PER_CONTEST + BETA2) ** .5 for t in times_ranked]
+    delta = [math.sqrt(get_var(t) + VAR_PER_CONTEST + BETA2) for t in times_ranked]
 
     new_p = [0.] * n
     new_mean = [0.] * n
@@ -122,20 +122,20 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
             w_sum = 0.
             for j, h in enumerate(historical_p[i]):
                 gamma2 = (VAR_PER_CONTEST if j > 0 else 0)
-                h_var = get_var(times_ranked[i] + 1 - j, cache)
+                h_var = get_var(times_ranked[i] + 1 - j)
                 k = h_var / (h_var + gamma2)
                 w = w_prev * k**2
                 # Future optimization: If j is around 20, then w < 1e-3 and it is possible to break early.
-                tanh_terms.append((h, BETA2 ** .5 * TANH_C, w))
+                tanh_terms.append((h, math.sqrt(BETA2) * TANH_C, w))
                 w_prev = w
                 w_sum += w / BETA2
-            w0 = 1. / get_var(times_ranked[i] + 1, cache) - w_sum
+            w0 = 1. / get_var(times_ranked[i] + 1) - w_sum
             p0 = eval_tanhs(tanh_terms[1:], old_mean[i]) / w0 + old_mean[i]
             new_mean[i] = solve(tanh_terms, w0 * p0, lin_factor=w0)
 
     # Display a slightly lower rating to incentivize participation.
     # As times_ranked increases, new_rating converges to new_mean.
-    new_rating = [round(m - (get_var(t + 1, cache) ** .5 - VAR_LIM ** .5)) for m, t in zip(new_mean, times_ranked)]
+    new_rating = [round(m - (math.sqrt(get_var(t + 1)) - SD_LIM)) for m, t in zip(new_mean, times_ranked)]
 
     return new_rating, new_mean, new_p
 
