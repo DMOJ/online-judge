@@ -186,7 +186,7 @@ def rate_contest(contest):
 
 
 RATING_LEVELS = ['Newbie', 'Amateur', 'Expert', 'Candidate Master', 'Master', 'Grandmaster', 'Target']
-RATING_VALUES = [1100, 1400, 1700, 2000, 2400, 3000]
+RATING_VALUES = [1000, 1300, 1600, 1900, 2400, 3000]
 RATING_CLASS = ['rate-newbie', 'rate-amateur', 'rate-expert', 'rate-candidate-master',
                 'rate-master', 'rate-grandmaster', 'rate-target']
 
