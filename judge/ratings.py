@@ -122,16 +122,16 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
             w_sum = 0.
             for j, h in enumerate(historical_p[i]):
                 gamma2 = (VAR_PER_CONTEST if j > 0 else 0)
-                h_var = get_var(times_ranked[i]+1-j, cache)
+                h_var = get_var(times_ranked[i] + 1 - j, cache)
                 k = h_var / (h_var + gamma2)
                 w = w_prev * k**2
                 # Future optimization: If j is around 20, then w < 1e-3 and it is possible to break early.
                 tanh_terms.append((h, BETA2 ** .5 * TANH_C, w))
                 w_prev = w
                 w_sum += w / BETA2
-            w0 = 1. / get_var(times_ranked[i]+1, cache) - w_sum
+            w0 = 1. / get_var(times_ranked[i] + 1, cache) - w_sum
             p0 = eval_tanhs(tanh_terms[1:], old_mean[i]) / w0 + old_mean[i]
-            new_mean[i] = solve(tanh_terms, w0*p0, lin_factor=w0)
+            new_mean[i] = solve(tanh_terms, w0 * p0, lin_factor=w0)
 
     # Display a slightly lower rating to incentivize participation.
     # As times_ranked increases, new_rating converges to new_mean.
