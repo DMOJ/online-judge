@@ -71,7 +71,6 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
 
     new_p = [0.] * n
     new_mean = [0.] * n
-    new_rating = [0] * n
 
     # Calculate performance at index i.
     def solve_idx(i, bounds=VALID_RANGE):
@@ -98,33 +97,35 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
 
     if n < 2:
         new_p = list(old_mean)
+        new_mean = list(old_mean)
     else:
+        # Calculate performance.
         solve_idx(0)
         solve_idx(n-1)
         divconq(0, n-1)
 
-    # Calculate mean and rating.
-    for i, r in enumerate(ranking):
-        tanh_terms = []
-        w_prev = 1.
-        w_sum = 0.
-        for j, h in enumerate(historical_p[i]):
-            gamma2 = (VAR_PER_CONTEST if j > 0 else 0)
-            h_var = get_var(times_ranked[i]+1-j, cache)
-            k = h_var / (h_var + gamma2)
-            w = w_prev * k**2
-            # Note: If j is around 20, then w < 1e-3 and it is possible to break early.
-            #if w < 1e-3: break
-            tanh_terms.append((h, BETA2 ** .5, w))
-            w_prev = w
-            w_sum += w / BETA2
-        w0 = 1. / get_var(times_ranked[i]+1, cache) - w_sum
-        p0 = eval_tanhs(tanh_terms[1:], old_mean[i]) / w0 + old_mean[i]
-        new_mean[i] = solve(tanh_terms, w0*p0, lin_factor=w0)
+        # Calculate mean.
+        for i, r in enumerate(ranking):
+            tanh_terms = []
+            w_prev = 1.
+            w_sum = 0.
+            for j, h in enumerate(historical_p[i]):
+                gamma2 = (VAR_PER_CONTEST if j > 0 else 0)
+                h_var = get_var(times_ranked[i]+1-j, cache)
+                k = h_var / (h_var + gamma2)
+                w = w_prev * k**2
+                # Note: If j is around 20, then w < 1e-3 and it is possible to break early.
+                #if w < 1e-3: break
+                tanh_terms.append((h, BETA2 ** .5, w))
+                w_prev = w
+                w_sum += w / BETA2
+            w0 = 1. / get_var(times_ranked[i]+1, cache) - w_sum
+            p0 = eval_tanhs(tanh_terms[1:], old_mean[i]) / w0 + old_mean[i]
+            new_mean[i] = solve(tanh_terms, w0*p0, lin_factor=w0)
 
-        # Display a slightly lower rating to incentivize participation.
-        # As times_ranked increases, new_rating converges to new_mean.
-        new_rating[i] = round(new_mean[i] - (get_var(times_ranked[i]+1, cache)**.5 - VAR_LIM**.5))
+    # Display a slightly lower rating to incentivize participation.
+    # As times_ranked increases, new_rating converges to new_mean.
+    new_rating = [round(m - (get_var(t+1, cache)**.5 - VAR_LIM**.5)) for m, t in zip(new_mean, times_ranked)]
 
     return new_rating, new_mean, new_p
 
