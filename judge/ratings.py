@@ -8,12 +8,13 @@ from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 
-BETA2 = 320. ** 2
+BETA2 = 328.33 ** 2
 VAR_INIT = 350. ** 2 * (BETA2 / 212**2)
 VAR_PER_CONTEST = 1219.047619 * (BETA2 / 212**2)
 VAR_LIM = ((VAR_PER_CONTEST**2 + 4*BETA2*VAR_PER_CONTEST) ** .5 - VAR_PER_CONTEST) / 2
 MEAN_INIT = 1500.
-VALID_RANGE = MEAN_INIT - 20*VAR_INIT, MEAN_INIT + 20*VAR_INIT
+SD_INIT = VAR_INIT ** .5
+VALID_RANGE = MEAN_INIT - 20*SD_INIT, MEAN_INIT + 20*SD_INIT
 TANH_C = 3 ** .5 / math.pi
 
 
@@ -21,13 +22,9 @@ def eval_tanhs(tanh_terms, x):
     return sum((wt / (TANH_C * sd)) * math.tanh((x - mu) / (2 * TANH_C * sd)) for mu, sd, wt in tanh_terms)
 
 
-def eval_tanhs_grad(tanh_terms, x):
-    return sum(0.5 * wt * (TANH_C * sd * math.cosh((x - mu) / (2 * TANH_C * sd))) ** -2 for mu, sd, wt in tanh_terms)
-
-
-def solve(tanh_terms, y_tg=0, lin_factor=0, bounds=VALID_RANGE):
+def solve(tanh_terms, y_tg, lin_factor=0, bounds=VALID_RANGE):
     L,R = bounds
-    while R-L > 1e-5*VAR_INIT:
+    while R-L > 1e-5*SD_INIT:
         x = 0.5 * (L + R)
         y = lin_factor * x + eval_tanhs(tanh_terms, x)
         if y > y_tg:
