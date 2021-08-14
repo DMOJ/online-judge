@@ -96,7 +96,6 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
                 y_tg -= 1. / (TANH_C * delta[j])
             # Otherwise, this is a tie that counts as half a win, as per Elo-MMR.
         new_p[i] = solve(tanh_terms, y_tg, bounds=bounds)
-        historical_p[i] = [new_p[i]] + historical_p[i]
 
     # Fill all indices between i and j, inclusive. Use the fact that new_p is non-increasing.
     def divconq(i, j):
@@ -120,7 +119,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
             tanh_terms = []
             w_prev = 1.
             w_sum = 0.
-            for j, h in enumerate(historical_p[i]):
+            for j, h in enumerate([new_p[i]] + historical_p[i]):
                 gamma2 = (VAR_PER_CONTEST if j > 0 else 0)
                 h_var = get_var(times_ranked[i] + 1 - j)
                 k = h_var / (h_var + gamma2)
