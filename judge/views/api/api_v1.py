@@ -152,7 +152,7 @@ def api_v1_user_info(request, user):
                                                          contest__is_private=False,
                                                          contest__is_organization_private=False)
     for contest_key, rating, mean, performance in participations.values_list(
-        'contest__key', 'rating__rating', 'rating__mean', 'rating__performance'
+        'contest__key', 'rating__rating', 'rating__mean', 'rating__performance',
     ):
         contest_history[contest_key] = {
             'rating': rating,

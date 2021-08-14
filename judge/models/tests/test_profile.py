@@ -115,14 +115,14 @@ class ProfileTestCase(CommonDataMixin, TestCase):
             'rating rate-none abcdef',
         )
         self.assertEqual(
-            Profile.get_user_css_class(display_rank='admin', rating=1200, rating_colors=True),
+            Profile.get_user_css_class(display_rank='admin', rating=1300, rating_colors=True),
             'rating rate-expert admin',
         )
         self.assertEqual(
-            Profile.get_user_css_class(display_rank=1111, rating=1199, rating_colors=True),
+            Profile.get_user_css_class(display_rank=1111, rating=1299, rating_colors=True),
             'rating rate-amateur 1111',
         )
         self.assertEqual(
-            Profile.get_user_css_class(display_rank='random', rating=1199, rating_colors=False),
+            Profile.get_user_css_class(display_rank='random', rating=1299, rating_colors=False),
             'random',
         )

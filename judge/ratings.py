@@ -11,10 +11,10 @@ from django.utils import timezone
 BETA2 = 328.33 ** 2
 VAR_INIT = 350. ** 2 * (BETA2 / 212**2)
 VAR_PER_CONTEST = 1219.047619 * (BETA2 / 212**2)
-VAR_LIM = ((VAR_PER_CONTEST**2 + 4*BETA2*VAR_PER_CONTEST) ** .5 - VAR_PER_CONTEST) / 2
+VAR_LIM = ((VAR_PER_CONTEST ** 2 + 4 * BETA2 * VAR_PER_CONTEST) ** .5 - VAR_PER_CONTEST) / 2
 MEAN_INIT = 1500.
 SD_INIT = VAR_INIT ** .5
-VALID_RANGE = MEAN_INIT - 20*SD_INIT, MEAN_INIT + 20*SD_INIT
+VALID_RANGE = MEAN_INIT - 20 * SD_INIT, MEAN_INIT + 20 * SD_INIT
 TANH_C = 3 ** .5 / math.pi
 
 
@@ -25,8 +25,8 @@ def eval_tanhs(tanh_terms, x):
 def solve(tanh_terms, y_tg, lin_factor=0, bounds=VALID_RANGE):
     L, R = bounds
     Ly, Ry = None, None
-    while R-L > 2:
-        x = (L+R) / 2
+    while R - L > 2:
+        x = (L + R) / 2
         y = lin_factor * x + eval_tanhs(tanh_terms, x)
         if y > y_tg:
             R, Ry = x, y
@@ -43,8 +43,8 @@ def solve(tanh_terms, y_tg, lin_factor=0, bounds=VALID_RANGE):
         Ry = lin_factor * R + eval_tanhs(tanh_terms, R)
     if y_tg >= Ry:
         return R
-    ratio = (y_tg-Ly) / (Ry-Ly)
-    return L*(1-ratio) + R*ratio
+    ratio = (y_tg - Ly) / (Ry - Ly)
+    return L * (1 - ratio) + R * ratio
 
 
 def tie_ranker(iterable, key=attrgetter('points')):
@@ -100,8 +100,8 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
 
     # Fill all indices between i and j, inclusive. Use the fact that new_p is non-increasing.
     def divconq(i, j):
-        if j-i > 1:
-            k = (i+j) // 2
+        if j - i > 1:
+            k = (i + j) // 2
             solve_idx(k, bounds=(new_p[j], new_p[i]))
             divconq(i, k)
             divconq(k, j)
@@ -112,8 +112,8 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
     else:
         # Calculate performance.
         solve_idx(0)
-        solve_idx(n-1)
-        divconq(0, n-1)
+        solve_idx(n - 1)
+        divconq(0, n - 1)
 
         # Calculate mean.
         for i, r in enumerate(ranking):
@@ -125,8 +125,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
                 h_var = get_var(times_ranked[i]+1-j, cache)
                 k = h_var / (h_var + gamma2)
                 w = w_prev * k**2
-                # Note: If j is around 20, then w < 1e-3 and it is possible to break early.
-                #if w < 1e-3: break
+                # Future optimization: If j is around 20, then w < 1e-3 and it is possible to break early.
                 tanh_terms.append((h, BETA2 ** .5 * TANH_C, w))
                 w_prev = w
                 w_sum += w / BETA2
@@ -136,7 +135,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
 
     # Display a slightly lower rating to incentivize participation.
     # As times_ranked increases, new_rating converges to new_mean.
-    new_rating = [round(m - (get_var(t+1, cache)**.5 - VAR_LIM**.5)) for m, t in zip(new_mean, times_ranked)]
+    new_rating = [round(m - (get_var(t + 1, cache) ** .5 - VAR_LIM ** .5)) for m, t in zip(new_mean, times_ranked)]
 
     return new_rating, new_mean, new_p
 
