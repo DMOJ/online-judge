@@ -19,7 +19,7 @@ TANH_C = 3 ** .5 / math.pi
 
 
 def eval_tanhs(tanh_terms, x):
-    return sum((wt / (TANH_C * sd)) * math.tanh((x - mu) / (2 * TANH_C * sd)) for mu, sd, wt in tanh_terms)
+    return sum((wt / sd) * math.tanh((x - mu) / (2 * sd)) for mu, sd, wt in tanh_terms)
 
 
 def solve(tanh_terms, y_tg, lin_factor=0, bounds=VALID_RANGE):
@@ -85,7 +85,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
         tanh_terms = []
         y_tg = 0
         for j, s in enumerate(ranking):
-            tanh_terms.append((old_mean[j], delta[j], 1))
+            tanh_terms.append((old_mean[j], delta[j] * TANH_C, 1))
             if s > r:       # j loses to i
                 y_tg += 1. / (TANH_C * delta[j])
             elif s < r:     # j beats i
@@ -123,7 +123,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
                 w = w_prev * k**2
                 # Note: If j is around 20, then w < 1e-3 and it is possible to break early.
                 #if w < 1e-3: break
-                tanh_terms.append((h, BETA2 ** .5, w))
+                tanh_terms.append((h, BETA2 ** .5 * TANH_C, w))
                 w_prev = w
                 w_sum += w / BETA2
             w0 = 1. / get_var(times_ranked[i]+1, cache) - w_sum
