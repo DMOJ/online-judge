@@ -1,5 +1,5 @@
-from math import pi, sqrt, tanh
 from bisect import bisect
+from math import pi, sqrt, tanh
 from operator import attrgetter, itemgetter
 
 from django.db import transaction
