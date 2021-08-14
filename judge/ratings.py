@@ -25,7 +25,7 @@ def eval_tanhs(tanh_terms, x):
 def solve(tanh_terms, y_tg, lin_factor=0, bounds=VALID_RANGE):
     L,R = bounds
     while R-L > 1e-5*SD_INIT:
-        x = 0.5 * (L + R)
+        x = (L+R) / 2
         y = lin_factor * x + eval_tanhs(tanh_terms, x)
         if y > y_tg:
             R = x
@@ -33,7 +33,7 @@ def solve(tanh_terms, y_tg, lin_factor=0, bounds=VALID_RANGE):
             L = x
         else:
             return x
-    return (L + R) / 2
+    return (L+R) / 2
 
 
 def tie_ranker(iterable, key=attrgetter('points')):
@@ -73,7 +73,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
     new_mean = [0.] * n
     new_rating = [0] * n
 
-    # Calculate performances.
+    # Calculate performance at index i.
     def solve_idx(i, bounds=VALID_RANGE):
         r = ranking[i]
         tanh_terms = []
@@ -87,8 +87,6 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
             # Otherwise, this is a tie that counts as half a win, as per Elo-MMR.
         new_p[i] = solve(tanh_terms, y_tg, bounds=bounds)
         historical_p[i] = [new_p[i]] + historical_p[i]
-    solve_idx(0)
-    solve_idx(n-1)
 
     # Fill all indices between i and j, inclusive. Use the fact that new_p is non-increasing.
     def divconq(i, j):
@@ -97,7 +95,13 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
             solve_idx(k, bounds=(new_p[j], new_p[i]))
             divconq(i, k)
             divconq(k, j)
-    divconq(0, n-1)
+
+    if n < 2:
+        new_p = list(old_mean)
+    else:
+        solve_idx(0)
+        solve_idx(n-1)
+        divconq(0, n-1)
 
     # Calculate mean and rating.
     for i, r in enumerate(ranking):
