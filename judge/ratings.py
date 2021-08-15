@@ -77,25 +77,24 @@ def get_var(times_ranked, cache=[VAR_INIT]):
 
 def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
     n = len(ranking)
-
-    delta = [sqrt(get_var(t) + VAR_PER_CONTEST + BETA2) for t in times_ranked]
-
     new_p = [0.] * n
     new_mean = [0.] * n
+
+    # Note: pre-multiply delta by TANH_C to improve efficiency.
+    delta = [TANH_C * sqrt(get_var(t) + VAR_PER_CONTEST + BETA2) for t in times_ranked]
+    p_tanh_terms = [(m, d, 1) for m, d in zip(old_mean, delta)]
 
     # Calculate performance at index i.
     def solve_idx(i, bounds=VALID_RANGE):
         r = ranking[i]
-        tanh_terms = []
         y_tg = 0
-        for j, s in enumerate(ranking):
-            tanh_terms.append((old_mean[j], delta[j] * TANH_C, 1))
-            if s > r:       # j loses to i
-                y_tg += 1. / (TANH_C * delta[j])
-            elif s < r:     # j beats i
-                y_tg -= 1. / (TANH_C * delta[j])
+        for d, s in zip(delta, ranking):
+            if s > r:       # s loses to r
+                y_tg += 1. / d
+            elif s < r:     # s beats r
+                y_tg -= 1. / d
             # Otherwise, this is a tie that counts as half a win, as per Elo-MMR.
-        new_p[i] = solve(tanh_terms, y_tg, bounds=bounds)
+        new_p[i] = solve(p_tanh_terms, y_tg, bounds=bounds)
 
     # Fill all indices between i and j, inclusive. Use the fact that new_p is non-increasing.
     def divconq(i, j):
