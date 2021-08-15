@@ -134,7 +134,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
 
     # Display a slightly lower rating to incentivize participation.
     # As times_ranked increases, new_rating converges to new_mean.
-    new_rating = [round(m - (sqrt(get_var(t + 1)) - SD_LIM)) for m, t in zip(new_mean, times_ranked)]
+    new_rating = [max(1, round(m - (sqrt(get_var(t + 1)) - SD_LIM))) for m, t in zip(new_mean, times_ranked)]
 
     return new_rating, new_mean, new_p
 
