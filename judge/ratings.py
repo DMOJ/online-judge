@@ -19,6 +19,26 @@ SD_LIM = sqrt(VAR_LIM)
 TANH_C = sqrt(3) / pi
 
 
+def tie_ranker(iterable, key=attrgetter('points')):
+    rank = 0
+    delta = 1
+    last = None
+    buf = []
+    for item in iterable:
+        new = key(item)
+        if new != last:
+            for _ in buf:
+                yield rank + (delta - 1) / 2.0
+            rank += delta
+            delta = 0
+            buf = []
+        delta += 1
+        buf.append(item)
+        last = key(item)
+    for _ in buf:
+        yield rank + (delta - 1) / 2.0
+
+
 def eval_tanhs(tanh_terms, x):
     return sum((wt / sd) * tanh((x - mu) / (2 * sd)) for mu, sd, wt in tanh_terms)
 
@@ -46,26 +66,6 @@ def solve(tanh_terms, y_tg, lin_factor=0, bounds=VALID_RANGE):
         return R
     ratio = (y_tg - Ly) / (Ry - Ly)
     return L * (1 - ratio) + R * ratio
-
-
-def tie_ranker(iterable, key=attrgetter('points')):
-    rank = 0
-    delta = 1
-    last = None
-    buf = []
-    for item in iterable:
-        new = key(item)
-        if new != last:
-            for _ in buf:
-                yield rank + (delta - 1) / 2.0
-            rank += delta
-            delta = 0
-            buf = []
-        delta += 1
-        buf.append(item)
-        last = key(item)
-    for _ in buf:
-        yield rank + (delta - 1) / 2.0
 
 
 def get_var(times_ranked, cache=[VAR_INIT]):
@@ -145,11 +145,13 @@ def rate_contest(contest):
     rating_sorted = rating_subquery.order_by('-contest__end_time')
     users = contest.users.order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker') \
         .annotate(submissions=Count('submission'),
+                  last_rating=Coalesce(Subquery(rating_sorted.values('rating')[:1]), MEAN_INIT),
                   last_mean=Coalesce(Subquery(rating_sorted.values('mean')[:1]), MEAN_INIT),
                   times=Coalesce(Subquery(rating_subquery.order_by().values('user_id')
                                           .annotate(count=Count('id')).values('count')), 0)) \
         .exclude(user_id__in=contest.rate_exclude.all()) \
-        .filter(virtual=0).values('id', 'user_id', 'score', 'cumtime', 'tiebreaker', 'last_mean', 'times')
+        .filter(virtual=0).values('id', 'user_id', 'score', 'cumtime', 'tiebreaker',
+                                  'last_rating', 'last_mean', 'times')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
     if contest.rating_floor is not None:
