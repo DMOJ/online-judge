@@ -17,7 +17,7 @@ See it live at [dmoj.ca](https://dmoj.ca/)!
    * Supports ICPC/IOI/AtCoder/ECOO formats out-of-the box
    * **System testing** supported
    * **Hidden scoreboards** and **virtual participation**
-   * Topcoder-style **rating**
+   * [Elo-MMR](https://arxiv.org/abs/2101.00400)-style **rating**
    * **Plagiarism detection** via [Stanford MOSS](https://theory.stanford.edu/~aiken/moss/)
    * Restricting contest access to particular organizations or users
 * Rich problem statements, with support for **LaTeX math and diagrams**
