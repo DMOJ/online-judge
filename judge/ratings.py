@@ -9,6 +9,7 @@ from django.utils import timezone
 
 
 BETA2 = 328.33 ** 2
+RATING_INIT = 1200      # Newcomer's rating when applying the rating floor/ceiling
 MEAN_INIT = 1500.
 VAR_INIT = 350**2 * (BETA2 / 212**2)
 SD_INIT = sqrt(VAR_INIT)
@@ -145,7 +146,7 @@ def rate_contest(contest):
     rating_sorted = rating_subquery.order_by('-contest__end_time')
     users = contest.users.order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker') \
         .annotate(submissions=Count('submission'),
-                  last_rating=Coalesce(Subquery(rating_sorted.values('rating')[:1]), MEAN_INIT),
+                  last_rating=Coalesce(Subquery(rating_sorted.values('rating')[:1]), RATING_INIT),
                   last_mean=Coalesce(Subquery(rating_sorted.values('mean')[:1]), MEAN_INIT),
                   times=Coalesce(Subquery(rating_subquery.order_by().values('user_id')
                                           .annotate(count=Count('id')).values('count')), 0)) \
