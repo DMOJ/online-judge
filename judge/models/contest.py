@@ -433,7 +433,8 @@ class ContestParticipation(models.Model):
             if self.is_disqualified:
                 self.score = -9999
                 self.cumtime = 0
-                self.save(update_fields=['score', 'cumtime'])
+                self.tiebreaker = 0
+                self.save(update_fields=['score', 'cumtime', 'tiebreaker'])
     recompute_results.alters_data = True
 
     def set_disqualified(self, disqualified):
