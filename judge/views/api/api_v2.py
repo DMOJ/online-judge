@@ -252,7 +252,6 @@ class APIContestDetail(APIDetailView):
             .order_by('order'),
         )
 
-        new_ratings_subquery = Rating.objects.filter(participation=OuterRef('pk'))
         old_ratings_subquery = (
             Rating.objects
             .filter(user=OuterRef('user__pk'), contest__end_time__lt=OuterRef('contest__end_time'))
@@ -264,10 +263,10 @@ class APIContestDetail(APIDetailView):
             .annotate(
                 username=F('user__user__username'),
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
-                new_rating=Subquery(new_ratings_subquery.values('rating')[:1]),
-                old_volatility=Subquery(old_ratings_subquery.values('volatility')[:1]),
-                new_volatility=Subquery(new_ratings_subquery.values('volatility')[:1]),
+                old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
+                old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
             )
+            .select_related('rating')
             .order_by('-score', 'cumtime', 'tiebreaker')
         )
 
@@ -319,9 +318,11 @@ class APIContestDetail(APIDetailView):
                     'cumulative_time': participation.cumtime,
                     'tiebreaker': participation.tiebreaker,
                     'old_rating': participation.old_rating,
-                    'new_rating': participation.new_rating,
-                    'old_volatility': participation.old_volatility,
-                    'new_volatility': participation.new_volatility,
+                    'new_rating': participation.rating.new_rating if participation.rating else None,
+                    'old_raw_rating': participation.old_mean,
+                    'new_raw_rating': participation.rating.new_mean if participation.rating else None,
+                    'old_performance': participation.old_performance,
+                    'new_performance': participation.rating.new_performance if participation.rating else None,
                     'is_disqualified': participation.is_disqualified,
                     'solutions': contest.format.get_problem_breakdown(participation, problems),
                 } for participation in participations
@@ -356,7 +357,6 @@ class APIContestParticipationList(APIListView):
                 q |= Q(view_contest_scoreboard=self.request.profile)
             visible_contests = visible_contests.filter(q)
 
-        new_ratings_subquery = Rating.objects.filter(participation=OuterRef('pk'))
         old_ratings_subquery = (
             Rating.objects
             .filter(user=OuterRef('user__pk'), contest__end_time__lt=OuterRef('contest__end_time'))
@@ -368,11 +368,10 @@ class APIContestParticipationList(APIListView):
             .filter(virtual__gte=0, contest__in=visible_contests)
             .annotate(
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
-                new_rating=Subquery(new_ratings_subquery.values('rating')[:1]),
-                old_volatility=Subquery(old_ratings_subquery.values('volatility')[:1]),
-                new_volatility=Subquery(new_ratings_subquery.values('volatility')[:1]),
+                old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
+                old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
             )
-            .select_related('user__user', 'contest')
+            .select_related('user__user', 'contest', 'rating')
             .order_by('id')
             .only(
                 'user__user__username',
@@ -387,9 +386,9 @@ class APIContestParticipationList(APIListView):
                 'is_disqualified',
                 'virtual',
                 'old_rating',
-                'new_rating',
-                'old_volatility',
-                'new_volatility',
+                'old_mean',
+                'old_performance',
+                'rating',
             )
         )
 
@@ -403,9 +402,11 @@ class APIContestParticipationList(APIListView):
             'cumulative_time': participation.cumtime,
             'tiebreaker': participation.tiebreaker,
             'old_rating': participation.old_rating,
-            'new_rating': participation.new_rating,
-            'old_volatility': participation.old_volatility,
-            'new_volatility': participation.new_volatility,
+            'new_rating': participation.rating.new_rating if participation.rating else None,
+            'old_raw_rating': participation.old_mean,
+            'new_raw_rating': participation.rating.new_mean if participation.rating else None,
+            'old_performance': participation.old_performance,
+            'new_performance': participation.rating.new_performance if participation.rating else None,
             'is_disqualified': participation.is_disqualified,
             'virtual_participation_number': participation.virtual,
         }
@@ -550,7 +551,6 @@ class APIUserDetail(APIDetailView):
 
         last_rating = profile.ratings.order_by('-contest__end_time').first()
 
-        new_ratings_subquery = Rating.objects.filter(participation=OuterRef('pk'))
         old_ratings_subquery = (
             Rating.objects
             .filter(user=OuterRef('user__pk'), contest__end_time__lt=OuterRef('contest__end_time'))
@@ -568,10 +568,10 @@ class APIUserDetail(APIDetailView):
             )
             .annotate(
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
-                new_rating=Subquery(new_ratings_subquery.values('rating')[:1]),
-                old_volatility=Subquery(old_ratings_subquery.values('volatility')[:1]),
-                new_volatility=Subquery(new_ratings_subquery.values('volatility')[:1]),
+                old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
+                old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
             )
+            .select_related('rating')
             .order_by('contest__end_time')
         )
 
@@ -584,11 +584,11 @@ class APIUserDetail(APIDetailView):
                 'cumulative_time': participation.cumtime,
                 'tiebreaker': participation.tiebreaker,
                 'old_rating': participation.old_rating,
-                'new_rating': participation.new_rating,
+                'new_rating': participation.rating.new_rating if participation.rating else None,
                 'old_raw_rating': participation.old_mean,
-                'new_raw_rating': participation.new_mean,
+                'new_raw_rating': participation.rating.new_mean if participation.rating else None,
                 'old_performance': participation.old_performance,
-                'new_performance': participation.new_performance,
+                'new_performance': participation.rating.new_performance if participation.rating else None,
                 'is_disqualified': participation.is_disqualified,
             })
 
