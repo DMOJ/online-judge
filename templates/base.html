@@ -211,7 +211,7 @@
                             <span>
                                 <img src="{{ gravatar(request.user, 32) }}" height="24" width="24">{# -#}
                                 <span>
-                                    {%- trans username=request.user.username -%}
+                                    {%- trans username=request.profile.display_name -%}
                                         Hello, <b>{{ username }}</b>.
                                     {%- endtrans %}
                                 </span>

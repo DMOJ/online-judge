@@ -115,6 +115,10 @@ class Contest(models.Model):
                                                         'testcases. Commonly set during a contest, then unset '
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
+    show_short_display = models.BooleanField(verbose_name=_('show short form settings display'),
+                                             help_text=_('Whether to show a section containing contest settings '
+                                                         'on the contest page or not.'),
+                                             default=False)
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may see the contest'))
@@ -432,7 +436,9 @@ class ContestParticipation(models.Model):
             self.contest.format.update_participation(self)
             if self.is_disqualified:
                 self.score = -9999
-                self.save(update_fields=['score'])
+                self.cumtime = 0
+                self.tiebreaker = 0
+                self.save(update_fields=['score', 'cumtime', 'tiebreaker'])
     recompute_results.alters_data = True
 
     def set_disqualified(self, disqualified):
@@ -549,7 +555,8 @@ class Rating(models.Model):
                                          related_name='rating', on_delete=CASCADE)
     rank = models.IntegerField(verbose_name=_('rank'))
     rating = models.IntegerField(verbose_name=_('rating'))
-    volatility = models.IntegerField(verbose_name=_('volatility'))
+    mean = models.FloatField(verbose_name=_('raw rating'))
+    performance = models.FloatField(verbose_name=_('contest performance'))
     last_rated = models.DateTimeField(db_index=True, verbose_name=_('last rated'))
 
     class Meta:

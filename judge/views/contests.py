@@ -234,8 +234,23 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
             .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
                                                     default=0, output_field=IntegerField()))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
-        context['contest_has_public_editorials'] = any(
-            problem.is_public and problem.has_public_editorial for problem in context['contest_problems']
+        context['metadata'] = {
+            'has_public_editorials': any(
+                problem.is_public and problem.has_public_editorial for problem in context['contest_problems']
+            ),
+        }
+        context['metadata'].update(
+            **self.object.contest_problems
+            .annotate(
+                partials_enabled=F('partial').bitand(F('problem__partial')),
+                pretests_enabled=F('is_pretested').bitand(F('contest__run_pretests_only')),
+            )
+            .aggregate(
+                has_partials=Sum('partials_enabled'),
+                has_pretests=Sum('pretests_enabled'),
+                has_submission_cap=Sum('max_submissions'),
+                problem_count=Count('id'),
+            ),
         )
         return context
 
@@ -565,7 +580,7 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
 ContestRankingProfile = namedtuple(
     'ContestRankingProfile',
     'id user css_class username points cumtime tiebreaker organization participation '
-    'participation_rating problem_cells result_cell',
+    'participation_rating problem_cells result_cell display_name',
 )
 
 BestSolutionData = namedtuple('BestSolutionData', 'code points time state is_pretested')
@@ -594,6 +609,7 @@ def make_contest_ranking_profile(contest, participation, contest_problems):
         problem_cells=[display_user_problem(contest_problem) for contest_problem in contest_problems],
         result_cell=contest.format.display_participation_result(participation),
         participation=participation,
+        display_name=user.display_name,
     )
 
 

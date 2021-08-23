@@ -513,7 +513,6 @@ class APIUserList(APIListView):
             .annotate(
                 username=F('user__username'),
                 latest_rating=Subquery(latest_rating_subquery.values('rating')[:1]),
-                latest_volatility=Subquery(latest_rating_subquery.values('volatility')[:1]),
             )
             .order_by('id')
             .only('id', 'points', 'performance_points', 'problem_count', 'display_rank')
@@ -528,7 +527,6 @@ class APIUserList(APIListView):
             'problem_count': profile.problem_count,
             'rank': profile.display_rank,
             'rating': profile.latest_rating,
-            'volatility': profile.latest_volatility,
         }
 
 
@@ -576,6 +574,7 @@ class APIUserDetail(APIDetailView):
             )
             .order_by('contest__end_time')
         )
+
         for participation in participations:
             contest_history.append({
                 'key': participation.contest.key,
@@ -586,8 +585,10 @@ class APIUserDetail(APIDetailView):
                 'tiebreaker': participation.tiebreaker,
                 'old_rating': participation.old_rating,
                 'new_rating': participation.new_rating,
-                'old_volatility': participation.old_volatility,
-                'new_volatility': participation.new_volatility,
+                'old_raw_rating': participation.old_mean,
+                'new_raw_rating': participation.new_mean,
+                'old_performance': participation.old_performance,
+                'new_performance': participation.new_performance,
                 'is_disqualified': participation.is_disqualified,
             })
 
@@ -600,7 +601,6 @@ class APIUserDetail(APIDetailView):
             'solved_problems': solved_problems,
             'rank': profile.display_rank,
             'rating': last_rating.rating if last_rating is not None else None,
-            'volatility': last_rating.volatility if last_rating is not None else None,
             'organizations': list(profile.organizations.values_list('id', flat=True)),
             'contests': contest_history,
         }

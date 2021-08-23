@@ -6,7 +6,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, ungettext
 
 from judge.contest_format.default import DefaultContestFormat
 from judge.contest_format.registry import register_contest_format
@@ -125,3 +125,25 @@ class ECOOContestFormat(DefaultContestFormat):
             points=floatformat(participation.score, -self.contest.points_precision),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday') if self.config['cumtime'] else '',
         )
+
+    def get_short_form_display(self):
+        yield _('The score on your **last** non-CE submission for each problem will be used.')
+
+        first_ac_bonus = self.config['first_ac_bonus']
+        if first_ac_bonus:
+            yield _(
+                'There is a **%d bonus** for fully solving on your first non-CE submission.',
+            ) % first_ac_bonus
+
+        time_bonus = self.config['time_bonus']
+        if time_bonus:
+            yield ungettext(
+                'For every **%d minute** you submit before the end of your window, there will be a **1** point bonus.',
+                'For every **%d minutes** you submit before the end of your window, there will be a **1** point bonus.',
+                time_bonus,
+            ) % time_bonus
+
+        if self.config['cumtime']:
+            yield _('Ties will be broken by the sum of the last submission time on **all** problems.')
+        else:
+            yield _('Ties by score will **not** be broken.')
