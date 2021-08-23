@@ -263,10 +263,12 @@ class APIContestDetail(APIDetailView):
             .annotate(
                 username=F('user__user__username'),
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
+                new_rating=F('rating_rating'),
                 old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
+                new_mean=F('rating_mean'),
                 old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
+                new_performance=F('rating_performance'),
             )
-            .select_related('rating')
             .order_by('-score', 'cumtime', 'tiebreaker')
         )
 
@@ -318,11 +320,11 @@ class APIContestDetail(APIDetailView):
                     'cumulative_time': participation.cumtime,
                     'tiebreaker': participation.tiebreaker,
                     'old_rating': participation.old_rating,
-                    'new_rating': participation.rating.new_rating if participation.rating else None,
+                    'new_rating': participation.new_rating,
                     'old_raw_rating': participation.old_mean,
-                    'new_raw_rating': participation.rating.new_mean if participation.rating else None,
+                    'new_raw_rating': participation.new_mean,
                     'old_performance': participation.old_performance,
-                    'new_performance': participation.rating.new_performance if participation.rating else None,
+                    'new_performance': participation.new_performance,
                     'is_disqualified': participation.is_disqualified,
                     'solutions': contest.format.get_problem_breakdown(participation, problems),
                 } for participation in participations
@@ -368,10 +370,13 @@ class APIContestParticipationList(APIListView):
             .filter(virtual__gte=0, contest__in=visible_contests)
             .annotate(
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
+                new_rating=F('rating_rating'),
                 old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
+                new_mean=F('rating_mean'),
                 old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
+                new_performance=F('rating_performance'),
             )
-            .select_related('user__user', 'contest', 'rating')
+            .select_related('user__user', 'contest')
             .order_by('id')
             .only(
                 'user__user__username',
@@ -388,7 +393,6 @@ class APIContestParticipationList(APIListView):
                 'old_rating',
                 'old_mean',
                 'old_performance',
-                'rating',
             )
         )
 
@@ -402,11 +406,11 @@ class APIContestParticipationList(APIListView):
             'cumulative_time': participation.cumtime,
             'tiebreaker': participation.tiebreaker,
             'old_rating': participation.old_rating,
-            'new_rating': participation.rating.new_rating if participation.rating else None,
+            'new_rating': participation.new_rating,
             'old_raw_rating': participation.old_mean,
-            'new_raw_rating': participation.rating.new_mean if participation.rating else None,
+            'new_raw_rating': participation.new_mean,
             'old_performance': participation.old_performance,
-            'new_performance': participation.rating.new_performance if participation.rating else None,
+            'new_performance': participation.new_performance,
             'is_disqualified': participation.is_disqualified,
             'virtual_participation_number': participation.virtual,
         }
@@ -568,10 +572,12 @@ class APIUserDetail(APIDetailView):
             )
             .annotate(
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
+                new_rating=F('rating_rating'),
                 old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
+                new_mean=F('rating_mean'),
                 old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
+                new_performance=F('rating_performance'),
             )
-            .select_related('rating')
             .order_by('contest__end_time')
         )
 
@@ -584,11 +590,11 @@ class APIUserDetail(APIDetailView):
                 'cumulative_time': participation.cumtime,
                 'tiebreaker': participation.tiebreaker,
                 'old_rating': participation.old_rating,
-                'new_rating': participation.rating.new_rating if participation.rating else None,
+                'new_rating': participation.new_rating,
                 'old_raw_rating': participation.old_mean,
-                'new_raw_rating': participation.rating.new_mean if participation.rating else None,
+                'new_raw_rating': participation.new_mean,
                 'old_performance': participation.old_performance,
-                'new_performance': participation.rating.new_performance if participation.rating else None,
+                'new_performance': participation.new_performance,
                 'is_disqualified': participation.is_disqualified,
             })
 
