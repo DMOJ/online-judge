@@ -54,12 +54,9 @@ class GenerateKeyTextInput(TextInput):
 <script type="text/javascript">
 django.jQuery(document).ready(function ($) {{
     $('#id_{0}_regen').click(function () {{
-        var length = 100,
-            charset = "abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789`~!@#$%^&*()_+-=|[]{{}};:,<>./?",
-            key = "";
-        for (var i = 0, n = charset.length; i < length; ++i) {{
-            key += charset.charAt(Math.floor(Math.random() * n));
-        }}
+        var rand = new Uint8Array(75);
+        window.crypto.getRandomValues(rand);
+        var key = btoa(String.fromCharCode.apply(null, rand));
         $('#id_{0}').val(key);
     }});
 }});
