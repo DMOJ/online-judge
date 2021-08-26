@@ -391,8 +391,11 @@ class APIContestParticipationList(APIListView):
                 'is_disqualified',
                 'virtual',
                 'old_rating',
+                'new_rating',
                 'old_mean',
+                'new_mean',
                 'old_performance',
+                'new_performance',
             )
         )
 
