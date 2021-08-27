@@ -266,8 +266,7 @@ class APIContestDetail(APIDetailView):
                 new_rating=F('rating_rating'),
                 old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
                 new_mean=F('rating_mean'),
-                old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
-                new_performance=F('rating_performance'),
+                performance=F('rating_performance'),
             )
             .order_by('-score', 'cumtime', 'tiebreaker')
         )
@@ -323,8 +322,7 @@ class APIContestDetail(APIDetailView):
                     'new_rating': participation.new_rating,
                     'old_raw_rating': participation.old_mean,
                     'new_raw_rating': participation.new_mean,
-                    'old_performance': participation.old_performance,
-                    'new_performance': participation.new_performance,
+                    'performance': participation.performance,
                     'is_disqualified': participation.is_disqualified,
                     'solutions': contest.format.get_problem_breakdown(participation, problems),
                 } for participation in participations
@@ -373,8 +371,7 @@ class APIContestParticipationList(APIListView):
                 new_rating=F('rating_rating'),
                 old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
                 new_mean=F('rating_mean'),
-                old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
-                new_performance=F('rating_performance'),
+                performance=F('rating_performance'),
             )
             .select_related('user__user', 'contest')
             .order_by('id')
@@ -394,8 +391,7 @@ class APIContestParticipationList(APIListView):
                 'new_rating',
                 'old_mean',
                 'new_mean',
-                'old_performance',
-                'new_performance',
+                'performance',
             )
         )
 
@@ -412,8 +408,7 @@ class APIContestParticipationList(APIListView):
             'new_rating': participation.new_rating,
             'old_raw_rating': participation.old_mean,
             'new_raw_rating': participation.new_mean,
-            'old_performance': participation.old_performance,
-            'new_performance': participation.new_performance,
+            'performance': participation.performance,
             'is_disqualified': participation.is_disqualified,
             'virtual_participation_number': participation.virtual,
         }
@@ -578,8 +573,7 @@ class APIUserDetail(APIDetailView):
                 new_rating=F('rating_rating'),
                 old_mean=Subquery(old_ratings_subquery.values('mean')[:1]),
                 new_mean=F('rating_mean'),
-                old_performance=Subquery(old_ratings_subquery.values('performance')[:1]),
-                new_performance=F('rating_performance'),
+                performance=F('rating_performance'),
             )
             .order_by('contest__end_time')
         )
@@ -596,8 +590,7 @@ class APIUserDetail(APIDetailView):
                 'new_rating': participation.new_rating,
                 'old_raw_rating': participation.old_mean,
                 'new_raw_rating': participation.new_mean,
-                'old_performance': participation.old_performance,
-                'new_performance': participation.new_performance,
+                'performance': participation.performance,
                 'is_disqualified': participation.is_disqualified,
             })
 
