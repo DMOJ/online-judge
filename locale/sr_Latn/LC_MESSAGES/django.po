@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-17 01:38+0000\n"
-"PO-Revision-Date: 2021-07-23 00:29\n"
+"POT-Creation-Date: 2021-08-26 23:49+0000\n"
+"PO-Revision-Date: 2021-08-28 00:26\n"
 "Last-Translator: \n"
 "Language-Team: Serbian (Latin)\n"
 "Language: sr_CS\n"
@@ -17,71 +17,71 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 
-#: dmoj/settings.py:365
+#: dmoj/settings.py:368
 msgid "Catalan"
 msgstr "Katalonski"
 
-#: dmoj/settings.py:366
+#: dmoj/settings.py:369
 msgid "German"
 msgstr "Nemački"
 
-#: dmoj/settings.py:367
+#: dmoj/settings.py:370
 msgid "English"
 msgstr "Engleski"
 
-#: dmoj/settings.py:368
+#: dmoj/settings.py:371
 msgid "Spanish"
 msgstr "Španski"
 
-#: dmoj/settings.py:369
+#: dmoj/settings.py:372
 msgid "French"
 msgstr "Francuski"
 
-#: dmoj/settings.py:370
+#: dmoj/settings.py:373
 msgid "Croatian"
 msgstr "Hrvatski"
 
-#: dmoj/settings.py:371
+#: dmoj/settings.py:374
 msgid "Hungarian"
 msgstr "Mađarski"
 
-#: dmoj/settings.py:372
+#: dmoj/settings.py:375
 msgid "Japanese"
 msgstr "Japanski"
 
-#: dmoj/settings.py:373
+#: dmoj/settings.py:376
 msgid "Korean"
 msgstr "Korejski"
 
-#: dmoj/settings.py:374
+#: dmoj/settings.py:377
 msgid "Brazilian Portuguese"
 msgstr "Brazilski Portugalski"
 
-#: dmoj/settings.py:375
+#: dmoj/settings.py:378
 msgid "Romanian"
 msgstr "Rumunski"
 
-#: dmoj/settings.py:376
+#: dmoj/settings.py:379
 msgid "Russian"
 msgstr "Ruski"
 
-#: dmoj/settings.py:377
+#: dmoj/settings.py:380
 msgid "Serbian (Latin)"
 msgstr "Srpski (Latinica)"
 
-#: dmoj/settings.py:378
+#: dmoj/settings.py:381
 msgid "Turkish"
 msgstr "Turski"
 
-#: dmoj/settings.py:379
+#: dmoj/settings.py:382
 msgid "Vietnamese"
 msgstr "Vijetnamski"
 
-#: dmoj/settings.py:380
+#: dmoj/settings.py:383
 msgid "Simplified Chinese"
 msgstr "Pojednostavljeni Kineski"
 
-#: dmoj/settings.py:381
+#: dmoj/settings.py:384
 msgid "Traditional Chinese"
 msgstr "Klasični kinezki"
 
@@ -93,21 +93,21 @@ msgstr "Naslovna Strana"
 #, python-format
 msgid "%d comment successfully hidden."
 msgid_plural "%d comments successfully hidden."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d komentar uspešno sakriven"
+msgstr[1] "%d komentari uspešno sakriveni"
+msgstr[2] "%d komentari uspešno sakriveni"
 
 #: judge/admin/comments.py:43
 msgid "Hide comments"
-msgstr "Sakrij komentar"
+msgstr "Sakrij komentare"
 
 #: judge/admin/comments.py:47
 #, python-format
 msgid "%d comment successfully unhidden."
 msgid_plural "%d comments successfully unhidden."
-msgstr[0] "%d Komentar dostupan."
-msgstr[1] "%d Komentara dostupan."
-msgstr[2] "%d Komentari dostupan."
+msgstr[0] "%d komentar dostupan."
+msgstr[1] "%d Komentari dostupni."
+msgstr[2] "%d Komentari dostupni."
 
 #: judge/admin/comments.py:50
 msgid "Unhide comments"
@@ -115,13 +115,13 @@ msgstr "prikaži komentare"
 
 #: judge/admin/comments.py:58
 msgid "Associated page"
-msgstr "Asocirana stranica"
+msgstr "Povezana stranica"
 
 #: judge/admin/contest.py:32
 msgid "Included contests"
 msgstr "Uključena takmičenja"
 
-#: judge/admin/contest.py:66 templates/contest/contest.html:83
+#: judge/admin/contest.py:66 templates/contest/contest.html:192
 #: templates/contest/moss.html:43 templates/problem/list.html:204
 #: templates/problem/list.html:219 templates/user/user-problems.html:58
 #: templates/user/user-problems.html:100
@@ -134,7 +134,7 @@ msgstr "Podešavanja"
 
 #: judge/admin/contest.py:120
 msgid "Scheduling"
-msgstr "zakazivanje"
+msgstr "Zakazivanje"
 
 #: judge/admin/contest.py:121
 msgid "Details"
@@ -160,69 +160,69 @@ msgstr "Pravda"
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d Takmičenje je uspešno označeno kao vidljivo."
+msgstr[1] "%d Takmičenja su uspešno označena kao vidljiva."
+msgstr[2] "%d Takmičenja su uspešno označena kao vidljiva."
 
 #: judge/admin/contest.py:218
 msgid "Mark contests as visible"
-msgstr "Označi takmičenje kao vidljivo"
+msgstr "Označi takmičenja kao vidljiva"
 
 #: judge/admin/contest.py:224
 #, python-format
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
 msgstr[0] "%d Takmičenje je uspešno označeno kao nevidljivo."
-msgstr[1] "%d Takmičenja je uspešno označeno kao nevidljivo."
-msgstr[2] "%d Takmičenja je uspešno označeno kao nevidljivo."
+msgstr[1] "%d Takmičenja su uspešno označena kao nevidljiva."
+msgstr[2] "%d Takmičenja su uspešno označena kao nevidljiva."
 
 #: judge/admin/contest.py:227
 msgid "Mark contests as hidden"
-msgstr "Označi takmičenje kao nevidljivo"
+msgstr "Označi takmičenja kao nevidljiva"
 
 #: judge/admin/contest.py:233
 #, python-format
 msgid "%d contest successfully locked."
 msgid_plural "%d contests successfully locked."
-msgstr[0] "%d Takmičenje uspešno zaključeno."
-msgstr[1] "%d Takmičenja uspešno zaključeno."
-msgstr[2] "%d Takmičenja uspešno zaključeno."
+msgstr[0] "%d Takmičenje uspešno zaključano."
+msgstr[1] "%d Takmičenja uspešno zaključana."
+msgstr[2] "%d Takmičenja uspešno zaključana."
 
 #: judge/admin/contest.py:236
 msgid "Lock contest submissions"
-msgstr ""
+msgstr "Zaključaj predaju takmičenja"
 
 #: judge/admin/contest.py:242
 #, python-format
 msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
-msgstr[0] "%d Takmičenje uspešno odključeno."
-msgstr[1] "%d Takmičenja uspešno odključeno."
-msgstr[2] "%d Takmičenja uspešno odključeno."
+msgstr[0] "%d Takmičenje uspešno otključano."
+msgstr[1] "%d Takmičenja uspešno otključana."
+msgstr[2] "%d Takmičenja uspešno otključana."
 
 #: judge/admin/contest.py:245
 msgid "Unlock contest submissions"
-msgstr ""
+msgstr "Otključaj predaju takmičenja"
 
 #: judge/admin/contest.py:266 judge/admin/submission.py:170
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d predaja je uspešno zakazana za ponovno ocenjivanje."
+msgstr[1] "%d predaje su uspešno zakazane za ponovno ocenjivanje."
+msgstr[2] "%d predaje su uspešno zakazane za ponovno ocenjivanje."
 
 #: judge/admin/contest.py:341
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d učestvovanje preračunato."
+msgstr[1] "%d učestvovanja preračunata."
+msgstr[2] "%d učestvovanja preračunata."
 
 #: judge/admin/contest.py:344
 msgid "Recalculate results"
-msgstr "Preračunati resultate"
+msgstr "Preračunati rezultati"
 
 #: judge/admin/contest.py:348 judge/admin/organization.py:63
 msgid "username"
@@ -242,11 +242,11 @@ msgstr "Sadržaj"
 
 #: judge/admin/interface.py:73
 msgid "Summary"
-msgstr ""
+msgstr "Kratak sadržaj"
 
-#: judge/admin/interface.py:113 judge/models/contest.py:419
-#: judge/models/contest.py:546 judge/models/profile.py:261
-#: judge/models/profile.py:292
+#: judge/admin/interface.py:113 judge/models/contest.py:423
+#: judge/models/contest.py:552 judge/models/profile.py:267
+#: judge/models/profile.py:298
 msgid "user"
 msgstr "korisnik"
 
@@ -257,7 +257,7 @@ msgstr "objekat"
 #: judge/admin/organization.py:32 judge/admin/problem.py:182
 #: judge/admin/profile.py:92
 msgid "View on site"
-msgstr ""
+msgstr "Pogledaj na sajtu"
 
 #: judge/admin/problem.py:29
 msgid "Describe the changes you made (optional)"
@@ -269,9 +269,9 @@ msgstr "Social Media"
 
 #: judge/admin/problem.py:131
 msgid "Taxonomy"
-msgstr ""
+msgstr "Taksonomija"
 
-#: judge/admin/problem.py:132 templates/contest/contest.html:84
+#: judge/admin/problem.py:132 templates/contest/contest.html:193
 #: templates/problem/data.html:385 templates/problem/list.html:209
 #: templates/problem/list.html:230 templates/user/base-users-table.html:10
 #: templates/user/user-problems.html:60
@@ -300,37 +300,37 @@ msgstr "Autori"
 #, python-format
 msgid "%d problem's publish date successfully updated."
 msgid_plural "%d problems' publish date successfully updated."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d datum objavljivanja zadatka uspešno ažuriran."
+msgstr[1] "%d datum objavljivanja zadataka uspešno ažuriran."
+msgstr[2] "%d datum objavljivanja zadataka uspešno ažuriran."
 
 #: judge/admin/problem.py:196
 msgid "Set publish date to now"
-msgstr "Podesi datum objavljivanja na danas"
+msgstr "Podesi datum objavljivanja na današnji dan"
 
 #: judge/admin/problem.py:202
 #, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
 msgstr[0] "%d zadatak je uspešno označen kao javni."
-msgstr[1] "%d zadatka je uspešno označen kao javni."
-msgstr[2] "%d zadataka je uspešno označen kao javni."
+msgstr[1] "%d zadaci su uspešno označeni kao javni."
+msgstr[2] "%d zadaci su uspešno označeni kao javni."
 
 #: judge/admin/problem.py:206
 msgid "Mark problems as public"
-msgstr ""
+msgstr "Obeleži zadatak kao javni"
 
 #: judge/admin/problem.py:212
 #, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
 msgstr[0] "%d zadatak je uspešno označen kao privatni."
-msgstr[1] "%d zadatka je uspešno označen kao privatni."
-msgstr[2] "%d zadataka je uspešno označen kao privatni."
+msgstr[1] "%d zadaci su uspešno označeni kao privatni."
+msgstr[2] "%d zadaci su uspešno označeni kao privatni."
 
 #: judge/admin/problem.py:216
 msgid "Mark problems as private"
-msgstr ""
+msgstr "Obeleži zadatak kao privatni"
 
 #: judge/admin/profile.py:35
 msgid "timezone"
@@ -361,31 +361,31 @@ msgstr "datum pridruženja"
 #, python-format
 msgid "%d user have scores recalculated."
 msgid_plural "%d users have scores recalculated."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d korisnikov rezultat je preračunat."
+msgstr[1] "%d korisnikovi rezultati su preračunati."
+msgstr[2] "%d korisnikovi rezultati su preračunati."
 
 #: judge/admin/profile.py:123
 msgid "Recalculate scores"
-msgstr ""
+msgstr "Preračunaj rezultate"
 
 #: judge/admin/runtime.py:19
 msgid "Disallowed problems"
-msgstr "Nedozvoljeni zadatak"
+msgstr "Ne dozvoljeni zadaci"
 
 #: judge/admin/runtime.py:22
 msgid "These problems are NOT allowed to be submitted in this language"
-msgstr ""
+msgstr "Nije dozvoljeno predati ove zadatke na ovom jeziku"
 
-#: judge/admin/runtime.py:80
+#: judge/admin/runtime.py:77
 msgid "Description"
 msgstr "Opis"
 
-#: judge/admin/runtime.py:81
+#: judge/admin/runtime.py:78
 msgid "Information"
 msgstr "Informacija"
 
-#: judge/admin/runtime.py:82
+#: judge/admin/runtime.py:79
 msgid "Capabilities"
 msgstr "Sposobnosti"
 
@@ -414,27 +414,27 @@ msgstr "%(problem)s u %(contest)s"
 
 #: judge/admin/submission.py:155 judge/admin/submission.py:177
 msgid "You do not have the permission to rejudge submissions."
-msgstr ""
+msgstr "Nemate prava da ponovo ocenite predaje."
 
 #: judge/admin/submission.py:161
 msgid "You do not have the permission to rejudge THAT many submissions."
-msgstr ""
+msgstr "Nemate prava da ponovo ocenite TOLIKO puno predaja."
 
 #: judge/admin/submission.py:173
 msgid "Rejudge the selected submissions"
-msgstr ""
+msgstr "Ponovo oceni izabrane predaje"
 
 #: judge/admin/submission.py:199 judge/views/problem_manage.py:128
 #, python-format
 msgid "%d submission were successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d predaja je uspešno preračunata."
+msgstr[1] "%d predaje su uspešno preračunate."
+msgstr[2] "%d predaje su uspešno preračunate."
 
 #: judge/admin/submission.py:202
 msgid "Rescore the selected submissions"
-msgstr ""
+msgstr "Preračunaj izabrane predaje"
 
 #: judge/admin/submission.py:206
 msgid "Problem code"
@@ -481,15 +481,15 @@ msgstr "Online sudija"
 
 #: judge/comments.py:41
 msgid "Comment body"
-msgstr ""
+msgstr "Sastav komentara"
 
 #: judge/comments.py:47 judge/views/comment.py:40 judge/views/ticket.py:46
 msgid "Your part is silent, little toad."
-msgstr ""
+msgstr "Trenutno ste ućutkani, skrati jezičinu"
 
 #: judge/comments.py:49 templates/comments/list.html:142
 msgid "You need to have solved at least one problem before your voice can be heard."
-msgstr ""
+msgstr "Morate da rešite bar jedan zadatak pre što možete da komentarišete."
 
 #: judge/comments.py:93
 msgid "Posted comment"
@@ -499,21 +499,80 @@ msgstr "Komentar ostavljen"
 msgid "AtCoder"
 msgstr "AtCoder"
 
+#: judge/contest_format/atcoder.py:117 judge/contest_format/default.py:79
+#: judge/contest_format/icpc.py:127 judge/contest_format/legacy_ioi.py:97
+msgid "The maximum score submission for each problem will be used."
+msgstr ""
+
+#: judge/contest_format/atcoder.py:122 judge/contest_format/icpc.py:132
+#, python-format
+msgid "Each submission before the first maximum score submission will incur a **penalty of %d minute**."
+msgid_plural "Each submission before the first maximum score submission will incur a **penalty of %d minutes**."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: judge/contest_format/atcoder.py:127
+msgid "Ties will be broken by the last score altering submission time."
+msgstr ""
+
 #: judge/contest_format/default.py:18
 msgid "Default"
 msgstr "Default"
+
+#: judge/contest_format/default.py:80
+msgid "Ties will be broken by the sum of the last submission time on problems with a non-zero score."
+msgstr ""
 
 #: judge/contest_format/ecoo.py:18
 msgid "ECOO"
 msgstr "ECOO"
 
+#: judge/contest_format/ecoo.py:130
+msgid "The score on your **last** non-CE submission for each problem will be used."
+msgstr ""
+
+#: judge/contest_format/ecoo.py:135
+#, python-format
+msgid "There is a **%d bonus** for fully solving on your first non-CE submission."
+msgstr ""
+
+#: judge/contest_format/ecoo.py:141
+#, python-format
+msgid "For every **%d minute** you submit before the end of your window, there will be a **1** point bonus."
+msgid_plural "For every **%d minutes** you submit before the end of your window, there will be a **1** point bonus."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: judge/contest_format/ecoo.py:147
+msgid "Ties will be broken by the sum of the last submission time on **all** problems."
+msgstr ""
+
+#: judge/contest_format/ecoo.py:149 judge/contest_format/ioi.py:102
+#: judge/contest_format/legacy_ioi.py:103
+msgid "Ties by score will **not** be broken."
+msgstr ""
+
 #: judge/contest_format/icpc.py:19
 msgid "ICPC"
 msgstr "ICPC"
 
+#: judge/contest_format/icpc.py:137
+msgid "Ties will be broken by the sum of the last score altering submission time on problems with a non-zero score, followed by the time of the last score altering submission."
+msgstr ""
+
 #: judge/contest_format/ioi.py:11
 msgid "IOI"
 msgstr "IOI"
+
+#: judge/contest_format/ioi.py:96
+msgid "The maximum score for each problem batch will be used."
+msgstr ""
+
+#: judge/contest_format/ioi.py:99 judge/contest_format/legacy_ioi.py:100
+msgid "Ties will be broken by the sum of the last score altering submission time on problems with a non-zero score."
+msgstr ""
 
 #: judge/contest_format/legacy_ioi.py:18
 msgid "IOI (pre-2016)"
@@ -522,15 +581,15 @@ msgstr "IOI (pre-2016)"
 #: judge/forms.py:27
 #, python-brace-format
 msgid "Two-factor authentication tokens must be {TOTP_CODE_LENGTH} decimal digits."
-msgstr ""
+msgstr "Token za dvofaktornu autentifikaciju mora biti {TOTP_CODE_LENGTH} decimalna broja."
 
 #: judge/forms.py:30
 msgid "Invalid two-factor authentication token."
-msgstr ""
+msgstr "Nevažeći token za dvofaktornu autentifikaciju."
 
 #: judge/forms.py:33
 msgid "Scratch codes must be 16 base32 characters."
-msgstr ""
+msgstr "Scratch kod mora biti 16 base32 karaktera."
 
 #: judge/forms.py:35 judge/forms.py:264
 msgid "Invalid scratch code."
@@ -538,7 +597,7 @@ msgstr "Nevažeći scratch kod."
 
 #: judge/forms.py:46
 msgid "Subscribe to contest updates"
-msgstr ""
+msgstr "Prijavi se za vesti sa takmičenja"
 
 #: judge/forms.py:47
 msgid "Enable experimental features"
@@ -551,7 +610,7 @@ msgstr "Morate rešiti barem jedan zadatak pre nego što možete da ažurirate s
 #: judge/forms.py:81 judge/views/organization.py:126
 #, python-brace-format
 msgid "You may not be part of more than {count} public organizations."
-msgstr "Nemožete biti član više od {count} javne organizacije."
+msgstr "Ne možete biti član više od {count} javne organizacije."
 
 #: judge/forms.py:97
 msgid "Download comments?"
@@ -563,7 +622,7 @@ msgstr "Download rešenja?"
 
 #: judge/forms.py:99
 msgid "Filter by problem code glob:"
-msgstr "Sortiraj po glob kodu zadatka:"
+msgstr "Filtriraj po glob kodu zadatka:"
 
 #: judge/forms.py:103
 msgid "Leave empty to include all submissions"
@@ -610,7 +669,7 @@ msgstr "Nevažeći WebAuthn credential ID."
 
 #: judge/forms.py:262
 msgid "Invalid two-factor authentication token or scratch code."
-msgstr ""
+msgstr "Nevažeći token za dvofaktornu autentifikaciju ili scratch kod."
 
 #: judge/forms.py:266
 msgid "Must specify either totp_token or webauthn_response."
@@ -618,7 +677,7 @@ msgstr ""
 
 #: judge/forms.py:270 judge/models/problem.py:119
 msgid "Problem code must be ^[a-z0-9]+$"
-msgstr ""
+msgstr "Kod zadatka mora biti  ^[a-z0-9]+$"
 
 #: judge/forms.py:275
 msgid "Problem with code already exists."
@@ -626,16 +685,16 @@ msgstr "Zadatak sa tim kodom več postoji."
 
 #: judge/forms.py:280 judge/models/contest.py:66
 msgid "Contest id must be ^[a-z0-9]+$"
-msgstr ""
+msgstr "ID takmičenja mora biti  ^[a-z0-9]+$"
 
 #: judge/forms.py:285
 msgid "Contest with key already exists."
-msgstr "Takmičenje sa tim ključem več postoji."
+msgstr "Takmičenje sa tim ključem već postoji."
 
 #: judge/jinja2/datetime.py:26 templates/blog/content.html:27
 #: templates/blog/dashboard.html:21
 msgid "N j, Y, g:i a"
-msgstr ""
+msgstr "N j, Y, g:i a"
 
 #: judge/jinja2/datetime.py:26
 #, python-brace-format
@@ -653,19 +712,19 @@ msgstr "Ostavi kao LaTeX"
 
 #: judge/models/choices.py:60
 msgid "SVG with PNG fallback"
-msgstr ""
+msgstr "SVG sa PNG alternativom"
 
 #: judge/models/choices.py:61
 msgid "MathML only"
-msgstr ""
+msgstr "samo MathML"
 
 #: judge/models/choices.py:62
 msgid "MathJax with SVG/PNG fallback"
-msgstr ""
+msgstr "MathJax sa SVG/PNG alternativom"
 
 #: judge/models/choices.py:63
 msgid "Detect best quality"
-msgstr "Otkriti najbolji kvalitet"
+msgstr "Otkrij najbolji kvalitet"
 
 #: judge/models/comment.py:25
 msgid "Page code must be ^[pcs]:[a-z0-9]+$|^b:\\d+$"
@@ -677,11 +736,11 @@ msgstr "komentator"
 
 #: judge/models/comment.py:42
 msgid "posted time"
-msgstr "objavljeno vreme"
+msgstr "vreme predaje"
 
 #: judge/models/comment.py:43 judge/models/comment.py:196
 msgid "associated page"
-msgstr "asocirana stranica"
+msgstr "povezana stranica"
 
 #: judge/models/comment.py:45
 msgid "votes"
@@ -749,7 +808,7 @@ msgstr "opis oznake"
 msgid "contest tag"
 msgstr "oznaka takmičenja"
 
-#: judge/models/contest.py:53 judge/models/contest.py:126
+#: judge/models/contest.py:53 judge/models/contest.py:130
 msgid "contest tags"
 msgstr "oznake takmičenja"
 
@@ -794,7 +853,7 @@ msgstr "opis"
 msgid "problems"
 msgstr "zadaci"
 
-#: judge/models/contest.py:78 judge/models/contest.py:420
+#: judge/models/contest.py:78 judge/models/contest.py:424
 msgid "start time"
 msgstr "vreme početka"
 
@@ -809,7 +868,7 @@ msgstr "vremensko ograničenje"
 
 #: judge/models/contest.py:81 judge/models/problem.py:158
 msgid "publicly visible"
-msgstr "javno vidljivo"
+msgstr "vidljivo za javnost"
 
 #: judge/models/contest.py:82
 msgid "Should be set even for organization-private contests, where it determines whether the contest is visible to members of the specified organizations."
@@ -849,27 +908,27 @@ msgstr "Koristi clarification sistem umesto komentara."
 
 #: judge/models/contest.py:96
 msgid "Rating floor for contest"
-msgstr ""
+msgstr "Minimalni nivo za takmičenje"
 
 #: judge/models/contest.py:98
 msgid "Rating ceiling for contest"
-msgstr ""
+msgstr "Maksimalni nivo za takmičenje"
 
 #: judge/models/contest.py:100
 msgid "rate all"
-msgstr ""
+msgstr "oceni sve"
 
 #: judge/models/contest.py:100
 msgid "Rate all users who joined."
-msgstr ""
+msgstr "Oceni sve korisnike koji su se uklučili."
 
 #: judge/models/contest.py:101
 msgid "exclude from ratings"
-msgstr ""
+msgstr "odstrani iz rangiranja"
 
 #: judge/models/contest.py:103
 msgid "private to specific users"
-msgstr ""
+msgstr "privatno za specijalne korisnike"
 
 #: judge/models/contest.py:104
 msgid "private contestants"
@@ -877,19 +936,19 @@ msgstr "privatni takmičari"
 
 #: judge/models/contest.py:105
 msgid "If private, only these users may see the contest"
-msgstr ""
+msgstr "Ako privatno, samo ovi korisnici mogu da vide takmičenje"
 
 #: judge/models/contest.py:107
 msgid "hide problem tags"
-msgstr ""
+msgstr "sakrij oznake zadataka"
 
 #: judge/models/contest.py:108
 msgid "Whether problem tags should be hidden by default."
-msgstr ""
+msgstr "Dali oznake zadataka treba biti nevidljive po defaultu."
 
 #: judge/models/contest.py:110
 msgid "hide problem authors"
-msgstr ""
+msgstr "sakrij autore zadatka"
 
 #: judge/models/contest.py:111
 msgid "Whether problem authors should be hidden by default."
@@ -903,297 +962,309 @@ msgstr ""
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
 msgstr ""
 
-#: judge/models/contest.py:118 judge/models/problem.py:183
+#: judge/models/contest.py:118
+msgid "show short form settings display"
+msgstr ""
+
+#: judge/models/contest.py:119
+msgid "Whether to show a section containing contest settings on the contest page or not."
+msgstr ""
+
+#: judge/models/contest.py:122 judge/models/problem.py:183
 msgid "private to organizations"
 msgstr ""
 
-#: judge/models/contest.py:119 judge/models/problem.py:181
+#: judge/models/contest.py:123 judge/models/problem.py:181
 #: judge/models/profile.py:86
 msgid "organizations"
 msgstr "organizacije"
 
-#: judge/models/contest.py:120
+#: judge/models/contest.py:124
 msgid "If private, only these organizations may see the contest"
 msgstr ""
 
-#: judge/models/contest.py:121 judge/models/problem.py:167
+#: judge/models/contest.py:125 judge/models/problem.py:167
 msgid "OpenGraph image"
 msgstr "OpenGraph slika"
 
-#: judge/models/contest.py:122 judge/models/profile.py:57
+#: judge/models/contest.py:126 judge/models/profile.py:57
 msgid "Logo override image"
 msgstr ""
 
-#: judge/models/contest.py:124
+#: judge/models/contest.py:128
 msgid "This image will replace the default site logo for users inside the contest."
 msgstr "Ova slika če zameniti default site logo za učesnike takmičenja."
 
-#: judge/models/contest.py:127
+#: judge/models/contest.py:131
 msgid "the amount of live participants"
 msgstr "broj aktivnih učesnika"
 
-#: judge/models/contest.py:128
+#: judge/models/contest.py:132
 msgid "contest summary"
-msgstr "opis takmičenja"
+msgstr "kratak opis takmičenja"
 
-#: judge/models/contest.py:129 judge/models/problem.py:169
+#: judge/models/contest.py:133 judge/models/problem.py:169
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr ""
 
-#: judge/models/contest.py:130 judge/models/profile.py:56
+#: judge/models/contest.py:134 judge/models/profile.py:56
 msgid "access code"
 msgstr "access code"
 
-#: judge/models/contest.py:131
+#: judge/models/contest.py:135
 msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
 msgstr ""
 
-#: judge/models/contest.py:133 judge/models/problem.py:163
+#: judge/models/contest.py:137 judge/models/problem.py:163
 msgid "personae non gratae"
 msgstr "personae non gratae"
 
-#: judge/models/contest.py:134
+#: judge/models/contest.py:138
 msgid "Bans the selected users from joining this contest."
 msgstr "Sprečava učešće u takmičenju izabranim korisnicima."
 
-#: judge/models/contest.py:135
+#: judge/models/contest.py:139
 msgid "contest format"
 msgstr "format takmičenja"
 
-#: judge/models/contest.py:136
+#: judge/models/contest.py:140
 msgid "The contest format module to use."
 msgstr ""
 
-#: judge/models/contest.py:137
+#: judge/models/contest.py:141
 msgid "contest format configuration"
 msgstr "konfiguracija formata takmičenja"
 
-#: judge/models/contest.py:138
+#: judge/models/contest.py:142
 msgid "A JSON object to serve as the configuration for the chosen contest format module. Leave empty to use None. Exact format depends on the contest format selected."
 msgstr ""
 
-#: judge/models/contest.py:145
+#: judge/models/contest.py:149
 msgid "contest lock"
 msgstr ""
 
-#: judge/models/contest.py:146
+#: judge/models/contest.py:150
 msgid "Prevent submissions from this contest from being rejudged after this date."
 msgstr ""
 
-#: judge/models/contest.py:148
+#: judge/models/contest.py:152
 msgid "precision points"
 msgstr ""
 
-#: judge/models/contest.py:150
+#: judge/models/contest.py:154
 msgid "Number of digits to round points to."
 msgstr ""
 
-#: judge/models/contest.py:398
+#: judge/models/contest.py:402
 msgid "See private contests"
-msgstr "Pogledajte privatne komentare"
+msgstr "Pogledajte privatna takmičenja"
 
-#: judge/models/contest.py:399
+#: judge/models/contest.py:403
 msgid "Edit own contests"
 msgstr ""
 
-#: judge/models/contest.py:400
+#: judge/models/contest.py:404
 msgid "Edit all contests"
 msgstr ""
 
-#: judge/models/contest.py:401
+#: judge/models/contest.py:405
 msgid "Clone contest"
 msgstr ""
 
-#: judge/models/contest.py:402 templates/contest/moss.html:74
+#: judge/models/contest.py:406 templates/contest/moss.html:74
 msgid "MOSS contest"
 msgstr "MOSS takmičenje"
 
-#: judge/models/contest.py:403
+#: judge/models/contest.py:407
 msgid "Rate contests"
 msgstr ""
 
-#: judge/models/contest.py:404
+#: judge/models/contest.py:408
 msgid "Contest access codes"
 msgstr ""
 
-#: judge/models/contest.py:405
+#: judge/models/contest.py:409
 msgid "Create private contests"
 msgstr "Napravi privatno takmičenje"
 
-#: judge/models/contest.py:406
+#: judge/models/contest.py:410
 msgid "Change contest visibility"
 msgstr "Promeniti vidljivost takmičenja"
 
-#: judge/models/contest.py:407
+#: judge/models/contest.py:411
 msgid "Edit contest problem label script"
 msgstr ""
 
-#: judge/models/contest.py:408
+#: judge/models/contest.py:412
 msgid "Change lock status of contest"
 msgstr ""
 
-#: judge/models/contest.py:410 judge/models/contest.py:508
-#: judge/models/contest.py:547 judge/models/contest.py:569
+#: judge/models/contest.py:414 judge/models/contest.py:514
+#: judge/models/contest.py:553 judge/models/contest.py:576
 #: judge/models/submission.py:85
 msgid "contest"
 msgstr "takmičenje"
 
-#: judge/models/contest.py:411
+#: judge/models/contest.py:415
 msgid "contests"
 msgstr "takmičenja"
 
-#: judge/models/contest.py:418
+#: judge/models/contest.py:422
 msgid "associated contest"
-msgstr "asociranja takmičenja"
+msgstr "povezana takmičenja"
 
-#: judge/models/contest.py:421
+#: judge/models/contest.py:425
 msgid "score"
 msgstr "rezultat"
 
-#: judge/models/contest.py:422
+#: judge/models/contest.py:426
 msgid "cumulative time"
 msgstr "zbirno vreme"
 
-#: judge/models/contest.py:423
+#: judge/models/contest.py:427
 msgid "is disqualified"
 msgstr "diskvalifikovan"
 
-#: judge/models/contest.py:424
+#: judge/models/contest.py:428
 msgid "Whether this participation is disqualified."
 msgstr ""
 
-#: judge/models/contest.py:425
+#: judge/models/contest.py:429
 msgid "tie-breaking field"
 msgstr ""
 
-#: judge/models/contest.py:426
+#: judge/models/contest.py:430
 msgid "virtual participation id"
 msgstr ""
 
-#: judge/models/contest.py:427
+#: judge/models/contest.py:431
 msgid "0 means non-virtual, otherwise the n-th virtual participation."
 msgstr ""
 
-#: judge/models/contest.py:428
+#: judge/models/contest.py:432
 msgid "contest format specific data"
 msgstr ""
 
-#: judge/models/contest.py:494
+#: judge/models/contest.py:500
 #, python-format
 msgid "%s spectating in %s"
 msgstr ""
 
-#: judge/models/contest.py:496
+#: judge/models/contest.py:502
 #, python-format
 msgid "%s in %s, v%d"
 msgstr ""
 
-#: judge/models/contest.py:497
+#: judge/models/contest.py:503
 #, python-format
 msgid "%s in %s"
 msgstr "%s u %s"
 
-#: judge/models/contest.py:500
+#: judge/models/contest.py:506
 msgid "contest participation"
 msgstr ""
 
-#: judge/models/contest.py:501
+#: judge/models/contest.py:507
 msgid "contest participations"
 msgstr "učesnici takmičenja"
 
-#: judge/models/contest.py:507 judge/models/contest.py:531
-#: judge/models/contest.py:570 judge/models/problem.py:457
+#: judge/models/contest.py:513 judge/models/contest.py:537
+#: judge/models/contest.py:577 judge/models/problem.py:457
 #: judge/models/problem.py:462 judge/models/problem.py:480
 #: judge/models/problem_data.py:35
 msgid "problem"
 msgstr "zadatak"
 
-#: judge/models/contest.py:509 judge/models/contest.py:535
+#: judge/models/contest.py:515 judge/models/contest.py:541
 #: judge/models/problem.py:151
 msgid "points"
 msgstr "poeni"
 
-#: judge/models/contest.py:510
+#: judge/models/contest.py:516
 msgid "partial"
 msgstr "delimičan"
 
-#: judge/models/contest.py:511 judge/models/contest.py:536
+#: judge/models/contest.py:517 judge/models/contest.py:542
 msgid "is pretested"
 msgstr "več testiran"
 
-#: judge/models/contest.py:512 judge/models/interface.py:43
+#: judge/models/contest.py:518 judge/models/interface.py:43
 msgid "order"
 msgstr "redosled"
 
-#: judge/models/contest.py:513
+#: judge/models/contest.py:519
 msgid "output prefix length override"
 msgstr ""
 
-#: judge/models/contest.py:515
+#: judge/models/contest.py:521
 msgid "Maximum number of submissions for this problem, or leave blank for no limit."
 msgstr "Maksimalan broj odgovora za ovaj zadatak, ili ostaviti prazno da nema ograničenja."
 
-#: judge/models/contest.py:518
+#: judge/models/contest.py:524
 msgid "Why include a problem you can't submit to?"
 msgstr "Zašto uključiti zadatak koji ne možete predati?"
 
-#: judge/models/contest.py:523
+#: judge/models/contest.py:529
 msgid "contest problem"
 msgstr "zadatak na takmičenju"
 
-#: judge/models/contest.py:524
+#: judge/models/contest.py:530
 msgid "contest problems"
 msgstr "zadaci na takmičenju"
 
-#: judge/models/contest.py:529 judge/models/submission.py:218
+#: judge/models/contest.py:535 judge/models/submission.py:218
 msgid "submission"
 msgstr "predaja"
 
-#: judge/models/contest.py:533 judge/models/contest.py:548
+#: judge/models/contest.py:539 judge/models/contest.py:554
 msgid "participation"
 msgstr "učestvovanje"
 
-#: judge/models/contest.py:537
+#: judge/models/contest.py:543
 msgid "Whether this submission was ran only on pretests."
 msgstr ""
 
-#: judge/models/contest.py:541
+#: judge/models/contest.py:547
 msgid "contest submission"
 msgstr "predaja takmičenja"
 
-#: judge/models/contest.py:542
+#: judge/models/contest.py:548
 msgid "contest submissions"
 msgstr "predaje takmičenja"
 
-#: judge/models/contest.py:550
+#: judge/models/contest.py:556
 msgid "rank"
-msgstr "nivo"
+msgstr "rang"
 
-#: judge/models/contest.py:551
+#: judge/models/contest.py:557
 msgid "rating"
 msgstr "rangiranje"
 
-#: judge/models/contest.py:552
-msgid "volatility"
+#: judge/models/contest.py:558
+msgid "raw rating"
 msgstr ""
 
-#: judge/models/contest.py:553
+#: judge/models/contest.py:559
+msgid "contest performance"
+msgstr ""
+
+#: judge/models/contest.py:560
 msgid "last rated"
 msgstr ""
 
-#: judge/models/contest.py:557
+#: judge/models/contest.py:564
 msgid "contest rating"
 msgstr ""
 
-#: judge/models/contest.py:558
+#: judge/models/contest.py:565
 msgid "contest ratings"
 msgstr ""
 
-#: judge/models/contest.py:577
+#: judge/models/contest.py:584
 msgid "contest moss result"
 msgstr ""
 
-#: judge/models/contest.py:578
+#: judge/models/contest.py:585
 msgid "contest moss results"
 msgstr ""
 
@@ -1259,7 +1330,7 @@ msgstr "objavi sadržaj"
 
 #: judge/models/interface.py:73
 msgid "post summary"
-msgstr "objavi opis"
+msgstr "objavi kratak opis"
 
 #: judge/models/interface.py:74
 msgid "openGraph image"
@@ -1296,7 +1367,7 @@ msgstr "tip zadatka"
 
 #: judge/models/problem.py:44 judge/models/problem.py:135
 msgid "problem types"
-msgstr "tipovi zadatka"
+msgstr "tipovi zadataka"
 
 #: judge/models/problem.py:48
 msgid "problem group ID"
@@ -1405,7 +1476,7 @@ msgstr "kustos"
 
 #: judge/models/problem.py:130
 msgid "These users will be able to edit the problem, but not be listed as authors."
-msgstr "Ovi korisnici će moći da edituju zadatak, i neće biti navedeni kao autori."
+msgstr "Ovi korisnici će moći da edituju zadatak, ali neće biti navedeni kao autori."
 
 #: judge/models/problem.py:132
 msgid "testers"
@@ -1421,7 +1492,7 @@ msgstr "Tip zadatka, kao što je prikazano na stranici zadatka."
 
 #: judge/models/problem.py:139
 msgid "The group of problem, shown under Category in the problem list."
-msgstr "Grupa zadataka, prikazana u okviru Kategorije u listi zadataka."
+msgstr "Grupa zadatka, prikazana u okviru Kategorije u listi zadataka."
 
 #: judge/models/problem.py:141
 msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
@@ -1437,7 +1508,7 @@ msgstr "Memorijsko ograničenje za ovaj zadatak, u kilobytes (npr. 64mb = 65536 
 
 #: judge/models/problem.py:152
 msgid "Points awarded for problem completion. Points are displayed with a 'p' suffix if partial."
-msgstr "Pojeni dodeljeni za rešen zadatak. Pojeni su prikazani sa 'p' sufiksom ako je rešenje delimično priznato."
+msgstr "Poeni dodeljeni za rešen zadatak. Poeni su prikazani sa 'p' sufiksom ako je rešenje delimično priznato."
 
 #: judge/models/problem.py:155
 msgid "allows partial points"
@@ -1777,13 +1848,13 @@ msgid "Edit all organizations"
 msgstr "Edit-uj sve organizacije"
 
 #: judge/models/profile.py:85 judge/models/profile.py:102
-#: judge/models/profile.py:293
+#: judge/models/profile.py:299
 msgid "organization"
 msgstr "organizacija"
 
 #: judge/models/profile.py:90
 msgid "user associated"
-msgstr "asocirani korisnik"
+msgstr "povezani korisnik"
 
 #: judge/models/profile.py:91
 msgid "self-description"
@@ -1807,7 +1878,7 @@ msgstr "poslednji IP"
 
 #: judge/models/profile.py:104
 msgid "display rank"
-msgstr "prikaži nivo"
+msgstr "prikaži rang"
 
 #: judge/models/profile.py:106
 msgid "Normal User"
@@ -1828,7 +1899,7 @@ msgstr "Administrator"
 
 #: judge/models/profile.py:109
 msgid "comment mute"
-msgstr "nemi koment"
+msgstr "nemi komentar"
 
 #: judge/models/profile.py:109
 msgid "Some users are at their best when silent."
@@ -1908,7 +1979,7 @@ msgstr ""
 
 #: judge/models/profile.py:137
 msgid "API token"
-msgstr "API žeton"
+msgstr "API token"
 
 #: judge/models/profile.py:138
 msgid "64 character hex-encoded API access token"
@@ -1930,63 +2001,71 @@ msgstr ""
 msgid "last data download time"
 msgstr ""
 
-#: judge/models/profile.py:253
+#: judge/models/profile.py:144
+msgid "display name override"
+msgstr ""
+
+#: judge/models/profile.py:145
+msgid "name displayed in place of username"
+msgstr ""
+
+#: judge/models/profile.py:259
 msgid "Shows in-progress development stuff"
 msgstr ""
 
-#: judge/models/profile.py:254
+#: judge/models/profile.py:260
 msgid "Edit TOTP settings"
 msgstr ""
 
-#: judge/models/profile.py:256
+#: judge/models/profile.py:262
 msgid "user profile"
 msgstr "profil korisnika"
 
-#: judge/models/profile.py:257
+#: judge/models/profile.py:263
 msgid "user profiles"
 msgstr ""
 
-#: judge/models/profile.py:263
+#: judge/models/profile.py:269
 msgid "device name"
 msgstr "ime uređaja"
 
-#: judge/models/profile.py:264
+#: judge/models/profile.py:270
 msgid "credential ID"
 msgstr ""
 
-#: judge/models/profile.py:265
+#: judge/models/profile.py:271
 msgid "public key"
 msgstr ""
 
-#: judge/models/profile.py:266
+#: judge/models/profile.py:272
 msgid "sign counter"
 msgstr ""
 
-#: judge/models/profile.py:287
+#: judge/models/profile.py:293
 msgid "WebAuthn credential"
 msgstr ""
 
-#: judge/models/profile.py:288
+#: judge/models/profile.py:294
 msgid "WebAuthn credentials"
 msgstr ""
 
-#: judge/models/profile.py:295
+#: judge/models/profile.py:301
 msgid "request time"
 msgstr ""
 
-#: judge/models/profile.py:296
+#: judge/models/profile.py:302
 msgid "state"
 msgstr "status"
 
-#: judge/models/profile.py:301
+#: judge/models/profile.py:307
 msgid "reason"
 msgstr "razlog"
 
-#: judge/models/profile.py:304
+#: judge/models/profile.py:310
 msgid "organization join request"
 msgstr ""
 
-#: judge/models/profile.py:305
+#: judge/models/profile.py:311
 msgid "organization join requests"
 msgstr ""
 
@@ -2149,7 +2228,7 @@ msgstr "Prihvaćeno"
 
 #: judge/models/submission.py:22 judge/models/submission.py:49
 msgid "Wrong Answer"
-msgstr "Pogrešni Odgovori"
+msgstr "Pogrešan Odgovor"
 
 #: judge/models/submission.py:23 judge/models/submission.py:51
 msgid "Time Limit Exceeded"
@@ -2174,11 +2253,11 @@ msgstr ""
 #: judge/models/submission.py:28 judge/models/submission.py:42
 #: judge/models/submission.py:56 judge/utils/problems.py:76
 msgid "Compile Error"
-msgstr "Greška u Sastavljanju"
+msgstr "Greška u Kompajliranju"
 
 #: judge/models/submission.py:29 judge/models/submission.py:41
 msgid "Internal Error"
-msgstr "Unutrašnja Grеška"
+msgstr "Interna Grеška"
 
 #: judge/models/submission.py:30
 msgid "Short circuit"
@@ -2239,7 +2318,7 @@ msgstr "rezultat"
 
 #: judge/models/submission.py:75
 msgid "compile errors"
-msgstr "Greške u Sastavljanju"
+msgstr "Greške u Kompajliranju"
 
 #: judge/models/submission.py:77
 msgid "batched cases"
@@ -2560,7 +2639,7 @@ msgid "Editing comment"
 msgstr ""
 
 #: judge/views/contests.py:57 judge/views/contests.py:210
-#: judge/views/contests.py:213 judge/views/contests.py:395
+#: judge/views/contests.py:213 judge/views/contests.py:410
 msgid "No such contest"
 msgstr "Ne postoji takvo takmičenje "
 
@@ -2582,110 +2661,110 @@ msgstr ""
 msgid "Access to contest \"%s\" denied"
 msgstr ""
 
-#: judge/views/contests.py:244
+#: judge/views/contests.py:259
 msgid "Clone Contest"
 msgstr ""
 
-#: judge/views/contests.py:278
+#: judge/views/contests.py:293
 #, python-format
 msgid "Cloned contest from %s"
 msgstr ""
 
-#: judge/views/contests.py:314
+#: judge/views/contests.py:329
 msgid "Contest not ongoing"
 msgstr ""
 
-#: judge/views/contests.py:315
+#: judge/views/contests.py:330
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr ""
 
-#: judge/views/contests.py:319
+#: judge/views/contests.py:334
 msgid "Already in contest"
 msgstr "Več na takmičenju "
 
-#: judge/views/contests.py:320
+#: judge/views/contests.py:335
 #, python-format
 msgid "You are already in a contest: \"%s\"."
 msgstr "Već učestvujete na takmičenju: \"%s\"."
 
-#: judge/views/contests.py:323
+#: judge/views/contests.py:338
 msgid "Banned from joining"
 msgstr ""
 
-#: judge/views/contests.py:324
+#: judge/views/contests.py:339
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr ""
 
-#: judge/views/contests.py:385
+#: judge/views/contests.py:400
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr ""
 
-#: judge/views/contests.py:396
+#: judge/views/contests.py:411
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr ""
 
-#: judge/views/contests.py:415
+#: judge/views/contests.py:430
 msgid "ContestCalendar requires integer year and month"
 msgstr ""
 
-#: judge/views/contests.py:455
+#: judge/views/contests.py:470
 #, python-format
 msgid "Contests in %(month)s"
 msgstr ""
 
-#: judge/views/contests.py:455
+#: judge/views/contests.py:470
 msgid "F Y"
 msgstr ""
 
-#: judge/views/contests.py:502
+#: judge/views/contests.py:517
 #, python-format
 msgid "%s Statistics"
 msgstr ""
 
-#: judge/views/contests.py:675
+#: judge/views/contests.py:691
 #, python-format
 msgid "%s Rankings"
 msgstr ""
 
-#: judge/views/contests.py:683
+#: judge/views/contests.py:699
 msgid "???"
 msgstr ""
 
-#: judge/views/contests.py:699
+#: judge/views/contests.py:715
 #, python-format
 msgid "Your participation in %s"
 msgstr ""
 
-#: judge/views/contests.py:700
+#: judge/views/contests.py:716
 #, python-format
 msgid "%s's participation in %s"
 msgstr ""
 
-#: judge/views/contests.py:707
+#: judge/views/contests.py:723
 msgid "Live"
 msgstr ""
 
-#: judge/views/contests.py:719 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:735 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr ""
 
-#: judge/views/contests.py:763
+#: judge/views/contests.py:779
 #, python-format
 msgid "%s MOSS Results"
 msgstr ""
 
-#: judge/views/contests.py:790
+#: judge/views/contests.py:806
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr ""
 
-#: judge/views/contests.py:813
+#: judge/views/contests.py:829
 #, python-format
 msgid "Contest tag: %s"
-msgstr ""
+msgstr "Oznaka takmičenja: %s"
 
 #: judge/views/error.py:14
 msgid "404 error"
@@ -2849,10 +2928,10 @@ msgstr ""
 msgid "Could not find an editorial with the code \"%s\"."
 msgstr ""
 
-#: judge/views/problem.py:289 templates/contest/contest.html:79
+#: judge/views/problem.py:289 templates/contest/contest.html:188
 #: templates/user/user-tabs.html:5 templates/user/users-table.html:23
 msgid "Problems"
-msgstr "Zadatci"
+msgstr "Zadaci"
 
 #: judge/views/problem.py:562 judge/views/problem.py:570
 #, python-format
@@ -3053,36 +3132,36 @@ msgstr "Moja rešenja za %(problem)s"
 msgid "%(user)s's submissions for %(problem)s"
 msgstr "%(user)sa rešenja za %(problem)s"
 
-#: judge/views/submission.py:546
+#: judge/views/submission.py:548
 msgid "Must pass a contest"
 msgstr ""
 
-#: judge/views/submission.py:554
+#: judge/views/submission.py:556
 #, python-format
 msgid "My submissions in %(contest)s"
 msgstr "Moja rešenja u %(contest)s"
 
-#: judge/views/submission.py:555
+#: judge/views/submission.py:557
 #, python-format
 msgid "%(user)s's submissions in %(contest)s"
 msgstr ""
 
-#: judge/views/submission.py:569
+#: judge/views/submission.py:571
 #, python-brace-format
 msgid "My submissions in <a href=\"{1}\">{0}</a>"
 msgstr ""
 
-#: judge/views/submission.py:571
+#: judge/views/submission.py:573
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions in <a href=\"{3}\">{2}</a>"
 msgstr ""
 
-#: judge/views/submission.py:597
+#: judge/views/submission.py:599
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for <a href=\"{3}\">{2}</a> in <a href=\"{5}\">{4}</a>"
 msgstr ""
 
-#: judge/views/submission.py:602
+#: judge/views/submission.py:604
 #, python-brace-format
 msgid "<a href=\"{1}\">{0}</a>'s submissions for problem {2} in <a href=\"{4}\">{3}</a>"
 msgstr ""
@@ -3155,7 +3234,7 @@ msgstr ""
 
 #: judge/views/two_factor.py:168
 msgid "Invalid name"
-msgstr "Nevažeći ime"
+msgstr "Nevažeće ime"
 
 #: judge/views/two_factor.py:221
 msgid "Staff may not disable 2FA"
@@ -3614,21 +3693,132 @@ msgstr ""
 msgid "<b>%(length)s</b> long starting on <b>%(start_time)s</b>"
 msgstr ""
 
+#: templates/contest/contest.html:74
+#, python-format
+msgid "The author of this contest is %(link_authors)s."
+msgid_plural "The authors of this contest are %(link_authors)s."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
 #: templates/contest/contest.html:85
+#, python-format
+msgid "Special thanks to %(link_testers)s for testing and feedback on the problems."
+msgid_plural "Special thanks to %(link_testers)s for testing and feedback on the problems."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/contest/contest.html:97
+#, python-format
+msgid "This contest will be **rated** for **all** participants who have a rating between **%(rating_floor)d** and **%(rating_ceiling)d**, inclusive."
+msgstr ""
+
+#: templates/contest/contest.html:99
+#, python-format
+msgid "This contest will be **rated** for **all** participants who have a rating of at least **%(rating_floor)d**."
+msgstr ""
+
+#: templates/contest/contest.html:101
+#, python-format
+msgid "This contest will be **rated** for **all** participants who have a rating of at most **%(rating_ceiling)d**."
+msgstr ""
+
+#: templates/contest/contest.html:103
+msgid "This contest will be **rated** for **all** participants."
+msgstr ""
+
+#: templates/contest/contest.html:107
+#, python-format
+msgid "This contest will be **rated** for participants who submit at least once and have a rating between **%(rating_floor)d** and **%(rating_ceiling)d**, inclusive."
+msgstr ""
+
+#: templates/contest/contest.html:109
+#, python-format
+msgid "This contest will be **rated** for participants who submit at least once and have a rating of at least **%(rating_floor)d**."
+msgstr ""
+
+#: templates/contest/contest.html:111
+#, python-format
+msgid "This contest will be **rated** for participants who submit at least once and have a rating of at most **%(rating_ceiling)d**."
+msgstr ""
+
+#: templates/contest/contest.html:113
+msgid "This contest will be **rated** for participants who submit at least once."
+msgstr ""
+
+#: templates/contest/contest.html:117
+msgid "This contest will **not** be rated."
+msgstr ""
+
+#: templates/contest/contest.html:122
+#, python-format
+msgid "There is **%(count)s** problem in this contest."
+msgid_plural "There are **%(count)s** problems in this contest."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: templates/contest/contest.html:131
+msgid "**Partial scoring is enabled** for some or all of these problems."
+msgstr ""
+
+#: templates/contest/contest.html:133
+msgid "This contest **will not use partial scoring**."
+msgstr ""
+
+#: templates/contest/contest.html:138
+msgid "The pretest system **will be used** for some or all of these problems."
+msgstr ""
+
+#: templates/contest/contest.html:140
+msgid "The pretest system **will not be used** for this contest."
+msgstr ""
+
+#: templates/contest/contest.html:145
+msgid "Some or all of these problems **have a submission limit**."
+msgstr ""
+
+#: templates/contest/contest.html:147
+msgid "There is **no submission limit** for any of these problems."
+msgstr ""
+
+#: templates/contest/contest.html:153
+#, python-format
+msgid "The contest format is **%(format)s**."
+msgstr ""
+
+#: templates/contest/contest.html:162
+msgid "The scoreboard will be **visible** for the duration of the contest."
+msgstr ""
+
+#: templates/contest/contest.html:164
+msgid "The scoreboard will be **hidden** until your window is over."
+msgstr ""
+
+#: templates/contest/contest.html:166
+msgid "The scoreboard will be **hidden** for the entire duration of the contest."
+msgstr ""
+
+#: templates/contest/contest.html:171
+msgid "An **access code is required** to join the contest."
+msgstr ""
+
+#: templates/contest/contest.html:194
 msgid "AC Rate"
 msgstr ""
 
-#: templates/contest/contest.html:86 templates/contest/list.html:152
+#: templates/contest/contest.html:195 templates/contest/list.html:152
 #: templates/contest/list.html:194 templates/contest/list.html:271
 #: templates/problem/list.html:210 templates/problem/list.html:236
 msgid "Users"
 msgstr ""
 
-#: templates/contest/contest.html:88
+#: templates/contest/contest.html:197
 msgid "Editorials"
 msgstr ""
 
-#: templates/contest/contest.html:114
+#: templates/contest/contest.html:223
 msgid "Editorial"
 msgstr ""
 
@@ -3679,7 +3869,7 @@ msgstr ""
 
 #: templates/contest/list.html:254
 msgid "There are no scheduled contests at this time."
-msgstr "Nema zakazana takmičenja u momentu"
+msgstr "Nema zakazanih takmičenja u ovom trenutku"
 
 #: templates/contest/list.html:260
 msgid "Past Contests"
@@ -3719,7 +3909,7 @@ msgstr ""
 
 #: templates/contest/private.html:5
 msgid "This contest is private to specific users."
-msgstr "Ovo takmičenje je privatno za određena korisnika."
+msgstr "Ovo takmičenje je privatno za određene korisnike."
 
 #: templates/contest/private.html:10
 msgid "Additionally, only the following organizations may access this contest:"
@@ -4023,7 +4213,7 @@ msgstr ""
 
 #: templates/problem/data.html:438 templates/problem/submit.html:258
 msgid "Submit!"
-msgstr "Odgovori!"
+msgstr "Predaj!"
 
 #: templates/problem/data.html:439
 msgid "Add new case"
@@ -4481,7 +4671,7 @@ msgstr ""
 
 #: templates/registration/totp_disable.html:41
 msgid "Disable Two Factor Authentication"
-msgstr "Isključi multi-faktor autentifikaciju"
+msgstr "Isključi dvofaktornu autentifikaciju"
 
 #: templates/registration/totp_enable.html:72
 msgid "Scan this code with your authenticator app:"
@@ -4505,7 +4695,7 @@ msgstr ""
 
 #: templates/registration/totp_enable.html:92
 msgid "Enable Two Factor Authentication"
-msgstr "Omogući multi-faktor autentifikaciju"
+msgstr "Omogući dvofaktornu autentifikaciju"
 
 #: templates/registration/totp_enable.html:98
 msgid "Below is a list of one-time use scratch codes."
@@ -4931,7 +5121,7 @@ msgstr ""
 
 #: templates/user/edit-profile.html:359
 msgid "Two-factor Authentication is enabled"
-msgstr "Multi-faktor autentifikacija je upaljena"
+msgstr "Dvofaktorna autentifikacija je uključena"
 
 #: templates/user/edit-profile.html:362 templates/user/edit-profile.html:365
 msgid "Disable"
@@ -4951,7 +5141,7 @@ msgstr ""
 
 #: templates/user/edit-profile.html:384
 msgid "Two-factor Authentication is disabled"
-msgstr "Multi-faktor autentifikacija je ugašena"
+msgstr "Dvofaktorna autentifikacija je isključena"
 
 #: templates/user/edit-profile.html:385
 msgid "Enable"
@@ -4959,7 +5149,7 @@ msgstr "Uključi"
 
 #: templates/user/edit-profile.html:392
 msgid "API Token"
-msgstr "API Žeton"
+msgstr "API Token"
 
 #: templates/user/edit-profile.html:409
 msgid "Security keys"
@@ -5139,14 +5329,10 @@ msgid "Rating:"
 msgstr "Rangiranje:"
 
 #: templates/user/user-base.html:77
-msgid "Volatility:"
-msgstr ""
-
-#: templates/user/user-base.html:78
 msgid "Min. rating:"
 msgstr "Min. Rangiranje:"
 
-#: templates/user/user-base.html:79
+#: templates/user/user-base.html:78
 msgid "Max rating:"
 msgstr "Max Rangiranje:"
 
