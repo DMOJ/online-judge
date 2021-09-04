@@ -103,6 +103,16 @@
                         {{ _('These codes will never be shown again after you enable two-factor authentication.') }}</label>
                     <pre><code><span class="fullwidth">{{ scratch_codes|join('\n') }}</span></code></pre>
                 </div>
+                {% if is_hardcore %}
+                    <div class="alert alert-danger">
+                        <b>{{ _('Important') }}</b>:
+                        {% trans trimmed site_name=SITE_NAME %}
+                            If you lose your authentication device and are unable to use your scratch codes,
+                            {{ site_name }} admins will NOT be able to recover your account.
+                            Please keep your scratch codes safe!
+                        {% endtrans %}
+                    </div>
+                {% endif %}
             {% endif %}
         </form>
     </div>

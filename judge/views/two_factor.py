@@ -78,6 +78,7 @@ class TOTPEnableView(TOTPView):
         context['scratch_codes'] = [] if self.is_refresh else json.loads(self.profile.scratch_codes)
         context['qr_code'] = self.render_qr_code(self.request.user.username, context['totp_key'])
         context['is_refresh'] = self.is_refresh
+        context['is_hardcore'] = settings.DMOJ_2FA_HARDCORE
         return context
 
     def form_valid(self, form):
@@ -251,3 +252,8 @@ class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
     def form_valid(self, form):
         self.request.session['2fa_passed'] = True
         return self.next_page()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_hardcore'] = settings.DMOJ_2FA_HARDCORE
+        return context
