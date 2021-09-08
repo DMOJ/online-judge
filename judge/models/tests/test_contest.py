@@ -61,11 +61,11 @@ class ContestTestCase(CommonDataMixin, TestCase):
             end_time=_now + timezone.timedelta(days=100),
             is_visible=True,
             scoreboard_visibility=Contest.SCOREBOARD_AFTER_CONTEST,
-            problem_label_script='''
+            problem_label_script="""
                 function(n)
                     return tostring(math.floor(n))
                 end
-            ''',
+            """,
         )
 
         self.hidden_scoreboard_non_staff_author = create_contest(
@@ -711,11 +711,11 @@ class ContestTestCase(CommonDataMixin, TestCase):
         contest.format_config = {}
         with self.assertRaisesRegex(ValidationError, 'Contest problem label script'):
             contest.full_clean()
-        contest.problem_label_script = '''
+        contest.problem_label_script = """
             function(n)
                 return n
             end
-        '''
+        """
         # Test for bad problem label script caching
         with self.assertRaisesRegex(ValidationError, 'Contest problem label script'):
             contest.full_clean()

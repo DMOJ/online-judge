@@ -99,7 +99,7 @@ class BasePdfMaker(object):
 
 
 class PhantomJSPdfMaker(BasePdfMaker):
-    template = '''\
+    template = """\
 "use strict";
 var page = require('webpage').create();
 var param = {params};
@@ -136,7 +136,7 @@ page.open(param.input, function (status) {
         }, param.timeout);
     }
 });
-'''
+"""
 
     def get_render_script(self):
         return self.template.replace('{params}', json.dumps({
@@ -159,7 +159,7 @@ page.open(param.input, function (status) {
 class SlimerJSPdfMaker(BasePdfMaker):
     math_engine = 'mml'
 
-    template = '''\
+    template = """\
 "use strict";
 try {
     var param = {params};
@@ -190,7 +190,7 @@ try {
     console.error(e);
     slimer.exit(1);
 }
-'''
+"""
 
     def get_render_script(self):
         return self.template.replace('{params}', json.dumps({
@@ -216,7 +216,7 @@ try {
 
 
 class PuppeteerPDFRender(BasePdfMaker):
-    template = '''\
+    template = """\
 "use strict";
 const param = {params};
 const puppeteer = require('puppeteer');
@@ -250,7 +250,7 @@ puppeteer.launch().then(browser => Promise.resolve()
     console.error(e);
     process.exit(1);
 });
-'''
+"""
 
     def get_render_script(self):
         return self.template.replace('{params}', json.dumps({
@@ -289,7 +289,7 @@ class SeleniumPDFRender(BasePdfMaker):
 
     def _make(self, debug):
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
+        options.add_argument('--headless')
         options.binary_location = settings.SELENIUM_CUSTOM_CHROME_PATH
 
         browser = webdriver.Chrome(settings.SELENIUM_CHROMEDRIVER_PATH, options=options)

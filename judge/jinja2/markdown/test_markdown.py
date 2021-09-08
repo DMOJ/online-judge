@@ -3,16 +3,16 @@ from lxml import html
 
 from . import fragment_tree_to_str, fragments_to_tree, get_cleaner, markdown
 
-MATHML_N = '''\
+MATHML_N = """\
 <math xmlns="http://www.w3.org/1998/Math/MathML">
 <semantics>
 <mi>N</mi>
 <annotation encoding="application/x-tex">N</annotation>
 </semantics>
 </math>
-'''
+"""
 
-MATHML_CHUDNOVSKY = r'''
+MATHML_CHUDNOVSKY = r"""
 <math xmlns="http://www.w3.org/1998/Math/MathML"
       alttext="{\displaystyle {\frac {1}{\pi }}=12\sum _{k=0}^{\infty }{\frac {(-1)^{k}(6k)!(545140134k+13591409)}{(3k)!(k!)^{3}\left(640320\right)^{3k+3/2}}}}">
   <semantics>
@@ -101,7 +101,7 @@ MATHML_CHUDNOVSKY = r'''
     <annotation encoding="application/x-tex">{\displaystyle {\frac {1}{\pi }}=12\sum _{k=0}^{\infty }{\frac {(-1)^{k}(6k)!(545140134k+13591409)}{(3k)!(k!)^{3}\left(640320\right)^{3k+3/2}}}}</annotation>
   </semantics>
 </math>
-'''  # noqa: E501
+"""  # noqa: E501
 
 
 class TestMarkdown(SimpleTestCase):

@@ -18,12 +18,12 @@ class ECOOContestFormat(DefaultContestFormat):
     name = gettext_lazy('ECOO')
     config_defaults = {'cumtime': False, 'first_ac_bonus': 10, 'time_bonus': 5}
     config_validators = {'cumtime': lambda x: True, 'first_ac_bonus': lambda x: x >= 0, 'time_bonus': lambda x: x >= 0}
-    '''
+    """
         cumtime: Specify True if cumulative time is to be used in breaking ties. Defaults to False.
         first_ac_bonus: The number of points to award if a solution gets AC on its first non-IE/CE run. Defaults to 10.
         time_bonus: Number of minutes to award an extra point for submitting before the contest end.
                     Specify 0 to disable. Defaults to 5.
-    '''
+    """
 
     @classmethod
     def validate(cls, config):

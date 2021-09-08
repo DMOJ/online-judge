@@ -10,9 +10,9 @@ from judge.timezone import from_database_time
 class IOIContestFormat(LegacyIOIContestFormat):
     name = gettext_lazy('IOI')
     config_defaults = {'cumtime': False}
-    '''
+    """
         cumtime: Specify True if time penalties are to be computed. Defaults to False.
-    '''
+    """
 
     def update_participation(self, participation):
         cumtime = 0
@@ -20,7 +20,7 @@ class IOIContestFormat(LegacyIOIContestFormat):
         format_data = {}
 
         with connection.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute("""
                 SELECT q.prob,
                        MIN(q.date) as `date`,
                        q.batch_points
@@ -64,7 +64,7 @@ class IOIContestFormat(LegacyIOIContestFormat):
                 ON p.prob = q.prob AND (p.batch = q.batch OR p.batch is NULL AND q.batch is NULL)
                 WHERE p.max_batch_points = q.batch_points
                 GROUP BY q.prob, q.batch
-            ''', (participation.id, participation.id))
+            """, (participation.id, participation.id))
 
             for problem_id, time, subtask_points in cursor.fetchall():
                 problem_id = str(problem_id)

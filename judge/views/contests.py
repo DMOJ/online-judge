@@ -467,7 +467,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         except ValueError:
             raise Http404()
         else:
-            context['title'] = _('Contests in %(month)s') % {'month': date_filter(month, _("F Y"))}
+            context['title'] = _('Contests in %(month)s') % {'month': date_filter(month, _('F Y'))}
 
         dates = Contest.objects.aggregate(min=Min('start_time'), max=Max('end_time'))
         min_month = (self.today.year, self.today.month)

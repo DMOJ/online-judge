@@ -17,9 +17,9 @@ from judge.utils.timedelta import nice_repr
 class LegacyIOIContestFormat(DefaultContestFormat):
     name = gettext_lazy('IOI (pre-2016)')
     config_defaults = {'cumtime': False}
-    '''
+    """
         cumtime: Specify True if time penalties are to be computed. Defaults to False.
-    '''
+    """
 
     @classmethod
     def validate(cls, config):
