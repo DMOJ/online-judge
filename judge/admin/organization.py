@@ -19,8 +19,17 @@ class OrganizationForm(ModelForm):
 
 class OrganizationAdmin(VersionAdmin):
     readonly_fields = ('creation_date',)
-    fields = ('name', 'slug', 'short_name', 'is_open', 'about', 'logo_override_image', 'slots',
-              'creation_date', 'admins')
+    fields = (
+        'name',
+        'slug',
+        'short_name',
+        'is_open',
+        'about',
+        'logo_override_image',
+        'slots',
+        'creation_date',
+        'admins',
+    )
     list_display = ('name', 'short_name', 'is_open', 'slots', 'show_public')
     prepopulated_fields = {'slug': ('name',)}
     actions_on_top = True
@@ -28,8 +37,9 @@ class OrganizationAdmin(VersionAdmin):
     form = OrganizationForm
 
     def show_public(self, obj):
-        return format_html('<a href="{0}" style="white-space:nowrap;">{1}</a>',
-                           obj.get_absolute_url(), gettext('View on site'))
+        return format_html(
+            '<a href="{0}" style="white-space:nowrap;">{1}</a>', obj.get_absolute_url(), gettext('View on site')
+        )
 
     show_public.short_description = ''
 
@@ -60,5 +70,6 @@ class OrganizationRequestAdmin(admin.ModelAdmin):
 
     def username(self, obj):
         return obj.user.user.username
+
     username.short_description = _('username')
     username.admin_order_field = 'user__user__username'

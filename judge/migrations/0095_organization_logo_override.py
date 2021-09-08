@@ -13,6 +13,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='organization',
             name='logo_override_image',
-            field=models.CharField(blank=True, default='', help_text='This image will replace the default site logo for users viewing the organization.', max_length=150, verbose_name='Logo override image'),
+            field=models.CharField(
+                blank=True,
+                default='',
+                help_text='This image will replace the default site logo for users viewing the organization.',
+                max_length=150,
+                verbose_name='Logo override image',
+            ),
         ),
     ]

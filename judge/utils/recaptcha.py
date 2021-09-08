@@ -6,6 +6,7 @@ except ImportError:
     ReCaptchaWidget = None
 else:
     from django.conf import settings
+
     if not hasattr(settings, 'RECAPTCHA_PRIVATE_KEY'):
         ReCaptchaField = None
         ReCaptchaWidget = None

@@ -45,12 +45,18 @@ class LegacyIOIContestFormat(DefaultContestFormat):
         score = 0
         format_data = {}
 
-        queryset = (participation.submissions.values('problem_id')
-                                             .filter(points=Subquery(
-                                                 participation.submissions.filter(problem_id=OuterRef('problem_id'))
-                                                                          .order_by('-points').values('points')[:1]))
-                                             .annotate(time=Min('submission__date'))
-                                             .values_list('problem_id', 'time', 'points'))
+        queryset = (
+            participation.submissions.values('problem_id')
+            .filter(
+                points=Subquery(
+                    participation.submissions.filter(problem_id=OuterRef('problem_id'))
+                    .order_by('-points')
+                    .values('points')[:1]
+                )
+            )
+            .annotate(time=Min('submission__date'))
+            .values_list('problem_id', 'time', 'points')
+        )
 
         for problem_id, time, points in queryset:
             if self.config['cumtime']:
@@ -74,10 +80,14 @@ class LegacyIOIContestFormat(DefaultContestFormat):
         if format_data:
             return format_html(
                 '<td class="{state}"><a href="{url}">{points}<div class="solving-time">{time}</div></a></td>',
-                state=(('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '') +
-                       self.best_solution_state(format_data['points'], contest_problem.points)),
-                url=reverse('contest_user_submissions',
-                            args=[self.contest.key, participation.user.user.username, contest_problem.problem.code]),
+                state=(
+                    ('pretest-' if self.contest.run_pretests_only and contest_problem.is_pretested else '')
+                    + self.best_solution_state(format_data['points'], contest_problem.points)
+                ),
+                url=reverse(
+                    'contest_user_submissions',
+                    args=[self.contest.key, participation.user.user.username, contest_problem.problem.code],
+                ),
                 points=floatformat(format_data['points']),
                 time=nice_repr(timedelta(seconds=format_data['time']), 'noday') if self.config['cumtime'] else '',
             )
@@ -87,8 +97,7 @@ class LegacyIOIContestFormat(DefaultContestFormat):
     def display_participation_result(self, participation):
         return format_html(
             '<td class="user-points"><a href="{url}">{points}<div class="solving-time">{cumtime}</div></a></td>',
-            url=reverse('contest_all_user_submissions',
-                        args=[self.contest.key, participation.user.user.username]),
+            url=reverse('contest_all_user_submissions', args=[self.contest.key, participation.user.user.username]),
             points=floatformat(participation.score, -self.contest.points_precision),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday') if self.config['cumtime'] else '',
         )
@@ -97,7 +106,9 @@ class LegacyIOIContestFormat(DefaultContestFormat):
         yield _('The maximum score submission for each problem will be used.')
 
         if self.config['cumtime']:
-            yield _('Ties will be broken by the sum of the last score altering submission time on problems with a '
-                    'non-zero score.')
+            yield _(
+                'Ties will be broken by the sum of the last score altering submission time on problems with a '
+                'non-zero score.'
+            )
         else:
             yield _('Ties by score will **not** be broken.')

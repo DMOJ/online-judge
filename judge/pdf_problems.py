@@ -21,6 +21,7 @@ if settings.USE_SELENIUM:
         from selenium.webdriver.common.by import By
         from selenium.webdriver.support import expected_conditions as EC
         from selenium.webdriver.support.ui import WebDriverWait
+
         HAS_SELENIUM = True
     except ImportError:
         logger.warning('Failed to import Selenium', exc_info=True)
@@ -32,8 +33,9 @@ NODE_PATH = settings.NODEJS
 PUPPETEER_MODULE = settings.PUPPETEER_MODULE
 HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE)
 
-HAS_PDF = (os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and
-           (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER or HAS_SELENIUM))
+HAS_PDF = os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and (
+    HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER or HAS_SELENIUM
+)
 
 EXIFTOOL = settings.EXIFTOOL
 HAS_EXIFTOOL = os.access(EXIFTOOL, os.X_OK)
@@ -139,13 +141,19 @@ page.open(param.input, function (status) {
 """
 
     def get_render_script(self):
-        return self.template.replace('{params}', json.dumps({
-            'zoom': settings.PHANTOMJS_PDF_ZOOM,
-            'timeout': int(settings.PHANTOMJS_PDF_TIMEOUT * 1000),
-            'input': 'input.html', 'output': 'output.pdf',
-            'paper': settings.PHANTOMJS_PAPER_SIZE,
-            'footer': gettext('Page [page] of [topage]'),
-        }))
+        return self.template.replace(
+            '{params}',
+            json.dumps(
+                {
+                    'zoom': settings.PHANTOMJS_PDF_ZOOM,
+                    'timeout': int(settings.PHANTOMJS_PDF_TIMEOUT * 1000),
+                    'input': 'input.html',
+                    'output': 'output.pdf',
+                    'paper': settings.PHANTOMJS_PAPER_SIZE,
+                    'footer': gettext('Page [page] of [topage]'),
+                }
+            ),
+        )
 
     def _make(self, debug):
         with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
@@ -193,12 +201,18 @@ try {
 """
 
     def get_render_script(self):
-        return self.template.replace('{params}', json.dumps({
-            'zoom': settings.SLIMERJS_PDF_ZOOM,
-            'input': 'input.html', 'output': 'output.pdf',
-            'paper': settings.SLIMERJS_PAPER_SIZE,
-            'footer': gettext('Page [page] of [topage]').replace('[page]', '&P').replace('[topage]', '&L'),
-        }))
+        return self.template.replace(
+            '{params}',
+            json.dumps(
+                {
+                    'zoom': settings.SLIMERJS_PDF_ZOOM,
+                    'input': 'input.html',
+                    'output': 'output.pdf',
+                    'paper': settings.SLIMERJS_PAPER_SIZE,
+                    'footer': gettext('Page [page] of [topage]').replace('[page]', '&P').replace('[topage]', '&L'),
+                }
+            ),
+        )
 
     def _make(self, debug):
         with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
@@ -253,12 +267,17 @@ puppeteer.launch().then(browser => Promise.resolve()
 """
 
     def get_render_script(self):
-        return self.template.replace('{params}', json.dumps({
-            'input': 'file://%s' % self.htmlfile,
-            'output': self.pdffile,
-            'paper': settings.PUPPETEER_PAPER_SIZE,
-            'footer': gettext('Page [page] of [topage]'),
-        }))
+        return self.template.replace(
+            '{params}',
+            json.dumps(
+                {
+                    'input': 'file://%s' % self.htmlfile,
+                    'output': self.pdffile,
+                    'paper': settings.PUPPETEER_PAPER_SIZE,
+                    'footer': gettext('Page [page] of [topage]'),
+                }
+            ),
+        )
 
     def _make(self, debug):
         with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
@@ -278,10 +297,9 @@ class SeleniumPDFRender(BasePdfMaker):
         'printBackground': True,
         'displayHeaderFooter': True,
         'headerTemplate': '<div></div>',
-        'footerTemplate': '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">' +
-                          gettext('Page %s of %s') %
-                          ('<span class="pageNumber"></span>', '<span class="totalPages"></span>') +
-                          '</center>',
+        'footerTemplate': '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">'
+        + gettext('Page %s of %s') % ('<span class="pageNumber"></span>', '<span class="totalPages"></span>')
+        + '</center>',
     }
 
     def get_log(self, driver):

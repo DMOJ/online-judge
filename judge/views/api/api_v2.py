@@ -10,7 +10,16 @@ from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
 
 from judge.models import (
-    Contest, ContestParticipation, ContestTag, Judge, Language, Organization, Problem, ProblemType, Profile, Rating,
+    Contest,
+    ContestParticipation,
+    ContestTag,
+    Judge,
+    Language,
+    Organization,
+    Problem,
+    ProblemType,
+    Profile,
+    Rating,
     Submission,
 )
 from judge.utils.infinite_paginator import InfinitePaginationMixin
@@ -101,10 +110,12 @@ class APIMixin:
         if exception_type in caught_exceptions:
             status_code, message = caught_exceptions[exception_type]
             return JsonResponse(
-                self.get_base_response(error={
-                    'code': status_code,
-                    'message': message,
-                }),
+                self.get_base_response(
+                    error={
+                        'code': status_code,
+                        'message': message,
+                    }
+                ),
                 status=status_code,
             )
         else:
@@ -149,9 +160,11 @@ class APIListView(APIMixin, InfinitePaginationMixin, BaseListView):
                     queryset = queryset.filter(**filter_name.to_filter(self.request.GET.get(key)))
                 else:
                     # May raise ValueError or ValidationError, but is caught in APIMixin
-                    queryset = queryset.filter(**{
-                        filter_name: self.request.GET.get(key),
-                    })
+                    queryset = queryset.filter(
+                        **{
+                            filter_name: self.request.GET.get(key),
+                        }
+                    )
                 self.used_basic_filters.add(key)
 
         for key, filter_name in self.list_filters:
@@ -160,9 +173,11 @@ class APIListView(APIMixin, InfinitePaginationMixin, BaseListView):
                     queryset = queryset.filter(**filter_name.to_filter(self.request.GET.getlist(key)))
                 else:
                     # May raise ValueError or ValidationError, but is caught in APIMixin
-                    queryset = queryset.filter(**{
-                        filter_name + '__in': self.request.GET.getlist(key),
-                    })
+                    queryset = queryset.filter(
+                        **{
+                            filter_name + '__in': self.request.GET.getlist(key),
+                        }
+                    )
                 self.used_list_filters.add(key)
 
         return queryset
@@ -195,9 +210,7 @@ class APIDetailView(APIMixin, BaseDetailView):
 
 class APIContestList(APIListView):
     model = Contest
-    basic_filters = (
-        ('is_rated', 'is_rated'),
-    )
+    basic_filters = (('is_rated', 'is_rated'),)
     list_filters = (
         ('tag', 'tags__name'),
         ('organization', 'organizations'),
@@ -243,24 +256,18 @@ class APIContestDetail(APIDetailView):
     def get_object_data(self, contest):
         in_contest = contest.is_in_contest(self.request.user)
         can_see_rankings = contest.can_see_full_scoreboard(self.request.user)
-        can_see_problems = (in_contest or contest.ended or contest.is_editable_by(self.request.user))
+        can_see_problems = in_contest or contest.ended or contest.is_editable_by(self.request.user)
 
         problems = list(
-            contest.contest_problems
-            .select_related('problem')
-            .defer('problem__description')
-            .order_by('order'),
+            contest.contest_problems.select_related('problem').defer('problem__description').order_by('order'),
         )
 
         new_ratings_subquery = Rating.objects.filter(participation=OuterRef('pk'))
-        old_ratings_subquery = (
-            Rating.objects
-            .filter(user=OuterRef('user__pk'), contest__end_time__lt=OuterRef('contest__end_time'))
-            .order_by('-contest__end_time')
-        )
+        old_ratings_subquery = Rating.objects.filter(
+            user=OuterRef('user__pk'), contest__end_time__lt=OuterRef('contest__end_time')
+        ).order_by('-contest__end_time')
         participations = (
-            contest.users
-            .filter(virtual=ContestParticipation.LIVE)
+            contest.users.filter(virtual=ContestParticipation.LIVE)
             .annotate(
                 username=F('user__user__username'),
                 old_rating=Subquery(old_ratings_subquery.values('rating')[:1]),
@@ -284,8 +291,8 @@ class APIContestDetail(APIDetailView):
             'has_rating': contest.ratings.exists(),
             'rating_floor': contest.rating_floor,
             'rating_ceiling': contest.rating_ceiling,
-            'hidden_scoreboard': contest.scoreboard_visibility in (contest.SCOREBOARD_AFTER_CONTEST,
-                                                                   contest.SCOREBOARD_AFTER_PARTICIPATION),
+            'hidden_scoreboard': contest.scoreboard_visibility
+            in (contest.SCOREBOARD_AFTER_CONTEST, contest.SCOREBOARD_AFTER_PARTICIPATION),
             'scoreboard_visibility': contest.scoreboard_visibility,
             'is_organization_private': contest.is_organization_private,
             'organizations': list(
@@ -306,8 +313,11 @@ class APIContestDetail(APIDetailView):
                     'label': contest.get_label_for_problem(index),
                     'name': problem.problem.name,
                     'code': problem.problem.code,
-                } for index, problem in enumerate(problems)
-            ] if can_see_problems else [],
+                }
+                for index, problem in enumerate(problems)
+            ]
+            if can_see_problems
+            else [],
             'rankings': [
                 {
                     'user': participation.username,
@@ -320,8 +330,11 @@ class APIContestDetail(APIDetailView):
                     'new_rating': participation.new_rating,
                     'is_disqualified': participation.is_disqualified,
                     'solutions': contest.format.get_problem_breakdown(participation, problems),
-                } for participation in participations
-            ] if can_see_rankings else [],
+                }
+                for participation in participations
+            ]
+            if can_see_rankings
+            else [],
         }
 
 
@@ -353,8 +366,7 @@ class APIContestParticipationList(APIListView):
             visible_contests = visible_contests.filter(q)
 
         return (
-            ContestParticipation.objects
-            .filter(virtual__gte=0, contest__in=visible_contests)
+            ContestParticipation.objects.filter(virtual__gte=0, contest__in=visible_contests)
             .select_related('user__user', 'contest')
             .order_by('id')
             .only(
@@ -388,9 +400,7 @@ class APIContestParticipationList(APIListView):
 
 class APIProblemList(APIListView):
     model = Problem
-    basic_filters = (
-        ('partial', 'partial'),
-    )
+    basic_filters = (('partial', 'partial'),)
     list_filters = (
         ('group', 'group__full_name'),
         ('type', 'types__full_name'),
@@ -459,8 +469,9 @@ class APIProblemDetail(APIDetailView):
                     'time_limit': time_limit,
                     'memory_limit': memory_limit,
                 }
-                for key, time_limit, memory_limit in
-                problem.language_limits.values_list('language__key', 'time_limit', 'memory_limit')
+                for key, time_limit, memory_limit in problem.language_limits.values_list(
+                    'language__key', 'time_limit', 'memory_limit'
+                )
             ],
             'points': problem.points,
             'partial': problem.partial,
@@ -476,15 +487,12 @@ class APIProblemDetail(APIDetailView):
 
 class APIUserList(APIListView):
     model = Profile
-    list_filters = (
-        ('organization', 'organizations'),
-    )
+    list_filters = (('organization', 'organizations'),)
 
     def get_unfiltered_queryset(self):
         latest_rating_subquery = Rating.objects.filter(user=OuterRef('pk')).order_by('-contest__end_time')
         return (
-            Profile.objects
-            .filter(is_unlisted=False, user__is_active=True)
+            Profile.objects.filter(is_unlisted=False, user__is_active=True)
             .annotate(
                 username=F('user__username'),
                 latest_rating=Subquery(latest_rating_subquery.values('rating')[:1]),
@@ -512,41 +520,44 @@ class APIUserDetail(APIDetailView):
 
     def get_object_data(self, profile):
         solved_problems = list(
-            Submission.objects
-            .filter(
+            Submission.objects.filter(
                 result='AC',
                 user=profile,
                 problem__is_public=True,
                 problem__is_organization_private=False,
             )
-            .values('problem').distinct()
+            .values('problem')
+            .distinct()
             .values_list('problem__code', flat=True),
         )
 
         last_rating = profile.ratings.order_by('-contest__end_time').first()
 
         contest_history = []
-        participations = (
-            ContestParticipation.objects
-            .filter(
-                user=profile,
-                virtual=ContestParticipation.LIVE,
-                contest__in=Contest.get_visible_contests(self.request.user),
-                contest__end_time__lt=self._now,
-            )
-            .order_by('contest__end_time')
-        )
+        participations = ContestParticipation.objects.filter(
+            user=profile,
+            virtual=ContestParticipation.LIVE,
+            contest__in=Contest.get_visible_contests(self.request.user),
+            contest__end_time__lt=self._now,
+        ).order_by('contest__end_time')
         for contest_key, score, cumtime, rating, mean, performance in participations.values_list(
-            'contest__key', 'score', 'cumtime', 'rating__rating', 'rating__mean', 'rating__performance',
+            'contest__key',
+            'score',
+            'cumtime',
+            'rating__rating',
+            'rating__mean',
+            'rating__performance',
         ):
-            contest_history.append({
-                'key': contest_key,
-                'score': score,
-                'cumulative_time': cumtime,
-                'rating': rating,
-                'raw_rating': mean,
-                'performance': performance,
-            })
+            contest_history.append(
+                {
+                    'key': contest_key,
+                    'score': score,
+                    'cumulative_time': cumtime,
+                    'rating': rating,
+                    'raw_rating': mean,
+                    'performance': performance,
+                }
+            )
 
         return {
             'id': profile.id,
@@ -588,8 +599,7 @@ class APISubmissionList(APIListView):
             alias='visible_problems',
         )
         return (
-            queryset
-            .select_related('problem', 'user__user', 'language')
+            queryset.select_related('problem', 'user__user', 'language')
             .order_by('id')
             .only(
                 'id',
@@ -641,7 +651,8 @@ class APISubmissionDetail(APILoginRequiredMixin, APIDetailView):
                     'memory': case.memory,
                     'points': case.points,
                     'total': case.total,
-                } for case in batch['cases']
+                }
+                for case in batch['cases']
             ]
 
             # These are individual cases.
@@ -649,13 +660,15 @@ class APISubmissionDetail(APILoginRequiredMixin, APIDetailView):
                 cases.extend(batch_cases)
             # This is one batch.
             else:
-                cases.append({
-                    'type': 'batch',
-                    'batch_id': batch['id'],
-                    'cases': batch_cases,
-                    'points': batch['points'],
-                    'total': batch['total'],
-                })
+                cases.append(
+                    {
+                        'type': 'batch',
+                        'batch_id': batch['id'],
+                        'cases': batch_cases,
+                        'points': batch['points'],
+                        'total': batch['total'],
+                    }
+                )
 
         return {
             'id': submission.id,
@@ -676,9 +689,7 @@ class APISubmissionDetail(APILoginRequiredMixin, APIDetailView):
 
 class APIOrganizationList(APIListView):
     model = Organization
-    basic_filters = (
-        ('is_open', 'is_open'),
-    )
+    basic_filters = (('is_open', 'is_open'),)
 
     def get_unfiltered_queryset(self):
         return Organization.objects.annotate(member_count=Count('member')).order_by('id')
@@ -695,9 +706,7 @@ class APIOrganizationList(APIListView):
 
 class APILanguageList(APIListView):
     model = Language
-    basic_filters = (
-        ('common_name', 'common_name'),
-    )
+    basic_filters = (('common_name', 'common_name'),)
 
     def get_object_data(self, language):
         return {

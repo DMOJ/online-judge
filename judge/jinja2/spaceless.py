@@ -22,7 +22,9 @@ class SpacelessExtension(Extension):
         body = parser.parse_statements(['name:endspaceless'], drop_needle=True)
         return nodes.CallBlock(
             self.call_method('_strip_spaces', [], [], None, None),
-            [], [], body,
+            [],
+            [],
+            body,
         ).set_lineno(lineno)
 
     def _strip_spaces(self, caller=None):

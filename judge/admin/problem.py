@@ -12,8 +12,13 @@ from reversion.admin import VersionAdmin
 
 from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
 from judge.utils.views import NoBatchDeleteMixin
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget, AdminSelect2MultipleWidget, \
-    AdminSelect2Widget, CheckboxSelectMultipleWithSelectAll
+from judge.widgets import (
+    AdminHeavySelect2MultipleWidget,
+    AdminMartorWidget,
+    AdminSelect2MultipleWidget,
+    AdminSelect2Widget,
+    CheckboxSelectMultipleWithSelectAll,
+)
 
 
 class ProblemForm(ModelForm):
@@ -25,19 +30,23 @@ class ProblemForm(ModelForm):
         self.fields['curators'].widget.can_add_related = False
         self.fields['testers'].widget.can_add_related = False
         self.fields['banned_users'].widget.can_add_related = False
-        self.fields['change_message'].widget.attrs.update({
-            'placeholder': gettext('Describe the changes you made (optional)'),
-        })
+        self.fields['change_message'].widget.attrs.update(
+            {
+                'placeholder': gettext('Describe the changes you made (optional)'),
+            }
+        )
 
     class Meta:
         widgets = {
             'authors': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'curators': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
             'testers': AdminHeavySelect2MultipleWidget(data_view='profile_select2', attrs={'style': 'width: 100%'}),
-            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                            attrs={'style': 'width: 100%'}),
-            'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2',
-                                                             attrs={'style': 'width: 100%'}),
+            'banned_users': AdminHeavySelect2MultipleWidget(
+                data_view='profile_select2', attrs={'style': 'width: 100%'}
+            ),
+            'organizations': AdminHeavySelect2MultipleWidget(
+                data_view='organization_select2', attrs={'style': 'width: 100%'}
+            ),
             'types': AdminSelect2MultipleWidget,
             'group': AdminSelect2Widget,
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('problem_preview')}),
@@ -120,13 +129,27 @@ class ProblemTranslationInline(admin.StackedInline):
 
 class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
-        (None, {
-            'fields': (
-                'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
-                'is_organization_private', 'organizations', 'submission_source_visibility_mode', 'is_full_markup',
-                'description', 'license',
-            ),
-        }),
+        (
+            None,
+            {
+                'fields': (
+                    'code',
+                    'name',
+                    'is_public',
+                    'is_manually_managed',
+                    'date',
+                    'authors',
+                    'curators',
+                    'testers',
+                    'is_organization_private',
+                    'organizations',
+                    'submission_source_visibility_mode',
+                    'is_full_markup',
+                    'description',
+                    'license',
+                ),
+            },
+        ),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
         (_('Taxonomy'), {'fields': ('types', 'group')}),
         (_('Points'), {'fields': (('points', 'partial'), 'short_circuit')}),
@@ -185,13 +208,20 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def _rescore(self, request, problem_id):
         from judge.tasks import rescore_problem
+
         transaction.on_commit(rescore_problem.s(problem_id).delay)
 
     def update_publish_date(self, request, queryset):
         count = queryset.update(date=timezone.now())
-        self.message_user(request, ungettext("%d problem's publish date successfully updated.",
-                                             "%d problems' publish date successfully updated.",
-                                             count) % count)
+        self.message_user(
+            request,
+            ungettext(
+                "%d problem's publish date successfully updated.",
+                "%d problems' publish date successfully updated.",
+                count,
+            )
+            % count,
+        )
 
     update_publish_date.short_description = _('Set publish date to now')
 
@@ -199,9 +229,11 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         count = queryset.update(is_public=True)
         for problem_id in queryset.values_list('id', flat=True):
             self._rescore(request, problem_id)
-        self.message_user(request, ungettext('%d problem successfully marked as public.',
-                                             '%d problems successfully marked as public.',
-                                             count) % count)
+        self.message_user(
+            request,
+            ungettext('%d problem successfully marked as public.', '%d problems successfully marked as public.', count)
+            % count,
+        )
 
     make_public.short_description = _('Mark problems as public')
 
@@ -209,9 +241,13 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         count = queryset.update(is_public=False)
         for problem_id in queryset.values_list('id', flat=True):
             self._rescore(request, problem_id)
-        self.message_user(request, ungettext('%d problem successfully marked as private.',
-                                             '%d problems successfully marked as private.',
-                                             count) % count)
+        self.message_user(
+            request,
+            ungettext(
+                '%d problem successfully marked as private.', '%d problems successfully marked as private.', count
+            )
+            % count,
+        )
 
     make_private.short_description = _('Mark problems as private')
 
@@ -235,9 +271,8 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def save_model(self, request, obj, form, change):
         super(ProblemAdmin, self).save_model(request, obj, form, change)
-        if (
-            form.changed_data and
-            any(f in form.changed_data for f in ('is_public', 'is_organization_private', 'points', 'partial'))
+        if form.changed_data and any(
+            f in form.changed_data for f in ('is_public', 'is_organization_private', 'points', 'partial')
         ):
             self._rescore(request, obj.id)
 

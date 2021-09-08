@@ -32,8 +32,9 @@ class CommentForm(ModelForm):
         }
 
         if HeavyPreviewPageDownWidget is not None:
-            widgets['body'] = HeavyPreviewPageDownWidget(preview=reverse_lazy('comment_preview'),
-                                                         preview_timeout=1000, hide_preview_button=True)
+            widgets['body'] = HeavyPreviewPageDownWidget(
+                preview=reverse_lazy('comment_preview'), preview_timeout=1000, hide_preview_button=True
+            )
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
@@ -46,8 +47,9 @@ class CommentForm(ModelForm):
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
             elif not self.request.user.is_staff and not profile.has_any_solves:
-                raise ValidationError(_('You need to have solved at least one problem '
-                                        'before your voice can be heard.'))
+                raise ValidationError(
+                    _('You need to have solved at least one problem ' 'before your voice can be heard.')
+                )
         return super(CommentForm, self).clean()
 
 
@@ -60,8 +62,9 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         return self.comment_page
 
     def is_comment_locked(self):
-        return (CommentLock.objects.filter(page=self.get_comment_page()).exists() and
-                not self.request.user.has_perm('judge.override_comment_lock'))
+        return CommentLock.objects.filter(page=self.get_comment_page()).exists() and not self.request.user.has_perm(
+            'judge.override_comment_lock'
+        )
 
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
@@ -99,10 +102,12 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return self.render_to_response(self.get_context_data(
-            object=self.object,
-            comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None}),
-        ))
+        return self.render_to_response(
+            self.get_context_data(
+                object=self.object,
+                comment_form=CommentForm(request, initial={'page': self.get_comment_page(), 'parent': None}),
+            )
+        )
 
     def get_context_data(self, **kwargs):
         context = super(CommentedDetailView, self).get_context_data(**kwargs)

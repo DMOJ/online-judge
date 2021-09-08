@@ -20,7 +20,8 @@ class IOIContestFormat(LegacyIOIContestFormat):
         format_data = {}
 
         with connection.cursor() as cursor:
-            cursor.execute("""
+            cursor.execute(
+                """
                 SELECT q.prob,
                        MIN(q.date) as `date`,
                        q.batch_points
@@ -64,7 +65,9 @@ class IOIContestFormat(LegacyIOIContestFormat):
                 ON p.prob = q.prob AND (p.batch = q.batch OR p.batch is NULL AND q.batch is NULL)
                 WHERE p.max_batch_points = q.batch_points
                 GROUP BY q.prob, q.batch
-            """, (participation.id, participation.id))
+            """,
+                (participation.id, participation.id),
+            )
 
             for problem_id, time, subtask_points in cursor.fetchall():
                 problem_id = str(problem_id)
@@ -96,7 +99,9 @@ class IOIContestFormat(LegacyIOIContestFormat):
         yield _('The maximum score for each problem batch will be used.')
 
         if self.config['cumtime']:
-            yield _('Ties will be broken by the sum of the last score altering submission time on problems with a '
-                    'non-zero score.')
+            yield _(
+                'Ties will be broken by the sum of the last score altering submission time on problems with a '
+                'non-zero score.'
+            )
         else:
             yield _('Ties by score will **not** be broken.')

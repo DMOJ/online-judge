@@ -7,18 +7,20 @@ class BlogPostTestCase(CommonDataMixin, TestCase):
     @classmethod
     def setUpTestData(self):
         super().setUpTestData()
-        self.users.update({
-            'staff_blogpost_edit_own': create_user(
-                username='staff_blogpost_edit_own',
-                is_staff=True,
-                user_permissions=('change_blogpost',),
-            ),
-            'staff_blogpost_edit_all': create_user(
-                username='staff_blogpost_edit_all',
-                is_staff=True,
-                user_permissions=('change_blogpost', 'edit_all_post'),
-            ),
-        })
+        self.users.update(
+            {
+                'staff_blogpost_edit_own': create_user(
+                    username='staff_blogpost_edit_own',
+                    is_staff=True,
+                    user_permissions=('change_blogpost',),
+                ),
+                'staff_blogpost_edit_all': create_user(
+                    username='staff_blogpost_edit_all',
+                    is_staff=True,
+                    user_permissions=('change_blogpost', 'edit_all_post'),
+                ),
+            }
+        )
 
         self.basic_blogpost = create_blogpost(
             title='basic',

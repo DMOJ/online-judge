@@ -19,10 +19,20 @@ from judge.models import Organization, OrganizationRequest, Profile
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
 
-__all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'OrganizationMembershipChange',
-           'JoinOrganization', 'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization',
-           'OrganizationRequestDetail', 'OrganizationRequestView', 'OrganizationRequestLog',
-           'KickUserWidgetView']
+__all__ = [
+    'OrganizationList',
+    'OrganizationHome',
+    'OrganizationUsers',
+    'OrganizationMembershipChange',
+    'JoinOrganization',
+    'LeaveOrganization',
+    'EditOrganization',
+    'RequestJoinOrganization',
+    'OrganizationRequestDetail',
+    'OrganizationRequestView',
+    'OrganizationRequestLog',
+    'KickUserWidgetView',
+]
 
 
 class OrganizationMixin(object):
@@ -40,11 +50,11 @@ class OrganizationMixin(object):
         except Http404:
             key = kwargs.get(self.slug_url_kwarg, None)
             if key:
-                return generic_message(request, _('No such organization'),
-                                       _('Could not find an organization with the key "%s".') % key)
+                return generic_message(
+                    request, _('No such organization'), _('Could not find an organization with the key "%s".') % key
+                )
             else:
-                return generic_message(request, _('No such organization'),
-                                       _('Could not find such organization.'))
+                return generic_message(request, _('No such organization'), _('Could not find such organization.'))
 
     def can_edit_organization(self, org=None):
         if org is None:
@@ -90,9 +100,12 @@ class OrganizationUsers(OrganizationDetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = _('%s Members') % self.object.name
-        context['users'] = \
-            ranker(self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
-                   .select_related('user').defer('about', 'user_script', 'notes'))
+        context['users'] = ranker(
+            self.object.members.filter(is_unlisted=False)
+            .order_by('-performance_points', '-problem_count')
+            .select_related('user')
+            .defer('about', 'user_script', 'notes')
+        )
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
         context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
@@ -122,7 +135,8 @@ class JoinOrganization(OrganizationMembershipChange):
         max_orgs = settings.DMOJ_USER_MAX_ORGANIZATION_COUNT
         if profile.organizations.filter(is_open=True).count() >= max_orgs:
             return generic_message(
-                request, _('Joining organization'),
+                request,
+                _('Joining organization'),
                 _('You may not be part of more than {count} public organizations.').format(count=max_orgs),
             )
 
@@ -168,9 +182,16 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         request.reason = form.cleaned_data['reason']
         request.state = 'P'
         request.save()
-        return HttpResponseRedirect(reverse('request_organization_detail', args=(
-            request.organization.id, request.organization.slug, request.id,
-        )))
+        return HttpResponseRedirect(
+            reverse(
+                'request_organization_detail',
+                args=(
+                    request.organization.id,
+                    request.organization.slug,
+                    request.id,
+                ),
+            )
+        )
 
 
 class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
@@ -235,8 +256,11 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                 to_approve = sum(form.cleaned_data['state'] == 'A' for form in formset.forms if form not in deleted_set)
                 can_add = organization.slots - organization.members.count()
                 if to_approve > can_add:
-                    messages.error(request, _('Your organization can only receive %d more members. '
-                                              'You cannot approve %d users.') % (can_add, to_approve))
+                    messages.error(
+                        request,
+                        _('Your organization can only receive %d more members. ' 'You cannot approve %d users.')
+                        % (can_add, to_approve),
+                    )
                     return self.render_to_response(self.get_context_data(object=organization))
 
             approved, rejected = 0, 0
@@ -246,9 +270,12 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                     approved += 1
                 elif obj.state == 'R':
                     rejected += 1
-            messages.success(request,
-                             ungettext('Approved %d user.', 'Approved %d users.', approved) % approved + '\n' +
-                             ungettext('Rejected %d user.', 'Rejected %d users.', rejected) % rejected)
+            messages.success(
+                request,
+                ungettext('Approved %d user.', 'Approved %d users.', approved) % approved
+                + '\n'
+                + ungettext('Rejected %d user.', 'Rejected %d users.', rejected) % rejected,
+            )
             cache.delete(make_template_fragment_key('org_member_count', (organization.id,)))
             return HttpResponseRedirect(request.get_full_path())
         return self.render_to_response(self.get_context_data(object=organization))
@@ -288,8 +315,9 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
 
     def get_form(self, form_class=None):
         form = super(EditOrganization, self).get_form(form_class)
-        form.fields['admins'].queryset = \
-            Profile.objects.filter(Q(organizations=self.object) | Q(admin_of=self.object)).distinct()
+        form.fields['admins'].queryset = Profile.objects.filter(
+            Q(organizations=self.object) | Q(admin_of=self.object)
+        ).distinct()
         return form
 
     def form_valid(self, form):
@@ -302,27 +330,36 @@ class EditOrganization(LoginRequiredMixin, TitleMixin, OrganizationMixin, Update
         try:
             return super(EditOrganization, self).dispatch(request, *args, **kwargs)
         except PermissionDenied:
-            return generic_message(request, _("Can't edit organization"),
-                                   _('You are not allowed to edit this organization.'), status=403)
+            return generic_message(
+                request, _("Can't edit organization"), _('You are not allowed to edit this organization.'), status=403
+            )
 
 
 class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixin, View):
     def post(self, request, *args, **kwargs):
         organization = self.get_object()
         if not self.can_edit_organization(organization):
-            return generic_message(request, _("Can't edit organization"),
-                                   _('You are not allowed to kick people from this organization.'), status=403)
+            return generic_message(
+                request,
+                _("Can't edit organization"),
+                _('You are not allowed to kick people from this organization.'),
+                status=403,
+            )
 
         try:
             user = Profile.objects.get(id=request.POST.get('user', None))
         except Profile.DoesNotExist:
-            return generic_message(request, _("Can't kick user"),
-                                   _('The user you are trying to kick does not exist!'), status=400)
+            return generic_message(
+                request, _("Can't kick user"), _('The user you are trying to kick does not exist!'), status=400
+            )
 
         if not organization.members.filter(id=user.id).exists():
-            return generic_message(request, _("Can't kick user"),
-                                   _('The user you are trying to kick is not in organization: %s.') %
-                                   organization.name, status=400)
+            return generic_message(
+                request,
+                _("Can't kick user"),
+                _('The user you are trying to kick is not in organization: %s.') % organization.name,
+                status=400,
+            )
 
         organization.members.remove(user)
         return HttpResponseRedirect(organization.get_users_url())

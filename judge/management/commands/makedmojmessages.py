@@ -12,19 +12,52 @@ from judge.models import NavigationBar, ProblemType
 
 class Command(MakeMessagesCommand):
     def add_arguments(self, parser):
-        parser.add_argument('--locale', '-l', default=[], dest='locale', action='append',
-                            help='Creates or updates the message files for the given locale(s) (e.g. pt_BR). '
-                                 'Can be used multiple times.')
-        parser.add_argument('--exclude', '-x', default=[], dest='exclude', action='append',
-                            help='Locales to exclude. Default is none. Can be used multiple times.')
-        parser.add_argument('--all', '-a', action='store_true', dest='all',
-                            default=False, help='Updates the message files for all existing locales.')
-        parser.add_argument('--no-wrap', action='store_true', dest='no_wrap',
-                            default=False, help="Don't break long message lines into several lines.")
-        parser.add_argument('--no-obsolete', action='store_true', dest='no_obsolete',
-                            default=False, help='Remove obsolete message strings.')
-        parser.add_argument('--keep-pot', action='store_true', dest='keep_pot',
-                            default=False, help='Keep .pot file after making messages. Useful when debugging.')
+        parser.add_argument(
+            '--locale',
+            '-l',
+            default=[],
+            dest='locale',
+            action='append',
+            help='Creates or updates the message files for the given locale(s) (e.g. pt_BR). '
+            'Can be used multiple times.',
+        )
+        parser.add_argument(
+            '--exclude',
+            '-x',
+            default=[],
+            dest='exclude',
+            action='append',
+            help='Locales to exclude. Default is none. Can be used multiple times.',
+        )
+        parser.add_argument(
+            '--all',
+            '-a',
+            action='store_true',
+            dest='all',
+            default=False,
+            help='Updates the message files for all existing locales.',
+        )
+        parser.add_argument(
+            '--no-wrap',
+            action='store_true',
+            dest='no_wrap',
+            default=False,
+            help="Don't break long message lines into several lines.",
+        )
+        parser.add_argument(
+            '--no-obsolete',
+            action='store_true',
+            dest='no_obsolete',
+            default=False,
+            help='Remove obsolete message strings.',
+        )
+        parser.add_argument(
+            '--keep-pot',
+            action='store_true',
+            dest='keep_pot',
+            default=False,
+            help='Keep .pot file after making messages. Useful when debugging.',
+        )
 
     def handle(self, *args, **options):
         locale = options.get('locale')
@@ -55,8 +88,9 @@ class Command(MakeMessagesCommand):
         self.keep_pot = options.get('keep_pot')
 
         if locale is None and not exclude and not process_all:
-            raise CommandError("Type '%s help %s' for usage information." % (
-                os.path.basename(sys.argv[0]), sys.argv[1]))
+            raise CommandError(
+                "Type '%s help %s' for usage information." % (os.path.basename(sys.argv[0]), sys.argv[1])
+            )
 
         self.invoked_for_django = False
         self.locale_paths = []
@@ -108,10 +142,13 @@ class Command(MakeMessagesCommand):
         return []
 
     def _emit_message(self, potfile, string):
-        potfile.write("""
+        potfile.write(
+            """
 msgid "%s"
 msgstr ""
-""" % string.replace('\\', r'\\').replace('\t', '\\t').replace('\n', '\\n').replace('"', '\\"'))
+"""
+            % string.replace('\\', r'\\').replace('\t', '\\t').replace('\n', '\\n').replace('"', '\\"')
+        )
 
     def process_files(self, file_list):
         with io.open(os.path.join(self.default_locale_path, 'dmoj-user.pot'), 'w', encoding='utf-8') as potfile:

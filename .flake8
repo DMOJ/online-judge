@@ -4,6 +4,7 @@ application-import-names = dmoj,judge,django_ace
 import-order-style = pycharm
 enable-extensions = G
 ignore =
+    E203, E501, W503, # for Black
     W504, # line break occurred after a binary operator
     # allow only generator_stop and annotations future imports
     FI10,FI11,FI12,FI13,FI14,FI15,FI16,FI17,FI18,FI55,FI58,

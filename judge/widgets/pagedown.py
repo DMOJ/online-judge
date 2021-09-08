@@ -6,9 +6,14 @@ from django.utils.html import conditional_escape
 
 from judge.widgets.mixins import CompressorWidgetMixin
 
-__all__ = ['PagedownWidget', 'AdminPagedownWidget',
-           'MathJaxPagedownWidget', 'MathJaxAdminPagedownWidget',
-           'HeavyPreviewPageDownWidget', 'HeavyPreviewAdminPageDownWidget']
+__all__ = [
+    'PagedownWidget',
+    'AdminPagedownWidget',
+    'MathJaxPagedownWidget',
+    'MathJaxAdminPagedownWidget',
+    'HeavyPreviewPageDownWidget',
+    'HeavyPreviewAdminPageDownWidget',
+]
 
 try:
     from pagedown.widgets import PagedownWidget as OldPagedownWidget
@@ -20,6 +25,7 @@ except ImportError:
     HeavyPreviewPageDownWidget = None
     HeavyPreviewAdminPageDownWidget = None
 else:
+
     class PagedownWidget(CompressorWidgetMixin, OldPagedownWidget):
         # The goal here is to compress all the pagedown JS into one file.
         # We do not want any further compress down the chain, because
@@ -31,15 +37,15 @@ else:
             kwargs.setdefault('css', ('pagedown_widget.css',))
             super(PagedownWidget, self).__init__(*args, **kwargs)
 
-
     class AdminPagedownWidget(PagedownWidget, admin_widgets.AdminTextareaWidget):
         class Media:
-            css = {'all': [
-                'content-description.css',
-                'admin/css/pagedown.css',
-            ]}
+            css = {
+                'all': [
+                    'content-description.css',
+                    'admin/css/pagedown.css',
+                ]
+            }
             js = ['admin/js/pagedown.js']
-
 
     class MathJaxPagedownWidget(PagedownWidget):
         class Media:
@@ -49,10 +55,8 @@ else:
                 'pagedown_math.js',
             ]
 
-
     class MathJaxAdminPagedownWidget(AdminPagedownWidget, MathJaxPagedownWidget):
         pass
-
 
     class HeavyPreviewPageDownWidget(PagedownWidget):
         def __init__(self, *args, **kwargs):
@@ -86,11 +90,12 @@ else:
             css = {'all': ['dmmd-preview.css']}
             js = ['dmmd-preview.js']
 
-
     class HeavyPreviewAdminPageDownWidget(AdminPagedownWidget, HeavyPreviewPageDownWidget):
         class Media:
-            css = {'all': [
-                'pygment-github.css',
-                'table.css',
-                'ranks.css',
-            ]}
+            css = {
+                'all': [
+                    'pygment-github.css',
+                    'table.css',
+                    'ranks.css',
+                ]
+            }

@@ -11,39 +11,41 @@ class ContestTestCase(CommonDataMixin, TestCase):
     @classmethod
     def setUpTestData(self):
         super().setUpTestData()
-        self.users.update({
-            'staff_contest_edit_own': create_user(
-                username='staff_contest_edit_own',
-                is_staff=True,
-                user_permissions=('edit_own_contest',),
-            ),
-            'staff_contest_see_all': create_user(
-                username='staff_contest_see_all',
-                user_permissions=('see_private_contest',),
-            ),
-            'staff_contest_edit_all': create_user(
-                username='staff_contest_edit_all',
-                is_staff=True,
-                user_permissions=('edit_own_contest', 'edit_all_contest'),
-            ),
-            'normal_during_window': create_user(
-                username='normal_during_window',
-            ),
-            'normal_after_window': create_user(
-                username='normal_after_window',
-            ),
-            'normal_before_window': create_user(
-                username='normal_before_window',
-            ),
-            'non_staff_author': create_user(
-                username='non_staff_author',
-                is_staff=False,
-            ),
-            'non_staff_tester': create_user(
-                username='non_staff_tester',
-                is_staff=False,
-            ),
-        })
+        self.users.update(
+            {
+                'staff_contest_edit_own': create_user(
+                    username='staff_contest_edit_own',
+                    is_staff=True,
+                    user_permissions=('edit_own_contest',),
+                ),
+                'staff_contest_see_all': create_user(
+                    username='staff_contest_see_all',
+                    user_permissions=('see_private_contest',),
+                ),
+                'staff_contest_edit_all': create_user(
+                    username='staff_contest_edit_all',
+                    is_staff=True,
+                    user_permissions=('edit_own_contest', 'edit_all_contest'),
+                ),
+                'normal_during_window': create_user(
+                    username='normal_during_window',
+                ),
+                'normal_after_window': create_user(
+                    username='normal_after_window',
+                ),
+                'normal_before_window': create_user(
+                    username='normal_before_window',
+                ),
+                'non_staff_author': create_user(
+                    username='non_staff_author',
+                    is_staff=False,
+                ),
+                'non_staff_tester': create_user(
+                    username='non_staff_tester',
+                    is_staff=False,
+                ),
+            }
+        )
 
         _now = timezone.now()
 

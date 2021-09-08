@@ -14,6 +14,14 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='api_token',
-            field=models.CharField(help_text='64 character hex-encoded API access token', max_length=64, null=True, validators=[django.core.validators.RegexValidator('^[a-f0-9]{64}$', 'API token must be None or hexadecimal')], verbose_name='API token'),
+            field=models.CharField(
+                help_text='64 character hex-encoded API access token',
+                max_length=64,
+                null=True,
+                validators=[
+                    django.core.validators.RegexValidator('^[a-f0-9]{64}$', 'API token must be None or hexadecimal')
+                ],
+                verbose_name='API token',
+            ),
         ),
     ]

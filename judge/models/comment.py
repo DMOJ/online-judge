@@ -21,8 +21,7 @@ from judge.utils.cachedict import CacheDict
 
 __all__ = ['Comment', 'CommentLock', 'CommentVote']
 
-comment_validator = RegexValidator(r'^[pcs]:[a-z0-9]+$|^b:\d+$',
-                                   _(r'Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
+comment_validator = RegexValidator(r'^[pcs]:[a-z0-9]+$|^b:\d+$', _(r'Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
 
 
 class VersionRelation(GenericRelation):
@@ -40,13 +39,15 @@ class VersionRelation(GenericRelation):
 class Comment(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name=_('commenter'), on_delete=CASCADE)
     time = models.DateTimeField(verbose_name=_('posted time'), auto_now_add=True)
-    page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
-                            validators=[comment_validator])
+    page = models.CharField(
+        max_length=30, verbose_name=_('associated page'), db_index=True, validators=[comment_validator]
+    )
     score = models.IntegerField(verbose_name=_('votes'), default=0)
     body = models.TextField(verbose_name=_('body of comment'), max_length=8192)
     hidden = models.BooleanField(verbose_name=_('hide the comment'), default=0)
-    parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies',
-                            on_delete=CASCADE)
+    parent = TreeForeignKey(
+        'self', verbose_name=_('parent'), null=True, blank=True, related_name='replies', on_delete=CASCADE
+    )
     versions = VersionRelation()
 
     class Meta:
@@ -58,8 +59,12 @@ class Comment(MPTTModel):
 
     @classmethod
     def most_recent(cls, user, n, batch=None):
-        queryset = cls.objects.filter(hidden=False).select_related('author__user') \
-            .defer('author__about', 'body').order_by('-id')
+        queryset = (
+            cls.objects.filter(hidden=False)
+            .select_related('author__user')
+            .defer('author__about', 'body')
+            .order_by('-id')
+        )
 
         problem_cache = CacheDict(lambda code: Problem.objects.defer('description', 'summary').get(code=code))
         solution_cache = CacheDict(lambda code: Solution.objects.defer('content').get(problem__code=code))
@@ -75,7 +80,7 @@ class Comment(MPTTModel):
             batch = 2 * n
         output = []
         for i in itertools.count(0):
-            slice = queryset[i * batch:i * batch + batch]
+            slice = queryset[i * batch : i * batch + batch]
             if not slice:
                 break
             for comment in slice:
@@ -193,13 +198,12 @@ class CommentVote(models.Model):
 
 
 class CommentLock(models.Model):
-    page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
-                            validators=[comment_validator])
+    page = models.CharField(
+        max_length=30, verbose_name=_('associated page'), db_index=True, validators=[comment_validator]
+    )
 
     class Meta:
-        permissions = (
-            ('override_comment_lock', _('Override comment lock')),
-        )
+        permissions = (('override_comment_lock', _('Override comment lock')),)
 
     def __str__(self):
         return str(self.page)

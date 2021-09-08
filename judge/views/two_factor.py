@@ -152,10 +152,13 @@ class WebAuthnAttestationView(WebAuthnView):
             icon_url=gravatar(request.user.email),
             attestation='none',
         ).registration_dict
-        data['excludeCredentials'] = [{
-            'type': 'public-key',
-            'id': {'_bytes': credential.cred_id},
-        } for credential in request.profile.webauthn_credentials.all()]
+        data['excludeCredentials'] = [
+            {
+                'type': 'public-key',
+                'id': {'_bytes': credential.cred_id},
+            }
+            for credential in request.profile.webauthn_credentials.all()
+        ]
         return JsonResponse(data, encoder=WebAuthnJSONEncoder)
 
     def post(self, request, *args, **kwargs):
@@ -184,7 +187,8 @@ class WebAuthnAttestationView(WebAuthnView):
             return HttpResponseBadRequest(str(e))
 
         model = WebAuthnCredential(
-            user=request.profile, name=request.POST['name'],
+            user=request.profile,
+            name=request.POST['name'],
             cred_id=credential.credential_id.decode('ascii'),
             public_key=credential.public_key.decode('ascii'),
             counter=credential.sign_count,
@@ -202,8 +206,10 @@ class WebAuthnAttestView(WebAuthnView):
         challenge = os.urandom(32)
         request.session['webauthn_assert'] = webauthn_encode(challenge)
         data = webauthn.WebAuthnAssertionOptions(
-            [credential.webauthn_user for credential in
-             request.profile.webauthn_credentials.select_related('user__user')],
+            [
+                credential.webauthn_user
+                for credential in request.profile.webauthn_credentials.select_related('user__user')
+            ],
             challenge,
         ).assertion_dict
         return JsonResponse(data, encoder=WebAuthnJSONEncoder)
@@ -217,8 +223,12 @@ class WebAuthnDeleteView(SingleObjectMixin, WebAuthnView):
         credential = self.get_object()
         count = self.get_queryset().count()
 
-        if settings.DMOJ_REQUIRE_STAFF_2FA and self.request.user.is_staff and \
-                count <= 1 and not request.profile.is_totp_enabled:
+        if (
+            settings.DMOJ_REQUIRE_STAFF_2FA
+            and self.request.user.is_staff
+            and count <= 1
+            and not request.profile.is_totp_enabled
+        ):
             return HttpResponseBadRequest(_('Staff may not disable 2FA'))
         credential.delete()
 
@@ -237,8 +247,9 @@ class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
         return result
 
     def check_skip(self):
-        return ((not self.profile.is_totp_enabled and not self.profile.is_webauthn_enabled) or
-                self.request.session.get('2fa_passed', False))
+        return (not self.profile.is_totp_enabled and not self.profile.is_webauthn_enabled) or self.request.session.get(
+            '2fa_passed', False
+        )
 
     def next_page(self):
         redirect_to = self.request.GET.get('next', '')

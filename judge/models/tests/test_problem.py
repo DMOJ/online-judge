@@ -4,8 +4,14 @@ from django.utils import timezone
 
 from judge.models import Language, LanguageLimit, Problem
 from judge.models.problem import disallowed_characters_validator
-from judge.models.tests.util import CommonDataMixin, create_organization, create_problem, create_problem_type, \
-    create_solution, create_user
+from judge.models.tests.util import (
+    CommonDataMixin,
+    create_organization,
+    create_problem,
+    create_problem_type,
+    create_solution,
+    create_user,
+)
 
 
 class ProblemTestCase(CommonDataMixin, TestCase):
@@ -13,13 +19,15 @@ class ProblemTestCase(CommonDataMixin, TestCase):
     def setUpTestData(self):
         super().setUpTestData()
 
-        self.users.update({
-            'staff_problem_edit_only_all': create_user(
-                username='staff_problem_edit_only_all',
-                is_staff=True,
-                user_permissions=('edit_all_problem',),
-            ),
-        })
+        self.users.update(
+            {
+                'staff_problem_edit_only_all': create_user(
+                    username='staff_problem_edit_only_all',
+                    is_staff=True,
+                    user_permissions=('edit_all_problem',),
+                ),
+            }
+        )
 
         create_problem_type(name='type')
 
@@ -277,12 +285,14 @@ class SolutionTestCase(CommonDataMixin, TestCase):
     @classmethod
     def setUpTestData(self):
         super().setUpTestData()
-        self.users.update({
-            'staff_solution_see_all': create_user(
-                username='staff_solution_see_all',
-                user_permissions=('see_private_solution',),
-            ),
-        })
+        self.users.update(
+            {
+                'staff_solution_see_all': create_user(
+                    username='staff_solution_see_all',
+                    user_permissions=('see_private_solution',),
+                ),
+            }
+        )
 
         _now = timezone.now()
 

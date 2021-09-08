@@ -20,15 +20,26 @@ from judge.models.runtime import Language
 from judge.user_translations import gettext as user_gettext
 from judge.utils.raw_sql import RawSQLColumn, unique_together_left_join
 
-__all__ = ['ProblemGroup', 'ProblemType', 'Problem', 'ProblemTranslation', 'ProblemClarification', 'License',
-           'Solution', 'SubmissionSourceAccess', 'TranslatedProblemQuerySet', 'TranslatedProblemForeignKeyQuerySet']
+__all__ = [
+    'ProblemGroup',
+    'ProblemType',
+    'Problem',
+    'ProblemTranslation',
+    'ProblemClarification',
+    'License',
+    'Solution',
+    'SubmissionSourceAccess',
+    'TranslatedProblemQuerySet',
+    'TranslatedProblemForeignKeyQuerySet',
+]
 
 
 def disallowed_characters_validator(text):
     common_disallowed_characters = set(text) & settings.DMOJ_PROBLEM_STATEMENT_DISALLOWED_CHARACTERS
     if common_disallowed_characters:
-        raise ValidationError(_('Disallowed characters: %(value)s'),
-                              params={'value': ''.join(common_disallowed_characters)})
+        raise ValidationError(
+            _('Disallowed characters: %(value)s'), params={'value': ''.join(common_disallowed_characters)}
+        )
 
 
 class ProblemType(models.Model):
@@ -58,12 +69,17 @@ class ProblemGroup(models.Model):
 
 
 class License(models.Model):
-    key = models.CharField(max_length=20, unique=True, verbose_name=_('key'),
-                           validators=[RegexValidator(r'^[-\w.]+$', r'License key must be ^[-\w.]+$')])
+    key = models.CharField(
+        max_length=20,
+        unique=True,
+        verbose_name=_('key'),
+        validators=[RegexValidator(r'^[-\w.]+$', r'License key must be ^[-\w.]+$')],
+    )
     link = models.CharField(max_length=256, verbose_name=_('link'))
     name = models.CharField(max_length=256, verbose_name=_('full name'))
-    display = models.CharField(max_length=256, blank=True, verbose_name=_('short name'),
-                               help_text=_('Displayed on pages under this license'))
+    display = models.CharField(
+        max_length=256, blank=True, verbose_name=_('short name'), help_text=_('Displayed on pages under this license')
+    )
     icon = models.CharField(max_length=256, blank=True, verbose_name=_('icon'), help_text=_('URL to the icon'))
     text = models.TextField(verbose_name=_('license text'))
 
@@ -91,12 +107,17 @@ class TranslatedProblemQuerySet(SearchQuerySet):
 class TranslatedProblemForeignKeyQuerySet(QuerySet):
     def add_problem_i18n_name(self, key, language, name_field=None):
         queryset = self._clone() if name_field is None else self.annotate(_name=F(name_field))
-        alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language,
-                                          parent_model=Problem)
+        alias = unique_together_left_join(
+            queryset, ProblemTranslation, 'problem', 'language', language, parent_model=Problem
+        )
         # You must specify name_field if Problem is not yet joined into the QuerySet.
-        kwargs = {key: Coalesce(RawSQL('%s.name' % alias, ()),
-                                F(name_field) if name_field else RawSQLColumn(Problem, 'name'),
-                                output_field=models.CharField())}
+        kwargs = {
+            key: Coalesce(
+                RawSQL('%s.name' % alias, ()),
+                F(name_field) if name_field else RawSQLColumn(Problem, 'name'),
+                output_field=models.CharField(),
+            )
+        }
         return queryset.annotate(**kwargs)
 
 
@@ -115,71 +136,132 @@ class Problem(models.Model):
         (SubmissionSourceAccess.ONLY_OWN, _('Only own submissions')),
     )
 
-    code = models.CharField(max_length=20, verbose_name=_('problem code'), unique=True,
-                            validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))],
-                            help_text=_('A short, unique code for the problem, '
-                                        'used in the url after /problem/'))
-    name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True,
-                            help_text=_('The full name of the problem, '
-                                        'as shown in the problem list.'))
+    code = models.CharField(
+        max_length=20,
+        verbose_name=_('problem code'),
+        unique=True,
+        validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))],
+        help_text=_('A short, unique code for the problem, ' 'used in the url after /problem/'),
+    )
+    name = models.CharField(
+        max_length=100,
+        verbose_name=_('problem name'),
+        db_index=True,
+        help_text=_('The full name of the problem, ' 'as shown in the problem list.'),
+    )
     description = models.TextField(verbose_name=_('problem body'), validators=[disallowed_characters_validator])
-    authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems',
-                                     help_text=_('These users will be able to edit the problem, '
-                                                 'and be listed as authors.'))
-    curators = models.ManyToManyField(Profile, verbose_name=_('curators'), blank=True, related_name='curated_problems',
-                                      help_text=_('These users will be able to edit the problem, '
-                                                  'but not be listed as authors.'))
-    testers = models.ManyToManyField(Profile, verbose_name=_('testers'), blank=True, related_name='tested_problems',
-                                     help_text=_(
-                                         'These users will be able to view the private problem, but not edit it.'))
-    types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'),
-                                   help_text=_('The type of problem, '
-                                               "as shown on the problem's page."))
-    group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE,
-                              help_text=_('The group of problem, shown under Category in the problem list.'))
-    time_limit = models.FloatField(verbose_name=_('time limit'),
-                                   help_text=_('The time limit for this problem, in seconds. '
-                                               'Fractional seconds (e.g. 1.5) are supported.'),
-                                   validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_TIME_LIMIT),
-                                               MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT)])
-    memory_limit = models.PositiveIntegerField(verbose_name=_('memory limit'),
-                                               help_text=_('The memory limit for this problem, in kilobytes '
-                                                           '(e.g. 64mb = 65536 kilobytes).'),
-                                               validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
-                                                           MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
+    authors = models.ManyToManyField(
+        Profile,
+        verbose_name=_('creators'),
+        blank=True,
+        related_name='authored_problems',
+        help_text=_('These users will be able to edit the problem, ' 'and be listed as authors.'),
+    )
+    curators = models.ManyToManyField(
+        Profile,
+        verbose_name=_('curators'),
+        blank=True,
+        related_name='curated_problems',
+        help_text=_('These users will be able to edit the problem, ' 'but not be listed as authors.'),
+    )
+    testers = models.ManyToManyField(
+        Profile,
+        verbose_name=_('testers'),
+        blank=True,
+        related_name='tested_problems',
+        help_text=_('These users will be able to view the private problem, but not edit it.'),
+    )
+    types = models.ManyToManyField(
+        ProblemType,
+        verbose_name=_('problem types'),
+        help_text=_('The type of problem, ' "as shown on the problem's page."),
+    )
+    group = models.ForeignKey(
+        ProblemGroup,
+        verbose_name=_('problem group'),
+        on_delete=CASCADE,
+        help_text=_('The group of problem, shown under Category in the problem list.'),
+    )
+    time_limit = models.FloatField(
+        verbose_name=_('time limit'),
+        help_text=_('The time limit for this problem, in seconds. ' 'Fractional seconds (e.g. 1.5) are supported.'),
+        validators=[
+            MinValueValidator(settings.DMOJ_PROBLEM_MIN_TIME_LIMIT),
+            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT),
+        ],
+    )
+    memory_limit = models.PositiveIntegerField(
+        verbose_name=_('memory limit'),
+        help_text=_('The memory limit for this problem, in kilobytes ' '(e.g. 64mb = 65536 kilobytes).'),
+        validators=[
+            MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
+            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT),
+        ],
+    )
     short_circuit = models.BooleanField(default=False)
-    points = models.FloatField(verbose_name=_('points'),
-                               help_text=_('Points awarded for problem completion. '
-                                           "Points are displayed with a 'p' suffix if partial."),
-                               validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS)])
+    points = models.FloatField(
+        verbose_name=_('points'),
+        help_text=_('Points awarded for problem completion. ' "Points are displayed with a 'p' suffix if partial."),
+        validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_PROBLEM_POINTS)],
+    )
     partial = models.BooleanField(verbose_name=_('allows partial points'), default=False)
-    allowed_languages = models.ManyToManyField(Language, verbose_name=_('allowed languages'),
-                                               help_text=_('List of allowed submission languages.'))
+    allowed_languages = models.ManyToManyField(
+        Language, verbose_name=_('allowed languages'), help_text=_('List of allowed submission languages.')
+    )
     is_public = models.BooleanField(verbose_name=_('publicly visible'), db_index=True, default=False)
-    is_manually_managed = models.BooleanField(verbose_name=_('manually managed'), db_index=True, default=False,
-                                              help_text=_('Whether judges should be allowed to manage data or not.'))
-    date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
-                                help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"))
-    banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
-                                          help_text=_('Bans the selected users from submitting to this problem.'))
-    license = models.ForeignKey(License, null=True, blank=True, on_delete=SET_NULL,
-                                help_text=_('The license under which this problem is published.'))
+    is_manually_managed = models.BooleanField(
+        verbose_name=_('manually managed'),
+        db_index=True,
+        default=False,
+        help_text=_('Whether judges should be allowed to manage data or not.'),
+    )
+    date = models.DateTimeField(
+        verbose_name=_('date of publishing'),
+        null=True,
+        blank=True,
+        db_index=True,
+        help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"),
+    )
+    banned_users = models.ManyToManyField(
+        Profile,
+        verbose_name=_('personae non gratae'),
+        blank=True,
+        help_text=_('Bans the selected users from submitting to this problem.'),
+    )
+    license = models.ForeignKey(
+        License,
+        null=True,
+        blank=True,
+        on_delete=SET_NULL,
+        help_text=_('The license under which this problem is published.'),
+    )
     og_image = models.CharField(verbose_name=_('OpenGraph image'), max_length=150, blank=True)
-    summary = models.TextField(blank=True, verbose_name=_('problem summary'),
-                               help_text=_('Plain-text, shown in meta description tag, e.g. for social media.'))
-    user_count = models.IntegerField(verbose_name=_('number of users'), default=0,
-                                     help_text=_('The number of users who solved the problem.'))
+    summary = models.TextField(
+        blank=True,
+        verbose_name=_('problem summary'),
+        help_text=_('Plain-text, shown in meta description tag, e.g. for social media.'),
+    )
+    user_count = models.IntegerField(
+        verbose_name=_('number of users'), default=0, help_text=_('The number of users who solved the problem.')
+    )
     ac_rate = models.FloatField(verbose_name=_('solve rate'), default=0)
     is_full_markup = models.BooleanField(verbose_name=_('allow full markdown access'), default=False)
-    submission_source_visibility_mode = models.CharField(verbose_name=_('submission source visibility'), max_length=1,
-                                                         default=SubmissionSourceAccess.FOLLOW,
-                                                         choices=SUBMISSION_SOURCE_ACCESS)
+    submission_source_visibility_mode = models.CharField(
+        verbose_name=_('submission source visibility'),
+        max_length=1,
+        default=SubmissionSourceAccess.FOLLOW,
+        choices=SUBMISSION_SOURCE_ACCESS,
+    )
 
     objects = TranslatedProblemQuerySet.as_manager()
     tickets = GenericRelation('Ticket')
 
-    organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                           help_text=_('If private, only these organizations may see the problem.'))
+    organizations = models.ManyToManyField(
+        Organization,
+        blank=True,
+        verbose_name=_('organizations'),
+        help_text=_('If private, only these organizations may see the problem.'),
+    )
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
 
     def __init__(self, *args, **kwargs):
@@ -218,6 +300,7 @@ class Problem(models.Model):
             current = user.profile.current_contest_id
             if current is not None:
                 from judge.models import ContestProblem
+
                 if ContestProblem.objects.filter(problem_id=self.id, contest__users__id=current).exists():
                     return True
 
@@ -232,8 +315,7 @@ class Problem(models.Model):
                 return True
 
             # If the user is in the organization.
-            if user.is_authenticated and \
-                    self.organizations.filter(id__in=user.profile.organizations.all()):
+            if user.is_authenticated and self.organizations.filter(id__in=user.profile.organizations.all()):
                 return True
 
         if not user.is_authenticated:
@@ -282,9 +364,8 @@ class Problem(models.Model):
             q = Q(is_public=True)
             if not (user.has_perm('judge.see_organization_problem') or edit_public_problem):
                 # Either not organization private or in the organization.
-                q &= (
-                    Q(is_organization_private=False) |
-                    Q(is_organization_private=True, organizations__in=user.profile.organizations.all())
+                q &= Q(is_organization_private=False) | Q(
+                    is_organization_private=True, organizations__in=user.profile.organizations.all()
                 )
 
             if edit_own_problem:
@@ -330,7 +411,8 @@ class Problem(models.Model):
     @cached_property
     def editor_ids(self):
         return self.author_ids.union(
-            Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True))
+            Problem.curators.through.objects.filter(problem=self).values_list('profile_id', flat=True)
+        )
 
     @cached_property
     def tester_ids(self):
@@ -394,9 +476,11 @@ class Problem(models.Model):
 
     def _get_limits(self, key):
         global_limit = getattr(self, key)
-        limits = {limit['language_id']: (limit['language__name'], limit[key])
-                  for limit in self.language_limits.values('language_id', 'language__name', key)
-                  if limit[key] != global_limit}
+        limits = {
+            limit['language_id']: (limit['language__name'], limit[key])
+            for limit in self.language_limits.values('language_id', 'language__name', key)
+            if limit[key] != global_limit
+        }
         limit_ids = set(limits.keys())
         common = []
 
@@ -487,12 +571,20 @@ class ProblemClarification(models.Model):
 class LanguageLimit(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='language_limits', on_delete=CASCADE)
     language = models.ForeignKey(Language, verbose_name=_('language'), on_delete=CASCADE)
-    time_limit = models.FloatField(verbose_name=_('time limit'),
-                                   validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_TIME_LIMIT),
-                                               MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT)])
-    memory_limit = models.IntegerField(verbose_name=_('memory limit'),
-                                       validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
-                                                   MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
+    time_limit = models.FloatField(
+        verbose_name=_('time limit'),
+        validators=[
+            MinValueValidator(settings.DMOJ_PROBLEM_MIN_TIME_LIMIT),
+            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT),
+        ],
+    )
+    memory_limit = models.IntegerField(
+        verbose_name=_('memory limit'),
+        validators=[
+            MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
+            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT),
+        ],
+    )
 
     class Meta:
         unique_together = ('problem', 'language')
@@ -501,8 +593,14 @@ class LanguageLimit(models.Model):
 
 
 class Solution(models.Model):
-    problem = models.OneToOneField(Problem, on_delete=SET_NULL, verbose_name=_('associated problem'),
-                                   null=True, blank=True, related_name='solution')
+    problem = models.OneToOneField(
+        Problem,
+        on_delete=SET_NULL,
+        verbose_name=_('associated problem'),
+        null=True,
+        blank=True,
+        related_name='solution',
+    )
     is_public = models.BooleanField(verbose_name=_('public visibility'), default=False)
     publish_on = models.DateTimeField(verbose_name=_('publish date'))
     authors = models.ManyToManyField(Profile, verbose_name=_('authors'), blank=True)
@@ -528,8 +626,6 @@ class Solution(models.Model):
         return False
 
     class Meta:
-        permissions = (
-            ('see_private_solution', _('See hidden solutions')),
-        )
+        permissions = (('see_private_solution', _('See hidden solutions')),)
         verbose_name = _('solution')
         verbose_name_plural = _('solutions')

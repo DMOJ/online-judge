@@ -47,9 +47,7 @@ class MathoidMathParser(object):
         self.type = type
 
         self.mathoid_url = settings.MATHOID_URL
-        self.cache = HashFileCache(settings.MATHOID_CACHE_ROOT,
-                                   settings.MATHOID_CACHE_URL,
-                                   settings.MATHOID_GZIP)
+        self.cache = HashFileCache(settings.MATHOID_CACHE_ROOT, settings.MATHOID_CACHE_URL, settings.MATHOID_GZIP)
 
         mml_cache = settings.MATHOID_MML_CACHE
         self.mml_cache = mml_cache and caches[mml_cache]
@@ -61,10 +59,13 @@ class MathoidMathParser(object):
         self.cache.create(hash)
 
         try:
-            response = requests.post(self.mathoid_url, data={
-                'q': reescape.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
-                'type': 'tex' if formula.startswith(r'\displaystyle') else 'inline-tex',
-            })
+            response = requests.post(
+                self.mathoid_url,
+                data={
+                    'q': reescape.sub(lambda m: '\\' + m.group(0), formula).encode('utf-8'),
+                    'type': 'tex' if formula.startswith(r'\displaystyle') else 'inline-tex',
+                },
+            )
             response.raise_for_status()
             data = response.json()
         except requests.ConnectionError:
@@ -88,7 +89,8 @@ class MathoidMathParser(object):
         css = data['mathoidStyle']
         mml = data['mml']
         result = {
-            'css': css, 'mml': mml,
+            'css': css,
+            'mml': mml,
             'png': self.cache.cache_data(hash, 'png', bytearray(data['png']['data'])),
             'svg': self.cache.cache_data(hash, 'svg', data['svg'].encode('utf-8')),
         }
@@ -147,36 +149,56 @@ class MathoidMathParser(object):
 
     def output_msp(self, result):
         # 100% MediaWiki compatibility.
-        return format_html('<span class="{5}-math">'
-                           '<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
-                           ' style="display: none;">{0}</span>'
-                           '<img src="{1}" class="mwe-math-fallback-image-{5}"'
-                           ' onerror="this.src=\'{2}\';this.onerror=null"'
-                           ' aria-hidden="true" style="{3}" alt="{4}"></span>',
-                           mark_safe(result['mml']), result['svg'], result['png'], result['css'], result['tex'],
-                           ['inline', 'display'][result['display']])
+        return format_html(
+            '<span class="{5}-math">'
+            '<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
+            ' style="display: none;">{0}</span>'
+            '<img src="{1}" class="mwe-math-fallback-image-{5}"'
+            ' onerror="this.src=\'{2}\';this.onerror=null"'
+            ' aria-hidden="true" style="{3}" alt="{4}"></span>',
+            mark_safe(result['mml']),
+            result['svg'],
+            result['png'],
+            result['css'],
+            result['tex'],
+            ['inline', 'display'][result['display']],
+        )
 
     def output_jax(self, result):
-        return format_html('<span class="{4}">'
-                           '''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
-                           """ onerror="this.src='{1}';this.onerror=null">"""
-                           '''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
-                           """ onerror="this.src='{1}';this.onerror=null">"""
-                           """<span class="tex-text" style="display:none">{5}{3}{5}</span>"""
-                           '</span>',
-                           result['svg'], result['png'], result['css'], result['tex'],
-                           ['inline-math', 'display-math'][result['display']], ['~', '$$'][result['display']])
+        return format_html(
+            '<span class="{4}">'
+            '''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
+            """ onerror="this.src='{1}';this.onerror=null">"""
+            '''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
+            """ onerror="this.src='{1}';this.onerror=null">"""
+            """<span class="tex-text" style="display:none">{5}{3}{5}</span>"""
+            '</span>',
+            result['svg'],
+            result['png'],
+            result['css'],
+            result['tex'],
+            ['inline-math', 'display-math'][result['display']],
+            ['~', '$$'][result['display']],
+        )
 
     def output_svg(self, result):
-        return format_html('<img class="{4}" src="{0}" style="{2}" alt="{3}" '
-                           """onerror="this.src='{1}';this.onerror=null">""",
-                           result['svg'], result['png'], result['css'], result['tex'],
-                           ['inline-math', 'display-math'][result['display']])
+        return format_html(
+            '<img class="{4}" src="{0}" style="{2}" alt="{3}" ' """onerror="this.src='{1}';this.onerror=null">""",
+            result['svg'],
+            result['png'],
+            result['css'],
+            result['tex'],
+            ['inline-math', 'display-math'][result['display']],
+        )
 
     def output_png(self, result):
-        return format_html('<img class="{3}" src="{0}" style="{1}" alt="{2}">',
-                           result['png'], result['css'], result['tex'],
-                           ['inline-math', 'display-math'][result['display']])
+        return format_html(
+            '<img class="{3}" src="{0}" style="{1}" alt="{2}">',
+            result['png'],
+            result['css'],
+            result['tex'],
+            ['inline-math', 'display-math'][result['display']],
+        )
 
     def display_math(self, math):
         math = format_math(math)

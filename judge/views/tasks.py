@@ -41,10 +41,16 @@ def task_status(request, task_id):
     if status['code'] == 'SUCCESS' and redirect:
         return HttpResponseRedirect(redirect)
 
-    return render(request, 'task_status.html', {
-        'task_id': task_id, 'task_status': json.dumps(status),
-        'message': request.GET.get('message', ''), 'redirect': redirect or '',
-    })
+    return render(
+        request,
+        'task_status.html',
+        {
+            'task_id': task_id,
+            'task_status': json.dumps(status),
+            'message': request.GET.get('message', ''),
+            'redirect': redirect or '',
+        },
+    )
 
 
 @short_circuit_middleware

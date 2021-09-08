@@ -14,7 +14,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='is_webauthn_enabled',
-            field=models.BooleanField(default=False, help_text='check to enable WebAuthn-based two-factor authentication', verbose_name='WebAuthn 2FA enabled'),
+            field=models.BooleanField(
+                default=False,
+                help_text='check to enable WebAuthn-based two-factor authentication',
+                verbose_name='WebAuthn 2FA enabled',
+            ),
         ),
         migrations.CreateModel(
             name='WebAuthnCredential',
@@ -24,7 +28,15 @@ class Migration(migrations.Migration):
                 ('cred_id', models.CharField(max_length=255, unique=True, verbose_name='credential ID')),
                 ('public_key', models.TextField(verbose_name='public key')),
                 ('counter', models.BigIntegerField(verbose_name='sign counter')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='webauthn_credentials', to='judge.Profile', verbose_name='user')),
+                (
+                    'user',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='webauthn_credentials',
+                        to='judge.Profile',
+                        verbose_name='user',
+                    ),
+                ),
             ],
         ),
     ]

@@ -17,8 +17,9 @@ def apply_submission_filter(queryset, id_range, languages, results):
         queryset = queryset.filter(language_id__in=languages)
     if results:
         queryset = queryset.filter(result__in=results)
-    queryset = queryset.exclude(locked_after__lt=timezone.now()) \
-                       .exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
+    queryset = queryset.exclude(locked_after__lt=timezone.now()).exclude(
+        status__in=Submission.IN_PROGRESS_GRADING_STATUS
+    )
     return queryset
 
 
@@ -45,8 +46,9 @@ def rescore_problem(self, problem_id):
     with Progress(self, submissions.count(), stage=_('Modifying submissions')) as p:
         rescored = 0
         for submission in submissions.iterator():
-            submission.points = round(submission.case_points / submission.case_total * problem.points
-                                      if submission.case_total else 0, 1)
+            submission.points = round(
+                submission.case_points / submission.case_total * problem.points if submission.case_total else 0, 1
+            )
             if not problem.partial and submission.points < problem.points:
                 submission.points = 0
             submission.save(update_fields=['points'])

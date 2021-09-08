@@ -78,7 +78,8 @@ class ProfileForm(ModelForm):
 
         if sum(org.is_open for org in organizations) > max_orgs:
             raise ValidationError(
-                _('You may not be part of more than {count} public organizations.').format(count=max_orgs))
+                _('You may not be part of more than {count} public organizations.').format(count=max_orgs)
+            )
 
         return self.cleaned_data
 
@@ -164,8 +165,9 @@ class CustomAuthenticationForm(AuthenticationForm):
         self.has_github_auth = self._has_social_auth('GITHUB_SECURE')
 
     def _has_social_auth(self, key):
-        return (getattr(settings, 'SOCIAL_AUTH_%s_KEY' % key, None) and
-                getattr(settings, 'SOCIAL_AUTH_%s_SECRET' % key, None))
+        return getattr(settings, 'SOCIAL_AUTH_%s_KEY' % key, None) and getattr(
+            settings, 'SOCIAL_AUTH_%s_SECRET' % key, None
+        )
 
 
 class NoAutoCompleteCharField(forms.CharField):

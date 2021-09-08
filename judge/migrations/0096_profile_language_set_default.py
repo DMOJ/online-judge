@@ -22,6 +22,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='profile',
             name='language',
-            field=models.ForeignKey(default=judge.models.runtime.Language.get_default_language_pk, on_delete=django.db.models.deletion.SET_DEFAULT, to='judge.Language', verbose_name='preferred language'),
+            field=models.ForeignKey(
+                default=judge.models.runtime.Language.get_default_language_pk,
+                on_delete=django.db.models.deletion.SET_DEFAULT,
+                to='judge.Language',
+                verbose_name='preferred language',
+            ),
         ),
     ]

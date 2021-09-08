@@ -70,20 +70,29 @@ class Submission(models.Model):
     points = models.FloatField(verbose_name=_('points granted'), null=True, db_index=True)
     language = models.ForeignKey(Language, verbose_name=_('submission language'), on_delete=models.CASCADE)
     status = models.CharField(verbose_name=_('status'), max_length=2, choices=STATUS, default='QU', db_index=True)
-    result = models.CharField(verbose_name=_('result'), max_length=3, choices=SUBMISSION_RESULT,
-                              default=None, null=True, blank=True, db_index=True)
+    result = models.CharField(
+        verbose_name=_('result'),
+        max_length=3,
+        choices=SUBMISSION_RESULT,
+        default=None,
+        null=True,
+        blank=True,
+        db_index=True,
+    )
     error = models.TextField(verbose_name=_('compile errors'), null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
     batch = models.BooleanField(verbose_name=_('batched cases'), default=False)
     case_points = models.FloatField(verbose_name=_('test case points'), default=0)
     case_total = models.FloatField(verbose_name=_('test case total points'), default=0)
-    judged_on = models.ForeignKey('Judge', verbose_name=_('judged on'), null=True, blank=True,
-                                  on_delete=models.SET_NULL)
+    judged_on = models.ForeignKey(
+        'Judge', verbose_name=_('judged on'), null=True, blank=True, on_delete=models.SET_NULL
+    )
     judged_date = models.DateTimeField(verbose_name=_('submission judge time'), default=None, null=True)
     rejudged_date = models.DateTimeField(verbose_name=_('last rejudge date by admin'), null=True, blank=True)
     is_pretested = models.BooleanField(verbose_name=_('was ran on pretests only'), default=False)
-    contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
-                                       on_delete=models.SET_NULL, related_name='+')
+    contest_object = models.ForeignKey(
+        'Contest', verbose_name=_('contest'), null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+    )
     locked_after = models.DateTimeField(verbose_name=_('submission lock'), null=True, blank=True)
 
     objects = TranslatedProblemForeignKeyQuerySet.as_manager()
@@ -143,13 +152,15 @@ class Submission(models.Model):
             return True
         elif source_visibility == SubmissionSourceAccess.ALWAYS:
             return True
-        elif source_visibility == SubmissionSourceAccess.SOLVED and \
-                (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
-                self.problem.submission_set.filter(user_id=profile.id, result='AC',
-                                                   points=self.problem.points).exists():
+        elif (
+            source_visibility == SubmissionSourceAccess.SOLVED
+            and (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists())
+            and self.problem.submission_set.filter(user_id=profile.id, result='AC', points=self.problem.points).exists()
+        ):
             return True
-        elif source_visibility == SubmissionSourceAccess.ONLY_OWN and \
-                self.problem.testers.filter(id=profile.id).exists():
+        elif (
+            source_visibility == SubmissionSourceAccess.ONLY_OWN and self.problem.testers.filter(id=profile.id).exists()
+        ):
             return True
 
         # If user is an author or curator of the contest the submission was made in
@@ -165,8 +176,9 @@ class Submission(models.Model):
             return
 
         contest_problem = contest.problem
-        contest.points = round(self.case_points / self.case_total * contest_problem.points
-                               if self.case_total > 0 else 0, 3)
+        contest.points = round(
+            self.case_points / self.case_total * contest_problem.points if self.case_total > 0 else 0, 3
+        )
         if not contest_problem.partial and contest.points != contest_problem.points:
             contest.points = 0
         contest.save()
@@ -198,8 +210,10 @@ class Submission(models.Model):
 
     @classmethod
     def get_id_secret(cls, sub_id):
-        return (hmac.new(utf8bytes(settings.EVENT_DAEMON_SUBMISSION_KEY), b'%d' % sub_id, hashlib.sha512)
-                    .hexdigest()[:16] + '%08x' % sub_id)
+        return (
+            hmac.new(utf8bytes(settings.EVENT_DAEMON_SUBMISSION_KEY), b'%d' % sub_id, hashlib.sha512).hexdigest()[:16]
+            + '%08x' % sub_id
+        )
 
     @cached_property
     def id_secret(self):
@@ -220,8 +234,9 @@ class Submission(models.Model):
 
 
 class SubmissionSource(models.Model):
-    submission = models.OneToOneField(Submission, on_delete=models.CASCADE, verbose_name=_('associated submission'),
-                                      related_name='source')
+    submission = models.OneToOneField(
+        Submission, on_delete=models.CASCADE, verbose_name=_('associated submission'), related_name='source'
+    )
     source = models.TextField(verbose_name=_('source code'), max_length=65536)
 
     def __str__(self):
@@ -231,8 +246,9 @@ class SubmissionSource(models.Model):
 class SubmissionTestCase(models.Model):
     RESULT = SUBMISSION_RESULT
 
-    submission = models.ForeignKey(Submission, verbose_name=_('associated submission'),
-                                   related_name='test_cases', on_delete=models.CASCADE)
+    submission = models.ForeignKey(
+        Submission, verbose_name=_('associated submission'), related_name='test_cases', on_delete=models.CASCADE
+    )
     case = models.IntegerField(verbose_name=_('test case ID'))
     status = models.CharField(max_length=3, verbose_name=_('status flag'), choices=SUBMISSION_RESULT)
     time = models.FloatField(verbose_name=_('execution time'), null=True)

@@ -13,6 +13,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='problem',
             name='submission_source_visibility_mode',
-            field=models.CharField(choices=[('F', 'Follow global setting'), ('A', 'Always visible'), ('S', 'Visible if problem solved'), ('O', 'Only own submissions')], default='F', max_length=1, verbose_name='submission source visibility'),
+            field=models.CharField(
+                choices=[
+                    ('F', 'Follow global setting'),
+                    ('A', 'Always visible'),
+                    ('S', 'Visible if problem solved'),
+                    ('O', 'Only own submissions'),
+                ],
+                default='F',
+                max_length=1,
+                verbose_name='submission source visibility',
+            ),
         ),
     ]

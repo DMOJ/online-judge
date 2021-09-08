@@ -21,8 +21,7 @@ class EventPoster(object):
     def post(self, channel, message, tries=0):
         try:
             id = int(time() * 1000000)
-            self._chan.basic_publish(self._exchange, '',
-                                     json.dumps({'id': id, 'channel': channel, 'message': message}))
+            self._chan.basic_publish(self._exchange, '', json.dumps({'id': id, 'channel': channel, 'message': message}))
             return id
         except AMQPError:
             if tries > 10:

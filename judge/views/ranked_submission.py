@@ -54,8 +54,12 @@ class RankedSubmissions(ProblemSubmissions):
                         ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
                 WHERE sub.problem_id = %s AND {points} > 0 {constraint}
                 GROUP BY sub.user_id
-            """.format(points=points, contest_join=contest_join, constraint=constraint),
-            params=params * 3, alias='best_subs', join_fields=[('id', 'id')],
+            """.format(
+                points=points, contest_join=contest_join, constraint=constraint
+            ),
+            params=params * 3,
+            alias='best_subs',
+            join_fields=[('id', 'id')],
         )
 
         if self.in_contest:
@@ -67,8 +71,11 @@ class RankedSubmissions(ProblemSubmissions):
         return _('Best solutions for %s') % self.problem_name
 
     def get_content_title(self):
-        return format_html(_('Best solutions for <a href="{1}">{0}</a>'), self.problem_name,
-                           reverse('problem_detail', args=[self.problem.code]))
+        return format_html(
+            _('Best solutions for <a href="{1}">{0}</a>'),
+            self.problem_name,
+            reverse('problem_detail', args=[self.problem.code]),
+        )
 
     def _get_result_data(self, queryset=None):
         if queryset is None:
@@ -80,20 +87,29 @@ class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):
     def get_title(self):
         if self.problem.is_accessible_by(self.request.user):
             return _('Best solutions for %(problem)s in %(contest)s') % {
-                'problem': self.problem_name, 'contest': self.contest.name,
+                'problem': self.problem_name,
+                'contest': self.contest.name,
             }
         return _('Best solutions for problem %(number)s in %(contest)s') % {
-            'number': self.get_problem_number(self.problem), 'contest': self.contest.name,
+            'number': self.get_problem_number(self.problem),
+            'contest': self.contest.name,
         }
 
     def get_content_title(self):
         if self.problem.is_accessible_by(self.request.user):
-            return format_html(_('Best solutions for <a href="{1}">{0}</a> in <a href="{3}">{2}</a>'),
-                               self.problem_name, reverse('problem_detail', args=[self.problem.code]),
-                               self.contest.name, reverse('contest_view', args=[self.contest.key]))
-        return format_html(_('Best solutions for problem {0} in <a href="{2}">{1}</a>'),
-                           self.get_problem_number(self.problem), self.contest.name,
-                           reverse('contest_view', args=[self.contest.key]))
+            return format_html(
+                _('Best solutions for <a href="{1}">{0}</a> in <a href="{3}">{2}</a>'),
+                self.problem_name,
+                reverse('problem_detail', args=[self.problem.code]),
+                self.contest.name,
+                reverse('contest_view', args=[self.contest.key]),
+            )
+        return format_html(
+            _('Best solutions for problem {0} in <a href="{2}">{1}</a>'),
+            self.get_problem_number(self.problem),
+            self.contest.name,
+            reverse('contest_view', args=[self.contest.key]),
+        )
 
     def _get_queryset(self):
         return super()._get_queryset().filter(contest_object=self.contest)

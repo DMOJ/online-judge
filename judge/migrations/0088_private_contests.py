@@ -12,7 +12,18 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='contest',
-            options={'permissions': (('see_private_contest', 'See private contests'), ('edit_own_contest', 'Edit own contests'), ('edit_all_contest', 'Edit all contests'), ('contest_rating', 'Rate contests'), ('contest_access_code', 'Contest access codes'), ('create_private_contest', 'Create private contests')), 'verbose_name': 'contest', 'verbose_name_plural': 'contests'},
+            options={
+                'permissions': (
+                    ('see_private_contest', 'See private contests'),
+                    ('edit_own_contest', 'Edit own contests'),
+                    ('edit_all_contest', 'Edit all contests'),
+                    ('contest_rating', 'Rate contests'),
+                    ('contest_access_code', 'Contest access codes'),
+                    ('create_private_contest', 'Create private contests'),
+                ),
+                'verbose_name': 'contest',
+                'verbose_name_plural': 'contests',
+            },
         ),
         migrations.RenameField(
             model_name='contest',
@@ -27,7 +38,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='private_contestants',
-            field=models.ManyToManyField(blank=True, help_text='If private, only these users may see the contest', related_name='_contest_private_contestants_+', to='judge.Profile', verbose_name='private contestants'),
+            field=models.ManyToManyField(
+                blank=True,
+                help_text='If private, only these users may see the contest',
+                related_name='_contest_private_contestants_+',
+                to='judge.Profile',
+                verbose_name='private contestants',
+            ),
         ),
         migrations.AlterField(
             model_name='contest',

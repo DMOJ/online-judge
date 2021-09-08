@@ -19,13 +19,14 @@ def zlibify(data):
 
 def dezlibify(data, skip_head=True):
     if skip_head:
-        data = data[size_pack.size:]
+        data = data[size_pack.size :]
     return zlib.decompress(data).decode('utf-8')
 
 
 def main():
     global host, port
     import argparse
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--host', default='localhost')
     parser.add_argument('-p', '--port', default=9999, type=int)
@@ -58,8 +59,8 @@ def main():
     result = b''
     while len(result) < size_pack.size:
         result += s4.recv(1024)
-    size = size_pack.unpack(result[:size_pack.size])[0]
-    result = result[size_pack.size:]
+    size = size_pack.unpack(result[: size_pack.size])[0]
+    result = result[size_pack.size :]
     while len(result) < size:
         result += s4.recv(1024)
     print('Received', end=' ')

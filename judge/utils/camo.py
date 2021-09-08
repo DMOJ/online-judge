@@ -16,9 +16,11 @@ class CamoClient(object):
         self.excluded = excluded
 
     def image_url(self, url):
-        return '%s/%s/%s' % (self.server,
-                             hmac.new(utf8bytes(self.key), utf8bytes(url), sha1).hexdigest(),
-                             utf8bytes(url).hex())
+        return '%s/%s/%s' % (
+            self.server,
+            hmac.new(utf8bytes(self.key), utf8bytes(url), sha1).hexdigest(),
+            utf8bytes(url).hex(),
+        )
 
     def rewrite_url(self, url):
         if url.startswith(self.server) or url.startswith(self.excluded):
@@ -41,8 +43,11 @@ class CamoClient(object):
 
 
 if settings.DMOJ_CAMO_URL and settings.DMOJ_CAMO_KEY:
-    client = CamoClient(settings.DMOJ_CAMO_URL, key=settings.DMOJ_CAMO_KEY,
-                        excluded=settings.DMOJ_CAMO_EXCLUDE,
-                        https=settings.DMOJ_CAMO_HTTPS)
+    client = CamoClient(
+        settings.DMOJ_CAMO_URL,
+        key=settings.DMOJ_CAMO_KEY,
+        excluded=settings.DMOJ_CAMO_EXCLUDE,
+        https=settings.DMOJ_CAMO_HTTPS,
+    )
 else:
     client = None

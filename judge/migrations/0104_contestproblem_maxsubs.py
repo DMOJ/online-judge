@@ -25,7 +25,15 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='contestproblem',
             name='max_submissions',
-            field=models.IntegerField(blank=True, default=None, help_text='Maximum number of submissions for this problem, or leave blank for no limit.', null=True, validators=[judge.models.contest.MinValueOrNoneValidator(1, "Why include a problem you can't submit to?")]),
+            field=models.IntegerField(
+                blank=True,
+                default=None,
+                help_text='Maximum number of submissions for this problem, or leave blank for no limit.',
+                null=True,
+                validators=[
+                    judge.models.contest.MinValueOrNoneValidator(1, "Why include a problem you can't submit to?")
+                ],
+            ),
         ),
         migrations.RunPython(zero_to_none, none_to_zero, atomic=True),
     ]

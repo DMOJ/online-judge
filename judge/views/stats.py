@@ -24,16 +24,19 @@ def language_data(request, language_count=Language.objects.annotate(count=Count(
     num_languages = min(len(languages), settings.DMOJ_STATS_LANGUAGE_THRESHOLD)
     other_count = sum(map(itemgetter('count'), languages[num_languages:]))
 
-    return JsonResponse({
-        'labels': list(map(itemgetter('name'), languages[:num_languages])) + ['Other'],
-        'datasets': [
-            {
-                'backgroundColor': chart_colors[:num_languages] + ['#FDB45C'],
-                'highlightBackgroundColor': highlight_colors[:num_languages] + ['#FFC870'],
-                'data': list(map(itemgetter('count'), languages[:num_languages])) + [other_count],
-            },
-        ],
-    }, safe=False)
+    return JsonResponse(
+        {
+            'labels': list(map(itemgetter('name'), languages[:num_languages])) + ['Other'],
+            'datasets': [
+                {
+                    'backgroundColor': chart_colors[:num_languages] + ['#FDB45C'],
+                    'highlightBackgroundColor': highlight_colors[:num_languages] + ['#FFC870'],
+                    'data': list(map(itemgetter('count'), languages[:num_languages])) + [other_count],
+                },
+            ],
+        },
+        safe=False,
+    )
 
 
 def ac_language_data(request):
@@ -42,8 +45,12 @@ def ac_language_data(request):
 
 def status_data(request, statuses=None):
     if not statuses:
-        statuses = (Submission.objects.values('result').annotate(count=Count('result'))
-                    .values('result', 'count').order_by('-count'))
+        statuses = (
+            Submission.objects.values('result')
+            .annotate(count=Count('result'))
+            .values('result', 'count')
+            .order_by('-count')
+        )
     data = []
     for status in statuses:
         res = status['result']
@@ -57,12 +64,21 @@ def status_data(request, statuses=None):
 
 def ac_rate(request):
     rate = CombinedExpression(ac_count / Count('submission'), '*', Value(100.0), output_field=FloatField())
-    data = Language.objects.annotate(total=Count('submission'), ac_rate=rate).filter(total__gt=0) \
-        .order_by('total').values_list('name', 'ac_rate')
+    data = (
+        Language.objects.annotate(total=Count('submission'), ac_rate=rate)
+        .filter(total__gt=0)
+        .order_by('total')
+        .values_list('name', 'ac_rate')
+    )
     return JsonResponse(get_bar_chart(list(data)))
 
 
 def language(request):
-    return render(request, 'stats/language.html', {
-        'title': _('Language statistics'), 'tab': 'language',
-    })
+    return render(
+        request,
+        'stats/language.html',
+        {
+            'title': _('Language statistics'),
+            'tab': 'language',
+        },
+    )

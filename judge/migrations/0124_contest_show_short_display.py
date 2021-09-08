@@ -13,6 +13,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='show_short_display',
-            field=models.BooleanField(default=False, help_text='Whether to show a section containing contest settings on the contest page or not.', verbose_name='show short form settings display'),
+            field=models.BooleanField(
+                default=False,
+                help_text='Whether to show a section containing contest settings on the contest page or not.',
+                verbose_name='show short form settings display',
+            ),
         ),
     ]

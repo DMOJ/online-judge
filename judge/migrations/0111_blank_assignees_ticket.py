@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='ticket',
             name='assignees',
-            field=models.ManyToManyField(blank=True, related_name='assigned_tickets', to='judge.Profile', verbose_name='assignees'),
+            field=models.ManyToManyField(
+                blank=True, related_name='assigned_tickets', to='judge.Profile', verbose_name='assignees'
+            ),
         ),
     ]

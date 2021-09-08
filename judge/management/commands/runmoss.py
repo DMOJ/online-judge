@@ -32,15 +32,20 @@ class Command(BaseCommand):
                 subs = Submission.objects.filter(
                     contest__participation__virtual__in=(ContestParticipation.LIVE, ContestParticipation.SPECTATE),
                     contest__participation__contest__key=contest,
-                    result='AC', problem__id=problem.id,
+                    result='AC',
+                    problem__id=problem.id,
                     language__common_name=dmoj_lang,
                 ).values_list('user__user__username', 'source__source')
                 if not subs:
                     print('<no submissions>')
                     continue
 
-                moss_call = MOSS(moss_api_key, language=moss_lang, matching_file_limit=100,
-                                 comment='%s - %s' % (contest, problem.code))
+                moss_call = MOSS(
+                    moss_api_key,
+                    language=moss_lang,
+                    matching_file_limit=100,
+                    comment='%s - %s' % (contest, problem.code),
+                )
 
                 users = set()
 

@@ -35,7 +35,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='locked_after',
-            field=models.DateTimeField(blank=True, help_text='Prevent submissions from this contest from being rejudged after this date.', null=True, verbose_name='contest lock'),
+            field=models.DateTimeField(
+                blank=True,
+                help_text='Prevent submissions from this contest from being rejudged after this date.',
+                null=True,
+                verbose_name='contest lock',
+            ),
         ),
         migrations.AddField(
             model_name='submission',

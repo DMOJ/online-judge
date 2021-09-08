@@ -30,8 +30,8 @@ def nice_repr(timedelta, display='long', sep=', '):
         days += weeks * 7
         if days:
             if hours or minutes:
-                return '%d day%s %d:%02d' % (days, 's'[days == 1:], hours, minutes)
-            return '%d day%s' % (days, 's'[days == 1:])
+                return '%d day%s %d:%02d' % (days, 's'[days == 1 :], hours, minutes)
+            return '%d day%s' % (days, 's'[days == 1 :])
         else:
             return '%d:%02d' % (hours, minutes)
     elif display == 'sql':
@@ -40,24 +40,36 @@ def nice_repr(timedelta, display='long', sep=', '):
     elif display == 'simple':
         days += weeks * 7
         if days:
-            return '%d day%s %02d:%02d:%02d' % (days, 's'[days == 1:], hours, minutes, seconds)
+            return '%d day%s %02d:%02d:%02d' % (days, 's'[days == 1 :], hours, minutes, seconds)
         else:
             return '%02d:%02d:%02d' % (hours, minutes, seconds)
     elif display == 'localized':
         days += weeks * 7
         if days:
-            return npgettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', days) \
-                .replace('%d', str(days)).replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes) \
+            return (
+                npgettext('time format with day', '%d day %h:%m:%s', '%d days %h:%m:%s', days)
+                .replace('%d', str(days))
+                .replace('%h', '%02d' % hours)
+                .replace('%m', '%02d' % minutes)
                 .replace('%s', '%02d' % seconds)
+            )
         else:
-            return pgettext('time format without day', '%h:%m:%s') \
-                .replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes).replace('%s', '%02d' % seconds)
+            return (
+                pgettext('time format without day', '%h:%m:%s')
+                .replace('%h', '%02d' % hours)
+                .replace('%m', '%02d' % minutes)
+                .replace('%s', '%02d' % seconds)
+            )
     elif display == 'localized-no-seconds':
         days += weeks * 7
         if days:
             if hours or minutes:
-                return npgettext('time format no seconds with day', '%d day %h:%m', '%d days %h:%m', days) \
-                    .replace('%d', str(days)).replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)
+                return (
+                    npgettext('time format no seconds with day', '%d day %h:%m', '%d days %h:%m', days)
+                    .replace('%d', str(days))
+                    .replace('%h', '%02d' % hours)
+                    .replace('%m', '%02d' % minutes)
+                )
             return ungettext('%d day', '%d days', days) % days
         else:
             return pgettext('hours and minutes', '%h:%m').replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)

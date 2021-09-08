@@ -37,16 +37,18 @@ class CommentAdmin(VersionAdmin):
 
     def hide_comment(self, request, queryset):
         count = queryset.update(hidden=True)
-        self.message_user(request, ungettext('%d comment successfully hidden.',
-                                             '%d comments successfully hidden.',
-                                             count) % count)
+        self.message_user(
+            request, ungettext('%d comment successfully hidden.', '%d comments successfully hidden.', count) % count
+        )
+
     hide_comment.short_description = _('Hide comments')
 
     def unhide_comment(self, request, queryset):
         count = queryset.update(hidden=False)
-        self.message_user(request, ungettext('%d comment successfully unhidden.',
-                                             '%d comments successfully unhidden.',
-                                             count) % count)
+        self.message_user(
+            request, ungettext('%d comment successfully unhidden.', '%d comments successfully unhidden.', count) % count
+        )
+
     unhide_comment.short_description = _('Unhide comments')
 
     def linked_page(self, obj):
@@ -55,6 +57,7 @@ class CommentAdmin(VersionAdmin):
             return format_html('<a href="{0}">{1}</a>', link, obj.page)
         else:
             return format_html('{0}', obj.page)
+
     linked_page.short_description = _('Associated page')
     linked_page.admin_order_field = 'page'
 

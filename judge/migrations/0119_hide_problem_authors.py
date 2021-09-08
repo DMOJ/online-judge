@@ -13,6 +13,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='contest',
             name='hide_problem_authors',
-            field=models.BooleanField(default=False, help_text='Whether problem authors should be hidden by default.', verbose_name='hide problem authors'),
+            field=models.BooleanField(
+                default=False,
+                help_text='Whether problem authors should be hidden by default.',
+                verbose_name='hide problem authors',
+            ),
         ),
     ]

@@ -61,8 +61,19 @@ class ProblemCaseForm(ModelForm):
 
     class Meta:
         model = ProblemTestCase
-        fields = ('order', 'type', 'input_file', 'output_file', 'points',
-                  'is_pretest', 'output_limit', 'output_prefix', 'checker', 'checker_args', 'generator_args')
+        fields = (
+            'order',
+            'type',
+            'input_file',
+            'output_file',
+            'points',
+            'is_pretest',
+            'output_limit',
+            'output_prefix',
+            'checker',
+            'checker_args',
+            'generator_args',
+        )
         widgets = {
             'generator_args': HiddenInput,
             'type': Select(attrs={'style': 'width: 100%'}),
@@ -73,8 +84,9 @@ class ProblemCaseForm(ModelForm):
         }
 
 
-class ProblemCaseFormSet(formset_factory(ProblemCaseForm, formset=BaseModelFormSet, extra=1, max_num=1,
-                                         can_delete=True)):
+class ProblemCaseFormSet(
+    formset_factory(ProblemCaseForm, formset=BaseModelFormSet, extra=1, max_num=1, can_delete=True)
+):
     model = ProblemTestCase
 
     def __init__(self, *args, **kwargs):
@@ -104,8 +116,11 @@ class ProblemSubmissionDiff(TitleMixin, ProblemMixin, DetailView):
         return _('Comparing submissions for {0}').format(self.object.name)
 
     def get_content_title(self):
-        return format_html(_('Comparing submissions for <a href="{1}">{0}</a>'), self.object.name,
-                           reverse('problem_detail', args=[self.object.code]))
+        return format_html(
+            _('Comparing submissions for <a href="{1}">{0}</a>'),
+            self.object.name,
+            reverse('problem_detail', args=[self.object.code]),
+        )
 
     def get_object(self, queryset=None):
         problem = super(ProblemSubmissionDiff, self).get_object(queryset)
@@ -142,18 +157,30 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         return _('Editing data for {0}').format(self.object.name)
 
     def get_content_title(self):
-        return mark_safe(escape(_('Editing data for %s')) % (
-            format_html('<a href="{1}">{0}</a>', self.object.name,
-                        reverse('problem_detail', args=[self.object.code]))))
+        return mark_safe(
+            escape(_('Editing data for %s'))
+            % (
+                format_html(
+                    '<a href="{1}">{0}</a>', self.object.name, reverse('problem_detail', args=[self.object.code])
+                )
+            )
+        )
 
     def get_data_form(self, post=False):
-        return ProblemDataForm(data=self.request.POST if post else None, prefix='problem-data',
-                               files=self.request.FILES if post else None,
-                               instance=ProblemData.objects.get_or_create(problem=self.object)[0])
+        return ProblemDataForm(
+            data=self.request.POST if post else None,
+            prefix='problem-data',
+            files=self.request.FILES if post else None,
+            instance=ProblemData.objects.get_or_create(problem=self.object)[0],
+        )
 
     def get_case_formset(self, files, post=False):
-        return ProblemCaseFormSet(data=self.request.POST if post else None, prefix='cases', valid_files=files,
-                                  queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk).order_by('order'))
+        return ProblemCaseFormSet(
+            data=self.request.POST if post else None,
+            prefix='cases',
+            valid_files=files,
+            queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk).order_by('order'),
+        )
 
     def get_valid_files(self, data, post=False):
         try:
@@ -194,8 +221,9 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
                 case.delete()
             ProblemDataCompiler.generate(problem, data, problem.cases.order_by('order'), valid_files)
             return HttpResponseRedirect(request.get_full_path())
-        return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
-                                                             valid_files=valid_files))
+        return self.render_to_response(
+            self.get_context_data(data_form=data_form, cases_formset=cases_formset, valid_files=valid_files)
+        )
 
     put = post
 
@@ -238,10 +266,16 @@ def problem_init_view(request, problem):
     except IOError:
         raise Http404()
 
-    return render(request, 'problem/yaml.html', {
-        'raw_source': data, 'highlighted_source': highlight_code(data, 'yaml'),
-        'title': _('Generated init.yml for %s') % problem.name,
-        'content_title': mark_safe(escape(_('Generated init.yml for %s')) % (
-            format_html('<a href="{1}">{0}</a>', problem.name,
-                        reverse('problem_detail', args=[problem.code])))),
-    })
+    return render(
+        request,
+        'problem/yaml.html',
+        {
+            'raw_source': data,
+            'highlighted_source': highlight_code(data, 'yaml'),
+            'title': _('Generated init.yml for %s') % problem.name,
+            'content_title': mark_safe(
+                escape(_('Generated init.yml for %s'))
+                % (format_html('<a href="{1}">{0}</a>', problem.name, reverse('problem_detail', args=[problem.code])))
+            ),
+        },
+    )

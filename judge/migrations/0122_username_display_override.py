@@ -13,6 +13,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='profile',
             name='username_display_override',
-            field=models.CharField(blank=True, max_length=100, verbose_name='display name override', help_text='name displayed in place of username'),
+            field=models.CharField(
+                blank=True,
+                max_length=100,
+                verbose_name='display name override',
+                help_text='name displayed in place of username',
+            ),
         ),
     ]

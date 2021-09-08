@@ -2,8 +2,14 @@ from django.test import TestCase
 from django.utils import timezone
 
 from judge.models import ContestSubmission, Language, Submission, SubmissionSource
-from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation, \
-    create_contest_problem, create_problem, create_user
+from judge.models.tests.util import (
+    CommonDataMixin,
+    create_contest,
+    create_contest_participation,
+    create_contest_problem,
+    create_problem,
+    create_user,
+)
 
 
 class SubmissionTestCase(CommonDataMixin, TestCase):
@@ -11,13 +17,15 @@ class SubmissionTestCase(CommonDataMixin, TestCase):
     def setUpTestData(self):
         super().setUpTestData()
 
-        self.users.update({
-            'staff_submission_view_all': create_user(
-                username='staff_submission_view_all',
-                is_staff=True,
-                user_permissions=('view_all_submission',),
-            ),
-        })
+        self.users.update(
+            {
+                'staff_submission_view_all': create_user(
+                    username='staff_submission_view_all',
+                    is_staff=True,
+                    user_permissions=('view_all_submission',),
+                ),
+            }
+        )
 
         self.basic_submission = Submission.objects.create(
             user=self.users['normal'].profile,

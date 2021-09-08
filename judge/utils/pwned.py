@@ -98,6 +98,7 @@ class PwnedPasswordsValidator(object):
     """
     Password validator which checks the Pwned Passwords database.
     """
+
     DEFAULT_HELP_MESSAGE = _("Your password can't be a commonly used password.")
     DEFAULT_PWNED_MESSAGE = _('This password is too common.')
 
