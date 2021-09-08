@@ -446,17 +446,17 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
 
     def get_title(self):
         if self.is_own:
-            return _("My submissions for %(problem)s") % {'problem': self.problem_name}
+            return _('My submissions for %(problem)s') % {'problem': self.problem_name}
         return _("%(user)s's submissions for %(problem)s") % {
             'user': self.profile.display_name, 'problem': self.problem_name,
         }
 
     def get_content_title(self):
         if self.request.user.is_authenticated and self.request.profile == self.profile:
-            return format_html('''My submissions for <a href="{3}">{2}</a>''',
+            return format_html("""My submissions for <a href="{3}">{2}</a>""",
                                self.username, reverse('user_page', args=[self.username]),
                                self.problem_name, reverse('problem_detail', args=[self.problem.code]))
-        return format_html('''<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>''',
+        return format_html("""<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>""",
                            self.profile.display_name, reverse('user_page', args=[self.username]),
                            self.problem_name, reverse('problem_detail', args=[self.problem.code]))
 
@@ -569,7 +569,7 @@ class UserAllContestSubmissions(ForceContestMixin, AllUserSubmissions):
     def get_content_title(self):
         if self.is_own:
             return format_html(_('My submissions in <a href="{1}">{0}</a>'),
-                               self.contest.name, reverse("contest_view", args=[self.contest.key]))
+                               self.contest.name, reverse('contest_view', args=[self.contest.key]))
         return format_html(_('<a href="{1}">{0}</a>\'s submissions in <a href="{3}">{2}</a>'),
                            self.profile.display_name, reverse('user_page', args=[self.username]),
                            self.contest.name, reverse('contest_view', args=[self.contest.key]))

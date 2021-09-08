@@ -159,15 +159,17 @@ class MathoidMathParser(object):
     def output_jax(self, result):
         return format_html('<span class="{4}">'
                            '''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
-                           ''' onerror="this.src='{1}';this.onerror=null">'''
-                           '''<span class="tex-text" style="display:none">{5}{3}{5}</span>'''
+                           """ onerror="this.src='{1}';this.onerror=null">"""
+                           '''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
+                           """ onerror="this.src='{1}';this.onerror=null">"""
+                           """<span class="tex-text" style="display:none">{5}{3}{5}</span>"""
                            '</span>',
                            result['svg'], result['png'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']], ['~', '$$'][result['display']])
 
     def output_svg(self, result):
         return format_html('<img class="{4}" src="{0}" style="{2}" alt="{3}" '
-                           '''onerror="this.src='{1}';this.onerror=null">''',
+                           """onerror="this.src='{1}';this.onerror=null">""",
                            result['svg'], result['png'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']])
 

@@ -19,9 +19,9 @@ class AtCoderContestFormat(DefaultContestFormat):
     name = gettext_lazy('AtCoder')
     config_defaults = {'penalty': 5}
     config_validators = {'penalty': lambda x: x >= 0}
-    '''
+    """
         penalty: Number of penalty minutes each incorrect submission adds. Defaults to 5.
-    '''
+    """
 
     @classmethod
     def validate(cls, config):
@@ -51,7 +51,7 @@ class AtCoderContestFormat(DefaultContestFormat):
         format_data = {}
 
         with connection.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute("""
                 SELECT MAX(cs.points) as `score`, (
                     SELECT MIN(csub.date)
                         FROM judge_contestsubmission ccs LEFT OUTER JOIN
@@ -62,7 +62,7 @@ class AtCoderContestFormat(DefaultContestFormat):
                      judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
                      judge_submission sub ON (sub.id = cs.submission_id)
                 GROUP BY cp.id
-            ''', (participation.id, participation.id))
+            """, (participation.id, participation.id))
 
             for score, time, prob in cursor.fetchall():
                 time = from_database_time(time)

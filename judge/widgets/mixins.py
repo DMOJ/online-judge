@@ -7,17 +7,17 @@ from lxml import html
 
 
 class CompressorWidgetMixin(object):
-    __template_css = dedent('''\
+    __template_css = dedent("""\
         {% compress css %}
             {{ media.css }}
         {% endcompress %}
-    ''')
+    """)
 
-    __template_js = dedent('''\
+    __template_js = dedent("""\
         {% compress js %}
             {{ media.js }}
         {% endcompress %}
-    ''')
+    """)
 
     __templates = {
         (False, False): Template(''),

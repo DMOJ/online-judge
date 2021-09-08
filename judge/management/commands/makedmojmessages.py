@@ -22,9 +22,9 @@ class Command(MakeMessagesCommand):
         parser.add_argument('--no-wrap', action='store_true', dest='no_wrap',
                             default=False, help="Don't break long message lines into several lines.")
         parser.add_argument('--no-obsolete', action='store_true', dest='no_obsolete',
-                            default=False, help="Remove obsolete message strings.")
+                            default=False, help='Remove obsolete message strings.')
         parser.add_argument('--keep-pot', action='store_true', dest='keep_pot',
-                            default=False, help="Keep .pot file after making messages. Useful when debugging.")
+                            default=False, help='Keep .pot file after making messages. Useful when debugging.')
 
     def handle(self, *args, **options):
         locale = options.get('locale')
@@ -97,7 +97,7 @@ class Command(MakeMessagesCommand):
             # Build po files for each selected locale
             for locale in locales:
                 if self.verbosity > 0:
-                    self.stdout.write("processing locale %s\n" % locale)
+                    self.stdout.write('processing locale %s\n' % locale)
                 for potfile in potfiles:
                     self.write_po_file(potfile, locale)
         finally:
@@ -108,10 +108,10 @@ class Command(MakeMessagesCommand):
         return []
 
     def _emit_message(self, potfile, string):
-        potfile.write('''
+        potfile.write("""
 msgid "%s"
 msgstr ""
-''' % string.replace('\\', r'\\').replace('\t', '\\t').replace('\n', '\\n').replace('"', '\\"'))
+""" % string.replace('\\', r'\\').replace('\t', '\\t').replace('\n', '\\n').replace('"', '\\"'))
 
     def process_files(self, file_list):
         with io.open(os.path.join(self.default_locale_path, 'dmoj-user.pot'), 'w', encoding='utf-8') as potfile:

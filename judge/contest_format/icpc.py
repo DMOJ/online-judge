@@ -19,9 +19,9 @@ class ICPCContestFormat(DefaultContestFormat):
     name = gettext_lazy('ICPC')
     config_defaults = {'penalty': 20}
     config_validators = {'penalty': lambda x: x >= 0}
-    '''
+    """
         penalty: Number of penalty minutes each incorrect submission adds. Defaults to 20.
-    '''
+    """
 
     @classmethod
     def validate(cls, config):
@@ -52,7 +52,7 @@ class ICPCContestFormat(DefaultContestFormat):
         format_data = {}
 
         with connection.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute("""
                 SELECT MAX(cs.points) as `points`, (
                     SELECT MIN(csub.date)
                         FROM judge_contestsubmission ccs LEFT OUTER JOIN
@@ -63,7 +63,7 @@ class ICPCContestFormat(DefaultContestFormat):
                      judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
                      judge_submission sub ON (sub.id = cs.submission_id)
                 GROUP BY cp.id
-            ''', (participation.id, participation.id))
+            """, (participation.id, participation.id))
 
             for points, time, prob in cursor.fetchall():
                 time = from_database_time(time)
