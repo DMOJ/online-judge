@@ -533,3 +533,83 @@ class Solution(models.Model):
         )
         verbose_name = _('solution')
         verbose_name_plural = _('solutions')
+
+
+class ProblemChecklist(models.Model):
+    key = models.CharField(max_length=20, verbose_name=_('contest id'), unique=True,
+                           validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
+    name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
+    problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
+    description = models.TextField(verbose_name=_('description'), blank=True)
+    authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
+                                     related_name='authors+')
+    is_visible = models.BooleanField(verbose_name=_('publicly visible'), default=False,
+                                     help_text=_('Should be set even for organization-private contests, where it '
+                                                 'determines whether the contest is visible to members of the '
+                                                 'specified organizations.'))
+    is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
+    organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
+                                           help_text=_('If private, only these organizations may see the contest'))
+
+    @cached_property
+    def author_ids(self):
+        return ProblemChecklist.authors.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+
+    class Inaccessible(Exception):
+        pass
+
+    class PrivateContest(Exception):
+        pass
+
+    def access_check(self, user):
+        if not user.is_authenticated:
+            if not self.is_visible:
+                raise self.Inaccessible()
+            if self.is_private or self.is_organization_private:
+                raise self.PrivateContest()
+            return
+
+        if user.has_perm('judge.see_private_problem_list') or user.has_perm('judge.edit_all_problem_list'):
+            return
+
+        if user.profile.id in self.author_ids:
+            return
+
+        if not self.is_visible:
+            raise self.Inaccessible()
+
+        if not self.is_private and not self.is_organization_private:
+            return
+
+        if self.is_organization_private:
+            if self.organizations.filter(id__in=user.profile.organizations.all()).exists():
+                return
+            raise self.PrivateContest()
+
+    def is_accessible_by(self, user):
+        try:
+            self.access_check(user)
+        except (self.Inaccessible, self.PrivateContest):
+            return False
+        else:
+            return True
+
+    def is_editable_by(self, user):
+        if user.has_perm('judge.edit_all_problem_list'):
+            return True
+
+        if user.has_perm('judge.edit_own_problem_list') and user.profile.id in self.author_ids:
+            return True
+
+        return False
+
+    class Meta:
+        permissions = (
+            ('see_private_problem_list', _('See private problem lists')),
+            ('edit_own_problem_list', _('Edit own problem lists')),
+            ('edit_all_problem_list', _('Edit all problem lists')),
+            ('create_private_contest', _('Create private problem lists')),
+            ('change_contest_visibility', _('Change problem list visibility')),
+        )
+        verbose_name = _('problem list')
+        verbose_name_plural = _('problem lists')
