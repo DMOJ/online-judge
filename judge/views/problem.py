@@ -27,7 +27,7 @@ from reversion import revisions
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemSubmitForm
-from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, \
+from judge.models import ContestSubmission, Judge, Language, Problem, ProblemChecklist, ProblemGroup, \
     ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, \
     TranslatedProblemForeignKeyQuerySet
 from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
@@ -362,13 +362,13 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
                                    'problem__group__full_name', 'points', 'partial', 'user_count')]
 
-    def get_normal_queryset(self):
+    def get_normal_queryset(self, queryset=Problem.objects.all()):
         filter = Q(is_public=True)
         if self.profile is not None:
             filter |= Q(authors=self.profile)
             filter |= Q(curators=self.profile)
             filter |= Q(testers=self.profile)
-        queryset = Problem.objects.filter(filter).select_related('group').defer('description', 'summary')
+        queryset = queryset.select_related('group').defer('description', 'summary')
         if not self.request.user.has_perm('see_organization_problem'):
             filter = Q(is_organization_private=False)
             if self.profile is not None:
@@ -497,6 +497,14 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             else:
                 request.session.pop(key, None)
         return HttpResponseRedirect(request.get_full_path())
+
+
+class ProblemSet(ProblemList):
+    title = gettext_lazy('Problem Set')
+
+    def get_queryset(self):
+        set = self.kwargs['set']
+        return self.get_normal_queryset(queryset=ProblemChecklist.objects.get(key=set).problems.all())
 
 
 class LanguageTemplateAjax(View):
