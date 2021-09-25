@@ -502,10 +502,15 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
 class ProblemSet(ProblemList):
     title = gettext_lazy('Problem Set')
 
-    def get_queryset(self):
-        set = self.kwargs['set']
-        return self.get_normal_queryset(queryset=ProblemChecklist.objects.get(key=set).problems.all())
+    @cached_property
+    def problem_checklist(self):
+        return get_object_or_404(ProblemChecklist, key=self.kwargs['set'])
 
+    def get_queryset(self):
+        return self.get_normal_queryset(queryset=self.problem_checklist.problems.all())
+
+    def get_content_title(self):
+        return self.problem_checklist.name
 
 class LanguageTemplateAjax(View):
     def get(self, request, *args, **kwargs):

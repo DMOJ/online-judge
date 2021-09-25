@@ -539,7 +539,7 @@ class ProblemChecklist(models.Model):
     key = models.CharField(max_length=20, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
-    problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
+    problems = models.ManyToManyField(Problem, verbose_name=_('problems'))
     description = models.TextField(verbose_name=_('description'), blank=True)
     authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
                                      related_name='authors+')
