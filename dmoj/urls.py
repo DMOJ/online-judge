@@ -109,7 +109,7 @@ urlpatterns = [
     url(r'^', include('social_django.urls')),
 
     url(r'^problems/$', problem.ProblemList.as_view(), name='problem_list'),
-    url(r'^problems/set/(?P<set>[a-z-]+)$', problem.ProblemSet.as_view(), name='problem_set'),
+    url(r'^problems/set/(?P<slug>[a-z-]+)$', problem.ProblemSet.as_view(), name='problem_set'),
     url(r'^problems/random/$', problem.RandomProblem.as_view(), name='problem_random'),
 
     url(r'^problem/(?P<problem>[^/]+)', include([

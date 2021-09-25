@@ -504,13 +504,14 @@ class ProblemSet(ProblemList):
 
     @cached_property
     def problem_checklist(self):
-        return get_object_or_404(ProblemChecklist, key=self.kwargs['set'])
+        return get_object_or_404(ProblemChecklist, slug=self.kwargs['slug'])
 
     def get_queryset(self):
         return self.get_normal_queryset(queryset=self.problem_checklist.problems.all())
 
     def get_content_title(self):
         return self.problem_checklist.name
+
 
 class LanguageTemplateAjax(View):
     def get(self, request, *args, **kwargs):
