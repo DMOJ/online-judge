@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 import shutil
 from datetime import timedelta
 from operator import itemgetter
@@ -38,6 +39,9 @@ from judge.utils.problems import contest_attempted_ids, contest_completed_ids, h
 from judge.utils.strings import safe_float_or_none, safe_int_or_none
 from judge.utils.tickets import own_ticket_filter
 from judge.utils.views import QueryStringSortMixin, SingleObjectFormView, TitleMixin, add_file_response, generic_message
+
+recjk = re.compile(r'[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303A\u303B\u3400-\u4DB5'
+                   r'\u4E00-\u9FC3\uF900-\uFA2D\uFA30-\uFA6A\uFA70-\uFAD9\U00020000-\U0002A6D6\U0002F800-\U0002FA1D]')
 
 
 def get_contest_problem(problem, profile):
@@ -362,6 +366,16 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
                                    'problem__group__full_name', 'points', 'partial', 'user_count')]
 
+    @staticmethod
+    def apply_full_text(queryset, query):
+        if recjk.search(query):
+            # MariaDB can't tokenize CJK properly, fallback to LIKE '%term%' for each term.
+            for term in query.split():
+                queryset = queryset.filter(Q(code__icontains=term) | Q(name__icontains=term) |
+                                           Q(description__icontains=term))
+            return queryset
+        return queryset.search(query, queryset.BOOLEAN).extra(order_by=['-relevance'])
+
     def get_normal_queryset(self):
         filter = Q(is_public=True)
         if self.profile is not None:
@@ -387,7 +401,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
                 if settings.ENABLE_FTS and self.full_text:
-                    queryset = queryset.search(query, queryset.BOOLEAN).extra(order_by=['-relevance'])
+                    queryset = self.apply_full_text(queryset, query)
                 else:
                     queryset = queryset.filter(
                         Q(code__icontains=query) | Q(name__icontains=query) |
