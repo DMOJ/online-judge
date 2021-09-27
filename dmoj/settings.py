@@ -391,7 +391,7 @@ BLEACH_USER_SAFE_TAGS = [
     'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's', 'abbr', 'cite', 'mark', 'q', 'samp', 'small',
     'u', 'var', 'wbr', 'dfn', 'ruby', 'rb', 'rp', 'rt', 'rtc', 'sub', 'sup', 'time', 'data',
     'p', 'br', 'pre', 'span', 'div', 'blockquote', 'code', 'hr',
-    'ul', 'ol', 'li', 'dd', 'dl', 'dt', 'address', 'section',
+    'ul', 'ol', 'li', 'dd', 'dl', 'dt', 'address', 'section', 'details', 'summary',
     'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col', 'tfoot',
     'img', 'audio', 'video', 'source',
     'a',
