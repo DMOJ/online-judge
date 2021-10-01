@@ -330,9 +330,6 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('"%s" is not currently ongoing.') % contest.name)
 
         profile = request.profile
-        if profile.current_contest is not None:
-            return generic_message(request, _('Already in contest'),
-                                   _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
         if not request.user.is_superuser and contest.banned_users.filter(id=profile.id).exists():
             return generic_message(request, _('Banned from joining'),
