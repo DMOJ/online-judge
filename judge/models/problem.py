@@ -470,7 +470,8 @@ class ProblemTranslation(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='translations', on_delete=CASCADE)
     language = models.CharField(verbose_name=_('language'), max_length=7, choices=settings.LANGUAGES)
     name = models.CharField(verbose_name=_('translated name'), max_length=100, db_index=True)
-    description = models.TextField(verbose_name=_('translated description'))
+    description = models.TextField(verbose_name=_('translated description'),
+                                   validators=[disallowed_characters_validator])
 
     class Meta:
         unique_together = ('problem', 'language')
@@ -480,7 +481,7 @@ class ProblemTranslation(models.Model):
 
 class ProblemClarification(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('clarified problem'), on_delete=CASCADE)
-    description = models.TextField(verbose_name=_('clarification body'))
+    description = models.TextField(verbose_name=_('clarification body'), validators=[disallowed_characters_validator])
     date = models.DateTimeField(verbose_name=_('clarification timestamp'), auto_now_add=True)
 
 
@@ -506,7 +507,7 @@ class Solution(models.Model):
     is_public = models.BooleanField(verbose_name=_('public visibility'), default=False)
     publish_on = models.DateTimeField(verbose_name=_('publish date'))
     authors = models.ManyToManyField(Profile, verbose_name=_('authors'), blank=True)
-    content = models.TextField(verbose_name=_('editorial content'))
+    content = models.TextField(verbose_name=_('editorial content'), validators=[disallowed_characters_validator])
 
     def get_absolute_url(self):
         problem = self.problem
