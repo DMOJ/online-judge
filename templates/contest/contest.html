@@ -202,7 +202,7 @@
                 {% for problem in contest_problems %}
                     <tr>
                         <td>
-                            {% if problem.is_public %}
+                            {% if problem.is_public or request.user.is_superuser or is_editor %}
                                 <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name or problem.name }}</a>
                             {% else %}
                                 {{ problem.i18n_name or problem.name }}
