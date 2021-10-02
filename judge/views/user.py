@@ -110,7 +110,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
         context['rank'] = Profile.objects.filter(
             is_unlisted=False, performance_points__gt=self.object.performance_points,
-        ).count() + 1
+        ).exclude(id=self.object.id).count() + 1
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(
