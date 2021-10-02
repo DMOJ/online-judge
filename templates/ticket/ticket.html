@@ -51,6 +51,10 @@
             border-radius: 5px;
         }
 
+        .info-box .fa {
+            color: #777;
+        }
+
         .info-title {
             padding: 2px 5px;
             font-weight: 600;
@@ -123,10 +127,6 @@
             margin: 0 auto;
         }
 
-        .message .message-date, .message .message-time {
-            display: inline-block;
-        }
-
         .message .detail {
             border: 1px #999 solid;
             border-radius: 5px;
@@ -139,8 +139,19 @@
             color: #777;
             border-bottom: 1px solid #999;
             border-radius: 5px 5px 0 0;
-            padding: 2px 7px;
+            padding: 2px 5px;
             text-align: right;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .message .operation {
+            flex: auto;
+        }
+
+        .message .operation .fa {
+            color: #777;
         }
 
         .message .content {
