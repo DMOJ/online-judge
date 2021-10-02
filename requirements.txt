@@ -36,3 +36,4 @@ netaddr
 webauthn<1
 bleach
 django-admin-sortable2
+icalendar
