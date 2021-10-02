@@ -5,7 +5,6 @@ from django.db.models import Field
 from django.db.models.expressions import RawSQL
 from django.db.models.sql.constants import INNER, LOUTER
 from django.db.models.sql.datastructures import Join
-from django.utils import six
 
 from judge.utils.cachedict import CacheDict
 
@@ -66,7 +65,7 @@ def RawSQLColumn(model, field=None):
     if isinstance(model, Field):
         field = model
         model = field.model
-    if isinstance(field, six.string_types):
+    if isinstance(field, str):
         field = model._meta.get_field(field)
     return RawSQL('%s.%s' % (model._meta.db_table, field.get_attname_column()[1]), ())
 
