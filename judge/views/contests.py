@@ -13,7 +13,7 @@ from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
 from django.db.models.expressions import CombinedExpression
-from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import date as date_filter
 from django.urls import reverse
@@ -25,6 +25,8 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView, SingleObjectMixin, View
+from django.views.generic.list import BaseListView
+from icalendar import Calendar as ICalendar, Event
 from reversion import revisions
 
 from judge import event_poster as event
@@ -496,6 +498,29 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         else:
             context['next_month'] = None
         return context
+
+
+class ContestICal(TitleMixin, ContestListMixin, BaseListView):
+    def generate_ical(self):
+        cal = ICalendar()
+        cal.add('prodid', '-//DMOJ//NONSGML Contests Calendar//')
+        cal.add('version', '2.0')
+
+        now = timezone.now().astimezone(timezone.utc)
+        domain = self.request.get_host()
+        for contest in self.get_queryset():
+            event = Event()
+            event.add('uid', f'contest-{contest.key}@{domain}')
+            event.add('summary', contest.name)
+            event.add('location', self.request.build_absolute_uri(contest.get_absolute_url()))
+            event.add('dtstart', contest.start_time.astimezone(timezone.utc))
+            event.add('dtend', contest.end_time.astimezone(timezone.utc))
+            event.add('dtstamp', now)
+            cal.add_component(event)
+        return cal.to_ical()
+
+    def render_to_response(self, context, **kwargs):
+        return HttpResponse(self.generate_ical(), content_type='text/calendar')
 
 
 class ContestStats(TitleMixin, ContestMixin, DetailView):
