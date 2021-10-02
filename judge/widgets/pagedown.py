@@ -1,7 +1,7 @@
 from django.contrib.admin import widgets as admin_widgets
 from django.forms.utils import flatatt
 from django.template.loader import get_template
-from django.utils.encoding import force_text
+from django.utils.encoding import force_str
 from django.utils.html import conditional_escape
 
 from judge.widgets.mixins import CompressorWidgetMixin
@@ -74,7 +74,7 @@ else:
         def get_template_context(self, attrs, value):
             return {
                 'attrs': flatatt(attrs),
-                'body': conditional_escape(force_text(value)),
+                'body': conditional_escape(force_str(value)),
                 'id': attrs['id'],
                 'show_preview': self.show_preview,
                 'preview_url': self.preview_url,
