@@ -1,5 +1,3 @@
-from django.utils import six
-
 from judge.ratings import rating_class, rating_name, rating_progress
 from . import registry
 
@@ -8,7 +6,7 @@ def _get_rating_value(func, obj):
     if obj is None:
         return None
 
-    if isinstance(obj, six.integer_types):
+    if isinstance(obj, int):
         return func(obj)
     else:
         return func(obj.rating)

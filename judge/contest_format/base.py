@@ -1,7 +1,5 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
 
-from django.utils import six
-
 
 class abstractclassmethod(classmethod):
     __isabstractmethod__ = True
@@ -11,7 +9,7 @@ class abstractclassmethod(classmethod):
         super(abstractclassmethod, self).__init__(callable)
 
 
-class BaseContestFormat(six.with_metaclass(ABCMeta)):
+class BaseContestFormat(metaclass=ABCMeta):
     @abstractmethod
     def __init__(self, contest, config):
         self.config = config

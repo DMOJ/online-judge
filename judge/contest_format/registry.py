@@ -1,5 +1,3 @@
-from django.utils import six
-
 formats = {}
 
 
@@ -13,4 +11,4 @@ def register_contest_format(name):
 
 
 def choices():
-    return [(key, value.name) for key, value in sorted(six.iteritems(formats))]
+    return [(key, value.name) for key, value in sorted(formats.items())]
