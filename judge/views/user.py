@@ -116,7 +116,6 @@ class UserPage(TitleMixin, UserMixin, DetailView):
             context['rating_rank'] = Profile.objects.filter(
                 is_unlisted=False, rating__gt=self.object.rating,
             ).count() + 1
-            context['rated_users'] = Profile.objects.filter(is_unlisted=False, rating__isnull=False).count()
         context.update(self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'),
                                                      contests=Count('contest')))
         return context
