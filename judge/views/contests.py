@@ -9,12 +9,11 @@ from operator import attrgetter, itemgetter
 from django import forms
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
 from django.db.models.expressions import CombinedExpression
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import date as date_filter
 from django.urls import reverse
@@ -493,18 +492,6 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         else:
             context['next_month'] = None
         return context
-
-
-class CachedContestCalendar(ContestCalendar):
-    def render(self):
-        key = 'contest_cal:%d:%d' % (self.year, self.month)
-        cached = cache.get(key)
-        if cached is not None:
-            return HttpResponse(cached)
-        response = super(CachedContestCalendar, self).render()
-        response.render()
-        cached.set(key, response.content)
-        return response
 
 
 class ContestStats(TitleMixin, ContestMixin, DetailView):
