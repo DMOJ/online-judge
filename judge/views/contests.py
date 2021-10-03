@@ -86,6 +86,7 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
         present, active, future = [], [], []
+        finished = set()
         for contest in self._get_queryset().exclude(end_time__lt=self._now):
             if contest.start_time > self._now:
                 future.append(contest)
@@ -98,7 +99,9 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
                     .select_related('contest') \
                     .prefetch_related('contest__authors', 'contest__curators', 'contest__testers') \
                     .annotate(key=F('contest__key')):
-                if not participation.ended:
+                if participation.ended:
+                    finished.add(participation.contest.key)
+                else:
                     active.append(participation)
                     present.remove(participation.contest)
 
@@ -108,6 +111,7 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
         context['active_participations'] = active
         context['current_contests'] = present
         context['future_contests'] = future
+        context['finished_contests'] = finished
         context['now'] = self._now
         context['first_page_href'] = '.'
         context['page_suffix'] = '#past-contests'
