@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.html import format_html
-from django.utils.translation import gettext, gettext_lazy as _, pgettext, ungettext
+from django.utils.translation import gettext, gettext_lazy as _, ngettext, pgettext
 
 from django_ace import AceWidget
 from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Profile, Submission, \
@@ -167,9 +167,9 @@ class SubmissionAdmin(admin.ModelAdmin):
         judged = len(queryset)
         for model in queryset:
             model.judge(rejudge=True, batch_rejudge=True)
-        self.message_user(request, ungettext('%d submission was successfully scheduled for rejudging.',
-                                             '%d submissions were successfully scheduled for rejudging.',
-                                             judged) % judged)
+        self.message_user(request, ngettext('%d submission was successfully scheduled for rejudging.',
+                                            '%d submissions were successfully scheduled for rejudging.',
+                                            judged) % judged)
     judge.short_description = _('Rejudge the selected submissions')
 
     def recalculate_score(self, request, queryset):
@@ -196,9 +196,9 @@ class SubmissionAdmin(admin.ModelAdmin):
                 id__in=queryset.values_list('contest__participation_id')).prefetch_related('contest'):
             participation.recompute_results()
 
-        self.message_user(request, ungettext('%d submission were successfully rescored.',
-                                             '%d submissions were successfully rescored.',
-                                             len(submissions)) % len(submissions))
+        self.message_user(request, ngettext('%d submission were successfully rescored.',
+                                            '%d submissions were successfully rescored.',
+                                            len(submissions)) % len(submissions))
     recalculate_score.short_description = _('Rescore the selected submissions')
 
     def problem_code(self, obj):

@@ -9,7 +9,7 @@ from django.db.models import Count, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.urls import reverse
-from django.utils.translation import gettext as _, gettext_lazy, ungettext
+from django.utils.translation import gettext as _, gettext_lazy, ngettext
 from django.views.generic import DetailView, FormView, ListView, UpdateView, View
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
 from reversion import revisions
@@ -250,8 +250,8 @@ class OrganizationRequestView(OrganizationRequestBaseView):
                 elif obj.state == 'R':
                     rejected += 1
             messages.success(request,
-                             ungettext('Approved %d user.', 'Approved %d users.', approved) % approved + '\n' +
-                             ungettext('Rejected %d user.', 'Rejected %d users.', rejected) % rejected)
+                             ngettext('Approved %d user.', 'Approved %d users.', approved) % approved + '\n' +
+                             ngettext('Rejected %d user.', 'Rejected %d users.', rejected) % rejected)
             cache.delete(make_template_fragment_key('org_member_count', (organization.id,)))
             return HttpResponseRedirect(request.get_full_path())
         return self.render_to_response(self.get_context_data(object=organization))
