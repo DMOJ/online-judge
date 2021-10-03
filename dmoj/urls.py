@@ -7,7 +7,7 @@ from django.http import Http404, HttpResponsePermanentRedirect
 from django.templatetags.static import static
 from django.urls import path, reverse
 from django.utils.functional import lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import RedirectView
 from martor.views import markdown_search_user
 
