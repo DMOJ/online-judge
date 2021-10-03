@@ -6,6 +6,7 @@ from django.db import transaction
 from django.db.models import Count, OuterRef, Subquery
 from django.db.models.functions import Coalesce
 from django.utils import timezone
+from django.utils.translation import gettext_lazy
 
 
 BETA2 = 328.33 ** 2
@@ -189,7 +190,15 @@ def rate_contest(contest):
                             .order_by('-contest__end_time').values('rating')[:1]))
 
 
-RATING_LEVELS = ['Newbie', 'Amateur', 'Expert', 'Candidate Master', 'Master', 'Grandmaster', 'Target']
+RATING_LEVELS = [
+    gettext_lazy('Newbie'),
+    gettext_lazy('Amateur'),
+    gettext_lazy('Expert'),
+    gettext_lazy('Candidate Master'),
+    gettext_lazy('Master'),
+    gettext_lazy('Grandmaster'),
+    gettext_lazy('Target'),
+]
 RATING_VALUES = [1000, 1300, 1600, 1900, 2400, 3000]
 RATING_CLASS = ['rate-newbie', 'rate-amateur', 'rate-expert', 'rate-candidate-master',
                 'rate-master', 'rate-grandmaster', 'rate-target']
