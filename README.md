@@ -105,11 +105,12 @@ The judge can also grade in the languages listed below. These languages are less
 * Forth
 * Go
 * Groovy
+* GAS x86/x64/ARM
 * Haskell
 * INTERCAL
 * Kotlin
 * Lua
-* NASM
+* NASM x86/x64
 * Objective-C
 * OCaml
 * PHP
