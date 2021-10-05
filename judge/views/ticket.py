@@ -236,7 +236,7 @@ class TicketList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
-        if self.GET_with_session('hide'):
+        if self.GET_with_session('open'):
             queryset = queryset.filter(is_open=True)
         if self.GET_with_session('own'):
             queryset = queryset.filter(own_ticket_filter(self.profile.id))
@@ -258,7 +258,7 @@ class TicketList(LoginRequiredMixin, ListView):
         }
         context['can_edit_all'] = self.can_edit_all
         context['filter_status'] = {
-            'hide': self.GET_with_session('hide'),
+            'open': self.GET_with_session('open'),
             'own': self.GET_with_session('own'),
             'user': self.filter_users,
             'assignee': self.filter_assignees,
@@ -273,7 +273,7 @@ class TicketList(LoginRequiredMixin, ListView):
         return context
 
     def post(self, request, *args, **kwargs):
-        to_update = ('hide', 'own')
+        to_update = ('open', 'own')
         for key in to_update:
             if key in request.GET:
                 val = request.GET.get(key) == '1'
