@@ -10,7 +10,7 @@ See it live at [dmoj.ca](https://dmoj.ca/)!
 * [Support for over **60 language runtimes**](https://github.com/DMOJ/online-judge#supported-languages)
 * Highly robust judging system:
    * Supports **interactive** and **signature-graded** tasks
-   * Supports **runtime data generators** and **custom output validators** 
+   * Supports **runtime data generators** and **custom output validators**
    * Specifying **per-language resource limits**
    * Capable of scaling to hundreds of judging servers
 * Extremely configurable contest system:
@@ -39,40 +39,29 @@ Check out the install documentation at [docs.dmoj.ca](https://docs.dmoj.ca/#/sit
 ### Sleek problem statements
 Problems are written in Markdown, with LaTeX-enabled math and figures, as well as syntax highlighting. Problem statements can be saved to PDF for ease of distribution to contestants.
 
-
 ![](https://i.imgur.com/7KD7h5r.png)
 
-
 ### Submit in over 60 languages
-Contestants may submit in over 60 programming languages with syntax highlighting. Problem authors can restrict problems to specific languages, and set language-specific resource limits. 
-
+Contestants may submit in over 60 programming languages with syntax highlighting. Problem authors can restrict problems to specific languages, and set language-specific resource limits.
 
 ![](https://i.imgur.com/8CjfHQb.png)
-
 
 ### Live submission status
 Submission pages feature live updates, and submissions may be aborted by both submission authors and administrators. Compilation errors and warnings for a number of languages feature color highlighting.
 
-
 ![](https://i.imgur.com/Hom0U3R.png)
-
 
 Global, per-problem, and per-contest submission lists are live-updating, and can be filtered by status and language.
 
-
 ![](https://i.imgur.com/rc7orzj.png)
-
 
 ### Extensible contest system
 Contests feature an optional rating system, and can be configured to run in any timeframe. Users are also able to participate virtually after the contest ends. ICPC, IOI, AtCoder, and ECOO contest formats are supported out-of-the-box, and new formats can be added with custom code.
 
-
 ![](https://i.imgur.com/0V1fzZi.png)
 
-
-Contests may be limited to particular organizations, or require access codes to join. Hidden scoreboards are supported. The contest system integrates with [Stanford MOSS](https://theory.stanford.edu/~aiken/moss/) to provide plagiarism checking. 
+Contests may be limited to particular organizations, or require access codes to join. Hidden scoreboards are supported. The contest system integrates with [Stanford MOSS](https://theory.stanford.edu/~aiken/moss/) to provide plagiarism checking.
 Editorial support is built-in, and editorials are automatically published once a contest ends.
-
 
 ### Home page blog and activity stream
 
@@ -80,18 +69,13 @@ Announcements from administrators, ongoing contests, recent comments and new pro
 
 ![](https://i.imgur.com/zpQAoDB.png)
 
-
 ### Internationalized interface
 Use the site in whatever language you're most comfortable in &mdash; visit [translate.dmoj.ca](https://translate.dmoj.ca/) to check the translation status of your preferred language. Problem authors can provide statements in multiple languages, and DMOJ will display the most relevant one to a reader.
 
-
 ![](https://i.imgur.com/OeuI0o5.png)
-
-
 
 ### Highly featured administration interface
 The DMOJ admin interface is highly versatile, and can be efficiently used for anything from managing users to authoring problem statements.
-
 
 ![](https://dmoj.ml/data/_other/readme/problem-admin.png)
 
@@ -104,7 +88,7 @@ Check out [**DMOJ/judge-server**](https://github.com/DMOJ/judge-server) for more
 Supported languages include:
 * C++ 11/14/17/20 (GCC and Clang)
 * C 99/11
-* Java 8/9/10/11
+* Java 8/9/10/11/15/17
 * Python 2/3
 * PyPy 2/3
 * Pascal
