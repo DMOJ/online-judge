@@ -75,7 +75,7 @@
     <script type="text/javascript" src="{{ static('event.js') }}"></script>
     <script type="text/javascript">
         $(function () {
-            $('input#own').click(function () {
+            $('input#open, input#own').click(function () {
                 ($('<form>').attr('action', window.location.pathname + '?' + $('form#filter-form').serialize())
                     .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
                         .attr('value', $.cookie('csrftoken')))
@@ -222,6 +222,11 @@
                 </div>
 
                 <form id="filter-form" name="form" action="" method="get">
+                    <div id="open-box" class="filter-check">
+                        <input id="open" type="checkbox" name="open"{% if filter_status.open %} checked{% endif %} value="1">
+                        <label for="open">{{ _('Hide closed tickets') }}</label>
+                    </div>
+
                     <div id="own-box" class="filter-check">
                         <input id="own" type="checkbox" name="own"{% if filter_status.own %} checked{% endif %} value="1">
                         <label for="own">{{ _('Show my tickets only') }}</label>
