@@ -1,33 +1,6 @@
 <script src="{{ static('libs/featherlight/featherlight.min.js') }}" type="text/javascript"></script>
 {% compress js %}
     {{ comment_form.media.js }}
-    {% if not REQUIRE_JAX %}
-        <script type="text/javascript">
-            $(function () {
-                $('#id_body').keypress(function () {
-                    if (!("MathJax" in window)) {
-                        $.ajax({
-                            type: "GET",
-                            url: '{{ static('mathjax_config.js') }}',
-                            dataType: "script",
-                            cache: true,
-                            success: function () {
-                                $.ajax({
-                                    type: "GET",
-                                    url: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config=TeX-AMS_HTML',
-                                    dataType: "script",
-                                    cache: true,
-                                    success: function () {
-                                        mathjax_pagedown($);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-        </script>
-    {% endif %}
     <script type="text/javascript">
         $(document).ready(function () {
             window.reply_comment = function (parent) {
@@ -55,7 +28,7 @@
             function update_math($comment) {
                 if ('MathJax' in window) {
                     var $body = $comment.find('.comment-body');
-                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, $body[0]], function () {
+                    MathJax.typesetPromise([$body[0]]).then(() => {
                         $body.find('.tex-image').hide();
                         $body.find('.tex-text').show();
                     });
@@ -174,9 +147,9 @@
                             if ('MathJax' in window) {
                                 var preview = $('.featherlight div.wmd-preview')[0];
                                 window.editors[$wmd.attr('id')].hooks.chain('onPreviewRefresh', function () {
-                                    MathJax.Hub.Queue(['Typeset', MathJax.Hub, preview]);
+                                    MathJax.typesetPromise([preview]);
                                 });
-                                MathJax.Hub.Queue(['Typeset', MathJax.Hub, preview]);
+                                MathJax.typesetPromise([preview]);
                             }
                         }
                     }
