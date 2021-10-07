@@ -45,7 +45,7 @@ else:
         class Media:
             js = [
                 'mathjax_config.js',
-                'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML',
+                'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-chtml.min.js',
                 'pagedown_math.js',
             ]
 

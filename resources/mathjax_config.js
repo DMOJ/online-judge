@@ -1,10 +1,11 @@
 window.MathJax = {
-    messageStyle: 'none',
-    tex2jax: {
+    tex: {
         inlineMath: [
             ['~', '~'],
             ['\\(', '\\)']
         ]
     },
-    showMathMenu: false
+    options: {
+        enableMenu: false
+    }
 };
