@@ -110,6 +110,10 @@ def disconnect_judge(judge, force=False):
 
 def abort_submission(submission):
     from .models import Submission
+    # We only want to try to abort a submission if it's still grading, otherwise this can lead to fully graded
+    # submissions marked as aborted.
+    if submission.status == 'D':
+        return
     response = judge_request({'name': 'terminate-submission', 'submission-id': submission.id})
     # This defaults to true, so that in the case the JudgeList fails to remove the submission from the queue,
     # and returns a bad-request, the submission is not falsely shown as "Aborted" when it will still be judged.
