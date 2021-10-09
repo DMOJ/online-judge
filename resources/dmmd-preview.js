@@ -40,7 +40,7 @@ $(function () {
                                         dataType: 'script',
                                         cache: true,
                                         success: function () {
-                                            MathJax.typesetPromise([$content[0]]).then(() => {
+                                            MathJax.typesetPromise([$content[0]]).then(function () {
                                                 $content.find('.tex-image').hide();
                                                 $content.find('.tex-text').show();
                                             });
@@ -49,7 +49,7 @@ $(function () {
                                 }
                             });
                         } else {
-                            MathJax.typesetPromise([$content[0]]).then(() => {
+                            MathJax.typesetPromise([$content[0]]).then(function () {
                                 $content.find('.tex-image').hide();
                                 $content.find('.tex-text').show();
                             });
