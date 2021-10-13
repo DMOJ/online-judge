@@ -150,7 +150,10 @@ class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMi
         context['problem_name'] = self.object.name
         context['url'] = self.request.build_absolute_uri()
         context['description'] = self.object.description
-        context['math_engine'] = self.request.profile.math_engine
+        if self.request.profile is not None:
+            context['math_engine'] = self.request.profile.math_engine
+        else:
+            context['math_engine'] = "jax"
         return context
 
     def get(self, request, *args, **kwargs):
