@@ -27,7 +27,7 @@
         <br>
         {% if statuses or not submission.is_graded %}
             {% for case in statuses %}
-                {% if case.status == "AC" %}
+                {% if case.status in ("AC", "_AC") %}
                     <span class="fa fa-check case-AC"></span>
                 {% elif case.status == "SC" %}
                     <span class="case-SC">&ndash;</span>
@@ -54,7 +54,7 @@
                 <div class="batch-cases">
             {% endif %}
         <table class="submissions-status-table">{% for case in batch.cases %}
-            {% set print_case_output = case.status != 'AC' and case.output and (prefix_length is none or prefix_length > 0) %}
+            {% set print_case_output = case.status not in ('AC', '_AC') and case.output and (prefix_length is none or prefix_length > 0) %}
             <tr id="{{ case.id }}" class="case-row toggle closed">
                 <td>
                     {%- if print_case_output or case.extended_feedback -%}
@@ -134,7 +134,7 @@
                 {% endif %}
                 {{ submission.memory|kbdetailformat }}
                 <br>
-                {% if submission.result == "AC" %}
+                {% if submission.result in ("AC", "_AC") %}
                     <b>{{ _('Maximum single-case runtime:') }}</b>
                     <span title="{{ max_execution_time }}s">{{ max_execution_time|floatformat(3) }}s</span>
                     <br>

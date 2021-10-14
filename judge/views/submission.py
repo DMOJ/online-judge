@@ -121,10 +121,13 @@ TestCase = namedtuple('TestCase', 'id status batch num_combined')
 
 
 def get_statuses(batch, cases):
-    cases = [TestCase(id=case.id, status=case.status, batch=batch, num_combined=1) for case in cases]
+    cases = [TestCase(id=case.id,
+                      status=Submission.result_class_from_code(case.status, case.points, case.total),
+                      batch=batch, num_combined=1)
+             for case in cases]
     if batch:
         # Get the first non-AC case if it exists.
-        return [next((case for case in cases if case.status != 'AC'), cases[0])]
+        return [next((case for case in cases if case.status not in ('AC', '_AC')), cases[0])]
     else:
         return cases
 
