@@ -22,7 +22,6 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, View
-from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 from reversion import revisions
 
@@ -136,29 +135,6 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
         code = self.kwargs.get(self.slug_url_kwarg, None)
         return generic_message(self.request, _('No such editorial'),
                                _('Could not find an editorial with the code "%s".') % code, status=404)
-
-
-class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
-    context_object_name = 'problem'
-    template_name = 'problem/raw.html'
-
-    def get_title(self):
-        return self.object.name
-
-    def get_context_data(self, **kwargs):
-        context = super(ProblemRaw, self).get_context_data(**kwargs)
-        context['problem_name'] = self.object.name
-        context['url'] = self.request.build_absolute_uri()
-        context['description'] = self.object.description
-        context['math_engine'] = self.request.profile.math_engine
-        return context
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        with translation.override(settings.LANGUAGE_CODE):
-            return self.render_to_response(self.get_context_data(
-                object=self.object,
-            ))
 
 
 class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
