@@ -60,6 +60,22 @@ jobs:
         git add locale
         git checkout .
         git clean -fd
+        git reset
+    - name: Remove useless changes
+      run: |
+        set -eu
+        while IFS= read -r -d $'\0' file; do
+          if git diff -s --exit-code "$file"; then
+            continue
+          fi
+
+          if git diff "$file" | tail -n +5 2>/dev/null | grep -qP '^[-+](?!"PO-Revision-Date:)'; then
+            echo "Changed: $file"
+          else
+            echo "No material change: $file"
+            git checkout "$file" > /dev/null 2>&1
+          fi
+        done < <(git ls-files -z 'locale/*/LC_MESSAGES/*.po')
     - name: Create pull request
       uses: peter-evans/create-pull-request@v3
       with:
