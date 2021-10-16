@@ -1,5 +1,6 @@
 name: updatemessages
 on:
+  push:
   schedule:
     - cron: '0 0 * * *'
 jobs:
@@ -60,6 +61,22 @@ jobs:
         git add locale
         git checkout .
         git clean -fd
+        git reset
+    - name: Remove useless changes
+      run: |
+        set -euo pipefail
+        while IFS= read -r -d $'\0' file; do
+          if git diff -s --exit-code "$file"; then
+            continue
+          fi
+
+          if git diff "$file" | tail -n +5 | grep -qP '^[-+](?!"PO-Revision-Date:)'; then
+            echo "Changed: $file"
+          else
+            echo "No material change: $file"
+            git checkout "$file"
+          fi
+        done < <(git ls-files -z 'locale/*/LC_MESSAGES/*.po')
     - name: Create pull request
       uses: peter-evans/create-pull-request@v3
       with:
