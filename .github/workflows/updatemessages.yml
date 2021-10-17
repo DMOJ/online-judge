@@ -69,7 +69,7 @@ jobs:
             continue
           fi
 
-          if git diff "$file" | tail -n +5 2>/dev/null | grep -qP '^[-+](?!"PO-Revision-Date:)'; then
+          if git diff "$file" | tail -n +5 2>/dev/null | grep -qP '^[-+](?!"PO-Revision-Date:|"POT-Creation-Date:)'; then
             echo "Changed: $file"
           else
             echo "No material change: $file"
