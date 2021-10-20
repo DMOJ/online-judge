@@ -230,7 +230,7 @@ const puppeteer = require('puppeteer');
 puppeteer.launch().then(browser => Promise.resolve()
     .then(async () => {
         const page = await browser.newPage();
-        await page.goto(param.input, { waitUntil: 'load' });
+        await page.goto(param.input, { waitUntil: 'networkidle0' });
         await page.waitForSelector('.math-loaded', { timeout: 15000 });
         await page.pdf({
             path: param.output,
