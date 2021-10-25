@@ -372,7 +372,7 @@ class Contest(models.Model):
             # Unauthenticated users can only see visible, non-private contests
             if not self.is_visible:
                 raise self.Inaccessible()
-            if self.is_private or self.is_organization_private:
+            if self.is_private or self.is_organization_private or not self.is_external:
                 raise self.PrivateContest()
             return
 
