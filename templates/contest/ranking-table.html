@@ -2,14 +2,14 @@
 
 {% block after_rank_head %}
     {% if has_rating %}
-        <th>{{ _('Rating') }}</th>
+        <th class="rating-column">{{ _('Rating') }}</th>
     {% endif %}
     <th class="organization-column">{{ _('Organization') }}</th>
 {% endblock %}
 
 {% block after_rank %}
     {% if has_rating %}
-        <td>{% if user.participation_rating %}{{ rating_number(user.participation_rating) }}{% endif %}</td>
+        <td class="rating-column">{% if user.participation_rating %}{{ rating_number(user.participation_rating) }}{% endif %}</td>
     {% endif %}
     <td class="organization-column">
         {% if user.organization %}

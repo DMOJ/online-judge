@@ -54,11 +54,27 @@ class ContestTag(models.Model):
 
 
 class Contest(models.Model):
+    SCOREBOARD_HIDDEN = 'H'
+    SCOREBOARD_VISIBLE = 'V'
+    SCOREBOARD_AFTER_CONTEST = 'C'
+    SCOREBOARD_AFTER_PARTICIPATION = 'P'
+    SCOREBOARD_VISIBILITY = (
+        (SCOREBOARD_HIDDEN, _('Hidden')),
+        (SCOREBOARD_VISIBLE, _('Visible')),
+        (SCOREBOARD_AFTER_CONTEST, _('Hidden for duration of contest')),
+        (SCOREBOARD_AFTER_PARTICIPATION, _('Hidden for duration of participation')),
+    )
     key = models.CharField(max_length=20, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
-    organizers = models.ManyToManyField(Profile, help_text=_('These people will be able to edit the contest.'),
-                                        related_name='organizers+')
+    authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
+                                     related_name='authors+')
+    curators = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest, '
+                                                           'but will not be listed as authors.'),
+                                      related_name='curators+', blank=True)
+    testers = models.ManyToManyField(Profile, help_text=_('These users will be able to view the contest, '
+                                                          'but not edit it.'),
+                                     blank=True, related_name='testers+')
     description = models.TextField(verbose_name=_('description'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
     start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
@@ -87,21 +103,12 @@ class Contest(models.Model):
     registration_end_time = models.DateTimeField(verbose_name=_('registration end time'),
                                                  help_text=_('Allow registration until the specified time.'),
                                                  blank=True, null=True)
-    hide_scoreboard = models.BooleanField(verbose_name=_('hide scoreboard'),
-                                          help_text=_('Whether the scoreboard should remain hidden for the duration '
-                                                      'of the contest.'),
-                                          default=False)
-    partially_hide_scoreboard = models.BooleanField(verbose_name=_('Partially hide scoreboard'),
-                                                    help_text=_("Whether the scoreboard is hidden until "
-                                                                "the user's contest window ends."),
-                                                    default=False)
-    permanently_hide_scoreboard = models.BooleanField(verbose_name=_('permanently hide scoreboard'), default=False,
-                                                      help_text=('Whether the scoreboard should remain hidden '
-                                                                 'permanently. Requires "hide scoreboard" to be '
-                                                                 'set as well to have any effect.'))
     view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
                                                      related_name='view_contest_scoreboard',
                                                      help_text=_('These users will be able to view the scoreboard.'))
+    scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default=SCOREBOARD_VISIBLE,
+                                             max_length=1, help_text=_('Scoreboard visibility through the duration '
+                                                                       'of the contest'), choices=SCOREBOARD_VISIBILITY)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_("Use clarification system instead of comments."),
                                              default=True)
@@ -225,27 +232,19 @@ class Contest(models.Model):
     def can_see_full_scoreboard(self, user):
         if self.show_scoreboard:
             return True
-        if user.has_perm('judge.see_private_contest'):
+        if not user.is_authenticated:
+            return False
+        if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
             return True
-        if self.is_editable_by(user):
+        if user.profile.id in self.editor_ids:
             return True
-        if user.is_authenticated and self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+        if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
-        if self.partially_hide_scoreboard and self.has_completed_contest(user):
+        if self.scoreboard_visibility == self.SCOREBOARD_HIDDEN:
+            return False
+        if self.scoreboard_visibility == self.SCOREBOARD_AFTER_PARTICIPATION and self.has_completed_contest(user):
             return True
         return False
-
-    @cached_property
-    def show_scoreboard(self):
-        if not self.can_join:
-            return False
-        if self.partially_hide_scoreboard and not self.ended:
-            return False
-        if self.hide_scoreboard and not self.ended:
-            return False
-        if self.hide_scoreboard and self.permanently_hide_scoreboard:
-            return False
-        return True
 
     def has_completed_contest(self, user):
         if user.is_authenticated:
@@ -253,6 +252,17 @@ class Contest(models.Model):
             if participation and participation.ended:
                 return True
         return False
+
+    @cached_property
+    def show_scoreboard(self):
+        if not self.can_join:
+            return False
+        if (self.scoreboard_visibility in (self.SCOREBOARD_AFTER_CONTEST, self.SCOREBOARD_AFTER_PARTICIPATION) and
+                not self.ended):
+            return False
+        if self.scoreboard_visibility == self.SCOREBOARD_HIDDEN:
+            return False
+        return True
 
     @property
     def contest_window_length(self):
@@ -285,6 +295,19 @@ class Contest(models.Model):
     def ended(self):
         return self.end_time < self._now
 
+    @cached_property
+    def author_ids(self):
+        return Contest.authors.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+
+    @cached_property
+    def editor_ids(self):
+        return self.author_ids.union(
+            Contest.curators.through.objects.filter(contest=self).values_list('profile_id', flat=True))
+
+    @cached_property
+    def tester_ids(self):
+        return Contest.testers.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+
     def __str__(self):
         return self.name
 
@@ -314,10 +337,14 @@ class Contest(models.Model):
             return False
         if self.ended:
             return self.is_virtualable
+
         if user.has_perm('judge.join_all_contest'):
             return True
-        if user.has_perm('judge.edit_own_contest') and \
-                self.organizers.filter(id=user.profile.id).exists():
+
+        if user.profile.id in self.editor_ids:
+            return True
+
+        if user.profile.id in self.tester_ids:
             return True
 
         if check_registered and not self.is_registered(user):
@@ -340,15 +367,29 @@ class Contest(models.Model):
         pass
 
     def access_check(self, user):
-        if (not user.is_authenticated or user.profile.is_external_user) and not self.is_external:
-            raise self.Inaccessible()
-
-        # If the user can view all contests
-        if user.has_perm('judge.see_private_contest'):
+        # Do unauthenticated check here so we can skip authentication checks later on.
+        if not user.is_authenticated:
+            # Unauthenticated users can only see visible, non-private contests
+            if not self.is_visible:
+                raise self.Inaccessible()
+            if self.is_private or self.is_organization_private or not self.is_external:
+                raise self.PrivateContest()
             return
 
-        # User can edit the contest
-        if self.is_editable_by(user):
+        # External user but internal contest
+        if user.profile.is_external_user and not self.is_external:
+            raise self.Inaccessible()
+
+        # If the user can view or edit all contests
+        if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
+            return
+
+        # User is organizer or curator for contest
+        if user.profile.id in self.editor_ids:
+            return
+
+        # User is tester for contest
+        if user.profile.id in self.tester_ids:
             return
 
         # Contest is not publicly visible
@@ -359,15 +400,11 @@ class Contest(models.Model):
         if not self.is_private and not self.is_organization_private:
             return
 
-        if user.is_authenticated:
-            if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
-                return
+        if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
+            return
 
-            in_org = self.organizations.filter(id__in=user.profile.organizations.all()).exists()
-            in_users = self.private_contestants.filter(id=user.profile.id).exists()
-        else:
-            in_org = False
-            in_users = False
+        in_org = self.organizations.filter(id__in=user.profile.organizations.all()).exists()
+        in_users = self.private_contestants.filter(id=user.profile.id).exists()
 
         if not self.is_private and self.is_organization_private:
             if in_org:
@@ -397,9 +434,8 @@ class Contest(models.Model):
         if user.has_perm('judge.edit_all_contest'):
             return True
 
-        # If the user is a contest organizer
-        if user.has_perm('judge.edit_own_contest') and \
-                self.organizers.filter(id=user.profile.id).exists():
+        # If the user is a contest organizer or curator
+        if user.has_perm('judge.edit_own_contest') and user.profile.id in self.editor_ids:
             return True
 
         return False
@@ -425,16 +461,19 @@ class Contest(models.Model):
                   private_contestants=user.profile)
             )
 
-            q |= Q(organizers=user.profile)
+            q |= Q(authors=user.profile)
+            q |= Q(curators=user.profile)
+            q |= Q(testers=user.profile)
             queryset = queryset.filter(q)
         return queryset.distinct()
 
     def rate(self):
-        Rating.objects.filter(contest__end_time__range=(self.end_time, self._now)).delete()
-        for contest in Contest.objects.filter(
-            is_rated=True, end_time__range=(self.end_time, self._now),
-        ).order_by('end_time'):
-            rate_contest(contest)
+        with transaction.atomic():
+            Rating.objects.filter(contest__end_time__range=(self.end_time, self._now)).delete()
+            for contest in Contest.objects.filter(
+                is_rated=True, end_time__range=(self.end_time, self._now),
+            ).order_by('end_time'):
+                rate_contest(contest)
 
     class Meta:
         permissions = (

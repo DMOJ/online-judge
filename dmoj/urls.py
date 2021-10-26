@@ -6,7 +6,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.templatetags.static import static
 from django.urls import path, reverse
-from django.utils.functional import lazystr
+from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import RedirectView
 from martor.views import markdown_search_user
@@ -75,6 +75,7 @@ register_patterns = [
 
     url(r'^2fa/$', two_factor.TwoFactorLoginView.as_view(), name='login_2fa'),
     url(r'^2fa/enable/$', two_factor.TOTPEnableView.as_view(), name='enable_2fa'),
+    url(r'^2fa/refresh/$', two_factor.TOTPRefreshView.as_view(), name='refresh_2fa'),
     url(r'^2fa/disable/$', two_factor.TOTPDisableView.as_view(), name='disable_2fa'),
     url(r'^2fa/webauthn/attest/$', two_factor.WebAuthnAttestationView.as_view(), name='webauthn_attest'),
     url(r'^2fa/webauthn/assert/$', two_factor.WebAuthnAttestView.as_view(), name='webauthn_assert'),
@@ -399,9 +400,10 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
                  'mstile-310x150.png', 'apple-touch-icon-144x144.png', 'browserconfig.xml', 'manifest.json',
                  'apple-touch-icon-120x120.png', 'mstile-310x310.png']
 
+static_lazy = lazy(static, str)
 for favicon in favicon_paths:
     urlpatterns.append(url(r'^%s$' % favicon, RedirectView.as_view(
-        url=lazystr(lambda: static('icons/' + favicon)),
+        url=static_lazy('icons/' + favicon),
     )))
 
 handler404 = 'judge.views.error.error404'

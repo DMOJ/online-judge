@@ -212,11 +212,11 @@
             {% if submissions_left > 0 %}
                 <div class="alert alert-warning alert-dismissable">
                     <a class="close">x</a>
-                    {% trans left=submissions_left %}
+                    {% trans left=submissions_left -%}
                         You have {{ left }} submission left
-                        {% pluralize %}
+                        {%- pluralize -%}
                         You have {{ left }} submissions left
-                    {% endtrans %}
+                    {%- endtrans %}
                 </div>
             {% else %}
                 <div class="alert alert-warning alert-dismissable">

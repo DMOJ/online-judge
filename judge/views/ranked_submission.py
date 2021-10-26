@@ -29,8 +29,9 @@ class RankedSubmissions(ProblemSubmissions):
 
         if self.selected_languages:
             lang_ids = Language.objects.filter(key__in=self.selected_languages).values_list('id', flat=True)
-            constraint += f' AND sub.language_id IN ({", ".join(["%s"] * len(lang_ids))})'
-            params.extend(lang_ids)
+            if lang_ids:
+                constraint += f' AND sub.language_id IN ({", ".join(["%s"] * len(lang_ids))})'
+                params.extend(lang_ids)
             self.selected_languages = set()
 
         queryset = super(RankedSubmissions, self).get_queryset().filter(user__is_unlisted=False)
@@ -69,8 +70,10 @@ class RankedSubmissions(ProblemSubmissions):
         return format_html(_('Best solutions for <a href="{1}">{0}</a>'), self.problem_name,
                            reverse('problem_detail', args=[self.problem.code]))
 
-    def _get_result_data(self):
-        return get_result_data(super(RankedSubmissions, self).get_queryset().order_by())
+    def _get_result_data(self, queryset=None):
+        if queryset is None:
+            queryset = super(RankedSubmissions, self).get_queryset()
+        return get_result_data(queryset.order_by())
 
 
 class ContestRankedSubmission(ForceContestMixin, RankedSubmissions):

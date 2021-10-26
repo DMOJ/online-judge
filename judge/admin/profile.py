@@ -6,7 +6,7 @@ from django.utils.translation import gettext, gettext_lazy as _, ungettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
-from judge.models import Profile
+from judge.models import Profile, WebAuthnCredential
 from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminMartorWidget, AdminSelect2Widget
 
@@ -44,6 +44,15 @@ class TimezoneFilter(admin.SimpleListFilter):
         return queryset.filter(timezone=self.value())
 
 
+class WebAuthnInline(admin.TabularInline):
+    model = WebAuthnCredential
+    readonly_fields = ('cred_id', 'public_key', 'counter')
+    extra = 0
+
+    def has_add_permission(self, request):
+        return False
+
+
 class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
     form = ProfileForm
     fieldsets = (
@@ -61,6 +70,8 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
     actions = ('recalculate_points',)
     actions_on_top = True
     actions_on_bottom = True
+    form = ProfileForm
+    inlines = [WebAuthnInline]
 
     def get_queryset(self, request):
         return super(ProfileAdmin, self).get_queryset(request).select_related('user')
