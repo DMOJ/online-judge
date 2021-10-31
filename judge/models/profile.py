@@ -9,9 +9,10 @@ import pyotp
 import webauthn
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import F, Max
+from django.db.models import F, Max, Q, UniqueConstraint
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.encoding import force_bytes
@@ -27,7 +28,7 @@ from judge.models.runtime import Language
 from judge.ratings import rating_class
 from judge.utils.two_factor import webauthn_decode
 
-__all__ = ['Organization', 'Profile', 'OrganizationRequest', 'WebAuthnCredential']
+__all__ = ['Class', 'Organization', 'Profile', 'OrganizationRequest', 'WebAuthnCredential']
 
 
 class EncryptedNullCharField(EncryptedCharField):
@@ -58,6 +59,12 @@ class Organization(models.Model):
                                            blank=True,
                                            help_text=_('This image will replace the default site logo for users '
                                                        'viewing the organization.'))
+    class_required = models.BooleanField(verbose_name=_('class membership required'), default=False,
+                                         help_text=_('whether members are compelled to select a class when joining'))
+
+    def clean(self):
+        if self.class_required and self.is_open:
+            raise ValidationError(_('Class membership cannot be enforced when organization has open enrollment'))
 
     def __contains__(self, item):
         if isinstance(item, int):
@@ -84,6 +91,28 @@ class Organization(models.Model):
         )
         verbose_name = _('organization')
         verbose_name_plural = _('organizations')
+
+
+class Class(models.Model):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, verbose_name=_('organization'),
+                                     help_text=_('the organization that this class belongs to'),
+                                     related_name='classes', related_query_name='class')
+    name = models.CharField(max_length=128, verbose_name=_('class name'), unique=True)
+    slug = models.SlugField(max_length=128, verbose_name=_('class slug'), help_text=_('class name shown in URLs'))
+    description = models.TextField(verbose_name=_('class description'), blank=True)
+    is_active = models.BooleanField(verbose_name=_('is class active'), default=True)
+    access_code = models.CharField(max_length=7, verbose_name=_('access code'), null=True, blank=True,
+                                   help_text=_('student access code'))
+    admins = models.ManyToManyField('Profile', verbose_name=_('administrators'), related_name='class_admin_of',
+                                    help_text=_('those who can approve membership to this class'))
+    members = models.ManyToManyField('Profile', verbose_name=_('members'), blank=True,
+                                     related_name='classes', related_query_name='class')
+
+    class Meta:
+        ordering = ['organization', 'name']
+        verbose_name = _('class')
+        verbose_name_plural = _('classes')
+        constraints = [UniqueConstraint(fields=['name'], condition=Q(is_active=True), name='unique_active_name')]
 
 
 class Profile(models.Model):
@@ -304,7 +333,14 @@ class OrganizationRequest(models.Model):
         ('A', 'Approved'),
         ('R', 'Rejected'),
     ))
+    request_class = models.ForeignKey(Class, verbose_name=_('class'), on_delete=models.CASCADE, null=True, blank=True)
     reason = models.TextField(verbose_name=_('reason'))
+
+    def clean(self):
+        if self.organization.class_required and self.request_class is None:
+            raise ValidationError('Organization requires a class to be specified')
+        if self.organization_id != self.request_class.organization_id:
+            raise ValidationError('Class must be part of the organization')
 
     class Meta:
         verbose_name = _('organization join request')
