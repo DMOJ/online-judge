@@ -26,7 +26,7 @@ class CommentAdmin(VersionAdmin):
     search_fields = ['author__user__username', 'page', 'body']
     actions = ['hide_comment', 'unhide_comment']
     list_filter = ['hidden']
-    readonly_fields = ['time']
+    readonly_fields = ['time', 'score']
     actions_on_top = True
     actions_on_bottom = True
     form = CommentForm
