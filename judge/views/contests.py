@@ -123,11 +123,12 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
 
 
 class PrivateContestError(Exception):
-    def __init__(self, name, is_private, is_organization_private, orgs):
+    def __init__(self, name, is_private, is_organization_private, orgs, classes):
         self.name = name
         self.is_private = is_private
         self.is_organization_private = is_organization_private
         self.orgs = orgs
+        self.classes = classes
 
 
 class ContestMixin(object):
@@ -200,7 +201,7 @@ class ContestMixin(object):
             contest.access_check(self.request.user)
         except Contest.PrivateContest:
             raise PrivateContestError(contest.name, contest.is_private, contest.is_organization_private,
-                                      contest.organizations.all())
+                                      contest.organizations.all(), contest.classes.all())
         except Contest.Inaccessible:
             raise Http404()
         else:

@@ -117,6 +117,9 @@ class Class(models.Model):
     def __str__(self):
         return f'{self.name} in {self.organization.name}'
 
+    def get_absolute_url(self):
+        return '#'
+
     class Meta:
         ordering = ['organization', 'name']
         verbose_name = _('class')
