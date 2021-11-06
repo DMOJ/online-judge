@@ -40,7 +40,6 @@ import requests
 from django.conf import settings
 from django.contrib.auth.password_validation import CommonPasswordValidator
 from django.core.exceptions import ValidationError
-from django.utils.six import string_types
 from django.utils.translation import gettext as _, ungettext
 
 from judge.utils.unicode import utf8bytes
@@ -83,7 +82,7 @@ def pwned_password(password):
     """
     Checks a password against the Pwned Passwords database.
     """
-    if not isinstance(password, string_types):
+    if not isinstance(password, str):
         raise TypeError('Password values to check must be strings.')
     password_hash = hashlib.sha1(utf8bytes(password)).hexdigest().upper()
     prefix, suffix = password_hash[:5], password_hash[5:]
@@ -106,7 +105,7 @@ class PwnedPasswordsValidator(object):
         error_message = error_message or self.DEFAULT_PWNED_MESSAGE
 
         # If there is no plural, use the same message for both forms.
-        if isinstance(error_message, string_types):
+        if isinstance(error_message, str):
             singular, plural = error_message, error_message
         else:
             singular, plural = error_message

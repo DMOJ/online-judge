@@ -238,10 +238,6 @@ class JudgeHandler(ZlibPacketHandler):
         if self.name:
             logger.warning('Judge seems dead: %s: %s', self.name, self._working)
 
-    def malformed_packet(self, exception):
-        logger.exception('Judge sent malformed packet: %s', self.name)
-        super(JudgeHandler, self).malformed_packet(exception)
-
     def on_submission_processing(self, packet):
         _ensure_connection()
 

@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.conf.urls import url
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
@@ -60,7 +61,7 @@ class ContestProblemInlineForm(ModelForm):
         widgets = {'problem': AdminHeavySelect2Widget(data_view='problem_select2')}
 
 
-class ContestProblemInline(admin.TabularInline):
+class ContestProblemInline(SortableInlineAdminMixin, admin.TabularInline):
     model = ContestProblem
     verbose_name = _('Problem')
     verbose_name_plural = 'Problems'
@@ -114,9 +115,10 @@ class ContestForm(ModelForm):
 class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers')}),
-        (_('Settings'), {'fields': ('is_visible', 'is_external', 'is_virtualable', 'use_clarifications',
-                                    'hide_problem_tags', 'scoreboard_visibility', 'run_pretests_only',
-                                    'is_locked', 'points_precision', 'access_code')}),
+        (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_problem_authors',
+                                    'is_external', 'is_virtualable', 'access_code',
+                                    'show_short_display', 'run_pretests_only', 'is_locked', 'scoreboard_visibility',
+                                    'points_precision')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),

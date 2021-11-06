@@ -272,10 +272,10 @@ class DiggPaginator(ExPaginator):
 
 class DiggPage(Page):
     def __str__(self):
-        return " ... ".join(filter(None, [
-            " ".join(map(str, self.leading_range)),
-            " ".join(map(str, self.main_range)),
-            " ".join(map(str, self.trailing_range))]))
+        return ' ... '.join(filter(None, [
+            ' '.join(map(str, self.leading_range)),
+            ' '.join(map(str, self.main_range)),
+            ' '.join(map(str, self.trailing_range))]))
 
     @property
     def num_pages(self):
@@ -284,7 +284,7 @@ class DiggPage(Page):
 
 QuerySetDiggPaginator = DiggPaginator
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import doctest
 
     doctest.testmod()

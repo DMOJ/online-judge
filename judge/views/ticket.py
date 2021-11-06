@@ -94,6 +94,10 @@ class NewProblemTicketView(ProblemMixin, TitleMixin, NewTicketView):
     template_name = 'ticket/new_problem.html'
 
     def get_assignees(self):
+        if self.request.in_contest:
+            contest = self.request.participation.contest
+            if self.object.contests.filter(contest=contest).exists():
+                return contest.authors.all()
         return self.object.authors.all()
 
     def get_title(self):
@@ -248,6 +252,8 @@ class TicketList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = self._get_queryset()
+        if self.GET_with_session('open'):
+            queryset = queryset.filter(is_open=True)
         if self.GET_with_session('own'):
             queryset = queryset.filter(own_ticket_filter(self.profile.id))
         elif not self.can_edit_all:
@@ -268,7 +274,10 @@ class TicketList(LoginRequiredMixin, ListView):
         }
         context['can_edit_all'] = self.can_edit_all
         context['filter_status'] = {
-            'own': self.GET_with_session('own'), 'user': self.filter_users, 'assignee': self.filter_assignees,
+            'open': self.GET_with_session('open'),
+            'own': self.GET_with_session('own'),
+            'user': self.filter_users,
+            'assignee': self.filter_assignees,
             'user_id': json.dumps(list(Profile.objects.filter(user__username__in=self.filter_users)
                                        .values_list('id', flat=True))),
             'assignee_id': json.dumps(list(Profile.objects.filter(user__username__in=self.filter_assignees)
@@ -280,7 +289,7 @@ class TicketList(LoginRequiredMixin, ListView):
         return context
 
     def post(self, request, *args, **kwargs):
-        to_update = ('own',)
+        to_update = ('open', 'own')
         for key in to_update:
             if key in request.GET:
                 val = request.GET.get(key) == '1'

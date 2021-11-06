@@ -6,7 +6,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy
 
 from judge.contest_format.base import BaseContestFormat
 from judge.contest_format.registry import register_contest_format
@@ -40,7 +40,7 @@ class DefaultContestFormat(BaseContestFormat):
             points += result['points']
 
         participation.cumtime = max(cumtime, 0)
-        participation.score = points
+        participation.score = round(points, self.contest.points_precision)
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
@@ -74,3 +74,7 @@ class DefaultContestFormat(BaseContestFormat):
 
     def get_label_for_problem(self, index):
         return str(index + 1)
+
+    def get_short_form_display(self):
+        yield _('The maximum score submission for each problem will be used.')
+        yield _('Ties will be broken by the sum of the last submission time on problems with a non-zero score.')

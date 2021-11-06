@@ -110,7 +110,7 @@ class Contest(models.Model):
                                              max_length=1, help_text=_('Scoreboard visibility through the duration '
                                                                        'of the contest'), choices=SCOREBOARD_VISIBILITY)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
-                                             help_text=_("Use clarification system instead of comments."),
+                                             help_text=_('Use clarification system instead of comments.'),
                                              default=True)
     rating_floor = models.IntegerField(verbose_name=('rating floor'), help_text=_('Rating floor for contest'),
                                        null=True, blank=True)
@@ -134,11 +134,19 @@ class Contest(models.Model):
     hide_problem_tags = models.BooleanField(verbose_name=_('hide problem tags'),
                                             help_text=_('Whether problem tags should be hidden by default.'),
                                             default=False)
+    hide_problem_authors = models.BooleanField(verbose_name=_('hide problem authors'),
+                                               help_text=_('Whether problem authors should be hidden by default.'),
+                                               default=False)
     run_pretests_only = models.BooleanField(verbose_name=_('run pretests only'),
                                             help_text=_('Whether judges should grade pretests only, versus all '
                                                         'testcases. Commonly set during a contest, then unset '
                                                         'prior to rejudging user submissions when the contest ends.'),
                                             default=False)
+    show_short_display = models.BooleanField(verbose_name=_('show short form settings display'),
+                                             help_text=_('Whether to show a section containing contest settings '
+                                                         'on the contest page or not.'),
+                                             default=False)
+    is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may join the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
@@ -530,7 +538,9 @@ class ContestParticipation(models.Model):
             self.contest.format.update_participation(self)
             if self.is_disqualified:
                 self.score = -9999
-                self.save(update_fields=['score'])
+                self.cumtime = 0
+                self.tiebreaker = 0
+                self.save(update_fields=['score', 'cumtime', 'tiebreaker'])
     recompute_results.alters_data = True
 
     def set_disqualified(self, disqualified):
@@ -614,12 +624,13 @@ class ContestProblem(models.Model):
                                                       'or leave blank for no limit.'),
                                           default=None, null=True, blank=True,
                                           validators=[MinValueOrNoneValidator(1, _('Why include a problem you '
-                                                                                   'can\'t submit to?'))])
+                                                                                   "can't submit to?"))])
 
     class Meta:
         unique_together = ('problem', 'contest')
         verbose_name = _('contest problem')
         verbose_name_plural = _('contest problems')
+        ordering = ('order',)
 
 
 class ContestSubmission(models.Model):
@@ -657,7 +668,8 @@ class Rating(models.Model):
                                          related_name='rating', on_delete=CASCADE)
     rank = models.IntegerField(verbose_name=_('rank'))
     rating = models.IntegerField(verbose_name=_('rating'))
-    volatility = models.IntegerField(verbose_name=_('volatility'))
+    mean = models.FloatField(verbose_name=_('raw rating'))
+    performance = models.FloatField(verbose_name=_('contest performance'))
     last_rated = models.DateTimeField(db_index=True, verbose_name=_('last rated'))
 
     class Meta:

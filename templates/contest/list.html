@@ -189,10 +189,10 @@
     {% endif %}
 {% endmacro %}
 
-{% macro contest_join(contest, request) %}
+{% macro contest_join(contest, request, finished_contests) %}
     {% if not request.in_contest %}
         <td>
-            {% if request.profile in contest.authors.all() or request.profile in contest.curators.all() or request.profile in contest.testers.all() %}
+            {% if contest.key in finished_contests or request.profile in contest.authors.all() or request.profile in contest.curators.all() or request.profile in contest.testers.all() %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button"
@@ -286,7 +286,7 @@
                             <td>
                                 {{ user_count(contest, request.user) }}
                             </td>
-                            {{ contest_join(contest, request) }}
+                            {{ contest_join(contest, request, finished_contests) }}
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -299,10 +299,22 @@
                 <table class="contest-list table striped">
                     <thead>
                     <tr>
-                        <th>{{ _('Contest') }}</th>
-                        {% if not request.in_contest %}
-                            <th style="width:10%"></th>
-                        {% endif %}
+                        <td>
+                            <div class="contest-block">
+                                {{ contest_head(contest) }}
+                                {% if contest.start_time %}
+                                    <br>
+                                    {% if contest.time_before_end %}
+                                        <span class="time">{{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}</span>
+                                    {% endif %}
+                                    {{ time_left(contest) }}
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            {{ user_count(contest, request.user) }}
+                        </td>
+                        {{ contest_join(contest, request, finished_contests) }}
                     </tr>
                     </thead>
                     <tbody>

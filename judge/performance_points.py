@@ -15,7 +15,7 @@ PPBreakdown = namedtuple('PPBreakdown', 'points weight scaled_points problem_nam
 
 def get_pp_breakdown(user, start=0, end=settings.DMOJ_PP_ENTRIES):
     with connection.cursor() as cursor:
-        cursor.execute('''
+        cursor.execute("""
             SELECT max_points_table.problem_code,
                    max_points_table.problem_name,
                    max_points_table.max_points,
@@ -47,7 +47,7 @@ def get_pp_breakdown(user, start=0, end=settings.DMOJ_PP_ENTRIES):
             GROUP BY max_points_table.problem_id
             ORDER BY max_points DESC, judge_submission.date DESC
             LIMIT %s OFFSET %s
-        ''', (user.id, user.id, end - start + 1, start))
+        """, (user.id, user.id, end - start + 1, start))
         data = cursor.fetchall()
 
     breakdown = []

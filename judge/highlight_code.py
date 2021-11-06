@@ -8,10 +8,10 @@ def _make_pre_code(code):
 
 
 def _wrap_code(inner):
-    yield 0, "<code>"
+    yield 0, '<code>'
     for tup in inner:
         yield tup
-    yield 0, "</code>"
+    yield 0, '</code>'
 
 
 try:

@@ -9,7 +9,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from judge.judgeapi import abort_submission, judge_submission
-from judge.models.problem import Problem, TranslatedProblemForeignKeyQuerySet
+from judge.models.problem import Problem, SubmissionSourceAccess, TranslatedProblemForeignKeyQuerySet
 from judge.models.profile import Profile
 from judge.models.runtime import Language
 from judge.utils.unicode import utf8bytes
@@ -46,7 +46,7 @@ class Submission(models.Model):
     USER_DISPLAY_CODES = {
         'AC': _('Accepted'),
         'WA': _('Wrong Answer'),
-        'SC': "Short Circuited",
+        'SC': 'Short Circuited',
         'TLE': _('Time Limit Exceeded'),
         'MLE': _('Memory Limit Exceeded'),
         'OLE': _('Output Limit Exceeded'),
@@ -129,20 +129,21 @@ class Submission(models.Model):
         if not user.is_authenticated:
             return False
         profile = user.profile
+        source_visibility = self.problem.submission_source_visibility
         if self.problem.is_editable_by(user):
             return True
         elif user.has_perm('judge.view_all_submission'):
             return True
         elif self.user_id == profile.id:
             return True
-        elif settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'all':
+        elif source_visibility == SubmissionSourceAccess.ALWAYS:
             return True
-        elif settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'all-solved' and \
+        elif source_visibility == SubmissionSourceAccess.SOLVED and \
                 (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
                 self.problem.submission_set.filter(user_id=profile.id, result='AC',
                                                    points=self.problem.points).exists():
             return True
-        elif settings.DMOJ_SUBMISSION_SOURCE_VISIBILITY == 'only-own' and \
+        elif source_visibility == SubmissionSourceAccess.ONLY_OWN and \
                 self.problem.testers.filter(id=profile.id).exists():
             return True
 

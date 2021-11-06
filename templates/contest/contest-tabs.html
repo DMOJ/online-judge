@@ -42,7 +42,7 @@
                     <form action="{{ url('contest_join', contest.key) }}" method="post"
                           class="contest-join-pseudotab unselectable button">
                         {% csrf_token %}
-                        <input type="submit" value="{{ _('Virtual join') }}">
+                        <input type="submit" value="{{ _('Virtual join') }}" class="contest-join">
                     </form>
                 {% endif %}
             {% else %}
@@ -62,13 +62,14 @@
                     <form action="{{ url('contest_join', contest.key) }}" method="post"
                           class="contest-join-pseudotab unselectable button">
                         {% csrf_token %}
-                        <input type="submit" value="{{ _('Spectate contest') }}">
+                        <input type="submit" value="{{ _('Spectate contest') }}" class="contest-join">
                     </form>
                 {% else %}
                     <form action="{{ url('contest_join', contest.key) }}" method="post"
                           class="contest-join-pseudotab unselectable button">
                         {% csrf_token %}
-                        <input type="submit" {% if not has_joined %}class="first-join"{% endif %}
+                        <input type="submit"
+                               class="contest-join{% if not has_joined %} first-join{% endif %}"
                                value="{{ _('Join contest') }}">
                     </form>
                 {% endif %}

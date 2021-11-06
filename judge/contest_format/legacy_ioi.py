@@ -6,7 +6,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy
 
 from judge.contest_format.default import DefaultContestFormat
 from judge.contest_format.registry import register_contest_format
@@ -17,9 +17,9 @@ from judge.utils.timedelta import nice_repr
 class LegacyIOIContestFormat(DefaultContestFormat):
     name = gettext_lazy('IOI (pre-2016)')
     config_defaults = {'cumtime': False}
-    '''
+    """
         cumtime: Specify True if time penalties are to be computed. Defaults to False.
-    '''
+    """
 
     @classmethod
     def validate(cls, config):
@@ -77,7 +77,7 @@ class LegacyIOIContestFormat(DefaultContestFormat):
             })
 
         participation.cumtime = max(cumtime, 0)
-        participation.score = score
+        participation.score = round(score, self.contest.points_precision)
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
@@ -106,3 +106,12 @@ class LegacyIOIContestFormat(DefaultContestFormat):
             points=floatformat(participation.score, -self.contest.points_precision),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday') if self.config['cumtime'] else '',
         )
+
+    def get_short_form_display(self):
+        yield _('The maximum score submission for each problem will be used.')
+
+        if self.config['cumtime']:
+            yield _('Ties will be broken by the sum of the last score altering submission time on problems with a '
+                    'non-zero score.')
+        else:
+            yield _('Ties by score will **not** be broken.')

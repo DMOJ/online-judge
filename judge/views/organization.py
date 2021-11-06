@@ -177,6 +177,9 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
 
     def dispatch(self, request, *args, **kwargs):
         self.object = self.get_object()
+        if self.object.requests.filter(user=self.request.profile, state='P').exists():
+            return generic_message(self.request, _("Can't request to join %s") % self.object.name,
+                                   _('You already have a pending request to join %s.') % self.object.name)
         return super(RequestJoinOrganization, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

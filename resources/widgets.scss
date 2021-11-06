@@ -526,3 +526,10 @@ ul.select2-selection__rendered {
         }
     }
 }
+
+details {
+    border: 1px solid $border_gray;
+    background: $background_light_gray;
+    padding: 5px 10px;
+    border-radius: 4px;
+}

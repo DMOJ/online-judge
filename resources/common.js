@@ -246,8 +246,11 @@ $(function () {
     register_time($('.time-with-rel'));
 
     $('form').submit(function (evt) {
-        // Prevent multiple submissions of forms, see #565
-        $("input[type='submit']").prop('disabled', true);
+        // Prevent multiple submissions of forms, see #565, #1776
+        $(this).submit(function() {
+            return false;
+        });
+        return true;
     });
 });
 

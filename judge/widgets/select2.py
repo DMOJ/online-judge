@@ -117,7 +117,7 @@ class Select2TagMixin(object):
         extra_attrs = extra_attrs or {}
         extra_attrs.setdefault('data-minimum-input-length', 1)
         extra_attrs.setdefault('data-tags', 'true')
-        extra_attrs.setdefault('data-token-separators', [",", " "])
+        extra_attrs.setdefault('data-token-separators', [',', ' '])
         return super(Select2TagMixin, self).build_attrs(base_attrs, extra_attrs)
 
 
@@ -203,8 +203,8 @@ class HeavySelect2Mixin(Select2Mixin):
 
         attrs['data-field_id'] = self.widget_id
         attrs.setdefault('data-ajax--url', self.get_url())
-        attrs.setdefault('data-ajax--cache', "true")
-        attrs.setdefault('data-ajax--type', "GET")
+        attrs.setdefault('data-ajax--cache', 'true')
+        attrs.setdefault('data-ajax--type', 'GET')
         attrs.setdefault('data-minimum-input-length', 2)
 
         attrs['class'] += ' django-select2-heavy'
