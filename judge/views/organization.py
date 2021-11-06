@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.core.exceptions import PermissionDenied
-from django.db.models import Count, Q
+from django.db.models import Count, IntegerField, OuterRef, Q, Subquery, Value
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.urls import reverse
@@ -94,6 +94,15 @@ class OrganizationHome(OrganizationDetailView):
             self.object.can_review_all_requests(self.request.profile) or
             self.object.can_review_class_requests(self.request.profile)
         )
+
+        classes = self.object.classes.filter(is_active=True)
+        if self.request.user.is_authenticated:
+            classes = classes.annotate(joined=Subquery(
+                self.request.profile.classes.filter(id=OuterRef('id')).values('id'),
+            )).order_by('-joined', 'name')
+        else:
+            classes = classes.annotate(joined=Value(0, output_field=IntegerField()))
+        context['classes'] = classes
         return context
 
 
@@ -396,10 +405,10 @@ class ClassHome(TitleMixin, DetailView):
         org = self.object.organization
         return mark_safe(escape(_('Class {name} in {organization}')).format(
             name=escape(self.object.name),
-            organization=format_html('<a href="{0}">{1}</html>', org.get_absolute_url(), org.name)
+            organization=format_html('<a href="{0}">{1}</html>', org.get_absolute_url(), org.name),
         ))
 
     def get_title(self):
         return _('Class {name} - {organization}').format(
-            name=self.object.name, organization=self.object.organization.name
+            name=self.object.name, organization=self.object.organization.name,
         )
