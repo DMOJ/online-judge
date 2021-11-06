@@ -83,6 +83,12 @@ class Organization(models.Model):
     def get_users_url(self):
         return reverse('organization_users', args=(self.id, self.slug))
 
+    def can_review_all_requests(self, profile):
+        return self.admins.filter(id=profile.id).exists()
+
+    def can_review_class_requests(self, profile):
+        return self.classes.filter(admins__id=profile.id).exists()
+
     class Meta:
         ordering = ['name']
         permissions = (

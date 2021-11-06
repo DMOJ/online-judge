@@ -83,6 +83,10 @@ class OrganizationHome(OrganizationDetailView):
         context = super(OrganizationHome, self).get_context_data(**kwargs)
         context['title'] = self.object.name
         context['can_edit'] = self.can_edit_organization()
+        context['can_review_requests'] = not self.object.is_open and self.request.user.is_authenticated and (
+            self.object.can_review_all_requests(self.request.profile) or
+            self.object.can_review_class_requests(self.request.profile)
+        )
         return context
 
 
@@ -202,7 +206,8 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
     def get_object(self, queryset=None):
         object = super(OrganizationRequestDetail, self).get_object(queryset)
         profile = self.request.profile
-        if object.user_id != profile.id and not object.organization.admins.filter(id=profile.id).exists():
+        if object.user_id != profile.id and not object.organization.admins.filter(id=profile.id).exists() and (
+                not object.request_class or not object.request_class.admins.filter(id=profile.id).exists()):
             raise PermissionDenied()
         return object
 
@@ -218,9 +223,19 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
-        if not organization.admins.filter(id=self.request.profile.id).exists():
+        if organization.can_review_all_requests(self.request.profile):
+            self.edit_all = True
+        elif organization.can_review_class_requests(self.request.profile):
+            self.edit_all = False
+        else:
             raise PermissionDenied()
         return organization
+
+    def get_requests(self):
+        queryset = self.object.requests.all()
+        if not self.edit_all:
+            queryset = queryset.filter(request_class__in=self.object.classes.filter(admins__id=self.request.profile.id))
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestBaseView, self).get_context_data(**kwargs)
@@ -240,15 +255,16 @@ class OrganizationRequestView(OrganizationRequestBaseView):
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        self.formset = OrganizationRequestFormSet(
-            queryset=OrganizationRequest.objects.filter(state='P', organization=self.object),
-        )
+        self.formset = OrganizationRequestFormSet(queryset=self.get_requests())
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
+    def get_requests(self):
+        return super().get_requests().filter(state='P')
+
     def post(self, request, *args, **kwargs):
         self.object = organization = self.get_object()
-        self.formset = formset = OrganizationRequestFormSet(request.POST, request.FILES)
+        self.formset = formset = OrganizationRequestFormSet(request.POST, request.FILES, queryset=self.get_requests())
         if formset.is_valid():
             if organization.slots is not None:
                 deleted_set = set(formset.deleted_forms)
@@ -263,6 +279,8 @@ class OrganizationRequestView(OrganizationRequestBaseView):
             for obj in formset.save():
                 if obj.state == 'A':
                     obj.user.organizations.add(obj.organization)
+                    if obj.request_class:
+                        obj.user.classes.add(obj.request_class)
                     approved += 1
                 elif obj.state == 'R':
                     rejected += 1
@@ -288,7 +306,7 @@ class OrganizationRequestLog(OrganizationRequestBaseView):
 
     def get_context_data(self, **kwargs):
         context = super(OrganizationRequestLog, self).get_context_data(**kwargs)
-        context['requests'] = self.object.requests.filter(state__in=self.states)
+        context['requests'] = self.get_requests().filter(state__in=self.states)
         return context
 
 
