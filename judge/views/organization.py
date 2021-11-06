@@ -26,7 +26,7 @@ from judge.utils.views import TitleMixin, generic_message
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'OrganizationMembershipChange',
            'JoinOrganization', 'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization',
            'OrganizationRequestDetail', 'OrganizationRequestView', 'OrganizationRequestLog',
-           'KickUserWidgetView', 'ClassHome']
+           'KickUserWidgetView', 'ClassHome', 'RequestJoinClass']
 
 
 def users_for_template(users):
@@ -380,18 +380,10 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixi
         return HttpResponseRedirect(organization.get_users_url())
 
 
-class ClassHome(TitleMixin, DetailView):
+class ClassMixin(TitleMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin):
     context_object_name = 'class'
     model = Class
     pk_url_kwarg = 'cpk'
-    template_name = 'organization/class.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['logo_override_image'] = self.object.organization.logo_override_image
-        context['users'] = users_for_template(self.object.members)
-        context['is_admin'] = False  # Don't allow kicking here
-        return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -400,6 +392,17 @@ class ClassHome(TitleMixin, DetailView):
             return HttpResponsePermanentRedirect(self.object.get_absolute_url())
         context = self.get_context_data()
         return self.render_to_response(context)
+
+
+class ClassHome(ClassMixin, DetailView):
+    template_name = 'organization/class.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['logo_override_image'] = self.object.organization.logo_override_image
+        context['users'] = users_for_template(self.object.members)
+        context['is_admin'] = False  # Don't allow kicking here
+        return context
 
     def get_content_title(self):
         org = self.object.organization
@@ -412,3 +415,44 @@ class ClassHome(TitleMixin, DetailView):
         return _('Class {name} - {organization}').format(
             name=self.object.name, organization=self.object.organization.name,
         )
+
+
+class ClassRequestForm(Form):
+    reason = forms.CharField(widget=forms.Textarea)
+
+
+class RequestJoinClass(LoginRequiredMixin, ClassMixin, FormView):
+    template_name = 'organization/requests/request.html'
+    form_class = ClassRequestForm
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        self.object = self.get_object()
+        org = self.object.organization
+        if not org.members.filter(id=self.request.profile.id).exists():
+            return HttpResponseRedirect(reverse('request_organization', args=(org.id, org.slug)))
+        if org.requests.filter(user=self.request.profile, state='P', request_class=self.object).exists():
+            return generic_message(self.request, _("Can't request to join %s") % self.object.name,
+                                   _('You already have a pending request to join %s.') % self.object.name)
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = _('Request to join {name} in {organization}').format(
+            name=self.object.name, organization=self.object.organization.name,
+        )
+        return context
+
+    def form_valid(self, form):
+        request = OrganizationRequest()
+        request.organization = self.object.organization
+        request.user = self.request.profile
+        request.reason = form.cleaned_data['reason']
+        request.request_class = self.object
+        request.state = 'P'
+        request.save()
+        return HttpResponseRedirect(reverse('request_organization_detail', args=(
+            request.organization.id, request.organization.slug, request.id,
+        )))

@@ -251,7 +251,10 @@ urlpatterns = [
                 name='organization_requests_rejected'),
         ])),
 
-        path('/class/<int:cpk>-<slug:cslug>', organization.ClassHome.as_view(), name='class_home'),
+        path('/class/<int:cpk>-<slug:cslug>', include([
+            path('', organization.ClassHome.as_view(), name='class_home'),
+            path('/join', organization.RequestJoinClass.as_view(), name='class_join'),
+        ])),
 
         url(r'^/$', lambda _, pk, slug: HttpResponsePermanentRedirect(reverse('organization_home', args=[pk, slug]))),
     ])),
