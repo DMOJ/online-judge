@@ -6,15 +6,32 @@
     {% endif %}
 
     {% if error.is_organization_private %}
-        {% if error.is_private %}
-            <p>{{ _('Additionally, only the following organizations may access this contest:') }}</p>
-        {% else %}
-            <p>{{ _('Only the following organizations may access this contest:') }}</p>
+        {% if error.orgs %}
+            {% if error.is_private %}
+                <p>{{ _('Additionally, only the following organizations may access this contest:') }}</p>
+            {% else %}
+                <p>{{ _('Only the following organizations may access this contest:') }}</p>
+            {% endif %}
+            <ul>
+                {% for org in error.orgs %}
+                    <li><a href="{{ org.get_absolute_url() }}">{{ org.name }}</a></li>
+                {% endfor %}
+            </ul>
         {% endif %}
-        <ul>
-            {% for org in error.orgs %}
-                <li><a href="{{ org.get_absolute_url() }}">{{ org.name }}</a></li>
-            {% endfor %}
-        </ul>
+
+        {% if error.classes %}
+            {% if not error.orgs and error.is_private %}
+                <p>{{ _('Additionally, only the following classes may access this contest:') }}</p>
+            {% elif not error.orgs %}
+                <p>{{ _('Only the following classes may access this contest:') }}</p>
+            {% else %}
+                <p>{{ _('Alternatively, the following classes may access this contest:') }}</p>
+            {% endif %}
+            <ul>
+                {% for class in error.classes %}
+                    <li><a href="{{ class.get_absolute_url() }}">{{ class.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% endif %}
 {% endblock %}
