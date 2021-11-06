@@ -1,5 +1,26 @@
 {% extends "common-content.html" %}
 
+{% block content_media %}
+    <style>
+        .class-list td {
+            vertical-align: middle;
+        }
+
+        .class-list td:first-child {
+            text-align: left;
+            padding: 0.5em 0.5em 0.5em 1em;
+        }
+
+        .class-list td:last-child {
+            width: 8em;
+        }
+
+        .class-description {
+            color: #777;
+        }
+    </style>
+{% endblock %}
+
 {% block content_js_media %}
     <script type="text/javascript">
         $(function () {
@@ -60,4 +81,26 @@
     {% cache 3600 'organization_html' organization.id MATH_ENGINE %}
         {{ organization.about|markdown('organization-about', MATH_ENGINE)|reference|str|safe }}
     {% endcache %}
+
+    {% if classes %}
+        <hr>
+        <table class="table class-list">
+            <thead><tr><th>{{ _('Class') }}</th><th></th></tr></thead>
+            <tbody>
+                {% for class in classes %}
+                    <tr>
+                        <td>
+                            <a href="{{ class.get_absolute_url() }}">{{ class.name }}</a>
+                            <div class="class-description">{{ class.description }}</div>
+                        </td>
+                        <td>{% if class.joined %}
+                            {{ _('Joined') }}
+                        {% else -%}
+                            {{ _('Request to join') }}
+                        {%- endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 {% endblock %}
