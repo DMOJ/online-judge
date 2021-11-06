@@ -209,6 +209,7 @@ else:
                     'children': [
                         'judge.Organization',
                         'judge.OrganizationRequest',
+                        'judge.Class',
                     ],
                 },
                 {
