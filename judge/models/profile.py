@@ -118,7 +118,7 @@ class Class(models.Model):
         return f'{self.name} in {self.organization.name}'
 
     def get_absolute_url(self):
-        return '#'
+        return reverse('class_home', args=(self.organization.id, self.organization.slug, self.id, self.slug))
 
     class Meta:
         ordering = ['organization', 'name']

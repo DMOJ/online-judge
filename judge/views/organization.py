@@ -11,6 +11,8 @@ from django.db.models import Count, Q
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
 from django.urls import reverse
+from django.utils.html import escape, format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy, ngettext
 from django.views.generic import DetailView, FormView, ListView, UpdateView, View
 from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateResponseMixin
@@ -24,7 +26,12 @@ from judge.utils.views import TitleMixin, generic_message
 __all__ = ['OrganizationList', 'OrganizationHome', 'OrganizationUsers', 'OrganizationMembershipChange',
            'JoinOrganization', 'LeaveOrganization', 'EditOrganization', 'RequestJoinOrganization',
            'OrganizationRequestDetail', 'OrganizationRequestView', 'OrganizationRequestLog',
-           'KickUserWidgetView']
+           'KickUserWidgetView', 'ClassHome']
+
+
+def users_for_template(users):
+    return ranker(users.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
+                  .select_related('user').defer('about', 'user_script', 'notes'))
 
 
 class OrganizationMixin(object):
@@ -96,9 +103,7 @@ class OrganizationUsers(OrganizationDetailView):
     def get_context_data(self, **kwargs):
         context = super(OrganizationUsers, self).get_context_data(**kwargs)
         context['title'] = _('%s Members') % self.object.name
-        context['users'] = \
-            ranker(self.object.members.filter(is_unlisted=False).order_by('-performance_points', '-problem_count')
-                   .select_related('user').defer('about', 'user_script', 'notes'))
+        context['users'] = users_for_template(self.object.members)
         context['partial'] = True
         context['is_admin'] = self.can_edit_organization()
         context['kick_url'] = reverse('organization_user_kick', args=[self.object.id, self.object.slug])
@@ -364,3 +369,37 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixi
 
         organization.members.remove(user)
         return HttpResponseRedirect(organization.get_users_url())
+
+
+class ClassHome(TitleMixin, DetailView):
+    context_object_name = 'class'
+    model = Class
+    pk_url_kwarg = 'cpk'
+    template_name = 'organization/class.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['logo_override_image'] = self.object.organization.logo_override_image
+        context['users'] = users_for_template(self.object.members)
+        context['is_admin'] = False  # Don't allow kicking here
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        org = self.object.organization
+        if self.object.slug != kwargs['cslug'] or str(org.id) != kwargs['pk'] or org.slug != kwargs['slug']:
+            return HttpResponsePermanentRedirect(self.object.get_absolute_url())
+        context = self.get_context_data()
+        return self.render_to_response(context)
+
+    def get_content_title(self):
+        org = self.object.organization
+        return mark_safe(escape(_('Class {name} in {organization}')).format(
+            name=escape(self.object.name),
+            organization=format_html('<a href="{0}">{1}</html>', org.get_absolute_url(), org.name)
+        ))
+
+    def get_title(self):
+        return _('Class {name} - {organization}').format(
+            name=self.object.name, organization=self.object.organization.name
+        )
