@@ -108,6 +108,9 @@ class Class(models.Model):
     members = models.ManyToManyField('Profile', verbose_name=_('members'), blank=True,
                                      related_name='classes', related_query_name='class')
 
+    def __str__(self):
+        return f'{self.name} in {self.organization.name}'
+
     class Meta:
         ordering = ['organization', 'name']
         verbose_name = _('class')
