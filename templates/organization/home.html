@@ -37,12 +37,12 @@
 
     {% if can_edit %}
         <div><a href="{{ url('edit_organization', organization.id, organization.slug) }}">{{ _('Edit organization') }}</a></div>
+    {% endif %}
 
-        {% if not organization.is_open %}
-            <div>
-                <a href="{{ url('organization_requests_pending', organization.id, organization.slug) }}">{{ _('View requests') }}</a>
-            </div>
-        {% endif %}
+    {% if can_review_requests %}
+        <div>
+            <a href="{{ url('organization_requests_pending', organization.id, organization.slug) }}">{{ _('View requests') }}</a>
+        </div>
     {% endif %}
 
     {% if perms.judge.change_organization %}
