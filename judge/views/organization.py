@@ -1,3 +1,5 @@
+from operator import attrgetter
+
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -15,7 +17,7 @@ from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateR
 from reversion import revisions
 
 from judge.forms import EditOrganizationForm
-from judge.models import Organization, OrganizationRequest, Profile
+from judge.models import Class, Organization, OrganizationRequest, Profile
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
 
@@ -140,7 +142,15 @@ class LeaveOrganization(OrganizationMembershipChange):
 
 
 class OrganizationRequestForm(Form):
+    class_ = forms.ModelChoiceField(Class.objects.all())
     reason = forms.CharField(widget=forms.Textarea)
+
+    def __init__(self, *args, class_required: bool, class_queryset, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.fields['class_'].required = class_required
+        self.fields['class_'].queryset = class_queryset
+        self.fields['class_'].label_from_instance = attrgetter('name')
+        self.show_classes = class_required or bool(class_queryset)
 
 
 class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
@@ -155,12 +165,18 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         if self.object.requests.filter(user=self.request.profile, state='P').exists():
             return generic_message(self.request, _("Can't request to join %s") % self.object.name,
                                    _('You already have a pending request to join %s.') % self.object.name)
+        if self.object.is_open:
+            raise Http404()
         return super(RequestJoinOrganization, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self) -> dict:
+        kwargs = super().get_form_kwargs()
+        kwargs['class_required'] = self.object.class_required
+        kwargs['class_queryset'] = self.object.classes.filter(is_active=True)
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super(RequestJoinOrganization, self).get_context_data(**kwargs)
-        if self.object.is_open:
-            raise Http404()
         context['title'] = _('Request to join %s') % self.object.name
         return context
 
@@ -169,6 +185,7 @@ class RequestJoinOrganization(LoginRequiredMixin, SingleObjectMixin, FormView):
         request.organization = self.get_object()
         request.user = self.request.profile
         request.reason = form.cleaned_data['reason']
+        request.request_class = form.cleaned_data['class_']
         request.state = 'P'
         request.save()
         return HttpResponseRedirect(reverse('request_organization_detail', args=(
