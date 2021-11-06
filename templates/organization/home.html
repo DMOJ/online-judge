@@ -96,7 +96,7 @@
                         <td>{% if class.joined %}
                             {{ _('Joined') }}
                         {% else -%}
-                            {{ _('Request to join') }}
+                            <a class="button" href="{{ class.get_join_url() }}">{{ _('Request to join') }}</a>
                         {%- endif %}</td>
                     </tr>
                 {% endfor %}

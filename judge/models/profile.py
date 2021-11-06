@@ -118,7 +118,14 @@ class Class(models.Model):
         return f'{self.name} in {self.organization.name}'
 
     def get_absolute_url(self):
-        return reverse('class_home', args=(self.organization.id, self.organization.slug, self.id, self.slug))
+        return reverse('class_home', args=self._url_args)
+
+    def get_join_url(self):
+        return reverse('class_join', args=self._url_args)
+
+    @cached_property
+    def _url_args(self):
+        return self.organization.id, self.organization.slug, self.id, self.slug
 
     class Meta:
         ordering = ['organization', 'name']
