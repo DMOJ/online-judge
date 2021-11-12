@@ -59,7 +59,8 @@ class OrganizationDetailView(OrganizationMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         if self.object.slug != kwargs['slug']:
-            return HttpResponsePermanentRedirect(reverse('organization_home', args=(self.object.id, self.object.slug)))
+            return HttpResponsePermanentRedirect(reverse(
+                request.resolver_match.url_name, args=(self.object.id, self.object.slug)))
         context = self.get_context_data(object=self.object)
         return self.render_to_response(context)
 
