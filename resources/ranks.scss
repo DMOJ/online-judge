@@ -58,6 +58,10 @@ svg.rate-box {
 
 .rating {
     font-weight: bold;
+
+    a {
+        display: inline-block;
+    }
 }
 
 .rate-none, .rate-none a {
@@ -87,6 +91,10 @@ svg.rate-box {
 
 .rate-grandmaster, .rate-grandmaster a, .rate-target, .rate-target a {
     color: #e00;
+}
+
+.rate-target a::first-letter {
+    color: #700;
 }
 
 .rate-group {
