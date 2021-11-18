@@ -43,13 +43,14 @@ class BasePdfMaker(object):
     math_engine = 'jax'
     title = None
 
-    def __init__(self, dir=None, clean_up=True):
+    def __init__(self, dir=None, clean_up=True, footer=True):
         self.dir = dir or os.path.join(settings.DMOJ_PDF_PROBLEM_TEMP_DIR, str(uuid.uuid1()))
         self.proc = None
         self.log = None
         self.htmlfile = os.path.join(self.dir, 'input.html')
         self.pdffile = os.path.join(self.dir, 'output.pdf')
         self.clean_up = clean_up
+        self.footer = footer
 
     def load(self, file, source):
         with open(os.path.join(self.dir, file), 'w') as target, open(source) as source:
@@ -106,13 +107,13 @@ var param = {params};
 
 page.paperSize = {
     format: param.paper, orientation: 'portrait', margin: '1cm',
-    footer: {
+    footer: param.footer ? {
         height: '1cm',
         contents: phantom.callback(function(num, pages) {
             return ('<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">'
                   + param.footer.replace('[page]', num).replace('[topage]', pages) + '</center>');
         })
-    }
+    } : {}
 };
 
 page.onCallback = function (data) {
@@ -144,7 +145,7 @@ page.open(param.input, function (status) {
             'timeout': int(settings.PHANTOMJS_PDF_TIMEOUT * 1000),
             'input': 'input.html', 'output': 'output.pdf',
             'paper': settings.PHANTOMJS_PAPER_SIZE,
-            'footer': gettext('Page [page] of [topage]'),
+            'footer': gettext('Page [page] of [topage]') if self.footer else '',
         }))
 
     def _make(self, debug):
@@ -174,8 +175,9 @@ try {
 
     page.paperSize = {
         format: param.paper, orientation: 'portrait', margin: '1cm', edge: '0.5cm',
-        footerStr: { left: '', right: '', center: param.footer }
     };
+    if (param.footer)
+        page.paperSize.footerStr = { left: '', right: '', center: param.footer };
 
     page.open(param.input, function (status) {
         if (status !== 'success') {
@@ -193,11 +195,15 @@ try {
 """
 
     def get_render_script(self):
+        if self.footer:
+            footer = gettext('Page [page] of [topage]').replace('[page]', '&P').replace('[topage]', '&L')
+        else:
+            footer = ''
         return self.template.replace('{params}', json.dumps({
             'zoom': settings.SLIMERJS_PDF_ZOOM,
             'input': 'input.html', 'output': 'output.pdf',
             'paper': settings.SLIMERJS_PAPER_SIZE,
-            'footer': gettext('Page [page] of [topage]').replace('[page]', '&P').replace('[topage]', '&L'),
+            'footer': footer,
         }))
 
     def _make(self, debug):
@@ -224,7 +230,7 @@ const puppeteer = require('puppeteer');
 puppeteer.launch().then(browser => Promise.resolve()
     .then(async () => {
         const page = await browser.newPage();
-        await page.goto(param.input, { waitUntil: 'load' });
+        await page.goto(param.input, { waitUntil: 'networkidle0' });
         await page.waitForSelector('.math-loaded', { timeout: 15000 });
         await page.pdf({
             path: param.output,
@@ -238,10 +244,10 @@ puppeteer.launch().then(browser => Promise.resolve()
             printBackground: true,
             displayHeaderFooter: true,
             headerTemplate: '<div></div>',
-            footerTemplate: '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">' +
+            footerTemplate: param.footer ? '<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">' +
                 param.footer.replace('[page]', '<span class="pageNumber"></span>')
                             .replace('[topage]', '<span class="totalPages"></span>')
-                + '</center>',
+                + '</center>' : '<div></div>',
         });
         await browser.close();
     })
@@ -257,7 +263,7 @@ puppeteer.launch().then(browser => Promise.resolve()
             'input': 'file://%s' % self.htmlfile,
             'output': self.pdffile,
             'paper': settings.PUPPETEER_PAPER_SIZE,
-            'footer': gettext('Page [page] of [topage]'),
+            'footer': gettext('Page [page] of [topage]') if self.footer else '',
         }))
 
     def _make(self, debug):
@@ -303,7 +309,11 @@ class SeleniumPDFRender(BasePdfMaker):
             self.log = self.get_log(browser) + '\nPDF math rendering timed out'
             return
 
-        response = browser.execute_cdp_cmd('Page.printToPDF', self.template)
+        template = self.template
+        if not self.footer:
+            template = template.copy()
+            template['footerTemplate'] = '<div></div>'
+        response = browser.execute_cdp_cmd('Page.printToPDF', template)
         self.log = self.get_log(browser)
         if not response:
             return

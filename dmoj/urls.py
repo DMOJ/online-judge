@@ -7,7 +7,7 @@ from django.http import Http404, HttpResponsePermanentRedirect
 from django.templatetags.static import static
 from django.urls import path, reverse
 from django.utils.functional import lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import RedirectView
 from martor.views import markdown_search_user
 
@@ -114,7 +114,6 @@ urlpatterns = [
     url(r'^problem/(?P<problem>[^/]+)', include([
         url(r'^$', problem.ProblemDetail.as_view(), name='problem_detail'),
         url(r'^/editorial$', problem.ProblemSolution.as_view(), name='problem_editorial'),
-        url(r'^/raw$', problem.ProblemRaw.as_view(), name='problem_raw'),
         url(r'^/pdf$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
         url(r'^/pdf/(?P<language>[a-z-]+)$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
         url(r'^/clone', problem.ProblemClone.as_view(), name='problem_clone'),
@@ -196,6 +195,7 @@ urlpatterns = [
     ])),
 
     url(r'^contests/$', contests.ContestList.as_view(), name='contest_list'),
+    path('contests.ics', contests.ContestICal.as_view(), name='contest_ical'),
     url(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', contests.ContestCalendar.as_view(), name='contest_calendar'),
     url(r'^contests/tag/(?P<name>[a-z-]+)', include([
         url(r'^$', contests.ContestTagDetail.as_view(), name='contest_tag'),

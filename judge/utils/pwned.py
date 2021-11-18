@@ -40,7 +40,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth.password_validation import CommonPasswordValidator
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _, ungettext
+from django.utils.translation import gettext as _, ngettext
 
 from judge.utils.unicode import utf8bytes
 
@@ -123,7 +123,7 @@ class PwnedPasswordsValidator(object):
             CommonPasswordValidator().validate(password, user)
         elif amount:
             raise ValidationError(
-                ungettext(
+                ngettext(
                     self.error_message['singular'],
                     self.error_message['plural'],
                     amount,
