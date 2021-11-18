@@ -58,7 +58,8 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
         (None, {'fields': ('user', 'display_rank')}),
         (_('User Settings'), {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
         (_('Administration'), {'fields': ('is_external_user', 'mute', 'is_unlisted', 'is_totp_enabled',
-                                          'last_access', 'ip', 'current_contest', 'notes', 'username_display_override')}),
+                                          'last_access', 'ip', 'current_contest', 'notes',
+                                          'username_display_override')}),
         (_('Text Fields'), {'fields': ('about', 'user_script')}),
     )
     readonly_fields = ('user',)
