@@ -33,6 +33,7 @@ sqlparse
 lupa
 martor @ git+git://github.com/DMOJ/martor.git
 netaddr
-webauthn
+webauthn<1
 bleach
 django-admin-sortable2
+icalendar

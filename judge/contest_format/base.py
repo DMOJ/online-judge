@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod, abstractproperty
+from abc import ABCMeta, abstractmethod
 
 
 class abstractclassmethod(classmethod):
@@ -15,7 +15,8 @@ class BaseContestFormat(metaclass=ABCMeta):
         self.config = config
         self.contest = contest
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def name(self):
         """
         Name of this contest format. Should be invoked with gettext_lazy.

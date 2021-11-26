@@ -1,6 +1,6 @@
 import datetime
 
-from django.utils.translation import npgettext, pgettext, ungettext
+from django.utils.translation import ngettext, npgettext, pgettext
 
 
 def nice_repr(timedelta, display='long', sep=', '):
@@ -58,7 +58,7 @@ def nice_repr(timedelta, display='long', sep=', '):
             if hours or minutes:
                 return npgettext('time format no seconds with day', '%d day %h:%m', '%d days %h:%m', days) \
                     .replace('%d', str(days)).replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)
-            return ungettext('%d day', '%d days', days) % days
+            return ngettext('%d day', '%d days', days) % days
         else:
             return pgettext('hours and minutes', '%h:%m').replace('%h', '%02d' % hours).replace('%m', '%02d' % minutes)
     elif display == 'concise':

@@ -12,6 +12,8 @@
             {% if next_month %}
                 <a href="{{ url('contest_calendar', next_month.year, next_month.month) }}">{{ _('Next') }} &raquo;</a>
             {% endif %}
+            {% if prev_month or next_month %}|{% endif %}
+            <a href="{{ url('contest_ical') }}">{{ _("Export") }}</a>
         </div>
         <span class="spacer"></span>
     {% endif %}

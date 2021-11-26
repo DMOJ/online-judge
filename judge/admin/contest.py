@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _, ungettext
+from django.utils.translation import gettext_lazy as _, ngettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
@@ -217,36 +217,36 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         if not request.user.has_perm('judge.change_contest_visibility'):
             queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
         count = queryset.update(is_visible=True)
-        self.message_user(request, ungettext('%d contest successfully marked as visible.',
-                                             '%d contests successfully marked as visible.',
-                                             count) % count)
+        self.message_user(request, ngettext('%d contest successfully marked as visible.',
+                                            '%d contests successfully marked as visible.',
+                                            count) % count)
     make_visible.short_description = _('Mark contests as visible')
 
     def make_hidden(self, request, queryset):
         if not request.user.has_perm('judge.change_contest_visibility'):
             queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
         count = queryset.update(is_visible=True)
-        self.message_user(request, ungettext('%d contest successfully marked as hidden.',
-                                             '%d contests successfully marked as hidden.',
-                                             count) % count)
+        self.message_user(request, ngettext('%d contest successfully marked as hidden.',
+                                            '%d contests successfully marked as hidden.',
+                                            count) % count)
     make_hidden.short_description = _('Mark contests as hidden')
 
     def set_locked(self, request, queryset):
         for row in queryset:
             self.set_is_locked(row, True)
         count = queryset.count()
-        self.message_user(request, ungettext('%d contest successfully locked.',
-                                             '%d contests successfully locked.',
-                                             count) % count)
+        self.message_user(request, ngettext('%d contest successfully locked.',
+                                            '%d contests successfully locked.',
+                                            count) % count)
     set_locked.short_description = _('Lock contest submissions')
 
     def set_unlocked(self, request, queryset):
         for row in queryset:
             self.set_is_locked(row, False)
         count = queryset.count()
-        self.message_user(request, ungettext('%d contest successfully unlocked.',
-                                             '%d contests successfully unlocked.',
-                                             count) % count)
+        self.message_user(request, ngettext('%d contest successfully unlocked.',
+                                            '%d contests successfully unlocked.',
+                                            count) % count)
     set_unlocked.short_description = _('Unlock contest submissions')
 
     def set_is_locked(self, contest, is_locked):
@@ -266,9 +266,9 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         for model in queryset:
             model.submission.judge(rejudge=True)
 
-        self.message_user(request, ungettext('%d submission was successfully scheduled for rejudging.',
-                                             '%d submissions were successfully scheduled for rejudging.',
-                                             len(queryset)) % len(queryset))
+        self.message_user(request, ngettext('%d submission was successfully scheduled for rejudging.',
+                                            '%d submissions were successfully scheduled for rejudging.',
+                                            len(queryset)) % len(queryset))
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest_id,)))
 
     def rate_all_view(self, request):
@@ -341,9 +341,9 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         for participation in queryset:
             participation.recompute_results()
             count += 1
-        self.message_user(request, ungettext('%d participation recalculated.',
-                                             '%d participations recalculated.',
-                                             count) % count)
+        self.message_user(request, ngettext('%d participation recalculated.',
+                                            '%d participations recalculated.',
+                                            count) % count)
     recalculate_results.short_description = _('Recalculate results')
 
     def username(self, obj):
