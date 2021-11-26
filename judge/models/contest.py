@@ -146,7 +146,6 @@ class Contest(models.Model):
                                              help_text=_('Whether to show a section containing contest settings '
                                                          'on the contest page or not.'),
                                              default=False)
-    is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
                                            help_text=_('If private, only these organizations may join the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
