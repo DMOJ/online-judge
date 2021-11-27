@@ -67,7 +67,7 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
                     'full_name', 'is_external_user',
                     'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
-    search_fields = ('user__username', 'ip', 'user__email')
+    search_fields = ('user__username', 'user__first_name', 'user__last_name', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
     actions = ('recalculate_points',)
     actions_on_top = True
