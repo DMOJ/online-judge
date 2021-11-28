@@ -357,16 +357,16 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
 
     def get_normal_queryset(self):
         filter = Q(is_public=True)
+        if not self.request.user.has_perm('see_organization_problem'):
+            org_filter = Q(is_organization_private=False)
+            if self.profile is not None:
+                org_filter |= Q(organizations__in=self.profile.organizations.all())
+            filter &= org_filter
         if self.profile is not None:
             filter |= Q(authors=self.profile)
             filter |= Q(curators=self.profile)
             filter |= Q(testers=self.profile)
         queryset = Problem.objects.filter(filter).select_related('group').defer('description', 'summary')
-        if not self.request.user.has_perm('see_organization_problem'):
-            filter = Q(is_organization_private=False)
-            if self.profile is not None:
-                filter |= Q(organizations__in=self.profile.organizations.all())
-            queryset = queryset.filter(filter)
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
                                         .values_list('problem__id', flat=True))
