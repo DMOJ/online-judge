@@ -10,9 +10,11 @@
 
 {% block body %}
     <div class="tabs">
-        <li{% if tab == 'language' %} class="active"{% endif %}>
-            <a href="{{ url('language_stats') }}">{{ _('Language') }}</a>
-        </li>
+		<ul>
+		    <li{% if tab == 'language' %} class="tab active"{% endif %}>
+			    <a href="{{ url('language_stats') }}">{{ _('Language') }}</a>
+			</li>
+		</ul>
     </div>
     {% block chart_body %}{% endblock %}
 {% endblock %}
