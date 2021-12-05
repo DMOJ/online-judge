@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _, ngettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
-from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating, Submission
+from judge.models import Class, Contest, ContestProblem, ContestSubmission, Profile, Rating, Submission
 from judge.ratings import rate_contest
 from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
@@ -303,6 +303,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
             Q(user__groups__permissions__codename__in=perms) |
             Q(user__user_permissions__codename__in=perms),
         ).distinct()
+        form.base_fields['classes'].queryset = Class.get_visible_classes(request.user)
         return form
 
 
