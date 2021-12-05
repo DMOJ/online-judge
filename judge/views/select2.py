@@ -54,7 +54,7 @@ class OrganizationSelect2View(Select2View):
 
 class ClassSelect2View(Select2View):
     def get_queryset(self):
-        return Class.objects.filter(name__icontains=self.term)
+        return Class.get_visible_classes(self.request.user).filter(name__icontains=self.term)
 
 
 class ProblemSelect2View(Select2View):

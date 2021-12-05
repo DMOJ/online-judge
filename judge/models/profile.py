@@ -114,6 +114,16 @@ class Class(models.Model):
     members = models.ManyToManyField('Profile', verbose_name=_('members'), blank=True,
                                      related_name='classes', related_query_name='class')
 
+    @classmethod
+    def get_visible_classes(cls, user):
+        if not user.is_authenticated:
+            return cls.objects.none()
+
+        if user.has_perm('judge.edit_all_organization'):
+            return cls.objects.all()
+
+        return cls.objects.filter(contest__organizations__admins=user.profile) | cls.objects.filter(admins=user.profile)
+
     def __str__(self):
         return f'{self.name} in {self.organization.name}'
 
