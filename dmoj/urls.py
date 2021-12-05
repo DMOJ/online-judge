@@ -134,15 +134,15 @@ urlpatterns = [
         path('/tickets/new', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
 
         re_path(r'^/manage/submission', include([
-            re_path('^$', problem_manage.ManageProblemSubmissionView.as_view(), name='problem_manage_submissions'),
-            re_path('^/rejudge$', problem_manage.RejudgeSubmissionsView.as_view(), name='problem_submissions_rejudge'),
-            re_path('^/rejudge/preview$', problem_manage.PreviewRejudgeSubmissionsView.as_view(),
+            path('', problem_manage.ManageProblemSubmissionView.as_view(), name='problem_manage_submissions'),
+            path('/rejudge', problem_manage.RejudgeSubmissionsView.as_view(), name='problem_submissions_rejudge'),
+            path('/rejudge/preview', problem_manage.PreviewRejudgeSubmissionsView.as_view(),
                 name='problem_submissions_rejudge_preview'),
-            re_path('^/rejudge/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rejudge_success,
+            re_path(r'^/rejudge/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rejudge_success,
                 name='problem_submissions_rejudge_success'),
-            re_path('^/rescore/all$', problem_manage.RescoreAllSubmissionsView.as_view(),
+            path('/rescore/all', problem_manage.RescoreAllSubmissionsView.as_view(),
                 name='problem_submissions_rescore_all'),
-            re_path('^/rescore/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rescore_success,
+            re_path(r'^/rescore/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rescore_success,
                 name='problem_submissions_rescore_success'),
         ])),
     ])),
@@ -162,7 +162,7 @@ urlpatterns = [
         path('', user.users, name='user_list'),
         re_path(r'^(?P<page>\d+)$', lambda request, page:
             HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
-        re_path(r'^find$', user.user_ranking_redirect, name='user_ranking_redirect'),
+        path('find', user.user_ranking_redirect, name='user_ranking_redirect'),
     ])),
 
     path('user', user.UserAboutPage.as_view(), name='user_page'),
