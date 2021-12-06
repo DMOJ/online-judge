@@ -36,11 +36,11 @@ $(function () {
                                 success: function () {
                                     $.ajax({
                                         type: 'GET',
-                                        url: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML',
+                                        url: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-chtml.min.js',
                                         dataType: 'script',
                                         cache: true,
                                         success: function () {
-                                            MathJax.Hub.Queue(function () {
+                                            MathJax.typesetPromise([$content[0]]).then(function () {
                                                 $content.find('.tex-image').hide();
                                                 $content.find('.tex-text').show();
                                             });
@@ -49,7 +49,7 @@ $(function () {
                                 }
                             });
                         } else {
-                            MathJax.Hub.Queue(['Typeset', MathJax.Hub, $content[0]], function () {
+                            MathJax.typesetPromise([$content[0]]).then(function () {
                                 $content.find('.tex-image').hide();
                                 $content.find('.tex-text').show();
                             });

@@ -9,5 +9,12 @@
             return confirm('{{ _('Are you sure you want to join?') }}\n' +
                 '{{ _('Joining a contest starts your timer, after which it becomes unstoppable.') }}');
         });
+
+        {% if request.in_contest %}
+            $('.contest-join').click(function () {
+                return confirm('{{ _('Are you sure you want to join?') }}\n' +
+                    '{{ _('Joining this contest will leave %(contest)s.', contest=request.participation.contest.name) }}');
+            });
+        {% endif %}
     });
 </script>

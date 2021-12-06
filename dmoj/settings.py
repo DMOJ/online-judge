@@ -13,7 +13,7 @@ import datetime
 import os
 import tempfile
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 from jinja2 import select_autoescape
 
@@ -36,6 +36,8 @@ SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
 SITE_ADMIN_EMAIL = False
 
 DMOJ_REQUIRE_STAFF_2FA = True
+# Display warnings that admins will not perform 2FA recovery.
+DMOJ_2FA_HARDCORE = False
 
 # Set to 1 to use HTTPS if request was made to https://
 # Set to 2 to always use HTTPS for links
@@ -93,6 +95,9 @@ DMOJ_STATS_SUBMISSION_RESULT_COLORS = {
     'ERR': '#ffa71c',
 }
 DMOJ_API_PAGE_SIZE = 1000
+
+DMOJ_PASSWORD_RESET_LIMIT_WINDOW = 3600
+DMOJ_PASSWORD_RESET_LIMIT_COUNT = 10
 
 MARKDOWN_STYLES = {}
 MARKDOWN_DEFAULT_STYLE = {}
@@ -259,6 +264,7 @@ INSTALLED_APPS += (
     'impersonate',
     'django_jinja',
     'martor',
+    'adminsortable2',
 )
 
 MIDDLEWARE = (
@@ -392,7 +398,7 @@ BLEACH_USER_SAFE_TAGS = [
     'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's', 'abbr', 'cite', 'mark', 'q', 'samp', 'small',
     'u', 'var', 'wbr', 'dfn', 'ruby', 'rb', 'rp', 'rt', 'rtc', 'sub', 'sup', 'time', 'data',
     'p', 'br', 'pre', 'span', 'div', 'blockquote', 'code', 'hr',
-    'ul', 'ol', 'li', 'dd', 'dl', 'dt', 'address', 'section',
+    'ul', 'ol', 'li', 'dd', 'dl', 'dt', 'address', 'section', 'details', 'summary',
     'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'caption', 'colgroup', 'col', 'tfoot',
     'img', 'audio', 'video', 'source',
     'a',
@@ -469,7 +475,7 @@ MARKDOWN_STYLES = {
 MARTOR_ENABLE_CONFIGS = {
     'imgur': 'true',
     'mention': 'true',
-    'jquery': 'true',
+    'jquery': 'false',
     'living': 'false',
     'spellcheck': 'false',
     'hljs': 'false',

@@ -6,7 +6,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, ungettext
 
 from judge.contest_format.default import DefaultContestFormat
 from judge.contest_format.registry import register_contest_format
@@ -19,9 +19,9 @@ class ICPCContestFormat(DefaultContestFormat):
     name = gettext_lazy('ICPC')
     config_defaults = {'penalty': 20}
     config_validators = {'penalty': lambda x: x >= 0}
-    '''
+    """
         penalty: Number of penalty minutes each incorrect submission adds. Defaults to 20.
-    '''
+    """
 
     @classmethod
     def validate(cls, config):
@@ -52,7 +52,7 @@ class ICPCContestFormat(DefaultContestFormat):
         format_data = {}
 
         with connection.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute("""
                 SELECT MAX(cs.points) as `points`, (
                     SELECT MIN(csub.date)
                         FROM judge_contestsubmission ccs LEFT OUTER JOIN
@@ -63,7 +63,7 @@ class ICPCContestFormat(DefaultContestFormat):
                      judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
                      judge_submission sub ON (sub.id = cs.submission_id)
                 GROUP BY cp.id
-            ''', (participation.id, participation.id))
+            """, (participation.id, participation.id))
 
             for points, time, prob in cursor.fetchall():
                 time = from_database_time(time)
@@ -92,7 +92,7 @@ class ICPCContestFormat(DefaultContestFormat):
                 score += points
 
         participation.cumtime = cumtime + penalty
-        participation.score = score
+        participation.score = round(score, self.contest.points_precision)
         participation.tiebreaker = last  # field is sorted from least to greatest
         participation.format_data = format_data
         participation.save()
@@ -122,3 +122,17 @@ class ICPCContestFormat(DefaultContestFormat):
             ret += chr((index - 1) % 26 + 65)
             index = (index - 1) // 26
         return ret[::-1]
+
+    def get_short_form_display(self):
+        yield _('The maximum score submission for each problem will be used.')
+
+        penalty = self.config['penalty']
+        if penalty:
+            yield ungettext(
+                'Each submission before the first maximum score submission will incur a **penalty of %d minute**.',
+                'Each submission before the first maximum score submission will incur a **penalty of %d minutes**.',
+                penalty,
+            ) % penalty
+
+        yield _('Ties will be broken by the sum of the last score altering submission time on problems with a non-zero '
+                'score, followed by the time of the last score altering submission.')

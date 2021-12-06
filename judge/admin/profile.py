@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils.html import format_html
-from django.utils.translation import gettext, gettext_lazy as _, ungettext
+from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
@@ -54,15 +54,17 @@ class WebAuthnInline(admin.TabularInline):
 
 
 class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
-    form = ProfileForm
     fieldsets = (
         (None, {'fields': ('user', 'display_rank')}),
         (_('User Settings'), {'fields': ('organizations', 'timezone', 'language', 'ace_theme', 'math_engine')}),
         (_('Administration'), {'fields': ('is_external_user', 'mute', 'is_unlisted', 'is_totp_enabled',
-                                          'last_access', 'ip', 'current_contest', 'notes')}),
+                                          'last_access', 'ip', 'current_contest', 'notes',
+                                          'username_display_override')}),
         (_('Text Fields'), {'fields': ('about', 'user_script')}),
     )
-    list_display = ('user', 'full_name', 'email', 'is_totp_enabled', 'is_external_user',
+    readonly_fields = ('user',)
+    list_display = ('admin_user_admin', 'email', 'is_totp_enabled', 'timezone_full',
+                    'full_name', 'is_external_user',
                     'date_joined', 'last_access', 'ip', 'show_public')
     ordering = ('user__username',)
     search_fields = ('user__username', 'user__first_name', 'user__last_name', 'ip', 'user__email')
@@ -128,9 +130,9 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
         for profile in queryset:
             profile.calculate_points()
             count += 1
-        self.message_user(request, ungettext('%d user have scores recalculated.',
-                                             '%d users have scores recalculated.',
-                                             count) % count)
+        self.message_user(request, ngettext('%d user have scores recalculated.',
+                                            '%d users have scores recalculated.',
+                                            count) % count)
     recalculate_points.short_description = _('Recalculate scores')
 
     def get_form(self, request, obj=None, **kwargs):

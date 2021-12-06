@@ -294,6 +294,10 @@ label[for="language"], label[for="status"] {
     td.case-output + td.case-ext-feedback {
         width: 50%;
     }
+
+    .case-output {
+        word-wrap: anywhere;
+    }
 }
 
 .case-AC {

@@ -6,7 +6,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, ngettext
 
 from judge.contest_format.default import DefaultContestFormat
 from judge.contest_format.registry import register_contest_format
@@ -19,9 +19,9 @@ class AtCoderContestFormat(DefaultContestFormat):
     name = gettext_lazy('AtCoder')
     config_defaults = {'penalty': 5}
     config_validators = {'penalty': lambda x: x >= 0}
-    '''
+    """
         penalty: Number of penalty minutes each incorrect submission adds. Defaults to 5.
-    '''
+    """
 
     @classmethod
     def validate(cls, config):
@@ -51,7 +51,7 @@ class AtCoderContestFormat(DefaultContestFormat):
         format_data = {}
 
         with connection.cursor() as cursor:
-            cursor.execute('''
+            cursor.execute("""
                 SELECT MAX(cs.points) as `score`, (
                     SELECT MIN(csub.date)
                         FROM judge_contestsubmission ccs LEFT OUTER JOIN
@@ -62,7 +62,7 @@ class AtCoderContestFormat(DefaultContestFormat):
                      judge_contestsubmission cs ON (cs.problem_id = cp.id AND cs.participation_id = %s) LEFT OUTER JOIN
                      judge_submission sub ON (sub.id = cs.submission_id)
                 GROUP BY cp.id
-            ''', (participation.id, participation.id))
+            """, (participation.id, participation.id))
 
             for score, time, prob in cursor.fetchall():
                 time = from_database_time(time)
@@ -90,7 +90,7 @@ class AtCoderContestFormat(DefaultContestFormat):
                 points += score
 
         participation.cumtime = cumtime + penalty
-        participation.score = points
+        participation.score = round(points, self.contest.points_precision)
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
@@ -112,3 +112,16 @@ class AtCoderContestFormat(DefaultContestFormat):
             )
         else:
             return mark_safe('<td></td>')
+
+    def get_short_form_display(self):
+        yield _('The maximum score submission for each problem will be used.')
+
+        penalty = self.config['penalty']
+        if penalty:
+            yield ngettext(
+                'Each submission before the first maximum score submission will incur a **penalty of %d minute**.',
+                'Each submission before the first maximum score submission will incur a **penalty of %d minutes**.',
+                penalty,
+            ) % penalty
+
+        yield _('Ties will be broken by the last score altering submission time.')

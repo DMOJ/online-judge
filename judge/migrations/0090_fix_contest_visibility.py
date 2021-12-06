@@ -8,12 +8,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunSQL('''
+        migrations.RunSQL("""
             UPDATE `judge_contest`
             SET `judge_contest`.`is_private` = 0, `judge_contest`.`is_organization_private` = 1
             WHERE `judge_contest`.`is_private` = 1
-        ''', '''
+        """, """
             UPDATE `judge_contest`
             SET `judge_contest`.`is_private` = `judge_contest`.`is_organization_private`
-        '''),
+        """),
     ]

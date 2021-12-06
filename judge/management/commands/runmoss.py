@@ -28,7 +28,7 @@ class Command(BaseCommand):
         for problem in Contest.objects.get(key=contest).problems.order_by('code'):
             print('========== %s / %s ==========' % (problem.code, problem.name))
             for dmoj_lang, moss_lang in self.LANG_MAPPING:
-                print("%s: " % dmoj_lang, end=' ')
+                print('%s: ' % dmoj_lang, end=' ')
                 subs = Submission.objects.filter(
                     contest__participation__virtual__in=(ContestParticipation.LIVE, ContestParticipation.SPECTATE),
                     contest__participation__contest__key=contest,

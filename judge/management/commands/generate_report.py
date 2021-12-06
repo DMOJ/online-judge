@@ -73,7 +73,7 @@ class Command(BaseCommand):
                 'teacher': teacher,
                 'math_engine': maker.math_engine,
             }).replace('"//', '"https://').replace("'//", "'https://")
-            maker.template['footerTemplate'] = "<div></div>"
+            maker.template['footerTemplate'] = '<div></div>'
             maker.title = contest.name
             for file in ('style.css', 'pygment-github.css', 'mathjax_config.js'):
                 maker.load(file, os.path.join(settings.DMOJ_RESOURCES, file))
@@ -90,7 +90,7 @@ class Command(BaseCommand):
                     f'problems, and editorials for the {contest.name}.\n\n'
                     'This is an automated email. If there are any issues, '
                     'please contact us at presidents@mcpt.ca.',
-                    to=[teacher["email"]],
+                    to=[teacher['email']],
                 )
                 email.attach_file(contest.key + '.pdf')
                 email.send()

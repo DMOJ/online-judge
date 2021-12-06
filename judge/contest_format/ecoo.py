@@ -6,7 +6,7 @@ from django.template.defaultfilters import floatformat
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, ngettext
 
 from judge.contest_format.default import DefaultContestFormat
 from judge.contest_format.registry import register_contest_format
@@ -18,12 +18,12 @@ class ECOOContestFormat(DefaultContestFormat):
     name = gettext_lazy('ECOO')
     config_defaults = {'cumtime': False, 'first_ac_bonus': 10, 'time_bonus': 5}
     config_validators = {'cumtime': lambda x: True, 'first_ac_bonus': lambda x: x >= 0, 'time_bonus': lambda x: x >= 0}
-    '''
+    """
         cumtime: Specify True if cumulative time is to be used in breaking ties. Defaults to False.
         first_ac_bonus: The number of points to award if a solution gets AC on its first non-IE/CE run. Defaults to 10.
         time_bonus: Number of minutes to award an extra point for submitting before the contest end.
                     Specify 0 to disable. Defaults to 5.
-    '''
+    """
 
     @classmethod
     def validate(cls, config):
@@ -93,7 +93,7 @@ class ECOOContestFormat(DefaultContestFormat):
             score += data['points'] + data['bonus']
 
         participation.cumtime = cumtime
-        participation.score = score
+        participation.score = round(score, self.contest.points_precision)
         participation.tiebreaker = 0
         participation.format_data = format_data
         participation.save()
@@ -125,3 +125,25 @@ class ECOOContestFormat(DefaultContestFormat):
             points=floatformat(participation.score, -self.contest.points_precision),
             cumtime=nice_repr(timedelta(seconds=participation.cumtime), 'noday') if self.config['cumtime'] else '',
         )
+
+    def get_short_form_display(self):
+        yield _('The score on your **last** non-CE submission for each problem will be used.')
+
+        first_ac_bonus = self.config['first_ac_bonus']
+        if first_ac_bonus:
+            yield _(
+                'There is a **%d bonus** for fully solving on your first non-CE submission.',
+            ) % first_ac_bonus
+
+        time_bonus = self.config['time_bonus']
+        if time_bonus:
+            yield ngettext(
+                'For every **%d minute** you submit before the end of your window, there will be a **1** point bonus.',
+                'For every **%d minutes** you submit before the end of your window, there will be a **1** point bonus.',
+                time_bonus,
+            ) % time_bonus
+
+        if self.config['cumtime']:
+            yield _('Ties will be broken by the sum of the last submission time on **all** problems.')
+        else:
+            yield _('Ties by score will **not** be broken.')

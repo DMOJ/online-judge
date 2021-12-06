@@ -2,13 +2,13 @@ import base64
 import hmac
 import re
 import struct
+from urllib.parse import quote
 
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import Resolver404, resolve, reverse
 from django.utils.encoding import force_bytes
-from django.utils.http import urlquote
 from requests.exceptions import HTTPError
 
 
@@ -43,12 +43,12 @@ class DMOJLoginMiddleware(object):
             if (has_2fa and not request.session.get('2fa_passed', False) and
                     request.path not in (login_2fa_path, logout_path, webauthn_path) and
                     not request.path.startswith(settings.STATIC_URL)):
-                return HttpResponseRedirect(login_2fa_path + '?next=' + urlquote(request.get_full_path()))
+                return HttpResponseRedirect(login_2fa_path + '?next=' + quote(request.get_full_path()))
             elif (request.session.get('password_pwned', False) and
                     request.path not in (change_password_path, change_password_done_path,
                                          login_2fa_path, logout_path) and
                     not request.path.startswith(settings.STATIC_URL)):
-                return HttpResponseRedirect(change_password_path + '?next=' + urlquote(request.get_full_path()))
+                return HttpResponseRedirect(change_password_path + '?next=' + quote(request.get_full_path()))
         else:
             request.profile = None
         return self.get_response(request)

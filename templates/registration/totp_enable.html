@@ -16,13 +16,6 @@
             padding-top: 0.5em;
         }
 
-        #center-float {
-            position: relative;
-            margin: 0 auto auto -28.5em;
-            left: 50%;
-            width: 700px;
-        }
-
         #totp-enable-form {
             border: none;
             background: none;
@@ -72,7 +65,7 @@
 {% endblock %}
 
 {% block body %}
-    <div id="center-float">
+    <div class="auth-flow-form" style="padding-top: 0;">
         <form id="totp-enable-form" action="" method="post" class="form-area">
             {% csrf_token %}
 
@@ -110,6 +103,16 @@
                         {{ _('These codes will never be shown again after you enable two-factor authentication.') }}</label>
                     <pre><code><span class="fullwidth">{{ scratch_codes|join('\n') }}</span></code></pre>
                 </div>
+                {% if is_hardcore %}
+                    <div class="alert alert-danger">
+                        <b>{{ _('Important') }}</b>:
+                        {% trans trimmed site_name=SITE_NAME %}
+                            If you lose your authentication device and are unable to use your scratch codes,
+                            {{ site_name }} admins will NOT be able to recover your account.
+                            Please keep your scratch codes safe!
+                        {% endtrans %}
+                    </div>
+                {% endif %}
             {% endif %}
         </form>
     </div>

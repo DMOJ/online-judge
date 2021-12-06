@@ -38,7 +38,7 @@ class Language(models.Model):
                                 help_text=_('Code template to display in submission editor.'), blank=True)
     info = models.CharField(max_length=50, verbose_name=_('runtime info override'), blank=True,
                             help_text=_("Do not set this unless you know what you're doing! It will override the "
-                                        "usually more specific, judge-provided runtime info!"))
+                                        'usually more specific, judge-provided runtime info!'))
     description = models.TextField(verbose_name=_('language description'),
                                    help_text=_('Use this field to inform users of quirks with your environment, '
                                                'additional restrictions, etc.'), blank=True)

@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 import shutil
 from datetime import timedelta
 from operator import itemgetter
@@ -21,7 +22,6 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, View
-from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.detail import SingleObjectMixin
 from reversion import revisions
 
@@ -38,6 +38,9 @@ from judge.utils.problems import contest_attempted_ids, contest_completed_ids, h
 from judge.utils.strings import safe_float_or_none, safe_int_or_none
 from judge.utils.tickets import own_ticket_filter
 from judge.utils.views import QueryStringSortMixin, SingleObjectFormView, TitleMixin, add_file_response, generic_message
+
+recjk = re.compile(r'[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303A\u303B\u3400-\u4DB5'
+                   r'\u4E00-\u9FC3\uF900-\uFA2D\uFA30-\uFA6A\uFA70-\uFAD9\U00020000-\U0002A6D6\U0002F800-\U0002FA1D]')
 
 
 def get_contest_problem(problem, profile):
@@ -132,28 +135,6 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
         code = self.kwargs.get(self.slug_url_kwarg, None)
         return generic_message(self.request, _('No such editorial'),
                                _('Could not find an editorial with the code "%s".') % code, status=404)
-
-
-class ProblemRaw(ProblemMixin, TitleMixin, TemplateResponseMixin, SingleObjectMixin, View):
-    context_object_name = 'problem'
-    template_name = 'problem/raw.html'
-
-    def get_title(self):
-        return self.object.name
-
-    def get_context_data(self, **kwargs):
-        context = super(ProblemRaw, self).get_context_data(**kwargs)
-        context['problem_name'] = self.object.name
-        context['url'] = self.request.build_absolute_uri()
-        context['description'] = self.object.description
-        return context
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        with translation.override(settings.LANGUAGE_CODE):
-            return self.render_to_response(self.get_context_data(
-                object=self.object,
-            ))
 
 
 class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
@@ -366,6 +347,16 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
                                    'problem__group__full_name', 'points', 'partial', 'user_count')]
 
+    @staticmethod
+    def apply_full_text(queryset, query):
+        if recjk.search(query):
+            # MariaDB can't tokenize CJK properly, fallback to LIKE '%term%' for each term.
+            for term in query.split():
+                queryset = queryset.filter(Q(code__icontains=term) | Q(name__icontains=term) |
+                                           Q(description__icontains=term))
+            return queryset
+        return queryset.search(query, queryset.BOOLEAN).extra(order_by=['-relevance'])
+
     def get_normal_queryset(self):
         queryset = Problem.get_visible_problems(self.request.user).select_related('group')
 
@@ -393,7 +384,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             self.search_query = query = ' '.join(self.request.GET.getlist('search')).strip()
             if query:
                 if settings.ENABLE_FTS and self.full_text:
-                    queryset = queryset.search(query, queryset.BOOLEAN).extra(order_by=['-relevance'])
+                    queryset = self.apply_full_text(queryset, query)
                 else:
                     queryset = queryset.filter(
                         Q(code__icontains=query) | Q(name__icontains=query) |

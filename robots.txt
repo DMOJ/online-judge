@@ -31,7 +31,6 @@ Disallow: /problem/*/data
 Disallow: /problem/*/manage/submission
 Disallow: /problem/*/pdf
 Disallow: /problem/*/rank
-Disallow: /problem/*/raw
 Disallow: /problem/*/resubmit
 Disallow: /problems/random/$
 Disallow: /problem/*/submissions

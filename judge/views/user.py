@@ -9,7 +9,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Permission
-from django.contrib.auth.views import LoginView, PasswordChangeView, redirect_to_login
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, redirect_to_login
 from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
@@ -81,7 +81,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
 
     def get_title(self):
         return (_('My account') if self.request.user == self.object.user else
-                _('User %s') % self.object.user.username)
+                _('User %s') % self.object.display_name)
 
     # TODO: the same code exists in problem.py, maybe move to problems.py?
     @cached_property
@@ -110,14 +110,12 @@ class UserPage(TitleMixin, UserMixin, DetailView):
         context['rating'] = rating[0] if rating else None
 
         context['rank'] = Profile.objects.filter(
-            is_external_user=False, is_unlisted=False, performance_points__gt=self.object.performance_points,
-        ).count() + 1
+            is_unlisted=False, performance_points__gt=self.object.performance_points,
+        ).exclude(id=self.object.id).count() + 1
 
         if rating:
             context['rating_rank'] = Profile.objects.filter(is_external_user=False, is_unlisted=False,
                                                             rating__gt=self.object.rating).count() + 1
-            context['rated_users'] = Profile.objects.filter(is_external_user=False, is_unlisted=False,
-                                                            rating__isnull=False).count()
         context.update(self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'),
                                                      contests=Count('contest')))
         return context
@@ -532,3 +530,13 @@ class UserLogoutView(TitleMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         auth_logout(request)
         return HttpResponseRedirect(request.get_full_path())
+
+
+class CustomPasswordResetView(PasswordResetView):
+    def post(self, request, *args, **kwargs):
+        key = f'pwreset!{request.META["REMOTE_ADDR"]}'
+        cache.add(key, 0, timeout=settings.DMOJ_PASSWORD_RESET_LIMIT_WINDOW)
+        if cache.incr(key) > settings.DMOJ_PASSWORD_RESET_LIMIT_COUNT:
+            return HttpResponse('You sent in too many password reset requests. Please try again later.',
+                                content_type='text/plain', status=429)
+        return super().post(request, *args, **kwargs)

@@ -10,7 +10,6 @@ from operator import attrgetter, itemgetter
 from django import forms
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.core.cache import cache
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
@@ -27,6 +26,8 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import BaseDetailView, DetailView, SingleObjectMixin, View
+from django.views.generic.list import BaseListView
+from icalendar import Calendar as ICalendar, Event
 from reversion import revisions
 
 from judge import event_poster as event
@@ -107,6 +108,7 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
     def get_context_data(self, **kwargs):
         context = super(ContestList, self).get_context_data(**kwargs)
         present, active, future = [], [], []
+        finished = set()
         for contest in self._get_queryset().exclude(end_time__lt=self._now):
             if contest.start_time > self._now:
                 future.append(contest)
@@ -119,7 +121,9 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
                     .select_related('contest') \
                     .prefetch_related('contest__authors', 'contest__curators', 'contest__testers') \
                     .annotate(key=F('contest__key')):
-                if not participation.ended:
+                if participation.ended:
+                    finished.add(participation.contest.key)
+                else:
                     active.append(participation)
                     present.remove(participation.contest)
 
@@ -129,6 +133,7 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
         context['active_participations'] = active
         context['current_contests'] = present
         context['future_contests'] = future
+        context['finished_contests'] = finished
         context['now'] = self._now
         context['first_page_href'] = '.'
         context['page_suffix'] = '#past-contests'
@@ -297,8 +302,23 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
             .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
                                                     default=0, output_field=IntegerField()))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
-        context['contest_has_public_editorials'] = any(
-            problem.is_public and problem.has_public_editorial for problem in context['contest_problems']
+        context['metadata'] = {
+            'has_public_editorials': any(
+                problem.is_public and problem.has_public_editorial for problem in context['contest_problems']
+            ),
+        }
+        context['metadata'].update(
+            **self.object.contest_problems
+            .annotate(
+                partials_enabled=F('partial').bitand(F('problem__partial')),
+                pretests_enabled=F('is_pretested').bitand(F('contest__run_pretests_only')),
+            )
+            .aggregate(
+                has_partials=Sum('partials_enabled'),
+                has_pretests=Sum('pretests_enabled'),
+                has_submission_cap=Sum('max_submissions'),
+                problem_count=Count('id'),
+            ),
         )
         return context
 
@@ -418,9 +438,6 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                                    _('"%s" is not currently ongoing.') % contest.name)
 
         profile = request.profile
-        if profile.current_contest is not None:
-            return generic_message(request, _('Already in contest'),
-                                   _('You are already in a contest: "%s".') % profile.current_contest.contest.name)
 
         if not contest.is_registered(request.user):
             return generic_message(request, _('Cannot join contest'),
@@ -564,7 +581,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         except ValueError:
             raise Http404()
         else:
-            context['title'] = _('Contests in %(month)s') % {'month': date_filter(month, _("F Y"))}
+            context['title'] = _('Contests in %(month)s') % {'month': date_filter(month, _('F Y'))}
 
         dates = Contest.get_visible_contests(self.request.user).aggregate(min=Min('start_time'), max=Max('end_time'))
         min_month = (self.today.year, self.today.month)
@@ -595,16 +612,27 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         return context
 
 
-class CachedContestCalendar(ContestCalendar):
-    def render(self):
-        key = 'contest_cal:%d:%d' % (self.year, self.month)
-        cached = cache.get(key)
-        if cached is not None:
-            return HttpResponse(cached)
-        response = super(CachedContestCalendar, self).render()
-        response.render()
-        cached.set(key, response.content)
-        return response
+class ContestICal(TitleMixin, ContestListMixin, BaseListView):
+    def generate_ical(self):
+        cal = ICalendar()
+        cal.add('prodid', '-//DMOJ//NONSGML Contests Calendar//')
+        cal.add('version', '2.0')
+
+        now = timezone.now().astimezone(timezone.utc)
+        domain = self.request.get_host()
+        for contest in self.get_queryset():
+            event = Event()
+            event.add('uid', f'contest-{contest.key}@{domain}')
+            event.add('summary', contest.name)
+            event.add('location', self.request.build_absolute_uri(contest.get_absolute_url()))
+            event.add('dtstart', contest.start_time.astimezone(timezone.utc))
+            event.add('dtend', contest.end_time.astimezone(timezone.utc))
+            event.add('dtstamp', now)
+            cal.add_component(event)
+        return cal.to_ical()
+
+    def render_to_response(self, context, **kwargs):
+        return HttpResponse(self.generate_ical(), content_type='text/calendar')
 
 
 class ContestStats(TitleMixin, ContestMixin, DetailView):
@@ -678,7 +706,7 @@ class ContestStats(TitleMixin, ContestMixin, DetailView):
 ContestRankingProfile = namedtuple(
     'ContestRankingProfile',
     'id user css_class username points cumtime tiebreaker organization participation '
-    'participation_rating problem_cells result_cell',
+    'participation_rating problem_cells result_cell display_name',
 )
 
 BestSolutionData = namedtuple('BestSolutionData', 'code points bonus time state is_pretested')
@@ -707,6 +735,7 @@ def make_contest_ranking_profile(contest, participation, contest_problems):
         problem_cells=[display_user_problem(contest_problem) for contest_problem in contest_problems],
         result_cell=contest.format.display_participation_result(participation),
         participation=participation,
+        display_name=user.display_name,
     )
 
 

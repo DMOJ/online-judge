@@ -7,7 +7,7 @@ from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.html import format_html
-from django.utils.translation import gettext, gettext_lazy as _, ungettext
+from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from reversion.admin import VersionAdmin
 
 from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
@@ -123,7 +123,8 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         (None, {
             'fields': (
                 'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
-                'is_organization_private', 'organizations', 'is_full_markup', 'description', 'license',
+                'is_organization_private', 'organizations', 'submission_source_visibility_mode', 'is_full_markup',
+                'description', 'license',
             ),
         }),
         (_('Social Media'), {'classes': ('collapse',), 'fields': ('og_image', 'summary')}),
@@ -188,9 +189,9 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def update_publish_date(self, request, queryset):
         count = queryset.update(date=timezone.now())
-        self.message_user(request, ungettext("%d problem's publish date successfully updated.",
-                                             "%d problems' publish date successfully updated.",
-                                             count) % count)
+        self.message_user(request, ngettext("%d problem's publish date successfully updated.",
+                                            "%d problems' publish date successfully updated.",
+                                            count) % count)
 
     update_publish_date.short_description = _('Set publish date to now')
 
@@ -198,9 +199,9 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         count = queryset.update(is_public=True)
         for problem_id in queryset.values_list('id', flat=True):
             self._rescore(request, problem_id)
-        self.message_user(request, ungettext('%d problem successfully marked as public.',
-                                             '%d problems successfully marked as public.',
-                                             count) % count)
+        self.message_user(request, ngettext('%d problem successfully marked as public.',
+                                            '%d problems successfully marked as public.',
+                                            count) % count)
 
     make_public.short_description = _('Mark problems as public')
 
@@ -208,9 +209,9 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         count = queryset.update(is_public=False)
         for problem_id in queryset.values_list('id', flat=True):
             self._rescore(request, problem_id)
-        self.message_user(request, ungettext('%d problem successfully marked as private.',
-                                             '%d problems successfully marked as private.',
-                                             count) % count)
+        self.message_user(request, ngettext('%d problem successfully marked as private.',
+                                            '%d problems successfully marked as private.',
+                                            count) % count)
 
     make_private.short_description = _('Mark problems as private')
 

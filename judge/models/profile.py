@@ -5,6 +5,7 @@ import secrets
 import struct
 from operator import mul
 
+import pyotp
 import webauthn
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -12,11 +13,13 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import F, Max
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.encoding import force_bytes
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from fernet_fields import EncryptedCharField
+from pyotp.utils import strings_equal
 from sortedm2m.fields import SortedManyToManyField
 
 from judge.models.choices import ACE_THEMES, MATH_ENGINES_CHOICES, TIMEZONE
@@ -130,6 +133,7 @@ class Profile(models.Model):
                                                RegexValidator(r'^(\[\])?$|^\[("[A-Z0-9]{16}", *)*"[A-Z0-9]{16}"\]$',
                                                               _('Scratch codes must be empty or a JSON array of \
                                                                  16-character base32 codes'))])
+    last_totp_timecode = models.IntegerField(verbose_name=_('last TOTP timecode'), default=0)
     api_token = models.CharField(max_length=64, null=True, verbose_name=_('API token'),
                                  help_text=_('64 character hex-encoded API access token'),
                                  validators=[RegexValidator('^[a-f0-9]{64}$',
@@ -140,6 +144,8 @@ class Profile(models.Model):
                                            help_text=_('If set, this account is an external user, and '
                                                        'has extra restrictions.'))
     data_last_downloaded = models.DateTimeField(verbose_name=_('last data download time'), null=True, blank=True)
+    username_display_override = models.CharField(max_length=100, blank=True, verbose_name=_('display name override'),
+                                                 help_text=_('name displayed in place of username'))
 
     @cached_property
     def organization(self):
@@ -150,6 +156,10 @@ class Profile(models.Model):
     @cached_property
     def username(self):
         return self.user.username
+
+    @cached_property
+    def display_name(self):
+        return self.username_display_override or self.username
 
     @cached_property
     def has_any_solves(self):
@@ -193,7 +203,7 @@ class Profile(models.Model):
 
     def generate_scratch_codes(self):
         def generate_scratch_code():
-            return "".join(secrets.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567") for _ in range(16))
+            return ''.join(secrets.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ234567') for _ in range(16))
         codes = [generate_scratch_code() for _ in range(settings.DMOJ_SCRATCH_CODES_COUNT)]
         self.scratch_codes = json.dumps(codes)
         self.save(update_fields=['scratch_codes'])
@@ -213,6 +223,19 @@ class Profile(models.Model):
             self.remove_contest()
 
     update_contest.alters_data = True
+
+    def check_totp_code(self, code):
+        totp = pyotp.TOTP(self.totp_key)
+        now_timecode = totp.timecode(timezone.now())
+        min_timecode = max(self.last_totp_timecode + 1, now_timecode - settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES)
+        for timecode in range(min_timecode, now_timecode + settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES + 1):
+            if strings_equal(code, totp.generate_otp(timecode)):
+                self.last_totp_timecode = timecode
+                self.save(update_fields=['last_totp_timecode'])
+                return True
+        return False
+
+    check_totp_code.alters_data = True
 
     def get_absolute_url(self):
         return reverse('user_page', args=(self.user.username,))
