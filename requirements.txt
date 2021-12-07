@@ -10,7 +10,7 @@ django-impersonate
 dmoj-wpadmin @ git+git://github.com/DMOJ/dmoj-wpadmin.git
 lxml
 Pygments
-mistune
+mistune<2
 social-auth-app-django
 pytz
 django-statici18n
