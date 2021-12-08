@@ -200,8 +200,7 @@
                 </thead>
                 <tbody>
                 {% for problem in contest_problems %}
-                    {% with accessible=problem.is_accessible_by(request.user) %}
-                        <tr>
+                    <tr>
                         <td>
                             {% if problem.is_public or request.user.is_superuser or is_editor %}
                                 <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name or problem.name }}</a>
@@ -220,31 +219,12 @@
                         </td>
                         {% if metadata.has_public_editorials %}
                             <td>
-                                {% if accessible %}
-                                    <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name or problem.name }}</a>
-                                {% else %}
-                                    {{ problem.i18n_name or problem.name }}
+                                {% if problem.is_public and problem.has_public_editorial %}
+                                    <a href="{{ url('problem_editorial', problem.code) }}">{{ _('Editorial') }}</a>
                                 {% endif %}
                             </td>
-                            <td>{{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}</td>
-                            <td>{{ problem.ac_rate|floatformat(1) }}%</td>
-                            <td>
-                                {% if accessible %}
-                                    <a href="{{ url('ranked_submissions', problem.code) }}">{{ problem.user_count }}</a>
-                                {% else %}
-                                    {{ problem.user_count }}
-                                {% endif %}
-                            </td>
-                            {% if contest_has_public_editorials %}
-                                <td>
-                                    {% if problem.is_public and problem.has_public_editorial %}
-                                        <a href="{{ url('problem_editorial', problem.code) }}">{{ _('Editorial') }}</a>
-                                    {% endif %}
-                                </td>
-                            {% endif %}
                         {% endif %}
-                        </tr>
-                    {% endwith %}
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
