@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.sitemaps.views import sitemap
 from django.http import Http404, HttpResponsePermanentRedirect
 from django.templatetags.static import static
-from django.urls import path, reverse, re_path, include
+from django.urls import include, path, re_path, reverse
 from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import RedirectView
@@ -78,11 +78,11 @@ register_patterns = [
     path('2fa/disable/', two_factor.TOTPDisableView.as_view(), name='disable_2fa'),
     path('2fa/webauthn/attest/', two_factor.WebAuthnAttestationView.as_view(), name='webauthn_attest'),
     path('2fa/webauthn/assert/', two_factor.WebAuthnAttestView.as_view(), name='webauthn_assert'),
-    re_path(r'^2fa/webauthn/delete/(?P<pk>\d+)$', two_factor.WebAuthnDeleteView.as_view(), name='webauthn_delete'),
+    path('2fa/webauthn/delete/<int:pk>', two_factor.WebAuthnDeleteView.as_view(), name='webauthn_delete'),
     path('2fa/scratchcode/generate/', user.generate_scratch_codes, name='generate_scratch_codes'),
 
-    re_path(r'api/token/generate/$', user.generate_api_token, name='generate_api_token'),
-    re_path(r'api/token/remove/$', user.remove_api_token, name='remove_api_token'),
+    path('api/token/generate/', user.generate_api_token, name='generate_api_token'),
+    path('api/token/remove/', user.remove_api_token, name='remove_api_token'),
 ]
 
 
@@ -95,72 +95,72 @@ def exception(request):
 def paged_list_view(view, name):
     return include([
         path('', view.as_view(), name=name),
-        re_path(r'^(?P<page>\d+)$', view.as_view(), name=name),
+        path('<int:page>', view.as_view(), name=name),
     ])
 
 
 urlpatterns = [
     path('', blog.PostList.as_view(template_name='home.html', title=_('Home')), kwargs={'page': 1}, name='home'),
     path('500/', exception),
-    re_path(r'^admin/', admin.site.urls),
-    re_path(r'^i18n/', include('django.conf.urls.i18n')),
-    re_path(r'^accounts/', include(register_patterns)),
-    re_path(r'^', include('social_django.urls')),
+    path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
+    path('accounts/', include(register_patterns)),
+    path('', include('social_django.urls')),
 
     path('problems/', problem.ProblemList.as_view(), name='problem_list'),
     path('problems/random/', problem.RandomProblem.as_view(), name='problem_random'),
 
-    re_path(r'^problem/(?P<problem>[^/]+)', include([
+    path('problem/<str:problem>', include([
         path('', problem.ProblemDetail.as_view(), name='problem_detail'),
         path('/editorial', problem.ProblemSolution.as_view(), name='problem_editorial'),
         path('/pdf', problem.ProblemPdfView.as_view(), name='problem_pdf'),
-        re_path(r'^/pdf/(?P<language>[a-z-]+)$', problem.ProblemPdfView.as_view(), name='problem_pdf'),
-        re_path(r'^/clone', problem.ProblemClone.as_view(), name='problem_clone'),
+        path('/pdf/<slug:language>', problem.ProblemPdfView.as_view(), name='problem_pdf'),
+        path('/clone', problem.ProblemClone.as_view(), name='problem_clone'),
         path('/submit', problem.ProblemSubmit.as_view(), name='problem_submit'),
-        re_path(r'^/resubmit/(?P<submission>\d+)$', problem.ProblemSubmit.as_view(), name='problem_submit'),
+        path('/resubmit/<int:submission>', problem.ProblemSubmit.as_view(), name='problem_submit'),
 
-        re_path(r'^/rank/', paged_list_view(ranked_submission.RankedSubmissions, 'ranked_submissions')),
-        re_path(r'^/submissions/', paged_list_view(submission.ProblemSubmissions, 'chronological_submissions')),
-        re_path(r'^/submissions/(?P<user>[\w-]+)/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
+        path('/rank/', paged_list_view(ranked_submission.RankedSubmissions, 'ranked_submissions')),
+        path('/submissions/', paged_list_view(submission.ProblemSubmissions, 'chronological_submissions')),
+        path('/submissions/<slug:user>/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
 
-        re_path(r'^/$', lambda _, problem: HttpResponsePermanentRedirect(reverse('problem_detail', args=[problem]))),
+        path('/', lambda _, problem: HttpResponsePermanentRedirect(reverse('problem_detail', args=[problem]))),
 
         path('/test_data', ProblemDataView.as_view(), name='problem_data'),
         path('/test_data/init', problem_init_view, name='problem_data_init'),
         path('/test_data/diff', ProblemSubmissionDiff.as_view(), name='problem_submission_diff'),
-        re_path(r'^/data/(?P<path>.+)$', problem_data_file, name='problem_data_file'),
+        path('/data/<path:path>', problem_data_file, name='problem_data_file'),
 
         path('/tickets', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
         path('/tickets/new', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
 
-        re_path(r'^/manage/submission', include([
+        path('/manage/submission', include([
             path('', problem_manage.ManageProblemSubmissionView.as_view(), name='problem_manage_submissions'),
             path('/rejudge', problem_manage.RejudgeSubmissionsView.as_view(), name='problem_submissions_rejudge'),
             path('/rejudge/preview', problem_manage.PreviewRejudgeSubmissionsView.as_view(),
                 name='problem_submissions_rejudge_preview'),
-            re_path(r'^/rejudge/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rejudge_success,
+            path('/rejudge/success/<slug:task_id>', problem_manage.rejudge_success,
                 name='problem_submissions_rejudge_success'),
             path('/rescore/all', problem_manage.RescoreAllSubmissionsView.as_view(),
                 name='problem_submissions_rescore_all'),
-            re_path(r'^/rescore/success/(?P<task_id>[A-Za-z0-9-]*)$', problem_manage.rescore_success,
+            path('/rescore/success/<slug:task_id>', problem_manage.rescore_success,
                 name='problem_submissions_rescore_success'),
         ])),
     ])),
 
-    re_path(r'^submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
-    re_path(r'^submissions/user/(?P<user>[\w-]+)/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
+    path('submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
+    path('submissions/user/<slug:user>/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
 
-    re_path(r'^src/(?P<submission>\d+)$', submission.SubmissionSource.as_view(), name='submission_source'),
-    re_path(r'^src/(?P<submission>\d+)/raw$', submission.SubmissionSourceRaw.as_view(), name='submission_source_raw'),
+    path('src/<int:submission>', submission.SubmissionSource.as_view(), name='submission_source'),
+    path('src/<int:submission>/raw', submission.SubmissionSourceRaw.as_view(), name='submission_source_raw'),
 
-    re_path(r'^submission/(?P<submission>\d+)', include([
-        re_path(r'^$', submission.SubmissionStatus.as_view(), name='submission_status'),
+    path('submission/<int:submission>', include([
+        path('', submission.SubmissionStatus.as_view(), name='submission_status'),
         path('/abort', submission.abort_submission, name='submission_abort'),
     ])),
 
-    re_path(r'^users/', include([
+    path('users/', include([
         path('', user.users, name='user_list'),
-        re_path(r'^(?P<page>\d+)$', lambda request, page:
+        path('<int:page>', lambda request, page:
             HttpResponsePermanentRedirect('%s?page=%s' % (reverse('user_list'), page))),
         path('find', user.user_ranking_redirect, name='user_ranking_redirect'),
     ])),
@@ -169,23 +169,23 @@ urlpatterns = [
     path('edit/profile/', user.edit_profile, name='user_edit_profile'),
     path('data/prepare/', user.UserPrepareData.as_view(), name='user_prepare_data'),
     path('data/download/', user.UserDownloadData.as_view(), name='user_download_data'),
-    re_path(r'^user/(?P<user>[\w-]+)', include([
+    path('user/<slug:user>', include([
         path('', user.UserAboutPage.as_view(), name='user_page'),
-        re_path(r'^/solved', include([
+        path('/solved', include([
             path('', user.UserProblemsPage.as_view(), name='user_problems'),
-            re_path(r'/ajax$', user.UserPerformancePointsAjax.as_view(), name='user_pp_ajax'),
+            path('/ajax', user.UserPerformancePointsAjax.as_view(), name='user_pp_ajax'),
         ])),
-        re_path(r'^/submissions/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions_old')),
-        re_path(r'^/submissions/', lambda _, user:
+        path('/submissions/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions_old')),
+        path('/submissions/', lambda _, user:
             HttpResponsePermanentRedirect(reverse('all_user_submissions', args=[user]))),
 
-        re_path(r'^/$', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))),
+        path('/', lambda _, user: HttpResponsePermanentRedirect(reverse('user_page', args=[user]))),
     ])),
 
     path('comments/upvote/', comment.upvote_comment, name='comment_upvote'),
     path('comments/downvote/', comment.downvote_comment, name='comment_downvote'),
     path('comments/hide/', comment.comment_hide, name='comment_hide'),
-    re_path(r'^comments/(?P<id>\d+)/', include([
+    path('comments/<int:id>/', include([
         path('edit', comment.CommentEdit.as_view(), name='comment_edit'),
         path('history/ajax', comment.CommentRevisionAjax.as_view(), name='comment_revision_ajax'),
         path('edit/ajax', comment.CommentEditAjax.as_view(), name='comment_edit_ajax'),
@@ -193,15 +193,15 @@ urlpatterns = [
         path('render', comment.CommentContent.as_view(), name='comment_content'),
     ])),
 
-    re_path(r'^contests/', paged_list_view(contests.ContestList, 'contest_list')),
+    path('contests/', paged_list_view(contests.ContestList, 'contest_list')),
     path('contests.ics', contests.ContestICal.as_view(), name='contest_ical'),
-    re_path(r'^contests/(?P<year>\d+)/(?P<month>\d+)/$', contests.ContestCalendar.as_view(), name='contest_calendar'),
+    path('contests/<int:year>/<int:month>/', contests.ContestCalendar.as_view(), name='contest_calendar'),
     re_path(r'^contests/tag/(?P<name>[a-z-]+)', include([
         path('', contests.ContestTagDetail.as_view(), name='contest_tag'),
         path('/ajax', contests.ContestTagDetailAjax.as_view(), name='contest_tag_ajax'),
     ])),
 
-    re_path(r'^contest/(?P<contest>\w+)', include([
+    path('contest/<slug:contest>', include([
         path('', contests.ContestDetail.as_view(), name='contest_view'),
         path('/moss', contests.ContestMossView.as_view(), name='contest_moss'),
         path('/moss/delete', contests.ContestMossDelete.as_view(), name='contest_moss_delete'),
@@ -212,25 +212,25 @@ urlpatterns = [
         path('/leave', contests.ContestLeave.as_view(), name='contest_leave'),
         path('/stats', contests.ContestStats.as_view(), name='contest_stats'),
 
-        re_path(r'^/rank/(?P<problem>\w+)/',
+        path('/rank/<slug:problem>/',
             paged_list_view(ranked_submission.ContestRankedSubmission, 'contest_ranked_submissions')),
 
-        re_path(r'^/submissions/(?P<user>[\w-]+)/',
+        path('/submissions/<slug:user>/',
             paged_list_view(submission.UserAllContestSubmissions, 'contest_all_user_submissions')),
-        re_path(r'^/submissions/(?P<user>[\w-]+)/(?P<problem>\w+)/',
+        path('/submissions/<slug:user>/<slug:problem>/',
             paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
 
         path('/participations', contests.ContestParticipationList.as_view(), name='contest_participation_own'),
-        re_path(r'^/participations/(?P<user>[\w-]+)$',
+        path('/participations/<slug:user>',
             contests.ContestParticipationList.as_view(), name='contest_participation'),
         path('/participation/disqualify', contests.ContestParticipationDisqualify.as_view(),
             name='contest_participation_disqualify'),
 
-        re_path(r'^/$', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))),
+        path('/', lambda _, contest: HttpResponsePermanentRedirect(reverse('contest_view', args=[contest]))),
     ])),
 
     path('organizations/', organization.OrganizationList.as_view(), name='organization_list'),
-    re_path(r'^organization/(?P<pk>\d+)-(?P<slug>[\w-]*)', include([
+    path('organization/<int:pk>-<slug:slug>', include([
         path('', organization.OrganizationHome.as_view(), name='organization_home'),
         path('/users', organization.OrganizationUsers.as_view(), name='organization_users'),
         path('/join', organization.JoinOrganization.as_view(), name='join_organization'),
@@ -239,9 +239,9 @@ urlpatterns = [
         path('/kick', organization.KickUserWidgetView.as_view(), name='organization_user_kick'),
 
         path('/request', organization.RequestJoinOrganization.as_view(), name='request_organization'),
-        re_path(r'^/request/(?P<rpk>\d+)$', organization.OrganizationRequestDetail.as_view(),
+        path('/request/<int:rpk>', organization.OrganizationRequestDetail.as_view(),
             name='request_organization_detail'),
-        re_path(r'^/requests/', include([
+        path('/requests/', include([
             path('pending', organization.OrganizationRequestView.as_view(), name='organization_requests_pending'),
             path('log', organization.OrganizationRequestLog.as_view(), name='organization_requests_log'),
             path('approved', organization.OrganizationRequestLog.as_view(states=('A',), tab='approved'),
@@ -250,14 +250,14 @@ urlpatterns = [
                 name='organization_requests_rejected'),
         ])),
 
-        re_path(r'^/$', lambda _, pk, slug: HttpResponsePermanentRedirect(reverse('organization_home', args=[pk, slug]))),
+        path('/', lambda _, pk, slug: HttpResponsePermanentRedirect(reverse('organization_home', args=[pk, slug]))),
     ])),
 
     path('runtimes/', language.LanguageList.as_view(), name='runtime_list'),
     path('runtimes/matrix/', status.version_matrix, name='version_matrix'),
     path('status/', status.status_all, name='status_all'),
 
-    re_path(r'^api/', include([
+    path('api/', include([
         path('contest/list', api.api_v1_contest_list),
         re_path(r'^contest/info/(\w+)$', api.api_v1_contest_detail),
         path('problem/list', api.api_v1_problem_list),
@@ -266,15 +266,15 @@ urlpatterns = [
         re_path(r'^user/info/([\w-]+)$', api.api_v1_user_info),
         re_path(r'^user/submissions/([\w-]+)$', api.api_v1_user_submissions),
         re_path(r'^user/ratings/(\d+)$', api.api_v1_user_ratings),
-        re_path(r'^v2/', include([
+        path('v2/', include([
             path('contests', api.api_v2.APIContestList.as_view()),
-            re_path(r'^contest/(?P<contest>\w+)$', api.api_v2.APIContestDetail.as_view()),
+            path('contest/<slug:contest>', api.api_v2.APIContestDetail.as_view()),
             path('problems', api.api_v2.APIProblemList.as_view()),
-            re_path(r'^problem/(?P<problem>\w+)$', api.api_v2.APIProblemDetail.as_view()),
+            path('problem/<slug:problem>', api.api_v2.APIProblemDetail.as_view()),
             path('users', api.api_v2.APIUserList.as_view()),
-            re_path(r'^user/(?P<user>[\w-]+)$', api.api_v2.APIUserDetail.as_view()),
+            path('user/<slug:user>', api.api_v2.APIUserDetail.as_view()),
             path('submissions', api.api_v2.APISubmissionList.as_view()),
-            re_path(r'^submission/(?P<submission>\d+)$', api.api_v2.APISubmissionDetail.as_view()),
+            path('submission/<int:submission>', api.api_v2.APISubmissionDetail.as_view()),
             path('organizations', api.api_v2.APIOrganizationList.as_view()),
             path('participations', api.api_v2.APIContestParticipationList.as_view()),
             path('languages', api.api_v2.APILanguageList.as_view()),
@@ -282,14 +282,14 @@ urlpatterns = [
         ])),
     ])),
 
-    re_path(r'^blog/', paged_list_view(blog.PostList, 'blog_post_list')),
-    re_path(r'^post/(?P<id>\d+)-(?P<slug>.*)$', blog.PostView.as_view(), name='blog_post'),
+    path('blog/', paged_list_view(blog.PostList, 'blog_post_list')),
+    path('post/<int:id>-<slug:slug>', blog.PostView.as_view(), name='blog_post'),
 
-    re_path(r'^license/(?P<key>[-\w.]+)$', license.LicenseDetail.as_view(), name='license'),
+    path('license/<path:key>', license.LicenseDetail.as_view(), name='license'),
 
     path('mailgun/mail_activate/', mailgun.MailgunActivationView.as_view(), name='mailgun_activate'),
 
-    re_path(r'^widgets/', include([
+    path('widgets/', include([
         path('rejudge', widgets.rejudge_submission, name='submission_rejudge'),
         path('single_submission', submission.single_submission, name='submission_single_query'),
         path('submission_testcases', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
@@ -298,15 +298,15 @@ urlpatterns = [
 
         path('template', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
 
-        re_path(r'^select2/', include([
+        path('select2/', include([
             path('user_search', UserSearchSelect2View.as_view(), name='user_search_select2_ajax'),
-            re_path(r'^contest_users/(?P<contest>\w+)$', ContestUserSearchSelect2View.as_view(),
+            path('contest_users/<slug:contest>', ContestUserSearchSelect2View.as_view(),
                 name='contest_user_search_select2_ajax'),
             path('ticket_user', TicketUserSelect2View.as_view(), name='ticket_user_select2_ajax'),
             path('ticket_assignee', AssigneeSelect2View.as_view(), name='ticket_assignee_select2_ajax'),
         ])),
 
-        re_path(r'^preview/', include([
+        path('preview/', include([
             path('default', preview.DefaultMarkdownPreviewView.as_view(), name='default_preview'),
             path('problem', preview.ProblemMarkdownPreviewView.as_view(), name='problem_preview'),
             path('blog', preview.BlogMarkdownPreviewView.as_view(), name='blog_preview'),
@@ -326,7 +326,7 @@ urlpatterns = [
         ])),
     ])),
 
-    re_path(r'^feed/', include([
+    path('feed/', include([
         path('problems/rss/', ProblemFeed(), name='problem_rss'),
         path('problems/atom/', AtomProblemFeed(), name='problem_atom'),
         path('comment/rss/', CommentFeed(), name='comment_rss'),
@@ -335,8 +335,8 @@ urlpatterns = [
         path('blog/atom/', AtomBlogFeed(), name='blog_atom'),
     ])),
 
-    re_path(r'^stats/', include([
-        re_path('^language/', include([
+    path('stats/', include([
+        path('language/', include([
             path('', stats.language, name='language_stats'),
             path('data/all/', stats.language_data, name='language_stats_data_all'),
             path('data/ac/', stats.ac_language_data, name='language_stats_data_ac'),
@@ -345,12 +345,12 @@ urlpatterns = [
         ])),
     ])),
 
-    re_path(r'^tickets/', include([
+    path('tickets/', include([
         path('', ticket.TicketList.as_view(), name='ticket_list'),
         path('ajax', ticket.TicketListDataAjax.as_view(), name='ticket_ajax'),
     ])),
 
-    re_path(r'^ticket/(?P<pk>\d+)', include([
+    path('ticket/<int:pk>', include([
         path('', ticket.TicketView.as_view(), name='ticket'),
         path('/ajax', ticket.TicketMessageDataAjax.as_view(), name='ticket_message_ajax'),
         path('/open', ticket.TicketStatusChangeView.as_view(open=True), name='ticket_open'),
@@ -358,7 +358,7 @@ urlpatterns = [
         path('/notes', ticket.TicketNotesEditView.as_view(), name='ticket_notes'),
     ])),
 
-    re_path(r'^sitemap\.xml$', sitemap, {'sitemaps': {
+    path('sitemap.xml', sitemap, {'sitemaps': {
         'problem': ProblemSitemap,
         'user': UserSitemap,
         'home': HomePageSitemap,
@@ -371,7 +371,7 @@ urlpatterns = [
         ]),
     }}),
 
-    re_path(r'^judge-select2/', include([
+    path('judge-select2/', include([
         path('profile/', UserSelect2View.as_view(), name='profile_select2'),
         path('organization/', OrganizationSelect2View.as_view(), name='organization_select2'),
         path('problem/', ProblemSelect2View.as_view(), name='problem_select2'),
@@ -379,7 +379,7 @@ urlpatterns = [
         path('comment/', CommentSelect2View.as_view(), name='comment_select2'),
     ])),
 
-    re_path(r'^tasks/', include([
+    path('tasks/', include([
         re_path(r'^status/(?P<task_id>[A-Za-z0-9-]*)$', tasks.task_status, name='task_status'),
         path('ajax_status', tasks.task_status_ajax, name='task_status_ajax'),
         path('success', tasks.demo_success),
@@ -409,6 +409,6 @@ handler403 = 'judge.views.error.error403'
 handler500 = 'judge.views.error.error500'
 
 if 'newsletter' in settings.INSTALLED_APPS:
-    urlpatterns.append(re_path(r'^newsletter/', include('newsletter.urls')))
+    urlpatterns.append(path('newsletter/', include('newsletter.urls')))
 if 'impersonate' in settings.INSTALLED_APPS:
-    urlpatterns.append(re_path(r'^impersonate/', include('impersonate.urls')))
+    urlpatterns.append(path('impersonate/', include('impersonate.urls')))
