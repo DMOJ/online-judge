@@ -296,23 +296,27 @@
 
             <h4>{{ _('Upcoming Contests') }}</h4>
             {% if future_contests %}
+                <table class="contest-list table striped">
+                    <thead>
+                    <tr>
+                        <th>{{ _('Contest') }}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {% for contest in future_contests %}
                         <tr>
                             <td>
                                 <div class="contest-block">
                                     {{ contest_head(contest) }}
-                                    <br>
-                                    {% if contest.time_before_start %}
-                                        <span class="time">{{ _('Starting in %(countdown)s.', countdown=contest.time_before_start|as_countdown) }}</span>
+                                    {% if contest.start_time %}
+                                        <br>
+                                        {% if contest.time_before_start %}
+                                            <span class="time">{{ _('Starting in %(countdown)s.', countdown=contest.time_before_start|as_countdown) }}</span>
+                                        {% endif %}
+                                        {{ time_left(contest) }}
                                     {% endif %}
-                                    {{ time_left(contest) }}
                                 </div>
                             </td>
-                            {% if not request.in_contest %}
-                                <td>
-                                    {{ contest_register(contest, request.user) }}
-                                </td>
-                            {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>
