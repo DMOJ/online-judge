@@ -35,7 +35,7 @@ register_patterns = [
     # [a-fA-F0-9]{40} because a bad activation key should still get to the view;
     # that way it can return a sensible "invalid key" message instead of a
     # confusing 404.
-    re_path(r'^activate/(?P<activation_key>\w+)/$',
+    path('activate/<str:activation_key>/',
         ActivationView.as_view(title='Activation key invalid'),
         name='registration_activate'),
     path('register/',
@@ -121,7 +121,7 @@ urlpatterns = [
 
         path('/rank/', paged_list_view(ranked_submission.RankedSubmissions, 'ranked_submissions')),
         path('/submissions/', paged_list_view(submission.ProblemSubmissions, 'chronological_submissions')),
-        path('/submissions/<slug:user>/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
+        path('/submissions/<str:user>/', paged_list_view(submission.UserProblemSubmissions, 'user_submissions')),
 
         path('/', lambda _, problem: HttpResponsePermanentRedirect(reverse('problem_detail', args=[problem]))),
 
@@ -148,7 +148,7 @@ urlpatterns = [
     ])),
 
     path('submissions/', paged_list_view(submission.AllSubmissions, 'all_submissions')),
-    path('submissions/user/<slug:user>/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
+    path('submissions/user/<str:user>/', paged_list_view(submission.AllUserSubmissions, 'all_user_submissions')),
 
     path('src/<int:submission>', submission.SubmissionSource.as_view(), name='submission_source'),
     path('src/<int:submission>/raw', submission.SubmissionSourceRaw.as_view(), name='submission_source_raw'),
@@ -169,7 +169,7 @@ urlpatterns = [
     path('edit/profile/', user.edit_profile, name='user_edit_profile'),
     path('data/prepare/', user.UserPrepareData.as_view(), name='user_prepare_data'),
     path('data/download/', user.UserDownloadData.as_view(), name='user_download_data'),
-    path('user/<slug:user>', include([
+    path('user/<str:user>', include([
         path('', user.UserAboutPage.as_view(), name='user_page'),
         path('/solved', include([
             path('', user.UserProblemsPage.as_view(), name='user_problems'),
@@ -201,7 +201,7 @@ urlpatterns = [
         path('/ajax', contests.ContestTagDetailAjax.as_view(), name='contest_tag_ajax'),
     ])),
 
-    path('contest/<slug:contest>', include([
+    path('contest/<str:contest>', include([
         path('', contests.ContestDetail.as_view(), name='contest_view'),
         path('/moss', contests.ContestMossView.as_view(), name='contest_moss'),
         path('/moss/delete', contests.ContestMossDelete.as_view(), name='contest_moss_delete'),
@@ -212,16 +212,16 @@ urlpatterns = [
         path('/leave', contests.ContestLeave.as_view(), name='contest_leave'),
         path('/stats', contests.ContestStats.as_view(), name='contest_stats'),
 
-        path('/rank/<slug:problem>/',
+        path('/rank/<str:problem>/',
             paged_list_view(ranked_submission.ContestRankedSubmission, 'contest_ranked_submissions')),
 
-        path('/submissions/<slug:user>/',
+        path('/submissions/<str:user>/',
             paged_list_view(submission.UserAllContestSubmissions, 'contest_all_user_submissions')),
-        path('/submissions/<slug:user>/<slug:problem>/',
+        path('/submissions/<str:user>/<str:problem>/',
             paged_list_view(submission.UserContestSubmissions, 'contest_user_submissions')),
 
         path('/participations', contests.ContestParticipationList.as_view(), name='contest_participation_own'),
-        path('/participations/<slug:user>',
+        path('/participations/<str:user>',
             contests.ContestParticipationList.as_view(), name='contest_participation'),
         path('/participation/disqualify', contests.ContestParticipationDisqualify.as_view(),
             name='contest_participation_disqualify'),
@@ -268,11 +268,11 @@ urlpatterns = [
         path('user/ratings/<int:page>', api.api_v1_user_ratings),
         path('v2/', include([
             path('contests', api.api_v2.APIContestList.as_view()),
-            path('contest/<slug:contest>', api.api_v2.APIContestDetail.as_view()),
+            path('contest/<str:contest>', api.api_v2.APIContestDetail.as_view()),
             path('problems', api.api_v2.APIProblemList.as_view()),
-            path('problem/<slug:problem>', api.api_v2.APIProblemDetail.as_view()),
+            path('problem/<str:problem>', api.api_v2.APIProblemDetail.as_view()),
             path('users', api.api_v2.APIUserList.as_view()),
-            path('user/<slug:user>', api.api_v2.APIUserDetail.as_view()),
+            path('user/<str:user>', api.api_v2.APIUserDetail.as_view()),
             path('submissions', api.api_v2.APISubmissionList.as_view()),
             path('submission/<int:submission>', api.api_v2.APISubmissionDetail.as_view()),
             path('organizations', api.api_v2.APIOrganizationList.as_view()),
@@ -300,7 +300,7 @@ urlpatterns = [
 
         path('select2/', include([
             path('user_search', UserSearchSelect2View.as_view(), name='user_search_select2_ajax'),
-            path('contest_users/<slug:contest>', ContestUserSearchSelect2View.as_view(),
+            path('contest_users/<str:contest>', ContestUserSearchSelect2View.as_view(),
                 name='contest_user_search_select2_ajax'),
             path('ticket_user', TicketUserSelect2View.as_view(), name='ticket_user_select2_ajax'),
             path('ticket_assignee', AssigneeSelect2View.as_view(), name='ticket_assignee_select2_ajax'),
@@ -380,7 +380,7 @@ urlpatterns = [
     ])),
 
     path('tasks/', include([
-        re_path(r'^status/(?P<task_id>[A-Za-z0-9-]*)$', tasks.task_status, name='task_status'),
+        path('status/<slug:task_id>', tasks.task_status, name='task_status'),
         path('ajax_status', tasks.task_status_ajax, name='task_status_ajax'),
         path('success', tasks.demo_success),
         path('failure', tasks.demo_failure),
@@ -400,7 +400,7 @@ favicon_paths = ['apple-touch-icon-180x180.png', 'apple-touch-icon-114x114.png',
 
 static_lazy = lazy(static, str)
 for favicon in favicon_paths:
-    urlpatterns.append(re_path(r'^%s$' % favicon, RedirectView.as_view(
+    urlpatterns.append(path(favicon, RedirectView.as_view(
         url=static_lazy('icons/' + favicon),
     )))
 
