@@ -261,10 +261,10 @@ urlpatterns = [
         path('contest/list', api.api_v1_contest_list),
         path('contest/info/<str:contest>', api.api_v1_contest_detail),
         path('problem/list', api.api_v1_problem_list),
-        re_path(r'^problem/info/(\w+)$', api.api_v1_problem_info),
+        path('problem/info/<str:problem>', api.api_v1_problem_info),
         path('user/list', api.api_v1_user_list),
-        re_path(r'^user/info/([\w-]+)$', api.api_v1_user_info),
-        re_path(r'^user/submissions/([\w-]+)$', api.api_v1_user_submissions),
+        path('user/info/<str:user>', api.api_v1_user_info),
+        path('user/submissions/<str:user>', api.api_v1_user_submissions),
         path('user/ratings/<int:page>', api.api_v1_user_ratings),
         path('v2/', include([
             path('contests', api.api_v2.APIContestList.as_view()),
