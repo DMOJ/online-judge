@@ -259,7 +259,7 @@ urlpatterns = [
 
     path('api/', include([
         path('contest/list', api.api_v1_contest_list),
-        re_path(r'^contest/info/(\w+)$', api.api_v1_contest_detail),
+        path('contest/info/<str:contest>', api.api_v1_contest_detail),
         path('problem/list', api.api_v1_problem_list),
         re_path(r'^problem/info/(\w+)$', api.api_v1_problem_info),
         path('user/list', api.api_v1_user_list),
