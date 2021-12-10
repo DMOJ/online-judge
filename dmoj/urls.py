@@ -31,8 +31,8 @@ register_patterns = [
         TitledTemplateView.as_view(template_name='registration/activation_complete.html',
                                    title='Activation Successful!'),
         name='registration_activation_complete'),
-    # Activation keys get matched by \w+ instead of the more specific
-    # [a-fA-F0-9]{40} because a bad activation key should still get to the view;
+    # Let use <str:activation_key>,
+    # because a bad activation key should still get to the view;
     # that way it can return a sensible "invalid key" message instead of a
     # confusing 404.
     path('activate/<str:activation_key>/',
