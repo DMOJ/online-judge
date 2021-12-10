@@ -265,7 +265,7 @@ urlpatterns = [
         path('user/list', api.api_v1_user_list),
         re_path(r'^user/info/([\w-]+)$', api.api_v1_user_info),
         re_path(r'^user/submissions/([\w-]+)$', api.api_v1_user_submissions),
-        re_path(r'^user/ratings/(\d+)$', api.api_v1_user_ratings),
+        path('user/ratings/<int:page>', api.api_v1_user_ratings),
         path('v2/', include([
             path('contests', api.api_v2.APIContestList.as_view()),
             path('contest/<slug:contest>', api.api_v2.APIContestDetail.as_view()),
