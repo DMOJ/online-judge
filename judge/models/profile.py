@@ -368,7 +368,7 @@ class OrganizationRequest(models.Model):
     def clean(self):
         if self.organization.class_required and self.request_class is None:
             raise ValidationError('Organization requires a class to be specified')
-        if self.organization_id != self.request_class.organization_id:
+        if self.request_class and self.organization_id != self.request_class.organization_id:
             raise ValidationError('Class must be part of the organization')
 
     class Meta:
