@@ -77,9 +77,13 @@ class ContestSubmissionInline(admin.StackedInline):
             if db_field.name == 'participation':
                 kwargs['queryset'] = ContestParticipation.objects.filter(user=submission.user,
                                                                          contest__problems=submission.problem) \
-                    .only('id', 'contest__name')
+                    .only('id', 'contest__name', 'virtual')
 
                 def label(obj):
+                    if obj.spectate:
+                        return gettext('%s (spectating)') % obj.contest.name
+                    if obj.virtual:
+                        return gettext('%s (virtual %d)') % (obj.contest.name, obj.virtual)
                     return obj.contest.name
             elif db_field.name == 'problem':
                 kwargs['queryset'] = ContestProblem.objects.filter(problem=submission.problem) \
