@@ -237,8 +237,11 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         context = super(ContestDetail, self).get_context_data(**kwargs)
         context['contest_problems'] = Problem.objects.filter(contests__contest=self.object) \
             .order_by('contests__order').defer('description') \
-            .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
-                                                    default=0, output_field=IntegerField()))) \
+            .annotate(has_public_editorial=Sum(Case(
+                When(solution__is_public=True, solution__publish_on__lte=timezone.now(), then=1),
+                default=0,
+                output_field=IntegerField(),
+            ))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
         context['metadata'] = {
             'has_public_editorials': any(
