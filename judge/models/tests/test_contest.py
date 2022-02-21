@@ -391,7 +391,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'has_completed_contest': self.assertFalse,
             },
             'normal_after_window': {
-                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertFalse,
                 'has_completed_contest': self.assertTrue,
             },
@@ -461,24 +461,31 @@ class ContestTestCase(CommonDataMixin, TestCase):
     def test_full_hidden_scoreboard_contest_methods(self):
         data = {
             'superuser': {
+                'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
             },
             'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
             },
             'non_staff_author': {
+                'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
             },
             'staff_contest_edit_own': {
+                'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
             },
             'staff_contest_edit_all': {
+                'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
             },
             'normal': {
+                'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
             },
             'normal_after_window': {
+                'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertFalse,
             },
         }
