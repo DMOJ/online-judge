@@ -203,7 +203,7 @@ class Contest(models.Model):
             return True
         if not self.can_join:
             return False
-        if not self.show_scoreboard and not self.is_in_contest(user):
+        if not self.show_scoreboard and not self.is_in_contest(user) and not self.has_completed_contest(user):
             return False
         return True
 
