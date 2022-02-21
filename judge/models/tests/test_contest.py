@@ -108,6 +108,18 @@ class ContestTestCase(CommonDataMixin, TestCase):
             testers=('non_staff_tester',),
         )
 
+        self.full_hidden_scoreboard_contest = create_contest(
+            key='full_hidden_board',
+            start_time=_now - timezone.timedelta(days=100),
+            end_time=_now - timezone.timedelta(days=1),
+            time_limit=timezone.timedelta(days=1),
+            is_visible=True,
+            scoreboard_visibility=Contest.SCOREBOARD_HIDDEN,
+            authors=('non_staff_author',),
+            curators=('staff_contest_edit_own',),
+            testers=('non_staff_tester',),
+        )
+
         for contest_key in ('contest_scoreboard', 'particip_scoreboard', 'visible_scoreboard'):
             create_contest_participation(
                 contest=contest_key,
@@ -135,6 +147,13 @@ class ContestTestCase(CommonDataMixin, TestCase):
             user='normal',
             real_start=_now + timezone.timedelta(days=101),
             virtual=ContestParticipation.SPECTATE,
+        )
+
+        create_contest_participation(
+            contest='full_hidden_board',
+            user='normal_after_window',
+            real_start=_now - timezone.timedelta(days=5),
+            virtual=ContestParticipation.LIVE,
         )
 
         self.users['normal'].profile.current_contest = create_contest_participation(
@@ -438,6 +457,32 @@ class ContestTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.visible_scoreboard_contest, data)
+
+    def test_full_hidden_scoreboard_contest_methods(self):
+        data = {
+            'superuser': {
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'non_staff_tester': {
+                'can_see_full_scoreboard': self.assertFalse,
+            },
+            'non_staff_author': {
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'staff_contest_edit_own': {
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'staff_contest_edit_all': {
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'normal': {
+                'can_see_full_scoreboard': self.assertFalse,
+            },
+            'normal_after_window': {
+                'can_see_full_scoreboard': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.full_hidden_scoreboard_contest, data)
 
     def test_private_contest_methods(self):
         with self.assertRaises(Contest.PrivateContest):

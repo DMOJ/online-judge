@@ -164,6 +164,8 @@
                             {{ _('The scoreboard will be **hidden** until your window is over.')|markdown('default') }}
                         {% elif contest.scoreboard_visibility == contest.SCOREBOARD_AFTER_CONTEST %}
                             {{ _('The scoreboard will be **hidden** for the entire duration of the contest.')|markdown('default') }}
+                        {% elif contest.scoreboard_visibility == contest.SCOREBOARD_HIDDEN %}
+                            {{ _('The scoreboard will be **hidden**, even after the contest is over.')|markdown('default') }}
                         {% endif %}
                     </li>
                     {% if contest.access_code %}

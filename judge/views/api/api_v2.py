@@ -285,7 +285,8 @@ class APIContestDetail(APIDetailView):
             'rating_floor': contest.rating_floor,
             'rating_ceiling': contest.rating_ceiling,
             'hidden_scoreboard': contest.scoreboard_visibility in (contest.SCOREBOARD_AFTER_CONTEST,
-                                                                   contest.SCOREBOARD_AFTER_PARTICIPATION),
+                                                                   contest.SCOREBOARD_AFTER_PARTICIPATION,
+                                                                   contest.SCOREBOARD_HIDDEN),
             'scoreboard_visibility': contest.scoreboard_visibility,
             'is_organization_private': contest.is_organization_private,
             'organizations': list(

@@ -251,7 +251,11 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
                 contest_queryset = Contest.objects.filter(Q(authors=self.request.profile) |
                                                           Q(curators=self.request.profile) |
                                                           Q(scoreboard_visibility=Contest.SCOREBOARD_VISIBLE) |
-                                                          Q(end_time__lt=timezone.now())).distinct()
+                                                          Q(end_time__lt=timezone.now()), scoreboard_visibility__in=(
+                                                          Contest.SCOREBOARD_AFTER_PARTICIPATION,
+                                                          Contest.SCOREBOARD_AFTER_CONTEST,
+                                                          )) \
+                                                  .distinct()
                 queryset = queryset.filter(Q(user=self.request.profile) |
                                            Q(contest_object__in=contest_queryset) |
                                            Q(contest_object__isnull=True))
