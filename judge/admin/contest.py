@@ -183,10 +183,11 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
                 raise PermissionDenied
 
         # `private_contestants` and `organizations` will not appear in `cleaned_data` if user cannot edit it
-        if 'private_contestants' in form.changed_data:
-            obj.is_private = bool(form.cleaned_data['private_contestants'])
-        if 'organizations' in form.changed_data:
-            obj.is_organization_private = bool(form.cleaned_data['organizations'])
+        if form.changed_data:
+            if 'private_contestants' in form.changed_data:
+                obj.is_private = bool(form.cleaned_data['private_contestants'])
+            if 'organizations' in form.changed_data:
+                obj.is_organization_private = bool(form.cleaned_data['organizations'])
         super().save_model(request, obj, form, change)
         # We need this flag because `save_related` deals with the inlines, but does not know if we have already rescored
         self._rescored = False
