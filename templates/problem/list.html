@@ -232,6 +232,9 @@
                         <th class="ac-rate">
                             <a href="{{ sort_links.ac_rate }}">{{ _('AC %%') }}{{ sort_order.ac_rate }}</a>
                         </th>
+                        <th class="editorial">
+                            {{ _('Editorial') }}
+                        </th>
                         <th class="users">
                             <a href="{{ sort_links.user_count }}">{{ _('Users') }}{{ sort_order.user_count }}</a>
                         </th>
@@ -286,6 +289,15 @@
                         <td class="p">{{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}</td>
                         {% if not request.in_contest %}
                             <td class="ac-rate">{{ problem.ac_rate|floatformat(1) }}%</td>
+                            {% if problem.has_public_editorial %}
+                                <td editorial="1">
+                                    <i class="has-editorial-color fa fa-check-circle"></i>
+                                </td>
+                            {% else %}
+                                <td editorial="0">
+                                    <i class="no-editorial-color fa fa-minus-circle"></i>
+                                </td>
+                            {% endif %}
                         {% endif %}
                         <td class="users">
                             <a href="{{ url('ranked_submissions', problem.code) }}">

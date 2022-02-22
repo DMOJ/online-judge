@@ -37,6 +37,12 @@
         }
     }
 
+    th {
+        &.editorial {
+            padding: 4px 10px;
+        }
+    }
+
     tr {
         transition: background-color linear 0.2s;
 
@@ -149,6 +155,14 @@ ul.problem-list {
 
 .attempted-problem-color {
     color: orange;
+}
+
+.has-editorial-color {
+    color: #44AD41;
+}
+
+.no-editorial-color {
+    color: #DE2121;
 }
 
 .submissions-left {
