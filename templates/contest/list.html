@@ -73,6 +73,13 @@
                         </a>
                     </span>
                 {% endfor %}
+                {% for class in contest.classes.all() %}
+                    <span style="background-color: #00ccff" class="contest-tag">
+                        <a href="{{ class.get_absolute_url() }}" style="color: #000000">
+                            <i class="fa fa-users"></i> {{ class.name }}
+                        </a>
+                    </span>
+                {% endfor %}
             {% elif contest.is_private %}
                 <span style="background-color: #666666; color: #ffffff" class="contest-tag">
                     <i class="fa fa-lock"></i> {{ _('private') }}

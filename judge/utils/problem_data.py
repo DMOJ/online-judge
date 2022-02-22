@@ -182,7 +182,9 @@ class ProblemDataCompiler(object):
 
         yml_file = '%s/init.yml' % self.problem.code
         try:
-            init = yaml.safe_dump(self.make_init())
+            init = self.make_init()
+            if init:
+                init = yaml.safe_dump(init)
         except ProblemDataError as e:
             self.data.feedback = e.message
             self.data.save()

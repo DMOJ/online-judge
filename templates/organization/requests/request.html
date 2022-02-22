@@ -15,6 +15,15 @@
 {% block body %}
     <form action="" method="post" class="form-area">
         {% csrf_token %}
+        {% if form.show_classes %}
+            {% if form.class_.errors %}
+                <div class="alert alert-danger">
+                    {{ form.class_.errors }}
+                </div>
+            {% endif %}
+            <p><label for="{{ form.class_.id_for_label }}"><b>{{ _('Select your class:') }}</b></label></p>
+            <p>{{ form.class_ }}</p>
+        {% endif %}
         <p><label for="{{ form.reason.id_for_label }}"><b>{{ _('Your reason for joining:') }}</b></label></p>
         <p>{{ form.reason }}</p>
         <button type="submit">{{ _('Request') }}</button>

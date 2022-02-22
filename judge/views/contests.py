@@ -123,11 +123,12 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
 
 
 class PrivateContestError(Exception):
-    def __init__(self, name, is_private, is_organization_private, orgs):
+    def __init__(self, name, is_private, is_organization_private, orgs, classes):
         self.name = name
         self.is_private = is_private
         self.is_organization_private = is_organization_private
         self.orgs = orgs
+        self.classes = classes
 
 
 class ContestMixin(object):
@@ -200,7 +201,7 @@ class ContestMixin(object):
             contest.access_check(self.request.user)
         except Contest.PrivateContest:
             raise PrivateContestError(contest.name, contest.is_private, contest.is_organization_private,
-                                      contest.organizations.all())
+                                      contest.organizations.all(), contest.classes.all())
         except Contest.Inaccessible:
             raise Http404()
         else:
@@ -236,8 +237,11 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         context = super(ContestDetail, self).get_context_data(**kwargs)
         context['contest_problems'] = Problem.objects.filter(contests__contest=self.object) \
             .order_by('contests__order').defer('description') \
-            .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
-                                                    default=0, output_field=IntegerField()))) \
+            .annotate(has_public_editorial=Sum(Case(
+                When(solution__is_public=True, solution__publish_on__lte=timezone.now(), then=1),
+                default=0,
+                output_field=IntegerField(),
+            ))) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
         context['metadata'] = {
             'has_public_editorials': any(

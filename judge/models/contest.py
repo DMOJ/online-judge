@@ -12,7 +12,7 @@ from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge import contest_format
 from judge.models.problem import Problem
-from judge.models.profile import Organization, Profile
+from judge.models.profile import Class, Organization, Profile
 from judge.models.submission import Submission
 from judge.ratings import rate_contest
 
@@ -121,7 +121,10 @@ class Contest(models.Model):
                                              default=False)
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                           help_text=_('If private, only these organizations may see the contest'))
+                                           help_text=_('If organization private, only these organizations may see '
+                                                       'the contest'))
+    classes = models.ManyToManyField(Class, blank=True, verbose_name=_('classes'),
+                                     help_text=_('If organization private, only these classes may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
     logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150,
                                            blank=True,
@@ -328,7 +331,8 @@ class Contest(models.Model):
         if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return
 
-        in_org = self.organizations.filter(id__in=user.profile.organizations.all()).exists()
+        in_org = (self.organizations.filter(id__in=user.profile.organizations.all()).exists() or
+                  self.classes.filter(id__in=user.profile.classes.all()).exists())
         in_users = self.private_contestants.filter(id=user.profile.id).exists()
 
         if not self.is_private and self.is_organization_private:
@@ -373,14 +377,15 @@ class Contest(models.Model):
 
         queryset = cls.objects.defer('description')
         if not (user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest')):
+            org_check = (Q(organizations__in=user.profile.organizations.all()) |
+                         Q(classes__in=user.profile.classes.all()))
             q = Q(is_visible=True)
             q &= (
                 Q(view_contest_scoreboard=user.profile) |
                 Q(is_organization_private=False, is_private=False) |
                 Q(is_organization_private=False, is_private=True, private_contestants=user.profile) |
-                Q(is_organization_private=True, is_private=False, organizations__in=user.profile.organizations.all()) |
-                Q(is_organization_private=True, is_private=True, organizations__in=user.profile.organizations.all(),
-                  private_contestants=user.profile)
+                (Q(is_organization_private=True, is_private=False) & org_check) |
+                (Q(is_organization_private=True, is_private=True, private_contestants=user.profile) & org_check)
             )
 
             q |= Q(authors=user.profile)

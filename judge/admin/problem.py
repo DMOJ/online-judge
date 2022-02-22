@@ -123,7 +123,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         (None, {
             'fields': (
                 'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
-                'is_organization_private', 'organizations', 'submission_source_visibility_mode', 'is_full_markup',
+                'organizations', 'submission_source_visibility_mode', 'is_full_markup',
                 'description', 'license',
             ),
         }),
@@ -234,10 +234,11 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         return form
 
     def save_model(self, request, obj, form, change):
+        obj.is_organization_private = bool(form.cleaned_data['organizations'])
         super(ProblemAdmin, self).save_model(request, obj, form, change)
         if (
             form.changed_data and
-            any(f in form.changed_data for f in ('is_public', 'is_organization_private', 'points', 'partial'))
+            any(f in form.changed_data for f in ('is_public', 'organizations', 'points', 'partial'))
         ):
             self._rescore(request, obj.id)
 

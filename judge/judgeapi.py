@@ -8,6 +8,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from judge import event_poster as event
+from judge.judge_priority import BATCH_REJUDGE_PRIORITY, CONTEST_SUBMISSION_PRIORITY, DEFAULT_PRIORITY, REJUDGE_PRIORITY
 
 logger = logging.getLogger('judge.judgeapi')
 size_pack = struct.Struct('!I')
@@ -51,11 +52,6 @@ def judge_request(packet, reply=True):
 
 def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=None):
     from .models import ContestSubmission, Submission, SubmissionTestCase
-
-    CONTEST_SUBMISSION_PRIORITY = 0
-    DEFAULT_PRIORITY = 1
-    REJUDGE_PRIORITY = 2
-    BATCH_REJUDGE_PRIORITY = 3
 
     updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'case_points': 0, 'case_total': 0,
                'error': None, 'rejudged_date': timezone.now() if rejudge or batch_rejudge else None, 'status': 'QU'}

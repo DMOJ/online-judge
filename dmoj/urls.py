@@ -19,7 +19,7 @@ from judge.views import TitledTemplateView, api, blog, comment, contests, langua
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
     problem_data_file, problem_init_view
 from judge.views.register import ActivationView, RegistrationView
-from judge.views.select2 import AssigneeSelect2View, CommentSelect2View, ContestSelect2View, \
+from judge.views.select2 import AssigneeSelect2View, ClassSelect2View, CommentSelect2View, ContestSelect2View, \
     ContestUserSearchSelect2View, OrganizationSelect2View, ProblemSelect2View, TicketUserSelect2View, \
     UserSearchSelect2View, UserSelect2View
 from judge.views.widgets import martor_image_uploader
@@ -250,6 +250,11 @@ urlpatterns = [
                  name='organization_requests_rejected'),
         ])),
 
+        path('/class/<int:cpk>-<slug:cslug>', include([
+            path('', organization.ClassHome.as_view(), name='class_home'),
+            path('/join', organization.RequestJoinClass.as_view(), name='class_join'),
+        ])),
+
         path('/', lambda _, pk, slug: HttpResponsePermanentRedirect(reverse('organization_home', args=[pk, slug]))),
     ])),
 
@@ -374,6 +379,7 @@ urlpatterns = [
     path('judge-select2/', include([
         path('profile/', UserSelect2View.as_view(), name='profile_select2'),
         path('organization/', OrganizationSelect2View.as_view(), name='organization_select2'),
+        path('class/', ClassSelect2View.as_view(), name='class_select2'),
         path('problem/', ProblemSelect2View.as_view(), name='problem_select2'),
         path('contest/', ContestSelect2View.as_view(), name='contest_select2'),
         path('comment/', CommentSelect2View.as_view(), name='comment_select2'),
