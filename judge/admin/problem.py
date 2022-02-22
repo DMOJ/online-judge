@@ -234,7 +234,8 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         return form
 
     def save_model(self, request, obj, form, change):
-        obj.is_organization_private = bool(form.cleaned_data['organizations'])
+        if form.changed_data and 'organizations' in form.changed_data:
+            obj.is_organization_private = bool(form.cleaned_data['organizations'])
         super(ProblemAdmin, self).save_model(request, obj, form, change)
         if (
             form.changed_data and
