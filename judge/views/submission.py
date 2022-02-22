@@ -247,9 +247,10 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             queryset = queryset.select_related('contest_object').defer('contest_object__description')
 
             if not self.request.user.has_perm('judge.see_private_contest'):
-                # Show submissions for any contest you can edit or visible scoreboard
+                # Show submissions for any contest you can edit or where you're added to the scoreboard
                 contest_queryset = Contest.objects.filter(Q(authors=self.request.profile) |
                                                           Q(curators=self.request.profile) |
+                                                          Q(view_contest_scoreboard=self.request.profile) |
                                                           Q(scoreboard_visibility=Contest.SCOREBOARD_VISIBLE) |
                                                           Q(end_time__lt=timezone.now())).distinct()
                 queryset = queryset.filter(Q(user=self.request.profile) |

@@ -86,7 +86,8 @@ class Contest(models.Model):
                                    default=False)
     view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
                                                      related_name='view_contest_scoreboard',
-                                                     help_text=_('These users will be able to view the scoreboard.'))
+                                                     help_text=_('These users will be able to view the scoreboard, '
+                                                                 'and view contest submisisons.'))
     scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default=SCOREBOARD_VISIBLE,
                                              max_length=1, help_text=_('Scoreboard visibility through the duration '
                                                                        'of the contest'), choices=SCOREBOARD_VISIBILITY)
