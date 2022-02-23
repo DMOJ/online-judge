@@ -519,6 +519,39 @@ class ContestTestCase(CommonDataMixin, TestCase):
         }
         self._test_object_methods_with_users(self.tester_see_scoreboard_contest, data)
 
+    def test_public_limit_organization_join_contest(self):
+        data = {
+            'non_staff_tester': {
+                'is_live_joinable_by': self.assertFalse,
+                'is_spectatable_by': self.assertTrue,
+            },
+            'non_staff_author': {
+                'is_live_joinable_by': self.assertFalse,
+                'is_spectatable_by': self.assertTrue,
+            },
+            'staff_contest_edit_own': {
+                'is_live_joinable_by': self.assertFalse,
+                'is_spectatable_by': self.assertTrue,  # curator
+            },
+            'staff_contest_edit_all': {
+                'is_live_joinable_by': self.assertFalse,
+                'is_spectatable_by': self.assertFalse,
+            },
+            'normal': {
+                'is_live_joinable_by': self.assertFalse,
+                'is_spectatable_by': self.assertFalse,
+            },
+            'normal_open_org': {
+                'is_live_joinable_by': self.assertTrue,
+                'is_spectatable_by': self.assertTrue,
+            },
+            'normal_after_window': {
+                'is_live_joinable_by': self.assertFalse,
+                'is_spectatable_by': self.assertFalse,  # not in org
+            },
+        }
+        self._test_object_methods_with_users(self.public_limit_organization_join_contest, data)
+
     def test_private_contest_methods(self):
         with self.assertRaises(Contest.PrivateContest):
             self.private_contest.access_check(self.users['normal'])

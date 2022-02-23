@@ -27,7 +27,7 @@
     {% endif %}
 
     {% if request.user.is_authenticated %}
-        {% if contest.can_join or is_editor or is_tester %}
+        {% if contest.started or is_editor or is_tester %}
             {% set in_contest = contest.is_in_contest(request.user) %}
             {% if contest.ended %}
                 {# Allow users to leave the virtual contest #}
@@ -58,13 +58,7 @@
                                 {{- _('Leave contest') -}}
                             {% endif %}">
                     </form>
-                {% elif is_editor or is_tester or live_participation.ended %}
-                    <form action="{{ url('contest_join', contest.key) }}" method="post"
-                          class="contest-join-pseudotab unselectable button">
-                        {% csrf_token %}
-                        <input type="submit" value="{{ _('Spectate contest') }}" class="contest-join">
-                    </form>
-                {% else %}
+                {% elif contest.is_live_joinable_by(request.user) %}
                     <form action="{{ url('contest_join', contest.key) }}" method="post"
                           class="contest-join-pseudotab unselectable button">
                         {% csrf_token %}
@@ -72,10 +66,24 @@
                                class="contest-join{% if not has_joined %} first-join{% endif %}"
                                value="{{ _('Join contest') }}">
                     </form>
+                {% elif contest.is_spectatable_by(request.user) %}
+                    <form action="{{ url('contest_join', contest.key) }}" method="post"
+                          class="contest-join-pseudotab unselectable button">
+                        {% csrf_token %}
+                        <input type="submit" value="{{ _('Spectate contest') }}" class="contest-join">
+                    </form>
+                {% else %}
+                    <form action="{{ url('contest_join', contest.key) }}" method="post"
+                          class="contest-join-pseudotab unselectable button disabled">
+                        {% csrf_token %}
+                        <input type="submit" class="disabled"
+                               title="{{ _('You cannot join this contest.') }}"
+                               value="{{ _('Join contest') }}" disabled>
+                    </form>
                 {% endif %}
             {% endif %}
         {% endif %}
-    {% elif contest.can_join %}
+    {% elif contest.started %}
         <form action="{{ url('auth_login') }}" method="get"
               class="contest-join-pseudotab unselectable button">
             <input type="hidden" name="next" value="{{ LOGIN_RETURN_PATH|urlencode }}">

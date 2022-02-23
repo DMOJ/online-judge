@@ -103,6 +103,7 @@ class ContestForm(ModelForm):
                                                                    attrs={'style': 'width: 100%'}),
             'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
             'classes': AdminHeavySelect2MultipleWidget(data_view='class_select2'),
+            'join_organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
             'tags': AdminSelect2MultipleWidget,
             'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
                                                             attrs={'style': 'width: 100%'}),
@@ -123,7 +124,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Access'), {'fields': ('access_code', 'private_contestants', 'organizations', 'classes',
-                                  'view_contest_scoreboard')}),
+                                  'join_organizations', 'view_contest_scoreboard')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'locked_after', 'start_time', 'end_time', 'time_limit',
@@ -181,6 +182,8 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
                 obj.is_private = bool(form.cleaned_data['private_contestants'])
             if 'organizations' in form.changed_data:
                 obj.is_organization_private = bool(form.cleaned_data['organizations'])
+            if 'join_organizations' in form.cleaned_data:
+                obj.limit_join_organizations = bool(form.cleaned_data['join_organizations'])
 
         # `is_visible` will not appear in `cleaned_data` if user cannot edit it
         if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):

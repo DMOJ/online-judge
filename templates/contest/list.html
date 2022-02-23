@@ -131,17 +131,23 @@
 {% macro contest_join(contest, request, finished_contests) %}
     {% if not request.in_contest %}
         <td>
-            {% if contest.key in finished_contests or request.profile in contest.authors.all() or request.profile in contest.curators.all() or request.profile in contest.testers.all() %}
+            {% if contest.is_live_joinable_by(request.user) %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button"
                            value="{{ _('Spectate') }}">
                 </form>
-            {% else %}
+            {% elif contest.is_spectatable_by(request.user) %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button join-warning"
                            value="{{ _('Join') }}">
+                </form>
+            {% else %}
+                <form action="{{ url('contest_join', contest.key) }}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="unselectable button full participate-button disabled"
+                           value="{{ _('Join') }}" disabled title="{{ _('You cannot join this contest.') }}">
                 </form>
             {% endif %}
         </td>
