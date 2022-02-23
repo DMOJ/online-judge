@@ -106,7 +106,7 @@ class Contest(models.Model):
                                           related_name='rate_exclude+')
     is_private = models.BooleanField(verbose_name=_('private to specific users'), default=False)
     private_contestants = models.ManyToManyField(Profile, blank=True, verbose_name=_('private contestants'),
-                                                 help_text=_('If private, only these users may see the contest'),
+                                                 help_text=_('If non-empty, only these users may see the contest'),
                                                  related_name='private_contestants+')
     hide_problem_tags = models.BooleanField(verbose_name=_('hide problem tags'),
                                             help_text=_('Whether problem tags should be hidden by default.'),
@@ -125,8 +125,12 @@ class Contest(models.Model):
                                              default=False)
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                           help_text=_('If organization private, only these organizations may see '
+                                           help_text=_('If non-empty, only these organizations may see '
                                                        'the contest'))
+    limit_join_organizations = models.BooleanField(verbose_name=_('limit organizations that can join'), default=False)
+    join_organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('join organizations'),
+                                                help_text=_('If non-empty, only these organizations may join '
+                                                            'the contest'), related_name='join_only_contests')
     classes = models.ManyToManyField(Class, blank=True, verbose_name=_('classes'),
                                      help_text=_('If organization private, only these classes may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
@@ -203,7 +207,7 @@ class Contest(models.Model):
     def can_see_own_scoreboard(self, user):
         if self.can_see_full_scoreboard(user):
             return True
-        if not self.can_join:
+        if not self.started:
             return False
         if not self.show_scoreboard and not self.is_in_contest(user) and not self.has_completed_contest(user):
             return False
@@ -235,7 +239,7 @@ class Contest(models.Model):
 
     @cached_property
     def show_scoreboard(self):
-        if not self.can_join:
+        if not self.started:
             return False
         if (self.scoreboard_visibility in (self.SCOREBOARD_AFTER_CONTEST, self.SCOREBOARD_AFTER_PARTICIPATION) and
                 not self.ended):
@@ -252,7 +256,7 @@ class Contest(models.Model):
         return timezone.now()
 
     @cached_property
-    def can_join(self):
+    def started(self):
         return self.start_time <= self._now
 
     @property
@@ -355,6 +359,36 @@ class Contest(models.Model):
             if in_org and in_users:
                 return
             raise self.PrivateContest()
+
+    # Assumes the user can access, to avoid the cost again
+    def is_live_joinable_by(self, user):
+        if not self.started:
+            return False
+
+        if not user.is_authenticated:
+            return False
+
+        if user.profile.id in self.editor_ids or user.profile.id in self.tester_ids:
+            return False
+
+        if self.has_completed_contest(user):
+            return False
+
+        if self.limit_join_organizations:
+            return self.join_organizations.filter(id__in=user.profile.organizations.all()).exists()
+        return True
+
+    # Also skips access check
+    def is_spectatable_by(self, user):
+        if not user.is_authenticated:
+            return False
+
+        if user.profile.id in self.editor_ids or user.profile.id in self.tester_ids:
+            return True
+
+        if self.limit_join_organizations:
+            return self.join_organizations.filter(id__in=user.profile.organizations.all()).exists()
+        return True
 
     def is_accessible_by(self, user):
         try:

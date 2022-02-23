@@ -334,7 +334,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def join_contest(self, request, access_code=None):
         contest = self.object
 
-        if not contest.can_join and not (self.is_editor or self.is_tester):
+        if not contest.started and not (self.is_editor or self.is_tester):
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
 
@@ -366,16 +366,25 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         else:
             SPECTATE = ContestParticipation.SPECTATE
             LIVE = ContestParticipation.LIVE
+
+            if contest.is_live_joinable_by(request.user):
+                participation_type = LIVE
+            elif contest.is_spectatable_by(request.user):
+                participation_type = SPECTATE
+            else:
+                return generic_message(request, _('Cannot enter'),
+                                       _('You are not able to join this contest.'))
+
             try:
                 participation = ContestParticipation.objects.get(
-                    contest=contest, user=profile, virtual=(SPECTATE if self.is_editor or self.is_tester else LIVE),
+                    contest=contest, user=profile, virtual=participation_type,
                 )
             except ContestParticipation.DoesNotExist:
                 if requires_access_code:
                     raise ContestAccessDenied()
 
                 participation = ContestParticipation.objects.create(
-                    contest=contest, user=profile, virtual=(SPECTATE if self.is_editor or self.is_tester else LIVE),
+                    contest=contest, user=profile, virtual=participation_type,
                     real_start=timezone.now(),
                 )
             else:
