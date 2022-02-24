@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
-from django.db.models import Case, Count, F, IntegerField, Prefetch, Q, Sum, When
+from django.db.models import BooleanField, Case, Count, F, Prefetch, Q, When
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -272,7 +272,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     template_name = 'problem/list.html'
     paginate_by = 50
     sql_sort = frozenset(('points', 'ac_rate', 'user_count', 'code'))
-    manual_sort = frozenset(('name', 'group', 'solved', 'type'))
+    manual_sort = frozenset(('name', 'group', 'solved', 'type', 'editorial'))
     all_sorts = sql_sort | manual_sort
     default_desc = frozenset(('points', 'ac_rate', 'user_count'))
     default_sort = 'code'
@@ -294,6 +294,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                 queryset = queryset.order_by(self.order.replace('name', 'i18n_name'), 'id')
             elif sort_key == 'group':
                 queryset = queryset.order_by(self.order + '__name', 'id')
+            elif sort_key == 'editorial':
+                queryset = queryset.order_by(self.order.replace('editorial', 'has_public_editorial'), 'id')
             elif sort_key == 'solved':
                 if self.request.user.is_authenticated:
                     profile = self.request.profile
@@ -370,13 +372,13 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                                         .values_list('problem__id', flat=True))
         if self.show_types:
             queryset = queryset.prefetch_related('types')
-        queryset = queryset.annotate(has_public_editorial=Sum(Case(
-            When(solution__is_public=True, solution__publish_on__lte=timezone.now(), then=1),
-            default=0,
-            output_field=IntegerField(),
-        )))
+        queryset = queryset.annotate(has_public_editorial=Case(
+            When(solution__is_public=True, solution__publish_on__lte=timezone.now(), then=True),
+            default=False,
+            output_field=BooleanField(),
+        ))
         if self.has_public_editorial:
-            queryset = queryset.filter(solution__is_public=True, solution__publish_on__lte=timezone.now())
+            queryset = queryset.filter(has_public_editorial=True)
         if self.category is not None:
             queryset = queryset.filter(group__id=self.category)
         if self.selected_types:
