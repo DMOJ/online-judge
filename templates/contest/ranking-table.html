@@ -54,10 +54,18 @@
 
 {% block before_point_head %}
     {% for problem in problems %}
-        <th class="points header"><a href="{{ url('contest_ranked_submissions', contest.key, problem.problem.code) }}">
-            {{- contest.get_label_for_problem(loop.index0) }}
-            <div class="point-denominator">{{ problem.points }}</div>
-        </a></th>
+        <th class="points header">
+            {# problem is a ContestProblem, so get the real problem #}
+            {% if problem.problem.is_accessible_by(request.user) %}
+                <a href="{{ url('contest_ranked_submissions', contest.key, problem.problem.code) }}">
+                    {{- contest.get_label_for_problem(loop.index0) }}
+                    <div class="point-denominator">{{ problem.points }}</div>
+                </a>
+            {% else %}
+                {{- contest.get_label_for_problem(loop.index0) }}
+                <div class="point-denominator">{{ problem.points }}</div>
+            {% endif %}
+        </th>
     {% endfor %}
 {% endblock %}
 
