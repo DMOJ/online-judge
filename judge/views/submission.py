@@ -22,10 +22,11 @@ from django.views.generic import DetailView, ListView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Contest, Language, Problem, ProblemTranslation, Profile, Submission
+from judge.models.problem import SubmissionSourceAccess
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.problems import get_result_data, user_completed_ids, user_editable_ids, user_tester_ids
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
-from judge.utils.views import DiggPaginatorMixin, TitleMixin
+from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
 
 
 def submission_related(queryset):
@@ -35,6 +36,11 @@ def submission_related(queryset):
               'points', 'result', 'status', 'case_points', 'case_total', 'current_testcase', 'contest_object',
               'locked_after', 'problem__submission_source_visibility_mode', 'user__username_display_override') \
         .prefetch_related('contest_object__authors', 'contest_object__curators')
+
+
+class SubmissionPermissionDenied(PermissionDenied):
+    def __init__(self, submission):
+        self.submission = submission
 
 
 class SubmissionMixin(object):
@@ -47,8 +53,28 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
     def get_object(self, queryset=None):
         submission = super(SubmissionDetailBase, self).get_object(queryset)
         if not submission.can_see_detail(self.request.user):
-            raise PermissionDenied()
+            raise SubmissionPermissionDenied(submission)
         return submission
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except SubmissionPermissionDenied as e:
+            return self.no_permission(e.submission)
+
+    def no_permission(self, submission):
+        problem = submission.problem
+        if problem.is_accessible_by(self.request.user) and \
+                problem.submission_source_visibility == SubmissionSourceAccess.SOLVED:
+
+            message = escape(_('Permission denied. Solve %(problem)s in order to view it.')) % {
+                'problem': format_html('<a href="{0}">{1}</a>',
+                                       reverse('problem_detail', args=[problem.code]),
+                                       problem.translated_name(self.request.LANGUAGE_CODE)),
+            }
+            return generic_message(self.request, _("Can't access submission"), mark_safe(message), status=403)
+        else:
+            return generic_message(self.request, _("Can't access submission"), _('Permission denied.'), status=403)
 
     def get_title(self):
         submission = self.object
