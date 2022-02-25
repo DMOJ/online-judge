@@ -175,19 +175,20 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         return readonly
 
     def save_model(self, request, obj, form, change):
-        # `is_visible` will not appear in `cleaned_data` if user cannot edit it
-        if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):
-            if not form.cleaned_data['is_private'] and not form.cleaned_data['is_organization_private']:
-                raise PermissionDenied
-            if not request.user.has_perm('judge.create_private_contest'):
-                raise PermissionDenied
-
         # `private_contestants` and `organizations` will not appear in `cleaned_data` if user cannot edit it
         if form.changed_data:
             if 'private_contestants' in form.changed_data:
                 obj.is_private = bool(form.cleaned_data['private_contestants'])
             if 'organizations' in form.changed_data:
                 obj.is_organization_private = bool(form.cleaned_data['organizations'])
+
+        # `is_visible` will not appear in `cleaned_data` if user cannot edit it
+        if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):
+            if not obj.is_private and not obj.is_organization_private:
+                raise PermissionDenied
+            if not request.user.has_perm('judge.create_private_contest'):
+                raise PermissionDenied
+
         super().save_model(request, obj, form, change)
         # We need this flag because `save_related` deals with the inlines, but does not know if we have already rescored
         self._rescored = False
