@@ -268,7 +268,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     def rejudge_view(self, request, contest_id, problem_id):
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
         for model in queryset:
-            model.submission.judge(rejudge=True)
+            model.submission.judge(rejudge=True, rejudge_user=request.user)
 
         self.message_user(request, ngettext('%d submission was successfully scheduled for rejudging.',
                                             '%d submissions were successfully scheduled for rejudging.',

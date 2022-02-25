@@ -90,7 +90,7 @@ class BaseRejudgeSubmissionsView(PermissionRequiredMixin, ManageProblemSubmissio
 
 class RejudgeSubmissionsView(BaseRejudgeSubmissionsView):
     def generate_response(self, id_range, languages, results):
-        status = rejudge_problem_filter.delay(self.object.id, id_range, languages, results)
+        status = rejudge_problem_filter.delay(self.object.id, id_range, languages, results, user=self.request.user)
         return redirect_to_task_status(
             status, message=_('Rejudging selected submissions for %s...') % (self.object.name,),
             redirect=reverse('problem_submissions_rejudge_success', args=[self.object.code, status.id]),
