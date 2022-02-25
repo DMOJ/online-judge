@@ -118,7 +118,7 @@
             },
             {
                 name: 'submit',
-                bindKey: "Ctrl+Enter",
+                bindKey: {win: 'Ctrl+Enter', mac: 'Command+Enter'},
                 exec: function (editor) {
                     $('form#problem_submit').submit();
                 },
