@@ -23,14 +23,14 @@ def apply_submission_filter(queryset, id_range, languages, results):
 
 
 @shared_task(bind=True)
-def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None):
+def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None, user=None):
     queryset = Submission.objects.filter(problem_id=problem_id)
     queryset = apply_submission_filter(queryset, id_range, languages, results)
 
     rejudged = 0
     with Progress(self, queryset.count()) as p:
         for submission in queryset.iterator():
-            submission.judge(rejudge=True, batch_rejudge=True)
+            submission.judge(rejudge=True, batch_rejudge=True, rejudge_user=user)
             rejudged += 1
             if rejudged % 10 == 0:
                 p.done = rejudged
