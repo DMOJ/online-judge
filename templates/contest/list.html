@@ -135,13 +135,13 @@
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button"
-                           value="{{ _('Spectate') }}">
+                           value="{{ _('Join') }}">
                 </form>
             {% elif contest.is_spectatable_by(request.user) %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button join-warning"
-                           value="{{ _('Join') }}">
+                           value="{{ _('Spectate') }}">
                 </form>
             {% else %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
