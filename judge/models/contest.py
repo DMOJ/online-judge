@@ -93,8 +93,8 @@ class Contest(models.Model):
     view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
                                                      related_name='view_contest_scoreboard',
                                                      help_text=_('These users will be able to view the scoreboard.'))
-    view_contest_submissions = models.ManyToManyField(Profile, verbose_name=('can see contest submissions'), blank=True,
-                                                      related_name='view_contest_submissions',
+    view_contest_submissions = models.ManyToManyField(Profile, verbose_name=_('can see contest submissions'),
+                                                      blank=True, related_name='view_contest_submissions',
                                                       help_text=_('These users will be able '
                                                                   'to see in-contest submissions.'))
     scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default=SCOREBOARD_VISIBLE,
@@ -103,9 +103,9 @@ class Contest(models.Model):
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_('Use clarification system instead of comments.'),
                                              default=True)
-    rating_floor = models.IntegerField(verbose_name=('rating floor'), help_text=_('Rating floor for contest'),
+    rating_floor = models.IntegerField(verbose_name=_('rating floor'), help_text=_('Rating floor for contest'),
                                        null=True, blank=True)
-    rating_ceiling = models.IntegerField(verbose_name=('rating ceiling'), help_text=_('Rating ceiling for contest'),
+    rating_ceiling = models.IntegerField(verbose_name=_('rating ceiling'), help_text=_('Rating ceiling for contest'),
                                          null=True, blank=True)
     rate_all = models.BooleanField(verbose_name=_('rate all'), help_text=_('Rate all users who joined.'), default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
