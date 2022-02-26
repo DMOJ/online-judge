@@ -384,10 +384,16 @@ class Contest(models.Model):
         if not self.started:
             return False
 
+        if self.ended:
+            return False
+
         if not user.is_authenticated:
             return False
 
         if user.profile.id in self.editor_ids or user.profile.id in self.tester_ids:
+            return False
+
+        if user.profile.id in self.spectator_ids:
             return False
 
         if self.has_completed_contest(user):
@@ -402,7 +408,16 @@ class Contest(models.Model):
         if not user.is_authenticated:
             return False
 
+        if self.ended:
+            return True
+
         if user.profile.id in self.editor_ids or user.profile.id in self.tester_ids:
+            return True
+
+        if not self.started:
+            return False
+
+        if user.profile.id in self.spectator_ids:
             return True
 
         if self.limit_join_organizations:
