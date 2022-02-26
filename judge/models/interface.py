@@ -94,6 +94,7 @@ class BlogPost(models.Model):
     class Meta:
         permissions = (
             ('edit_all_post', _('Edit all posts')),
+            ('change_post_visibility', _('Edit post visibility')),
         )
         verbose_name = _('blog post')
         verbose_name_plural = _('blog posts')

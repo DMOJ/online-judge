@@ -9,7 +9,7 @@ from mptt.admin import DraggableMPTTAdmin
 from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
-from judge.models import NavigationBar
+from judge.models import BlogPost, NavigationBar
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget
 
 
@@ -83,6 +83,17 @@ class BlogPostAdmin(VersionAdmin):
         if obj is None:
             return request.user.has_perm('judge.change_blogpost')
         return obj.is_editable_by(request.user)
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.has_perm('judge.change_post_visibility'):
+            return ['visible']
+        return []
+
+    def get_queryset(self, request):
+        queryset = BlogPost.objects.all()
+        if not request.user.has_perm('judge.edit_all_post'):
+            queryset = queryset.filter(authors=request.profile)
+        return queryset
 
 
 class SolutionForm(ModelForm):
