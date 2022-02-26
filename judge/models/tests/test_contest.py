@@ -120,6 +120,17 @@ class ContestTestCase(CommonDataMixin, TestCase):
             testers=('non_staff_tester',),
         )
 
+        self.tester_see_scoreboard_contest = create_contest(
+            key='tester_see_board',
+            start_time=_now - timezone.timedelta(days=100),
+            end_time=_now + timezone.timedelta(days=100),
+            time_limit=timezone.timedelta(days=1),
+            is_visible=True,
+            scoreboard_visibility=Contest.SCOREBOARD_HIDDEN,
+            testers=('non_staff_tester',),
+            tester_see_scoreboard=True,
+        )
+
         for contest_key in ('contest_scoreboard', 'particip_scoreboard', 'visible_scoreboard'):
             create_contest_participation(
                 contest=contest_key,
@@ -490,6 +501,23 @@ class ContestTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.full_hidden_scoreboard_contest, data)
+
+    def test_tester_see_scoreboard_contest_methods(self):
+        data = {
+            'superuser': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'normal': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.tester_see_scoreboard_contest, data)
 
     def test_private_contest_methods(self):
         with self.assertRaises(Contest.PrivateContest):

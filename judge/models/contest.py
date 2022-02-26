@@ -75,6 +75,8 @@ class Contest(models.Model):
     testers = models.ManyToManyField(Profile, help_text=_('These users will be able to view the contest, '
                                                           'but not edit it.'),
                                      blank=True, related_name='testers+')
+    tester_see_scoreboard = models.BooleanField(verbose_name=_('testers see scoreboard'), default=False,
+                                                help_text=_('If testers can see the scoreboard.'))
     description = models.TextField(verbose_name=_('description'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
     start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
@@ -215,6 +217,8 @@ class Contest(models.Model):
         if user.has_perm('judge.see_private_contest') or user.has_perm('judge.edit_all_contest'):
             return True
         if user.profile.id in self.editor_ids:
+            return True
+        if self.tester_see_scoreboard and user.profile.id in self.tester_ids:
             return True
         if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
