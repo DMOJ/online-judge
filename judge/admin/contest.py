@@ -109,13 +109,15 @@ class ContestForm(ModelForm):
                                                             attrs={'style': 'width: 100%'}),
             'view_contest_scoreboard': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
                                                                        attrs={'style': 'width: 100%'}),
+            'view_contest_submissions': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                                        attrs={'style': 'width: 100%'}),
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('contest_preview')}),
         }
 
 
 class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers')}),
+        (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers', 'tester_see_submissions')}),
         (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_problem_authors',
                                     'show_short_display', 'run_pretests_only', 'locked_after', 'scoreboard_visibility',
                                     'points_precision')}),
@@ -124,7 +126,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Access'), {'fields': ('access_code', 'private_contestants', 'organizations', 'classes',
-                                  'join_organizations', 'view_contest_scoreboard')}),
+                                  'join_organizations', 'view_contest_scoreboard', 'view_contest_submissions')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'locked_after', 'start_time', 'end_time', 'time_limit',
