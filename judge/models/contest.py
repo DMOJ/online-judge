@@ -77,6 +77,8 @@ class Contest(models.Model):
                                      blank=True, related_name='testers+')
     tester_see_scoreboard = models.BooleanField(verbose_name=_('testers see scoreboard'), default=False,
                                                 help_text=_('If testers can see the scoreboard.'))
+    tester_see_submissions = models.BooleanField(verbose_name=_('testers see submissions'), default=False,
+                                                 help_text=_('If testers can see in-contest submissions.'))
     description = models.TextField(verbose_name=_('description'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
     start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
@@ -91,6 +93,10 @@ class Contest(models.Model):
     view_contest_scoreboard = models.ManyToManyField(Profile, verbose_name=_('view contest scoreboard'), blank=True,
                                                      related_name='view_contest_scoreboard',
                                                      help_text=_('These users will be able to view the scoreboard.'))
+    view_contest_submissions = models.ManyToManyField(Profile, verbose_name=('can see contest submissions'), blank=True,
+                                                      related_name='view_contest_submissions',
+                                                      help_text=_('These users will be able '
+                                                                  'to see in-contest submissions.'))
     scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default=SCOREBOARD_VISIBLE,
                                              max_length=1, help_text=_('Scoreboard visibility through the duration '
                                                                        'of the contest'), choices=SCOREBOARD_VISIBILITY)

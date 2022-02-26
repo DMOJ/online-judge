@@ -160,8 +160,13 @@ class Submission(models.Model):
                 self.problem.testers.filter(id=profile.id).exists():
             return True
 
-        # If user is an author or curator of the contest the submission was made in
-        if self.contest_object is not None and user.profile.id in self.contest_object.editor_ids:
+        contest = self.contest_object
+        # If user is an author or curator of the contest the submission was made in, or they can see in-contest subs
+        if contest is not None and (
+            user.profile.id in contest.editor_ids or
+            contest.view_contest_submissions.filter(id=user.profile.id).exists() or
+            (contest.tester_see_submissions and user.profile.id in contest.tester_ids)
+        ):
             return True
 
         return False
