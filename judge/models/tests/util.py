@@ -195,6 +195,7 @@ class CreateContest(CreateModel):
         'rate_exclude': (Profile, 'user__username'),
         'private_contestants': (Profile, 'user__username'),
         'organizations': (Organization, 'name'),
+        'join_organizations': (Organization, 'name'),
         'tags': (ContestTag, 'name'),
         'banned_users': (Profile, 'user__username'),
     }
