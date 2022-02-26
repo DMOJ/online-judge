@@ -68,17 +68,20 @@ class Contest(models.Model):
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
     authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
-                                     related_name='authors+')
+                                     related_name='authored_contests')
     curators = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest, '
                                                            'but will not be listed as authors.'),
-                                      related_name='curators+', blank=True)
+                                      related_name='curated_contests', blank=True)
     testers = models.ManyToManyField(Profile, help_text=_('These users will be able to view the contest, '
                                                           'but not edit it.'),
-                                     blank=True, related_name='testers+')
+                                     blank=True, related_name='tested_contests')
     tester_see_scoreboard = models.BooleanField(verbose_name=_('testers see scoreboard'), default=False,
                                                 help_text=_('If testers can see the scoreboard.'))
     tester_see_submissions = models.BooleanField(verbose_name=_('testers see submissions'), default=False,
                                                  help_text=_('If testers can see in-contest submissions.'))
+    spectators = models.ManyToManyField(Profile, help_text=_('These users will be able to spectate the contest, '
+                                                             'but not see the problems ahead of time.'),
+                                        blank=True, related_name='spectated_contests')
     description = models.TextField(verbose_name=_('description'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
     start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
@@ -230,6 +233,8 @@ class Contest(models.Model):
             return True
         if self.tester_see_scoreboard and user.profile.id in self.tester_ids:
             return True
+        if self.started and user.profile.id in self.spectator_ids:
+            return True
         if self.view_contest_scoreboard.filter(id=user.profile.id).exists():
             return True
         if self.scoreboard_visibility == self.SCOREBOARD_AFTER_PARTICIPATION and self.has_completed_contest(user):
@@ -296,6 +301,10 @@ class Contest(models.Model):
     def tester_ids(self):
         return Contest.testers.through.objects.filter(contest=self).values_list('profile_id', flat=True)
 
+    @cached_property
+    def spectator_ids(self):
+        return Contest.spectators.through.objects.filter(contest=self).values_list('profile_id', flat=True)
+
     def __str__(self):
         return self.name
 
@@ -334,6 +343,10 @@ class Contest(models.Model):
 
         # User is tester for contest
         if user.profile.id in self.tester_ids:
+            return
+
+        # User is spectator for contest
+        if user.profile.id in self.spectator_ids:
             return
 
         # Contest is not publicly visible
@@ -437,6 +450,7 @@ class Contest(models.Model):
             q |= Q(authors=user.profile)
             q |= Q(curators=user.profile)
             q |= Q(testers=user.profile)
+            q |= Q(spectators=user.profile)
             queryset = queryset.filter(q)
         return queryset.distinct()
 

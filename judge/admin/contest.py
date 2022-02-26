@@ -99,6 +99,7 @@ class ContestForm(ModelForm):
             'authors': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'curators': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'testers': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'spectators': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'private_contestants': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
                                                                    attrs={'style': 'width: 100%'}),
             'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
@@ -117,7 +118,7 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers', 'tester_see_submissions')}),
+        (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers', 'tester_see_submissions', 'spectators')}),
         (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_problem_authors',
                                     'show_short_display', 'run_pretests_only', 'locked_after', 'scoreboard_visibility',
                                     'points_precision')}),
