@@ -233,7 +233,7 @@
                         <th class="ac-rate">
                             <a href="{{ sort_links.ac_rate }}">{{ _('AC %%') }}{{ sort_order.ac_rate }}</a>
                         </th>
-                        <th class="editorial">
+                        <th class="editorial" title="{{ _('Editorial') }}">
                             <a href="{{ sort_links.editorial }}">
                                 <i class="fa fa-book"></i>{{ sort_order.editorial }}
                             </a>
@@ -293,11 +293,11 @@
                         {% if not request.in_contest %}
                             <td class="ac-rate">{{ problem.ac_rate|floatformat(1) }}%</td>
                             {% if problem.has_public_editorial %}
-                                <td editorial="1">
+                                <td>
                                     <i class="has-editorial-color fa fa-check-circle"></i>
                                 </td>
                             {% else %}
-                                <td editorial="0">
+                                <td>
                                     <i class="no-editorial-color fa fa-minus-circle"></i>
                                 </td>
                             {% endif %}
