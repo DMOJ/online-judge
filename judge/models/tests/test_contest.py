@@ -47,6 +47,10 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 username='normal_open_org',
                 is_staff=False,
             ),
+            'non_staff_spectator': create_user(
+                username='non_staff_spectator',
+                is_staff=False,
+            ),
         })
 
         self.users['normal_open_org'].profile.organizations.add(self.organizations['open'])
@@ -72,6 +76,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                     return tostring(math.floor(n))
                 end
             """,
+            spectators=('non_staff_spectator',),
         )
 
         self.hidden_scoreboard_non_staff_author = create_contest(
@@ -124,6 +129,20 @@ class ContestTestCase(CommonDataMixin, TestCase):
             authors=('non_staff_author',),
             curators=('staff_contest_edit_own',),
             testers=('non_staff_tester',),
+            spectators=('non_staff_spectator',),
+        )
+
+        self.future_contest = create_contest(
+            key='future_contest',
+            start_time=_now + timezone.timedelta(days=3),
+            end_time=_now + timezone.timedelta(days=5),
+            time_limit=timezone.timedelta(days=1),
+            is_visible=True,
+            scoreboard_visibility=Contest.SCOREBOARD_AFTER_CONTEST,
+            authors=('non_staff_author',),
+            curators=('staff_contest_edit_own',),
+            testers=('non_staff_tester',),
+            spectators=('non_staff_spectator',),
         )
 
         self.tester_see_scoreboard_contest = create_contest(
@@ -387,6 +406,13 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 'is_editable_by': self.assertTrue,
                 'is_in_contest': self.assertFalse,
             },
+            'non_staff_spectator': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+                'is_accessible_by': self.assertTrue,
+                'is_editable_by': self.assertFalse,
+                'is_in_contest': self.assertFalse,
+            },
             'normal': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertFalse,
@@ -591,6 +617,35 @@ class ContestTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.public_limit_organization_join_contest, data)
+
+    def test_future_contest_methods(self):
+        data = {
+            'non_staff_spectator': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+            },
+            'non_staff_tester': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+            },
+            'non_staff_author': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'staff_contest_edit_own': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'staff_contest_edit_all': {
+                'can_see_own_scoreboard': self.assertTrue,
+                'can_see_full_scoreboard': self.assertTrue,
+            },
+            'normal': {
+                'can_see_own_scoreboard': self.assertFalse,
+                'can_see_full_scoreboard': self.assertFalse,
+            },
+        }
+        self._test_object_methods_with_users(self.future_contest, data)
 
     def test_private_contest_methods(self):
         # User must be in org and in private user list

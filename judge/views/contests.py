@@ -80,7 +80,14 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
         return timezone.now()
 
     def _get_queryset(self):
-        return super().get_queryset().prefetch_related('tags', 'organizations', 'authors', 'curators', 'testers')
+        return super().get_queryset().prefetch_related(
+            'tags',
+            'organizations',
+            'authors',
+            'curators',
+            'testers',
+            'spectators',
+        )
 
     def get_queryset(self):
         return self._get_queryset().order_by(self.order, 'key').filter(end_time__lt=self._now)
@@ -96,11 +103,12 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
                 present.append(contest)
 
         if self.request.user.is_authenticated:
-            for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.profile,
-                                                                     contest_id__in=present) \
-                    .select_related('contest') \
-                    .prefetch_related('contest__authors', 'contest__curators', 'contest__testers') \
-                    .annotate(key=F('contest__key')):
+            for participation in (
+                ContestParticipation.objects.filter(virtual=0, user=self.request.profile, contest_id__in=present)
+                .select_related('contest')
+                .prefetch_related('contest__authors', 'contest__curators', 'contest__testers', 'contest__spectators')
+                .annotate(key=F('contest__key'))
+            ):
                 if participation.ended:
                     finished.add(participation.contest.key)
                 else:
@@ -150,6 +158,12 @@ class ContestMixin(object):
         return self.request.profile.id in self.object.tester_ids
 
     @cached_property
+    def is_spectator(self):
+        if not self.request.user.is_authenticated:
+            return False
+        return self.request.profile.id in self.object.spectator_ids
+
+    @cached_property
     def can_edit(self):
         return self.object.is_editable_by(self.request.user)
 
@@ -175,6 +189,7 @@ class ContestMixin(object):
         context['now'] = timezone.now()
         context['is_editor'] = self.is_editor
         context['is_tester'] = self.is_tester
+        context['is_spectator'] = self.is_spectator
         context['can_edit'] = self.can_edit
 
         if not self.object.og_image or not self.object.summary:
@@ -374,7 +389,6 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             else:
                 return generic_message(request, _('Cannot enter'),
                                        _('You are not able to join this contest.'))
-
             try:
                 participation = ContestParticipation.objects.get(
                     contest=contest, user=profile, virtual=participation_type,

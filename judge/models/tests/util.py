@@ -190,6 +190,7 @@ class CreateContest(CreateModel):
         'authors': (Profile, 'user__username'),
         'curators': (Profile, 'user__username'),
         'testers': (Profile, 'user__username'),
+        'spectators': (Profile, 'user__username'),
         'problems': (Problem, 'code'),
         'view_contest_scoreboard': (Profile, 'user__username'),
         'rate_exclude': (Profile, 'user__username'),
