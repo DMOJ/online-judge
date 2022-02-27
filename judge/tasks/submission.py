@@ -1,4 +1,5 @@
 from celery import shared_task
+from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -23,9 +24,10 @@ def apply_submission_filter(queryset, id_range, languages, results):
 
 
 @shared_task(bind=True)
-def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None, user=None):
+def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None, user_id=None):
     queryset = Submission.objects.filter(problem_id=problem_id)
     queryset = apply_submission_filter(queryset, id_range, languages, results)
+    user = User.objects.get(id=user_id)
 
     rejudged = 0
     with Progress(self, queryset.count()) as p:
