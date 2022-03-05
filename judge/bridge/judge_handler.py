@@ -540,6 +540,9 @@ class JudgeHandler(ZlibPacketHandler):
                 time=test_case.time, memory=test_case.memory, feedback=test_case.feedback,
                 extended_feedback=test_case.extended_feedback, output=test_case.output,
                 points=test_case.points, total=test_case.total, status=test_case.status,
+                voluntary_context_switches=result.get('voluntary-context-switches', 0),
+                involuntary_context_switches=result.get('involuntary-context-switches', 0),
+                runtime_version=result.get('runtime-version', ''),
             ))
 
         do_post = True
