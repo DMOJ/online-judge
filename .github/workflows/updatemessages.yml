@@ -64,12 +64,13 @@ jobs:
     - name: Remove useless changes
       run: |
         set -eu
+        i18n_head=$(git rev-parse --verify -q origin/update-i18n || echo "HEAD")
         while IFS= read -r -d $'\0' file; do
           if git diff -s --exit-code "$file"; then
             continue
           fi
 
-          if git diff origin/update-i18n -- "$file" | tail -n +5 2>/dev/null | grep -qP '^[-+](?!"PO-Revision-Date:|"POT-Creation-Date:)'; then
+          if git diff $(i18n_head) -- "$file" | tail -n +5 2>/dev/null | grep -qP '^[-+](?!"PO-Revision-Date:|"POT-Creation-Date:)'; then
             echo "Changed: $file"
           else
             echo "No material change: $file"
