@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: Set up Python 3.7
       uses: actions/setup-python@v1
       with:
@@ -65,6 +67,7 @@ jobs:
       run: |
         set -eu
         i18n_head=$(git rev-parse --verify -q origin/update-i18n || echo "HEAD")
+        echo "Comparing against: $i18n_head"
         while IFS= read -r -d $'\0' file; do
           if git diff -s --exit-code "$file"; then
             continue
