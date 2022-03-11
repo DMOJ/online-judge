@@ -75,10 +75,11 @@ class ProblemCaseForm(ModelForm):
 
     class Meta:
         model = ProblemTestCase
-        fields = ('order', 'type', 'input_file', 'output_file', 'points',
-                  'is_pretest', 'output_limit', 'output_prefix', 'checker', 'checker_args', 'generator_args')
+        fields = ('order', 'type', 'input_file', 'output_file', 'points', 'is_pretest', 'output_limit',
+                  'output_prefix', 'checker', 'checker_args', 'generator_args', 'batch_dependencies')
         widgets = {
             'generator_args': HiddenInput,
+            'batch_dependencies': HiddenInput,
             'type': Select(attrs={'style': 'width: 100%'}),
             'points': NumberInput(attrs={'style': 'width: 4em'}),
             'output_prefix': NumberInput(attrs={'style': 'width: 4.5em'}),
