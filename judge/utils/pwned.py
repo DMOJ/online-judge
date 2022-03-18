@@ -106,10 +106,7 @@ class PwnedPasswordsValidator(object):
             # the same database.
             CommonPasswordValidator().validate(password, user)
         elif amount:
-            raise ValidationError(
-                _('This password is too common.'),
-                code='pwned_password',
-            )
+            raise ValidationError(_('This password is too common.'))
 
     def get_help_text(self):
         return _("Your password can't be a commonly used password.")
