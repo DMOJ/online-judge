@@ -204,7 +204,7 @@
                 {% for problem in contest_problems %}
                     <tr>
                         <td>
-                            {% if problem.is_public or request.user.is_superuser or is_editor %}
+                            {% if problem.is_public or request.user.is_superuser or is_editor or (contest.implicit_problem_perms and is_tester) %}
                                 <a href="{{ url('problem_detail', problem.code) }}">{{ problem.i18n_name or problem.name }}</a>
                             {% else %}
                                 {{ problem.i18n_name or problem.name }}

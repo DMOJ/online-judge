@@ -253,6 +253,16 @@ class Problem(models.Model):
         if self.testers.filter(id=user.profile.id).exists():
             return True
 
+        # If the user is a author/curator/tester/spectator on a contest with "implicit_problem_perms"
+        from judge.models import ContestProblem
+        if self.contests.filter(
+            Q(contest__testers=user.profile.id) |
+            Q(contest__curators=user.profile.id) |
+            Q(contest__authors=user.profile.id),
+            contest__implicit_problem_perms=True,
+        ).exists():
+            return True
+
         return False
 
     def is_subs_manageable_by(self, user):
@@ -295,6 +305,14 @@ class Problem(models.Model):
             q |= Q(authors=user.profile)
             q |= Q(curators=user.profile)
             q |= Q(testers=user.profile)
+
+            q |= Q(
+                Q(contests__contest__testers=user.profile.id) |
+                Q(contests__contest__curators=user.profile.id) |
+                Q(contests__contest__authors=user.profile.id),
+                contests__contest__implicit_problem_perms=True,
+            )
+
             queryset = queryset.filter(q)
 
         return queryset

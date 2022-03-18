@@ -82,6 +82,9 @@ class Contest(models.Model):
     spectators = models.ManyToManyField(Profile, help_text=_('These users will be able to spectate the contest, '
                                                              'but not see the problems ahead of time.'),
                                         blank=True, related_name='spectated_contests')
+    implicit_problem_perms = models.BooleanField(verbose_name=_('implicit problem permissions'), default=False,
+                                                 help_text=_('If contest personnel have implicit '
+                                                             'view permissions on contest problems'))
     description = models.TextField(verbose_name=_('description'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
     start_time = models.DateTimeField(verbose_name=_('start time'), db_index=True)
