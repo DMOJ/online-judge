@@ -5,9 +5,9 @@ django-pagedown<2
 django-registration-redux
 django-reversion
 django-social-share
-django-sortedm2m @ git+git://github.com/DMOJ/django-sortedm2m.git
+django-sortedm2m @ git+https://github.com/DMOJ/django-sortedm2m.git
 django-impersonate
-dmoj-wpadmin @ git+git://github.com/DMOJ/dmoj-wpadmin.git
+dmoj-wpadmin @ git+https://github.com/DMOJ/dmoj-wpadmin.git
 lxml
 Pygments
 mistune<2
@@ -28,10 +28,10 @@ jsonfield
 pymoss
 packaging
 celery
-ansi2html @ git+git://github.com/DMOJ/ansi2html.git
+ansi2html @ git+https://github.com/DMOJ/ansi2html.git
 sqlparse
 lupa
-martor @ git+git://github.com/DMOJ/martor.git
+martor @ git+https://github.com/DMOJ/martor.git
 netaddr
 webauthn<1
 bleach
