@@ -134,7 +134,7 @@ class Judge(models.Model):
     load = models.FloatField(verbose_name=_('system load'), null=True,
                              help_text=_('Load for the last minute, divided by processors to be fair.'))
     description = models.TextField(blank=True, verbose_name=_('description'))
-    last_ip = models.GenericIPAddressField(verbose_name='Last connected IP', blank=True, null=True)
+    last_ip = models.GenericIPAddressField(verbose_name=_('Last connected IP'), blank=True, null=True)
     problems = models.ManyToManyField('Problem', verbose_name=_('problems'), related_name='judges')
     runtimes = models.ManyToManyField(Language, verbose_name=_('judges'), related_name='judges')
 
