@@ -223,7 +223,7 @@
                             {% endif %}
                             <li><a href="{{ url('user_edit_profile') }}">{{ _('Edit profile') }}</a></li>
                             {% if request.user.is_impersonate %}
-                                <li><a href="{{ url('impersonate-stop') }}">Stop impersonating</a></li>
+                                <li><a href="{{ url('impersonate-stop') }}">{{ _('Stop impersonating') }}</a></li>
                             {% else %}
                                 <li>
                                     <form action="{{ url('auth_logout') }}" method="POST">
