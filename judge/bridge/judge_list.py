@@ -130,7 +130,7 @@ class JudgeList(object):
             else:
                 logger.info('Free judges: %d', len(candidates))
 
-            if len(candidates) == 1 and priority >= REJUDGE_PRIORITY:
+            if len(self.judges) > 1 and len(candidates) == 1 and priority >= REJUDGE_PRIORITY:
                 candidates = []
 
             if candidates:
