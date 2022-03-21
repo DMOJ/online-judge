@@ -3,8 +3,12 @@ import logging
 import socket
 import struct
 import zlib
+from operator import attrgetter
 
 from django.conf import settings
+from django.db import transaction
+from django.db.models import BooleanField, F, OuterRef, Subquery
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 
 from judge import event_poster as event
@@ -50,11 +54,11 @@ def judge_request(packet, reply=True):
         return result
 
 
-def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=None):
+def judge_submission(submission, rejudge=False, judge_id=None):
     from .models import ContestSubmission, Submission, SubmissionTestCase
 
     updates = {'time': None, 'memory': None, 'points': None, 'result': None, 'case_points': 0, 'case_total': 0,
-               'error': None, 'rejudged_date': timezone.now() if rejudge or batch_rejudge else None, 'status': 'QU'}
+               'error': None, 'rejudged_date': timezone.now() if rejudge else None, 'status': 'QU'}
     try:
         # This is set proactively; it might get unset in judgecallback's on_grading_begin if the problem doesn't
         # actually have pretests stored on the judge.
@@ -86,7 +90,7 @@ def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=No
             'language': submission.language.key,
             'source': submission.source.source,
             'judge-id': judge_id,
-            'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else (REJUDGE_PRIORITY if rejudge else priority),
+            'priority': REJUDGE_PRIORITY if rejudge else priority,
         })
     except BaseException:
         logger.exception('Failed to send request to judge')
@@ -98,6 +102,62 @@ def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=No
         _post_update_submission(submission)
         success = True
     return success
+
+
+def batch_judge_submission(submissions, rejudge=False, judge_id=None):
+    from .models import Submission, SubmissionTestCase
+    updates = {
+        'time': None, 'memory': None, 'points': None, 'result': None, 'case_points': 0, 'case_total': 0,
+        'error': None, 'rejudged_date': timezone.now() if rejudge else None, 'status': 'QU',
+        'is_pretested': Coalesce(
+            Subquery(
+                Submission.objects.filter(pk=OuterRef('pk'))
+                .annotate(pretested=F('contest_object__run_pretests_only').bitand(F('contest__problem__is_pretested')))
+                .values_list('pretested')[:1],
+                output_field=BooleanField(),
+            ),
+            False,
+        ),
+    }
+
+    with transaction.atomic():
+        submission_queryset = Submission.objects.filter(id__in=map(attrgetter('id'), submissions)) \
+                                                .exclude(status__in=('P', 'G'))
+        submission_queryset.update(**updates)
+
+        ids = set(submission_queryset.values_list('id', flat=True))
+        # Do the filtering using the new set of IDs rather than submission_queryset
+        # because submission_queryset itself takes a list of IDs anyways.
+        SubmissionTestCase.objects.filter(submission_id__in=ids).delete()
+
+    submissions = [submission for submission in submissions if submission.id in ids]
+
+    try:
+        response = judge_request({
+            'name': 'batch-submission-request',
+            'submissions': [{
+                'submission-id': submission.id,
+                'problem-id': submission.problem.code,
+                'language': submission.language.key,
+                'source': submission.source.source,
+                'priority': BATCH_REJUDGE_PRIORITY if rejudge else (
+                    CONTEST_SUBMISSION_PRIORITY if submission.contest_object is not None else DEFAULT_PRIORITY
+                )
+            } for submission in submissions],
+            'judge-id': judge_id,
+        })
+    except BaseException:
+        logger.exception('Failed to send request to judge')
+        processed_ids = set()
+    else:
+        processed_ids = set(response['submission-ids']) if 'submission-ids' in response else set()
+
+    if processed_ids != ids:
+        Submission.objects.filter(id__in=ids - processed_ids).update(status='IE', result='IE', error='')
+
+    for submission in submissions:
+        # If the submission is not in processed_ids, that means the submission IE'd and thus is "done" judging.
+        _post_update_submission(submission, done=submission.id not in processed_ids)
 
 
 def disconnect_judge(judge, force=False):

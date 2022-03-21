@@ -161,7 +161,6 @@ class SubmissionAdmin(VersionAdmin):
             self.message_user(request, gettext('You do not have the permission to rejudge submissions.'),
                               level=messages.ERROR)
             return
-        queryset = queryset.order_by('id')
         if not request.user.has_perm('judge.rejudge_submission_lot') and \
                 queryset.count() > settings.DMOJ_SUBMISSIONS_REJUDGE_LIMIT:
             self.message_user(request, gettext('You do not have the permission to rejudge THAT many submissions.'),
@@ -170,9 +169,8 @@ class SubmissionAdmin(VersionAdmin):
         if not request.user.has_perm('judge.edit_all_problem'):
             id = request.profile.id
             queryset = queryset.filter(Q(problem__authors__id=id) | Q(problem__curators__id=id))
-        judged = len(queryset)
-        for model in queryset:
-            model.judge(rejudge=True, batch_rejudge=True, rejudge_user=request.user)
+
+        judged = sum(queryset.batch_judge(rejudge=True, rejudge_user=request.user))
         self.message_user(request, ngettext('%d submission was successfully scheduled for rejudging.',
                                             '%d submissions were successfully scheduled for rejudging.',
                                             judged) % judged)
