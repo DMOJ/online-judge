@@ -104,8 +104,9 @@ class ProblemSubmissionDiff(TitleMixin, ProblemMixin, DetailView):
         return _('Comparing submissions for {0}').format(self.object.name)
 
     def get_content_title(self):
-        return format_html(_('Comparing submissions for <a href="{1}">{0}</a>'), self.object.name,
-                           reverse('problem_detail', args=[self.object.code]))
+        return mark_safe(escape(_('Comparing submissions for {0}')).format(
+            format_html('<a href="{1}">{0}</a>', self.object.name, reverse('problem_detail', args=[self.object.code])),
+        ))
 
     def get_object(self, queryset=None):
         problem = super(ProblemSubmissionDiff, self).get_object(queryset)

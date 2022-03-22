@@ -162,10 +162,10 @@ class Contest(models.Model):
                               help_text=_('A JSON object to serve as the configuration for the chosen contest format '
                                           'module. Leave empty to use None. Exact format depends on the contest format '
                                           'selected.'))
-    problem_label_script = models.TextField(verbose_name='contest problem label script', blank=True,
-                                            help_text='A custom Lua function to generate problem labels. Requires a '
-                                                      'single function with an integer parameter, the zero-indexed '
-                                                      'contest problem index, and returns a string, the label.')
+    problem_label_script = models.TextField(verbose_name=_('contest problem label script'), blank=True,
+                                            help_text=_('A custom Lua function to generate problem labels. Requires a '
+                                                        'single function with an integer parameter, the zero-indexed '
+                                                        'contest problem index, and returns a string, the label.'))
     locked_after = models.DateTimeField(verbose_name=_('contest lock'), null=True, blank=True,
                                         help_text=_('Prevent submissions from this contest '
                                                     'from being rejudged after this date.'))

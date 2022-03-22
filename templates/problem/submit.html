@@ -201,10 +201,9 @@
         {% if default_lang not in form.fields.language.queryset %}
             <div class="alert alert-warning alert-dismissable">
                 <a class="close">x</a>
-                {% trans trimmed default_language=default_lang.name %}
-                    <b>Warning!</b> Your default language, <b>{{ default_language }}</b>,
-                    is unavailable for this problem and has been deselected.
-                {% endtrans %}
+                <b>{{ _('Warning!') }}</b>
+                {{ _('Your default language, %(language)s, is unavailable for this problem and has been deselected.',
+                     language='<b>%s</b>'|safe|format(default_lang.name)) }}
             </div>
         {% endif %}
 
