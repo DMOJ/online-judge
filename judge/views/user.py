@@ -14,8 +14,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, Max, Min
-from django.db.models.fields import DateField
-from django.db.models.functions import Cast, ExtractYear
+from django.db.models.functions import ExtractYear, TruncDate
 from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -185,7 +184,7 @@ class UserAboutPage(UserPage):
 
         submissions = (
             self.object.submission_set
-            .annotate(date_only=Cast('date', DateField()))
+            .annotate(date_only=TruncDate('date'))
             .values('date_only').annotate(cnt=Count('id'))
         )
 
