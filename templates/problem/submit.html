@@ -202,8 +202,7 @@
             <div class="alert alert-warning alert-dismissable">
                 <a class="close">x</a>
                 <b>{{ _('Warning!') }}</b>
-                {{ _('Your default language, %(language)s, is unavailable for this problem and has been deselected.',
-                     language='<b>%s</b>'|safe|format(default_lang.name)) }}
+                {{ _('Your default language, %(language)s, is unavailable for this problem and has been deselected.', language=bold(default_lang.name)) }}
             </div>
         {% endif %}
 
