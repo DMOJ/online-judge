@@ -292,15 +292,15 @@
                         <td class="p">{{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}</td>
                         {% if not request.in_contest %}
                             <td class="ac-rate">{{ problem.ac_rate|floatformat(1) }}%</td>
-                            {% if problem.has_public_editorial %}
-                                <td>
-                                    <i class="has-editorial-color fa fa-check-circle"></i>
-                                </td>
-                            {% else %}
-                                <td>
+                            <td>
+                                {% if problem.has_public_editorial %}
+                                    <a href="{{ url('problem_editorial', problem.code) }}">
+                                        <i class="has-editorial-color fa fa-check-circle"></i>
+                                    </a>
+                                {% else %}
                                     <i class="no-editorial-color fa fa-minus-circle"></i>
-                                </td>
-                            {% endif %}
+                                {% endif %}
+                            </td>
                         {% endif %}
                         <td class="users">
                             <a href="{{ url('ranked_submissions', problem.code) }}">
