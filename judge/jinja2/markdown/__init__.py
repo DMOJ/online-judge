@@ -6,9 +6,9 @@ from urllib.parse import urlparse
 import mistune
 from bleach.sanitizer import Cleaner
 from django.conf import settings
-from jinja2 import Markup
 from lxml import html
 from lxml.etree import ParserError, XMLSyntaxError
+from markupsafe import Markup
 
 from judge.highlight_code import highlight_code
 from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
