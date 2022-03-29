@@ -121,7 +121,8 @@ class RuntimeVersion(models.Model):
 
 
 class Judge(models.Model):
-    name = models.CharField(max_length=50, help_text=_('Server name, hostname-style'), unique=True)
+    name = models.CharField(max_length=50, verbose_name=_('judge name'), help_text=_('Server name, hostname-style'),
+                            unique=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name=_('time of creation'))
     auth_key = models.CharField(max_length=100, help_text=_('A key to authenticate this judge'),
                                 verbose_name=_('authentication key'))

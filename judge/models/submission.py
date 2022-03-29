@@ -64,8 +64,8 @@ class Submission(models.Model):
         'AB': _('Aborted'),
     }
 
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, verbose_name=_('user'), on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), on_delete=models.CASCADE)
     date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True, db_index=True)
     time = models.FloatField(verbose_name=_('execution time'), null=True, db_index=True)
     memory = models.FloatField(verbose_name=_('memory usage'), null=True)
@@ -239,6 +239,10 @@ class SubmissionSource(models.Model):
 
     def __str__(self):
         return 'Source of %s' % self.submission
+
+    class Meta:
+        verbose_name = _('submission source')
+        verbose_name_plural = _('submission sources')
 
 
 @revisions.register()

@@ -200,6 +200,8 @@ class CommentLock(models.Model):
         permissions = (
             ('override_comment_lock', _('Override comment lock')),
         )
+        verbose_name = _('comment lock')
+        verbose_name_plural = _('comment locks')
 
     def __str__(self):
         return str(self.page)
