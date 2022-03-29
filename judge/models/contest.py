@@ -67,20 +67,23 @@ class Contest(models.Model):
     key = models.CharField(max_length=20, verbose_name=_('contest id'), unique=True,
                            validators=[RegexValidator('^[a-z0-9]+$', _('Contest id must be ^[a-z0-9]+$'))])
     name = models.CharField(max_length=100, verbose_name=_('contest name'), db_index=True)
-    authors = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest.'),
+    authors = models.ManyToManyField(Profile, verbose_name=_('authors'),
+                                     help_text=_('These users will be able to edit the contest.'),
                                      related_name='authored_contests')
-    curators = models.ManyToManyField(Profile, help_text=_('These users will be able to edit the contest, '
-                                                           'but will not be listed as authors.'),
+    curators = models.ManyToManyField(Profile, verbose_name=_('curators'),
+                                      help_text=_('These users will be able to edit the contest, '
+                                                  'but will not be listed as authors.'),
                                       related_name='curated_contests', blank=True)
-    testers = models.ManyToManyField(Profile, help_text=_('These users will be able to view the contest, '
-                                                          'but not edit it.'),
+    testers = models.ManyToManyField(Profile, verbose_name=_('testers'),
+                                     help_text=_('These users will be able to view the contest, but not edit it.'),
                                      blank=True, related_name='tested_contests')
     tester_see_scoreboard = models.BooleanField(verbose_name=_('testers see scoreboard'), default=False,
                                                 help_text=_('If testers can see the scoreboard.'))
     tester_see_submissions = models.BooleanField(verbose_name=_('testers see submissions'), default=False,
                                                  help_text=_('If testers can see in-contest submissions.'))
-    spectators = models.ManyToManyField(Profile, help_text=_('These users will be able to spectate the contest, '
-                                                             'but not see the problems ahead of time.'),
+    spectators = models.ManyToManyField(Profile, verbose_name=_('spectators'),
+                                        help_text=_('These users will be able to spectate the contest, '
+                                                    'but not see the problems ahead of time.'),
                                         blank=True, related_name='spectated_contests')
     description = models.TextField(verbose_name=_('description'), blank=True)
     problems = models.ManyToManyField(Problem, verbose_name=_('problems'), through='ContestProblem')
@@ -583,7 +586,8 @@ class ContestProblem(models.Model):
     order = models.PositiveIntegerField(db_index=True, verbose_name=_('order'))
     output_prefix_override = models.IntegerField(verbose_name=_('output prefix length override'),
                                                  default=0, null=True, blank=True)
-    max_submissions = models.IntegerField(help_text=_('Maximum number of submissions for this problem, '
+    max_submissions = models.IntegerField(verbose_name=_('max submissions'),
+                                          help_text=_('Maximum number of submissions for this problem, '
                                                       'or leave blank for no limit.'),
                                           default=None, null=True, blank=True,
                                           validators=[MinValueOrNoneValidator(1, _('Why include a problem you '

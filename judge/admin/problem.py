@@ -17,7 +17,7 @@ from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget, Ad
 
 
 class ProblemForm(ModelForm):
-    change_message = forms.CharField(max_length=256, label='Edit reason', required=False)
+    change_message = forms.CharField(max_length=256, label=_('Edit reason'), required=False)
 
     def __init__(self, *args, **kwargs):
         super(ProblemForm, self).__init__(*args, **kwargs)
