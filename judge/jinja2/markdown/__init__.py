@@ -4,6 +4,7 @@ from html import unescape
 from urllib.parse import urlparse
 
 import mistune
+from bleach.css_sanitizer import CSSSanitizer
 from bleach.sanitizer import Cleaner
 from django.conf import settings
 from lxml import html
@@ -117,8 +118,9 @@ def get_cleaner(name, params):
     if name in cleaner_cache:
         return cleaner_cache[name]
 
-    if params.get('styles') is True:
-        params['styles'] = all_styles
+    styles = params.pop('styles', None)
+    if styles:
+        params['css_sanitizer'] = CSSSanitizer(allowed_css_properties=all_styles if styles is True else styles)
 
     if params.pop('mathml', False):
         params['tags'] = params.get('tags', []) + mathml_tags
