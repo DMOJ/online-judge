@@ -34,7 +34,7 @@ lupa
 martor @ git+https://github.com/DMOJ/martor.git
 netaddr
 webauthn<1
-bleach<5
+bleach[css]
 django-admin-sortable2<2
 icalendar
 # This is a celery dependency whose latest major version is breaking everything.
