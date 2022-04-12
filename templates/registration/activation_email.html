@@ -1,23 +1,33 @@
-<b>Thanks for registering on the {{ site.name }}! We're glad to have you.</b>
-<br><br>
-The last step is activating your account. Please activate your {{ SITE_NAME }} account in the next {{ expiration_days }} days.
-<br><br>
-Please click on the following link to activate your account:
-<p style="margin-left:1em">
-      <a href="http://{{ site.domain }}/accounts/activate/{{ activation_key }}/">http://{{ site.domain }}/accounts/activate/{{ activation_key }}</a>
-</p>
 
-Alternatively, you can reply to this message to activate your account.
-Your reply must keep the following text intact for this to work:
+<span style="display: block;text-align: center; justify-content: center;margin: 0 2px;border: 4px solid #FFDE05;border-radius: 6px;font-size: .95em;color: #444;margin-bottom:0.75em;margin-left:30%;margin-right:30%">
+    <div style="padding: 1em;">
+        <br>
+        <div>
+            <img style="display:table;margin-left: auto;margin-right: auto;"src="https://avatars1.githubusercontent.com/u/6934864?v=3&s=101" width="35%" height="30%">
+        </div>
+        <br><br><br>
 
-<pre style="margin-left:1em">
-{{ activation_key }}
-</pre>
+        <h1 style="font-size:30px;display:inline;vertical-align: middle">Welcome to DMOJ!</h1>
+        <p>The last step is activating your account. Please activate your <b>{{ SITE_NAME }}</b> account in the next {{ expiration_days }} days.</p>
+        <br>
+        <p>Please click on the following link to activate your account:</p>
+        <p style="margin-left:1em">
+            <a href="http://{{ site.domain }}/accounts/activate/{{ activation_key }}/">http://{{ site.domain }}/accounts/activate/{{ activation_key }}</a>
+        </p>
+        <i>Alternatively, you can reply to this message to activate your account</i>
+        <br>
+        <i>Your reply must keep the following text intact for this to work:</i>
+        {{ activation_key }}
+        <br>
+        {% if SITE_ADMIN_EMAIL %}
+        <p>See you soon!</p>
+    </div>
+    <div style="margin-top:40px;background-color:#282828;padding: 40px;text-align:center;border-radius: 3px;">
+        <i style="color: white">If you have problems activating your account, feel free to send us an email at <a href="mailto:{{ SITE_ADMIN_EMAIL }}" style="color: white">{{ SITE_ADMIN_EMAIL }}</a>.</i>
+        <br>
+            {% else %}
+        <p style="color: white">See you soon!</p>
+        {% endif %}
+    </div>
+</span>
 
-{% if SITE_ADMIN_EMAIL %}
-See you soon!
-<br>
-If you have problems activating your account, feel free to send us an email at <a href="mailto:{{ SITE_ADMIN_EMAIL }}">{{ SITE_ADMIN_EMAIL }}</a>.
-{% else %}
-See you soon!
-{% endif %}
