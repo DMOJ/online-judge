@@ -55,7 +55,10 @@ def join_sql_subquery(queryset, subquery, params, join_fields, alias, join_type=
         parent_alias = parent_model._meta.db_table
     else:
         parent_alias = queryset.query.get_initial_alias()
-    queryset.query.external_aliases.add(alias)
+    if isinstance(queryset.query.external_aliases, dict):  # Django 3.x
+        queryset.query.external_aliases[alias] = True
+    else:
+        queryset.query.external_aliases.add(alias)
     join = RawSQLJoin(subquery, params, parent_alias, alias, join_type, FakeJoinField(join_fields), join_type == LOUTER)
     queryset.query.join(join)
     join.table_alias = alias

@@ -1,11 +1,11 @@
-Django>=2.2,<3
-django_compressor
-django-mptt
+Django>=3.2,<4
+django_compressor>=3
+django-mptt>=0.13
 django-pagedown<2
-django-registration-redux
-django-reversion
+django-registration-redux>=2.10
+django-reversion>=3.0.5,<4
 django-social-share
-django-sortedm2m @ git+https://github.com/DMOJ/django-sortedm2m.git
+django-sortedm2m>=3.1.0
 django-impersonate
 dmoj-wpadmin @ git+https://github.com/DMOJ/dmoj-wpadmin.git
 lxml
@@ -18,13 +18,13 @@ pika
 ua-parser
 pyyaml
 jinja2
-django_jinja
+django_jinja>=2.5.0
 llist
 requests
 django-fernet-fields
 pyotp
 qrcode[pil]
-jsonfield
+jsonfield>=3.0.3
 pymoss
 packaging
 celery
