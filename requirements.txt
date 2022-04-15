@@ -34,6 +34,6 @@ lupa
 martor @ git+https://github.com/DMOJ/martor.git
 netaddr
 webauthn<1
-bleach
-django-admin-sortable2
+bleach<5
+django-admin-sortable2<2
 icalendar
