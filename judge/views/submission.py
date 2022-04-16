@@ -393,7 +393,7 @@ class AllUserSubmissions(ConditionalUserTabMixin, UserMixin, SubmissionsListBase
 
     def get_content_title(self):
         if self.is_own:
-            return mark_safe(escape(_('All my submissions')))
+            return _('All my submissions')
         return mark_safe(escape(_('All submissions by %s')) % (
             format_html('<a href="{1}">{0}</a>', self.profile.display_name,
                         reverse('user_page', args=[self.username])),
