@@ -185,12 +185,12 @@ class Profile(models.Model):
                                       validators=[RegexValidator('^$|^[A-Z2-7]{32}$',
                                                                  _('TOTP key must be empty or base32'))])
     scratch_codes = EncryptedNullCharField(max_length=255, null=True, blank=True, verbose_name=_('scratch codes'),
-                                           help_text=_('JSON array of 16 character base32-encoded codes \
-                                                        for scratch codes'),
+                                           help_text=_('JSON array of 16 character base32-encoded codes '
+                                                       'for scratch codes'),
                                            validators=[
                                                RegexValidator(r'^(\[\])?$|^\[("[A-Z0-9]{16}", *)*"[A-Z0-9]{16}"\]$',
-                                                              _('Scratch codes must be empty or a JSON array of \
-                                                                 16-character base32 codes'))])
+                                                              _('Scratch codes must be empty or a JSON array of '
+                                                                '16-character base32 codes'))])
     last_totp_timecode = models.IntegerField(verbose_name=_('last TOTP timecode'), default=0)
     api_token = models.CharField(max_length=64, null=True, verbose_name=_('API token'),
                                  help_text=_('64 character hex-encoded API access token'),
