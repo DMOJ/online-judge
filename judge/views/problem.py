@@ -696,7 +696,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
 
 class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
-    title = _('Clone Problem')
+    title = gettext_lazy('Clone Problem')
     template_name = 'problem/clone.html'
     form_class = ProblemCloneForm
     permission_required = 'judge.clone_problem'

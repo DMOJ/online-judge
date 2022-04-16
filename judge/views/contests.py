@@ -280,7 +280,7 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
 
 
 class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
-    title = _('Clone Contest')
+    title = gettext_lazy('Clone Contest')
     template_name = 'contest/clone.html'
     form_class = ContestCloneForm
     permission_required = 'judge.clone_contest'

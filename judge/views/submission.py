@@ -393,9 +393,11 @@ class AllUserSubmissions(ConditionalUserTabMixin, UserMixin, SubmissionsListBase
 
     def get_content_title(self):
         if self.is_own:
-            return format_html('All my submissions')
-        return format_html('All submissions by <a href="{1}">{0}</a>', self.profile.display_name,
-                           reverse('user_page', args=[self.username]))
+            return mark_safe(escape(_('All my submissions')))
+        return mark_safe(escape(_('All submissions by %s')) % (
+            format_html('<a href="{1}">{0}</a>', self.profile.display_name,
+                        reverse('user_page', args=[self.username])),
+        ))
 
     def get_my_submissions_page(self):
         if self.request.user.is_authenticated:
@@ -423,8 +425,10 @@ class ProblemSubmissionsBase(SubmissionsListBase):
         return _('All submissions for %s') % self.problem_name
 
     def get_content_title(self):
-        return format_html('All submissions for <a href="{1}">{0}</a>', self.problem_name,
-                           reverse('problem_detail', args=[self.problem.code]))
+        return mark_safe(escape(_('All submissions for %s')) % (
+            format_html('<a href="{1}">{0}</a>', self.problem_name,
+                        reverse('problem_detail', args=[self.problem.code])),
+        ))
 
     def access_check_contest(self, request):
         if self.in_contest and not self.contest.can_see_own_scoreboard(request.user):
@@ -489,12 +493,16 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
 
     def get_content_title(self):
         if self.request.user.is_authenticated and self.request.profile == self.profile:
-            return format_html("""My submissions for <a href="{3}">{2}</a>""",
-                               self.username, reverse('user_page', args=[self.username]),
-                               self.problem_name, reverse('problem_detail', args=[self.problem.code]))
-        return format_html("""<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>""",
-                           self.profile.display_name, reverse('user_page', args=[self.username]),
-                           self.problem_name, reverse('problem_detail', args=[self.problem.code]))
+            return mark_safe(escape(_('My submissions for %(problem)s')) % {
+                'problem': format_html('<a href="{1}">{0}</a>', self.problem_name,
+                                       reverse('problem_detail', args=[self.problem.code])),
+            })
+        return mark_safe(escape(_("%(user)s's submissions for %(problem)s")) % {
+            'user': format_html('<a href="{1}">{0}</a>', self.profile.display_name,
+                                reverse('user_page', args=[self.username])),
+            'problem': format_html('<a href="{1}">{0}</a>', self.problem_name,
+                                   reverse('problem_detail', args=[self.problem.code])),
+        })
 
     def get_context_data(self, **kwargs):
         context = super(UserProblemSubmissions, self).get_context_data(**kwargs)
