@@ -1,11 +1,5 @@
 @import "vars";
 
-#content-left {
-    &.users {
-        flex: unset;
-    }
-}
-
 td.user-name {
     padding-left: 2em;
     text-align: left;
