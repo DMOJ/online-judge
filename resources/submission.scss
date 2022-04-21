@@ -134,13 +134,7 @@ label[for="language"], label[for="status"] {
     border-right: 1px solid white;
 }
 
-#content-left.submission {
-    flex: 70%;
-}
-
 #content-right.submission {
-    flex: 12%;
-    min-width: initial;
     max-width: 100%;
     padding-top: 0;
 }
@@ -160,18 +154,6 @@ label[for="language"], label[for="status"] {
         .fa {
             display: inline-block;
         }
-    }
-
-    #fake-info-float {
-        display: none;
-    }
-
-    #statistics-table {
-        display: none;
-    }
-
-    #content-left.submission {
-        flex: 100%;
     }
 
     #content-right.submission {
