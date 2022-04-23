@@ -12,9 +12,9 @@ def delete_self_votes(apps, schema_editor):
         score=Subquery(
             Comment.objects.filter(
                 id=OuterRef('id'),
-            ).annotate(
+            ).order_by().annotate(
                 newscore=Coalesce(Sum('votes__score'), 0),
-            ).values('newscore')[:1],
+            ).values('newscore'),
         ),
     )
 
