@@ -8,15 +8,10 @@ def delete_self_votes(apps, schema_editor):
     CommentVote = apps.get_model('judge', 'CommentVote')
 
     CommentVote.objects.filter(voter=F('comment__author')).delete()
-    Comment.objects.update(
-        score=Subquery(
-            Comment.objects.filter(
-                id=OuterRef('id'),
-            ).order_by().annotate(
-                newscore=Coalesce(Sum('votes__score'), 0),
-            ).values('newscore'),
-        ),
-    )
+
+    votes = CommentVote.objects.filter(comment=OuterRef('id')).order_by().values('comment')
+    total_votes = votes.annotate(total=Sum('score')).values('total')
+    Comment.objects.update(score=Coalesce(Subquery(total_votes), 0))
 
 
 class Migration(migrations.Migration):
