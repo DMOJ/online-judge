@@ -125,7 +125,7 @@ class Class(models.Model):
         return cls.objects.filter(contest__organizations__admins=user.profile) | cls.objects.filter(admins=user.profile)
 
     def __str__(self):
-        return f'{self.name} in {self.organization.name}'
+        return _('%(class)s in %(organization)s') % {'class': self.name, 'organization': self.organization.name}
 
     def get_absolute_url(self):
         return reverse('class_home', args=self._url_args)
@@ -345,7 +345,7 @@ class WebAuthnCredential(models.Model):
         )
 
     def __str__(self):
-        return f'WebAuthn credential: {self.name}'
+        return _('WebAuthn credential: %(name)s') % {'name': self.name}
 
     class Meta:
         verbose_name = _('WebAuthn credential')

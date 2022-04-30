@@ -5,7 +5,7 @@ from django.db.models import CASCADE, Q
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from jsonfield import JSONField
 from lupa import LuaRuntime
 from moss import MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
@@ -565,10 +565,12 @@ class ContestParticipation(models.Model):
 
     def __str__(self):
         if self.spectate:
-            return gettext('%s spectating in %s') % (self.user.username, self.contest.name)
+            return _('%(user)s spectating in %(contest)s') % {'user': self.user.username, 'contest': self.contest.name}
         if self.virtual:
-            return gettext('%s in %s, v%d') % (self.user.username, self.contest.name, self.virtual)
-        return gettext('%s in %s') % (self.user.username, self.contest.name)
+            return _('%(user)s in %(contest)s, v%(id)d') % {
+                'user': self.user.username, 'contest': self.contest.name, 'id': self.virtual,
+            }
+        return _('%(user)s in %(contest)s') % {'user': self.user.username, 'contest': self.contest.name}
 
     class Meta:
         verbose_name = _('contest participation')
