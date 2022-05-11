@@ -173,12 +173,12 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
         context['form'] = ProblemSubmitForm()
-        context['default_lang'] = self.default_language
 
         can_edit = self.object.is_editable_by(user)
         context['can_edit_problem'] = can_edit
         if user.is_authenticated:
             tickets = self.object.tickets
+            context['default_lang'] = self.default_language
             if not can_edit:
                 tickets = tickets.filter(own_ticket_filter(user.profile.id))
             context['has_tickets'] = tickets.exists()

@@ -123,6 +123,8 @@
         <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
             {{ _('Go to editor') }}
         </a>
+    {% endif %}
+	{% if request.user.is_authenticated and (not request.in_contest or submission_limit) %}
 		<form id="file-upload" method="post" action="{{ url('problem_submit', problem.code) }}" enctype="multipart/form-data">
 			{% csrf_token %}
 			{{ form.non_field_errors() }}
@@ -137,7 +139,7 @@
 				<div id="language-select">
 					<select id="id_language" name="language" class="full">
 						{% for lang in form.fields.language.queryset %}
-							<option value="{{ lang.id }}" {% if lang.id == default_lang.id %}selected{% endif %}>{{ lang.name }}</option>
+							<option value="{{ lang.id }}" {% if request.user.is_authenticated and lang.id == default_lang.id %}selected{% endif %}>{{ lang.name }}</option>
 						{% endfor %}
 					</select>
 				</div>
@@ -147,7 +149,7 @@
 				</div>
 			</div>
 		</form>
-    {% endif %}
+	{% endif %}
 
     <hr style="padding-bottom: 0.3em">
 
