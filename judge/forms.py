@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
-from django.forms import BooleanField, CharField, ChoiceField, Form, ModelForm, MultipleChoiceField
+from django.forms import BooleanField, CharField, ChoiceField, Form, ModelForm, MultipleChoiceField, FileField
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -124,7 +124,8 @@ class DownloadDataForm(Form):
 
 
 class ProblemSubmitForm(ModelForm):
-    source = CharField(max_length=65536, widget=AceWidget(theme='twilight', no_ace_media=True))
+    source = CharField(max_length=65536, widget=AceWidget(theme='twilight', no_ace_media=True), required=False)
+    file = FileField(required=False, widget=forms.FileInput)
     judge = ChoiceField(choices=(), widget=forms.HiddenInput(), required=False)
 
     def __init__(self, *args, judge_choices=(), **kwargs):
@@ -139,10 +140,21 @@ class ProblemSubmitForm(ModelForm):
             )
             self.fields['judge'].choices = judge_choices
 
+    def clean(self):
+        cleaned_data = super(ProblemSubmitForm, self).clean()
+        file = cleaned_data['file']
+        if file is not None:
+            with file.open(mode='rb') as source_file:
+                source = ''.join(map(lambda b: b.decode('utf-8'), source_file.readlines()))
+                if len(source) > 65536: raise ValidationError(_('Source file is too long'))
+                cleaned_data['source'] = source
+
+
+        return cleaned_data
+
     class Meta:
         model = Submission
         fields = ['language']
-
 
 class EditOrganizationForm(ModelForm):
     class Meta:

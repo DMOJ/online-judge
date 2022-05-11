@@ -144,6 +144,10 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
+    @cached_property
+    def default_language(self):
+        return self.request.profile.language
+
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
@@ -168,6 +172,8 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['has_pdf_render'] = HAS_PDF
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
+        context['form'] = ProblemSubmitForm()
+        context['default_lang'] = self.default_language
 
         can_edit = self.object.is_editable_by(user)
         context['can_edit_problem'] = can_edit
