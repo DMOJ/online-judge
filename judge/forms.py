@@ -146,14 +146,17 @@ class ProblemSubmitForm(ModelForm):
         if file is not None:
             with file.open(mode='rb') as source_file:
                 source = ''.join(map(lambda b: b.decode('utf-8'), source_file.readlines()))
-                if len(source) >= 65536: raise ValidationError(_('Source file is too long.'))
+                if len(source) >= 65536:
+                    raise ValidationError(_('Source file is too long.'))
                 cleaned_data['source'] = source
-        elif cleaned_data['source'] is None: raise ValidationError(_('Source and file are both empty.'))
+        elif cleaned_data['source'] is None:
+            raise ValidationError(_('Source and file are both empty.'))
         return cleaned_data
 
     class Meta:
         model = Submission
         fields = ['language']
+
 
 class EditOrganizationForm(ModelForm):
     class Meta:
