@@ -57,20 +57,14 @@
 			$("#file-upload-submit").click(function (event) {
 				const reader = new FileReader();
 				reader.addEventListener("load", function () {
-					$.ajax({
-						url: "{{ url('problem_submit', problem.code) }}",
-						method: "post",
-						data: {
-							source: reader.result,
-							language: $("#id_language").val(),
-							csrfmiddlewaretoken: "{{ csrf_token }}"
-						}
-					}).done(function (data) {
-						// Extract submission id from response
-						// This kinda sucks, it would be better to update the submit endpoint
-						window.location.href = data.match(/<form action="(.+?)\/abort"/)[1];
-						console.log(data);
-					});
+					const form = $(`<form style="display:none;" action="{{ url('problem_submit', problem.code) }}" method="post">
+							{% csrf_token %}
+							<textarea name="source" id="hidden-textarea-file-submit" />
+							<input name="language" value="${$("#id_language").val()}" />
+						</form>`);
+					$('body').append(form);
+					$('#hidden-textarea-file-submit').val(reader.result);
+					form.submit();
 				});
 				reader.readAsText($("#file-upload-input")[0].files[0]);
 			});
