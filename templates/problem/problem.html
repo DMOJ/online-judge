@@ -52,24 +52,24 @@
 {% block content_js_media %}
     {{ form.media.js }}
     {% include "comments/media-js.html" %}
-	<script>
-		$(document).ready(function () {
-			$("#file-upload-submit").click(function (event) {
-				const reader = new FileReader();
-				reader.addEventListener("load", function () {
-					const form = $(`<form style="display:none;" action="{{ url('problem_submit', problem.code) }}" method="post">
-							{% csrf_token %}
-							<textarea name="source" id="hidden-textarea-file-submit" />
-							<input name="language" value="${$("#id_language").val()}" />
-						</form>`);
-					$('body').append(form);
-					$('#hidden-textarea-file-submit').val(reader.result);
-					form.submit();
-				});
-				reader.readAsText($("#file-upload-input")[0].files[0]);
-			});
-		});
-	</script>
+    <script>
+        $(document).ready(function () {
+            $("#file-upload-submit").click(function (event) {
+                const reader = new FileReader();
+                reader.addEventListener("load", function () {
+                    const form = $(`<form style="display:none;" action="{{ url('problem_submit', problem.code) }}" method="post">
+                            {% csrf_token %}
+                            <textarea name="source" id="hidden-textarea-file-submit" />
+                            <input name="language" value="${$("#id_language").val()}" />
+                        </form>`);
+                    $('body').append(form);
+                    $('#hidden-textarea-file-submit').val(reader.result);
+                    form.submit();
+                });
+                reader.readAsText($("#file-upload-input")[0].files[0]);
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block title_row %}
@@ -147,7 +147,7 @@
             </div>
             <div style="display:none;" class="toggled" id="file-upload-form">
                 <div>
-					<input type="file" id="file-upload-input" name="file"/>
+                    <input type="file" id="file-upload-input" name="file"/>
                 </div>
                 <div id="language-select">
                     <select id="id_language" name="language" class="full">
