@@ -144,10 +144,6 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     def get_comment_page(self):
         return 'p:%s' % self.object.code
 
-    @cached_property
-    def default_language(self):
-        return self.request.profile.language
-
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)
         user = self.request.user
@@ -178,7 +174,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['can_edit_problem'] = can_edit
         if user.is_authenticated:
             tickets = self.object.tickets
-            context['default_lang'] = self.default_language
+            context['default_lang'] = self.request.profile.language
             if not can_edit:
                 tickets = tickets.filter(own_ticket_filter(user.profile.id))
             context['has_tickets'] = tickets.exists()

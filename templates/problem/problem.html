@@ -1,7 +1,4 @@
 {% extends "common-content.html" %}
-{% block js_media %}
-    {{ form.media.js }}
-{% endblock %}
 {% block content_media %}
     {% include "comments/media-css.html" %}
     {{ form.media.css }}
@@ -53,7 +50,32 @@
 {% endblock %}
 
 {% block content_js_media %}
+    {{ form.media.js }}
     {% include "comments/media-js.html" %}
+	<script>
+		$(document).ready(function () {
+			$("#file-upload-submit").click(function (event) {
+				const reader = new FileReader();
+				reader.addEventListener("load", function () {
+					$.ajax({
+						url: "{{ url('problem_submit', problem.code) }}",
+						method: "post",
+						data: {
+							source: reader.result,
+							language: $("#id_language").val(),
+							csrfmiddlewaretoken: "{{ csrf_token }}"
+						}
+					}).done(function (data) {
+						// Extract submission id from response
+						// This kinda sucks, it would be better to update the submit endpoint
+						window.location.href = data.match(/<form action="(.+?)\/abort"/)[1];
+						console.log(data);
+					});
+				});
+				reader.readAsText($("#file-upload-input")[0].files[0]);
+			});
+		});
+	</script>
 {% endblock %}
 
 {% block title_row %}
@@ -125,16 +147,13 @@
         </a>
     {% endif %}
     {% if request.user.is_authenticated and (not request.in_contest or submission_limit) %}
-        <form id="file-upload" method="post" action="{{ url('problem_submit', problem.code) }}" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.non_field_errors() }}
-
+        <div id="file-upload">
             <div class="toggle closed unselectable">
                 <i class="fa fa-chevron-right fa-fw"></i>Upload a file
             </div>
-            <div style="display:none" class="toggled" id="file-upload-form">
+            <div style="display:none;" class="toggled" id="file-upload-form">
                 <div>
-                    {{ form.file }}
+					<input type="file" id="file-upload-input" name="file"/>
                 </div>
                 <div id="language-select">
                     <select id="id_language" name="language" class="full">
@@ -144,11 +163,11 @@
                     </select>
                 </div>
                 <div>
-                    <input value="{{ _('Submit!') }}" type="submit" id="submit-file-button" class="unselectable button full" 
-                        {% if request.in_contest and submission_limit and not submissions_left %}disabled{% endif %} />
+                    <input value="{{ _('Submit!') }}" id="file-upload-submit" class="unselectable button full" 
+                        {% if request.in_contest and submission_limit and submissions_left == 0 %}disabled{% endif %} />
                 </div>
             </div>
-        </form>
+        </div>
     {% endif %}
 
     <hr style="padding-bottom: 0.3em">
