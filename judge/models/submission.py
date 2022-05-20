@@ -197,7 +197,9 @@ class Submission(models.Model):
             return self.contest_object.key
 
     def __str__(self):
-        return 'Submission %d of %s by %s' % (self.id, self.problem, self.user.user.username)
+        return _('Submission %(id)d of %(problem)s by %(user)s') % {
+            'id': self.id, 'problem': self.problem, 'user': self.user.user.username,
+        }
 
     def get_absolute_url(self):
         return reverse('submission_status', args=(self.id,))
@@ -238,7 +240,7 @@ class SubmissionSource(models.Model):
     source = models.TextField(verbose_name=_('source code'), max_length=65536)
 
     def __str__(self):
-        return 'Source of %s' % self.submission
+        return _('Source of %(submission)s') % {'submission': self.submission}
 
     class Meta:
         verbose_name = _('submission source')
