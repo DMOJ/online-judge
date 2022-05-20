@@ -28,7 +28,7 @@ class Language(models.Model):
                                   null=True, blank=True)
     common_name = models.CharField(max_length=10, verbose_name=_('common name'),
                                    help_text=_('Common name for the language. For example, the common name for C++03, '
-                                               'C++11, and C++14 would be "C++"'))
+                                               'C++11, and C++14 would be "C++".'))
     ace = models.CharField(max_length=20, verbose_name=_('ace mode name'),
                            help_text=_('Language ID for Ace.js editor highlighting, appended to "mode-" to determine '
                                        'the Ace JavaScript file to use, e.g., "python".'))

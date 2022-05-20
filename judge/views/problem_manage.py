@@ -126,6 +126,6 @@ def rescore_success(request, problem, task_id):
     count = AsyncResult(task_id).result
     if not isinstance(count, int):
         raise Http404()
-    messages.success(request, ngettext('%d submission were successfully rescored.',
+    messages.success(request, ngettext('%d submission was successfully rescored.',
                                        '%d submissions were successfully rescored.', count) % (count,))
     return HttpResponseRedirect(reverse('problem_manage_submissions', args=[problem]))

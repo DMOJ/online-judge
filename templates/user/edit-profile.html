@@ -113,7 +113,7 @@
                 if (confirm("{{ _('Are you sure you want to generate or regenerate your API token?') }}\n"
                           + "{{ _('This will invalidate any previous API tokens.') }} "
                           + "{{ _('It also allows access to your account without Two-factor Authentication.') }}\n\n"
-                          + "{{ _('You will not be able to view your api token after you leave this page!') }}")) {
+                          + "{{ _('You will not be able to view your API token after you leave this page!') }}")) {
                     $('#api-token').text("{{ _('Generating...') }}");
 
                     $.ajax({
@@ -236,7 +236,7 @@ You will not be able to view your scratch codes after you leave this page!') }}"
                             showTooltip(e.trigger, fallbackMessage(e.action));
                         });
                     });
- 
+
                     $.ajax({
                         type: 'POST',
                         url: $(this).attr('href'),

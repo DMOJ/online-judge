@@ -374,7 +374,7 @@ class KickUserWidgetView(LoginRequiredMixin, OrganizationMixin, SingleObjectMixi
 
         if not organization.members.filter(id=user.id).exists():
             return generic_message(request, _("Can't kick user"),
-                                   _('The user you are trying to kick is not in organization: %s.') %
+                                   _('The user you are trying to kick is not in organization: %s') %
                                    organization.name, status=400)
 
         organization.members.remove(user)
