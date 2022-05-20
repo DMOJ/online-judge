@@ -201,7 +201,7 @@ class SubmissionAdmin(VersionAdmin):
                 id__in=queryset.values_list('contest__participation_id')).prefetch_related('contest'):
             participation.recompute_results()
 
-        self.message_user(request, ngettext('%d submission were successfully rescored.',
+        self.message_user(request, ngettext('%d submission was successfully rescored.',
                                             '%d submissions were successfully rescored.',
                                             len(submissions)) % len(submissions))
     recalculate_score.short_description = _('Rescore the selected submissions')

@@ -20,7 +20,7 @@ class CommentForm(ModelForm):
 class CommentAdmin(VersionAdmin):
     fieldsets = (
         (None, {'fields': ('author', 'page', 'parent', 'time', 'score', 'hidden')}),
-        ('Content', {'fields': ('body',)}),
+        (_('Content'), {'fields': ('body',)}),
     )
     list_display = ['author', 'linked_page', 'time']
     search_fields = ['author__user__username', 'page', 'body']

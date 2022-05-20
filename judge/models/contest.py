@@ -146,7 +146,7 @@ class Contest(models.Model):
     classes = models.ManyToManyField(Class, blank=True, verbose_name=_('classes'),
                                      help_text=_('If organization private, only these classes may see the contest'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
-    logo_override_image = models.CharField(verbose_name=_('Logo override image'), default='', max_length=150,
+    logo_override_image = models.CharField(verbose_name=_('logo override image'), default='', max_length=150,
                                            blank=True,
                                            help_text=_('This image will replace the default site logo for users '
                                                        'inside the contest.'))
