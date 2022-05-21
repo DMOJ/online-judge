@@ -112,9 +112,11 @@
         {% endif %}
         <br>
         {% if contest.time_limit %}
-            {{ _('%(time_limit)s window', time_limit=contest.time_limit|timedelta('localized-no-seconds')) }}
+            {% set time_limit=contest.time_limit|timedelta('localized-no-seconds') %}
+            {{ _('%(time_limit)s window', time_limit=time_limit) }}
         {% else %}
-            {{ _('%(duration)s long', duration=contest.contest_window_length|timedelta('localized-no-seconds')) }}
+            {% set duration=contest.contest_window_length|timedelta('localized-no-seconds') %}
+            {{ _('%(duration)s long', duration=duration) }}
         {% endif %}
     </div>
 {% endmacro %}
@@ -177,9 +179,9 @@
                                     {% if contest.start_time %}
                                         <br>
                                         {% if contest.time_limit %}
-                                            <span class="time">{{ _('Window ends in %(countdown)s', countdown=participation.time_remaining|as_countdown) }}</span>
+                                            <span class="time">{{ _('Window ends in %(countdown)s', countdown=as_countdown(participation.time_remaining)) }}</span>
                                         {% elif contest.time_before_end %}
-                                            <span class="time">{{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}</span>
+                                            <span class="time">{{ _('Ends in %(countdown)s', countdown=as_countdown(contest.time_before_end)) }}</span>
                                         {% endif %}
                                         {{ time_left(contest) }}
                                     {% endif %}
@@ -218,7 +220,7 @@
                                 {% if contest.start_time %}
                                     <br>
                                     {% if contest.time_before_end %}
-                                        <span class="time">{{ _('Ends in %(countdown)s', countdown=contest.time_before_end|as_countdown) }}</span>
+                                        <span class="time">{{ _('Ends in %(countdown)s', countdown=as_countdown(contest.time_before_end)) }}</span>
                                     {% endif %}
                                     {{ time_left(contest) }}
                                 {% endif %}
@@ -252,7 +254,7 @@
                                 {% if contest.start_time %}
                                     <br>
                                     {% if contest.time_before_start %}
-                                        <span class="time">{{ _('Starting in %(countdown)s.', countdown=contest.time_before_start|as_countdown) }}</span>
+                                        <span class="time">{{ _('Starting in %(countdown)s.', countdown=as_countdown(contest.time_before_start)) }}</span>
                                     {% endif %}
                                     {{ time_left(contest) }}
                                 {% endif %}

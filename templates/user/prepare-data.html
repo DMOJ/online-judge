@@ -81,7 +81,8 @@
             <a class="button aux-download-action" href="{{ in_progress_url }}">{{ _('Track progress') }}</a>
         {% elif can_prepare_data %}
             <div class="alert alert-warning">
-                {{ _('You may only prepare a new data download once every %(ratelimit)s.', ratelimit=ratelimit|timedelta) }}
+                {% set duration=ratelimit|timedelta %}
+                {{ _('You may only prepare a new data download once every %(duration)s.', duration=duration) }}
                 <br>
                 {{ _('Once your data is ready, you will find a download link on this page.') }}
             </div>
@@ -131,7 +132,7 @@
             <div class="alert alert-warning">
                 {{ _('Your data is ready!') }}
                 <br>
-                {{ _('You will need to wait %(countdown)s to prepare a new data download.', countdown=time_until_can_prepare|as_countdown) }}
+                {{ _('You will need to wait %(countdown)s to prepare a new data download.', countdown=as_countdown(time_until_can_prepare)) }}
             </div>
             <a class="button aux-download-action" href="{{ url('user_download_data') }}">{{ _('Download data') }}</a>
         {% endif %}
