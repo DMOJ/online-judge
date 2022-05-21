@@ -7,7 +7,7 @@ from django.core.cache import cache
 from django.utils.functional import SimpleLazyObject, new_method_proxy
 
 from judge.utils.caniuse import CanIUse, SUPPORT
-from .models import MiscConfig, NavigationBar, Profile
+from .models import MiscConfig, NavigationBar
 
 
 class FixedSimpleLazyObject(SimpleLazyObject):
@@ -32,12 +32,6 @@ def get_resource(request):
         'DMOJ_SCHEME': scheme,
         'DMOJ_CANONICAL': settings.DMOJ_CANONICAL,
     }
-
-
-def get_profile(request):
-    if request.user.is_authenticated:
-        return Profile.objects.get_or_create(user=request.user)[0]
-    return None
 
 
 def comet_location(request):

@@ -1,4 +1,3 @@
-from itertools import chain, repeat
 from operator import itemgetter
 
 from django.conf import settings
@@ -13,10 +12,6 @@ from judge.utils.stats import chart_colors, get_bar_chart, get_pie_chart, highli
 
 
 ac_count = Count(Case(When(submission__result='AC', then=Value(1)), output_field=IntegerField()))
-
-
-def repeat_chain(iterable):
-    return chain.from_iterable(repeat(iterable))
 
 
 def language_data(request, language_count=Language.objects.annotate(count=Count('submission'))):
