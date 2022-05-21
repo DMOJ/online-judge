@@ -22,7 +22,7 @@ def seconds(timedelta):
     return timedelta.total_seconds()
 
 
-@registry.filter
+@registry.function
 @registry.render_with('time-remaining-fragment.html')
 def as_countdown(timedelta):
     return {'countdown': timedelta}
