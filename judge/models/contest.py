@@ -218,6 +218,16 @@ class Contest(models.Model):
             return profile and profile.current_contest is not None and profile.current_contest.contest == self
         return False
 
+    def is_in_testing(self, user):
+        if user.is_authenticated:
+            profile = user.profile
+            return (
+                profile and profile.current_contest is not None and
+                profile.current_contest.contest == self and
+                profile.current_contest.testing
+            )
+        return False
+
     def can_see_own_scoreboard(self, user):
         if self.can_see_full_scoreboard(user):
             return True
@@ -246,12 +256,47 @@ class Contest(models.Model):
             return True
         return False
 
-    def has_completed_contest(self, user):
+    def can_see_own_testing_scoreboard(self, user) -> bool:
+        if self.can_see_full_testing_scoreboard(user):
+            return True
+
+        if self.is_in_testing(user) or self.has_completed_testing(user):
+            return True
+
+        return False
+
+    def can_see_full_testing_scoreboard(self, user) -> bool:
+        if user.profile.id in self.editor_ids:
+            return True
+
+        if user.profile.id not in self.tester_ids:
+            return False
+
+        # This means that after the contest has started, even if the scoreboard is HIDDEN,
+        # testers can see the testing scoreboard.
+        if self.started:
+            return True
+
+        if self.scoreboard_visibility == self.SCOREBOARD_VISIBLE:
+            return True
+
+        if self.scoreboard_visibility == self.SCOREBOARD_AFTER_PARTICIPATION and self.has_completed_testing(user):
+            return True
+
+        return False
+
+    def has_finished_participation(self, user, type: int) -> bool:
         if user.is_authenticated:
-            participation = self.users.filter(virtual=ContestParticipation.LIVE, user=user.profile).first()
+            participation = self.users.filter(virtual=type, user=user.profile).first()
             if participation and participation.ended:
                 return True
         return False
+
+    def has_completed_contest(self, user):
+        return self.has_finished_participation(user, ContestParticipation.LIVE)
+
+    def has_completed_testing(self, user):
+        return self.has_finished_participation(user, ContestParticipation.TESTING)
 
     @cached_property
     def show_scoreboard(self):
@@ -391,7 +436,12 @@ class Contest(models.Model):
         if not user.is_authenticated:
             return None
 
-        if user.profile.id in self.editor_ids or user.profile.id in self.tester_ids:
+        if user.profile.id in self.tester_ids:
+            if self.started or self.has_completed_testing(user):
+                return ContestParticipation.SPECTATE
+            return ContestParticipation.TESTING
+
+        if user.profile.id in self.editor_ids:
             return ContestParticipation.SPECTATE
 
         if not self.started:
@@ -483,6 +533,7 @@ class Contest(models.Model):
 class ContestParticipation(models.Model):
     LIVE = 0
     SPECTATE = -1
+    TESTING = -2
 
     contest = models.ForeignKey(Contest, verbose_name=_('associated contest'), related_name='users', on_delete=CASCADE)
     user = models.ForeignKey(Profile, verbose_name=_('user'), related_name='contest_history', on_delete=CASCADE)
@@ -526,6 +577,10 @@ class ContestParticipation(models.Model):
     @property
     def spectate(self):
         return self.virtual == self.SPECTATE
+
+    @property
+    def testing(self):
+        return self.virtual == self.TESTING
 
     @cached_property
     def start(self):

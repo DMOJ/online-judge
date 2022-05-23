@@ -613,7 +613,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'non_staff_tester': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'get_join_type': self.assertSpectate,
+                'get_join_type': self.assertTesting,
             },
             'non_staff_author': {
                 'can_see_own_scoreboard': self.assertTrue,
@@ -637,6 +637,15 @@ class ContestTestCase(CommonDataMixin, TestCase):
             },
         }
         self._test_object_methods_with_users(self.future_contest, data)
+
+        create_contest_participation(
+            contest='future_contest',
+            user='non_staff_tester',
+            real_start=timezone.now() - timezone.timedelta(days=2),
+            virtual=ContestParticipation.TESTING,
+        )
+
+        self.assertSpectate(self.future_contest.get_join_type(self.users['non_staff_tester']))
 
     def test_private_contest_methods(self):
         # User must be in org and in private user list
@@ -772,7 +781,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 # False because contest has not begun
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'get_join_type': self.assertSpectate,
+                'get_join_type': self.assertTesting,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -995,6 +1004,9 @@ class ContestTestCase(CommonDataMixin, TestCase):
 
     def assertSpectate(self, arg: Optional[int], msg: Optional[str] = None) -> None:
         self.assertEqual(arg, ContestParticipation.SPECTATE, msg=msg)
+
+    def assertTesting(self, arg: Optional[int], msg: Optional[str] = None) -> None:
+        self.assertEqual(arg, ContestParticipation.TESTING, msg=msg)
 
     def assertCantJoin(self, arg: Optional[int], msg: Optional[str] = None) -> None:
         self.assertIsNone(arg, msg=msg)
