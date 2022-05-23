@@ -39,7 +39,7 @@ from judge.utils.ranker import ranker
 from judge.utils.subscription import Subscription
 from judge.utils.unicode import utf8text
 from judge.utils.views import DiggPaginatorMixin, QueryStringSortMixin, TitleMixin, add_file_response, generic_message
-from .contests import ContestRanking
+from .contests import ContestRanking, ContestTestingRanking
 
 __all__ = ['UserPage', 'UserAboutPage', 'UserProblemsPage', 'UserDownloadData', 'UserPrepareData',
            'users', 'edit_profile']
@@ -466,11 +466,19 @@ class UserList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ListView):
 user_list_view = UserList.as_view()
 
 
-class FixedContestRanking(ContestRanking):
+class FixedContestMixin:
     contest = None
 
     def get_object(self, queryset=None):
         return self.contest
+
+
+class FixedContestRanking(FixedContestMixin, ContestRanking):
+    pass
+
+
+class FixedContestTestingRanking(FixedContestMixin, ContestTestingRanking):
+    pass
 
 
 def users(request):
@@ -478,7 +486,10 @@ def users(request):
         participation = request.profile.current_contest
         if participation is not None:
             contest = participation.contest
-            return FixedContestRanking.as_view(contest=contest)(request, contest=contest.key)
+            if participation.testing or not contest.started:
+                return FixedContestTestingRanking.as_view(contest=contest)(request, contest=contest.key)
+            else:
+                return FixedContestRanking.as_view(contest=contest)(request, contest=contest.key)
     return user_list_view(request)
 
 
