@@ -12,7 +12,7 @@ from django.contrib.auth.views import SuccessURLAllowedHostsMixin
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.utils.http import is_safe_url
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import FormView, View
 from django.views.generic.detail import SingleObjectMixin
 
@@ -46,7 +46,7 @@ class TOTPView(TitleMixin, LoginRequiredMixin, FormView):
 
 
 class TOTPEnableView(TOTPView):
-    title = _('Enable Two-factor Authentication')
+    title = gettext_lazy('Enable Two-factor Authentication')
     form_class = TOTPEnableForm
     template_name = 'registration/totp_enable.html'
     is_refresh = False
@@ -106,7 +106,7 @@ class TOTPEnableView(TOTPView):
 
 
 class TOTPRefreshView(TOTPEnableView):
-    title = _('Refresh Two-factor Authentication')
+    title = gettext_lazy('Refresh Two-factor Authentication')
     is_refresh = True
 
     def check_skip(self):
@@ -114,7 +114,7 @@ class TOTPRefreshView(TOTPEnableView):
 
 
 class TOTPDisableView(TOTPView):
-    title = _('Disable Two-factor Authentication')
+    title = gettext_lazy('Disable Two-factor Authentication')
     template_name = 'registration/totp_disable.html'
 
     def check_skip(self):
@@ -227,7 +227,7 @@ class WebAuthnDeleteView(SingleObjectMixin, WebAuthnView):
 
 class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView):
     form_class = TwoFactorLoginForm
-    title = _('Perform Two-factor Authentication')
+    title = gettext_lazy('Perform Two-factor Authentication')
     template_name = 'registration/two_factor_auth.html'
 
     def get_form_kwargs(self):

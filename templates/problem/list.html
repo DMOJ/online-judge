@@ -81,7 +81,7 @@
 
                 $('#go').click(clean_submit);
 
-                $('input#full_text, input#hide_solved, input#show_types').click(function () {
+                $('input#full_text, input#hide_solved, input#show_types, input#has_public_editorial').click(function () {
                     prep_form();
                     ($('<form>').attr('action', window.location.pathname + '?' + $form.serialize())
                         .append($('<input>').attr('type', 'hidden').attr('name', 'csrfmiddlewaretoken')
@@ -167,7 +167,6 @@
 
 {% block title_row %}
     {% set tab = 'list' %}
-    {% set title = 'Problems' %}
     {% include "problem/problem-list-tabs.html" %}
 {% endblock %}
 
@@ -215,7 +214,8 @@
                     {% else %}
                         {% if request.user.is_authenticated %}
                             <th class="solved">
-                                <a href="{{ sort_links.solved }}"><i class="fa fa-check"></i>{{ sort_order.solved }}
+                                <a href="{{ sort_links.solved }}">
+                                    <i class="fa fa-check"></i>{{ sort_order.solved }}
                                 </a>
                             </th>
                         {% endif %}
@@ -235,6 +235,11 @@
                         </th>
                         <th class="ac-rate">
                             <a href="{{ sort_links.ac_rate }}">{{ _('AC %%') }}{{ sort_order.ac_rate }}</a>
+                        </th>
+                        <th class="editorial" title="{{ _('Editorial') }}">
+                            <a href="{{ sort_links.editorial }}">
+                                <i class="fa fa-book"></i>{{ sort_order.editorial }}
+                            </a>
                         </th>
                         <th class="users">
                             <a href="{{ sort_links.user_count }}">{{ _('Users') }}{{ sort_order.user_count }}</a>
@@ -290,6 +295,15 @@
                         <td class="p">{{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}</td>
                         {% if not request.in_contest %}
                             <td class="ac-rate">{{ problem.ac_rate|floatformat(1) }}%</td>
+                            <td>
+                                {% if problem.has_public_editorial %}
+                                    <a href="{{ url('problem_editorial', problem.code) }}">
+                                        <i class="has-editorial-color fa fa-check-circle"></i>
+                                    </a>
+                                {% else %}
+                                    <i class="no-editorial-color fa fa-minus-circle"></i>
+                                {% endif %}
+                            </td>
                         {% endif %}
                         <td class="users">
                             <a href="{{ url('ranked_submissions', problem.code) }}">

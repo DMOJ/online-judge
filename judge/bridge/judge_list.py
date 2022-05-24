@@ -3,6 +3,8 @@ from collections import namedtuple
 from random import random
 from threading import RLock
 
+from judge.judge_priority import REJUDGE_PRIORITY
+
 try:
     from llist import dllist
 except ImportError:
@@ -27,8 +29,14 @@ class JudgeList(object):
     def _handle_free_judge(self, judge):
         with self.lock:
             node = self.queue.first
+            priority = 0
             while node:
-                if not isinstance(node.value, PriorityMarker):
+                if isinstance(node.value, PriorityMarker):
+                    priority = node.value.priority + 1
+                elif priority >= REJUDGE_PRIORITY and len(self.judges) > 1 and sum(
+                        not judge.working for judge in self.judges) <= 1:
+                    return
+                else:
                     id, problem, language, source, judge_id = node.value
                     if judge.can_judge(problem, language, judge_id):
                         self.submission_map[id] = judge
@@ -70,6 +78,13 @@ class JudgeList(object):
                 except KeyError:
                     pass
             self.judges.discard(judge)
+
+            # Since we reserve a judge for high priority submissions when there are more than one,
+            # we'll need to start judging if there is exactly one judge and it's free.
+            if len(self.judges) == 1:
+                judge = next(iter(self.judges))
+                if not judge.working:
+                    self._handle_free_judge(judge)
 
     def __iter__(self):
         return iter(self.judges)
@@ -114,6 +129,10 @@ class JudgeList(object):
                 logger.info('Specified judge %s is%savailable', judge_id, ' ' if candidates else ' not ')
             else:
                 logger.info('Free judges: %d', len(candidates))
+
+            if len(self.judges) > 1 and len(candidates) == 1 and priority >= REJUDGE_PRIORITY:
+                candidates = []
+
             if candidates:
                 # Schedule the submission on the judge reporting least load.
                 judge = min(candidates, key=lambda judge: (judge.load, random()))

@@ -85,7 +85,8 @@ class TranslatedProblemQuerySet(SearchQuerySet):
     def add_i18n_name(self, language):
         queryset = self._clone()
         alias = unique_together_left_join(queryset, ProblemTranslation, 'problem', 'language', language)
-        return queryset.annotate(i18n_name=RawSQL('%s.name' % alias, ()))
+        return queryset.annotate(i18n_name=Coalesce(RawSQL('%s.name' % alias, ()), F('name'),
+                                                    output_field=models.CharField()))
 
 
 class TranslatedProblemForeignKeyQuerySet(QuerySet):
@@ -147,7 +148,7 @@ class Problem(models.Model):
                                                            '(e.g. 64mb = 65536 kilobytes).'),
                                                validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
                                                            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
-    short_circuit = models.BooleanField(default=False)
+    short_circuit = models.BooleanField(verbose_name=_('short circuit'), default=False)
     points = models.FloatField(verbose_name=_('points'),
                                help_text=_('Points awarded for problem completion. '
                                            "Points are displayed with a 'p' suffix if partial."),
@@ -162,7 +163,7 @@ class Problem(models.Model):
                                 help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem.'))
-    license = models.ForeignKey(License, null=True, blank=True, on_delete=SET_NULL,
+    license = models.ForeignKey(License, null=True, blank=True, on_delete=SET_NULL, verbose_name=_('license'),
                                 help_text=_('The license under which this problem is published.'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), max_length=150, blank=True)
     summary = models.TextField(blank=True, verbose_name=_('problem summary'),
@@ -483,6 +484,10 @@ class ProblemClarification(models.Model):
     problem = models.ForeignKey(Problem, verbose_name=_('clarified problem'), on_delete=CASCADE)
     description = models.TextField(verbose_name=_('clarification body'), validators=[disallowed_characters_validator])
     date = models.DateTimeField(verbose_name=_('clarification timestamp'), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('problem clarification')
+        verbose_name_plural = _('problem clarifications')
 
 
 class LanguageLimit(models.Model):

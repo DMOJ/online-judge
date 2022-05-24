@@ -29,6 +29,10 @@ class Ticket(models.Model):
 
         return filter_visible_tickets(queryset, user)
 
+    class Meta:
+        verbose_name = _('ticket')
+        verbose_name_plural = _('tickets')
+
 
 class TicketMessage(models.Model):
     ticket = models.ForeignKey(Ticket, verbose_name=_('ticket'), related_name='messages',
@@ -37,3 +41,7 @@ class TicketMessage(models.Model):
                              on_delete=models.CASCADE)
     body = models.TextField(verbose_name=_('message body'))
     time = models.DateTimeField(verbose_name=_('message time'), auto_now_add=True)
+
+    class Meta:
+        verbose_name = _('ticket message')
+        verbose_name_plural = _('ticket messages')

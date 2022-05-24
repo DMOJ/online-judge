@@ -1,0 +1,77 @@
+version: '3'
+services:
+  site:
+    build: .
+    restart: always
+    volumes:
+      - ./dmoj/local_settings.py:/opt/wlmoj/dmoj/local_settings.py
+      - wlmoj_static:/opt/wlmoj-static
+      - wlmoj:/opt/wlmoj
+    environment:
+      WLMOJ_MODE: "celery evsv uwsgi bridged demo"
+    networks:
+      - main
+    depends_on:
+      - database
+      - redis
+  nginx:
+    build: ./docker/nginx
+    restart: always
+    ports:
+      - 8081:8081
+    volumes:
+      - wlmoj_static:/opt/wlmoj-static
+      - wlmoj:/opt/wlmoj
+    environment:
+      NGINX_HOST: localhost
+      NGINX_PORT: 8081
+    networks:
+      - main
+    depends_on:
+      - site
+  redis:
+    image: redis:latest
+    restart: always
+    networks:
+      - main
+  judge:
+    build: ./docker/judge
+    restart: always
+    volumes:
+      - ./docker/judge/config.yml:/opt/wlmoj_judge/config.yml
+      - problem_storage:/opt/wlmoj_judge_problem_storage
+    environment:
+      BRIDGED_JUDGE_HOST: "site"
+      BRIDGED_JUDGE_PORT: "9999"
+      JUDGE_NAME: "ExampleJudge"
+      JUDGE_KEY: "earutFKRoNyF/OWiUZVejHiboz2uG3NqqIAWPpWpjqCwLKSZds1izqqbbmWjscoge8cHbVyKOXji4XXUUVfOCv+o9w/8kN8J4UYR"
+      WLMOJ_JUDGE_MODE: "demo"
+    networks:
+      - main
+    depends_on:
+      - site
+  database:
+    image: mariadb:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: wlmoj_db
+      MYSQL_USER: wlmoj_user
+      MYSQL_PASSWORD: very_secure_password
+      MYSQL_ROOT_PASSWORD: security
+        #MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+    networks:
+      - main
+
+volumes:
+  database:
+  problem_storage:
+  wlmoj_static:
+  wlmoj:
+
+networks:
+  main:
+    driver: bridge
+

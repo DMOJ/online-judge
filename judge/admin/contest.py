@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _, ngettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
-from judge.models import Contest, ContestProblem, ContestSubmission, Profile, Rating
+from judge.models import Class, Contest, ContestProblem, ContestSubmission, Profile, Rating, Submission
 from judge.ratings import rate_contest
 from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
@@ -99,14 +99,19 @@ class ContestForm(ModelForm):
             'authors': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'curators': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'testers': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'spectators': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'private_contestants': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
                                                                    attrs={'style': 'width: 100%'}),
             'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
+            'classes': AdminHeavySelect2MultipleWidget(data_view='class_select2'),
+            'join_organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
             'tags': AdminSelect2MultipleWidget,
             'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
                                                             attrs={'style': 'width: 100%'}),
             'view_contest_scoreboard': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
                                                                        attrs={'style': 'width: 100%'}),
+            'view_contest_submissions': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
+                                                                        attrs={'style': 'width: 100%'}),
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('contest_preview')}),
             'registration_page': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('contest_preview')}),
         }
@@ -114,10 +119,11 @@ class ContestForm(ModelForm):
 
 class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers')}),
+        (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers', 'tester_see_submissions',
+                           'tester_see_scoreboard', 'spectators')}),
         (_('Settings'), {'fields': ('is_visible', 'use_clarifications', 'hide_problem_tags', 'hide_problem_authors',
-                                    'is_external', 'is_virtualable', 'access_code',
-                                    'show_short_display', 'run_pretests_only', 'is_locked', 'scoreboard_visibility',
+                                    'is_external', 'is_virtualable',
+                                    'show_short_display', 'run_pretests_only', 'locked_after', 'scoreboard_visibility',
                                     'points_precision')}),
         (_('Scheduling'), {'fields': ('start_time', 'end_time', 'time_limit')}),
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
@@ -125,11 +131,11 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Registration'), {'fields': ('require_registration', 'registration_start_time',
                                         'registration_end_time', 'registration_page')}),
-        (_('Access'), {'fields': ('is_organization_private', 'is_private_viewable', 'organizations',
-                                  'is_private', 'private_contestants', 'view_contest_scoreboard')}),
+        (_('Access'), {'fields': ('access_code', 'is_organization_private', 'is_private_viewable', 'organizations', 'private_contestants', 'classes',
+                                  'is_private', 'join_organizations', 'view_contest_scoreboard', 'view_contest_submissions')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
-    list_display = ('key', 'name', 'is_visible', 'is_rated', 'is_locked', 'start_time', 'end_time', 'time_limit',
+    list_display = ('key', 'name', 'is_visible', 'is_rated', 'locked_after', 'start_time', 'end_time', 'time_limit',
                     'user_count')
     search_fields = ('key', 'name')
     inlines = [ContestProblemInline]
@@ -166,12 +172,11 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         if not request.user.has_perm('judge.contest_rating'):
             readonly += ['is_rated', 'rate_all', 'rate_exclude']
         if not request.user.has_perm('judge.lock_contest'):
-            readonly += ['is_locked']
+            readonly += ['locked_after']
         if not request.user.has_perm('judge.contest_access_code'):
             readonly += ['access_code']
         if not request.user.has_perm('judge.create_private_contest'):
-            readonly += ['is_private', 'private_contestants', 'is_organization_private',
-                         'organizations', 'is_private_viewable']
+            readonly += ['private_contestants', 'organizations']
             if not request.user.has_perm('judge.change_contest_visibility'):
                 readonly += ['is_visible']
         if not request.user.has_perm('judge.contest_problem_label'):
@@ -179,9 +184,18 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         return readonly
 
     def save_model(self, request, obj, form, change):
+        # `private_contestants` and `organizations` will not appear in `cleaned_data` if user cannot edit it
+        if form.changed_data:
+            if 'private_contestants' in form.changed_data:
+                obj.is_private = bool(form.cleaned_data['private_contestants'])
+            if 'organizations' in form.changed_data:
+                obj.is_organization_private = bool(form.cleaned_data['organizations'])
+            if 'join_organizations' in form.cleaned_data:
+                obj.limit_join_organizations = bool(form.cleaned_data['join_organizations'])
+
         # `is_visible` will not appear in `cleaned_data` if user cannot edit it
         if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):
-            if not form.cleaned_data['is_private'] and not form.cleaned_data['is_organization_private']:
+            if not obj.is_private and not obj.is_organization_private:
                 raise PermissionDenied
             if not request.user.has_perm('judge.create_private_contest'):
                 raise PermissionDenied
@@ -193,8 +207,8 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
             self._rescore(obj.key)
             self._rescored = True
 
-        if form.changed_data and 'is_locked' in form.changed_data:
-            self.set_is_locked(obj, form.cleaned_data['is_locked'])
+        if form.changed_data and 'locked_after' in form.changed_data:
+            self.set_locked_after(obj, form.cleaned_data['locked_after'])
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
@@ -233,7 +247,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def set_locked(self, request, queryset):
         for row in queryset:
-            self.set_is_locked(row, True)
+            self.set_locked_after(row, timezone.now())
         count = queryset.count()
         self.message_user(request, ngettext('%d contest successfully locked.',
                                             '%d contests successfully locked.',
@@ -242,17 +256,19 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def set_unlocked(self, request, queryset):
         for row in queryset:
-            self.set_is_locked(row, False)
+            self.set_locked_after(row, None)
         count = queryset.count()
         self.message_user(request, ngettext('%d contest successfully unlocked.',
                                             '%d contests successfully unlocked.',
                                             count) % count)
     set_unlocked.short_description = _('Unlock contest submissions')
 
-    def set_is_locked(self, contest, is_locked):
+    def set_locked_after(self, contest, locked_after):
         with transaction.atomic():
-            contest.is_locked = is_locked
+            contest.locked_after = locked_after
             contest.save()
+            Submission.objects.filter(contest_object=contest,
+                                      contest__participation__virtual=0).update(locked_after=locked_after)
 
     def get_urls(self):
         return [
@@ -264,7 +280,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     def rejudge_view(self, request, contest_id, problem_id):
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
         for model in queryset:
-            model.submission.judge(rejudge=True)
+            model.submission.judge(rejudge=True, rejudge_user=request.user)
 
         self.message_user(request, ngettext('%d submission was successfully scheduled for rejudging.',
                                             '%d submissions were successfully scheduled for rejudging.',
@@ -305,6 +321,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
             Q(user__groups__permissions__codename__in=perms) |
             Q(user__user_permissions__codename__in=perms),
         ).distinct()
+        form.base_fields['classes'].queryset = Class.get_visible_classes(request.user)
         return form
 
 

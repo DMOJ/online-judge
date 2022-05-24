@@ -7,7 +7,11 @@
     </div>
     <div class="detail">
         <div class="header">
-            <span class="time">{{ relative_time(message.time, abs=_('messaged on {time}'), rel=_('messaged {time}')) }}</span>
+            <span class="time">
+                {% with abs=_('messaged on {time}'), rel=_('messaged {time}') %}
+                    {{ relative_time(message.time, abs=abs, rel=rel) }}
+                {% endwith %}
+            </span>
             <span class="operation">
                 {% if perms.judge.change_ticket and perms.judge.change_ticketmessage %}
                     <a href="{{ url('admin:judge_ticket_change', ticket.id) }}"

@@ -6,9 +6,9 @@ from urllib.parse import urlparse
 import mistune
 from bleach.sanitizer import Cleaner
 from django.conf import settings
-from jinja2 import Markup
 from lxml import html
 from lxml.etree import ParserError, XMLSyntaxError
+from markupsafe import Markup
 
 from judge.highlight_code import highlight_code
 from judge.jinja2.markdown.lazy_load import lazy_load as lazy_load_processor
@@ -145,12 +145,25 @@ def fragments_to_tree(fragment):
     return tree
 
 
+def strip_paragraphs_tags(tree):
+    for p in tree.xpath('.//p'):
+        for child in p.iterchildren(reversed=True):
+            p.addnext(child)
+        parent = p.getparent()
+        prev = p.getprevious()
+        if prev is not None:
+            prev.tail = (prev.tail or '') + p.text
+        else:
+            parent.text = (parent.text or '') + p.text
+        parent.remove(p)
+
+
 def fragment_tree_to_str(tree):
     return html.tostring(tree, encoding='unicode')[len('<div>'):-len('</div>')]
 
 
 @registry.filter
-def markdown(value, style, math_engine=None, lazy_load=False):
+def markdown(value, style, math_engine=None, lazy_load=False, strip_paragraphs=False):
     styles = settings.MARKDOWN_STYLES.get(style, settings.MARKDOWN_DEFAULT_STYLE)
     escape = styles.get('safe_mode', True)
     nofollow = styles.get('nofollow', True)
@@ -170,10 +183,12 @@ def markdown(value, style, math_engine=None, lazy_load=False):
                                 parse_block_html=1, parse_inline_html=1)
     result = markdown(value)
 
-    if post_processors:
+    if post_processors or strip_paragraphs:
         tree = fragments_to_tree(result)
         for processor in post_processors:
             processor(tree)
+        if strip_paragraphs:
+            strip_paragraphs_tags(tree)
         result = fragment_tree_to_str(tree)
     if bleach_params:
         result = get_cleaner(style, bleach_params).clean(result)

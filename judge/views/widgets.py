@@ -33,7 +33,7 @@ def rejudge_submission(request):
     if not submission.problem.is_subs_manageable_by(request.user):
         return HttpResponseForbidden()
 
-    submission.judge(rejudge=True)
+    submission.judge(rejudge=True, rejudge_user=request.user)
 
     redirect = request.POST.get('path', None)
 

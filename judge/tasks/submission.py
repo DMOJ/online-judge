@@ -1,5 +1,7 @@
 from celery import shared_task
+from django.contrib.auth.models import User
 from django.core.cache import cache
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from judge.models import Problem, Profile, Submission
@@ -16,19 +18,20 @@ def apply_submission_filter(queryset, id_range, languages, results):
         queryset = queryset.filter(language_id__in=languages)
     if results:
         queryset = queryset.filter(result__in=results)
-    queryset = queryset.filter(is_locked=False).exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
+    queryset = queryset.filter(locked_after__gt=timezone.now()).exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
     return queryset
 
 
 @shared_task(bind=True)
-def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None):
+def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, results=None, user_id=None):
     queryset = Submission.objects.filter(problem_id=problem_id)
     queryset = apply_submission_filter(queryset, id_range, languages, results)
+    user = User.objects.get(id=user_id)
 
     rejudged = 0
     with Progress(self, queryset.count()) as p:
         for submission in queryset.iterator():
-            submission.judge(rejudge=True, batch_rejudge=True)
+            submission.judge(rejudge=True, batch_rejudge=True, rejudge_user=user)
             rejudged += 1
             if rejudged % 10 == 0:
                 p.done = rejudged

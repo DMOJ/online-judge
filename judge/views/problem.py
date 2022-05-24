@@ -10,13 +10,13 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
-from django.db.models import Count, F, Prefetch, Q
+from django.db.models import BooleanField, Case, Count, F, Prefetch, Q, When
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 from django.urls import reverse
-from django.utils import translation
+from django.utils import timezone, translation
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
@@ -114,8 +114,9 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
         return _('Editorial for {0}').format(self.object.name)
 
     def get_content_title(self):
-        return format_html(_(u'Editorial for <a href="{1}">{0}</a>'), self.object.name,
-                           reverse('problem_detail', args=[self.object.code]))
+        return mark_safe(escape(_('Editorial for {0}')).format(
+            format_html('<a href="{1}">{0}</a>', self.object.name, reverse('problem_detail', args=[self.object.code])),
+        ))
 
     def get_context_data(self, **kwargs):
         context = super(ProblemSolution, self).get_context_data(**kwargs)
@@ -276,7 +277,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     template_name = 'problem/list.html'
     paginate_by = 50
     sql_sort = frozenset(('points', 'ac_rate', 'user_count', 'code'))
-    manual_sort = frozenset(('name', 'group', 'solved', 'type'))
+    manual_sort = frozenset(('name', 'group', 'solved', 'type', 'editorial'))
     all_sorts = sql_sort | manual_sort
     default_desc = frozenset(('points', 'ac_rate', 'user_count'))
     default_sort = 'code'
@@ -298,6 +299,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                 queryset = queryset.order_by(self.order.replace('name', 'i18n_name'), 'id')
             elif sort_key == 'group':
                 queryset = queryset.order_by(self.order + '__name', 'id')
+            elif sort_key == 'editorial':
+                queryset = queryset.order_by(self.order.replace('editorial', 'has_public_editorial'), 'id')
             elif sort_key == 'solved':
                 if self.request.user.is_authenticated:
                     profile = self.request.profile
@@ -365,6 +368,13 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                                         .values_list('problem__id', flat=True))
         if self.show_types:
             queryset = queryset.prefetch_related('types')
+        queryset = queryset.annotate(has_public_editorial=Case(
+            When(solution__is_public=True, solution__publish_on__lte=timezone.now(), then=True),
+            default=False,
+            output_field=BooleanField(),
+        ))
+        if self.has_public_editorial:
+            queryset = queryset.filter(has_public_editorial=True)
         if self.category is not None:
             queryset = queryset.filter(group__id=self.category)
 
@@ -406,6 +416,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = 0 if self.in_contest else int(self.hide_solved)
         context['show_types'] = 0 if self.in_contest else int(self.show_types)
+        context['has_public_editorial'] = 0 if self.in_contest else int(self.has_public_editorial)
         context['full_text'] = 0 if self.in_contest else int(self.full_text)
         context['problem_visibility'] = self.problem_visibility
         context['visibilities'] = {
@@ -431,8 +442,11 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         else:
             context['hot_problems'] = None
             context['point_start'], context['point_end'], context['point_values'] = 0, 0, {}
-            context['hide_contest_scoreboard'] = self.contest.scoreboard_visibility in \
-                (self.contest.SCOREBOARD_AFTER_CONTEST, self.contest.SCOREBOARD_AFTER_PARTICIPATION)
+            context['hide_contest_scoreboard'] = self.contest.scoreboard_visibility in (
+                self.contest.SCOREBOARD_AFTER_CONTEST,
+                self.contest.SCOREBOARD_AFTER_PARTICIPATION,
+                self.contest.SCOREBOARD_HIDDEN,
+            )
         return context
 
     def get_noui_slider_points(self):
@@ -463,6 +477,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         self.hide_solved = self.GET_with_session(request, 'hide_solved')
         self.show_types = self.GET_with_session(request, 'show_types')
         self.full_text = self.GET_with_session(request, 'full_text')
+        self.has_public_editorial = self.GET_with_session(request, 'has_public_editorial')
 
         self.search_query = None
         self.category = None
@@ -691,7 +706,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
 
 
 class ProblemClone(ProblemMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
-    title = _('Clone Problem')
+    title = gettext_lazy('Clone Problem')
     template_name = 'problem/clone.html'
     form_class = ProblemCloneForm
     permission_required = 'judge.clone_problem'

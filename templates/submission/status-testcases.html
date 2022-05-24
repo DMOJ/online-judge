@@ -135,7 +135,7 @@
                 {{ submission.memory|kbdetailformat }}
                 <br>
                 {% if submission.result == "AC" %}
-                    <b>{{ _('Maximum runtime on single test case:') }}</b>
+                    <b>{{ _('Maximum single-case runtime:') }}</b>
                     <span title="{{ max_execution_time }}s">{{ max_execution_time|floatformat(3) }}s</span>
                     <br>
                 {% endif %}
@@ -147,12 +147,14 @@
                 {{ submission.case_points|floatformat(0) }}/{{ submission.case_total|floatformat(0) }}
                 {% if request.in_contest and submission.contest_or_none %}
                     {% with contest=submission.contest_or_none %}
-                        ({{ _('%(points)s/%(total)s points', points=contest.points|roundfloat(3),
-                              total=contest.problem.points|floatformat(-1)) }})
+                        {% set points=contest.points|roundfloat(3) %}
+                        {% set total=contest.problem.points|floatformat(-1) %}
+                        ({{ _('%(points)s/%(total)s points', points=points, total=total) }})
                     {% endwith %}
                 {% else %}
-                    ({{ _('%(points)s/%(total)s points', points=submission.points|roundfloat(3),
-                          total=submission.problem.points|floatformat(-1)) }})
+                    {% with points=submission.points|roundfloat(3), total=submission.problem.points|floatformat(-1) %}
+                        ({{ _('%(points)s/%(total)s points', points=points, total=total) }})
+                    {% endwith %}
                 {% endif %}
                 {% if is_pretest and submission.result == "AC" %}
                     <br>

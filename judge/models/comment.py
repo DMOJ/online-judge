@@ -169,7 +169,7 @@ class Comment(MPTTModel):
         return '%s#comment-%d' % (self.link, self.id)
 
     def __str__(self):
-        return '%(page)s by %(user)s' % {'page': self.page, 'user': self.author.user.username}
+        return _('%(page)s by %(user)s') % {'page': self.page, 'user': self.author.user.username}
 
         # Only use this when queried with
         # .prefetch_related(Prefetch('votes', queryset=CommentVote.objects.filter(voter_id=profile_id)))
@@ -204,6 +204,8 @@ class CommentLock(models.Model):
         permissions = (
             ('override_comment_lock', _('Override comment lock')),
         )
+        verbose_name = _('comment lock')
+        verbose_name_plural = _('comment locks')
 
     def __str__(self):
         return str(self.page)

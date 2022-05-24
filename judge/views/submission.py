@@ -22,10 +22,11 @@ from django.views.generic import DetailView, ListView
 from judge import event_poster as event
 from judge.highlight_code import highlight_code
 from judge.models import Contest, Language, Problem, ProblemTranslation, Profile, Submission
+from judge.models.problem import SubmissionSourceAccess
 from judge.utils.infinite_paginator import InfinitePaginationMixin
 from judge.utils.problems import get_result_data, user_completed_ids, user_editable_ids, user_tester_ids
 from judge.utils.raw_sql import join_sql_subquery, use_straight_join
-from judge.utils.views import DiggPaginatorMixin, TitleMixin
+from judge.utils.views import DiggPaginatorMixin, TitleMixin, generic_message
 
 
 def submission_related(queryset):
@@ -33,8 +34,13 @@ def submission_related(queryset):
         .only('id', 'user__user__username', 'user__display_rank', 'user__rating', 'problem__name',
               'problem__code', 'problem__is_public', 'language__short_name', 'language__key', 'date', 'time', 'memory',
               'points', 'result', 'status', 'case_points', 'case_total', 'current_testcase', 'contest_object',
-              'is_locked', 'problem__submission_source_visibility_mode', 'user__username_display_override') \
+              'locked_after', 'problem__submission_source_visibility_mode', 'user__username_display_override') \
         .prefetch_related('contest_object__authors', 'contest_object__curators')
+
+
+class SubmissionPermissionDenied(PermissionDenied):
+    def __init__(self, submission):
+        self.submission = submission
 
 
 class SubmissionMixin(object):
@@ -47,8 +53,28 @@ class SubmissionDetailBase(LoginRequiredMixin, TitleMixin, SubmissionMixin, Deta
     def get_object(self, queryset=None):
         submission = super(SubmissionDetailBase, self).get_object(queryset)
         if not submission.can_see_detail(self.request.user):
-            raise PermissionDenied()
+            raise SubmissionPermissionDenied(submission)
         return submission
+
+    def get(self, request, *args, **kwargs):
+        try:
+            return super().get(request, *args, **kwargs)
+        except SubmissionPermissionDenied as e:
+            return self.no_permission(e.submission)
+
+    def no_permission(self, submission):
+        problem = submission.problem
+        if problem.is_accessible_by(self.request.user) and \
+                problem.submission_source_visibility == SubmissionSourceAccess.SOLVED:
+
+            message = escape(_('Permission denied. Solve %(problem)s in order to view it.')) % {
+                'problem': format_html('<a href="{0}">{1}</a>',
+                                       reverse('problem_detail', args=[problem.code]),
+                                       problem.translated_name(self.request.LANGUAGE_CODE)),
+            }
+            return generic_message(self.request, _("Can't access submission"), mark_safe(message), status=403)
+        else:
+            return generic_message(self.request, _("Can't access submission"), _('Permission denied.'), status=403)
 
     def get_title(self):
         submission = self.object
@@ -247,17 +273,24 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
             queryset = queryset.select_related('contest_object').defer('contest_object__description')
 
             if not self.request.user.has_perm('judge.see_private_contest'):
-                # Show submissions for any contest you can edit or visible scoreboard
+                # Show submissions for any contest you can edit or where you can see submissions
                 contest_queryset = Contest.objects.filter(
                     Q(authors=self.request.profile) |
                     Q(curators=self.request.profile) |
+                    Q(tester_see_submissions=True, testers=self.request.profile) |
+                    Q(view_contest_submissions=self.request.profile) |
                     Q(scoreboard_visibility=Contest.SCOREBOARD_VISIBLE) |
-                    Q(end_time__lt=timezone.now(), scoreboard_visibility=Contest.SCOREBOARD_AFTER_CONTEST) |
-                    Q(end_time__lt=timezone.now(), scoreboard_visibility=Contest.SCOREBOARD_AFTER_PARTICIPATION),
+                    Q(end_time__lt=timezone.now(), scoreboard_visibility__in=(
+                        Contest.SCOREBOARD_AFTER_PARTICIPATION,
+                        Contest.SCOREBOARD_AFTER_CONTEST,
+                    )),
                 ).distinct()
-                queryset = queryset.filter(Q(user=self.request.profile) |
-                                           Q(contest_object__in=contest_queryset) |
-                                           Q(contest_object__isnull=True))
+
+                queryset = queryset.filter(
+                    Q(user=self.request.profile) |
+                    Q(contest_object__in=contest_queryset) |
+                    Q(contest_object__isnull=True),
+                )
 
         if self.selected_languages:
             queryset = queryset.filter(language__in=Language.objects.filter(key__in=self.selected_languages))
@@ -360,9 +393,11 @@ class AllUserSubmissions(ConditionalUserTabMixin, UserMixin, SubmissionsListBase
 
     def get_content_title(self):
         if self.is_own:
-            return format_html('All my submissions')
-        return format_html('All submissions by <a href="{1}">{0}</a>', self.profile.display_name,
-                           reverse('user_page', args=[self.username]))
+            return _('All my submissions')
+        return mark_safe(escape(_('All submissions by %s')) % (
+            format_html('<a href="{1}">{0}</a>', self.profile.display_name,
+                        reverse('user_page', args=[self.username])),
+        ))
 
     def get_my_submissions_page(self):
         if self.request.user.is_authenticated:
@@ -390,8 +425,10 @@ class ProblemSubmissionsBase(SubmissionsListBase):
         return _('All submissions for %s') % self.problem_name
 
     def get_content_title(self):
-        return format_html('All submissions for <a href="{1}">{0}</a>', self.problem_name,
-                           reverse('problem_detail', args=[self.problem.code]))
+        return mark_safe(escape(_('All submissions for %s')) % (
+            format_html('<a href="{1}">{0}</a>', self.problem_name,
+                        reverse('problem_detail', args=[self.problem.code])),
+        ))
 
     def access_check_contest(self, request):
         if self.in_contest and not self.contest.can_see_own_scoreboard(request.user):
@@ -456,12 +493,16 @@ class UserProblemSubmissions(ConditionalUserTabMixin, UserMixin, ProblemSubmissi
 
     def get_content_title(self):
         if self.request.user.is_authenticated and self.request.profile == self.profile:
-            return format_html("""My submissions for <a href="{3}">{2}</a>""",
-                               self.username, reverse('user_page', args=[self.username]),
-                               self.problem_name, reverse('problem_detail', args=[self.problem.code]))
-        return format_html("""<a href="{1}">{0}</a>'s submissions for <a href="{3}">{2}</a>""",
-                           self.profile.display_name, reverse('user_page', args=[self.username]),
-                           self.problem_name, reverse('problem_detail', args=[self.problem.code]))
+            return mark_safe(escape(_('My submissions for %(problem)s')) % {
+                'problem': format_html('<a href="{1}">{0}</a>', self.problem_name,
+                                       reverse('problem_detail', args=[self.problem.code])),
+            })
+        return mark_safe(escape(_("%(user)s's submissions for %(problem)s")) % {
+            'user': format_html('<a href="{1}">{0}</a>', self.profile.display_name,
+                                reverse('user_page', args=[self.username])),
+            'problem': format_html('<a href="{1}">{0}</a>', self.problem_name,
+                                   reverse('problem_detail', args=[self.problem.code])),
+        })
 
     def get_context_data(self, **kwargs):
         context = super(UserProblemSubmissions, self).get_context_data(**kwargs)
@@ -571,11 +612,16 @@ class UserAllContestSubmissions(ForceContestMixin, AllUserSubmissions):
 
     def get_content_title(self):
         if self.is_own:
-            return format_html(_('My submissions in <a href="{1}">{0}</a>'),
-                               self.contest.name, reverse('contest_view', args=[self.contest.key]))
-        return format_html(_('<a href="{1}">{0}</a>\'s submissions in <a href="{3}">{2}</a>'),
-                           self.profile.display_name, reverse('user_page', args=[self.username]),
-                           self.contest.name, reverse('contest_view', args=[self.contest.key]))
+            return mark_safe(escape(_('My submissions in %(contest)s')) % {
+                'contest': format_html('<a href="{1}">{0}</a>', self.contest.name,
+                                       reverse('contest_view', args=[self.contest.key])),
+            })
+        return mark_safe(escape(_("%(user)s's submissions in %(contest)s")) % {
+            'user': format_html('<a href="{1}">{0}</a>', self.profile.display_name,
+                                reverse('user_page', args=[self.username])),
+            'contest': format_html('<a href="{1}">{0}</a>', self.contest.name,
+                                   reverse('contest_view', args=[self.contest.key])),
+        })
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -588,9 +634,16 @@ class UserAllContestSubmissions(ForceContestMixin, AllUserSubmissions):
 class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
     def get_title(self):
         if self.problem.is_accessible_by(self.request.user):
-            return "%s's submissions for %s in %s" % (self.profile.display_name, self.problem_name, self.contest.name)
-        return "%s's submissions for problem %s in %s" % (
-            self.profile.display_name, self.get_problem_number(self.problem), self.contest.name)
+            return _("{user}'s submissions for {problem} in {contest}").format(
+                user=self.profile.display_name,
+                problem=self.problem_name,
+                contest=self.contest.name,
+            )
+        return _("{user}'s submissions for problem {number} in {contest}").format(
+            user=self.profile.display_name,
+            number=self.get_problem_number(self.problem),
+            contest=self.contest.name,
+        )
 
     def access_check(self, request):
         super(UserContestSubmissions, self).access_check(request)
@@ -599,13 +652,18 @@ class UserContestSubmissions(ForceContestMixin, UserProblemSubmissions):
 
     def get_content_title(self):
         if self.problem.is_accessible_by(self.request.user):
-            return format_html(_('<a href="{1}">{0}</a>\'s submissions for '
-                                 '<a href="{3}">{2}</a> in <a href="{5}">{4}</a>'),
-                               self.profile.display_name, reverse('user_page', args=[self.username]),
-                               self.problem_name, reverse('problem_detail', args=[self.problem.code]),
-                               self.contest.name, reverse('contest_view', args=[self.contest.key]))
-        return format_html(_('<a href="{1}">{0}</a>\'s submissions for '
-                             'problem {2} in <a href="{4}">{3}</a>'),
-                           self.profile.display_name, reverse('user_page', args=[self.username]),
-                           self.get_problem_number(self.problem),
-                           self.contest.name, reverse('contest_view', args=[self.contest.key]))
+            return mark_safe(escape(_("{user}'s submissions for {problem} in {contest}")).format(
+                user=format_html('<a href="{1}">{0}</a>', self.profile.display_name,
+                                 reverse('user_page', args=[self.username])),
+                problem=format_html('<a href="{1}">{0}</a>', self.problem_name,
+                                    reverse('problem_detail', args=[self.problem.code])),
+                contest=format_html('<a href="{1}">{0}</a>', self.contest.name,
+                                    reverse('contest_view', args=[self.contest.key])),
+            ))
+        return mark_safe(escape(_("{user}'s submissions for problem {number} in {contest}")).format(
+            user=format_html('<a href="{1}">{0}</a>', self.profile.display_name,
+                             reverse('user_page', args=[self.username])),
+            number=self.get_problem_number(self.problem),
+            contest=format_html('<a href="{1}">{0}</a>', self.contest.name,
+                                reverse('contest_view', args=[self.contest.key])),
+        ))

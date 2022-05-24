@@ -104,7 +104,6 @@
 
 {% block title_row %}
     {% set tab = 'list' %}
-    {% set title = 'Contests' %}
     {% include "contest/contest-list-tabs.html" %}
 {% endblock %}
 
@@ -124,6 +123,13 @@
                     <span style="background-color: #cccccc" class="contest-tag">
                         <a href="{{ org.get_absolute_url() }}" style="color: #000000">
                             <i class="fa fa-lock"></i> {{ org.name }}
+                        </a>
+                    </span>
+                {% endfor %}
+                {% for class in contest.classes.all() %}
+                    <span style="background-color: #00ccff" class="contest-tag">
+                        <a href="{{ class.get_absolute_url() }}" style="color: #000000">
+                            <i class="fa fa-users"></i> {{ class.name }}
                         </a>
                     </span>
                 {% endfor %}
@@ -192,7 +198,13 @@
 {% macro contest_join(contest, request, finished_contests) %}
     {% if not request.in_contest %}
         <td>
-            {% if contest.key in finished_contests or request.profile in contest.authors.all() or request.profile in contest.curators.all() or request.profile in contest.testers.all() %}
+            {% if contest.is_live_joinable_by(request.user) %}
+                <form action="{{ url('contest_join', contest.key) }}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="unselectable button full participate-button join-warning"
+                           value="{{ _('Join') }}">
+                </form>
+            {% elif contest.is_spectatable_by(request.user) %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button"
@@ -201,8 +213,8 @@
             {% elif contest.is_joinable_by(request.user) %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
-                    <input type="submit" class="unselectable button full participate-button join-warning"
-                           value="{{ _('Join') }}">
+                    <input type="submit" class="unselectable button full participate-button disabled"
+                           value="{{ _('Join') }}" disabled title="{{ _('You cannot join this contest.') }}">
                 </form>
             {% else %}
                 {{ contest_register(contest, request.user) }}

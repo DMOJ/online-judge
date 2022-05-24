@@ -12,7 +12,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
-from django.db.models import Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
+from django.db.models import BooleanField, Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
 from django.db.models.expressions import CombinedExpression
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
@@ -82,9 +82,14 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
         return timezone.now()
 
     def _get_queryset(self):
-        queryset = super(ContestList, self).get_queryset().prefetch_related('tags', 'organizations', 'authors',
-                                                                            'curators', 'testers')
-
+        queryset = super().get_queryset().prefetch_related(
+            'tags',
+            'organizations',
+            'authors',
+            'curators',
+            'testers',
+            'spectators',
+        )
         if self.search_query:
             queryset = queryset.filter(Q(key__icontains=self.search_query) | Q(name__icontains=self.search_query))
         if self.selected_tags:
@@ -116,11 +121,12 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
                 present.append(contest)
 
         if self.request.user.is_authenticated:
-            for participation in ContestParticipation.objects.filter(virtual=0, user=self.request.profile,
-                                                                     contest_id__in=present) \
-                    .select_related('contest') \
-                    .prefetch_related('contest__authors', 'contest__curators', 'contest__testers') \
-                    .annotate(key=F('contest__key')):
+            for participation in (
+                ContestParticipation.objects.filter(virtual=0, user=self.request.profile, contest_id__in=present)
+                .select_related('contest')
+                .prefetch_related('contest__authors', 'contest__curators', 'contest__testers', 'contest__spectators')
+                .annotate(key=F('contest__key'))
+            ):
                 if participation.ended:
                     finished.add(participation.contest.key)
                 else:
@@ -186,11 +192,12 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
 
 
 class PrivateContestError(Exception):
-    def __init__(self, name, is_private, is_organization_private, orgs):
+    def __init__(self, name, is_private, is_organization_private, orgs, classes):
         self.name = name
         self.is_private = is_private
         self.is_organization_private = is_organization_private
         self.orgs = orgs
+        self.classes = classes
 
 
 class ContestMixin(object):
@@ -210,6 +217,12 @@ class ContestMixin(object):
         if not self.request.user.is_authenticated:
             return False
         return self.request.profile.id in self.object.tester_ids
+
+    @cached_property
+    def is_spectator(self):
+        if not self.request.user.is_authenticated:
+            return False
+        return self.request.profile.id in self.object.spectator_ids
 
     @cached_property
     def can_edit(self):
@@ -237,6 +250,7 @@ class ContestMixin(object):
         context['now'] = timezone.now()
         context['is_editor'] = self.is_editor
         context['is_tester'] = self.is_tester
+        context['is_spectator'] = self.is_spectator
         context['can_edit'] = self.can_edit
 
         if not self.object.og_image or not self.object.summary:
@@ -263,7 +277,7 @@ class ContestMixin(object):
             contest.access_check(self.request.user)
         except Contest.PrivateContest:
             raise PrivateContestError(contest.name, contest.is_private, contest.is_organization_private,
-                                      contest.organizations.all())
+                                      contest.organizations.all(), contest.classes.all())
         except Contest.Inaccessible:
             raise Http404()
         else:
@@ -299,8 +313,11 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         context = super(ContestDetail, self).get_context_data(**kwargs)
         context['contest_problems'] = Problem.objects.filter(contests__contest=self.object) \
             .order_by('contests__order').defer('description') \
-            .annotate(has_public_editorial=Sum(Case(When(solution__is_public=True, then=1),
-                                                    default=0, output_field=IntegerField()))) \
+            .annotate(has_public_editorial=Case(
+                When(solution__is_public=True, solution__publish_on__lte=timezone.now(), then=True),
+                default=False,
+                output_field=BooleanField(),
+            )) \
             .add_i18n_name(self.request.LANGUAGE_CODE)
         context['metadata'] = {
             'has_public_editorials': any(
@@ -324,7 +341,7 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
 
 
 class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObjectFormView):
-    title = _('Clone Contest')
+    title = gettext_lazy('Clone Contest')
     template_name = 'contest/clone.html'
     form_class = ContestCloneForm
     permission_required = 'judge.clone_contest'
@@ -342,7 +359,7 @@ class ContestClone(ContestMixin, PermissionRequiredMixin, TitleMixin, SingleObje
         contest.pk = None
         contest.is_visible = False
         contest.user_count = 0
-        contest.is_locked = False
+        contest.locked_after = None
         contest.key = form.cleaned_data['key']
         with revisions.create_revision(atomic=True):
             contest.save()
@@ -433,7 +450,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
     def join_contest(self, request, access_code=None):
         contest = self.object
 
-        if not contest.can_join and not (self.is_editor or self.is_tester):
+        if not contest.started and not (self.is_editor or self.is_tester):
             return generic_message(request, _('Contest not ongoing'),
                                    _('"%s" is not currently ongoing.') % contest.name)
 
@@ -473,16 +490,24 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
         else:
             SPECTATE = ContestParticipation.SPECTATE
             LIVE = ContestParticipation.LIVE
+
+            if contest.is_live_joinable_by(request.user):
+                participation_type = LIVE
+            elif contest.is_spectatable_by(request.user):
+                participation_type = SPECTATE
+            else:
+                return generic_message(request, _('Cannot enter'),
+                                       _('You are not able to join this contest.'))
             try:
                 participation = ContestParticipation.objects.get(
-                    contest=contest, user=profile, virtual=(SPECTATE if self.is_editor or self.is_tester else LIVE),
+                    contest=contest, user=profile, virtual=participation_type,
                 )
             except ContestParticipation.DoesNotExist:
                 if requires_access_code:
                     raise ContestAccessDenied()
 
                 participation = ContestParticipation.objects.create(
-                    contest=contest, user=profile, virtual=(SPECTATE if self.is_editor or self.is_tester else LIVE),
+                    contest=contest, user=profile, virtual=participation_type,
                     real_start=timezone.now(),
                 )
                 event.post('contest_%d' % contest.id, {'type': 'update'})

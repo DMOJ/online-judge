@@ -17,7 +17,7 @@ from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget, Ad
 
 
 class ProblemForm(ModelForm):
-    change_message = forms.CharField(max_length=256, label='Edit reason', required=False)
+    change_message = forms.CharField(max_length=256, label=_('Edit reason'), required=False)
 
     def __init__(self, *args, **kwargs):
         super(ProblemForm, self).__init__(*args, **kwargs)
@@ -123,7 +123,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         (None, {
             'fields': (
                 'code', 'name', 'is_public', 'is_manually_managed', 'date', 'authors', 'curators', 'testers',
-                'is_organization_private', 'organizations', 'submission_source_visibility_mode', 'is_full_markup',
+                'organizations', 'submission_source_visibility_mode', 'is_full_markup',
                 'description', 'license',
             ),
         }),
@@ -234,10 +234,13 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         return form
 
     def save_model(self, request, obj, form, change):
+        # `organizations` will not appear in `cleaned_data` if user cannot edit it
+        if form.changed_data and 'organizations' in form.changed_data:
+            obj.is_organization_private = bool(form.cleaned_data['organizations'])
         super(ProblemAdmin, self).save_model(request, obj, form, change)
         if (
             form.changed_data and
-            any(f in form.changed_data for f in ('is_public', 'is_organization_private', 'points', 'partial'))
+            any(f in form.changed_data for f in ('is_public', 'organizations', 'points', 'partial'))
         ):
             self._rescore(request, obj.id)
 

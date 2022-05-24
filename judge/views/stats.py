@@ -25,7 +25,7 @@ def language_data(request, language_count=Language.objects.annotate(count=Count(
     other_count = sum(map(itemgetter('count'), languages[num_languages:]))
 
     return JsonResponse({
-        'labels': list(map(itemgetter('name'), languages[:num_languages])) + ['Other'],
+        'labels': list(map(itemgetter('name'), languages[:num_languages])) + [_('Other')],
         'datasets': [
             {
                 'backgroundColor': chart_colors[:num_languages] + ['#FDB45C'],

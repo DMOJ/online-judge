@@ -275,6 +275,9 @@
                 var getItem = function (index) {
                     return rating_history[index];
                 };
+                var ratings = rating_history.map(function (x) {
+                    return x.rating;
+                });
 
                 var originalDraw = Chart.controllers.scatter.prototype.draw;
                 Chart.helpers.extend(Chart.controllers.scatter.prototype, {
@@ -356,6 +359,8 @@
                             yAxes: [{
                                 ticks: {
                                     precision: 0,
+                                    suggestedMin: Math.max(0, Math.min.apply(null, ratings) - 50),
+                                    suggestedMax: Math.max.apply(null, ratings) + 50,
                                 },
                             }],
                         },

@@ -210,6 +210,7 @@ else:
                     'children': [
                         'judge.Organization',
                         'judge.OrganizationRequest',
+                        'judge.Class',
                     ],
                 },
                 {
@@ -343,6 +344,7 @@ TEMPLATES = [
             'autoescape': select_autoescape(['html', 'xml']),
             'trim_blocks': True,
             'lstrip_blocks': True,
+            'translation_engine': 'judge.utils.safe_translations',
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension',
                 'judge.jinja2.DMOJExtension',

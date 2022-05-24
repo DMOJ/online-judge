@@ -19,7 +19,10 @@
 {% block body %}
     <div class="content-description">
         {% if not has_solved_problem %}
-            <div class="alert alert-danger">{{ _('Remember to use this editorial <b>only</b> when stuck, and <b>not to copy-paste code from it</b>. Please be respectful to the problem author and editorialist. <br><br> <b>Submitting an official solution before solving the problem yourself is a bannable offence.</b>') }}</div>
+            <div class="alert alert-danger">
+                {{ _('Remember to use this editorial **only** when stuck, and **not to copy-paste code from it**. Please be respectful to the problem author and editorialist.')|markdown('default', strip_paragraphs=True) }}<br>
+                <b>{{ _('Submitting an official solution before solving the problem yourself is a bannable offence.') }}</b>
+            </div>
         {% endif %}
         {% with authors=solution.authors.all() %}
             {% if authors %}

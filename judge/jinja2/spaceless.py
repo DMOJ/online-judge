@@ -1,7 +1,8 @@
 import re
 
-from jinja2 import Markup, nodes
+from jinja2 import nodes
 from jinja2.ext import Extension
+from markupsafe import Markup
 
 
 class SpacelessExtension(Extension):

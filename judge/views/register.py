@@ -55,7 +55,7 @@ class CustomRegistrationForm(RegistrationForm):
 
 
 class RegistrationView(OldRegistrationView):
-    title = _('Registration')
+    title = _('Register')
     form_class = CustomRegistrationForm
     template_name = 'registration/registration_form.html'
 
@@ -96,7 +96,7 @@ class RegistrationView(OldRegistrationView):
 
 
 class ActivationView(OldActivationView):
-    title = _('Registration')
+    title = _('Activation Key Invalid')
     template_name = 'registration/activate.html'
 
     def get_context_data(self, **kwargs):

@@ -168,5 +168,16 @@
         },
         "model": "sites.site",
         "pk": 1
+    },
+    {
+        "fields": {
+            "name": "ExampleJudge",
+            "created": "2022-05-23 00:00",
+            "auth_key": "earutFKRoNyF/OWiUZVejHiboz2uG3NqqIAWPpWpjqCwLKSZds1izqqbbmWjscoge8cHbVyKOXji4XXUUVfOCv+o9w/8kN8J4UYR",
+            "is_blocked": false,
+            "description": "docker judge"
+        },
+        "model": "judge.judge",
+        "pk": 1
     }
 ]

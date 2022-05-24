@@ -341,7 +341,7 @@ class TicketMessageDataAjax(TicketMixin, SingleObjectMixin, View):
         except TicketMessage.DoesNotExist:
             return HttpResponseBadRequest()
         return JsonResponse({
-            'message': get_template('ticket/message.html').render({'message': message}, request),
+            'message': get_template('ticket/message.html').render({'message': message, 'ticket': ticket}, request),
             'notification': {
                 'title': _('New Ticket Message For: %s') % ticket.title,
                 'body': truncatechars(message.body, 200),

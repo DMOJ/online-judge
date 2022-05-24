@@ -259,8 +259,8 @@
     "model": "judge.language",
     "pk": 21,
     "fields": {
-        "key": "RUBY2",
-        "name": "Ruby 2",
+        "key": "RUBY",
+        "name": "Ruby",
         "short_name": "",
         "common_name": "Ruby",
         "ace": "ruby",

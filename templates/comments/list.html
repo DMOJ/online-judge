@@ -15,7 +15,7 @@
                                     <a href="javascript:comment_upvote({{ node.id }})"
                                        class="upvote-link fa fa-chevron-up fa-fw{% if node.vote_score == 1 %} voted{% endif %}"></a>
                                 {% else %}
-                                    <a href="javascript:alert('{{ _('Please login to vote')|escapejs }}')" title="{{ _('Please login to vote') }}"
+                                    <a href="javascript:alert('{{ _('Please log in to vote')|escapejs }}')" title="{{ _('Please log in to vote') }}"
                                        class="upvote-link fa fa-chevron-up fa-fw"></a>
                                 {% endif %}
                                 <br>
@@ -24,7 +24,7 @@
                                     <a href="javascript:comment_downvote({{ node.id }})"
                                        class="downvote-link fa fa-chevron-down fa-fw{% if node.vote_score == -1 %} voted{% endif %}"></a>
                                 {% else %}
-                                    <a href="javascript:alert('{{ _('Please login to vote')|escapejs }}')" title="{{ _('Please login to vote') }}"
+                                    <a href="javascript:alert('{{ _('Please log in to vote')|escapejs }}')" title="{{ _('Please log in to vote') }}"
                                        class="downvote-link fa fa-chevron-down fa-fw"></a>
                                 {% endif %}
                             </div>
@@ -44,7 +44,9 @@
                                     {% endwith %}
                                     {{ link_user(node.author) }}&nbsp;
                                 </span>
-                                {{ relative_time(node.time, abs=_('commented on {time}'), rel=_('commented {time}')) }}
+                                {% with abs=_('commented on {time}'), rel=_('commented {time}') %}
+                                    {{ relative_time(node.time, abs=abs, rel=rel) }}
+                                {% endwith %}
                                 <span class="comment-spacer"></span>
                                 <span class="comment-operation">
                                 {% if node.revisions > 1 %}
@@ -108,10 +110,8 @@
                                 {% if node.score <= vote_hide_threshold %}
                                     <div class="comment-body bad-comment-body">
                                         <p>
-                                            {% trans id=node.id %}
-                                                This comment is hidden due to too much negative feedback.
-                                                Click <a href="javascript:comment_show_content({{ id }})">here</a> to view it.
-                                            {% endtrans %}
+                                            {{ _('This comment is hidden due to too much negative feedback.') }}
+                                            <a href="javascript:comment_show_content({{ node.id }})">{{ _('Show it anyway.') }}</a>
                                         </p>
                                     </div>
                                 {% endif %}

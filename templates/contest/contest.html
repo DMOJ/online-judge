@@ -55,15 +55,16 @@
             {%- endif -%}
         </a>
         <div id="time">
-            {% if contest.time_limit %}
-                {% trans trimmed start_time=contest.start_time|date(_("F j, Y, G:i T")), end_time=contest.end_time|date(_("F j, Y, G:i T")), time_limit=contest.time_limit|timedelta('localized-no-seconds') %}
-                    <b>{{ time_limit }}</b> window between <b>{{ start_time }}</b> and <b>{{ end_time }}</b>
-                {% endtrans %}
-            {% else %}
-                {% trans trimmed length=contest.contest_window_length|timedelta("localized-no-seconds"), start_time=contest.start_time|date(_("F j, Y, G:i T")) %}
-                    <b>{{ length }}</b> long starting on <b>{{ start_time }}</b>
-                {% endtrans %}
-            {% endif %}
+            {% with start_time=contest.start_time|date(_("F j, Y, G:i T")) %}
+                {% if contest.time_limit %}
+                    {% set end_time=contest.end_time|date(_("F j, Y, G:i T")) %}
+                    {% set time_limit=contest.time_limit|timedelta('localized-no-seconds') %}
+                    {{ _('%(time_limit)s window between %(start_time)s and %(end_time)s', start_time=bold(start_time), end_time=bold(end_time), time_limit=bold(time_limit)) }}
+                {% else %}
+                    {% set length=contest.contest_window_length|timedelta('localized-no-seconds') %}
+                    {{ _('%(length)s long starting on %(start_time)s', start_time=bold(start_time), length=bold(length)) }}
+                {% endif %}
+            {% endwith %}
         </div>
         {% if contest.show_short_display %}
             <div id="details">
@@ -164,6 +165,8 @@
                             {{ _('The scoreboard will be **hidden** until your window is over.')|markdown('default') }}
                         {% elif contest.scoreboard_visibility == contest.SCOREBOARD_AFTER_CONTEST %}
                             {{ _('The scoreboard will be **hidden** for the entire duration of the contest.')|markdown('default') }}
+                        {% elif contest.scoreboard_visibility == contest.SCOREBOARD_HIDDEN %}
+                            {{ _('The scoreboard will be **hidden**, even after the contest is over.')|markdown('default') }}
                         {% endif %}
                     </li>
                     {% if contest.access_code %}
@@ -182,7 +185,7 @@
         {% endcache %}
     </div>
 
-    {% if contest.ended or request.user.is_superuser or is_editor or is_tester %}
+    {% if contest.ended or request.user.is_superuser or is_editor or is_tester or (is_spectator and contest.started) %}
         <hr>
         <div class="contest-problems">
             <h2 style="margin-bottom: 0.2em"><i class="fa fa-fw fa-question-circle"></i>{{ _('Problems') }} </h2>

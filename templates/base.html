@@ -210,11 +210,7 @@
                         <a href="{{ url('user_dashboard') }}">
                             <span>
                                 <img src="{{ gravatar(request.user, 32) }}" height="24" width="24">{# -#}
-                                <span>
-                                    {%- trans username=request.profile.display_name -%}
-                                        Hello, <b>{{ username }}</b>.
-                                    {%- endtrans %}
-                                </span>
+                                <span>{{ _('Hello, %(username)s.', username=bold(request.profile.display_name)) }}</span>
                             </span>
                         </a>
                         <ul style="width: 150px">
@@ -223,7 +219,7 @@
                             {% endif %}
                             <li><a href="{{ url('user_edit_profile') }}">{{ _('Edit profile') }}</a></li>
                             {% if request.user.is_impersonate %}
-                                <li><a href="{{ url('impersonate-stop') }}">Stop impersonating</a></li>
+                                <li><a href="{{ url('impersonate-stop') }}">{{ _('Stop impersonating') }}</a></li>
                             {% else %}
                                 <li>
                                     <form action="{{ url('auth_logout') }}" method="POST">

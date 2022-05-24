@@ -40,7 +40,7 @@ import requests
 from django.conf import settings
 from django.contrib.auth.password_validation import CommonPasswordValidator
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _, ngettext
+from django.utils.translation import gettext as _
 
 from judge.utils.unicode import utf8bytes
 
@@ -97,22 +97,6 @@ class PwnedPasswordsValidator(object):
     """
     Password validator which checks the Pwned Passwords database.
     """
-    DEFAULT_HELP_MESSAGE = _("Your password can't be a commonly used password.")
-    DEFAULT_PWNED_MESSAGE = _('This password is too common.')
-
-    def __init__(self, error_message=None, help_message=None):
-        self.help_message = help_message or self.DEFAULT_HELP_MESSAGE
-        error_message = error_message or self.DEFAULT_PWNED_MESSAGE
-
-        # If there is no plural, use the same message for both forms.
-        if isinstance(error_message, str):
-            singular, plural = error_message, error_message
-        else:
-            singular, plural = error_message
-        self.error_message = {
-            'singular': singular,
-            'plural': plural,
-        }
 
     def validate(self, password, user=None):
         amount = pwned_password(password)
@@ -122,15 +106,7 @@ class PwnedPasswordsValidator(object):
             # the same database.
             CommonPasswordValidator().validate(password, user)
         elif amount:
-            raise ValidationError(
-                ngettext(
-                    self.error_message['singular'],
-                    self.error_message['plural'],
-                    amount,
-                ),
-                params={'amount': amount},
-                code='pwned_password',
-            )
+            raise ValidationError(_('This password is too common.'))
 
     def get_help_text(self):
-        return self.help_message
+        return _("Your password can't be a commonly used password.")

@@ -6,13 +6,13 @@
     {% endcompress %}
 {% endblock %}
 
-{% block content_title %}{{ _('Statistics') }}{% endblock %}
+{% block title_ruler %}{% endblock %}
+
+{% block title_row %}
+    {% set tab = 'language' %}
+    {% include "stats/tabs.html" %}
+{% endblock %}
 
 {% block body %}
-    <div class="tabs">
-        <li{% if tab == 'language' %} class="active"{% endif %}>
-            <a href="{{ url('language_stats') }}">{{ _('Language') }}</a>
-        </li>
-    </div>
     {% block chart_body %}{% endblock %}
 {% endblock %}

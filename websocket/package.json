@@ -1,0 +1,17 @@
+{
+  "name": "websocket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "daemon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "AGPL3",
+  "dependencies": {
+    "commander": "^9.2.0",
+    "qu": "^0.1.0",
+    "simplesets": "^1.2.0",
+    "ws": "^8.6.0"
+  }
+}
