@@ -178,34 +178,12 @@ class Submission(models.Model):
             return
 
         contest_problem = contest.problem
-        participation = contest.participation
-
-        if participation.contest.is_locked and participation.live:
-            contest.updated_frozen = True
-            contest.save()
-            return
-
-        contest.updated_frozen = False
         contest.points = round(self.case_points / self.case_total * contest_problem.points
                                if self.case_total > 0 else 0, 3)
         if not contest_problem.partial and contest.points != contest_problem.points:
             contest.points = 0
-
-        contest.bonus = 0
-        if contest.points != 0 and not participation.spectate:
-            config = participation.contest.format.config
-            if config:
-                time_bonus = config.get('time_bonus') or 0
-                first_submission_bonus = config.get('first_submission_bonus') or 0
-                if time_bonus:
-                    dt = (participation.end_time - self.date).total_seconds()
-                    contest.bonus = (contest.points / contest_problem.points) * (dt // (60 * time_bonus))
-                if first_submission_bonus and contest.points == contest_problem.points and \
-                        not participation.submissions.filter(problem=contest_problem,
-                                                             submission__date__lt=self.date).exists():
-                    contest.bonus += first_submission_bonus
         contest.save()
-        participation.recompute_results()
+        contest.participation.recompute_results()
 
     update_contest.alters_data = True
 

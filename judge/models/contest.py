@@ -202,6 +202,10 @@ class Contest(models.Model):
                                            help_text=_('Number of digits to round points to.'))
 
     @cached_property
+    def is_locked(self):
+        return self.locked_after is not None and self.locked_after < timezone.now()
+
+    @cached_property
     def format_class(self):
         return contest_format.formats[self.format_name]
 
