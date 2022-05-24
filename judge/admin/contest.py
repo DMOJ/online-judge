@@ -131,8 +131,9 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling', 'rate_exclude')}),
         (_('Registration'), {'fields': ('require_registration', 'registration_start_time',
                                         'registration_end_time', 'registration_page')}),
-        (_('Access'), {'fields': ('access_code', 'is_organization_private', 'is_private_viewable', 'organizations', 'private_contestants', 'classes',
-                                  'is_private', 'join_organizations', 'view_contest_scoreboard', 'view_contest_submissions')}),
+        (_('Access'), {'fields': ('access_code', 'is_organization_private', 'is_private_viewable', 'organizations',
+                                  'private_contestants', 'classes', 'is_private', 'join_organizations',
+                                  'view_contest_scoreboard', 'view_contest_submissions')}),
         (_('Justice'), {'fields': ('banned_users',)}),
     )
     list_display = ('key', 'name', 'is_visible', 'is_rated', 'locked_after', 'start_time', 'end_time', 'time_limit',

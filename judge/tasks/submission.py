@@ -18,7 +18,8 @@ def apply_submission_filter(queryset, id_range, languages, results):
         queryset = queryset.filter(language_id__in=languages)
     if results:
         queryset = queryset.filter(result__in=results)
-    queryset = queryset.filter(locked_after__gt=timezone.now()).exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
+    queryset = queryset.filter(locked_after__gt=timezone.now()) \
+        .exclude(status__in=Submission.IN_PROGRESS_GRADING_STATUS)
     return queryset
 
 

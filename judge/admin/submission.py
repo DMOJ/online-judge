@@ -116,8 +116,8 @@ class SubmissionSourceInline(admin.StackedInline):
 
 class SubmissionAdmin(VersionAdmin):
     readonly_fields = ('user', 'problem', 'date', 'judged_date')
-    fields = ('user', 'problem', 'date', 'judged_date', 'locked_after', 'time', 'memory', 'points', 'language', 'status',
-              'result', 'case_points', 'case_total', 'judged_on', 'error')
+    fields = ('user', 'problem', 'date', 'judged_date', 'locked_after', 'time', 'memory', 'points', 'language',
+              'status', 'result', 'case_points', 'case_total', 'judged_on', 'error')
     actions = ('judge', 'recalculate_score')
     list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
                     'points', 'language_column', 'status', 'result', 'judge_column')

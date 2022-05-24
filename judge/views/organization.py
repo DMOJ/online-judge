@@ -20,7 +20,7 @@ from django.views.generic.detail import SingleObjectMixin, SingleObjectTemplateR
 from reversion import revisions
 
 from judge.forms import EditOrganizationForm
-from judge.models import BlogPost, Comment, Class, Organization, OrganizationRequest, Profile
+from judge.models import BlogPost, Class, Comment, Organization, OrganizationRequest, Problem, Profile
 from judge.utils.ranker import ranker
 from judge.utils.views import TitleMixin, generic_message
 
