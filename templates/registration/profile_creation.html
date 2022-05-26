@@ -27,7 +27,19 @@
     </style>
 {% endblock %}
 
-{% block js_media %}{{ form.media.js }}{% endblock %}
+{% block js_media %}
+    {{ form.media.js }}
+    <script type="text/javascript">
+        $(function () {
+            try {
+                var tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                if (typeof tz === 'string' && $('#id_timezone option[value="' + tz + '"]').length) {
+                    $('#id_timezone').val(tz).change();
+                }
+            } catch (e) {}
+        });
+    </script>
+{% endblock %}
 
 {% block body %}
     <form action="" method="post" class="form-area">
@@ -42,17 +54,4 @@
             <div class="map-axis-y"></div>
         </div>
     </div>
-{% endblock %}
-
-{% block bodyend %}
-    <script type="text/javascript" src="{{ static('libs/timezone-map/timezone-picker.js') }}"></script>
-    <script type="text/javascript">
-        $(function () {
-            $('#open-map').featherlight({
-                afterOpen: function () {
-                    timezone_picker($('.featherlight-inner .map-inset'), $('#id_timezone'), '{{ static('libs/timezone-map/timezone-picker.json') }}');
-                }
-            });
-        });
-    </script>
 {% endblock %}

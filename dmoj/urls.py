@@ -292,7 +292,6 @@ urlpatterns = [
         path('rejudge', widgets.rejudge_submission, name='submission_rejudge'),
         path('single_submission', submission.single_submission, name='submission_single_query'),
         path('submission_testcases', submission.SubmissionTestCaseQuery.as_view(), name='submission_testcases_query'),
-        path('detect_timezone', widgets.DetectTimezone.as_view(), name='detect_timezone'),
         path('status-table', status.status_table, name='status_table'),
 
         path('template', problem.LanguageTemplateAjax.as_view(), name='language_template_ajax'),
