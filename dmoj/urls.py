@@ -49,11 +49,7 @@ register_patterns = [
     path('password/change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='registration/password_change_done.html',
     ), name='password_change_done'),
-    path('password/reset/', user.CustomPasswordResetView.as_view(
-        template_name='registration/password_reset.html',
-        html_email_template_name='registration/password_reset_email.html',
-        email_template_name='registration/password_reset_email.txt',
-    ), name='password_reset'),
+    path('password/reset/', user.CustomPasswordResetView.as_view(), name='password_reset'),
     re_path(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',
             auth_views.PasswordResetConfirmView.as_view(
                 template_name='registration/password_reset_confirm.html',
