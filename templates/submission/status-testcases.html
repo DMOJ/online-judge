@@ -48,7 +48,7 @@
         {% set test_case_id = counter() %}
         {% for batch in batches %}
             {% if batch.id %}
-                <b>{{ _('Batch ') }}#{{ test_case_id() }}</b>
+                <b>{{ _('Batch #%(id)d', id=test_case_id()) }}</b>
                 ({{ _('%(points)s/%(total)s points', points=batch.points|floatformat(0), total=batch.total|floatformat(0)) }})
                 <br>
                 <div class="batch-cases">
@@ -61,11 +61,11 @@
                         <i class="fa fa-chevron-right fa-fw"></i>
                     {%- endif -%}
                     {%- if batch.id -%}
-                        <b>{{ _('Case') }} #{{ loop.index }}:</b>
+                        <b>{{ _('Case #%(id)d:', id=loop.index) }}</b>
                     {%- elif is_pretest -%}
-                        <b>{{ _('Pretest') }} #{{ test_case_id() }}:</b>
+                        <b>{{ _('Pretest #%(id)d:', id=test_case_id()) }}</b>
                     {%- else -%}
-                        <b>{{ _('Test case') }} #{{ test_case_id() }}:</b>
+                        <b>{{ _('Test case #%(id)d:', id=test_case_id()) }}</b>
                     {%- endif -%}
                 </td>
 
