@@ -52,7 +52,7 @@
                     <select id="types" name="type" multiple>
                         {% for type in problem_types %}
                             <option value="{{ type.id }}"{% if type.id in selected_types %} selected{% endif %}>
-                                {{ type.full_name }}
+                                {{ user_trans(type.full_name) }}
                             </option>
                         {% endfor %}
                     </select>
