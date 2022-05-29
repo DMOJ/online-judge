@@ -37,10 +37,6 @@ two_factor_validators_by_length = {
 }
 
 
-def fix_unicode(string, unsafe=tuple('\u202a\u202b\u202d\u202e')):
-    return string + (sum(k in unsafe for k in string) - string.count('\u202c')) * '\u202c'
-
-
 class ProfileForm(ModelForm):
     if newsletter_id is not None:
         newsletter = forms.BooleanField(label=_('Subscribe to contest updates'), initial=False, required=False)
