@@ -145,7 +145,7 @@ class Problem(models.Model):
                                                MaxValueValidator(settings.DMOJ_PROBLEM_MAX_TIME_LIMIT)])
     memory_limit = models.PositiveIntegerField(verbose_name=_('memory limit'),
                                                help_text=_('The memory limit for this problem, in kilobytes '
-                                                           '(e.g. 64mb = 65536 kilobytes).'),
+                                                           '(e.g. 512mb = 524288 kilobytes).'),
                                                validators=[MinValueValidator(settings.DMOJ_PROBLEM_MIN_MEMORY_LIMIT),
                                                            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_MEMORY_LIMIT)])
     short_circuit = models.BooleanField(verbose_name=_('short circuit'), default=False)
