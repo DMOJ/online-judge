@@ -148,7 +148,9 @@ class JoinOrganization(OrganizationMembershipChange):
         if profile.organizations.filter(is_open=True).count() >= max_orgs:
             return generic_message(
                 request, _('Joining organization'),
-                _('You may not be part of more than {count} public organizations.').format(count=max_orgs),
+                ngettext('You may not be part of more than {count} public organization.',
+                         'You may not be part of more than {count} public organizations.',
+                         max_orgs).format(count=max_orgs),
             )
 
         profile.organizations.add(org)
