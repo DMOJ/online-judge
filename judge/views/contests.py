@@ -24,7 +24,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import BaseDetailView, DetailView, SingleObjectMixin, View
+from django.views.generic.detail import DetailView, SingleObjectMixin, View
 from django.views.generic.list import BaseListView
 from icalendar import Calendar as ICalendar, Event
 from reversion import revisions
@@ -331,7 +331,7 @@ class ContestAccessCodeForm(forms.Form):
         self.fields['access_code'].widget.attrs.update({'autocomplete': 'off'})
 
 
-class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
+class ContestJoin(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         return self.ask_for_access_code()
