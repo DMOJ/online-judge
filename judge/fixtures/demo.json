@@ -132,7 +132,7 @@
             "authors": [
                 1
             ],
-            "content": "Welcome to DMOJ!\n\n```python\nprint \"Hello, World!\"\n```\n\nYou can get started by checking out [this problem we've added for you](/problem/aplusb).",
+            "content": "Welcome to the DMOJ!\n\n```python\nprint('Hello, World!')\n```\n\nYou can get started by checking out [this problem we've added for you](/problem/aplusb).",
             "og_image": "",
             "publish_on": "2017-12-02T05:00:00Z",
             "slug": "first-post",
