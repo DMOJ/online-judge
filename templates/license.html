@@ -9,5 +9,5 @@
     {% if perms.judge.change_license %}
         <div><a href="{{ url('admin:judge_license_change', license.id) }}">{{ _('Edit') }}</a></div>
     {% endif %}
-    <div><b>{{ _('Source:') }}</b> <a href="{{ license.link }}">{{ license.link }}</a></div>
+    <div><a href="{{ license.link }}">{{ _('Visit source') }}</a></div>
 {% endblock %}
