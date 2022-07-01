@@ -389,7 +389,7 @@ class ClassMixin(TitleMixin, SingleObjectTemplateResponseMixin, SingleObjectMixi
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         org = self.object.organization
-        if self.object.slug != kwargs['cslug'] or str(org.id) != kwargs['pk'] or org.slug != kwargs['slug']:
+        if self.object.slug != kwargs['cslug'] or org.id != kwargs['pk'] or org.slug != kwargs['slug']:
             return HttpResponsePermanentRedirect(self.object.get_absolute_url())
         context = self.get_context_data()
         return self.render_to_response(context)
@@ -409,7 +409,7 @@ class ClassHome(ClassMixin, DetailView):
         org = self.object.organization
         return mark_safe(escape(_('Class {name} in {organization}')).format(
             name=escape(self.object.name),
-            organization=format_html('<a href="{0}">{1}</html>', org.get_absolute_url(), org.name),
+            organization=format_html('<a href="{0}">{1}</a>', org.get_absolute_url(), org.name),
         ))
 
     def get_title(self):
