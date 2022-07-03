@@ -5,6 +5,7 @@ from datetime import date, datetime, time, timedelta
 from functools import partial
 from itertools import chain
 from operator import attrgetter, itemgetter
+from typing import Optional, Tuple
 
 from django import forms
 from django.conf import settings
@@ -122,6 +123,8 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
         context['current_contests'] = present
         context['future_contests'] = future
         context['finished_contests'] = finished
+        context['LIVE'] = ContestParticipation.LIVE
+        context['SPECTATE'] = ContestParticipation.SPECTATE
         context['now'] = self._now
         context['first_page_href'] = '.'
         context['page_suffix'] = '#past-contests'
@@ -167,30 +170,33 @@ class ContestMixin(object):
     def can_edit(self):
         return self.object.is_editable_by(self.request.user)
 
-    def get_context_data(self, **kwargs):
-        context = super(ContestMixin, self).get_context_data(**kwargs)
+    def get_participation(self, type: int) -> Tuple[Optional[ContestParticipation], bool]:
         if self.request.user.is_authenticated:
             try:
-                context['live_participation'] = (
-                    self.request.profile.contest_history.get(
-                        contest=self.object,
-                        virtual=ContestParticipation.LIVE,
-                    )
-                )
+                return (self.request.profile.contest_history.get(contest=self.object, virtual=type), True)
             except ContestParticipation.DoesNotExist:
-                context['live_participation'] = None
-                context['has_joined'] = False
-            else:
-                context['has_joined'] = True
-        else:
-            context['live_participation'] = None
-            context['has_joined'] = False
+                return None, False
+        return None, False
+
+    def get_context_data(self, **kwargs):
+        context = super(ContestMixin, self).get_context_data(**kwargs)
+        context['live_participation'], context['has_joined'] = self.get_participation(ContestParticipation.LIVE)
+        context['testing_participation'], context['has_started_testing'] = self.get_participation(
+            ContestParticipation.TESTING,
+        )
+
+        context['is_in_contest'] = self.object.is_in_contest(self.request.user)
 
         context['now'] = timezone.now()
         context['is_editor'] = self.is_editor
         context['is_tester'] = self.is_tester
         context['is_spectator'] = self.is_spectator
         context['can_edit'] = self.can_edit
+
+        participation_type = self.object.get_join_type(self.request.user)
+        context['can_test'] = participation_type == ContestParticipation.TESTING
+        context['can_live_join'] = participation_type == ContestParticipation.LIVE
+        context['can_spectate'] = participation_type == ContestParticipation.SPECTATE
 
         if not self.object.og_image or not self.object.summary:
             metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id,
@@ -379,14 +385,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
                 else:
                     break
         else:
-            SPECTATE = ContestParticipation.SPECTATE
-            LIVE = ContestParticipation.LIVE
-
-            if contest.is_live_joinable_by(request.user):
-                participation_type = LIVE
-            elif contest.is_spectatable_by(request.user):
-                participation_type = SPECTATE
-            else:
+            participation_type = contest.get_join_type(request.user)
+            if participation_type is None:
                 return generic_message(request, _('Cannot enter'),
                                        _('You are not able to join this contest.'))
             try:
@@ -404,7 +404,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, BaseDetailView):
             else:
                 if participation.ended:
                     participation = ContestParticipation.objects.get_or_create(
-                        contest=contest, user=profile, virtual=SPECTATE,
+                        contest=contest, user=profile, virtual=ContestParticipation.SPECTATE,
                         defaults={'real_start': timezone.now()},
                     )[0]
 
@@ -658,10 +658,18 @@ def base_contest_ranking_list(contest, problems, queryset):
             queryset.select_related('user__user', 'rating').defer('user__about', 'user__organizations__about')]
 
 
-def contest_ranking_list(contest, problems):
-    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=0)
+def ranking_list_by_type(contest, problems, *, type: int):
+    return base_contest_ranking_list(contest, problems, contest.users.filter(virtual=type)
                                      .prefetch_related('user__organizations')
                                      .order_by('is_disqualified', '-score', 'cumtime', 'tiebreaker'))
+
+
+def contest_ranking_list(contest, problems):
+    return ranking_list_by_type(contest, problems, type=ContestParticipation.LIVE)
+
+
+def contest_testing_ranking_list(contest, problems):
+    return ranking_list_by_type(contest, problems, type=ContestParticipation.TESTING)
 
 
 def get_contest_ranking_list(request, contest, participation=None, ranking_list=contest_ranking_list,
@@ -675,7 +683,10 @@ def get_contest_ranking_list(request, contest, participation=None, ranking_list=
             participation = request.profile.current_contest
             if participation is None or participation.contest_id != contest.id:
                 participation = None
-        if participation is not None and participation.virtual:
+        if (
+            participation is not None and
+            participation.virtual not in (ContestParticipation.LIVE, ContestParticipation.TESTING)
+        ):
             users = chain([('-', make_contest_ranking_profile(contest, participation, problems))], users)
     return users, problems
 
@@ -710,10 +721,13 @@ class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
     def get_ranking_list(self):
         raise NotImplementedError()
 
+    def access_check(self, user) -> bool:
+        raise NotImplementedError()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        if not self.object.can_see_own_scoreboard(self.request.user):
+        if not self.access_check(self.request.user):
             raise Http404()
 
         users, problems = self.get_ranking_list()
@@ -729,6 +743,9 @@ class ContestRanking(ContestRankingBase):
 
     def get_title(self):
         return _('%s Rankings') % self.object.name
+
+    def access_check(self, user) -> bool:
+        return self.object.can_see_own_scoreboard(user)
 
     def get_ranking_list(self):
         if not self.object.can_see_full_scoreboard(self.request.user):
@@ -747,6 +764,27 @@ class ContestRanking(ContestRankingBase):
         return context
 
 
+class ContestTestingRanking(ContestRankingBase):
+    tab = 'testing'
+
+    def get_title(self):
+        return _('%s Testing') % self.object.name
+
+    def access_check(self, user) -> bool:
+        return self.object.can_see_own_testing_scoreboard(user)
+
+    def get_ranking_list(self):
+        if not self.object.can_see_full_testing_scoreboard(self.request.user):
+            queryset = self.object.users.filter(user=self.request.profile, virtual=ContestParticipation.TESTING)
+            return get_contest_ranking_list(
+                self.request, self.object,
+                ranking_list=partial(base_contest_ranking_list, queryset=queryset),
+                ranker=lambda users, key: ((_('???'), user) for user in users),
+            )
+
+        return get_contest_ranking_list(self.request, self.object, ranking_list=contest_testing_ranking_list)
+
+
 class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
     tab = 'participation'
 
@@ -755,10 +793,10 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
             return _('Your participation in %s') % self.object.name
         return _("%s's participation in %s") % (self.profile.username, self.object.name)
 
-    def get_ranking_list(self):
-        if not self.object.can_see_full_scoreboard(self.request.user) and self.profile != self.request.profile:
-            raise Http404()
+    def access_check(self, user) -> bool:
+        return self.object.can_see_full_scoreboard(user) or self.profile == self.request.profile
 
+    def get_ranking_list(self):
         queryset = self.object.users.filter(user=self.profile, virtual__gte=0).order_by('-virtual')
         live_link = format_html('<a href="{2}#!{1}">{0}</a>', _('Live'), self.profile.username,
                                 reverse('contest_ranking', args=[self.object.key]))

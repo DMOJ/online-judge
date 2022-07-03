@@ -200,6 +200,7 @@ urlpatterns = [
         path('/moss', contests.ContestMossView.as_view(), name='contest_moss'),
         path('/moss/delete', contests.ContestMossDelete.as_view(), name='contest_moss_delete'),
         path('/clone', contests.ContestClone.as_view(), name='contest_clone'),
+        path('/testing', contests.ContestTestingRanking.as_view(), name='contest_testing'),
         path('/ranking/', contests.ContestRanking.as_view(), name='contest_ranking'),
         path('/ranking/ajax', contests.contest_ranking_ajax, name='contest_ranking_ajax'),
         path('/join', contests.ContestJoin.as_view(), name='contest_join'),

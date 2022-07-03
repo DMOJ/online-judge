@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.core.exceptions import ValidationError
 from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
@@ -319,8 +321,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'superuser': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertFalse,  # author
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertSpectate,  # author
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertTrue,
                 'is_in_contest': self.assertFalse,
@@ -328,8 +329,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'staff_contest_edit_own': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertFalse,  # author
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertSpectate,  # author
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertTrue,
                 'is_in_contest': self.assertFalse,
@@ -337,8 +337,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'staff_contest_see_all': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertTrue,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertLive,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -346,8 +345,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'staff_contest_edit_all': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertTrue,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertLive,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertTrue,
                 'is_in_contest': self.assertFalse,
@@ -356,8 +354,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 # scoreboard checks don't do accessibility checks
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertTrue,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertLive,
                 'is_accessible_by': self.assertFalse,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -365,8 +362,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'non_staff_tester': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertSpectate,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -374,8 +370,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'anonymous': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertFalse,
+                'get_join_type': self.assertCantJoin,
                 'is_accessible_by': self.assertFalse,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -454,8 +449,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'normal_before_window': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_live_joinable_by': self.assertTrue,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertLive,
                 'has_completed_contest': self.assertFalse,
             },
             'normal_during_window': {
@@ -466,15 +460,13 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'normal_after_window': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertSpectate,
                 'has_completed_contest': self.assertTrue,
             },
             'non_staff_tester': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertSpectate,
                 'has_completed_contest': self.assertFalse,
             },
         }
@@ -588,32 +580,25 @@ class ContestTestCase(CommonDataMixin, TestCase):
     def test_public_limit_organization_join_contest(self):
         data = {
             'non_staff_tester': {
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertSpectate,
             },
             'non_staff_author': {
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertSpectate,
             },
             'staff_contest_edit_own': {
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,  # curator
+                'get_join_type': self.assertSpectate,  # curator
             },
             'staff_contest_edit_all': {
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertFalse,
+                'get_join_type': self.assertCantJoin,
             },
             'normal': {
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertFalse,
+                'get_join_type': self.assertCantJoin,
             },
             'normal_open_org': {
-                'is_live_joinable_by': self.assertTrue,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertLive,
             },
             'normal_after_window': {
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertFalse,  # not in org
+                'get_join_type': self.assertCantJoin,  # not in org
             },
         }
         self._test_object_methods_with_users(self.public_limit_organization_join_contest, data)
@@ -623,29 +608,44 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'non_staff_spectator': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
+                'get_join_type': self.assertCantJoin,
             },
             'non_staff_tester': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
+                'get_join_type': self.assertTesting,
             },
             'non_staff_author': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
+                'get_join_type': self.assertSpectate,
             },
             'staff_contest_edit_own': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
+                'get_join_type': self.assertSpectate,
             },
             'staff_contest_edit_all': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
+                'get_join_type': self.assertCantJoin,
             },
             'normal': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
+                'get_join_type': self.assertCantJoin,
             },
         }
         self._test_object_methods_with_users(self.future_contest, data)
+
+        create_contest_participation(
+            contest='future_contest',
+            user='non_staff_tester',
+            real_start=timezone.now() - timezone.timedelta(days=2),
+            virtual=ContestParticipation.TESTING,
+        )
+
+        self.assertSpectate(self.future_contest.get_join_type(self.users['non_staff_tester']))
 
     def test_private_contest_methods(self):
         # User must be in org and in private user list
@@ -656,12 +656,11 @@ class ContestTestCase(CommonDataMixin, TestCase):
             self.private_contest.access_check(self.users['normal_open_org'])
         self.private_contest.organizations.add(self.organizations['open'])
 
+        # Join checks are moot, since the contest is over.
         data = {
             'normal_open_org': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertTrue,
-                'is_spectatable_by': self.assertTrue,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -696,6 +695,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 # scoreboard checks don't do accessibility checks
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
+                'get_join_type': self.assertLive,  # Not an editor on the contest
                 'is_accessible_by': self.assertFalse,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -703,6 +703,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'staff_contest_see_all': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
+                'get_join_type': self.assertLive,  # Not an editor on the contest
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -710,6 +711,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'staff_contest_edit_all': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
+                'get_join_type': self.assertLive,  # Not an editor on the contest
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertTrue,
                 'is_in_contest': self.assertFalse,
@@ -717,8 +719,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'normal': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertTrue,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertLive,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -726,6 +727,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'non_staff_tester': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
+                'get_join_type': self.assertSpectate,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -733,6 +735,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'anonymous': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
+                'get_join_type': self.assertCantJoin,
                 'is_accessible_by': self.assertFalse,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -745,8 +748,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'staff_contest_edit_own': {
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertCantJoin,
                 'is_accessible_by': self.assertFalse,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -754,8 +756,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'staff_contest_see_all': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertCantJoin,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -763,8 +764,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'staff_contest_edit_all': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertCantJoin,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertTrue,
                 'is_in_contest': self.assertFalse,
@@ -772,8 +772,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
             'normal': {
                 'can_see_own_scoreboard': self.assertTrue,
                 'can_see_full_scoreboard': self.assertTrue,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertCantJoin,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -782,8 +781,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 # False because contest has not begun
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertTrue,
+                'get_join_type': self.assertTesting,
                 'is_accessible_by': self.assertTrue,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -792,8 +790,7 @@ class ContestTestCase(CommonDataMixin, TestCase):
                 # False because contest has not begun
                 'can_see_own_scoreboard': self.assertFalse,
                 'can_see_full_scoreboard': self.assertFalse,
-                'is_live_joinable_by': self.assertFalse,
-                'is_spectatable_by': self.assertFalse,
+                'get_join_type': self.assertCantJoin,
                 'is_accessible_by': self.assertFalse,
                 'is_editable_by': self.assertFalse,
                 'is_in_contest': self.assertFalse,
@@ -1001,6 +998,18 @@ class ContestTestCase(CommonDataMixin, TestCase):
         self.assertFalse(participation.spectate)
         self.assertEqual(participation.start, participation.real_start)
         self.assertIsInstance(participation.end_time, timezone.datetime)
+
+    def assertLive(self, arg: Optional[int], msg: Optional[str] = None) -> None:
+        self.assertEqual(arg, ContestParticipation.LIVE, msg=msg)
+
+    def assertSpectate(self, arg: Optional[int], msg: Optional[str] = None) -> None:
+        self.assertEqual(arg, ContestParticipation.SPECTATE, msg=msg)
+
+    def assertTesting(self, arg: Optional[int], msg: Optional[str] = None) -> None:
+        self.assertEqual(arg, ContestParticipation.TESTING, msg=msg)
+
+    def assertCantJoin(self, arg: Optional[int], msg: Optional[str] = None) -> None:
+        self.assertIsNone(arg, msg=msg)
 
 
 class ContestTagTestCase(TestCase):
