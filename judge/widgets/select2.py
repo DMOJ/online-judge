@@ -46,9 +46,6 @@ from django.core import signing
 from django.forms.models import ModelChoiceIterator
 from django.urls import reverse_lazy
 
-DEFAULT_SELECT2_JS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
-DEFAULT_SELECT2_CSS = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
-
 __all__ = ['Select2Widget', 'Select2MultipleWidget', 'Select2TagWidget',
            'HeavySelect2Widget', 'HeavySelect2MultipleWidget', 'HeavySelect2TagWidget',
            'AdminSelect2Widget', 'AdminSelect2MultipleWidget', 'AdminHeavySelect2Widget',
