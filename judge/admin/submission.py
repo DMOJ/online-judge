@@ -9,6 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _, ngettext, pgettext
 from reversion.admin import VersionAdmin
@@ -244,9 +245,10 @@ class SubmissionAdmin(VersionAdmin):
 
     def judge_column(self, obj):
         if obj.is_locked:
-            return format_html('<input type="button" disabled value="Locked"/>')
+            return format_html('<input type="button" disabled value="{0}"/>', _('Locked'))
         else:
-            return format_html('<input type="button" value="Rejudge" onclick="location.href=\'{}/judge/\'" />', obj.id)
+            return format_html('<input type="button" value="{0}" onclick="location.href=\'{1}\'"/>', _('Rejudge'),
+                               reverse('admin:judge_submission_rejudge', args=(obj.id,)))
     judge_column.short_description = ''
 
     def get_urls(self):
