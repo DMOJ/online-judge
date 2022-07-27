@@ -90,7 +90,7 @@
                             on_success();
                     },
                     error: function (data, textStatus, jqXHR) {
-                        alert('Could not vote: ' + data.responseText);
+                        alert('{{ _('Could not vote: {error}') }}'.replace('{error}', data.responseText));
                     }
                 });
             }
@@ -126,7 +126,7 @@
             var $comments = $('.comments');
             $comments.find('a.hide-comment').click(function (e) {
                 e.preventDefault();
-                if (!(e.ctrlKey || e.metaKey || confirm('Are you sure you want to hide this comment?')))
+                if (!(e.ctrlKey || e.metaKey || confirm('{{ _('Are you sure you want to hide this comment?') }}')))
                     return;
 
                 var id = $(this).attr('data-id');
@@ -134,7 +134,7 @@
                     $('#comment-' + id).remove();
                     $('#comment-' + id + '-children').remove();
                 }).catch(function () {
-                    alert('Failed.');
+                    alert('{{ _('Could not hide comment.') }}');
                 });
             });
 
@@ -169,10 +169,12 @@
                                 if (window.add_code_copy_buttons)
                                     window.add_code_copy_buttons($area);
                                 var $edits = $comment.find('.comment-edits').first();
-                                $edits.text('updated');
+                                $edits.text('{{ _('updated') }}');
                             }).fail(function () {
-                                console.log('Failed to update comment:' + id);
+                                alert('{{ _('Failed to update comment body.') }}');
                             });
+                        }).fail(function (data) {
+                            alert('{{ _('Could not edit comment: {error}') }}'.replace('{error}', data.responseText));
                         });
                     });
                 },

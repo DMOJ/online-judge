@@ -202,7 +202,7 @@
                         update_ticket_state(open);
                     },
                     error: function (data) {
-                        alert('Could not change ticket: ' + data.responseText);
+                        alert('{{ _('Could not change ticket: {error}') }}'.replace('{error}', data.responseText));
                     }
                 });
             });
