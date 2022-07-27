@@ -54,6 +54,18 @@ th.header.rank {
             background: #fff897;
         }
     }
+
+    th a {
+        color: white;
+
+        &:link, &:visited {
+            color: white;
+        }
+
+        &:hover {
+            color: #0F0;
+        }
+    }
 }
 
 #search-form {
