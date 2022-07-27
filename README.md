@@ -14,7 +14,7 @@ See it live at [dmoj.ca](https://dmoj.ca/)!
    * Specifying **per-language resource limits**
    * Capable of scaling to hundreds of judging servers
 * Extremely configurable contest system:
-   * Supports ICPC/IOI/AtCoder/ECOO formats out-of-the box
+   * Supports ICPC/IOI/AtCoder/ECOO formats out-of-the-box
    * **System testing** supported
    * **Hidden scoreboards** and **virtual participation**
    * [Elo-MMR](https://arxiv.org/abs/2101.00400)-style **rating**
