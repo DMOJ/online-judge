@@ -100,7 +100,7 @@ class Submission(models.Model):
 
     @property
     def result_class(self):
-        # This exists to save all these conditionals from being executed (slowly) in each row.jade template
+        # This exists to save all these conditionals from being executed (slowly) in each row.html template
         if self.status in ('IE', 'CE'):
             return self.status
         return Submission.result_class_from_code(self.result, self.case_points, self.case_total)

@@ -298,7 +298,7 @@ class JudgeHandler(ZlibPacketHandler):
             logger.exception('Error in packet handling (Judge-side): %s', self.name)
             self._packet_exception()
             # You can't crash here because you aren't so sure about the judges
-            # not being malicious or simply malforms. THIS IS A SERVER!
+            # not being malicious or simply malformed. THIS IS A SERVER!
 
     def _packet_exception(self):
         json_log.exception(self._make_json_log(sub=self._working, info='packet processing exception'))

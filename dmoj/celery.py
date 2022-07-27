@@ -17,7 +17,7 @@ if hasattr(settings, 'CELERY_RESULT_BACKEND_SECRET'):
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
 
-# Logger to enable errors be reported.
+# Logger to enable reporting of errors.
 logger = logging.getLogger('judge.celery')
 
 
