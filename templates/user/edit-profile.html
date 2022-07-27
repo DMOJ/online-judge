@@ -91,7 +91,6 @@
             padding-top: 5px;
             font-size: 12px;
         }
-
     </style>
 {% endblock %}
 
@@ -105,7 +104,7 @@
             });
 
             $('#disable-2fa-button').click(function () {
-                alert("The administrators for this site require all the staff to have Two-factor Authentication enabled, so it may not be disabled at this time.");
+                alert("{{ _('The administrators for this site require all the staff to have Two-factor Authentication enabled, so it may not be disabled at this time.') }}");
             });
 
             $('#generate-api-token-button').click(function (event) {
@@ -205,20 +204,20 @@
         $(function () {
             $('#generate-scratch-codes-button').click(function(event) {
                 event.preventDefault();
-                if (confirm("{{ _('Are you sure you want to generate or regenerate a new set of scratch codes? \
-This will invalidate any previous scratch codes you have. \
-You will not be able to view your scratch codes after you leave this page!') }}")) {
+                if (confirm("{{ _('Are you sure you want to generate or regenerate a new set of scratch codes?') }}\n"
+                          + "{{ _('This will invalidate any previous scratch codes you have.') }}\n\n"
+                          + "{{ _('You will not be able to view your scratch codes after you leave this page!') }}")) {
                     $('#scratch-codes').text("{{ _('Generating...') }}");
 
-                    var copyButton;
                     $('pre code').each(function () {
-                        $(this).parent().before($('<div>', {'class': 'copy-clipboard', 'id': {}})
+                        var copyButton;
+                        $(this).parent().before($('<div>', {'class': 'copy-clipboard'})
                             .append(copyButton = $('<span>', {
                                 'class': 'btn-clipboard',
                                 'id': 'scratch-codes-copy-button',
                                 'data-clipboard-text': '',
-                                'title': 'Click to copy'
-                            }).text('Copy')));
+                                'title': '{{ _('Click to copy') }}'
+                            }).text('{{ _('Copy') }}')));
 
                         $(copyButton.get(0)).mouseleave(function () {
                             $(this).attr('class', 'btn-clipboard');
@@ -229,7 +228,7 @@ You will not be able to view your scratch codes after you leave this page!') }}"
 
                         curClipboard.on('success', function(e) {
                             e.clearSelection();
-                            showTooltip(e.trigger, _('Copied!'));
+                            showTooltip(e.trigger, '{{ _('Copied!') }}');
                         });
 
                         curClipboard.on('error', function(e) {
@@ -245,13 +244,8 @@ You will not be able to view your scratch codes after you leave this page!') }}"
                             $('#scratch-codes').text(data.data.codes.join('\n'));
                             $('#scratch-codes-copy-button').attr('data-clipboard-text', data.data.codes.join('\n'));
                             $('#generate-scratch-codes-button').text("{{ _('Regenerate') }}");
-                            $('.hidden-word').empty();
-                            $('#scratch-codes-text').text("{{ _('Below is a list of one-time use scratch codes. \
-                                                                 These codes can only be used once and are for emergency use. \
-                                                                 You can use these codes to login to your account or disable two-factor authentication. \
-                                                                 If you ever need more scratch codes, you can regenerate them on the edit profile tab. \
-                                                                 Please write these down and keep them in a secure location. \
-                                                                 These codes will never be shown again after you enable two-factor authentication.') }}");
+                            $('#hidden-word').hide();
+                            $('#scratch-codes-regen').show();
                         },
                     });
                 }
@@ -376,8 +370,16 @@ You will not be able to view your scratch codes after you leave this page!') }}"
                                     <a id="generate-scratch-codes-button" href="{{ url('generate_scratch_codes') }}"
                                        class="button inline-button">{{ _('Generate') }}</a>
                                 {% endif %}
-                                <div id="scratch-codes-text"></div>
-                                <pre><code id="scratch-codes"></code></pre>
+                                <div style="display: none" id="scratch-codes-regen">
+                                    <div id="scratch-codes-text">
+                                        {{ _('Below is a list of one-time use scratch codes.') }}
+                                        {{ _('These codes can only be used once and are for emergency use.') }}
+                                        {{ _('You can use these codes to login to your account or disable two-factor authentication.') }}
+                                        {{ _('If you ever need more scratch codes, you can regenerate them here.') }}
+                                        {{ _('Please write these down and keep them in a secure location.') }}<br><br>
+                                        {{ _('You will not be able to view your scratch codes after you leave this page!') }}</div>
+                                    <pre><code id="scratch-codes"></code></pre>
+                                </div>
                             </div>
                         {% else %}
                             <span class="inline-header grayed">
