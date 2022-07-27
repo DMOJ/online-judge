@@ -155,11 +155,19 @@
 
         <div class="pane">
             <h3>{{ _('Rescore Everything') }}</h3>
-            <p id="rescore-warning">{{ _('This will rescore %(count)d submissions.', count=submission_count) }}</p>
+            <p id="rescore-warning">{% trans trimmed count=submission_count %}
+                This will rescore {{ count }} submission.
+            {% pluralize %}
+                This will rescore {{ count }} submissions.
+            {% endtrans %}</p>
             <form action="{{ url('problem_submissions_rescore_all', problem.code) }}" method="post">
                 {% csrf_token %}
                 <a id="rescore-all" class="unselectable button full" href="#"
-                   data-warning="{{ _('Are you sure you want to rescore %(count)d submissions?', count=submission_count) }}">
+                   data-warning="{% trans trimmed count=submission_count %}
+                                    Are you sure you want to rescore {{ count }} submission?
+                                 {% pluralize %}
+                                    Are you sure you want to rescore {{ count }} submissions?
+                                 {% endtrans %}">
                     {{ _('Rescore all submissions') }}
                 </a>
             </form>
