@@ -28,7 +28,7 @@ SUBMISSION_RESULT = (
     ('RTE', _('Runtime Error')),
     ('CE', _('Compile Error')),
     ('IE', _('Internal Error')),
-    ('SC', _('Short circuit')),
+    ('SC', _('Short Circuited')),
     ('AB', _('Aborted')),
 )
 
