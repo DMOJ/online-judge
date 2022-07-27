@@ -1,10 +1,10 @@
-from django.utils.html import escape, mark_safe
+from django.utils.html import format_html, mark_safe
 
 __all__ = ['highlight_code']
 
 
 def _make_pre_code(code):
-    return mark_safe('<pre>' + escape(code) + '</pre>')
+    return format_html('<pre><code>{0}</code></pre>', code)
 
 
 try:
