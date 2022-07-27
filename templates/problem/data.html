@@ -1,15 +1,10 @@
 {% extends "base.html" %}
 
 {% block js_media %}
-    <script type="text/javascript">
-        window.valid_files = {{valid_files_json}};
-
-        $(function () {
-        });
-    </script>
     <script type="text/javascript" src="{{ static('libs/jquery-sortable.js') }}"></script>
     <script type="text/javascript" src="{{ static('libs/featherlight/featherlight.min.js') }}"></script>
     <script type="text/javascript">
+        window.valid_files = {{ valid_files_json }};
         $(function () {
             function autofill_if_exists($select, file) {
                 if (!$select.val() && ~window.valid_files.indexOf(file))
@@ -72,7 +67,7 @@
                 var $precision = $('<input>', {
                     type: 'number',
                     value: try_parse_json($args.val()).precision || 6,
-                    title: 'precision (decimal digits)',
+                    title: '{{ _('precision (decimal digits)') }}',
                     style: 'width: 4em'
                 }).change(function () {
                     if ($checker.val().startsWith('floats'))
