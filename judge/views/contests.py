@@ -752,8 +752,10 @@ class ContestParticipationList(LoginRequiredMixin, ContestRankingBase):
 
     def get_title(self):
         if self.profile == self.request.profile:
-            return _('Your participation in %s') % self.object.name
-        return _("%s's participation in %s") % (self.profile.username, self.object.name)
+            return _('Your participation in %(contest)s') % {'contest': self.object.name}
+        return _("%(user)s's participation in %(contest)s") % {
+            'user': self.profile.username, 'contest': self.object.name,
+        }
 
     def get_ranking_list(self):
         if not self.object.can_see_full_scoreboard(self.request.user) and self.profile != self.request.profile:

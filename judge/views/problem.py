@@ -618,13 +618,13 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
             Submission.objects.filter(user=self.request.profile, rejudged_date__isnull=True)
                               .exclude(status__in=['D', 'IE', 'CE', 'AB']).count() >= settings.DMOJ_SUBMISSION_LIMIT
         ):
-            return HttpResponse('<h1>You submitted too many submissions.</h1>', status=429)
+            return HttpResponse(format_html('<h1>{0}</h1>', _('You submitted too many submissions.')), status=429)
         if not self.object.allowed_languages.filter(id=form.cleaned_data['language'].id).exists():
             raise PermissionDenied()
         if not self.request.user.is_superuser and self.object.banned_users.filter(id=self.request.profile.id).exists():
             return generic_message(self.request, _('Banned from submitting'),
                                    _('You have been declared persona non grata for this problem. '
-                                     'You are permanently barred from submitting this problem.'))
+                                     'You are permanently barred from submitting to this problem.'))
         # Must check for zero and not None. None means infinite submissions remaining.
         if self.remaining_submission_count == 0:
             return generic_message(self.request, _('Too many submissions'),
@@ -678,7 +678,7 @@ class ProblemSubmit(LoginRequiredMixin, ProblemMixin, TitleMixin, SingleObjectFo
                 request.user.username,
                 kwargs.get(self.slug_url_kwarg),
             )
-            return HttpResponseForbidden('<h1>Do you want me to ban you?</h1>')
+            return HttpResponseForbidden(format_html('<h1>{0}</h1>', _('Do you want me to ban you?')))
 
     def dispatch(self, request, *args, **kwargs):
         submission_id = kwargs.get('submission')

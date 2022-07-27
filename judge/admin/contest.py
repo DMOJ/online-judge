@@ -73,8 +73,8 @@ class ContestProblemInline(SortableInlineAdminMixin, admin.TabularInline):
     def rejudge_column(self, obj):
         if obj.id is None:
             return ''
-        return format_html('<a class="button rejudge-link" href="{}">Rejudge</a>',
-                           reverse('admin:judge_contest_rejudge', args=(obj.contest.id, obj.id)))
+        return format_html('<a class="button rejudge-link" href="{0}">{1}</a>',
+                           reverse('admin:judge_contest_rejudge', args=(obj.contest.id, obj.id)), _('Rejudge'))
     rejudge_column.short_description = ''
 
 
