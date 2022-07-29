@@ -37,3 +37,4 @@ webauthn<1
 bleach<5
 django-admin-sortable2<2
 icalendar
+Redis
