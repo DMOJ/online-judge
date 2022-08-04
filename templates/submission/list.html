@@ -32,7 +32,7 @@
             <script type="text/javascript">
                 window.rejudge_submission = function (id, e) {
                     if ((typeof e !== 'undefined' && e.ctrlKey) ||
-                        confirm('Are you sure you want to rejudge?')) {
+                        confirm('{{ _('Are you sure you want to rejudge?') }}')) {
                         $.ajax({
                             url: '{{ url('submission_rejudge') }}',
                             type: "POST",
@@ -248,7 +248,7 @@
     {% if dynamic_update and last_msg %}
         <script type="text/javascript">
             $(function () {
-                load_dynamic_update({{last_msg}});
+                load_dynamic_update({{ last_msg }});
             });
         </script>
     {% endif %}
