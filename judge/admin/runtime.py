@@ -19,7 +19,7 @@ class LanguageForm(ModelForm):
         label=_('Disallowed problems'),
         queryset=Problem.objects.all(),
         required=False,
-        help_text=_('These problems are NOT allowed to be submitted in this language'),
+        help_text=_('These problems are NOT allowed to be submitted in this language.'),
         widget=AdminHeavySelect2MultipleWidget(data_view='problem_select2'))
 
     class Meta:
