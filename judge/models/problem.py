@@ -63,8 +63,8 @@ class License(models.Model):
     link = models.CharField(max_length=256, verbose_name=_('link'))
     name = models.CharField(max_length=256, verbose_name=_('full name'))
     display = models.CharField(max_length=256, blank=True, verbose_name=_('short name'),
-                               help_text=_('Displayed on pages under this license'))
-    icon = models.CharField(max_length=256, blank=True, verbose_name=_('icon'), help_text=_('URL to the icon'))
+                               help_text=_('Displayed on pages under this license.'))
+    icon = models.CharField(max_length=256, blank=True, verbose_name=_('icon'), help_text=_('URL to the icon.'))
     text = models.TextField(verbose_name=_('license text'))
 
     def __str__(self):
@@ -118,11 +118,9 @@ class Problem(models.Model):
 
     code = models.CharField(max_length=20, verbose_name=_('problem code'), unique=True,
                             validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))],
-                            help_text=_('A short, unique code for the problem, '
-                                        'used in the url after /problem/'))
+                            help_text=_('A short, unique code for the problem, used in the URL after /problem/'))
     name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True,
-                            help_text=_('The full name of the problem, '
-                                        'as shown in the problem list.'))
+                            help_text=_('The full name of the problem, as shown in the problem list.'))
     description = models.TextField(verbose_name=_('problem body'), validators=[disallowed_characters_validator])
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems',
                                      help_text=_('These users will be able to edit the problem, '
@@ -134,8 +132,7 @@ class Problem(models.Model):
                                      help_text=_(
                                          'These users will be able to view the private problem, but not edit it.'))
     types = models.ManyToManyField(ProblemType, verbose_name=_('problem types'),
-                                   help_text=_('The type of problem, '
-                                               "as shown on the problem's page."))
+                                   help_text=_("The type of problem, as shown on the problem's page."))
     group = models.ForeignKey(ProblemGroup, verbose_name=_('problem group'), on_delete=CASCADE,
                               help_text=_('The group of problem, shown under Category in the problem list.'))
     time_limit = models.FloatField(verbose_name=_('time limit'),
@@ -160,7 +157,8 @@ class Problem(models.Model):
     is_manually_managed = models.BooleanField(verbose_name=_('manually managed'), db_index=True, default=False,
                                               help_text=_('Whether judges should be allowed to manage data or not.'))
     date = models.DateTimeField(verbose_name=_('date of publishing'), null=True, blank=True, db_index=True,
-                                help_text=_("Doesn't have magic ability to auto-publish due to backward compatibility"))
+                                help_text=_(
+                                    "Doesn't have the magic ability to auto-publish due to backward compatibility."))
     banned_users = models.ManyToManyField(Profile, verbose_name=_('personae non gratae'), blank=True,
                                           help_text=_('Bans the selected users from submitting to this problem.'))
     license = models.ForeignKey(License, null=True, blank=True, on_delete=SET_NULL, verbose_name=_('license'),

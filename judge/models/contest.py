@@ -104,21 +104,22 @@ class Contest(models.Model):
                                                       help_text=_('These users will be able '
                                                                   'to see in-contest submissions.'))
     scoreboard_visibility = models.CharField(verbose_name=_('scoreboard visibility'), default=SCOREBOARD_VISIBLE,
-                                             max_length=1, help_text=_('Scoreboard visibility through the duration '
-                                                                       'of the contest'), choices=SCOREBOARD_VISIBILITY)
+                                             help_text=_('Scoreboard visibility through the duration of the contest.'),
+                                             max_length=1, choices=SCOREBOARD_VISIBILITY)
     use_clarifications = models.BooleanField(verbose_name=_('no comments'),
                                              help_text=_('Use clarification system instead of comments.'),
                                              default=True)
-    rating_floor = models.IntegerField(verbose_name=_('rating floor'), help_text=_('Rating floor for contest'),
-                                       null=True, blank=True)
-    rating_ceiling = models.IntegerField(verbose_name=_('rating ceiling'), help_text=_('Rating ceiling for contest'),
+    rating_floor = models.IntegerField(verbose_name=_('rating floor'),
+                                       help_text=_('Do not rate users who have a lower rating.'), null=True, blank=True)
+    rating_ceiling = models.IntegerField(verbose_name=_('rating ceiling'),
+                                         help_text=_('Do not rate users who have a higher rating.'),
                                          null=True, blank=True)
     rate_all = models.BooleanField(verbose_name=_('rate all'), help_text=_('Rate all users who joined.'), default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
     is_private = models.BooleanField(verbose_name=_('private to specific users'), default=False)
     private_contestants = models.ManyToManyField(Profile, blank=True, verbose_name=_('private contestants'),
-                                                 help_text=_('If non-empty, only these users may see the contest'),
+                                                 help_text=_('If non-empty, only these users may see the contest.'),
                                                  related_name='private_contestants+')
     hide_problem_tags = models.BooleanField(verbose_name=_('hide problem tags'),
                                             help_text=_('Whether problem tags should be hidden by default.'),
@@ -137,14 +138,13 @@ class Contest(models.Model):
                                              default=False)
     is_organization_private = models.BooleanField(verbose_name=_('private to organizations'), default=False)
     organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('organizations'),
-                                           help_text=_('If non-empty, only these organizations may see '
-                                                       'the contest'))
+                                           help_text=_('If non-empty, only these organizations may see the contest.'))
     limit_join_organizations = models.BooleanField(verbose_name=_('limit organizations that can join'), default=False)
     join_organizations = models.ManyToManyField(Organization, blank=True, verbose_name=_('join organizations'),
                                                 help_text=_('If non-empty, only these organizations may join '
-                                                            'the contest'), related_name='join_only_contests')
+                                                            'the contest.'), related_name='join_only_contests')
     classes = models.ManyToManyField(Class, blank=True, verbose_name=_('classes'),
-                                     help_text=_('If organization private, only these classes may see the contest'))
+                                     help_text=_('If organization private, only these classes may see the contest.'))
     og_image = models.CharField(verbose_name=_('OpenGraph image'), default='', max_length=150, blank=True)
     logo_override_image = models.CharField(verbose_name=_('logo override image'), default='', max_length=150,
                                            blank=True,
