@@ -64,7 +64,7 @@ class Organization(models.Model):
 
     def clean(self):
         if self.class_required and self.is_open:
-            raise ValidationError(_('Class membership cannot be enforced when organization has open enrollment'))
+            raise ValidationError(_('Class membership cannot be enforced when organization has open enrollment.'))
 
     def __contains__(self, item):
         if isinstance(item, int):
@@ -72,7 +72,7 @@ class Organization(models.Model):
         elif isinstance(item, Profile):
             return self.members.filter(id=item.id).exists()
         else:
-            raise TypeError('Organization membership test must be Profile or primary key')
+            raise TypeError('Organization membership test must be Profile or primary key.')
 
     def __str__(self):
         return self.name
