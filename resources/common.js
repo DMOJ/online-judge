@@ -212,12 +212,32 @@ function count_down(label) {
     }, 1000);
 }
 
-function register_time(elems, limit) {
-    limit = limit || 300;
+function set_date_locale(language_code) {
+    if (typeof Intl !== 'undefined' && !!Intl.RelativeTimeFormat && !!Math.trunc) {
+        var rtf = new Intl.RelativeTimeFormat(language_code);
+        window.format_ms = function (amount) {
+            amount = Math.trunc(amount / 1000); // seconds
+            if (Math.abs(amount) < 120) return rtf.format(amount, 'second');
+            amount = Math.trunc(amount / 60);   // minutes
+            if (Math.abs(amount) < 180) return rtf.format(amount, 'minute');
+            amount = Math.trunc(amount / 60);   // hours
+            if (Math.abs(amount) < 48) return rtf.format(amount, 'hour');
+            amount = Math.trunc(amount / 24);   // days
+            if (Math.abs(amount) < 100) return rtf.format(amount, 'day');
+            return '';          // beyond 100 days, use absolute time
+        };
+    } else {
+        window.format_ms = function () {
+            return '';
+        };
+    }
+}
+
+function register_time(elems) {
     elems.each(function () {
         var outdated = false;
         var $this = $(this);
-        var time = moment($this.attr('data-iso'));
+        var time = Date.parse($this.attr('data-iso'));
         var rel_format = $this.attr('data-format');
         var abs = $this.text();
 
@@ -225,11 +245,12 @@ function register_time(elems, limit) {
             if ($('body').hasClass('window-hidden'))
                 return outdated = true;
             outdated = false;
-            if (moment().diff(time, 'days') > limit) {
+            var msg = window.format_ms(time - Date.now());
+            if (!msg) {
                 $this.text(abs);
                 return;
             }
-            $this.text(rel_format.replace('{time}', time.fromNow()));
+            $this.text(rel_format.replace('{time}', msg));
             setTimeout(update, 10000);
         }
 
