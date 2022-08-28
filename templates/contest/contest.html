@@ -38,7 +38,7 @@
                 {% endif %}
             {%- else -%}
                 {% if contest.start_time > now %}
-                    {{- _('Starting in %(countdown)s', countdown=as_countdown(contest.time_before_start)) -}}
+                    {{- _('Starting in %(countdown)s.', countdown=as_countdown(contest.time_before_start)) -}}
                 {% elif contest.end_time < now %}
                     {{- _('Contest is over.') -}}
                 {% else %}

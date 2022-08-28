@@ -254,7 +254,7 @@
                                 {% if contest.start_time %}
                                     <br>
                                     {% if contest.time_before_start %}
-                                        <span class="time">{{ _('Starting in %(countdown)s.', countdown=as_countdown(contest.time_before_start)) }}</span>
+                                        <span class="time">{{ _('Starting in %(countdown)s', countdown=as_countdown(contest.time_before_start)) }}</span>
                                     {% endif %}
                                     {{ time_left(contest) }}
                                 {% endif %}

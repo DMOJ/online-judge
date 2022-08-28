@@ -54,7 +54,7 @@ def verify_email(backend, details, *args, **kwargs):
 
 class UsernameForm(forms.Form):
     username = forms.RegexField(regex=r'^\w+$', max_length=30, label='Username',
-                                error_messages={'invalid': 'A username must contain letters, numbers, or underscores'})
+                                error_messages={'invalid': 'A username must contain letters, numbers, or underscores.'})
 
     def clean_username(self):
         if User.objects.filter(username=self.cleaned_data['username']).exists():
