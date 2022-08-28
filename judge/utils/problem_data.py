@@ -133,7 +133,7 @@ class ProblemDataCompiler(object):
                 case.save(update_fields=('checker_args', 'input_file', 'output_file'))
             elif case.type == 'E':
                 if not batch:
-                    raise ProblemDataError(_('Attempt to end batch outside of one in case #%d') % i)
+                    raise ProblemDataError(_('Attempt to end batch outside of one in case #%d.') % i)
                 case.is_pretest = batch['is_pretest']
                 case.input_file = ''
                 case.output_file = ''
