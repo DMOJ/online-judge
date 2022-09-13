@@ -2,19 +2,25 @@
 {% load i18n %}
 
 {% block extrahead %}{{ block.super }}
-    <script>
+    <script type="text/javascript">
         django.jQuery(function ($) {
             $('.submissions-link').appendTo('div#bottombar').show();
+            $('.problem-votes-link').appendTo('div#bottombar').show();
         });
     </script>
 {% endblock extrahead %}
 
 {% block after_field_sets %}{{ block.super }}
     {% if original %}
-        <a style="display: none" title="{% trans "View Submissions" %}" class="button submissions-link"
+        <a style="display: none" title="{{ _('View submissions') }}" class="button submissions-link"
            href="{% url 'admin:judge_submission_changelist' %}?problem__code={{ original.code }}">
             <i class="fa fa-lg fa-search-plus"></i>
-            <span class="text">{% trans "View submissions" %}</span>
+            <span class="text">{{ _('View submissions') }}</span>
+        </a>
+        <a style="display: none" title="{{ _('View problem votes') }}" class="button problem-votes-link"
+           href="{% url 'admin:judge_problempointsvote_changelist' %}?problem__code={{ original.code }}">
+           <i class="fa fa-lg fa-envelope"></i>
+           <span class="text">{{ _('View problem votes') }}</span>
         </a>
     {% endif %}
 {% endblock %}

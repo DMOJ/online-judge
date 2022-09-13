@@ -65,6 +65,8 @@ DMOJ_PROBLEM_MAX_TIME_LIMIT = 60  # seconds
 DMOJ_PROBLEM_MIN_MEMORY_LIMIT = 0  # kilobytes
 DMOJ_PROBLEM_MAX_MEMORY_LIMIT = 1048576  # kilobytes
 DMOJ_PROBLEM_MIN_PROBLEM_POINTS = 0
+DMOJ_PROBLEM_MIN_USER_POINTS_VOTE = 1  # when voting on problem, minimum point value user can select
+DMOJ_PROBLEM_MAX_USER_POINTS_VOTE = 50  # when voting on problem, maximum point value user can select
 DMOJ_PROBLEM_HOT_PROBLEM_COUNT = 7
 DMOJ_PROBLEM_STATEMENT_DISALLOWED_CHARACTERS = {'“', '”', '‘', '’', '−', 'ﬀ', 'ﬁ', 'ﬂ', 'ﬃ', 'ﬄ'}
 DMOJ_RATING_COLORS = True
@@ -178,6 +180,7 @@ else:
                         'judge.ProblemGroup',
                         'judge.ProblemType',
                         'judge.License',
+                        'judge.ProblemPointsVote',
                     ],
                 },
                 ('judge.Submission', 'fa-check-square-o'),
@@ -588,3 +591,7 @@ try:
         exec(f.read(), globals())
 except IOError:
     pass
+
+
+# Check settings are consistent
+assert DMOJ_PROBLEM_MIN_USER_POINTS_VOTE >= DMOJ_PROBLEM_MIN_PROBLEM_POINTS

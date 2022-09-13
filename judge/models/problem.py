@@ -1,3 +1,4 @@
+from enum import IntEnum
 from operator import attrgetter
 
 from django.conf import settings
@@ -91,6 +92,18 @@ class SubmissionSourceAccess:
     SOLVED = 'S'
     ONLY_OWN = 'O'
     FOLLOW = 'F'
+
+
+class VotePermission(IntEnum):
+    NONE = 0
+    VIEW = 1
+    VOTE = 2
+
+    def can_view(self):
+        return self >= VotePermission.VIEW
+
+    def can_vote(self):
+        return self >= VotePermission.VOTE
 
 
 class Problem(models.Model):
@@ -434,6 +447,32 @@ class Problem(models.Model):
 
     save.alters_data = True
 
+    def is_solved_by(self, user):
+        # Return true if a full AC submission to the problem from the user exists.
+        return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).exists()
+
+    def vote_permission_for_user(self, user):
+        if not user.is_authenticated:
+            return VotePermission.NONE
+
+        # If the user is in contest, nothing should be shown.
+        if user.profile.current_contest:
+            return VotePermission.NONE
+
+        # If the user is not allowed to vote.
+        if user.profile.is_unlisted or user.profile.is_banned_from_problem_voting:
+            return VotePermission.VIEW
+
+        # If the user is banned from submitting to the problem.
+        if self.banned_users.filter(pk=user.pk).exists():
+            return VotePermission.VIEW
+
+        # If the user has not solved the problem.
+        if not self.is_solved_by(user):
+            return VotePermission.VIEW
+
+        return VotePermission.VOTE
+
     class Meta:
         permissions = (
             ('see_private_problem', _('See hidden problems')),
@@ -522,3 +561,28 @@ class Solution(models.Model):
         )
         verbose_name = _('solution')
         verbose_name_plural = _('solutions')
+
+
+class ProblemPointsVote(models.Model):
+    points = models.IntegerField(
+        verbose_name=_('proposed points'),
+        help_text=_('The amount of points the voter thinks this problem deserves.'),
+        validators=[
+            MinValueValidator(settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE),
+            MaxValueValidator(settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE),
+        ],
+    )
+    voter = models.ForeignKey(Profile, verbose_name=_('voter'), related_name='problem_points_votes', on_delete=CASCADE)
+    problem = models.ForeignKey(Problem, verbose_name=_('problem'), related_name='problem_points_votes',
+                                on_delete=CASCADE)
+    vote_time = models.DateTimeField(verbose_name=_('vote time'), help_text=_('The time this vote was cast.'),
+                                     auto_now_add=True)
+    note = models.TextField(verbose_name=_('note'), help_text=_('Justification for problem point value.'),
+                            max_length=8192, blank=True, default='')
+
+    class Meta:
+        verbose_name = _('problem vote')
+        verbose_name_plural = _('problem votes')
+
+    def __str__(self):
+        return _('Points vote by %(voter)s for %(problem)s') % {'voter': self.voter, 'problem': self.problem}

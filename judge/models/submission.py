@@ -151,8 +151,7 @@ class Submission(models.Model):
             return True
         elif source_visibility == SubmissionSourceAccess.SOLVED and \
                 (self.problem.is_public or self.problem.testers.filter(id=profile.id).exists()) and \
-                self.problem.submission_set.filter(user_id=profile.id, result='AC',
-                                                   points=self.problem.points).exists():
+                self.problem.is_solved_by(user):
             return True
         elif source_visibility == SubmissionSourceAccess.ONLY_OWN and \
                 self.problem.testers.filter(id=profile.id).exists():

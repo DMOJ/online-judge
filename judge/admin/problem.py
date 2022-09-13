@@ -4,13 +4,14 @@ from django import forms
 from django.contrib import admin
 from django.db import transaction
 from django.forms import ModelForm
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from reversion.admin import VersionAdmin
 
-from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemTranslation, Profile, Solution
+from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemPointsVote, ProblemTranslation, Profile, \
+    Solution
 from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget, AdminSelect2MultipleWidget, \
     AdminSelect2Widget, CheckboxSelectMultipleWithSelectAll
@@ -248,3 +249,29 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         if form.cleaned_data.get('change_message'):
             return form.cleaned_data['change_message']
         return super(ProblemAdmin, self).construct_change_message(request, form, *args, **kwargs)
+
+
+class ProblemPointsVoteAdmin(admin.ModelAdmin):
+    list_display = ('points', 'voter', 'linked_problem', 'vote_time')
+    search_fields = ('voter__user__username', 'problem__code', 'problem__name')
+    readonly_fields = ('voter', 'problem', 'vote_time')
+
+    def get_queryset(self, request):
+        return ProblemPointsVote.objects.filter(problem__in=Problem.get_editable_problems(request.user))
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        if obj is None:
+            return request.user.has_perm('judge.edit_own_problem')
+        return obj.problem.is_editable_by(request.user)
+
+    def lookup_allowed(self, key, value):
+        return super().lookup_allowed(key, value) or key in ('problem__code',)
+
+    def linked_problem(self, obj):
+        link = reverse('problem_detail', args=[obj.problem.code])
+        return format_html('<a href="{0}">{1}</a>', link, obj.problem.name)
+    linked_problem.short_description = _('problem')
+    linked_problem.admin_order_field = 'problem__name'
