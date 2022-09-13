@@ -1,0 +1,22 @@
+<div class="problem-vote-container">
+    <div class="problem-vote-form-header">
+        <span class="problem-vote-form-title">{{ _('Voting statistics') }}</span>
+    </div>
+    {% if not votes %}
+        <div class="problem-vote-stats-bar">
+            <span>{{ _('No votes available!') }}</span>
+        </div>
+    {% else %}
+        <canvas id="problem-vote-chart"></canvas>
+        <script type="text/javascript">
+            reload_problem_vote_graph({{ votes }}, {{ min_possible_vote }}, {{ max_possible_vote }});
+        </script>
+        <div class="problem-vote-stats-bar">
+            {% with median_str=median|floatformat(1), mean_str=mean|floatformat(1), vote_count=votes|length %}
+                <span>{{ _('Median vote: %(val)s', val=median_str) }}</span>
+                <span>{{ _('Mean vote: %(val)s', val=mean_str) }}</span>
+                <span>{{ _('Number of votes: %(val)d', val=vote_count) }}</span>
+            {% endwith %}
+        </div>
+    {% endif %}
+</div>

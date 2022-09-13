@@ -1,0 +1,54 @@
+.problem-vote-container {
+    margin: 1em;
+    min-width: 25em;
+}
+
+.problem-vote-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 1px solid #aaa;
+}
+
+.problem-vote-form-title {
+    font-size: 2em;
+    margin-right: 0.5em;
+}
+
+.problem-vote-date {
+    font-style: italic;
+}
+
+.problem-vote-form-info {
+    font-size: 1.2em;
+    margin-right: 0.5em;
+}
+
+#problem-vote-form textarea {
+    margin-top: 0.5em;
+    width: 100%;
+    font-size: 14px;
+}
+
+.problem-voting-form-error {
+    font-size: 1.2em;
+    color: red;
+}
+
+.problem-vote-submits {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
+.problem-vote-stats-bar {
+    font-size: 1.2em;
+    font-weight: 500;
+    margin: 0.6em 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.problem-vote-stats-bar span {
+    margin: 0 0.6em;
+}

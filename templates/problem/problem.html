@@ -46,6 +46,11 @@
 
 {% block content_js_media %}
     {% include "comments/media-js.html" %}
+
+    {% if vote_perm.can_view() %}
+        <script src="{{ static('libs/chart.js/Chart.js') }}" type="text/javascript"></script>
+        <script src="{{ static('problem-vote.js') }}" type="text/javascript"></script>
+    {% endif %}
 {% endblock %}
 
 {% block title_row %}
@@ -126,6 +131,21 @@
     {% endif %}
     <div><a href="{{ url('chronological_submissions', problem.code) }}">{{ _('All submissions') }}</a></div>
     <div><a href="{{ url('ranked_submissions', problem.code) }}">{{ _('Best submissions') }}</a></div>
+
+    {% if vote_perm.can_view() %}
+        <hr style="padding-top: 0.1em">
+        {% if vote_perm.can_vote() %}
+            <div><a href="#" data-featherlight="{{ url('problem_vote', problem.code) }}" id="problem-vote-button">
+                {%- if vote is none -%}
+                    {{ _('Vote on problem points') }}
+                {%- else -%}
+                    {{ _('Edit points vote (%(points)d)', points=vote.points) }}
+                {%- endif -%}
+            </a></div>
+        {% endif %}
+        <div><a href="#" data-featherlight="{{ url('problem_vote_stats', problem.code) }}">{{ _('Voting statistics') }}</a></div>
+    {% endif %}
+
     {% if (editorial and editorial.is_accessible_by(request.user)) and not request.in_contest %}
         <hr>
         <div><a href="{{ url('problem_editorial', problem.code) }}">{{ _('Read editorial') }}</a></div>
