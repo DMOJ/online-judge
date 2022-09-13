@@ -5,6 +5,7 @@ import shutil
 from datetime import timedelta
 from operator import itemgetter
 from random import randrange
+from statistics import mean, median
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
@@ -13,7 +14,7 @@ from django.db import transaction
 from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Prefetch, Q, When
 from django.db.models.functions import Coalesce
 from django.db.utils import ProgrammingError
-from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.template.loader import get_template
 from django.urls import reverse
@@ -22,13 +23,13 @@ from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _, gettext_lazy
-from django.views.generic import ListView, View
+from django.views.generic import DetailView, ListView, View
 from django.views.generic.detail import SingleObjectMixin
 from reversion import revisions
 
 from judge.comments import CommentedDetailView
-from judge.forms import ProblemCloneForm, ProblemSubmitForm
-from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, \
+from judge.forms import ProblemCloneForm, ProblemPointsVoteForm, ProblemSubmitForm
+from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVote, \
     ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource
 from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
 from judge.utils.diggpaginator import DiggPaginator
@@ -201,6 +202,89 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                                           context['description'], 'problem')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+
+        context['vote_perm'] = self.object.vote_permission_for_user(user)
+        if context['vote_perm'].can_vote():
+            try:
+                context['vote'] = ProblemPointsVote.objects.get(voter=user.profile, problem=self.object)
+            except ObjectDoesNotExist:
+                context['vote'] = None
+        else:
+            context['vote'] = None
+
+        return context
+
+
+class ProblemVote(ProblemMixin, DetailView):
+    context_object_name = 'problem'
+    template_name = 'problem/vote-ajax.html'
+
+    def get_context_data(self, **kwargs):
+        if not self.object.vote_permission_for_user(self.request.user).can_vote():
+            raise Http404()
+
+        context = super().get_context_data(**kwargs)
+
+        try:
+            context['vote'] = ProblemPointsVote.objects.get(voter=self.request.profile, problem=self.object)
+        except ObjectDoesNotExist:
+            context['vote'] = None
+
+        context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
+        context['min_possible_vote'] = settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE
+        return context
+
+    def post(self, request, *args, **kwargs):
+        problem = self.get_object()
+        if not problem.vote_permission_for_user(request.user).can_vote():
+            return JsonResponse({'message': _('Not allowed to vote on this problem.')}, status=403)
+
+        form = ProblemPointsVoteForm(request.POST)
+        if not form.is_valid():
+            return JsonResponse(form.errors, status=400)
+
+        with transaction.atomic():
+            # Delete any pre-existing votes.
+            ProblemPointsVote.objects.filter(voter=request.profile, problem=problem).delete()
+            vote = form.save(commit=False)
+            vote.voter = request.profile
+            vote.problem = problem
+            vote.save()
+
+        return JsonResponse({'points': vote.points})
+
+
+class DeleteProblemVote(ProblemMixin, SingleObjectMixin, View):
+    http_method_names = ['options', 'post']  # This disables GET requests, even though ProblemMixin.get exists.
+
+    def post(self, request, *args, **kwargs):
+        problem = self.get_object()
+        if not problem.vote_permission_for_user(request.user).can_vote():
+            return JsonResponse({'message': _('Not allowed to delete votes on this problem.')}, status=403)
+
+        ProblemPointsVote.objects.filter(voter=request.profile, problem=problem).delete()
+        return JsonResponse({'message': _('success')})
+
+
+class ProblemVoteStats(ProblemMixin, DetailView):
+    context_object_name = 'problem'
+    template_name = 'problem/vote-stats-ajax.html'
+
+    def get_context_data(self, **kwargs):
+        if not self.object.vote_permission_for_user(self.request.user).can_view():
+            raise Http404()
+
+        context = super().get_context_data(**kwargs)
+
+        votes = list(self.object.problem_points_votes.order_by('points').values_list('points', flat=True))
+        context['votes'] = votes
+
+        if votes:
+            context['mean'] = mean(votes)
+            context['median'] = median(votes)
+
+        context['max_possible_vote'] = settings.DMOJ_PROBLEM_MAX_USER_POINTS_VOTE
+        context['min_possible_vote'] = settings.DMOJ_PROBLEM_MIN_USER_POINTS_VOTE
         return context
 
 
