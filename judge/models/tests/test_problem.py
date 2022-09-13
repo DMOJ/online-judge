@@ -2,10 +2,10 @@ from django.core.exceptions import ValidationError
 from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 
-from judge.models import Language, LanguageLimit, Problem
-from judge.models.problem import disallowed_characters_validator
-from judge.models.tests.util import CommonDataMixin, create_organization, create_problem, create_problem_type, \
-    create_solution, create_user
+from judge.models import Language, LanguageLimit, Problem, Submission
+from judge.models.problem import VotePermission, disallowed_characters_validator
+from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation, \
+    create_organization, create_problem, create_problem_type, create_solution, create_user
 
 
 class ProblemTestCase(CommonDataMixin, TestCase):
@@ -245,6 +245,59 @@ class ProblemTestCase(CommonDataMixin, TestCase):
         }
         self._test_object_methods_with_users(self.organization_admin_problem, data)
 
+    def give_basic_problem_ac(self, user, points=None):
+        Submission.objects.create(
+            user=user.profile,
+            problem=self.basic_problem,
+            result='AC',
+            points=self.basic_problem.points if points is None else points,
+            language=Language.get_python3(),
+        )
+
+    def test_problem_voting_permissions(self):
+        self.assertEqual(self.basic_problem.vote_permission_for_user(self.users['anonymous']), VotePermission.NONE)
+
+        now = timezone.now()
+        basic_contest = create_contest(
+            key='basic',
+            start_time=now - timezone.timedelta(days=1),
+            end_time=now + timezone.timedelta(days=100),
+            authors=('superuser', 'staff_contest_edit_own'),
+            testers=('non_staff_tester',),
+        )
+        in_contest = create_user(username='in_contest')
+        in_contest.profile.current_contest = create_contest_participation(
+            user=in_contest,
+            contest=basic_contest,
+        )
+        self.give_basic_problem_ac(in_contest)
+        self.assertEqual(self.basic_problem.vote_permission_for_user(in_contest), VotePermission.NONE)
+
+        unlisted = create_user(username='unlisted')
+        unlisted.profile.is_unlisted = True
+        self.give_basic_problem_ac(unlisted)
+        self.assertEqual(self.basic_problem.vote_permission_for_user(unlisted), VotePermission.VIEW)
+
+        banned_from_voting = create_user(username='banned_from_voting')
+        banned_from_voting.profile.is_banned_from_problem_voting = True
+        self.give_basic_problem_ac(banned_from_voting)
+        self.assertEqual(self.basic_problem.vote_permission_for_user(banned_from_voting), VotePermission.VIEW)
+
+        banned_from_problem = create_user(username='banned_from_problem')
+        self.basic_problem.banned_users.add(banned_from_problem.profile)
+        self.give_basic_problem_ac(banned_from_problem)
+        self.assertEqual(self.basic_problem.vote_permission_for_user(banned_from_problem), VotePermission.VIEW)
+
+        self.assertEqual(self.basic_problem.vote_permission_for_user(self.users['normal']), VotePermission.VIEW)
+
+        self.give_basic_problem_ac(self.users['normal'])
+        self.assertEqual(self.basic_problem.vote_permission_for_user(self.users['normal']), VotePermission.VOTE)
+
+        partial_ac = create_user(username='partial_ac')
+        self.give_basic_problem_ac(partial_ac, 0.5)  # ensure this value is not equal to its point value
+        self.assertNotEqual(self.basic_problem.points, 0.5)
+        self.assertEqual(self.basic_problem.vote_permission_for_user(partial_ac), VotePermission.VIEW)
+
     def test_problems_list(self):
         for name, user in self.users.items():
             with self.subTest(user=name):
@@ -284,14 +337,14 @@ class SolutionTestCase(CommonDataMixin, TestCase):
             ),
         })
 
-        _now = timezone.now()
+        now = timezone.now()
 
         self.basic_solution = create_solution(problem='basic')
 
         self.private_solution = create_solution(
             problem='private',
             is_public=False,
-            publish_on=_now - timezone.timedelta(days=100),
+            publish_on=now - timezone.timedelta(days=100),
         )
 
         self.unpublished_problem = create_problem(
@@ -302,7 +355,7 @@ class SolutionTestCase(CommonDataMixin, TestCase):
         self.unpublished_solution = create_solution(
             problem=self.unpublished_problem,
             is_public=False,
-            publish_on=_now + timezone.timedelta(days=100),
+            publish_on=now + timezone.timedelta(days=100),
             authors=('normal',),
         )
 

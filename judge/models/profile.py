@@ -168,6 +168,11 @@ class Profile(models.Model):
                                default=False)
     is_unlisted = models.BooleanField(verbose_name=_('unlisted user'), help_text=_('User will not be ranked.'),
                                       default=False)
+    is_banned_from_problem_voting = models.BooleanField(
+        verbose_name=_('banned from voting on problem point values'),
+        help_text=_("User will not be able to vote on problems' point values."),
+        default=False,
+    )
     rating = models.IntegerField(null=True, default=None)
     user_script = models.TextField(verbose_name=_('user script'), default='', blank=True, max_length=65536,
                                    help_text=_('User-defined JavaScript for site customization.'))
