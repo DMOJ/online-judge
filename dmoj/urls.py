@@ -123,6 +123,10 @@ urlpatterns = [
         path('/tickets', ticket.ProblemTicketListView.as_view(), name='problem_ticket_list'),
         path('/tickets/new', ticket.NewProblemTicketView.as_view(), name='new_problem_ticket'),
 
+        path('/vote', problem.ProblemVote.as_view(), name='problem_vote'),
+        path('/vote/delete', problem.DeleteProblemVote.as_view(), name='delete_problem_vote'),
+        path('/vote/stats', problem.ProblemVoteStats.as_view(), name='problem_vote_stats'),
+
         path('/manage/submission', include([
             path('', problem_manage.ManageProblemSubmissionView.as_view(), name='problem_manage_submissions'),
             path('/rejudge', problem_manage.RejudgeSubmissionsView.as_view(), name='problem_submissions_rejudge'),
