@@ -1,0 +1,42 @@
+<div class="problem-vote-container">
+    <div class="problem-vote-form-header">
+        {% if vote %}
+            <span class="problem-vote-form-title">{{ _('Change vote') }}</span>
+            <span class="problem-vote-date">
+                {%- with vote_date=vote.vote_time|date(_('N j, Y, g:i a')) -%}
+                    {{ _('Last voted on %(date)s', date=vote_date) }}
+                {%- endwith -%}
+            </span>
+        {% else %}
+            <span class="problem-vote-form-title">{{ _('Cast vote') }}</span>
+        {% endif %}
+    </div>
+    <form id="delete-problem-vote-form" action="{{ url('delete_problem_vote', problem.code) }}" method="post">
+        {% csrf_token %}
+    </form>
+    <br>
+    <form id="problem-vote-form" action="{{ url('problem_vote', problem.code) }}" method="post">
+        {% csrf_token %}
+        <span class="problem-vote-form-info">{{ _('Points:') }}</span>
+        <input type="number" step="1" placeholder="{{ problem.points|floatformat(0) }}" value="{% if vote %}{{ vote.points }}{% endif %}"
+               min="{{ min_possible_vote }}" max="{{ max_possible_vote }}" name="points" required>
+        <div id="points-error" class="problem-voting-form-error"></div>
+        <br>
+        <span class="problem-vote-form-info">{{ _('Justification:') }}</span>
+        <br>
+        <textarea name="note" rows="12" placeholder="{{ _("A short justification for your vote to this problem's point value (optional).") }}">
+            {%- if vote %}{{ vote.note }}{% endif -%}
+        </textarea>
+        <div id="note-error" class="problem-voting-form-error"></div>
+        <br>
+        <div class="problem-vote-submits">
+            <input type="submit" value="{{ _('Vote!') }}">
+            {% if vote %}
+                <input type="submit" value="{{ _('Delete vote') }}" form="delete-problem-vote-form">
+            {% endif %}
+        </div>
+    </form>
+    <script type="text/javascript">
+        init_problem_vote_form();
+    </script>
+</div>
