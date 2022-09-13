@@ -449,7 +449,7 @@ class Problem(models.Model):
 
     def is_solved_by(self, user):
         # Return true if a full AC submission to the problem from the user exists.
-        return self.submission_set.filter(user=user.profile, result='AC', points=F('problem__points')).exists()
+        return self.submission_set.filter(user=user.profile, result='AC', points__gte=F('problem__points')).exists()
 
     def vote_permission_for_user(self, user):
         if not user.is_authenticated:
