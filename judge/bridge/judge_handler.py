@@ -96,15 +96,20 @@ class JudgeHandler(ZlibPacketHandler):
 
     def _authenticate(self, id, key):
         try:
-            judge = Judge.objects.get(name=id, is_blocked=False)
+            judge = Judge.objects.get(name=id)
         except Judge.DoesNotExist:
-            result = False
-        else:
-            result = hmac.compare_digest(judge.auth_key, key)
+            return False
 
-        if not result:
+        if not hmac.compare_digest(judge.auth_key, key):
+            logger.warning('Judge authentication failure: %s', self.client_address)
             json_log.warning(self._make_json_log(action='auth', judge=id, info='judge failed authentication'))
-        return result
+            return False
+
+        if judge.is_blocked:
+            json_log.warning(self._make_json_log(action='auth', judge=id, info='judge authenticated but is blocked'))
+            return False
+
+        return True
 
     def _connected(self):
         judge = self.judge = Judge.objects.get(name=self.name)
@@ -150,7 +155,6 @@ class JudgeHandler(ZlibPacketHandler):
             return
 
         if not self._authenticate(packet['id'], packet['key']):
-            logger.warning('Authentication failure: %s', self.client_address)
             self.close()
             return
 
