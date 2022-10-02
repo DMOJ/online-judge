@@ -1,7 +1,7 @@
 import logging
 import socket
 
-from celery import Celery
+from celery.app import Celery
 from celery.signals import task_failure
 
 app = Celery('dmoj')
