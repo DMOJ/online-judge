@@ -37,7 +37,9 @@ jobs:
     - name: Start MySQL
       run: sudo systemctl start mysql.service
     - name: Run unit tests
-      run: coverage run --source=. manage.py test judge
+      run: |
+        cat /opt/hostedtoolcache/Python/3.7.14/x64/lib/python3.7/site-packages/celery/__init__.py
+        coverage run --source=. manage.py test judge
     - name: Generate coverage report
       run: coverage xml
     - uses: codecov/codecov-action@v1
