@@ -122,20 +122,19 @@ class JudgeList(object):
                 # idempotent.
                 return
 
-            candidates = [
-                judge for judge in self.judges if not judge.working and judge.can_judge(problem, language, judge_id)
-            ]
+            candidates = [judge for judge in self.judges if judge.can_judge(problem, language, judge_id)]
+            available = [judge for judge in candidates if not judge.working]
             if judge_id:
-                logger.info('Specified judge %s is%savailable', judge_id, ' ' if candidates else ' not ')
+                logger.info('Specified judge %s is%savailable', judge_id, ' ' if available else ' not ')
             else:
-                logger.info('Free judges: %d', len(candidates))
+                logger.info('Free judges: %d', len(available))
 
-            if len(self.judges) > 1 and len(candidates) == 1 and priority >= REJUDGE_PRIORITY:
-                candidates = []
+            if len(candidates) > 1 and len(available) == 1 and priority >= REJUDGE_PRIORITY:
+                available = []
 
-            if candidates:
+            if available:
                 # Schedule the submission on the judge reporting least load.
-                judge = min(candidates, key=lambda judge: (judge.load, random()))
+                judge = min(available, key=lambda judge: (judge.load, random()))
                 logger.info('Dispatched submission %d to: %s', id, judge.name)
                 self.submission_map[id] = judge
                 try:
