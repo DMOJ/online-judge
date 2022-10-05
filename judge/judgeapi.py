@@ -104,6 +104,10 @@ def disconnect_judge(judge, force=False):
     judge_request({'name': 'disconnect-judge', 'judge-id': judge.name, 'force': force}, reply=False)
 
 
+def update_disable_judge(judge):
+    judge_request({'name': 'disable-judge', 'judge-id': judge.name, 'is-disabled': judge.is_disabled})
+
+
 def abort_submission(submission):
     from .models import Submission
     # We only want to try to abort a submission if it's still grading, otherwise this can lead to fully graded

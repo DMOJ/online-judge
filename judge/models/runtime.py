@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from judge.judgeapi import disconnect_judge
+from judge.judgeapi import disconnect_judge, update_disable_judge
 
 __all__ = ['Language', 'RuntimeVersion', 'Judge']
 
@@ -148,6 +148,13 @@ class Judge(models.Model):
         disconnect_judge(self, force=force)
 
     disconnect.alters_data = True
+
+    def toggle_disabled(self):
+        self.is_disabled = not self.is_disabled
+        update_disable_judge(self)
+        self.save(update_fields=['is_disabled'])
+
+    toggle_disabled.alters_data = True
 
     @classmethod
     def runtime_versions(cls):

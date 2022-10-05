@@ -58,6 +58,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.time_delta = None
         self.load = 1e100
         self.name = None
+        self.is_disabled = False
         self.batch_id = None
         self.in_batch = False
         self._stop_ping = threading.Event()
@@ -115,6 +116,9 @@ class JudgeHandler(ZlibPacketHandler):
         judge.problems.set(Problem.objects.filter(code__in=list(self.problems.keys())))
         judge.runtimes.set(Language.objects.filter(key__in=list(self.executors.keys())))
 
+        # Cache is_disabled for faster access
+        self.is_disabled = judge.is_disabled
+
         # Delete now in case we somehow crashed and left some over from the last connection
         RuntimeVersion.objects.filter(judge=judge).delete()
         versions = []
@@ -168,7 +172,8 @@ class JudgeHandler(ZlibPacketHandler):
         self._connected()
 
     def can_judge(self, problem, executor, judge_id=None):
-        return problem in self.problems and executor in self.executors and (not judge_id or self.name == judge_id)
+        return problem in self.problems and executor in self.executors and  \
+            ((not judge_id and not self.is_disabled) or self.name == judge_id)
 
     @property
     def working(self):
