@@ -71,9 +71,10 @@ class JudgeAdminForm(ModelForm):
 
 class JudgeAdmin(VersionAdmin):
     form = JudgeAdminForm
-    readonly_fields = ('created', 'online', 'start_time', 'ping', 'load', 'last_ip', 'runtimes', 'problems')
+    readonly_fields = ('created', 'online', 'start_time', 'ping', 'load', 'last_ip', 'runtimes', 'problems',
+                       'is_disabled')
     fieldsets = (
-        (None, {'fields': ('name', 'auth_key', 'is_blocked')}),
+        (None, {'fields': ('name', 'auth_key', 'is_blocked', 'is_disabled')}),
         (_('Description'), {'fields': ('description',)}),
         (_('Information'), {'fields': ('created', 'online', 'last_ip', 'start_time', 'ping', 'load')}),
         (_('Capabilities'), {'fields': ('runtimes', 'problems')}),
@@ -86,7 +87,8 @@ class JudgeAdmin(VersionAdmin):
 
     def get_urls(self):
         return ([url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
-                 url(r'^(\d+)/terminate/$', self.terminate_view, name='judge_judge_terminate')] +
+                 url(r'^(\d+)/terminate/$', self.terminate_view, name='judge_judge_terminate'),
+                 url(r'^(\d+)/disable/$', self.disable_view, name='judge_judge_disable')] +
                 super(JudgeAdmin, self).get_urls())
 
     def disconnect_judge(self, id, force=False):
@@ -99,6 +101,11 @@ class JudgeAdmin(VersionAdmin):
 
     def terminate_view(self, request, id):
         return self.disconnect_judge(id, force=True)
+
+    def disable_view(self, request, id):
+        judge = get_object_or_404(Judge, id=id)
+        judge.toggle_disabled()
+        return HttpResponseRedirect(reverse('admin:judge_judge_changelist'))
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None and obj.online:
