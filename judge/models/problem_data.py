@@ -28,6 +28,7 @@ CHECKERS = (
     ('sorted', _('Unordered')),
     ('identical', _('Byte identical')),
     ('linecount', _('Line-by-line')),
+    ('linematches', _('Line matches')),
 )
 
 
