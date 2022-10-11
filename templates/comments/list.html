@@ -66,32 +66,15 @@
                                 {% else %}
                                     <span class="comment-edits"></span>
                                 {% endif %}
-                                    <a href="#comment-{{ node.id }}" title="{{ _('Link') }}" class="comment-link">
-                                    <i class="fa fa-link fa-fw"></i>
-                                </a>
+                                    <a href="#comment-{{ node.id }}" title="{{ _('Link') }}"
+                                       class="comment-link"><i class="fa fa-link fa-fw"></i></a>
                                     {% if logged_in and not comment_lock %}
-                                        {% set can_edit = node.author.id == profile.id and not profile.mute %}
-                                        {% if can_edit %}
-                                            <a data-featherlight="{{ url('comment_edit_ajax', node.id) }}"
-                                               href="{{ url('comment_edit', node.id) }}"
-                                               title="{{ _('Edit') }}" class="edit-link">
-                                            <i class="fa fa-pencil fa-fw"></i>
-                                        </a>
-                                        {% else %}
-                                            <a href="javascript:reply_comment({{ node.id }})"
-                                               title="{{ _('Reply') }}">
-                                            <i class="fa fa-reply fa-fw"></i>
-                                        </a>
-                                        {% endif %}
                                         {% if perms.judge.change_comment %}
-                                            {% if can_edit %}
-                                                <a href="javascript:reply_comment({{ node.id }})"
-                                                   title="{{ _('Reply') }}"><i class="fa fa-reply fa-fw"></i></a>
-                                            {% else %}
-                                                <a data-featherlight="{{ url('comment_edit_ajax', node.id) }}"
-                                                   href="{{ url('comment_edit', node.id) }}" title="{{ _('Edit') }}"
-                                                   class="edit-link"><i class="fa fa-pencil fa-fw"></i></a>
-                                            {% endif %}
+                                            <a href="javascript:reply_comment({{ node.id }})"
+                                               title="{{ _('Reply') }}"><i class="fa fa-reply fa-fw"></i></a>
+                                            <a data-featherlight="{{ url('comment_edit_ajax', node.id) }}"
+                                               href="{{ url('comment_edit', node.id) }}" title="{{ _('Edit') }}"
+                                               class="edit-link"><i class="fa fa-pencil fa-fw"></i></a>
                                             <a data-featherlight="{{ url('comment_votes_ajax', node.id) }}"
                                                href="javascript:void(0)"
                                                title="{{ _('Votes') }}" class="votes-link"><i class="fa fa-bar-chart fa-fw"></i></a>
@@ -99,6 +82,16 @@
                                                class="hide-comment"><i class="fa fa-trash fa-fw"></i></a>
                                             <a href="{{ url('admin:judge_comment_change', node.id) }}"
                                                title="{{ _('Admin') }}"><i class="fa fa-cog fa-fw"></i></a>
+                                        {% else %}
+                                            {% if node.time > reply_cutoff %}
+                                                <a href="javascript:reply_comment({{ node.id }})"
+                                                   title="{{ _('Reply') }}"><i class="fa fa-reply fa-fw"></i></a>
+                                            {% endif %}
+                                            {% if node.author.id == profile.id and not profile.mute %}
+                                                <a data-featherlight="{{ url('comment_edit_ajax', node.id) }}"
+                                                   href="{{ url('comment_edit', node.id) }}" title="{{ _('Edit') }}"
+                                                   class="edit-link"><i class="fa fa-pencil fa-fw"></i></a>
+                                            {% endif %}
                                         {% endif %}
                                     {% endif %}
                             </span>
