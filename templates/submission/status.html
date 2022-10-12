@@ -74,10 +74,19 @@
         <div><a href="{{ url('problem_submit', submission.problem.code, submission.id) }}">{{ _('Resubmit') }}</a></div>
     {% endif %}
     {% if perms.judge.rejudge_submission and not submission.is_locked %}
+        {% compress js %}
+            <script type="text/javascript">
+                window.confirm_and_rejudge = function (form) {
+                    if (confirm("{{ _('Are you sure you want to rejudge?') }}")) {
+                        form.submit();
+                    }
+                };
+            </script>
+        {% endcompress %}
         <div>
             <form action="{{ url('submission_rejudge') }}" method="post">
                 {% csrf_token %}
-                <a href="#" onclick="parentNode.submit()">{{ _('Rejudge') }}</a>
+                <a href="#" onclick="confirm_and_rejudge(parentNode)">{{ _('Rejudge') }}</a>
                 <input type="hidden" name="id" value="{{ submission.id }}">
                 <input type="hidden" name="path" value="{{ url('submission_status', submission.id) }}">
             </form>
