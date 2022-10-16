@@ -22,7 +22,7 @@ class CommentAdmin(VersionAdmin):
         (None, {'fields': ('author', 'page', 'parent', 'time', 'score', 'hidden')}),
         (_('Content'), {'fields': ('body',)}),
     )
-    list_display = ['author', 'linked_page', 'time']
+    list_display = ['author', 'linked_page', 'time', 'score', 'hidden']
     search_fields = ['author__user__username', 'page', 'body']
     actions = ['hide_comment', 'unhide_comment']
     list_filter = ['hidden']
