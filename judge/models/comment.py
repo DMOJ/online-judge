@@ -44,7 +44,7 @@ class Comment(MPTTModel):
                             validators=[comment_validator])
     score = models.IntegerField(verbose_name=_('votes'), default=0)
     body = models.TextField(verbose_name=_('body of comment'), max_length=8192)
-    hidden = models.BooleanField(verbose_name=_('hide the comment'), default=0)
+    hidden = models.BooleanField(verbose_name=_('hidden'), default=0)
     parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies',
                             on_delete=CASCADE)
     versions = VersionRelation()
