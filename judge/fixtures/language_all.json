@@ -771,8 +771,8 @@
     "model": "judge.language",
     "pk": 61,
     "fields": {
-        "key": "JAVA9",
-        "name": "Java 9",
+        "key": "JAVA",
+        "name": "Java",
         "short_name": null,
         "common_name": "Java",
         "ace": "java",
@@ -897,22 +897,6 @@
 },
 {
     "model": "judge.language",
-    "pk": 71,
-    "fields": {
-        "key": "JAVA10",
-        "name": "Java 10",
-        "short_name": null,
-        "common_name": "Java",
-        "ace": "java",
-        "pygments": "java",
-        "template": "import java.io.*;\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n    }\r\n}",
-        "info": "",
-        "description": "",
-        "extension": "java"
-    }
-},
-{
-    "model": "judge.language",
     "pk": 72,
     "fields": {
         "key": "C11",
@@ -925,22 +909,6 @@
         "info": "",
         "description": "",
         "extension": "c"
-    }
-},
-{
-    "model": "judge.language",
-    "pk": 74,
-    "fields": {
-        "key": "JAVA11",
-        "name": "Java 11",
-        "short_name": null,
-        "common_name": "Java",
-        "ace": "java",
-        "pygments": "java",
-        "template": "import java.io.*;\r\nimport java.util.*;\r\n\r\npublic class Main {\r\n    public static void main(String[] args) {\r\n\r\n    }\r\n}",
-        "info": "",
-        "description": "",
-        "extension": "java"
     }
 },
 {
