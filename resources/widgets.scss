@@ -202,6 +202,7 @@ input {
 
     > ul {
         margin: 0;
+        margin-bottom: -1px;
         padding: 0;
         list-style: outside none none;
         display: flex;
@@ -209,7 +210,6 @@ input {
         overflow-y: hidden;
 
         > li {
-            margin-bottom: -1px;
             position: relative;
             display: block;
 
