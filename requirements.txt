@@ -24,7 +24,7 @@ requests
 django-fernet-fields
 pyotp
 qrcode[pil]
-jsonfield>=3.0.3
+jsonfield @ git+https://github.com/DMOJ/jsonfield.git
 pymoss
 packaging
 celery
