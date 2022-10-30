@@ -49,7 +49,7 @@ class WebAuthnInline(admin.TabularInline):
     readonly_fields = ('cred_id', 'public_key', 'counter')
     extra = 0
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, request, obj=None):
         return False
 
 
