@@ -87,7 +87,7 @@ jobs:
           git reset --hard "$i18n_head"
         fi
     - name: Create pull request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         token: ${{ secrets.REPO_SCOPED_TOKEN }}
         author: dmoj-build <build@dmoj.ca>

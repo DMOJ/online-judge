@@ -12,7 +12,7 @@ jobs:
       run: |
         curl -s https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json | python3 -m json.tool > resources/caniuse.json
     - name: Create pull request
-      uses: peter-evans/create-pull-request@v3
+      uses: peter-evans/create-pull-request@v4
       with:
         token: ${{ secrets.REPO_SCOPED_TOKEN }}
         author: dmoj-build <build@dmoj.ca>
