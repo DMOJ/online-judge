@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.db.models import Count
+from django.db.models import Count, IntegerField
 from django.db.models.expressions import Value
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
@@ -112,7 +112,10 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         queryset = queryset.select_related('author__user').defer('author__about').annotate(revisions=Count('versions'))
 
         if self.request.user.is_authenticated:
-            queryset = queryset.annotate(vote_score=Coalesce(RawSQLColumn(CommentVote, 'score'), Value(0)))
+            queryset = queryset.annotate(vote_score=Coalesce(
+                RawSQLColumn(CommentVote, 'score', output_field=IntegerField()),
+                Value(0),
+            ))
             profile = self.request.profile
             unique_together_left_join(queryset, CommentVote, 'comment', 'voter', profile.id)
             context['is_new_user'] = not self.request.user.is_staff and not profile.has_any_solves

@@ -64,13 +64,13 @@ def join_sql_subquery(queryset, subquery, params, join_fields, alias, join_type=
     join.table_alias = alias
 
 
-def RawSQLColumn(model, field=None):
+def RawSQLColumn(model, field=None, output_field=None):
     if isinstance(model, Field):
         field = model
         model = field.model
     if isinstance(field, str):
         field = model._meta.get_field(field)
-    return RawSQL('%s.%s' % (model._meta.db_table, field.get_attname_column()[1]), ())
+    return RawSQL('%s.%s' % (model._meta.db_table, field.get_attname_column()[1]), (), output_field=output_field)
 
 
 def make_straight_join_query(QueryType):
