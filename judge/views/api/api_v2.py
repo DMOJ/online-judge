@@ -585,6 +585,7 @@ class APISubmissionList(APIListView):
             queryset,
             subquery=Problem.get_visible_problems(self.request.user).distinct().only('id').query,
             params=[],
+            related_model=Problem,
             join_fields=[('problem_id', 'id')],
             alias='visible_problems',
         )

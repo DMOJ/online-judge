@@ -40,8 +40,9 @@ class RawSQLJoin(Join):
 
 
 class FakeJoinField:
-    def __init__(self, joining_columns):
+    def __init__(self, joining_columns, related_model):
         self.joining_columns = joining_columns
+        self.related_model = related_model
 
     def get_joining_columns(self):
         return self.joining_columns
@@ -50,7 +51,8 @@ class FakeJoinField:
         pass
 
 
-def join_sql_subquery(queryset, subquery, params, join_fields, alias, join_type=INNER, parent_model=None):
+def join_sql_subquery(
+        queryset, subquery, params, join_fields, alias, related_model, join_type=INNER, parent_model=None):
     if parent_model is not None:
         parent_alias = parent_model._meta.db_table
     else:
@@ -59,7 +61,8 @@ def join_sql_subquery(queryset, subquery, params, join_fields, alias, join_type=
         queryset.query.external_aliases[alias] = True
     else:
         queryset.query.external_aliases.add(alias)
-    join = RawSQLJoin(subquery, params, parent_alias, alias, join_type, FakeJoinField(join_fields), join_type == LOUTER)
+    join = RawSQLJoin(subquery, params, parent_alias, alias, join_type, FakeJoinField(join_fields, related_model),
+                      join_type == LOUTER)
     queryset.query.join(join)
     join.table_alias = alias
 
