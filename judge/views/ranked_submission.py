@@ -3,7 +3,7 @@ from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 
-from judge.models import Language
+from judge.models import Language, Submission
 from judge.utils.problems import get_result_data
 from judge.utils.raw_sql import join_sql_subquery
 from judge.views.submission import ForceContestMixin, ProblemSubmissions
@@ -56,7 +56,7 @@ class RankedSubmissions(ProblemSubmissions):
                 WHERE sub.problem_id = %s AND {points} > 0 {constraint}
                 GROUP BY sub.user_id
             """.format(points=points, contest_join=contest_join, constraint=constraint),
-            params=params * 3, alias='best_subs', join_fields=[('id', 'id')],
+            params=params * 3, alias='best_subs', join_fields=[('id', 'id')], related_model=Submission,
         )
 
         if self.in_contest:
