@@ -130,13 +130,14 @@
 {% macro contest_join(contest, request, finished_contests) %}
     {% if not request.in_contest %}
         <td>
-            {% if contest.is_live_joinable_by(request.user) %}
+            {% set participation_type = contest.get_join_type(request.user) %}
+            {% if is_live(participation_type) %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button join-warning"
                            value="{{ _('Join') }}">
                 </form>
-            {% elif contest.is_spectatable_by(request.user) %}
+            {% elif is_spectate(participation_type) %}
                 <form action="{{ url('contest_join', contest.key) }}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="unselectable button full participate-button"

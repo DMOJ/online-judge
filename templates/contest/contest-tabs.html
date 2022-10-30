@@ -58,7 +58,7 @@
                                 {{- _('Leave contest') -}}
                             {% endif %}">
                     </form>
-                {% elif contest.is_live_joinable_by(request.user) %}
+                {% elif can_live_join %}
                     <form action="{{ url('contest_join', contest.key) }}" method="post"
                           class="contest-join-pseudotab unselectable button">
                         {% csrf_token %}
@@ -66,7 +66,7 @@
                                class="contest-join{% if not has_joined %} first-join{% endif %}"
                                value="{{ _('Join contest') }}">
                     </form>
-                {% elif contest.is_spectatable_by(request.user) %}
+                {% elif can_spectate %}
                     <form action="{{ url('contest_join', contest.key) }}" method="post"
                           class="contest-join-pseudotab unselectable button">
                         {% csrf_token %}
