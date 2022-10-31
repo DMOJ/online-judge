@@ -158,7 +158,7 @@
 {% block body %}
     <div class="content-description">
         {% if active_participations %}
-            <h4>{{ _('Active Contests') }}</h4>
+            <h4>{{ _('Active contests') }}</h4>
             <table class="contest-list table striped">
                 <thead>
                 <tr>
@@ -200,7 +200,7 @@
         {% endif %}
 
         {% if current_contests %}
-            <h4>{{ _('Ongoing Contests') }}</h4>
+            <h4>{{ _('Ongoing contests') }}</h4>
             <table class="contest-list table striped">
                 <thead>
                 <tr>
@@ -237,7 +237,7 @@
             <br>
         {% endif %}
 
-        <h4>{{ _('Upcoming Contests') }}</h4>
+        <h4>{{ _('Upcoming contests') }}</h4>
         {% if future_contests %}
             <table class="contest-list table striped">
                 <thead>
@@ -271,7 +271,7 @@
         <br>
 
         {% if past_contests %}
-            <h4 id="past-contests">{{ _('Past Contests') }}</h4>
+            <h4 id="past-contests">{{ _('Past contests') }}</h4>
             {% if page_obj and page_obj.has_other_pages() %}
                 <div class="top-pagination-bar">{% include "list-pages.html" %}</div>
             {% endif %}
