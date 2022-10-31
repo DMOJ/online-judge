@@ -1,6 +1,4 @@
 from django.db import connections
-from django.db.models import Field
-from django.db.models.expressions import RawSQL
 from django.db.models.sql.constants import INNER, LOUTER
 from django.db.models.sql.datastructures import Join
 
@@ -45,15 +43,6 @@ def join_sql_subquery(
                       join_type == LOUTER)
     queryset.query.join(join)
     join.table_alias = alias
-
-
-def RawSQLColumn(model, field=None, output_field=None):
-    if isinstance(model, Field):
-        field = model
-        model = field.model
-    if isinstance(field, str):
-        field = model._meta.get_field(field)
-    return RawSQL('%s.%s' % (model._meta.db_table, field.get_attname_column()[1]), (), output_field=output_field)
 
 
 def make_straight_join_query(QueryType):
