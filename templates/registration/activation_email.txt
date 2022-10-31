@@ -1,9 +1,13 @@
-Please activate your {{ site.name }} account in {{ expiration_days }} days.
+{% trans trimmed count=expiration_days, site_name=site.name %}
+Please activate your {{ site_name }} account in the next {{ count }} day.
+{% pluralize %}
+Please activate your {{ site_name }} account in the next {{ count }} days.
+{% endtrans %}
 
-Please click on the following link to activate your account:
-    http://{{ site.domain }}/accounts/activate/{{ activation_key }}/
 
-Alternatively, you can reply to this message to activate your account.
-Your reply must keep the following text intact for this to work:
+{{ _('Please click on the following link to activate your account:') }}
+    {{ request.scheme }}://{{ site.domain }}/accounts/activate/{{ activation_key }}/
+
+{{ _('Alternatively, you can reply to this message to activate your account. Your reply must keep the following text intact for this to work:') }}
 
 {{ activation_key }}

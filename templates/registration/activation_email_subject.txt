@@ -1,1 +1,1 @@
-Activate your {{ SITE_NAME }} account
+{{ _('Activate your %(site_name)s account', site_name=SITE_NAME) }}
