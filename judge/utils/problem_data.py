@@ -160,13 +160,20 @@ class ProblemDataCompiler(object):
                 raise ProblemDataError(_('How did you corrupt the generator path?'))
             init['generator'] = generator_path[1]
 
-        pretests = [case for case in cases if case['is_pretest']]
+        pretest_test_cases = []
+        test_cases = []
         for case in cases:
+            if case['is_pretest']:
+                pretest_test_cases.append(case)
+            else:
+                test_cases.append(case)
+
             del case['is_pretest']
-        if pretests:
-            init['pretest_test_cases'] = pretests
-        if cases:
-            init['test_cases'] = cases
+
+        if pretest_test_cases:
+            init['pretest_test_cases'] = pretest_test_cases
+        if test_cases:
+            init['test_cases'] = test_cases
         if self.data.output_limit is not None:
             init['output_limit_length'] = self.data.output_limit
         if self.data.output_prefix is not None:
