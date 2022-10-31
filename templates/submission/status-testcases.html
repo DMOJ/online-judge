@@ -70,7 +70,7 @@
                 </td>
 
                 <td>
-                    <span title="{{ case.long_status }}" class="case-{{ case.status }}">
+                    <span title="{{ case.long_status }}" class="case-{{ case.result_class }}">
                         {%- if case.status == 'SC' %}&mdash;{% else %}{{ case.status }}{% endif -%}
                     </span>
                     {%- if case.feedback %}&nbsp;({{ case.feedback }}){% endif -%}
