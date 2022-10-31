@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from reversion import revisions
 
 from judge.judgeapi import abort_submission, judge_submission
-from judge.models.problem import Problem, SubmissionSourceAccess, TranslatedProblemForeignKeyQuerySet
+from judge.models.problem import Problem, SubmissionSourceAccess
 from judge.models.profile import Profile
 from judge.models.runtime import Language
 from judge.utils.unicode import utf8bytes
@@ -87,8 +87,6 @@ class Submission(models.Model):
     contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
                                        on_delete=models.SET_NULL, related_name='+')
     locked_after = models.DateTimeField(verbose_name=_('submission lock'), null=True, blank=True)
-
-    objects = TranslatedProblemForeignKeyQuerySet.as_manager()
 
     @classmethod
     def result_class_from_code(cls, result, case_points, case_total):
