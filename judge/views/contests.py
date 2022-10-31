@@ -456,7 +456,7 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
             self.year = int(kwargs['year'])
             self.month = int(kwargs['month'])
         except (KeyError, ValueError):
-            raise ImproperlyConfigured(_('ContestCalendar requires integer year and month'))
+            raise ImproperlyConfigured('ContestCalendar requires integer year and month')
         self.today = timezone.now().date()
         return self.render()
 
