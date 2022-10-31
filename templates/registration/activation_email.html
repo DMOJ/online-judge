@@ -1,23 +1,27 @@
-<b>Thanks for registering on the {{ site.name }}! We're glad to have you.</b>
+<div style="border:2px solid #fd0;margin:4px 0;"><div style="background:#000;border:6px solid #000;">
+<a href="{{ request.scheme }}://{{ site.domain }}"><img src="{{ request.scheme }}://{{ site.domain }}/static/icons/logo.svg" alt="{{ SITE_NAME }}" width="160" height="44"></a>
+</div></div>
+
+<div style="border:2px solid #337ab7;margin:4px 0;"><div style="background:#fafafa;border:12px solid #fafafa;font-family:segoe ui,lucida grande,Arial,sans-serif;font-size:14px;">
+<strong>{{ _("Thanks for registering on the %(site_name)s! We're glad to have you.", site_name=SITE_NAME) }}</strong>
 <br><br>
-The last step is activating your account. Please activate your {{ SITE_NAME }} account in the next {{ expiration_days }} days.
+{% trans trimmed count=expiration_days, site_name=SITE_NAME %}
+The last step is activating your account. Please activate your {{ site_name }} account in the next {{ count }} day.
+{% pluralize %}
+The last step is activating your account. Please activate your {{ site_name }} account in the next {{ count }} days.
+{% endtrans %}
 <br><br>
-Please click on the following link to activate your account:
-<p style="margin-left:1em">
-      <a href="http://{{ site.domain }}/accounts/activate/{{ activation_key }}/">http://{{ site.domain }}/accounts/activate/{{ activation_key }}</a>
-</p>
-
-Alternatively, you can reply to this message to activate your account.
-Your reply must keep the following text intact for this to work:
-
-<pre style="margin-left:1em">
-{{ activation_key }}
-</pre>
-
-{% if SITE_ADMIN_EMAIL %}
-See you soon!
+{{ _('Please click on the following link to activate your account:') }}
 <br>
-If you have problems activating your account, feel free to send us an email at <a href="mailto:{{ SITE_ADMIN_EMAIL }}">{{ SITE_ADMIN_EMAIL }}</a>.
+<a href="{{ request.scheme }}://{{ site.domain }}/accounts/activate/{{ activation_key }}/">{{ request.scheme }}://{{ site.domain }}/accounts/activate/{{ activation_key }}/</a>
+<br><br>
+{{ _('Alternatively, you can reply to this message to activate your account. Your reply must keep the following text intact for this to work:') }}
+<p style="font-family:monospace;">{{ activation_key }}</p>
+{% if SITE_ADMIN_EMAIL %}
+{% with link='<a href="mailto:%(email)s">%(email)s</a>'|safe|format(email=SITE_ADMIN_EMAIL) %}
+{{ _('See you soon! If you have problems activating your account, feel free to send us an email at %(email)s.', email=link) }}
+{% endwith %}
 {% else %}
-See you soon!
+{{ _('See you soon!') }}
 {% endif %}
+</div></div>
