@@ -10,7 +10,8 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
-from django.db.models import BooleanField, Case, Count, F, Prefetch, Q, When
+from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Prefetch, Q, When
+from django.db.models.functions import Coalesce
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -28,8 +29,7 @@ from reversion import revisions
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemSubmitForm
 from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, \
-    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, \
-    TranslatedProblemForeignKeyQuerySet
+    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource
 from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
@@ -330,10 +330,11 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
             .annotate(user_count=Count('submission__participation', distinct=True)) \
-            .order_by('order')
-        queryset = TranslatedProblemForeignKeyQuerySet.add_problem_i18n_name(queryset, 'i18n_name',
-                                                                             self.request.LANGUAGE_CODE,
-                                                                             'problem__name')
+            .annotate(i18n_translation=FilteredRelation(
+                'problem__translations', condition=Q(problem__translations__language=self.request.LANGUAGE_CODE),
+            )).annotate(i18n_name=Coalesce(
+                F('i18n_translation__name'), F('problem__name'), output_field=CharField(),
+            )).order_by('order')
         return [{
             'id': p['problem_id'],
             'code': p['problem__code'],
