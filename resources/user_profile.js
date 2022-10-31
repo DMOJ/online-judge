@@ -82,7 +82,7 @@ function init_submission_table($, submission_activity, metadata, language_code) 
                 .append($('<td>').addClass('activity-blank').append('<div>'));
         }
 
-        var max_activity = Math.max.apply(null, days.map(function (obj) { return obj.activity; }));
+        var max_activity = Math.max(1, Math.max.apply(null, days.map(function (obj) { return obj.activity; })));
         days.forEach(function (obj) {
             var level = Math.ceil((obj.activity / max_activity) * (activity_levels - 1));
             var text = ngettext('%(cnt)d submission on %(date)s', '%(cnt)d submissions on %(date)s', obj.activity)
