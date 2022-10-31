@@ -268,6 +268,12 @@ class SubmissionTestCase(models.Model):
     def long_status(self):
         return Submission.USER_DISPLAY_CODES.get(self.status, '')
 
+    @property
+    def result_class(self):
+        if self.status in ('IE', 'CE'):
+            return self.status
+        return Submission.result_class_from_code(self.status, self.points, self.total)
+
     class Meta:
         unique_together = ('submission', 'case')
         verbose_name = _('submission test case')
