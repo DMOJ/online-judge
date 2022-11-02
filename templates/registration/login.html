@@ -48,6 +48,22 @@
                     <td>{{ form.password }}
                     </td>
                 </tr>
+                <tr>
+                    <th></th>
+                    <th>
+                        <input type="checkbox" onclick="togglePasswordVisiblity()">Show Password
+                        <script>
+                            function togglePasswordVisiblity(){
+                                var source = document.getElementsByName('password')[0];
+                                if (source.type === "password") {
+                                    source.type = "text";
+                                } else {
+                                    source.type = "password";
+                                }
+                            }
+                        </script>
+                    </th>
+                </tr>
             </table>
             <hr>
             <button style="float:right;" type="submit">{{ _('Login!') }}</button>
