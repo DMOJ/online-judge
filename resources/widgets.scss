@@ -170,10 +170,8 @@ input {
     margin: 0 0 8px;
     width: 100%;
     display: flex;
-
-    &.tabs-no-flex {
-        display: block;
-    }
+    justify-content: space-between;
+    flex-wrap: wrap;
 
     .tab {
         .tab-icon {
