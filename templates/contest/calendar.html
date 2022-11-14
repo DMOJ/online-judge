@@ -19,7 +19,7 @@
         </tr>
         {% for week in calendar %}
             <tr>{% for day in week %}
-                <td class="{{ day.weekday }}{% if day.is_today %} today{% endif %}{% if day.is_pad %} noday{% endif %}">
+                <td class="{% if day.is_today %}today{% endif %}{% if day.is_pad %} noday{% endif %}">
                     <span class="num">{{ day.date.day }}</span>
                     <ul class="fa-ul">
                         {% for contest in day.starts %}

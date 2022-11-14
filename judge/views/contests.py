@@ -443,12 +443,11 @@ class ContestLeave(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View):
         return HttpResponseRedirect(reverse('contest_view', args=(contest.key,)))
 
 
-ContestDay = namedtuple('ContestDay', 'date weekday is_pad is_today starts ends oneday')
+ContestDay = namedtuple('ContestDay', 'date is_pad is_today starts ends oneday')
 
 
 class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
     firstweekday = SUNDAY
-    weekday_classes = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
     template_name = 'contest/calendar.html'
 
     def get(self, request, *args, **kwargs):
@@ -484,9 +483,9 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
         starts, ends, oneday = self.get_contest_data(make_aware(datetime.combine(calendar[0][0], time.min)),
                                                      make_aware(datetime.combine(calendar[-1][-1], time.min)))
         return [[ContestDay(
-            date=date, weekday=self.weekday_classes[weekday], is_pad=date.month != self.month,
+            date=date, is_pad=date.month != self.month,
             is_today=date == self.today, starts=starts[date], ends=ends[date], oneday=oneday[date],
-        ) for weekday, date in enumerate(week)] for week in calendar]
+        ) for date in week] for week in calendar]
 
     def get_context_data(self, **kwargs):
         context = super(ContestCalendar, self).get_context_data(**kwargs)
