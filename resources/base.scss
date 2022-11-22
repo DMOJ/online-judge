@@ -40,7 +40,7 @@ img {
 }
 
 table.sortable thead {
-    background-color: $background_gray;
+    background-color: $color_primary10;
     color: #666;
     font-weight: bold;
     cursor: default;
@@ -71,12 +71,12 @@ hr {
     height: 0;
     border: 0;
     font-style: italic;
-    border-bottom: 1px solid $border_gray;
+    border-bottom: 1px solid $color_primary25;
     padding: 0;
 }
 
 .dashed {
-    border-bottom: 1px dashed $border_gray;
+    border-bottom: 1px dashed $color_primary25;
 }
 
 th {
@@ -85,10 +85,10 @@ th {
 
 .form-area {
     display: inline-block;
-    background: $background_light_gray;
+    background: $color_primary5;
     padding: 5px 10px 10px 15px;
     border-radius: $widget_border_radius;
-    border: 1px solid $border_gray;
+    border: 1px solid $color_primary25;
 }
 
 div.info-float {
@@ -111,7 +111,7 @@ body {
     max-width: 107em;
     font-size: $base_font_size;
     line-height: 1.231;
-    background: $background_light_gray;
+    background: $color_primary5;
     font-family: "Segoe UI", "Lucida Grande", Arial, sans-serif;
     color: #000;
     height: 100%;
@@ -223,7 +223,7 @@ header {
 }
 
 #nav-container {
-    background: $widget_black;
+    background: $color_primary75;
 
     // opacity: 0.77
     // filter: alpha(opacity=77)
@@ -306,14 +306,14 @@ nav {
                 left: 5px;
                 display: none;
                 color: #fff;
-                background: $widget_black;
+                background: $color_primary75;
                 margin: 0 !important;
                 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 
                 li {
                     &:first-child {
                         a.active {
-                            border-top: 1px solid $widget_black;
+                            border-top: 1px solid $color_primary75;
                         }
                     }
                 }
@@ -386,7 +386,7 @@ hr {
 footer {
     text-align: center;
     height: 40px;
-    border-top: 1px solid $border_gray;
+    border-top: 1px solid $color_primary25;
     background: #ededed;
 }
 
@@ -466,8 +466,8 @@ noscript #noscript {
     height: 47px;
     max-width: 107em;
     background: white;
-    border-right: 1px solid $border_gray;
-    border-left: 1px solid $border_gray;
+    border-right: 1px solid $color_primary25;
+    border-left: 1px solid $color_primary25;
 }
 
 #contest-info {
@@ -521,8 +521,8 @@ noscript #noscript {
     min-height: 100%;
     position: relative;
     margin: 0 auto;
-    border-right: 1px solid $border_gray;
-    border-left: 1px solid $border_gray;
+    border-right: 1px solid $color_primary25;
+    border-left: 1px solid $color_primary25;
     background: white;
 }
 
@@ -590,7 +590,7 @@ math {
         border-left: 4px solid $highlight_blue;
         position: fixed;
         top: 36px;
-        background: $widget_black;
+        background: $color_primary75;
         bottom: 0;
         width: 8em;
         left: 0;

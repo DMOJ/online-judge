@@ -38,7 +38,7 @@ a {
     background: rgba(0, 0, 0, 0.1);
     padding: 5px 10px 5px 5px;
     margin-left: 30px;
-    border: 1px solid $border_gray;
+    border: 1px solid $color_primary25;
     border-radius: $widget_border_radius;
     display: flex;
 }
@@ -93,7 +93,7 @@ a {
 .comment-box {
     border-radius: $widget_border_radius;
     padding: 5px 10px 10px 15px;
-    border: 1px solid $border_gray;
+    border: 1px solid $color_primary25;
     background: rgba(0, 0, 0, 0.01);
 }
 

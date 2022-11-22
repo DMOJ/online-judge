@@ -70,7 +70,7 @@
         height: 0;
         border: 0;
         font-style: italic;
-        border-bottom: 1px solid $border_gray;
+        border-bottom: 1px solid $color_primary25;
         margin: 25px 0 20px 0;
         padding: 0;
     }
@@ -86,7 +86,7 @@
         font-family: $monospace-fonts !important;
         margin: 0 2px;
         padding: 0 5px;
-        border: 1px solid $border_gray;
+        border: 1px solid $color_primary25;
         background-color: #f8f8f8;
         border-radius: $widget_border_radius;
         font-size: 0.95em;
@@ -108,7 +108,7 @@
         word-wrap: break-word;
         margin: 1.5em 0 1.5em 0;
         padding: 1em;
-        border: 1px solid $border_gray;
+        border: 1px solid $color_primary25;
         background-color: #f8f8f8;
         color: black;
         border-radius: $widget_border_radius;
