@@ -5,8 +5,8 @@
     width: 100%;
 
     th {
-        border: 1px solid $border_gray;
-        background: $background_light_gray;
+        border: 1px solid $color_primary25;
+        background: $color_primary5;
     }
 
     td {
@@ -16,14 +16,14 @@
         vertical-align: top;
         text-align: right;
         font-size: 0.75em;
-        border: 1px solid $border_gray;
+        border: 1px solid $color_primary25;
         transition-duration: 0.2s;
 
         .num {
             font-size: 1.1em;
             font-weight: bold;
             display: block;
-            border-bottom: 1px dashed $border_gray;
+            border-bottom: 1px dashed $color_primary25;
             padding-right: 0.2em;
             margin-bottom: 0.4em;
         }
@@ -67,7 +67,7 @@
     }
 
     .noday {
-        background: $background_gray;
+        background: $color_primary10;
     }
 
     .today {

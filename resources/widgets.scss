@@ -78,7 +78,7 @@ input {
         padding: 4px 8px;
         color: #555;
         background: #FFF none;
-        border: 1px solid $border_gray;
+        border: 1px solid $color_primary25;
         border-radius: $widget_border_radius;
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
         transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
@@ -102,7 +102,7 @@ textarea {
     padding: 4px 8px;
     color: #555;
     background: #FFF none;
-    border: 1px solid $border_gray;
+    border: 1px solid $color_primary25;
     border-radius: $widget_border_radius;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
@@ -160,13 +160,13 @@ input {
     color: black;
     cursor: default;
     background-color: #fff;
-    border: 1px solid $border_gray;
+    border: 1px solid $color_primary25;
     border-bottom-color: transparent;
     border-image: none;
 }
 
 .tabs {
-    border-bottom: 1px solid $border_gray;
+    border-bottom: 1px solid $color_primary25;
     margin: 0 0 8px;
     width: 100%;
     display: flex;
@@ -279,7 +279,7 @@ ul.pagination {
                     line-height: 1.42857;
                     text-decoration: none;
                     color: #FFF;
-                    background-color: $widget_black;
+                    background-color: $color_primary75;
                     border: 1px solid #505050;
                     margin-left: -1px;
                 }
@@ -289,13 +289,13 @@ ul.pagination {
         .disabled-page > {
             a {
                 color: #888;
-                background-color: $widget_black;
+                background-color: $color_primary75;
                 border-color: #282828;
             }
 
             span {
                 color: #888;
-                background-color: $widget_black;
+                background-color: $color_primary75;
                 border-color: #505050;
             }
         }
@@ -425,7 +425,7 @@ ul.select2-selection__rendered {
 
 .sidebox h3 {
     margin: 0 -5px;
-    background: $widget_black;
+    background: $color_primary75;
     border-radius: $widget_border_radius $widget_border_radius 0 0;
     color: white;
     padding-top: 5px;
@@ -441,7 +441,7 @@ ul.select2-selection__rendered {
 }
 
 .sidebox-content {
-    border: 1px solid $border_gray;
+    border: 1px solid $color_primary25;
     border-top: none;
     margin: 0 -5px;
     padding: 1px 0.5em 3px;
@@ -526,8 +526,8 @@ ul.select2-selection__rendered {
 }
 
 details {
-    border: 1px solid $border_gray;
-    background: $background_light_gray;
+    border: 1px solid $color_primary25;
+    background: $color_primary5;
     padding: 5px 10px;
     border-radius: 4px;
 }
