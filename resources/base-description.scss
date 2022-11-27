@@ -17,7 +17,7 @@
 
     h1, h2, h3, h4, h5, h6 {
         font-weight: normal;
-        color: #111;
+        color: $color_primary90;
         margin-bottom: 0.75em;
         padding: 0;
         background: 0;
@@ -43,7 +43,7 @@
 
     h4 {
         font-size: 1.4em;
-        border-bottom: 1px solid #EEE;
+        border-bottom: 1px solid rgba($color_primary100, 0.1);
         line-height: 1.225;
         padding-bottom: 0.3em;
         padding-top: 0.5em;
@@ -59,10 +59,10 @@
     }
 
     blockquote {
-        color: #666;
+        color: $color_primary50;
         margin: 0;
         padding-left: 1.5em;
-        border-left: 0.5em #EEE solid;
+        border-left: 0.5em $color_primary10 solid;
     }
 
     hr {
@@ -76,7 +76,7 @@
     }
 
     pre, code, kbd, samp, span.code {
-        color: #000;
+        color: $color_primary100;
         page-break-inside: avoid;
         font-family: $monospace-fonts;
         font-size: 0.98em;
@@ -87,10 +87,10 @@
         margin: 0 2px;
         padding: 0 5px;
         border: 1px solid $color_primary25;
-        background-color: #f8f8f8;
+        background-color: $color_primary5;
         border-radius: $widget_border_radius;
         font-size: 0.95em;
-        color: #444;
+        color: $color_primary75;
     }
 
     pre {
@@ -101,7 +101,7 @@
             padding: 0;
             background: transparent;
             font-size: 1em;
-            color: black;
+            color: $color_primary100;
         }
 
         white-space: pre-wrap;
@@ -109,8 +109,8 @@
         margin: 1.5em 0 1.5em 0;
         padding: 1em;
         border: 1px solid $color_primary25;
-        background-color: #f8f8f8;
-        color: black;
+        background-color: $color_primary5;
+        color: $color_primary100;
         border-radius: $widget_border_radius;
     }
 

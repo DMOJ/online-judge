@@ -7,11 +7,11 @@
 
 a {
     &.upvote-link, &.downvote-link {
-        color: black;
+        color: $color_primary100;
     }
 
     &.voted {
-        text-shadow: 0 0 4px black, 0 0 9px blue;
+        text-shadow: 0 0 4px $color_primary100, 0 0 9px blue;
     }
 }
 
@@ -54,14 +54,14 @@ a {
 
 .comment-edits:not(:empty) {
     padding-right: 2px;
-    color: #444;
+    color: $color_primary75;
 }
 
 .comment-operation {
     flex: auto;
 
     .fa {
-        color: #444;
+        color: $color_primary75;
     }
 
     a + a {

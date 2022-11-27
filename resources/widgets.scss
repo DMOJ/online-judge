@@ -76,11 +76,11 @@ button:hover, button:hover, input[type=submit]:hover {
 input {
     &[type=text], &[type=password], &[type=email], &[type=number] {
         padding: 4px 8px;
-        color: #555;
-        background: #FFF none;
+        color: $color_primary75;
+        background: $color_primary0 none;
         border: 1px solid $color_primary25;
         border-radius: $widget_border_radius;
-        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+        box-shadow: 0 1px 1px rgba($color_primary100, 0.075) inset;
         transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
         box-sizing: border-box;
 
@@ -100,37 +100,37 @@ input {
 
 textarea {
     padding: 4px 8px;
-    color: #555;
-    background: #FFF none;
+    color: $color_primary75;
+    background: $color_primary0 none;
     border: 1px solid $color_primary25;
     border-radius: $widget_border_radius;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    box-shadow: 0 1px 1px rgba($color_primary100, 0.075) inset;
     transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
     box-sizing: border-box;
 }
 
 textarea:hover {
     border-color: rgba(82, 168, 236, 0.8);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
+    box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
 }
 
 input {
     &[type="text"]:hover, &[type="password"]:hover {
         border-color: rgba(82, 168, 236, 0.8);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
+        box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
     }
 }
 
 textarea:focus {
     border-color: rgba(82, 168, 236, 0.8);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+    box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
     outline: 0;
 }
 
 input {
     &[type="text"]:focus, &[type="password"]:focus {
         border-color: rgba(82, 168, 236, 0.8);
-        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+        box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
         outline: 0;
     }
 }
@@ -141,10 +141,10 @@ input {
     right: 0;
     display: block;
     font-size: 12px;
-    color: #767676;
+    color: $color_primary50;
     cursor: pointer;
-    background-color: #FFF;
-    border: 1px solid #E1E1E8;
+    background-color: $color_pageBg;
+    border: 1px solid $color_primary25;
     border-radius: 0 $widget_border_radius;
     position: absolute;
     padding: 5px 8px;
@@ -157,11 +157,10 @@ input {
 
 // Bootstrap-y tabs
 .ul_tab_a_active {
-    color: black;
+    color: $color_primary100;
     cursor: default;
-    background-color: #fff;
     border: 1px solid $color_primary25;
-    border-bottom-color: transparent;
+    border-bottom-color: $color_pageBg;
     border-image: none;
 }
 
@@ -176,7 +175,7 @@ input {
     .tab {
         .tab-icon {
             padding-right: 0.3em;
-            color: gray;
+            color: $color_primary50;
         }
 
         a, span {
@@ -189,13 +188,13 @@ input {
             }
 
             .tab-icon {
-                color: black;
+                color: $color_primary100;
             }
         }
     }
 
     h2 {
-        color: #393630;
+        color: $color_primary75;
     }
 
     > ul {
@@ -231,7 +230,7 @@ input {
                 position: relative;
                 display: block;
                 padding: 10px 15px;
-                color: #555;
+                color: $color_primary50;
                 text-decoration: none;
                 white-space: nowrap;
             }
@@ -241,8 +240,8 @@ input {
 
 // Bootstrap-y pagination
 ul.pagination a:hover {
-    color: #FFF;
-    background: rgba(0, 0, 0, 0.55);
+    color: $color_primary0;
+    background: rgba($color_primary100, 0.55);
 }
 
 ul.pagination {
@@ -278,38 +277,24 @@ ul.pagination {
                     padding: 4px 12px;
                     line-height: 1.42857;
                     text-decoration: none;
-                    color: #FFF;
+                    color: $color_primary0;
                     background-color: $color_primary75;
-                    border: 1px solid #505050;
+                    border: 1px solid $color_primary50;
                     margin-left: -1px;
                 }
             }
         }
 
         .disabled-page > {
-            a {
-                color: #888;
+            a, span {
+                color: $color_primary50;
                 background-color: $color_primary75;
-                border-color: #282828;
-            }
-
-            span {
-                color: #888;
-                background-color: $color_primary75;
-                border-color: #505050;
+                border-color: $color_primary50;
             }
         }
 
         .active-page > {
-            a {
-                z-index: 2;
-                color: #FFF;
-                background-color: $highlight_blue;
-                border-color: transparent;
-                cursor: default;
-            }
-
-            span {
+            a, span {
                 z-index: 2;
                 color: #FFF;
                 background-color: $highlight_blue;
@@ -413,7 +398,7 @@ a.close {
 }
 
 .form-submit-group {
-    border-top: 1px solid #EEE;
+    border-top: 1px solid rgba($color_primary100, 0.1);
     margin-top: 0.8em;
     padding-top: 0.5em;
     text-align: right;
@@ -427,7 +412,7 @@ ul.select2-selection__rendered {
     margin: 0 -5px;
     background: $color_primary75;
     border-radius: $widget_border_radius $widget_border_radius 0 0;
-    color: white;
+    color: $color_primary0;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 7px;
@@ -435,7 +420,7 @@ ul.select2-selection__rendered {
 }
 
 .sidebox h3 .fa {
-    color: white;
+    color: $color_primary0;
     float: right;
     margin: 0.2em 0.4em 0 0;
 }

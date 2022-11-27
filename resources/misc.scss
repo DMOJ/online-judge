@@ -8,11 +8,12 @@
     }
 
     .version-blank {
-        background: #eee;
+        background: $color_primary10;
     }
 
     .version-latest {
         background: #b3ff3fe6;
+        color: black;
     }
 
     .version-outdated {
