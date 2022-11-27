@@ -1,5 +1,7 @@
+@import "vars";
+
 .admin a, .admin {
-    color: black !important;
+    color: $color_primary100 !important;
     font-weight: bold !important;
 }
 

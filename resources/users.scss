@@ -47,7 +47,7 @@ th.header.rank {
         transition: background-color linear .2s;
 
         &:hover {
-            background: #EAEAEA;
+            background: $color_primary10;
         }
 
         &.highlight {
@@ -56,10 +56,10 @@ th.header.rank {
     }
 
     th a {
-        color: white;
+        color: $color_primary0;
 
         &:link, &:visited {
-            color: white;
+            color: $color_primary0;
         }
     }
 }
@@ -159,7 +159,7 @@ a.edit-profile {
     top: 50%;
     width: 100000px;
     height: 1px;
-    background: rgba(0, 0, 0, 0.2);
+    background: $color_primary25;
     right: 100%;
     margin-right: 5px;
 }
@@ -207,7 +207,7 @@ a.edit-profile {
     }
 
     .pp-weighted {
-        color: #777;
+        color: $color_primary50;
     }
 
     div.sub-pp {
@@ -233,7 +233,7 @@ a.edit-profile {
 
 #pp-load-link-wrapper {
     text-align: center;
-    border: 1px solid #ccc;
+    border: 1px solid $color_primary25;
 }
 
 #pp-load-more-link {
@@ -276,7 +276,7 @@ a.edit-profile {
         }
         #year {
             font-size: 1.25em;
-            color: #444;
+            color: $color_primary75;
         }
     }
 
@@ -302,7 +302,7 @@ a.edit-profile {
             font-size: 0.75em;
             line-height: 1;
             font-weight: 100;
-            color: #444;
+            color: $color_primary75;
         }
 
         #submission-total-count {

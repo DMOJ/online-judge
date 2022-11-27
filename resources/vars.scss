@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $color_primary0: #fff;
 $color_primary5: #f8f8f8;   // light background
 $color_primary10: #eee;     // background
@@ -6,6 +8,8 @@ $color_primary50: #808080;
 $color_primary75: #3b3b3b;  // widget
 $color_primary90: #111;
 $color_primary100: #000;
+
+$color_pageBg: color.adjust($color_primary5, $lightness: 10%);
 
 $highlight_blue: #2980B9;
 $announcement_red: #ae0000;
