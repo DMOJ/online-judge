@@ -13,7 +13,7 @@
     color: #55ACEE;
 }
 
-.facebook-this it {
+.facebook-this i {
     color: #133783;
 }
 
@@ -47,24 +47,20 @@
         background: #265a88;
     }
 
+    &:active {
+        border-color: #245580;
+        background: #265a88;
+    }
+
+    &.full {
+        padding: 6px 0;
+    }
+
     &.disabled {
         background: linear-gradient(to bottom, darkgray 0, gray 100%) repeat-x !important;
         border-color: grey !important;
         cursor: not-allowed;
     }
-}
-
-.button.full, input[type=submit].full, button.full {
-    padding: 6px 0;
-}
-
-button:hover, button:hover, input[type=submit]:hover {
-    background: #265a88;
-}
-
-.button:active, button:active, input[type=submit]:hover {
-    border-color: #245580;
-    background: #265a88;
 }
 
 .inline-button {
@@ -87,6 +83,17 @@ input {
         // Need this explicitly because UA stylesheet for Chrome on 4k makes
         // everything look bad otherwise (forces it to 9.3px)
         font-size: $base_font_size;
+
+        &:hover {
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
+        }
+
+        &:focus {
+            border-color: rgba(82, 168, 236, 0.8);
+            box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+            outline: 0;
+        }
     }
 
     &[type=number] {
@@ -114,25 +121,10 @@ textarea:hover {
     box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
 }
 
-input {
-    &[type="text"]:hover, &[type="password"]:hover {
-        border-color: rgba(82, 168, 236, 0.8);
-        box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 4px rgba(82, 168, 236, 0.6);
-    }
-}
-
 textarea:focus {
     border-color: rgba(82, 168, 236, 0.8);
     box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
     outline: 0;
-}
-
-input {
-    &[type="text"]:focus, &[type="password"]:focus {
-        border-color: rgba(82, 168, 236, 0.8);
-        box-shadow: inset 0 1px 1px rgba($color_primary100, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
-        outline: 0;
-    }
 }
 
 // Bootstrap-y copy button
@@ -240,7 +232,6 @@ input {
 
 // Bootstrap-y pagination
 ul.pagination a:hover {
-    color: $color_primary0;
     background: rgba($color_primary100, 0.55);
 }
 
@@ -248,7 +239,6 @@ ul.pagination {
     display: inline-block;
     padding-left: 0;
     margin: 0;
-    border-radius: $widget_border_radius;
 
     > {
         li {
@@ -264,7 +254,6 @@ ul.pagination {
 
             &:last-child > {
                 a, span {
-                    margin-left: 0;
                     border-top-right-radius: $widget_border_radius;
                     border-bottom-right-radius: $widget_border_radius;
                 }
@@ -288,8 +277,6 @@ ul.pagination {
         .disabled-page > {
             a, span {
                 color: $color_primary50;
-                background-color: $color_primary75;
-                border-color: $color_primary50;
             }
         }
 
@@ -404,8 +391,13 @@ a.close {
     text-align: right;
 }
 
+ul.select2-results__options {
+    color: black;
+}
+
 ul.select2-selection__rendered {
     padding: 0 5px !important;
+    color: black;
 }
 
 .sidebox h3 {
