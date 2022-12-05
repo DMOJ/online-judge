@@ -14,8 +14,7 @@ if ! [ -x "$(command -v autoprefixer)" ]; then
   exit 1
 fi
 
-FILES=(sass_processed/style.css sass_processed/content-description.css sass_processed/table.css
-       sass_processed/ranks.css sass_processed/martor-description.css)
+FILES=(sass_processed/style.css sass_processed/martor-description.css)
 
 cd "$(dirname "$0")" || exit
 sass resources:sass_processed
