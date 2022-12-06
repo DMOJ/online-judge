@@ -22,7 +22,7 @@ else:
         compress_js = True
 
         def __init__(self, *args, **kwargs):
-            kwargs.setdefault('css', ('pagedown_widget.css',))
+            kwargs.setdefault('css', ())
             super(PagedownWidget, self).__init__(*args, **kwargs)
 
 
@@ -64,5 +64,4 @@ else:
             }
 
         class Media:
-            css = {'all': ['dmmd-preview.css']}
             js = ['dmmd-preview.js']

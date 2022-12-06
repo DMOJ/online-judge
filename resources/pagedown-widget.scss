@@ -1,3 +1,5 @@
+@import "vars";
+
 .wmd-panel {
     margin: 0;
     width: 100%;
@@ -13,8 +15,8 @@
     height: 300px;
     width: 100%;
     max-width: 100%;
-    background: #fff;
-    border: 1px solid DarkGray;
+    background: $color_primary0;
+    border: 1px solid $color_primary50;
     font-family: Consolas, "Liberation Mono", Monaco, "Courier New", monospace !important;
 }
 
@@ -58,8 +60,8 @@
 }
 
 .wmd-prompt-dialog {
-    border: 1px solid #999999;
-    background-color: #F5F5F5;
+    border: 1px solid $color_primary25;
+    background-color: $color_primary5;
 }
 
 .wmd-prompt-dialog > div {
@@ -68,12 +70,12 @@
 }
 
 .wmd-prompt-dialog > form > input[type="text"] {
-    border: 1px solid #999999;
-    color: black;
+    border: 1px solid $color_primary25;
+    color: $color_primary100;
 }
 
 .wmd-prompt-dialog > form > input[type="button"] {
-    border: 1px solid #888888;
+    border: 1px solid $color_primary50;
     font-family: trebuchet MS, helvetica, sans-serif;
     font-size: 0.8em;
     font-weight: bold;
@@ -86,10 +88,10 @@
 .wmd-preview {
     margin-top: 15px;
     padding: 7px;
-    background: white;
+    background: $color_primary0;
     line-height: 1.5em;
     font-size: 1em;
-    border: 1px solid #a9a9a9;
+    border: 1px solid $color_primary50;
     border-radius: 5px;
     box-sizing: border-box;
 }
