@@ -15,10 +15,14 @@
             font-size: 1.7em;
 
             a {
-                color: #5b80b9 !important;
+                color: $color_link50;
 
                 &:hover {
-                    color: #0645ad !important;
+                    color: $color_link100;
+                }
+
+                &:active {
+                    color: $color_link200;
                 }
             }
         }
@@ -56,19 +60,6 @@
 
         &:last-child {
             border-bottom: none;
-        }
-
-        .name {
-            font-size: 1.25em;
-            font-weight: 500;
-
-            a {
-                color: #5b80b9 !important;
-
-                &:hover {
-                    color: #0645ad !important;
-                }
-            }
         }
     }
 

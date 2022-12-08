@@ -54,7 +54,7 @@
         }
 
         &:hover {
-            background: rgba(0, 0, 255, 0.3);
+            background: rgba($color_link100, 0.2);
 
             .num {
                 color: white;
@@ -71,7 +71,7 @@
     }
 
     .today {
-        background: rgba(255, 255, 100, 0.5);
+        background: rgba($color_link200, 0.2);
     }
 }
 
@@ -88,13 +88,14 @@
         line-height: 1.3;
         font-size: 2.3em;
         padding-bottom: 0.15em;
-
-        &:link, &:visited {
-            color: #5B80B9;
-        }
+        color: $color_link50;
 
         &:hover {
-            color: #0645AD;
+            color: $color_link100;
+        }
+
+        &:active {
+            color: $color_link200;
         }
     }
 
