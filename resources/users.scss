@@ -9,7 +9,7 @@ tr {
     padding-bottom: 96px;
 
     &:target {
-        background: #fff897;
+        background: rgba($color_link200, 0.2);
     }
 }
 
@@ -47,11 +47,11 @@ th.header.rank {
         transition: background-color linear .2s;
 
         &:hover {
-            background: $color_primary10;
+            background: rgba($color_primary100, 0.05);
         }
 
         &.highlight {
-            background: #fff897;
+            background: rgba($color_link200, 0.2);
         }
     }
 
@@ -75,31 +75,6 @@ th.header.rank {
 
     .select2-selection__rendered {
         cursor: text;
-    }
-
-    .select2-results__option {
-        position: relative;
-    }
-
-    .select2-results__option--highlighted {
-        background-color: #DEDEDE !important;
-    }
-
-    li.select2-results__option--highlighted a.user-redirect {
-        display: inline-block;
-    }
-}
-
-a.user-redirect {
-    color: #2980b9;
-    vertical-align: middle;
-    font-size: 1.2em;
-    position: absolute;
-    right: 0.8em;
-    display: none;
-
-    &:hover {
-        text-shadow: 0 0 2px blue;
     }
 }
 

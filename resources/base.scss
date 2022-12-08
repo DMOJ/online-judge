@@ -18,14 +18,14 @@
 }
 
 a {
-    color: #1958c1;
+    color: $color_link75;
 
     &:hover {
-        color: #0645ad;
+        color: $color_link100;
     }
 
     &:active {
-        color: #faa700;
+        color: $color_link200;
     }
 }
 
