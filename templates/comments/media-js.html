@@ -6,13 +6,21 @@
             window.reply_comment = function (parent) {
                 var $comment_reply = $('#comment-' + parent + '-reply');
                 var reply_id = 'reply-' + parent;
+                var new_id = 'id' + parent + '_body';
                 if ($comment_reply.find('#' + reply_id).length == 0) {
                     var $reply_form = $('#new-comment').clone(true).prop('id', reply_id);
                     $reply_form.find('h3').html('{{ _('Replying to comment') }}');
                     $reply_form.prepend('<a class="close">x</a>');
                     $reply_form.find('form.comment-submit-form input#id_parent').val(parent);
+                    $reply_form.find('div#id_body-wmd-wrapper').prop('id', new_id + '-wmd-wrapper');
+                    $reply_form.find('div#id_body_wmd_button_bar').empty().prop('id', new_id + '_wmd_button_bar');
+                    $reply_form.find('textarea.wmd-input').val('').prop('id', new_id);
+                    $reply_form.find('div#id_body-preview').attr('data-textarea-id', new_id).prop('id', new_id + '-preview');
                     $reply_form.appendTo($comment_reply);
-                    register_dmmd_preview($('#' + reply_id + ' #id_body-preview'));
+                    register_dmmd_preview($reply_form.find('div#' + new_id + '-preview'));
+                    if ('DjangoPagedown' in window) {
+                        window.DjangoPagedown.createEditor($reply_form.find('textarea.wmd-input').get(0));
+                    }
                 }
                 $comment_reply.fadeIn();
 
