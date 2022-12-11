@@ -1,6 +1,7 @@
 {% extends "common-content.html" %}
 {% block content_media %}
     {% include "comments/media-css.html" %}
+    {{ form.media.css }}
     <style>
         .title-state {
             font-size: 2em;
@@ -34,18 +35,41 @@
             min-width: 12.5em;
         }
 
-        #problem-types, #allowed-langs, #available-judges {
+        #problem-types, #allowed-langs, #available-judges, #file-upload {
             padding-top: 1em;
         }
 
         .problem-info-entry {
             padding-top: 0.5em;
         }
+
+        #file-upload-form > div {
+            margin-top: 5px;
+        }
     </style>
 {% endblock %}
 
 {% block content_js_media %}
+    {{ form.media.js }}
     {% include "comments/media-js.html" %}
+    <script>
+        $(document).ready(function () {
+            $("#file-upload-submit").click(function (event) {
+                const reader = new FileReader();
+                reader.addEventListener("load", function () {
+                    const form = $(`<form style="display:none;" action="{{ url('problem_submit', problem.code) }}" method="post">
+                            {% csrf_token %}
+                            <textarea name="source" id="hidden-textarea-file-submit" />
+                            <input name="language" value="${$("#id_language").val()}" />
+                        </form>`);
+                    $('body').append(form);
+                    $('#hidden-textarea-file-submit').val(reader.result);
+                    form.submit();
+                });
+                reader.readAsText($("#file-upload-input")[0].files[0]);
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block title_row %}
@@ -98,7 +122,7 @@
     {% if request.user.is_authenticated and request.in_contest and submission_limit %}
         {% if submissions_left > 0 %}
             <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
-                {{ _('Submit solution') }}
+                {{ _('Go to editor') }}
             </a>
             <div class="submissions-left">
                 {% trans trimmed counter=submissions_left %}
@@ -108,13 +132,36 @@
                 {% endtrans %}
             </div>
         {% else %}
-            <a class="unselectable button full disabled">{{ _('Submit solution') }}</a>
+            <a class="unselectable button full disabled">{{ _('Go to editor') }}</a>
             <div class="no-submissions-left submissions-left">{{ _('0 submissions left') }}</div>
         {% endif %}
     {% else %}
         <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
-            {{ _('Submit solution') }}
+            {{ _('Go to editor') }}
         </a>
+    {% endif %}
+    {% if request.user.is_authenticated and (not request.in_contest or submission_limit) %}
+        <div id="file-upload">
+            <div class="toggle closed unselectable">
+                <i class="fa fa-chevron-right fa-fw"></i>Upload a file
+            </div>
+            <div style="display:none;" class="toggled" id="file-upload-form">
+                <div>
+                    <input type="file" id="file-upload-input" name="file"/>
+                </div>
+                <div id="language-select">
+                    <select id="id_language" name="language" class="full">
+                        {% for lang in form.fields.language.queryset %}
+                            <option value="{{ lang.id }}" {% if request.user.is_authenticated and lang.id == default_lang.id %}selected{% endif %}>{{ lang.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <input value="{{ _('Submit!') }}" id="file-upload-submit" class="unselectable button full" 
+                        {% if request.in_contest and submission_limit and submissions_left == 0 %}disabled{% endif %} />
+                </div>
+            </div>
+        </div>
     {% endif %}
 
     <hr style="padding-bottom: 0.3em">
