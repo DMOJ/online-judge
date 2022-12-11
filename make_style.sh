@@ -14,10 +14,14 @@ if ! [ -x "$(command -v autoprefixer)" ]; then
   exit 1
 fi
 
-FILES=(sass_processed/style.css sass_processed/martor-description.css)
-
 cd "$(dirname "$0")" || exit
-sass resources:sass_processed
 
-echo
-postcss "${FILES[@]}" --verbose --use autoprefixer -d resources
+build_style() {
+  echo "Creating $1 style..."
+  cp resources/vars-$1.scss resources/vars.scss
+  sass resources:sass_processed
+  postcss sass_processed/style.css sass_processed/martor-description.css --verbose --use autoprefixer -d $2
+}
+
+build_style 'default' 'resources'
+build_style 'dark' 'resources/dark'
