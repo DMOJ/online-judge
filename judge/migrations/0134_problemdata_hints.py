@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0133_auto_20221212_1427'),
+        ('judge', '0133_add_binary_data'),
     ]
 
     operations = [
