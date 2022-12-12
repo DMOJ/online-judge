@@ -178,6 +178,8 @@ class ProblemDataCompiler(object):
             init['output_limit_length'] = self.data.output_limit
         if self.data.output_prefix is not None:
             init['output_prefix_length'] = self.data.output_prefix
+        if self.data.binary_data:
+            init['binary_data'] = self.data.binary_data
         if self.data.checker:
             init['checker'] = make_checker(self.data)
         else:
