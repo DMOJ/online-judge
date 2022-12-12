@@ -47,7 +47,7 @@ class ProblemDataForm(ModelForm):
         return self.cleaned_data['zipfile']
 
     clean_checker_args = checker_args_cleaner
-    
+
     class Meta:
         model = ProblemData
         fields = ['zipfile', 'generator', 'binary_data', 'output_limit', 'output_prefix', 'checker', 'checker_args']
