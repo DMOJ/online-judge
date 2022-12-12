@@ -31,8 +31,8 @@ CHECKERS = (
 )
 
 HINTS = (
-    ('unicode', _('Unicode')),
-    ('none', _('NONE'))
+    ('unicode', _('Enable unicode')),
+    ('nobigmath', _('Disable BigInteger/BigDecimal'))
 )
 
 
