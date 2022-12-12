@@ -116,9 +116,6 @@
                             {% cache 86400 'post_summary' post.id %}
                                 {{ post.summary|default(post.content, true)|markdown('blog', 'svg', lazy_load=True)|reference|str|safe }}
                             {% endcache %}
-                            {%- if post.summary -%}
-                                <p><a href="{{ url('blog_post', post.id, post.slug) }}">{{ _('Continue reading...') }}</a></p>
-                            {%- endif -%}
                         </div>
                     </section>
                 {% endfor %}
