@@ -180,6 +180,11 @@ class ProblemDataCompiler(object):
             init['output_prefix_length'] = self.data.output_prefix
         if self.data.binary_data:
             init['binary_data'] = self.data.binary_data
+        if self.data.hints:
+            if self.data.hints == "none":
+                init['hints'] = None
+            else:
+                init['hints'] = [self.data.hints]
         if self.data.checker:
             init['checker'] = make_checker(self.data)
         else:

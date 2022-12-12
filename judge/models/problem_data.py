@@ -30,6 +30,11 @@ CHECKERS = (
     ('linecount', _('Line-by-line')),
 )
 
+HINTS = (
+    ('unicode', _('Unicode')),
+    ('none', _('NONE'))
+)
+
 
 class ProblemData(models.Model):
     problem = models.OneToOneField('Problem', verbose_name=_('problem'), related_name='data_files',
@@ -43,6 +48,7 @@ class ProblemData(models.Model):
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
     feedback = models.TextField(verbose_name=_('init.yml generation feedback'), blank=True)
     checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
+    hints = models.CharField(max_length=10, verbose_name=_('hints'), choices=HINTS, blank=True)
     checker_args = models.TextField(verbose_name=_('checker arguments'), blank=True,
                                     help_text=_('Checker arguments as a JSON object.'))
 
