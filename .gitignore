@@ -7,8 +7,6 @@
 *~
 *.swp
 dmoj/local_settings.py
-resources/dark
-resources/martor-description.css
 resources/style.css
-resources/vars.scss
+resources/martor-description.css
 sass_processed
