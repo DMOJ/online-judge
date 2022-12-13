@@ -49,7 +49,7 @@
 }
 
 .wmd-button > span {
-    background: url(pagedown/wmd-buttons.png) no-repeat 0 0;
+    background: url($path_to_root + '/pagedown/wmd-buttons.png') no-repeat 0 0;
     width: 20px;
     height: 20px;
     display: inline-block;
