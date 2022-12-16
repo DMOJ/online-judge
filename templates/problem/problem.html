@@ -69,7 +69,7 @@
                 </a>
             {% endif %}
         {% endif %}
-        <h2 style="color:#393630; display: inline-block">{{ title }}</h2>
+        <h2 style="display: inline-block">{{ title }}</h2>
         {% if problem.is_organization_private %}
             <span class="organization-tags">
                 {% for org in problem.organizations.all() %}
