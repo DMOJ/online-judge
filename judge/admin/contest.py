@@ -184,8 +184,8 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         if form.changed_data:
             if 'private_contestants' in form.changed_data:
                 obj.is_private = bool(form.cleaned_data['private_contestants'])
-            if 'organizations' in form.changed_data:
-                obj.is_organization_private = bool(form.cleaned_data['organizations'])
+            if 'organizations' in form.changed_data or 'classes' in form.changed_data:
+                obj.is_organization_private = bool(form.cleaned_data['organizations'] or form.cleaned_data['classes'])
             if 'join_organizations' in form.cleaned_data:
                 obj.limit_join_organizations = bool(form.cleaned_data['join_organizations'])
 
