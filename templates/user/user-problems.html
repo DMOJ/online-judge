@@ -92,7 +92,9 @@
     {% for group in best_submissions %}
         <div class="user-problem-group">
             <h3 class="unselectable toggle closed"><span class="fa fa-chevron-right fa-fw"></span>
-                {{ group.name }} ({{ _('%(points).1f points', points=group.points) }})
+                {%- with points_str=group.points|floatformat(-3) -%}
+                    {{ _('%(group)s (%(val)s points)', group=group.name, val=points_str) }}
+                {%- endwith -%}
             </h3>
             <table style="display: none" class="table toggled">
                 <thead>
@@ -109,7 +111,9 @@
                         </td>
                         <td class="problem-score">
                             <a href="{{ url('user_submissions', entry.code, user.user.username) }}">
-                                {{ _('%(points)s / %(total)s', points=entry.points, total=entry.total) }}
+                                {%- with points_str=entry.points|floatformat(-3), total_str=entry.total|floatformat(-3) -%}
+                                    {{ _('%(points)s / %(total)s', points=points_str, total=total_str) }}
+                                {%- endwith -%}
                             </a>
                         </td>
                     </tr>
