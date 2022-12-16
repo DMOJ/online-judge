@@ -18,7 +18,7 @@ class ClassForm(ModelForm):
 
 
 class ClassAdmin(VersionAdmin):
-    fields = ('name', 'slug', 'organization', 'is_active', 'access_code', 'admins', 'description')
+    fields = ('name', 'slug', 'organization', 'is_active', 'access_code', 'admins', 'description', 'members')
     list_display = ('name', 'organization', 'is_active')
     prepopulated_fields = {'slug': ('name',)}
     form = ClassForm
