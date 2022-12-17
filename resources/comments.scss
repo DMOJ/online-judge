@@ -145,3 +145,120 @@ a {
     word-wrap: break-word;
     word-break: break-word;
 }
+
+.revision-text p:first-child {
+    margin-top: 0;
+}
+
+.revision-text p:last-child {
+    margin-bottom: 0;
+}
+
+.previous-revision, .next-revision {
+    color: $color_primary75;
+}
+
+.new-comments {
+    .comment-display {
+        display: flex;
+        margin-top: -0.25em !important;
+        padding-left: 1em;
+        padding-top: 0.5em !important;
+        border: 1px solid $color_primary25;
+        background: $color_primary5;
+        border-radius: $widget_border_radius;
+    }
+
+    .comment .detail {
+        margin: 0px 15px 0px;
+        width: 100%;
+
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 2px 0px;
+            font-weight: normal;
+            border-bottom: 1px $color_primary50 solid;
+            color: $color_primary50;
+            text-align: right;
+        }
+    }
+
+    .comment:target > .comment-display {
+        border: 1px solid $highlight_blue;
+        border-left: 10px solid $highlight_blue;
+        padding-left: 5px;
+    }
+
+    .comment-edits {
+        padding-right: 0.75em;
+    }
+
+    .header i {
+        color: $color_primary50 !important;
+    }
+
+    .info {
+        padding-top: 0.4em;
+        display: flex;
+    }
+
+    .gravatar {
+        width: 75px;
+        max-width: 75px;
+    }
+
+    .gravatar-mobile {
+        display: none;
+    }
+
+    .gravatar-main {
+        display: unset;
+    }
+
+    .vote {
+        margin-right: 1em;
+        height: 75px;
+        padding-top: 0.4em;
+    }
+}
+
+@media (max-width: 760px) {
+    .new-comments {
+        .gravatar {
+            width: 10px;
+            max-width: 10px;
+        }
+
+        .gravatar-mobile {
+            display: unset;
+        }
+
+        .gravatar-main {
+            display: none;
+        }
+
+        .vote {
+            margin-right: 0em;
+        }
+    }
+}
+
+.comments.top-level-comments {
+    margin-bottom: -3px;
+}
+
+.bad-comment {
+    opacity: 0.3;
+
+    &:hover {
+        opacity: 1;
+        /* This is necessary to prevent random flickering */
+        -webkit-transform: translatez(0);
+        -moz-transform: translatez(0);
+        -ms-transform: translatez(0);
+        -o-transform: translatez(0);
+        transform: translatez(0);
+    }
+}
