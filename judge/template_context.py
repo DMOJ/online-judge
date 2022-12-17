@@ -24,7 +24,7 @@ def get_resource(request):
     else:
         scheme = 'http'
     return {
-        'STYLE_CSS': 'dark/style.css' if request.GET.get('dark') else 'style.css',
+        'STYLE_CSS': 'dark/style.css' if 'dark' in request.GET else 'style.css',
         'PYGMENT_THEME': settings.PYGMENT_THEME,
         'INLINE_JQUERY': settings.INLINE_JQUERY,
         'INLINE_FONTAWESOME': settings.INLINE_FONTAWESOME,
