@@ -52,7 +52,7 @@
             <h3 class="unselectable toggle closed">
                 <span class="fa fa-chevron-right fa-fw"></span>{{ _('Authored problems') }} ({{ authored|length }})
             </h3>
-            <table style="display: none" class="table toggled">
+            <table style="display: none" class="table striped toggled">
                 <thead>
                 <tr>
                     <th>{{ _('Problem') }}</th>
@@ -96,7 +96,7 @@
                     {{ _('%(group)s (%(val)s points)', group=group.name, val=points_str) }}
                 {%- endwith -%}
             </h3>
-            <table style="display: none" class="table toggled">
+            <table style="display: none" class="table striped toggled">
                 <thead>
                 <tr>
                     <th>{{ _('Problem') }}</th>
