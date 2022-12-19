@@ -275,7 +275,7 @@
 
             {% csrf_token %}
 
-            <div style="padding-top:0.5em" class="block-header">{{ _('Self-description') }}:</div>
+            <div style="padding-top:0.5em" class="block-header">{{ _('Self-description:') }}</div>
             {{ form.about }}
             <hr>
 
@@ -283,20 +283,20 @@
                 <div class="pane" style="vertical-align:top">
                     <table style="padding-right:0.8em">
                         <tr title="{{ _('Select your closest major city') }}">
-                            <td><label class="inline-header grayed">{{ _('Timezone') }}:</label></td>
+                            <td><label class="inline-header grayed">{{ _('Time zone:') }}</label></td>
                             <td><span class="fullwidth">{{ form.timezone }}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="inline-header grayed">{{ _('Language') }}:</label></td>
+                            <td><label class="inline-header grayed">{{ _('Language:') }}</label></td>
                             <td><span class="fullwidth">{{ form.language }}</span></td>
                         </tr>
                         <tr>
-                            <td><label class="inline-header grayed">{{ _('Editor theme') }}:</label></td>
+                            <td><label class="inline-header grayed">{{ _('Editor theme:') }}</label></td>
                             <td><span class="fullwidth">{{ form.ace_theme }}</span></td>
                         </tr>
                         {% if has_math_config %}
                             <tr>
-                                <td><label class="inline-header grayed">{{ _('Math engine') }}:</label></td>
+                                <td><label class="inline-header grayed">{{ _('Math engine:') }}</label></td>
                                 <td><span class="fullwidth">{{ form.math_engine }}</span></td>
                             </tr>
                         {% endif %}
@@ -305,7 +305,7 @@
                 {% if form.organizations %}
                     <div class="pane">
                         <div style="padding-bottom:0.3em; margin-top:0.3em" class="block-header">
-                            {{ _('Affiliated organizations') }}:
+                            {{- _('Affiliated organizations:') -}}
                         </div>
                         {{ form.organizations }}
                     </div>
@@ -330,8 +330,7 @@
                             </label>
                         </td></tr>
                         <tr><td>
-                            <a href="http://www.gravatar.com/" title="{{ _('Change your avatar') }}"
-                               target="_blank" class="inline-header" rel="noopener">
+                            <a href="https://www.gravatar.com/" target="_blank" class="inline-header" rel="noopener">
                                 {{ _('Change your avatar') }}
                             </a>
                         </td></tr>
@@ -350,7 +349,7 @@
                     </table>
                     <div>
                         {% if profile.is_totp_enabled %}
-                            <div class="block-header grayed">{{ _('Two-factor Authentication is enabled') }}:</div>
+                            <div class="block-header grayed">{{ _('Two-factor Authentication is enabled:') }}</div>
                             <div class="block-buttons">
                                 {% if require_staff_2fa and request.user.is_staff and not profile.is_webauthn_enabled %}
                                     <a id="disable-2fa-button" class="button inline-button">{{ _('Disable') }}</a>
@@ -361,7 +360,7 @@
                                 <a href="{{ url('refresh_2fa') }}" class="button inline-button">{{ _('Refresh') }}</a>
                             </div>
                             <div class="block-header grayed">
-                                {{ _('Scratch Codes:') }}
+                                {{ _('Scratch codes:') }}
                                 {% if profile.scratch_codes %}
                                     <a id="generate-scratch-codes-button" href="{{ url('generate_scratch_codes') }}"
                                        class="button inline-button">{{ _('Regenerate') }}</a>
@@ -383,7 +382,7 @@
                             </div>
                         {% else %}
                             <span class="inline-header grayed">
-                                {{ _('Two-factor Authentication is disabled') }}:
+                                {{ _('Two-factor Authentication is disabled:') }}
                                 <a href="{{ url('enable_2fa') }}" class="button inline-button">{{ _('Enable') }}</a>
                             </span>
                         {% endif %}
@@ -391,7 +390,7 @@
                 </div>
                 <div class="pane">
                     <span id="api-token-td" class="inline-header grayed">
-                        {{ _('API Token') }}:
+                        {{ _('API token:') }}
                         {% if profile.api_token %}
                             <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
                                 class="button inline-button">{{ _('Regenerate') }}</a>
@@ -408,7 +407,7 @@
                     <span class="inline-header grayed">
                     {% if HAS_WEBAUTHN %}
                         <div style="padding-bottom:0.4em" class="block-header">
-                            {{ _('Security keys') }}:
+                            {{- _('Security keys:') -}}
                         </div>
                         <table class="table">
                             {% if profile.is_webauthn_enabled %}
@@ -434,7 +433,7 @@
                 </div>
             </div>
             <hr>
-            <div class="block-header">{{ _('User-script') }}:</div>
+            <div class="block-header">{{ _('User-script:') }}</div>
             {{ form.user_script }}
             <hr>
 
