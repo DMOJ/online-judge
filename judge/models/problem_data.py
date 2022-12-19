@@ -30,12 +30,6 @@ CHECKERS = (
     ('linecount', _('Line-by-line')),
 )
 
-HINTS = (
-    ('unicode', _('Enable unicode')),
-    ('nobigmath', _('Disable BigInteger/BigDecimal'))
-)
-
-
 class ProblemData(models.Model):
     problem = models.OneToOneField('Problem', verbose_name=_('problem'), related_name='data_files',
                                    on_delete=models.CASCADE)
@@ -43,12 +37,12 @@ class ProblemData(models.Model):
                                upload_to=problem_directory_file)
     generator = models.FileField(verbose_name=_('generator file'), storage=problem_data_storage, null=True, blank=True,
                                  upload_to=problem_directory_file)
-    binary_data = models.BooleanField(verbose_name=_('binary data'), null=True, blank=True)
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
     feedback = models.TextField(verbose_name=_('init.yml generation feedback'), blank=True)
     checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
-    hints = models.CharField(max_length=10, verbose_name=_('hints'), choices=HINTS, blank=True)
+    unicode = models.BooleanField(verbose_name=_('enable unicode'), null=True, blank=True)
+    nobigmath = models.BooleanField(verbose_name=_('disable biginteger/bigdecimal'), null=True, blank=True)
     checker_args = models.TextField(verbose_name=_('checker arguments'), blank=True,
                                     help_text=_('Checker arguments as a JSON object.'))
 
