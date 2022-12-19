@@ -181,16 +181,16 @@ class ProblemDataCompiler(object):
         if self.data.output_prefix is not None:
             init['output_prefix_length'] = self.data.output_prefix
         if self.data.unicode:
-            hints.append("unicode")
+            hints.append("unicode")            
         if self.data.nobigmath:
-            hints.append("nobigmath")            
+            hints.append("nobigmath")                     
         if self.data.checker:
             init['checker'] = make_checker(self.data)
         else:
             self.data.checker_args = ''
 
         if len(hints) > 0:
-            self.data.hints = hints
+            init['hints'] = hints
 
         return init
 
