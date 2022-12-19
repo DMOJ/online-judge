@@ -12,3 +12,6 @@ resources/martor-description.css
 sass_processed
 dmojsite
 dmojsite/*
+problems
+problems/*
+*.log
