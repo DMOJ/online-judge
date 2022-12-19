@@ -10,3 +10,5 @@ dmoj/local_settings.py
 resources/style.css
 resources/martor-description.css
 sass_processed
+dmojsite
+dmojsite/*
