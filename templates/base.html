@@ -39,21 +39,16 @@
     {% if meta_description %}
         <meta property="og:description" content="{{ meta_description }}">
     {% endif %}
-    <!--[if lt IE 9]>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script>window.bad_browser = true</script>
-    <![endif]-->
     {% block meta %}{% endblock %}
     {% if not INLINE_FONTAWESOME %}
         <link rel="stylesheet" href="{{ FONTAWESOME_CSS }}">
     {% endif %}
     {% compress css %}
-        <link rel="stylesheet" href="{{ static('style.css') }}">
+        <link rel="stylesheet" href="{{ static(STYLE_CSS) }}">
         {% if PYGMENT_THEME %}
             <link rel="stylesheet" href="{{ static(PYGMENT_THEME) }}">
         {% endif %}{% if INLINE_FONTAWESOME %}
         <link rel="stylesheet" href="{{ static('libs/fontawesome/font-awesome.css') }}">{% endif %}
-        <link rel="stylesheet" type="text/css" href="{{ static('libs/featherlight/featherlight.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ static('libs/clipboard/tooltip.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ static('libs/select2/select2.css') }}">
     {% endcompress %}
@@ -266,7 +261,7 @@
     <br>
     <main id="content">
         {% block title_row %}
-            <h2 style="color:#393630; display:inline">
+            <h2 style="display:inline">
                 {% block content_title %}
                     {% if content_title %}{{ content_title }}{% else %}{{ title }}{% endif %}
                 {% endblock %}
