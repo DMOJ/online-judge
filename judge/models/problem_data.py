@@ -30,6 +30,7 @@ CHECKERS = (
     ('linecount', _('Line-by-line')),
 )
 
+
 class ProblemData(models.Model):
     problem = models.OneToOneField('Problem', verbose_name=_('problem'), related_name='data_files',
                                    on_delete=models.CASCADE)
@@ -45,7 +46,7 @@ class ProblemData(models.Model):
     nobigmath = models.BooleanField(verbose_name=_('disable bigInteger / bigDecimal'), null=True, blank=True)
     checker_args = models.TextField(verbose_name=_('checker arguments'), blank=True,
                                     help_text=_('Checker arguments as a JSON object.'))
-                                    
+
     __original_zipfile = None
 
     def __init__(self, *args, **kwargs):
