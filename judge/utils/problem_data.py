@@ -162,6 +162,8 @@ class ProblemDataCompiler(object):
 
         pretest_test_cases = []
         test_cases = []
+        hints = []
+
         for case in cases:
             if case['is_pretest']:
                 pretest_test_cases.append(case)
@@ -178,10 +180,18 @@ class ProblemDataCompiler(object):
             init['output_limit_length'] = self.data.output_limit
         if self.data.output_prefix is not None:
             init['output_prefix_length'] = self.data.output_prefix
+        if self.data.unicode:
+            hints.append('unicode')
+        if self.data.nobigmath:
+            hints.append('nobigmath')
         if self.data.checker:
             init['checker'] = make_checker(self.data)
         else:
             self.data.checker_args = ''
+
+        if hints:
+            init['hints'] = hints
+
         return init
 
     def compile(self):
