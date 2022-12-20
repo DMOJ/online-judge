@@ -189,7 +189,7 @@ class ProblemDataCompiler(object):
         else:
             self.data.checker_args = ''
 
-        if len(hints) > 0:
+        if hints:
             init['hints'] = hints
 
         return init
