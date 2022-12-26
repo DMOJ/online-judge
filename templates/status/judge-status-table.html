@@ -1,3 +1,4 @@
+<thead>
 <tr>
     <th>{{ _('Judge') }}</th>
     {% if see_all_judges %}
@@ -8,7 +9,8 @@
     <th>{{ _('Load') }}</th>
     <th>{{ _('Runtimes') }}</th>
 </tr>
-
+</thead>
+<tbody>
 {% for judge in judges %}
     <tr>
         <td>
@@ -29,7 +31,7 @@
         {% endif %}
         <td>
             {% if judge.online %}
-                {{ judge.uptime|timedelta("simple") }}
+                {{ judge.uptime|timedelta('localized') }}
             {% else %}
                 {{ _('N/A') }}
             {% endif %}
@@ -65,3 +67,4 @@
         </td>
     </tr>
 {% endfor %}
+</tbody>
