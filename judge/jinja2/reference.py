@@ -18,7 +18,7 @@ rereference = re.compile(r'\[(r?user):(\w+)\]')
 
 def get_user(username, data):
     if not data:
-        element = Element('span')
+        element = Element('span', {'class': 'deleted-user'})
         element.text = username
         return element
 
