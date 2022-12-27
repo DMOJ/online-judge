@@ -24,10 +24,7 @@ SubmissionData = namedtuple('SubmissionData', 'time memory short_circuit pretest
 
 
 def _ensure_connection():
-    try:
-        db.connection.cursor().execute('SELECT 1').fetchall()
-    except Exception:
-        db.connection.close()
+    db.connection.close_if_unusable_or_obsolete()
 
 
 class JudgeHandler(ZlibPacketHandler):
