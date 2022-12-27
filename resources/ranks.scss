@@ -26,6 +26,10 @@ svg.rate-box {
         visibility: hidden;
     }
 
+    &.rate-primary0 {
+        @include rate-svg-color($color_primary0);
+    }
+
     &.rate-newbie {
         @include rate-svg-color(#999);
     }
@@ -106,10 +110,11 @@ svg.rate-box {
 
     .rating {
         display: inline-block;
+        vertical-align: middle;
     }
 
     .rate-box {
         margin-right: 0.2em;
-        vertical-align: bottom;
+        vertical-align: middle;
     }
 }
