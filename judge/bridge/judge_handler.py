@@ -626,3 +626,6 @@ class JudgeHandler(ZlibPacketHandler):
                 'user': data['user_id'], 'problem': data['problem_id'],
                 'status': data['status'], 'language': data['language__key'],
             })
+
+    def on_cleanup(self):
+        db.connection.close()
