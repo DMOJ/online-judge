@@ -141,6 +141,9 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
     def on_timeout(self):
         pass
 
+    def on_cleanup(self):
+        pass
+
     def handle(self):
         try:
             tag = self.read_size()
@@ -187,6 +190,8 @@ class ZlibPacketHandler(metaclass=RequestHandlerMeta):
             if e.__class__.__name__ == 'cancel_wait_ex':
                 return
             raise
+        finally:
+            self.on_cleanup()
 
     def send(self, data):
         compressed = zlib.compress(data.encode('utf-8'))
