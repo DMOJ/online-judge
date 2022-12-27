@@ -2,6 +2,8 @@ import json
 import logging
 import struct
 
+from django import db
+
 from judge.bridge.base_handler import Disconnect, ZlibPacketHandler
 
 logger = logging.getLogger('judge.bridge')
@@ -55,5 +57,5 @@ class DjangoHandler(ZlibPacketHandler):
     def on_malformed(self, packet):
         logger.error('Malformed packet: %s', packet)
 
-    def on_close(self):
-        self._to_kill = False
+    def on_cleanup(self):
+        db.connection.close()
