@@ -1,9 +1,8 @@
-from django.conf.urls import url
 from django.db.models import TextField
 from django.forms import ModelForm, TextInput
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.urls import path, reverse
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
@@ -73,9 +72,9 @@ class JudgeAdmin(VersionAdmin):
     }
 
     def get_urls(self):
-        return ([url(r'^(\d+)/disconnect/$', self.disconnect_view, name='judge_judge_disconnect'),
-                 url(r'^(\d+)/terminate/$', self.terminate_view, name='judge_judge_terminate'),
-                 url(r'^(\d+)/disable/$', self.disable_view, name='judge_judge_disable')] +
+        return ([path('<int:id>/disconnect/', self.disconnect_view, name='judge_judge_disconnect'),
+                 path('<int:id>/terminate/', self.terminate_view, name='judge_judge_terminate'),
+                 path('<int:id>/disable/', self.disable_view, name='judge_judge_disable')] +
                 super(JudgeAdmin, self).get_urls())
 
     def disconnect_judge(self, id, force=False):

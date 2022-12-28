@@ -2,14 +2,13 @@ from functools import partial
 from operator import itemgetter
 
 from django.conf import settings
-from django.conf.urls import url
 from django.contrib import admin, messages
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.urls import path, reverse
 from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_lazy as _, ngettext, pgettext
 from reversion.admin import VersionAdmin
@@ -253,7 +252,7 @@ class SubmissionAdmin(VersionAdmin):
 
     def get_urls(self):
         return [
-            url(r'^(\d+)/judge/$', self.judge_view, name='judge_submission_rejudge'),
+            path('<int:id>/judge/', self.judge_view, name='judge_submission_rejudge'),
         ] + super(SubmissionAdmin, self).get_urls()
 
     def judge_view(self, request, id):
