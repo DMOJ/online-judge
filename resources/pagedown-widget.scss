@@ -49,6 +49,7 @@
 }
 
 .wmd-button > span {
+    @include vars-img;
     background: url($path_to_root + '/pagedown/wmd-buttons.png') no-repeat 0 0;
     width: 20px;
     height: 20px;
