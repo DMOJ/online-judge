@@ -17,3 +17,5 @@ $color_link200: #faa700;    // active
 $color_pageBg: #fff;
 
 $path_to_root: '.';     // relative path from style.css to STATIC_ROOT
+
+@mixin vars-img {}

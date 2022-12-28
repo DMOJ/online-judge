@@ -88,7 +88,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
                 return '<pre>%s</pre>' % mistune.escape(latex, smart_amp=False)
             elif 'error' not in result:
                 img = ('''<img src="%(svg)s" onerror="this.src='%(png)s';this.onerror=null"'''
-                       'width="%(width)s" height="%(height)s"%(tail)s>') % {
+                       'class="tex-full" width="%(width)s" height="%(height)s"%(tail)s>') % {
                     'svg': result['svg'], 'png': result['png'],
                     'width': result['meta']['width'], 'height': result['meta']['height'],
                     'tail': ' /' if self.options.get('use_xhtml') else '',
@@ -96,7 +96,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
                 style = ['max-width: 100%',
                          'height: %s' % result['meta']['height'],
                          'max-height: %s' % result['meta']['height'],
-                         'width: %s' % result['meta']['height']]
+                         'width: %s' % result['meta']['width']]
                 if 'inline' in attr:
                     tag = 'span'
                 else:

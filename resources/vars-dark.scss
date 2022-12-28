@@ -17,3 +17,7 @@ $color_link200: #960;   // active
 $color_pageBg: #222;    // #222 because some elements should be darker than pageBg
 
 $path_to_root: '..';    // relative path from style.css to STATIC_ROOT
+
+@mixin vars-img {
+    filter: invert(1) hue-rotate(180deg);
+}
