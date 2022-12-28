@@ -1,5 +1,4 @@
 from adminsortable2.admin import SortableInlineAdminMixin
-from django.conf.urls import url
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import connection, transaction
@@ -7,7 +6,7 @@ from django.db.models import Q, TextField
 from django.forms import ModelForm, ModelMultipleChoiceField
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import path, reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _, ngettext
@@ -268,9 +267,9 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def get_urls(self):
         return [
-            url(r'^rate/all/$', self.rate_all_view, name='judge_contest_rate_all'),
-            url(r'^(\d+)/rate/$', self.rate_view, name='judge_contest_rate'),
-            url(r'^(\d+)/judge/(\d+)/$', self.rejudge_view, name='judge_contest_rejudge'),
+            path('rate/all/', self.rate_all_view, name='judge_contest_rate_all'),
+            path('<int:id>/rate/', self.rate_view, name='judge_contest_rate'),
+            path('<int:contest_id>/judge/<int:problem_id>/', self.rejudge_view, name='judge_contest_rejudge'),
         ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
