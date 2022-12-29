@@ -114,7 +114,7 @@ def site_name(request):
 def math_setting(request):
     caniuse = CanIUse(request.META.get('HTTP_USER_AGENT', ''))
 
-    if request.user.is_authenticated:
+    if request.user.profile:
         engine = request.profile.math_engine
     else:
         engine = settings.MATHOID_DEFAULT_TYPE
