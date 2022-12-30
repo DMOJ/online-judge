@@ -223,7 +223,7 @@ class Profile(models.Model):
 
     @cached_property
     def has_any_solves(self):
-        return self.submission_set.filter(points=F('problem__points')).exists()
+        return self.submission_set.filter(result='AC', case_points__gte=F('case_total')).exists()
 
     _pp_table = [pow(settings.DMOJ_PP_STEP, i) for i in range(settings.DMOJ_PP_ENTRIES)]
 
