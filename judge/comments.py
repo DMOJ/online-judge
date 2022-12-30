@@ -46,8 +46,7 @@ class CommentForm(ModelForm):
             if profile.mute:
                 raise ValidationError(_('Your part is silent, little toad.'))
             elif not self.request.user.is_staff and not profile.has_any_solves:
-                raise ValidationError(_('You need to have solved at least one problem '
-                                        'before your voice can be heard.'))
+                raise ValidationError(_('You must solve at least one problem before your voice can be heard.'))
         return super(CommentForm, self).clean()
 
 
