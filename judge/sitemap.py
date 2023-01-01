@@ -7,7 +7,7 @@ from judge.models import BlogPost, Contest, Organization, Problem, Solution
 
 
 class ProblemSitemap(Sitemap):
-    changefreq = 'daily'
+    changefreq = 'weekly'
     priority = 0.8
 
     def items(self):
@@ -18,7 +18,7 @@ class ProblemSitemap(Sitemap):
 
 
 class UserSitemap(Sitemap):
-    changefreq = 'hourly'
+    changefreq = 'weekly'
     priority = 0.5
 
     def items(self):
@@ -30,7 +30,7 @@ class UserSitemap(Sitemap):
 
 class ContestSitemap(Sitemap):
     changefreq = 'hourly'
-    priority = 0.5
+    priority = 0.7
 
     def items(self):
         return Contest.objects.filter(is_visible=True, is_private=False,
@@ -41,7 +41,7 @@ class ContestSitemap(Sitemap):
 
 
 class OrganizationSitemap(Sitemap):
-    changefreq = 'hourly'
+    changefreq = 'weekly'
     priority = 0.5
 
     def items(self):
@@ -63,7 +63,7 @@ class BlogPostSitemap(Sitemap):
 
 
 class SolutionSitemap(Sitemap):
-    changefreq = 'hourly'
+    changefreq = 'weekly'
     priority = 0.8
 
     def items(self):
@@ -76,7 +76,7 @@ class SolutionSitemap(Sitemap):
 
 class HomePageSitemap(Sitemap):
     priority = 1.0
-    changefreq = 'daily'
+    changefreq = 'hourly'
 
     def items(self):
         return ['home']
