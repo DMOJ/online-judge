@@ -357,16 +357,16 @@ urlpatterns = [
     ])),
 
     path('sitemap.xml', sitemap, {'sitemaps': {
-        'problem': ProblemSitemap,
-        'user': UserSitemap,
         'home': HomePageSitemap,
-        'contest': ContestSitemap,
-        'organization': OrganizationSitemap,
-        'blog': BlogPostSitemap,
-        'solutions': SolutionSitemap,
         'pages': UrlSitemap([
             {'location': '/about/', 'priority': 0.9},
         ]),
+        'problem': ProblemSitemap,
+        'solutions': SolutionSitemap,
+        'blog': BlogPostSitemap,
+        'contest': ContestSitemap,
+        'organization': OrganizationSitemap,
+        'user': UserSitemap,
     }}),
 
     path('judge-select2/', include([
