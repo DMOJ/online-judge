@@ -15,7 +15,7 @@
         height: auto;
     }
 
-    img.tex-full {
+    img.tex-full, img.tex-image, img.inline-math, img.display-math {
         @include vars-img;
     }
 
