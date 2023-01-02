@@ -1,25 +1,6 @@
 {% extends "base.html" %}
 
-{% block media %}
-    {{ form.media.css }}
-    <style>
-        form#ticket-form {
-            display: block;
-            margin: 0 auto;
-            width: 100%;
-            max-width: 750px;
-            padding-top: 1em;
-        }
-
-        #id_title {
-            width: 100%;
-        }
-
-        form#ticket-form .submit {
-            margin: 10px 0 0 auto;
-        }
-    </style>
-{% endblock %}
+{% block media %}{{ form.media.css }}{% endblock %}
 
 {% block js_media %}{{ form.media.js }}{% endblock %}
 

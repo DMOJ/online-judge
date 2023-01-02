@@ -1,37 +1,5 @@
 {% extends "base.html" %}
-{% block media %}
-    <style>
-        #ticket-list .fa-check-circle-o {
-            color: #00a900;
-        }
-
-        #ticket-list .fa-exclamation-circle {
-            color: darkred;
-        }
-
-        @media (min-width: 500px) {
-            #container {
-                display: flex;
-                flex-direction: row-reverse;
-            }
-
-            #container > main {
-                flex: 1;
-            }
-
-            #container > aside {
-                flex: 1;
-                max-width: 200px;
-                margin-left: 1em;
-            }
-
-            #container > aside > div {
-                position: sticky;
-                top: 60px;
-            }
-        }
-    </style>
-{% endblock %}
+{% block media %}{% endblock %}
 
 {% block js_media %}
     <script type="text/javascript">
@@ -180,7 +148,7 @@
     {% if page_obj.has_other_pages() %}
         <div class="top-pagination-bar">{% include "list-pages.html" %}</div>
     {% endif %}
-    <div id="container">
+    <div id="ticket-list-container">
         <aside>
             <div>
                 <div id="notification-box">
