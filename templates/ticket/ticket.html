@@ -1,180 +1,5 @@
 {% extends "base.html" %}
-{% block media %}
-    {{ form.media.css }}
-    <style>
-        #content > h2:first-child small {
-            color: #999;
-            font-size: 0.9em;
-            margin-left: 0.3em;
-        }
-
-        #content > h2:first-child .status, #content > h2:first-child .title {
-            display: inline;
-        }
-
-        #content > h2:first-child .fa-check-circle-o {
-            color: #00a900;
-        }
-
-        #content > h2:first-child .fa-exclamation-circle {
-            color: darkred;
-        }
-
-        .container {
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap-reverse;
-            max-width: 1000px;
-        }
-
-        .ticket-sidebar {
-            flex: 1;
-            padding: 10px 0 0 10px;
-            min-width: 150px;
-            max-width: 200px;
-        }
-
-        .ticket-info {
-            position: sticky;
-            top: 60px;
-        }
-
-        .ticket-messages {
-            flex: 1;
-        }
-
-        .info-box {
-            margin: 5px 0 10px;
-            border: 1px #999 solid;
-            border-radius: 5px;
-        }
-
-        .info-box .fa {
-            color: #777;
-        }
-
-        .info-title {
-            padding: 2px 5px;
-            font-weight: 600;
-            border-bottom: 1px #999 solid;
-            background: #eee;
-            border-radius: 5px 5px 0 0;
-        }
-
-        .info-data {
-            padding: 2px 5px;
-        }
-
-        .info-empty {
-            color: #999;
-            font-style: italic;
-        }
-
-        .close-ticket {
-            display: block;
-            width: 100%;
-            background: linear-gradient(to bottom, #4bad00 0%, #278811 100%);
-            border-color: #24710e;
-            font-weight: 600;
-        }
-
-        .close-ticket:hover {
-            background: #24710e;
-        }
-
-        .open-ticket {
-            display: block;
-            width: 100%;
-            background: linear-gradient(to bottom, #ff130f, #b03d17);
-            border-color: #853011;
-            font-weight: 600;
-        }
-
-        .open-ticket:hover {
-            background: #853011;
-        }
-
-        a.edit-notes {
-            float: right;
-        }
-
-        #ticket-notes .info-real :first-child {
-            margin-top: 0;
-        }
-
-        #ticket-notes .info-real :last-child {
-            margin-bottom: 0;
-        }
-
-        .message {
-            display: flex;
-            padding-top: 15px;
-        }
-
-        .message .info {
-            width: 130px;
-        }
-
-        .message .username {
-            text-align: center;
-        }
-
-        .message .gravatar {
-            width: 80px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .message .detail {
-            border: 1px #999 solid;
-            border-radius: 5px;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .message .header {
-            background: #eee;
-            color: #777;
-            border-bottom: 1px solid #999;
-            border-radius: 5px 5px 0 0;
-            padding: 2px 5px;
-            text-align: right;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .message .operation {
-            flex: auto;
-        }
-
-        .message .operation .fa {
-            color: #777;
-        }
-
-        .message .content {
-            padding: 7px;
-        }
-
-        .message .content :first-child {
-            margin-top: 0;
-        }
-
-        .message .content :last-child {
-            margin-bottom: 0;
-        }
-
-        .new-message .detail {
-            padding: 8px 10px;
-        }
-
-        .new-message .submit, #edit-notes .submit {
-            margin: 10px 0 0 auto;
-        }
-    </style>
-{% endblock %}
+{% block media %}{{ form.media.css }}{% endblock %}
 
 {% block js_media %}
     {{ form.media.js }}
@@ -183,7 +8,7 @@
     <script type="text/javascript">
         $(function () {
             var $h2 = $('#content').find('> h2:first-child');
-            var $status = $h2.find('.status i'), $title = $h2.find('.title');
+            var $status = $h2.find('.ticket-title i'), $title = $h2.find('.title');
 
             function update_ticket_state(open) {
                 if (open)
@@ -321,14 +146,15 @@
 {% endblock %}
 
 {% block content_title %}
-    <div class="status">
+    <div class="ticket-title">
         <i class="fa {% if ticket.is_open %}fa-exclamation-circle{% else %}fa-check-circle-o{% endif %}"></i>
+        <div class="title">{{ ticket.title }}</div>
+        <small>#{{ ticket.id }}</small>
     </div>
-    <div class="title">{{ ticket.title }}</div><small>#{{ ticket.id }}</small>
 {% endblock %}
 
 {% block body %}
-    <div class="container">
+    <div class="ticket-container">
         <div class="ticket-messages">
             <main id="messages">
                 {% for message in ticket_messages %}
@@ -336,7 +162,7 @@
                 {% endfor %}
             </main>
             <hr>
-            <section class="message new-message">
+            <section class="ticket-message new-message">
                 <div class="info">
                     <a href="{{ url('user_page', request.user.username) }}" class="user">
                         <img src="{{ gravatar(request.user, 135) }}" class="gravatar">
