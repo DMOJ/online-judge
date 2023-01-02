@@ -8,9 +8,9 @@
     <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DMOJ/online-judge/build.yml?branch=master"/>
   </a>
   <a href="LICENSE.md">
-    <img alt="License" src="https://img.shields.io/github/license/DMOJ/judge-server?style=flat-square"/>
+    <img alt="License" src="https://img.shields.io/github/license/DMOJ/online-judge"/>
   </a>
-  <a href="https://img.shields.io/github/license/DMOJ/judge-server?style=flat-square">
+  <a href="https://img.shields.io/github/license/DMOJ/judge-server">
     <img src="https://slack.dmoj.ca/badge.svg"/>
   </a>
 </p>
@@ -106,10 +106,9 @@ Supported languages include:
 * Python 2/3
 * PyPy 2/3
 * Pascal
-* Perl
 * Mono C#/F#/VB
 
-The judge can also grade in the languages listed below. These languages are less tested and more likely to be buggy.
+The judge can also grade in the languages listed below:
 * Ada
 * AWK
 * COBOL
@@ -127,6 +126,7 @@ The judge can also grade in the languages listed below. These languages are less
 * NASM x86/x64
 * Objective-C
 * OCaml
+* Perl
 * PHP
 * Pike
 * Prolog
