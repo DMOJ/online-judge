@@ -15,15 +15,21 @@ a {
     }
 }
 
-.comment-area {
-    h2 {
-        margin-bottom: 20px;
-    }
+.no-comments-message {
+    margin: 10px 0 15px 2.75em;
 }
 
-.no-comments-message {
-    margin-top: -15px;
-    margin-left: 2.75em;
+.comment-header-space {
+    height: 20px;
+}
+
+.comment-lock {
+    margin: 0 0 5px;
+}
+
+.comments.top-level-comments {
+    padding: 0;
+    margin: 0 0 5px;
 }
 
 .comment-author {
@@ -91,7 +97,7 @@ a {
 .comment {
     list-style: none none;
     border-radius: $widget_border_radius;
-    margin: 0 0 10px -40px;
+    margin: 0 0 5px;
 
     &:target > .comment-box {
         border-left: 10px solid $highlight_blue;
@@ -108,16 +114,7 @@ a {
 }
 
 .reply-comment {
-    margin: 0 0 10px -40px;
-}
-
-@media (max-width: 760px) {
-    .comments {
-        padding-inline-start: 5%;
-    }
-    .comment {
-        margin-left: -5%;
-    }
+    margin: 0 0 5px;
 }
 
 .comment-author {
@@ -152,7 +149,6 @@ a {
 .new-comments {
     .comment-display {
         display: flex;
-        margin-top: -0.25em !important;
         padding-left: 1em;
         padding-top: 0.5em !important;
         border: 1px solid $color_primary25;
@@ -234,10 +230,6 @@ a {
             margin-right: 0em;
         }
     }
-}
-
-.comments.top-level-comments {
-    margin-bottom: -3px;
 }
 
 .bad-comment {
