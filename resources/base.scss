@@ -155,21 +155,11 @@ h4 {
     margin: 0;
 }
 
-header {
-    background: #111;
-    color: #aaa;
-    text-align: left;
-    display: block;
-    height: 60px;
-    margin-top: -10px;
-    padding: 10px 10px 10px 5%;
-}
-
 #user-links {
     top: 0;
     right: 0;
     position: absolute;
-    color: #5c5954;
+    height: 100%;
 
     .anon {
         padding-right: 10px;
@@ -177,10 +167,11 @@ header {
         min-height: 100%;
         align-items: center;
         white-space: nowrap;
-    }
+        color: #5c5954;
 
-    a {
-        color: #FFF;
+        a {
+            color: #FFF;
+        }
     }
 
     li {
@@ -191,27 +182,33 @@ header {
         display: block;
         margin: 0;
 
-        & > li > a > span {
-            font-size: 13px;
-            height: 36px;
-            padding-top: 8px;
-            display: block;
-            white-space: nowrap;
+        & > li {
+            & > a {
+                display: block;
+                padding: 0;
+                height: 100%;
 
-            & > img {
-                vertical-align: middle;
-                border-radius: $widget_border_radius;
-                display: inline;
-                margin: 2px 6px 0 5px;
+                & > span {
+                    font-size: 13px;
+                    padding: 10px 10px;
+                    display: block;
+                    white-space: nowrap;
+
+                    & > img {
+                        vertical-align: middle;
+                        border-radius: $widget_border_radius;
+                        margin-right: 6px;
+                    }
+
+                    & > span {
+                        vertical-align: middle;
+                        color: #eee;
+                    }
+                }
             }
 
-            & > span {
-                color: #eee;
-                vertical-align: middle;
-                display: inline;
-                margin-top: 11px;
-                margin-right: 9px;
-                padding: 0;
+            & > ul {
+                left: 0;
             }
         }
     }
@@ -498,25 +495,6 @@ noscript #noscript {
     display: inline-block;
 }
 
-#user-links {
-    height: 100%;
-
-    ul {
-        margin: 0;
-
-        li {
-            display: block;
-            height: 100%;
-
-            a {
-                display: block;
-                padding: 0;
-                height: 100%;
-            }
-        }
-    }
-}
-
 #page-container {
     min-height: 100%;
     position: relative;
@@ -624,22 +602,8 @@ math {
         }
     }
 
-    #user-links {
-        bottom: 6px;
-        right: 6px;
-        position: absolute;
-
-        & > ul > li {
-            & > a > span {
-                padding-top: 4px;
-                height: 32px;
-            }
-
-            & > ul {
-                left: 0 !important;
-                margin-top: 0 !important;
-            }
-        }
+    #user-links > ul > li > a > span {
+        padding: 6px 8px;
     }
 
     #content {
