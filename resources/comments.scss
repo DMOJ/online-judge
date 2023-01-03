@@ -16,8 +16,6 @@ a {
 }
 
 .comment-area {
-    margin-right: 30px;
-
     h2 {
         margin-bottom: 20px;
     }
@@ -43,11 +41,6 @@ a {
     display: flex;
 }
 
-.comment-lock {
-    width: 100%;
-    padding-left: 14px;
-}
-
 .comment-spacer {
     flex: 1;
 }
@@ -69,17 +62,15 @@ a {
     }
 }
 
-.comments.top-level-comments {
-    margin-right: -26px;
-}
-
-.comment-submit {
+.form-area.comment-submit {
+    padding-left: 15px;
+    padding-right: 15px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .comment-post-wrapper {
-    padding-bottom: 2px;
-    padding-right: 10px;
+    padding-bottom: 5px;
 
     input, textarea {
         min-width: 100%;
@@ -100,7 +91,7 @@ a {
 .comment {
     list-style: none none;
     border-radius: $widget_border_radius;
-    margin: 0px -4px 10px -40px;
+    margin: 0 0 10px -40px;
 
     &:target > .comment-box {
         border-left: 10px solid $highlight_blue;
@@ -117,7 +108,7 @@ a {
 }
 
 .reply-comment {
-    margin: 0 23px 10px -40px;
+    margin: 0 0 10px -40px;
 }
 
 @media (max-width: 760px) {
