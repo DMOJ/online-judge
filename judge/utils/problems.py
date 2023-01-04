@@ -2,7 +2,7 @@ from collections import defaultdict
 from math import e
 
 from django.core.cache import cache
-from django.db.models import Case, Count, ExpressionWrapper, F, Max, When
+from django.db.models import Case, Count, ExpressionWrapper, F, When
 from django.db.models.fields import FloatField
 from django.utils import timezone
 from django.utils.translation import gettext_noop
@@ -44,11 +44,7 @@ def contest_attempted_ids(participation):
     key = 'contest_attempted:%s' % participation.id
     result = cache.get(key)
     if result is None:
-        result = {id: {'achieved_points': points, 'max_points': max_points}
-                  for id, max_points, points in (participation.submissions
-                                                 .values_list('problem__problem__id', 'problem__points')
-                                                 .annotate(points=Max('points'))
-                                                 .filter(points__lt=F('problem__points')))}
+        result = set(participation.submissions.values_list('problem__problem_id', flat=True).distinct())
         cache.set(key, result, 86400)
     return result
 
@@ -57,11 +53,7 @@ def user_attempted_ids(profile):
     key = 'user_attempted:%s' % profile.id
     result = cache.get(key)
     if result is None:
-        result = {id: {'achieved_points': points, 'max_points': max_points}
-                  for id, max_points, points in (Submission.objects.filter(user=profile)
-                                                 .values_list('problem__id', 'problem__points')
-                                                 .annotate(points=Max('points'))
-                                                 .filter(points__lt=F('problem__points')))}
+        result = set(profile.submission_set.values_list('problem_id', flat=True).distinct())
         cache.set(key, result, 86400)
     return result
 
