@@ -63,11 +63,11 @@
                 <tbody>
                 {% for problem in authored %}
                     <tr>
-                        <td class="problem-name">
+                        <td>
                             <a href="{{ url('problem_detail', problem.code) }}">{{ problem.name }}</a>
                         </td>
-                        <td class="problem-category">{{ problem.group.full_name }}</td>
-                        <td class="problem-score"><a href="{{ url('ranked_submissions', problem.code) }}">
+                        <td>{{ problem.group.full_name }}</td>
+                        <td><a href="{{ url('ranked_submissions', problem.code) }}">
                             {{ problem.points|floatformat }}{% if problem.partial %}p{% endif %}
                         </a></td>
                     </tr>
@@ -106,10 +106,10 @@
                 <tbody>
                 {% for entry in group.problems %}
                     <tr>
-                        <td class="problem-name">
+                        <td>
                             <a href="{{ url('problem_detail', entry.code) }}">{{ entry.name }}</a>
                         </td>
-                        <td class="problem-score">
+                        <td>
                             <a href="{{ url('user_submissions', entry.code, user.user.username) }}">
                                 {%- with points_str=entry.points|floatformat(-3), total_str=entry.total|floatformat(-3) -%}
                                     {{ _('%(points)s / %(total)s', points=points_str, total=total_str) }}
