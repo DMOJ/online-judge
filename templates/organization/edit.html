@@ -1,43 +1,7 @@
 {% extends "base.html" %}
 
-{% block js_media %}
-    {{ form.media.js }}
-    <script type="text/javascript">
-        window.django = {jQuery: $};
-
-        function pluralidx(count) {
-            return (count == 1) ? 0 : 1;
-        }
-
-        function gettext(msgid) {
-            return msgid;
-        }
-
-        function interpolate(fmt, obj, named) {
-            if (named) {
-                return fmt.replace(/%\(\w+\)s/g, function (match) {
-                    return String(obj[match.slice(2, -2)])
-                });
-            } else {
-                return fmt.replace(/%s/g, function (match) {
-                    return String(obj.shift())
-                });
-            }
-        }
-    </script>
-{% endblock %}
-
-{% block media %}
-    {{ form.media.css }}
-    <link rel="stylesheet" href="{{ static('admin/css/widgets.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ static('admin/css/pagedown.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ static('problem_edit.css') }}" type="text/css">
-    <style>
-        #id_about {
-            width: 500px;
-        }
-    </style>
-{% endblock %}
+{% block js_media %}{{ form.media.js }}{% endblock %}
+{% block media %}{{ form.media.css }}{% endblock %}
 
 {% block body %}
     <div class="centered-form">
