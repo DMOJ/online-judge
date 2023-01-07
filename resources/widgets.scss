@@ -293,9 +293,10 @@ ul.pagination {
 }
 
 .top-pagination-bar {
-    margin-top: 11px;
-    margin-bottom: 7px;
+    margin: 11px 0 7px;
     display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .bottom-pagination-bar {
