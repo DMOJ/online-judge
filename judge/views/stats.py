@@ -1,8 +1,7 @@
-from itertools import chain, repeat
 from operator import itemgetter
 
 from django.conf import settings
-from django.db.models import Case, Count, FloatField, IntegerField, Value, When
+from django.db.models import Count, FloatField, Q, Value
 from django.db.models.expressions import CombinedExpression
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -12,15 +11,11 @@ from judge.models import Language, Submission
 from judge.utils.stats import chart_colors, get_bar_chart, get_pie_chart, highlight_colors
 
 
-ac_count = Count(Case(When(submission__result='AC', then=Value(1)), output_field=IntegerField()))
-
-
-def repeat_chain(iterable):
-    return chain.from_iterable(repeat(iterable))
+ac_count = Count(Value(1), filter=Q(submission__result='AC'))
 
 
 def language_data(request, language_count=Language.objects.annotate(count=Count('submission'))):
-    languages = language_count.filter(count__gt=0).values('key', 'name', 'count').order_by('-count')
+    languages = language_count.filter(count__gt=0).values('name', 'count').order_by('-count')
     num_languages = min(len(languages), settings.DMOJ_STATS_LANGUAGE_THRESHOLD)
     other_count = sum(map(itemgetter('count'), languages[num_languages:]))
 
