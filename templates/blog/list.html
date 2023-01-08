@@ -9,45 +9,6 @@
     <link rel="alternate" type="application/rss+xml" href="{{ url('comment_rss') }}" title="RSS Comment Feed">
     <link rel="alternate" type="application/atom+xml" href="{{ url('problem_atom') }}" title="Atom Problem Feed">
     <link rel="alternate" type="application/rss+xml" href="{{ url('problem_rss') }}" title="RSS Problem Feed">
-    <style>
-        .post {
-            margin: 0 1.4em;
-        }
-
-        .post:first-child {
-            margin-top: 0.6em;
-        }
-
-        .comment-count {
-            font-size: 12px;
-        }
-
-        .comment-icon {
-            padding: 0.1em 0.2em 0 0.5em;
-        }
-
-        .comment-count-link {
-            color: #555;
-        }
-
-        .own-open-tickets .title a, .open-tickets .title a {
-            display: block;
-        }
-
-        .own-open-tickets .object, .open-tickets .object {
-            margin-left: 1em;
-            font-style: italic;
-        }
-
-        .open-tickets .author {
-            margin-left: 1em;
-        }
-
-        .no-clarifications-message {
-            font-style: italic;
-            text-align: center;
-        }
-    </style>
 {% endblock %}
 
 {% block js_media %}
@@ -229,12 +190,10 @@
                 <div class="blog-sidebox sidebox">
                     <h3>{{ _('My open tickets') }} <i class="fa fa-question-circle"></i></h3>
                     <div class="sidebox-content">
-                        <ul class="own-open-tickets">
+                        <ul class="open-tickets">
                             {% for ticket in own_open_tickets %}
                                 <li>
-                                    <div class="title">
-                                        <a href="{{ url('ticket', ticket.id) }}">{{ ticket.title }}</a>
-                                    </div>
+                                    <a href="{{ url('ticket', ticket.id) }}">{{ ticket.title }}</a>
                                     <div class="object">
                                         <a href="{{ ticket.linked_item.get_absolute_url() }}">
                                             {{ ticket.linked_item|item_title }}</a>
@@ -253,9 +212,7 @@
                         <ul class="open-tickets">
                             {% for ticket in open_tickets %}
                                 <li>
-                                    <div class="title">
-                                        <a href="{{ url('ticket', ticket.id) }}">{{ ticket.title }}</a>
-                                    </div>
+                                    <a href="{{ url('ticket', ticket.id) }}">{{ ticket.title }}</a>
                                     <div class="object">
                                         <a href="{{ ticket.linked_item.get_absolute_url() }}">
                                             {{ ticket.linked_item|item_title }}</a>
