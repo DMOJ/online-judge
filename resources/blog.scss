@@ -8,7 +8,15 @@
 
     .post {
         border-bottom: 2px solid $color_primary25;
-        padding-top: 0.5em;
+        margin: 0.5em 1.4em;
+
+        &:first-child {
+            margin-top: 1.1em;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
 
         .title {
             font-weight: 600;
@@ -27,8 +35,12 @@
             }
         }
 
-        &:last-child {
-            border-bottom: none;
+        .comment-count-link {
+            color: $color_primary75;
+        }
+
+        .comment-icon {
+            padding: 0 0.2em 0 0.5em;
         }
     }
 }
@@ -115,4 +127,20 @@
             display: block;
         }
     }
+}
+
+.open-tickets {
+    .object {
+        margin-left: 1em;
+        font-style: italic;
+    }
+
+    .author {
+        margin-left: 1em;
+    }
+}
+
+.no-clarifications-message {
+    font-style: italic;
+    text-align: center;
 }
