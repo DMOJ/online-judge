@@ -227,30 +227,17 @@ h4 {
     height: 100%;
 }
 
-#navigation {
+nav {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-}
-
-nav {
-    position: relative;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    margin: 0 auto;
     z-index: 500;
-    text-align: left;
 
     ul {
-        margin: 0 0 0 -5px !important;
+        margin: 0 0 0 -5px;
         padding: 0 0 0 1%;
-        text-align: left;
-        display: inline;
-        list-style: none;
-        background: transparent;
+        display: block;
 
         li {
             display: inline-block;
@@ -564,15 +551,17 @@ math {
     #nav-list {
         display: none;
         padding: 0;
-        margin-left: 0;
-        border-left: 4px solid $highlight_blue;
+        margin: 0;
         position: fixed;
         top: 36px;
         background: #3b3b3b;
         bottom: 0;
         width: 8em;
         left: 0;
-        box-shadow: none;
+
+        &.show-list {
+            display: block;
+        }
 
         li {
             display: block;
@@ -614,8 +603,6 @@ math {
 
 @media not all and (max-width: 760px) {
     #nav-list {
-        display: block !important;
-
         li {
             &.home-menu-item {
                 display: none;
