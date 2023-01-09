@@ -120,7 +120,7 @@ $(function () {
     var $nav_list = $('#nav-list');
     $('#navicon').click(function (event) {
         event.stopPropagation();
-        $nav_list.toggle();
+        $nav_list.toggleClass('show-list');
         if ($nav_list.is(':hidden'))
             $(this).blur().removeClass('hover');
         else {
@@ -153,7 +153,7 @@ $(function () {
     });
 
     $('html').click(function () {
-        $nav_list.hide();
+        $nav_list.removeClass('show-list');
     });
 
     $.ajaxSetup({
