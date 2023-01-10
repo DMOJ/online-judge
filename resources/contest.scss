@@ -12,15 +12,12 @@
     td {
         height: 110px;
         width: 170px;
-        color: $color_primary100;
         vertical-align: top;
-        text-align: right;
-        font-size: 0.75em;
         border: 1px solid $color_primary25;
         transition-duration: 0.2s;
 
         .num {
-            font-size: 1.1em;
+            text-align: right;
             font-weight: bold;
             display: block;
             border-bottom: 1px dashed $color_primary25;
@@ -29,21 +26,18 @@
         }
 
         ul {
-            text-decoration: none;
-            text-align: left;
+            font-size: 0.75em;
             padding: 0;
             margin: 0;
 
             li {
-                margin-left: 17px;
-                margin-bottom: 0.2em;
+                margin: 0 0 0.2em 17px;
 
                 i.fa {
-                    color: orange;
+                    color: $color_link200;
                 }
 
                 a {
-                    text-decoration: none;
                     color: $color_primary75;
 
                     &:hover {
@@ -55,14 +49,6 @@
 
         &:hover {
             background: rgba($color_link100, 0.2);
-
-            .num {
-                color: white;
-            }
-
-            ul li a {
-                color: white;
-            }
         }
     }
 
