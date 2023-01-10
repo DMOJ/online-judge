@@ -1,0 +1,289 @@
+// Navbar should look the same in every theme, so vars-common should be enough.
+@import "vars-common";
+
+#user-links {
+    top: 0;
+    right: 0;
+    position: absolute;
+    height: 100%;
+
+    .anon {
+        padding-right: 10px;
+        display: inline-flex;
+        min-height: 100%;
+        align-items: center;
+        white-space: nowrap;
+        color: #5c5954;
+
+        a {
+            color: #FFF;
+        }
+    }
+
+    li {
+        text-transform: none;
+    }
+
+    & > ul {
+        display: block;
+        margin: 0;
+
+        & > li {
+            & > a {
+                display: block;
+                padding: 0;
+                height: 100%;
+
+                & > span {
+                    font-size: 13px;
+                    padding: 10px 10px;
+                    display: block;
+                    white-space: nowrap;
+
+                    & > img {
+                        vertical-align: middle;
+                        border-radius: $widget_border_radius;
+                        margin-right: 6px;
+                    }
+
+                    & > span {
+                        vertical-align: middle;
+                        color: #eee;
+                    }
+                }
+            }
+
+            & > ul {
+                left: 0;
+            }
+        }
+    }
+}
+
+#nav-shadow {
+    height: 3px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), transparent);
+}
+
+#nav-container {
+    background: #3b3b3b;
+
+    // opacity: 0.77
+    // filter: alpha(opacity=77)
+    height: 100%;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+
+    ul {
+        margin: 0 0 0 -5px;
+        padding: 0 0 0 1%;
+        display: block;
+
+        li {
+            display: inline-block;
+            color: #FFF;
+            text-transform: uppercase;
+            position: relative;
+
+            &.home-nav-element a {
+                padding: 0;
+                height: 44px;
+
+                &:hover {
+                    border-bottom: none;
+                    padding-top: 0;
+                    padding-bottom: 0;
+                }
+            }
+
+            a, button {
+                display: inline-block;
+                text-decoration: none;
+                vertical-align: middle;
+                color: #FFF;
+                padding: 13px 7px;
+                height: 18px;
+
+                &:link {
+                    color: #FFF;
+                }
+
+                &:hover {
+                    color: #FFF;
+                    background: rgba(255, 255, 255, 0.25);
+                    margin: 0;
+                }
+
+                &.active {
+                    color: #FFF;
+                    background: $highlight_blue;
+                }
+
+                .nav-expand {
+                    display: none;
+                }
+            }
+
+            ul {
+                padding: 0;
+                position: absolute;
+                left: 5px;
+                display: none;
+                color: #fff;
+                background: #3b3b3b;
+                margin: 0 !important;
+                box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+
+                li {
+                    &:first-child {
+                        a.active {
+                            border-top: 1px solid #3b3b3b;
+                        }
+                    }
+                }
+
+                li {
+                    display: block;
+
+                    a, button {
+                        padding: 8px 20px 8px 8px !important;
+                        font-size: 0.8em;
+                        line-height: 18px;
+                        display: block;
+                        border-left: 4px solid $highlight_blue;
+                        white-space: nowrap;
+                    }
+                }
+            }
+
+            button {
+                background: none;
+                text-align: left;
+                border: none;
+                width: 100%;
+                border-radius: 0;
+                height: auto;
+            }
+
+            &:hover > ul, &:active > ul, &:focus > ul {
+                display: block !important;
+            }
+
+            &.home-nav-element a:hover {
+                border-bottom: 0;
+                padding-top: 0;
+                padding-bottom: 0;
+                background: transparent;
+            }
+        }
+    }
+
+    .nav-divider {
+        width: 1px;
+        vertical-align: middle;
+        padding-left: 3px;
+        display: inline-block;
+        height: 32px;
+        margin-right: 1px;
+        border-right: 3px solid rgba(255, 255, 255, 0.15);
+    }
+}
+
+#navicon {
+    display: none;
+}
+
+@media (max-width: 760px) {
+    #navigation {
+        height: 36px;
+    }
+
+    #navicon {
+        transition-duration: 0.25s;
+        display: block;
+        line-height: 26px;
+        font-size: 2em;
+        color: #FFF;
+        padding: 0 0.25em;
+        margin: 4px 0.25em;
+        white-space: nowrap;
+        float: left;
+
+        &.hover {
+            color: #4db7fe;
+            text-shadow: 0 0 5px $highlight_blue;
+            transition-duration: 0.25s;
+        }
+    }
+
+    #nav-list {
+        display: none;
+        padding: 0;
+        margin: 0;
+        position: fixed;
+        top: 36px;
+        background: #3b3b3b;
+        bottom: 0;
+        width: 8em;
+        left: 0;
+
+        &.show-list {
+            display: block;
+        }
+
+        li {
+            display: block;
+
+            a {
+                display: block;
+
+                .nav-expand {
+                    float: right;
+                    display: block;
+                    height: inherit;
+                    margin: (-13px) -7px;
+                    padding: inherit;
+                }
+            }
+
+            ul {
+                left: 8em;
+                top: auto;
+                bottom: auto;
+                margin-top: -36px;
+            }
+
+            &.home-nav-element {
+                display: none;
+            }
+        }
+    }
+
+    #user-links > ul > li > a > span {
+        padding: 6px 8px;
+    }
+}
+
+@media not all and (max-width: 760px) {
+    #nav-list {
+        li {
+            &.home-menu-item {
+                display: none;
+            }
+
+            &:not(:hover) > ul {
+                display: none !important;
+            }
+
+            ul {
+                left: 0 !important;
+            }
+        }
+    }
+}
