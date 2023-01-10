@@ -4,7 +4,6 @@
     padding-right: 0em;
     flex: 73.5%;
     vertical-align: top;
-    margin-right: 0;
 
     .post {
         border-bottom: 2px solid $color_primary25;
@@ -50,11 +49,6 @@
 }
 
 .blog-sidebox {
-    h3 {
-        padding-bottom: 0.25em;
-        padding-left: 0.5em;
-    }
-
     ul {
         list-style: none;
         padding-left: 1em;
@@ -75,6 +69,10 @@
         }
     }
 
+    ul.problem-list li {
+        margin-bottom: 0.5em;
+    }
+
     .sidebox-ongoing-contest {
         overflow-y: auto;
         max-height: 23em;
@@ -87,7 +85,7 @@
     }
 
     .blog-content {
-        margin-right: 1em !important;
+        margin-right: 1em;
     }
 
     #mobile.tabs {
@@ -100,13 +98,12 @@
 }
 
 #mobile.tabs {
-    margin: 0;
-    margin-bottom: 1em;
+    margin: 0 0 1em;
 }
 
 .rssatom {
     text-align: right;
-    padding: 0.25em;
+    margin: 0.25em;
     display: block;
 
     span {
