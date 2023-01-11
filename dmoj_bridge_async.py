@@ -11,9 +11,6 @@ import dmoj_install_pymysql  # noqa: E402, F401, I100, I202, imported for side e
 import django  # noqa: E402, F401, I100, I202, django must be imported here
 django.setup()
 
-# noinspection PyUnresolvedReferences
-import django_2_2_pymysql_patch  # noqa: E402, I100, F401, I202, imported for side effect
-
 from judge.bridge.daemon import judge_daemon  # noqa: E402, I100, I202, django code must be imported here
 
 if __name__ == '__main__':
