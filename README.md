@@ -10,8 +10,8 @@
   <a href="LICENSE.md">
     <img alt="License" src="https://img.shields.io/github/license/DMOJ/online-judge"/>
   </a>
-  <a href="https://img.shields.io/github/license/DMOJ/judge-server">
-    <img src="https://slack.dmoj.ca/badge.svg"/>
+  <a href="https://dmoj.ca/about/discord/">
+    <img src="https://img.shields.io/discord/677340492651954177?color=%237289DA&label=Discord"/>
   </a>
 </p>
 
@@ -46,7 +46,7 @@ See it live at [dmoj.ca](https://dmoj.ca/)!
 
 ## Installation
 
-Check out the install documentation at [docs.dmoj.ca](https://docs.dmoj.ca/#/site/installation). Feel free to reach out to us on [Slack](https://slack.dmoj.ca) if you have any questions.
+Check out the install documentation at [docs.dmoj.ca](https://docs.dmoj.ca/#/site/installation). Feel free to reach out to us on [Discord](https://dmoj.ca/about/discord/) if you have any questions.
 
 ## Screenshots
 
