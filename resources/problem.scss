@@ -110,6 +110,16 @@ span.type-tag {
     white-space: nowrap;
 }
 
+ul.problem-list {
+    list-style: none;
+    padding-left: 1em;
+    padding-right: 0.5em;
+
+    li {
+        margin-bottom: 0.5em;
+    }
+}
+
 .pi-name {
     font-weight: bold;
 }
