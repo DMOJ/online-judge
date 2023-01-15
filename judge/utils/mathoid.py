@@ -6,7 +6,6 @@ import requests
 from django.conf import settings
 from django.core.cache import caches
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from mistune import escape
 
 from judge.utils.file_cache import HashFileCache
@@ -135,26 +134,14 @@ class MathoidMathParser(object):
         result['display'] = formula.startswith(r'\displaystyle')
         return {
             'mml': self.output_mml,
-            'msp': self.output_msp,
-            'svg': self.output_svg,
             'jax': self.output_jax,
+            'svg': self.output_svg,
             'png': self.output_png,
             'raw': lambda x: x,
         }[self.type](result)
 
     def output_mml(self, result):
         return result['mml']
-
-    def output_msp(self, result):
-        # 100% MediaWiki compatibility.
-        return format_html('<span class="{5}-math">'
-                           '<span class="mwe-math-mathml-{5} mwe-math-mathml-a11y"'
-                           ' style="display: none;">{0}</span>'
-                           '<img src="{1}" class="mwe-math-fallback-image-{5}"'
-                           ' onerror="this.src=\'{2}\';this.onerror=null"'
-                           ' aria-hidden="true" style="{3}" alt="{4}"></span>',
-                           mark_safe(result['mml']), result['svg'], result['png'], result['css'], result['tex'],
-                           ['inline', 'display'][result['display']])
 
     def output_jax(self, result):
         return format_html('<span class="{4}">'
