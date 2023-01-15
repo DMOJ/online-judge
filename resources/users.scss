@@ -27,9 +27,14 @@ tr:target {
         white-space: nowrap;
     }
 
-    th.rank {
+    th.rank, th.rate {
         padding-left: 5px;
         padding-right: 5px;
+    }
+
+    th.rate, td.rate {
+        border-right: none;
+        text-align: left;
     }
 
     th.username {
