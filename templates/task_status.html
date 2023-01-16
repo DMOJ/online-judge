@@ -26,7 +26,7 @@
                         $progress.filter('.progress-complete').show();
                         break;
                     case 'FAILURE':
-                        $fail_text.text(status.error || 'Failed');
+                        if (status.error) $fail_text.text(status.error);
                         $fail.show();
                         break;
                     case 'PROGRESS':
@@ -89,10 +89,10 @@
             <div class="progress-bar progress-bar-animated" role="progressbar"></div>
         </div>
         <div class="progress progress-complete">
-            <div class="progress-bar" role="progressbar">Completed!</div>
+            <div class="progress-bar" role="progressbar">{{ _('Completed!') }}</div>
         </div>
         <div class="progress progress-failed">
-            <div class="progress-bar" role="progressbar">Failed!</div>
+            <div class="progress-bar" role="progressbar">{{ _('Failed!') }}</div>
         </div>
     </div>
 </div>
