@@ -10,7 +10,7 @@ def generate_opengraph(cache_key, data, style):
     if metadata is None:
         description = None
         tree = reference(markdown(data, style)).tree
-        for p in tree.iterfind('.//p'):
+        for p in tree.iterfind('..//p'):
             text = p.text_content().strip()
             if text:
                 description = text
