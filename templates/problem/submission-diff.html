@@ -59,11 +59,11 @@
     <table id="case-table" class="table">
         <thead>
         <tr>
-            <th class="sub-id">ID</th>
-            <th class="sub-username">Username</th>
-            <th class="sub-result">Result</th>
-            <th class="sub-language">Language</th>
-            <th class="sub-date">Date</th>
+            <th class="sub-id">{{ _('ID') }}</th>
+            <th class="sub-username">{{ _('Username') }}</th>
+            <th class="sub-result">{{ _('Result') }}</th>
+            <th class="sub-language">{{ _('Language') }}</th>
+            <th class="sub-date">{{ _('Date') }}</th>
             {% for case in range(num_cases) %}
                 <th class="sub-case">{{ loop.index }}</th>
             {% endfor %}
