@@ -80,15 +80,15 @@ class MathoidMathParser(object):
             logger.error('Mathoid failure for: %s\n%s', formula, data)
             return
 
-        if any(i not in data for i in ('mml', 'png', 'svg', 'mathoidStyle')):
-            logger.error('Mathoid did not return required information (mml, png, svg, mathoidStyle needed):\n%s', data)
+        if any(i not in data for i in ('mml', 'svg', 'mathoidStyle')):
+            logger.error('Mathoid did not return required information (mml, svg, mathoidStyle needed):\n%s', data)
             return
 
         css = data['mathoidStyle']
         mml = data['mml']
         result = {
-            'css': css, 'mml': mml,
-            'png': self.cache.cache_data(hash, 'png', bytearray(data['png']['data'])),
+            'css': css,
+            'mml': mml,
             'svg': self.cache.cache_data(hash, 'svg', data['svg'].encode('utf-8')),
         }
         self.cache.cache_data(hash, 'mml', mml.encode('utf-8'), url=False, gzip=False)
@@ -96,10 +96,7 @@ class MathoidMathParser(object):
         return result
 
     def query_cache(self, hash):
-        result = {
-            'svg': self.cache.get_url(hash, 'svg'),
-            'png': self.cache.get_url(hash, 'png'),
-        }
+        result = {'svg': self.cache.get_url(hash, 'svg')}
 
         key = 'mathoid:css:' + hash
         css = result['css'] = self.css_cache.get(key)
@@ -136,7 +133,6 @@ class MathoidMathParser(object):
             'mml': self.output_mml,
             'jax': self.output_jax,
             'svg': self.output_svg,
-            'png': self.output_png,
             'raw': lambda x: x,
         }[self.type](result)
 
@@ -144,23 +140,16 @@ class MathoidMathParser(object):
         return result['mml']
 
     def output_jax(self, result):
-        return format_html('<span class="{4}">'
-                           '''<img class="tex-image" src="{0}" style="{2}" alt="{3}"'''
-                           """ onerror="this.src='{1}';this.onerror=null">"""
-                           """<span class="tex-text" style="display:none">{5}{3}{5}</span>"""
+        return format_html('<span class="{3}">'
+                           '<img class="tex-image" src="{0}" style="{1}" alt="{2}">'
+                           '<span class="tex-text" style="display:none">{4}{2}{4}</span>'
                            '</span>',
-                           result['svg'], result['png'], result['css'], result['tex'],
+                           result['svg'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']], ['~', '$$'][result['display']])
 
     def output_svg(self, result):
-        return format_html('<img class="{4}" src="{0}" style="{2}" alt="{3}" '
-                           """onerror="this.src='{1}';this.onerror=null">""",
-                           result['svg'], result['png'], result['css'], result['tex'],
-                           ['inline-math', 'display-math'][result['display']])
-
-    def output_png(self, result):
         return format_html('<img class="{3}" src="{0}" style="{1}" alt="{2}">',
-                           result['png'], result['css'], result['tex'],
+                           result['svg'], result['css'], result['tex'],
                            ['inline-math', 'display-math'][result['display']])
 
     def display_math(self, math):
