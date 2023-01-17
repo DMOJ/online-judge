@@ -2,10 +2,12 @@
 
 {% block header %}
     <span class="submission-info">
-        <span class="submission-date">{{ submission.date|date(_("N j, Y, g:i a")) }}
-            {% with can_edit=submission.problem.is_editable_by(request.user) %}
-                {%- if can_edit and submission.judged_on %}
-                    on {{ submission.judged_on.name }}
+        <span class="submission-date">
+            {% with date=submission.date|date(_('N j, Y, g:i a')), can_edit=submission.problem.is_editable_by(request.user) %}
+                {% if can_edit and submission.judged_on %}
+                    {{ _('%(date)s on %(judge)s', date=date, judge=submission.judged_on.name) }}
+                {% else %}
+                    {{ date }}
                 {% endif %}
                 <br>
                 <span>{{ submission.language }}</span>

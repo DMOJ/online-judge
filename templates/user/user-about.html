@@ -22,9 +22,8 @@
         {% if perms.judge.change_profile %}
             {% with notes=user.notes %}
                 {% if notes %}
-                    <p style="margin-top: 0"><b>{{ _('Admin Notes') }}: </b>
-                        <pre>{{ notes }}</pre>
-                    </p>
+                    <b>{{ _('Admin notes:') }}</b>
+                    <pre style="margin-top: 0">{{ notes }}</pre>
                 {% endif %}
             {% endwith %}
         {% endif %}
