@@ -125,7 +125,6 @@ $(function () {
             $(this).blur().removeClass('hover');
         else {
             $(this).addClass('hover');
-            $nav_list.find('li ul').css('left', $('#nav-list').width()).hide();
         }
     }).hover(function () {
         $(this).addClass('hover');
@@ -135,7 +134,7 @@ $(function () {
 
     $nav_list.find('li a .nav-expand').click(function (event) {
         event.preventDefault();
-        $(this).parent().siblings('ul').css('display', 'block');
+        $(this).parent().siblings('ul').toggleClass('show-list');
     });
 
     $nav_list.find('li a').each(function () {
