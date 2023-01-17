@@ -254,9 +254,11 @@ nav {
 
             ul {
                 left: 8em;
-                top: auto;
-                bottom: auto;
-                margin-top: -36px;
+                top: 0px;
+
+                &.show-list {
+                    display: block;
+                }
             }
 
             &.home-nav-element {

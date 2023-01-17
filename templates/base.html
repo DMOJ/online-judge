@@ -185,8 +185,8 @@
                 <li>
                     <a href="{{ node.path }}" class="nav-{{ node.key }}{% if node.key in nav_tab %} active{% endif %}">
                         {{ user_trans(node.label) }}
-                        {% if not node.is_leaf_node %}
-                            <div href="javascript:void(0)" class="nav-expand">></div>
+                        {% if not node.is_leaf_node() %}
+                            <div class="nav-expand">&gt;</div>
                         {% endif %}
                     </a>
                     {% with children=node.get_children() %}
