@@ -344,7 +344,7 @@ class UserDownloadData(LoginRequiredMixin, UserDataMixin, View):
 @login_required
 def edit_profile(request):
     if request.profile.mute:
-        raise Http404()
+        return generic_message(request, _("Can't edit profile"), _('Your part is silent, little toad.'), status=403)
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=request.profile, user=request.user)
         if form.is_valid():
