@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-02 00:30+0000\n"
-"PO-Revision-Date: 2023-01-02 00:47\n"
+"POT-Creation-Date: 2023-01-20 23:04+0000\n"
+"PO-Revision-Date: 2023-01-22 00:52\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -17,75 +17,75 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 
-#: dmoj/settings.py:381
+#: dmoj/settings.py:380
 msgid "Catalan"
 msgstr "Catalan"
 
-#: dmoj/settings.py:382
+#: dmoj/settings.py:381
 msgid "German"
 msgstr "Allemand"
 
-#: dmoj/settings.py:383
+#: dmoj/settings.py:382
 msgid "Greek"
 msgstr "Grec"
 
-#: dmoj/settings.py:384
+#: dmoj/settings.py:383
 msgid "English"
 msgstr "Anglais"
 
-#: dmoj/settings.py:385
+#: dmoj/settings.py:384
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: dmoj/settings.py:386
+#: dmoj/settings.py:385
 msgid "French"
 msgstr "Français"
 
-#: dmoj/settings.py:387
+#: dmoj/settings.py:386
 msgid "Croatian"
 msgstr "Croate"
 
-#: dmoj/settings.py:388
+#: dmoj/settings.py:387
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: dmoj/settings.py:389
+#: dmoj/settings.py:388
 msgid "Japanese"
 msgstr "Japonais"
 
-#: dmoj/settings.py:390
+#: dmoj/settings.py:389
 msgid "Korean"
 msgstr "Coréen"
 
-#: dmoj/settings.py:391
+#: dmoj/settings.py:390
 msgid "Brazilian Portuguese"
 msgstr "Portugais Brésilien"
 
-#: dmoj/settings.py:392
+#: dmoj/settings.py:391
 msgid "Romanian"
 msgstr "Roumain"
 
-#: dmoj/settings.py:393
+#: dmoj/settings.py:392
 msgid "Russian"
 msgstr "Russe"
 
-#: dmoj/settings.py:394
+#: dmoj/settings.py:393
 msgid "Serbian (Latin)"
 msgstr "Serbe (Latin)"
 
-#: dmoj/settings.py:395
+#: dmoj/settings.py:394
 msgid "Turkish"
 msgstr "Turc"
 
-#: dmoj/settings.py:396
+#: dmoj/settings.py:395
 msgid "Vietnamese"
 msgstr "Vietnamien"
 
-#: dmoj/settings.py:397
+#: dmoj/settings.py:396
 msgid "Simplified Chinese"
 msgstr "Chinois Simplifié"
 
-#: dmoj/settings.py:398
+#: dmoj/settings.py:397
 msgid "Traditional Chinese"
 msgstr "Chinois Traditionnel"
 
@@ -101,7 +101,7 @@ msgstr "Inscription Terminée"
 msgid "Registration Not Allowed"
 msgstr "Inscription Non Autorisée"
 
-#: dmoj/urls.py:93 templates/base.html:186
+#: dmoj/urls.py:93 templates/base.html:183
 msgid "Home"
 msgstr "Accueil"
 
@@ -135,125 +135,125 @@ msgstr "Décacher les commentaires"
 msgid "Associated page"
 msgstr "Page associée"
 
-#: judge/admin/contest.py:32
+#: judge/admin/contest.py:31
 msgid "Included contests"
 msgstr "Concours inclus"
 
-#: judge/admin/contest.py:66 templates/contest/contest.html:195
-#: templates/contest/moss.html:41 templates/problem/list.html:201
-#: templates/problem/list.html:217 templates/user/user-problems.html:58
+#: judge/admin/contest.py:65 templates/contest/contest.html:195
+#: templates/contest/moss.html:41 templates/problem/list.html:197
+#: templates/problem/list.html:213 templates/user/user-problems.html:58
 #: templates/user/user-problems.html:102
 msgid "Problem"
 msgstr "Problème"
 
-#: judge/admin/contest.py:67 judge/views/problem.py:355
+#: judge/admin/contest.py:66 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
 msgstr "Problèmes"
 
-#: judge/admin/contest.py:77 judge/admin/submission.py:250
+#: judge/admin/contest.py:76 judge/admin/submission.py:249
 #: templates/admin/judge/submission/change_form.html:14
 #: templates/admin/judge/submission/change_form.html:17
 #: templates/submission/source.html:34 templates/submission/status.html:89
 msgid "Rejudge"
 msgstr "Rejuger"
 
-#: judge/admin/contest.py:123
+#: judge/admin/contest.py:122
 msgid "Settings"
 msgstr "Réglages"
 
-#: judge/admin/contest.py:126
+#: judge/admin/contest.py:125
 msgid "Scheduling"
 msgstr "Planification"
 
-#: judge/admin/contest.py:127
+#: judge/admin/contest.py:126
 msgid "Details"
 msgstr "Détails"
 
-#: judge/admin/contest.py:128
+#: judge/admin/contest.py:127
 msgid "Format"
 msgstr "Format"
 
-#: judge/admin/contest.py:129 templates/contest/ranking-table.html:5
+#: judge/admin/contest.py:128 templates/contest/ranking-table.html:5
 msgid "Rating"
 msgstr "Classement"
 
-#: judge/admin/contest.py:130
+#: judge/admin/contest.py:129
 msgid "Access"
 msgstr "Accès"
 
-#: judge/admin/contest.py:132 judge/admin/problem.py:136
+#: judge/admin/contest.py:131 judge/admin/problem.py:136
 msgid "Justice"
 msgstr "Justice"
 
-#: judge/admin/contest.py:230
+#: judge/admin/contest.py:229
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
 msgstr[0] "%d concours marqué visible avec succès."
 msgstr[1] "%d concours marqués visibles avec succès."
 
-#: judge/admin/contest.py:233
+#: judge/admin/contest.py:232
 msgid "Mark contests as visible"
 msgstr "Marquer les concours comme visibles"
 
-#: judge/admin/contest.py:239
+#: judge/admin/contest.py:238
 #, python-format
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
 msgstr[0] "%d concours marqué invisible avec succès."
 msgstr[1] "%d concours marqués invisibles avec succès."
 
-#: judge/admin/contest.py:242
+#: judge/admin/contest.py:241
 msgid "Mark contests as hidden"
 msgstr "Marquer les concours comme invisibles"
 
-#: judge/admin/contest.py:248
+#: judge/admin/contest.py:247
 #, python-format
 msgid "%d contest successfully locked."
 msgid_plural "%d contests successfully locked."
 msgstr[0] "%d concours a été verrouillé avec succès."
 msgstr[1] "%d concours ont été verrouillés avec succès."
 
-#: judge/admin/contest.py:251
+#: judge/admin/contest.py:250
 msgid "Lock contest submissions"
 msgstr "Verrouiller les soumissions au concours"
 
-#: judge/admin/contest.py:257
+#: judge/admin/contest.py:256
 #, python-format
 msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
 msgstr[0] "%d concours a été déverrouillé avec succès."
 msgstr[1] "%d concours ont été déverrouillés avec succès."
 
-#: judge/admin/contest.py:260
+#: judge/admin/contest.py:259
 msgid "Unlock contest submissions"
 msgstr "Déverrouiller les soumissions au concours"
 
-#: judge/admin/contest.py:281 judge/admin/submission.py:176
+#: judge/admin/contest.py:280 judge/admin/submission.py:175
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d soumission a été programmée pour être rejugée avec succès."
 msgstr[1] "%d soumissions ont été programmées pour être rejugées avec succès."
 
-#: judge/admin/contest.py:357
+#: judge/admin/contest.py:356
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
 msgstr[0] "%d participation recalculée."
 msgstr[1] "%d participations recalculées."
 
-#: judge/admin/contest.py:360
+#: judge/admin/contest.py:359
 msgid "Recalculate results"
 msgstr "Recalculer les résultats"
 
-#: judge/admin/contest.py:364 judge/admin/organization.py:113
+#: judge/admin/contest.py:363 judge/admin/organization.py:113
 msgid "username"
 msgstr "nom d'utilisateur"
 
-#: judge/admin/contest.py:369 templates/base.html:252
+#: judge/admin/contest.py:368 templates/base.html:249
 msgid "virtual"
 msgstr "virtuel"
 
@@ -298,8 +298,8 @@ msgid "Taxonomy"
 msgstr "Taxonomie"
 
 #: judge/admin/problem.py:133 templates/contest/contest.html:196
-#: templates/problem/data.html:380 templates/problem/list.html:206
-#: templates/problem/list.html:228 templates/user/base-users-table.html:10
+#: templates/problem/data.html:380 templates/problem/list.html:202
+#: templates/problem/list.html:224 templates/user/base-users-table.html:10
 #: templates/user/user-problems.html:60
 msgid "Points"
 msgstr "Points"
@@ -308,8 +308,9 @@ msgstr "Points"
 msgid "Limits"
 msgstr "Limites"
 
-#: judge/admin/problem.py:135 judge/admin/submission.py:244
-#: templates/stats/tabs.html:4 templates/submission/list.html:317
+#: judge/admin/problem.py:135 judge/admin/submission.py:243
+#: templates/problem/submission-diff.html:65 templates/stats/tabs.html:4
+#: templates/submission/list.html:317
 msgid "Language"
 msgstr "Langage"
 
@@ -366,10 +367,10 @@ msgstr "problème"
 msgid "timezone"
 msgstr "fuseau horaire"
 
-#: judge/admin/profile.py:98 judge/admin/submission.py:223
+#: judge/admin/profile.py:98 judge/admin/submission.py:222
 #: templates/organization/requests/log.html:9
 #: templates/organization/requests/pending.html:12
-#: templates/ticket/list.html:233
+#: templates/ticket/list.html:201
 msgid "User"
 msgstr "Utilisateur"
 
@@ -397,116 +398,108 @@ msgstr[1] "%d utilisateurs ont des notes recalculées."
 msgid "Recalculate scores"
 msgstr "Recalculer les scores"
 
-#: judge/admin/runtime.py:19
-msgid "Disallowed problems"
-msgstr "Problèmes non autorisés"
-
-#: judge/admin/runtime.py:22
-msgid "These problems are NOT allowed to be submitted in this language."
-msgstr "Ces problèmes ne peuvent PAS être soumis dans ce langage."
-
-#: judge/admin/runtime.py:64 templates/user/edit-profile.html:124
+#: judge/admin/runtime.py:50 templates/user/edit-profile.html:124
 #: templates/user/edit-profile.html:246 templates/user/edit-profile.html:366
 #: templates/user/edit-profile.html:396
 msgid "Regenerate"
 msgstr "Régénérer"
 
-#: judge/admin/runtime.py:77
+#: judge/admin/runtime.py:64
 msgid "Description"
 msgstr "Description"
 
-#: judge/admin/runtime.py:78
+#: judge/admin/runtime.py:65
 msgid "Information"
 msgstr "Information"
 
-#: judge/admin/runtime.py:79
+#: judge/admin/runtime.py:66
 msgid "Capabilities"
 msgstr "Capacités"
 
-#: judge/admin/submission.py:25 judge/admin/submission.py:44
-#: judge/admin/submission.py:233
+#: judge/admin/submission.py:24 judge/admin/submission.py:43
+#: judge/admin/submission.py:232
 msgid "None"
 msgstr "Rien"
 
-#: judge/admin/submission.py:25
+#: judge/admin/submission.py:24
 msgid "Not done"
 msgstr "Pas finit"
 
-#: judge/admin/submission.py:25
+#: judge/admin/submission.py:24
 msgid "Exceptional"
 msgstr "Exceptionnel"
 
-#: judge/admin/submission.py:44
+#: judge/admin/submission.py:43
 msgid "Unaccepted"
 msgstr "Non accepté"
 
-#: judge/admin/submission.py:86
+#: judge/admin/submission.py:85
 #, python-format
 msgid "%s (spectating)"
 msgstr "%s (observateur)"
 
-#: judge/admin/submission.py:88
+#: judge/admin/submission.py:87
 #, python-format
 msgid "%s (virtual %d)"
 msgstr "%s (virtuel %d)"
 
-#: judge/admin/submission.py:95
+#: judge/admin/submission.py:94
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr "%(problem)s dans %(contest)s"
 
-#: judge/admin/submission.py:161 judge/admin/submission.py:183
+#: judge/admin/submission.py:160 judge/admin/submission.py:182
 msgid "You do not have the permission to rejudge submissions."
 msgstr "Vous n'avez pas le droit de rejuger des soumissions."
 
-#: judge/admin/submission.py:167
+#: judge/admin/submission.py:166
 msgid "You do not have the permission to rejudge THAT many submissions."
 msgstr "Vous n'avez pas le droit de rejuger AUTANT de soumissions."
 
-#: judge/admin/submission.py:179
+#: judge/admin/submission.py:178
 msgid "Rejudge the selected submissions"
 msgstr "Rejuger les soumissions sélectionnées"
 
-#: judge/admin/submission.py:205 judge/views/problem_manage.py:129
+#: judge/admin/submission.py:204 judge/views/problem_manage.py:129
 #, python-format
 msgid "%d submission was successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d soumission a été recomptée avec succès."
 msgstr[1] "%d soumissions ont été recomptées avec succès."
 
-#: judge/admin/submission.py:208
+#: judge/admin/submission.py:207
 msgid "Rescore the selected submissions"
 msgstr "Recompter les soumissions sélectionnées"
 
-#: judge/admin/submission.py:212
+#: judge/admin/submission.py:211
 msgid "Problem code"
 msgstr "Code du problème"
 
-#: judge/admin/submission.py:217
+#: judge/admin/submission.py:216
 msgid "Problem name"
 msgstr "Nom du problème"
 
-#: judge/admin/submission.py:227 templates/organization/requests/log.html:10
+#: judge/admin/submission.py:226 templates/organization/requests/log.html:10
 #: templates/organization/requests/pending.html:13
 msgid "Time"
 msgstr "Temps"
 
-#: judge/admin/submission.py:235
+#: judge/admin/submission.py:234
 #, python-format
 msgid "%d KB"
 msgstr "%d Ko"
 
-#: judge/admin/submission.py:237
+#: judge/admin/submission.py:236
 #, python-format
 msgid "%.2f MB"
 msgstr "%.2f Mo"
 
-#: judge/admin/submission.py:239
+#: judge/admin/submission.py:238
 msgid "Memory"
 msgstr "Mémoire"
 
-#: judge/admin/submission.py:248
+#: judge/admin/submission.py:247
 msgid "Locked"
 msgstr "Verrouillé"
 
@@ -534,9 +527,9 @@ msgstr "Corps du commentaire"
 msgid "Your part is silent, little toad."
 msgstr "Ton personnage est muet, le crapaud."
 
-#: judge/comments.py:49 templates/comments/list.html:135
+#: judge/comments.py:49 templates/comments/list.html:146
 msgid "You must solve at least one problem before your voice can be heard."
-msgstr ""
+msgstr "Vous devez résoudre au moins un problème avant de pouvoir se faire entendre."
 
 #: judge/comments.py:96
 msgid "Posted comment"
@@ -560,7 +553,7 @@ msgstr[1] "Chaque soumission avant la première soumission de score maximum entr
 
 #: judge/contest_format/atcoder.py:127
 msgid "Ties will be broken by the last score altering submission time."
-msgstr ""
+msgstr "Les égalités seront départagées par le dernier temps de soumission qui a modifié le score."
 
 #: judge/contest_format/default.py:18
 msgid "Default"
@@ -581,14 +574,14 @@ msgstr "Le score de votre **dernière** soumission non CE pour chaque problème 
 #: judge/contest_format/ecoo.py:135
 #, python-format
 msgid "There is a **%d bonus** for fully solving on your first non-CE submission."
-msgstr ""
+msgstr "Il y a un **bonus de %d ** pour une solution complète à votre première soumission non CE."
 
 #: judge/contest_format/ecoo.py:141
 #, python-format
 msgid "For every **%d minute** you submit before the end of your window, there will be a **1** point bonus."
 msgid_plural "For every **%d minutes** you submit before the end of your window, there will be a **1** point bonus."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Obtenez **1** point de bonus pour chaque **%d minute** restante avant la fin de votre fenêtre."
+msgstr[1] "Obtenez **1** point de bonus pour chaque **%d minutes** restantes avant la fin de votre fenêtre."
 
 #: judge/contest_format/ecoo.py:147
 msgid "Ties will be broken by the sum of the last submission time on **all** problems."
@@ -605,7 +598,7 @@ msgstr "ICPC"
 
 #: judge/contest_format/icpc.py:137
 msgid "Ties will be broken by the sum of the last score altering submission time on problems with a non-zero score, followed by the time of the last score altering submission."
-msgstr ""
+msgstr "Les égalités seront départagées par la somme des derniers temps de soumission qui ont modifié le score sur les problèmes avec un score non nul, puis par le dernier temps de soumission qui a modifié le score."
 
 #: judge/contest_format/ioi.py:11
 msgid "IOI"
@@ -617,7 +610,7 @@ msgstr "Le score maximum pour chaque lot de problèmes sera utilisé."
 
 #: judge/contest_format/ioi.py:99 judge/contest_format/legacy_ioi.py:100
 msgid "Ties will be broken by the sum of the last score altering submission time on problems with a non-zero score."
-msgstr ""
+msgstr "Les égalités seront départagées par la somme des derniers temps de soumission qui ont modifié le score sur les problèmes avec un score non nul."
 
 #: judge/contest_format/legacy_ioi.py:18
 msgid "IOI (pre-2016)"
@@ -690,6 +683,7 @@ msgid "Any judge"
 msgstr "N'importe quel juge"
 
 #: judge/forms.py:160 judge/views/register.py:25
+#: templates/problem/submission-diff.html:63
 #: templates/registration/registration_form.html:143
 #: templates/user/base-users-table.html:5
 msgid "Username"
@@ -741,7 +735,7 @@ msgid "Contest with key already exists."
 msgstr "Le concours avec la clé existe déjà."
 
 #: judge/jinja2/datetime.py:29 templates/blog/content.html:27
-#: templates/problem/vote-ajax.html:6
+#: templates/problem/vote-ajax.html:6 templates/submission/info-base.html:6
 msgid "N j, Y, g:i a"
 msgstr "j N Y, G \\h i"
 
@@ -764,16 +758,16 @@ msgid "Leave as LaTeX"
 msgstr "Laisser en tant que LaTeX"
 
 #: judge/models/choices.py:60
-msgid "SVG with PNG fallback"
-msgstr "SVG avec repli PNG"
+msgid "SVG only"
+msgstr "SVG seulement"
 
 #: judge/models/choices.py:61
 msgid "MathML only"
 msgstr "MathML seulement"
 
 #: judge/models/choices.py:62
-msgid "MathJax with SVG/PNG fallback"
-msgstr "MathJax avec repli SVG/PNG"
+msgid "MathJax with SVG fallback"
+msgstr "MathJax avec repli SVG"
 
 #: judge/models/choices.py:63
 msgid "Detect best quality"
@@ -803,7 +797,7 @@ msgstr "votes"
 msgid "body of comment"
 msgstr "corps du commentaire"
 
-#: judge/models/comment.py:47 templates/contest/list.html:64
+#: judge/models/comment.py:47 templates/contest/list.html:50
 msgid "hidden"
 msgstr "caché"
 
@@ -951,12 +945,12 @@ msgstr "observateurs"
 msgid "These users will be able to spectate the contest, but not see the problems ahead of time."
 msgstr "Ces utilisateurs pourront observer le concours, mais ne pourront pas voir les problèmes à l'avance."
 
-#: judge/models/contest.py:88 judge/models/runtime.py:137
+#: judge/models/contest.py:88 judge/models/runtime.py:139
 msgid "description"
 msgstr "description"
 
 #: judge/models/contest.py:89 judge/models/problem.py:489
-#: judge/models/runtime.py:139
+#: judge/models/runtime.py:141
 msgid "problems"
 msgstr "problèmes"
 
@@ -2148,11 +2142,11 @@ msgstr "Utilisateur Normal"
 msgid "Problem Setter"
 msgstr "Créateur de Problèmes"
 
-#: judge/models/profile.py:166 templates/base.html:214
-#: templates/comments/list.html:84 templates/contest/contest-list-tabs.html:25
+#: judge/models/profile.py:166 templates/base.html:211
+#: templates/comments/list.html:97 templates/contest/contest-list-tabs.html:25
 #: templates/contest/ranking-table.html:51
 #: templates/problem/problem-list-tabs.html:6
-#: templates/submission/info-base.html:13
+#: templates/submission/info-base.html:15
 #: templates/submission/submission-list-tabs.html:15
 #: templates/ticket/message.html:18
 msgid "Admin"
@@ -2268,7 +2262,7 @@ msgstr "Notes pour les administrateurs concernant cet utilisateur."
 
 #: judge/models/profile.py:206
 msgid "last data download time"
-msgstr ""
+msgstr "dernier temps de téléchargement"
 
 #: judge/models/profile.py:207
 msgid "display name override"
@@ -2484,39 +2478,47 @@ msgid "Whether this judge should be blocked from connecting, even if its key is 
 msgstr "Si ce juge doit être empêché de se connecter, même si sa clé est correcte."
 
 #: judge/models/runtime.py:132
+msgid "disable judge"
+msgstr ""
+
+#: judge/models/runtime.py:133
+msgid "Whether this judge should be removed from judging queue."
+msgstr ""
+
+#: judge/models/runtime.py:134
 msgid "judge online status"
 msgstr "statut en ligne du juge"
 
-#: judge/models/runtime.py:133
+#: judge/models/runtime.py:135
 msgid "judge start time"
 msgstr "heure de début du juge"
 
-#: judge/models/runtime.py:134
+#: judge/models/runtime.py:136
 msgid "response time"
 msgstr "temps de réponse"
 
-#: judge/models/runtime.py:135
+#: judge/models/runtime.py:137
 msgid "system load"
 msgstr "charge du système"
 
-#: judge/models/runtime.py:136
+#: judge/models/runtime.py:138
 msgid "Load for the last minute, divided by processors to be fair."
 msgstr "Charge pour la dernière minute, divisée par les processeurs pour être juste."
 
-#: judge/models/runtime.py:138
+#: judge/models/runtime.py:140
 msgid "last connected IP"
 msgstr "dernière IP connectée"
 
-#: judge/models/runtime.py:140 judge/models/runtime.py:182
+#: judge/models/runtime.py:142 judge/models/runtime.py:191
 msgid "judges"
 msgstr "juges"
 
-#: judge/models/runtime.py:181
+#: judge/models/runtime.py:190
 msgid "judge"
 msgstr "juge"
 
 #: judge/models/submission.py:22 judge/models/submission.py:50
-#: judge/utils/problems.py:74
+#: judge/utils/problems.py:66
 msgid "Accepted"
 msgstr "Accepté"
 
@@ -2545,7 +2547,7 @@ msgid "Runtime Error"
 msgstr "Erreur d'Exécution"
 
 #: judge/models/submission.py:29 judge/models/submission.py:44
-#: judge/models/submission.py:58 judge/utils/problems.py:76
+#: judge/models/submission.py:58 judge/utils/problems.py:68
 msgid "Compile Error"
 msgstr "Erreur de Compilation"
 
@@ -2848,7 +2850,7 @@ msgstr "MOSS en cours d'exécution"
 
 #: judge/tasks/submission.py:47
 msgid "Modifying submissions"
-msgstr ""
+msgstr "Modification des soumissions"
 
 #: judge/tasks/submission.py:60
 msgid "Recalculating user points"
@@ -2856,7 +2858,7 @@ msgstr ""
 
 #: judge/tasks/user.py:49
 msgid "Applying filters"
-msgstr ""
+msgstr "Application des filtres"
 
 #: judge/tasks/user.py:64
 msgid "Preparing your submission data"
@@ -2903,15 +2905,15 @@ msgstr "Comment avez-vous corrompu le chemin zip ?"
 msgid "How did you corrupt the generator path?"
 msgstr "Comment avez-vous corrompu le chemin du générateur ?"
 
-#: judge/utils/problems.py:75
+#: judge/utils/problems.py:67
 msgid "Wrong"
 msgstr "Mauvais"
 
-#: judge/utils/problems.py:77
+#: judge/utils/problems.py:69
 msgid "Timeout"
 msgstr "Expiré"
 
-#: judge/utils/problems.py:78
+#: judge/utils/problems.py:70
 msgid "Error"
 msgstr "Erreur"
 
@@ -2985,7 +2987,7 @@ msgstr "Modifié à partir du site"
 
 #: judge/views/comment.py:155
 msgid "Editing comment"
-msgstr ""
+msgstr "Édition du commentaire"
 
 #: judge/views/contests.py:58 judge/views/contests.py:231
 #: judge/views/contests.py:234 judge/views/contests.py:439
@@ -3034,7 +3036,7 @@ msgstr "Interdit de rejoindre"
 
 #: judge/views/contests.py:360
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
-msgstr ""
+msgstr "Vous êtes persona non grata pour ce concours. Il vous est définitivement interdit de participer à ce concours."
 
 #: judge/views/contests.py:390
 msgid "Cannot enter"
@@ -3207,8 +3209,8 @@ msgstr "Gestion des demandes d'adhésion à %s"
 #, python-format
 msgid "Your organization can only receive %d more member."
 msgid_plural "Your organization can only receive %d more members."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Votre organisation ne peut accueillir que %d membre de plus."
+msgstr[1] "Votre organisation ne peut accueillir que %d membres de plus."
 
 #: judge/views/organization.py:297
 #, python-format
@@ -3311,40 +3313,40 @@ msgstr "Non autorisé à supprimer des votes sur ce problème."
 msgid "success"
 msgstr "réussi"
 
-#: judge/views/problem.py:653 judge/views/problem.py:661
+#: judge/views/problem.py:654 judge/views/problem.py:662
 #, python-format
 msgid "Submit to %s"
 msgstr "Soumettre à %s"
 
-#: judge/views/problem.py:706
+#: judge/views/problem.py:707
 msgid "You submitted too many submissions."
 msgstr "Vous avez soumis trop de soumissions."
 
-#: judge/views/problem.py:710
+#: judge/views/problem.py:711
 msgid "Banned from submitting"
 msgstr "Interdit de soumettre"
 
-#: judge/views/problem.py:711
+#: judge/views/problem.py:712
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting to this problem."
-msgstr ""
+msgstr "Vous êtes persona non grata pour ce problème. Il vous est définitivement interdit de soumettre à ce problème."
 
-#: judge/views/problem.py:715
+#: judge/views/problem.py:716
 msgid "Too many submissions"
 msgstr "Trop de soumissions"
 
-#: judge/views/problem.py:716
+#: judge/views/problem.py:717
 msgid "You have exceeded the submission limit for this problem."
 msgstr "Vous avez dépassé la limite de soumission pour ce problème."
 
-#: judge/views/problem.py:766
+#: judge/views/problem.py:767
 msgid "Do you want me to ban you?"
 msgstr "Voulez-vous que je vous bannisse ?"
 
-#: judge/views/problem.py:784
+#: judge/views/problem.py:785
 msgid "Clone Problem"
 msgstr "Cloner Problème"
 
-#: judge/views/problem.py:811
+#: judge/views/problem.py:812
 #, python-format
 msgid "Cloned problem from %s"
 msgstr "Problème cloné de %s"
@@ -3364,7 +3366,7 @@ msgstr "Votre fichier zip est invalide !"
 #: judge/views/problem_data.py:105 judge/views/problem_data.py:108
 #, python-brace-format
 msgid "Comparing submissions for {0}"
-msgstr ""
+msgstr "Comparaison des soumissions pour {0}"
 
 #: judge/views/problem_data.py:144
 #, python-brace-format
@@ -3400,8 +3402,8 @@ msgstr "Recompter toutes les soumissions pour %s..."
 #, python-format
 msgid "Successfully scheduled %d submission for rejudging."
 msgid_plural "Successfully scheduled %d submissions for rejudging."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d soumission a été programmée pour être réjugée avec succès."
+msgstr[1] "%d soumissions ont été programmées pour être rejugées avec succès."
 
 #: judge/views/ranked_submission.py:68 judge/views/ranked_submission.py:71
 #, python-format
@@ -3451,11 +3453,11 @@ msgstr "Clé d'Activation Invalide"
 msgid "Authentication failure"
 msgstr "Échec d'authentification"
 
-#: judge/views/stats.py:28
+#: judge/views/stats.py:23
 msgid "Other"
 msgstr "Autre"
 
-#: judge/views/stats.py:67
+#: judge/views/stats.py:62
 msgid "Language statistics"
 msgstr "Statistiques de langage"
 
@@ -3651,7 +3653,7 @@ msgid "Updated on site"
 msgstr "Mise à jour sur le site"
 
 #: judge/views/user.py:387 templates/admin/auth/user/change_form.html:14
-#: templates/admin/auth/user/change_form.html:17 templates/base.html:216
+#: templates/admin/auth/user/change_form.html:17 templates/base.html:213
 #: templates/user/user-tabs.html:16
 msgid "Edit profile"
 msgstr "Modifier le profil"
@@ -3693,19 +3695,31 @@ msgstr "Évaluer"
 msgid "Rate all ratable contests"
 msgstr "Évaluer tous les concours évaluables"
 
-#: templates/admin/judge/judge/change_form.html:15
-#: templates/admin/judge/judge/change_form.html:18
+#: templates/admin/judge/judge/change_form.html:16
+#: templates/admin/judge/judge/change_form.html:19
 msgid "Disconnect"
 msgstr "Déconnecter"
 
-#: templates/admin/judge/judge/change_form.html:20
-#: templates/admin/judge/judge/change_form.html:23
+#: templates/admin/judge/judge/change_form.html:21
+#: templates/admin/judge/judge/change_form.html:24
 msgid "Terminate"
 msgstr "Terminer"
 
+#: templates/admin/judge/judge/change_form.html:27
+#: templates/admin/judge/judge/change_form.html:30
+#: templates/user/edit-profile.html:355 templates/user/edit-profile.html:358
+msgid "Disable"
+msgstr "Désactiver"
+
+#: templates/admin/judge/judge/change_form.html:33
+#: templates/admin/judge/judge/change_form.html:36
+#: templates/user/edit-profile.html:386
+msgid "Enable"
+msgstr "Activer"
+
 #: templates/admin/judge/problem/change_form.html:15
 #: templates/admin/judge/problem/change_form.html:18
-#: templates/user/user-base.html:54
+#: templates/user/user-base.html:37
 msgid "View submissions"
 msgstr "Voir les soumissions"
 
@@ -3719,46 +3733,46 @@ msgstr "Voir les votes du problème"
 msgid "Edit user"
 msgstr "Modifier l'utilisateur"
 
-#: templates/base.html:209
+#: templates/base.html:206
 #, python-format
 msgid "Hello, %(username)s."
 msgstr "Bonjour, %(username)s."
 
-#: templates/base.html:218
+#: templates/base.html:215
 msgid "Stop impersonating"
 msgstr "Arrêter d'imiter"
 
-#: templates/base.html:223
+#: templates/base.html:220
 msgid "Log out"
 msgstr "Se déconnecter"
 
-#: templates/base.html:232
+#: templates/base.html:229
 #: templates/registration/password_reset_complete.html:4
 msgid "Log in"
 msgstr "Se connecter"
 
-#: templates/base.html:233 templates/registration/registration_form.html:181
+#: templates/base.html:230 templates/registration/registration_form.html:181
 msgid "or"
 msgstr "ou"
 
-#: templates/base.html:234
+#: templates/base.html:231
 msgid "Sign up"
 msgstr "S'inscrire"
 
-#: templates/base.html:246
+#: templates/base.html:243
 msgid "spectating"
 msgstr "en observant"
 
-#: templates/base.html:259
+#: templates/base.html:256
 msgid "This site works best with JavaScript enabled."
 msgstr "Ce site fonctionne mieux avec JavaScript activé."
 
-#: templates/base.html:286
+#: templates/base.html:283
 msgid "proudly powered by **DMOJ**"
 msgstr "fièrement propulsé par **DMOJ**"
 
-#: templates/blog/content.html:13 templates/comments/list.html:76
-#: templates/comments/list.html:92 templates/contest/contest-tabs.html:23
+#: templates/blog/content.html:13 templates/comments/list.html:89
+#: templates/comments/list.html:105 templates/contest/contest-tabs.html:23
 #: templates/contest/tag-title.html:9 templates/flatpages/admin_link.html:3
 #: templates/license.html:10 templates/problem/data.html:423
 #: templates/problem/editorial.html:14
@@ -3770,144 +3784,145 @@ msgstr "Modifier"
 msgid "posted on %(time)s"
 msgstr "posté le %(time)s"
 
-#: templates/blog/list.html:84
+#: templates/blog/list.html:45
 msgid "Blog"
 msgstr "Blog"
 
-#: templates/blog/list.html:86
+#: templates/blog/list.html:47
 msgid "Events"
 msgstr "Évènements"
 
-#: templates/blog/list.html:91
+#: templates/blog/list.html:52
 msgid "News"
 msgstr "Actualités"
 
-#: templates/blog/list.html:105
+#: templates/blog/list.html:66
 #, python-brace-format
 msgid "posted on {time}"
 msgstr "posté le {time}"
 
-#: templates/blog/list.html:105
+#: templates/blog/list.html:66
 #, python-brace-format
 msgid "posted {time}"
 msgstr "posté {time}"
 
-#: templates/blog/list.html:120
+#: templates/blog/list.html:81
 msgid "Continue reading..."
-msgstr ""
+msgstr "Lire la suite..."
 
-#: templates/blog/list.html:134 templates/problem/problem.html:331
+#: templates/blog/list.html:95 templates/problem/problem.html:331
 msgid "Clarifications"
 msgstr "Clarifications"
 
-#: templates/blog/list.html:150 templates/problem/problem.html:342
+#: templates/blog/list.html:111 templates/problem/problem.html:342
 msgid "No clarifications have been made at this time."
 msgstr "Aucune clarification n'a été apportée pour l'instant."
 
-#: templates/blog/list.html:158 templates/contest/list.html:203
+#: templates/blog/list.html:119 templates/contest/list.html:189
 msgid "Ongoing contests"
 msgstr "Concours en cours"
 
-#: templates/blog/list.html:166
+#: templates/blog/list.html:127
 #, python-format
 msgid "Ends in %(countdown)s."
 msgstr "Se termine dans %(countdown)s."
 
-#: templates/blog/list.html:176 templates/contest/list.html:240
+#: templates/blog/list.html:137 templates/contest/list.html:226
 msgid "Upcoming contests"
 msgstr "Concours à venir"
 
-#: templates/blog/list.html:184 templates/contest/contest.html:41
+#: templates/blog/list.html:145 templates/contest/contest.html:41
 #, python-format
 msgid "Starting in %(countdown)s."
 msgstr "Commence dans %(countdown)s."
 
-#: templates/blog/list.html:193
+#: templates/blog/list.html:154
 msgid "Comment stream"
 msgstr "Flux de commentaire"
 
-#: templates/blog/list.html:213
+#: templates/blog/list.html:174
 msgid "New problems"
 msgstr "Nouveaux problèmes"
 
-#: templates/blog/list.html:230
+#: templates/blog/list.html:191
 msgid "My open tickets"
 msgstr "Mes tickets ouverts"
 
-#: templates/blog/list.html:251
+#: templates/blog/list.html:210
 msgid "New tickets"
 msgstr "Nouveaux tickets"
+
+#: templates/comments/edit-ajax.html:16 templates/comments/list.html:163
+#: templates/ticket/ticket.html:181
+msgid "Post!"
+msgstr "Poster !"
 
 #: templates/comments/list.html:2 templates/user/prepare-data.html:98
 msgid "Comments"
 msgstr "Commentaires"
 
-#: templates/comments/list.html:18 templates/comments/list.html:27
+#: templates/comments/list.html:5
+msgid "There are no comments at the moment."
+msgstr "Il n'y a aucun commentaire pour le moment."
+
+#: templates/comments/list.html:12
+msgid "Comments are disabled on this page."
+msgstr "Les commentaires sont désactivés sur cette page."
+
+#: templates/comments/list.html:31 templates/comments/list.html:40
 msgid "Please log in to vote"
 msgstr "Veuillez vous connecter pour voter"
 
-#: templates/comments/list.html:47
+#: templates/comments/list.html:60
 #, python-brace-format
 msgid "commented on {time}"
 msgstr "commenté le {time}"
 
-#: templates/comments/list.html:47
+#: templates/comments/list.html:60
 #, python-brace-format
 msgid "commented {time}"
 msgstr "commenté {time}"
 
-#: templates/comments/list.html:58
+#: templates/comments/list.html:71
 #, python-format
 msgid "edit %(edits)s"
 msgstr "modification %(edits)s"
 
-#: templates/comments/list.html:60 templates/comments/media-js.html:77
+#: templates/comments/list.html:73 templates/comments/media-js.html:77
 msgid "edited"
 msgstr "modifié"
 
-#: templates/comments/list.html:69
+#: templates/comments/list.html:82
 msgid "Link"
 msgstr "Lien"
 
-#: templates/comments/list.html:74 templates/comments/list.html:88
+#: templates/comments/list.html:87 templates/comments/list.html:101
 msgid "Reply"
 msgstr "Répondre"
 
-#: templates/comments/list.html:80 templates/comments/votes.html:1
+#: templates/comments/list.html:93 templates/comments/votes.html:1
 msgid "Votes"
 msgstr "Votes"
 
-#: templates/comments/list.html:81
+#: templates/comments/list.html:94
 msgid "Hide"
 msgstr "Cacher"
 
-#: templates/comments/list.html:106
+#: templates/comments/list.html:119
 msgid "This comment is hidden due to too much negative feedback."
 msgstr "Ce commentaire est masqué en raison d'un trop grand nombre de réactions négatives."
 
-#: templates/comments/list.html:107
+#: templates/comments/list.html:120
 msgid "Show it anyway."
 msgstr "Montrez-le quand même."
 
-#: templates/comments/list.html:124
-msgid "There are no comments at the moment."
-msgstr "Il n'y a aucun commentaire pour le moment."
-
-#: templates/comments/list.html:130
+#: templates/comments/list.html:141
 msgid "New comment"
 msgstr "Nouveau commentaire"
 
-#: templates/comments/list.html:144
+#: templates/comments/list.html:155
 msgid "Invalid comment body."
 msgstr "Corps du commentaire invalide."
-
-#: templates/comments/list.html:152 templates/ticket/ticket.html:355
-msgid "Post!"
-msgstr "Poster !"
-
-#: templates/comments/list.html:160
-msgid "Comments are disabled on this page."
-msgstr "Les commentaires sont désactivés sur cette page."
 
 #: templates/comments/media-js.html:12
 msgid "Replying to comment"
@@ -4074,7 +4089,7 @@ msgstr "Cloner"
 msgid "Leave contest"
 msgstr "Quitter le concours"
 
-#: templates/contest/contest-tabs.html:45 templates/contest/list.html:308
+#: templates/contest/contest-tabs.html:45 templates/contest/list.html:294
 msgid "Virtual join"
 msgstr "Rejoindre virtuellement"
 
@@ -4091,7 +4106,7 @@ msgstr "Rejoindre le concours"
 msgid "Spectate contest"
 msgstr "Observer le concours"
 
-#: templates/contest/contest-tabs.html:80 templates/contest/list.html:151
+#: templates/contest/contest-tabs.html:80 templates/contest/list.html:137
 msgid "You cannot join this contest."
 msgstr "Vous ne pouvez pas rejoindre ce concours."
 
@@ -4211,11 +4226,11 @@ msgstr[1] "Il y a **%(count)s** problèmes dans ce concours."
 
 #: templates/contest/contest.html:132
 msgid "**Partial scoring is enabled** for some or all of these problems."
-msgstr ""
+msgstr "**La notation partielle est activée** pour ces problèmes ou certains d'entre eux."
 
 #: templates/contest/contest.html:134
 msgid "This contest **will not use partial scoring**."
-msgstr ""
+msgstr "Ce concours **n'utilise pas la notation partielle**."
 
 #: templates/contest/contest.html:139
 msgid "The pretest system **will be used** for some or all of these problems."
@@ -4227,11 +4242,11 @@ msgstr "Le système de prétest **ne sera pas utilisé** pour ce concours."
 
 #: templates/contest/contest.html:146
 msgid "Some or all of these problems **have a submission limit**."
-msgstr ""
+msgstr "**Une limite de soumission** est imposée à certains ou à l'ensemble de ces problèmes."
 
 #: templates/contest/contest.html:148
 msgid "There is **no submission limit** for any of these problems."
-msgstr ""
+msgstr "**Aucune limite de soumission** ne s'applique à l'ensemble de ces problèmes."
 
 #: templates/contest/contest.html:154
 #, python-format
@@ -4262,9 +4277,9 @@ msgstr "Un **code d'accès est nécessaire** pour rejoindre le concours."
 msgid "AC Rate"
 msgstr "Taux d'AC"
 
-#: templates/contest/contest.html:198 templates/contest/list.html:166
-#: templates/contest/list.html:208 templates/contest/list.html:285
-#: templates/problem/list.html:207 templates/problem/list.html:239
+#: templates/contest/contest.html:198 templates/contest/list.html:152
+#: templates/contest/list.html:194 templates/contest/list.html:271
+#: templates/problem/list.html:203 templates/problem/list.html:235
 msgid "Users"
 msgstr "Utilisateurs"
 
@@ -4272,74 +4287,74 @@ msgstr "Utilisateurs"
 msgid "Editorials"
 msgstr "Éditoriaux"
 
-#: templates/contest/contest.html:226 templates/problem/list.html:233
+#: templates/contest/contest.html:226 templates/problem/list.html:229
 msgid "Editorial"
 msgstr "Éditorial"
 
-#: templates/contest/list.html:31 templates/contest/media-js.html:9
+#: templates/contest/list.html:17 templates/contest/media-js.html:9
 #: templates/contest/media-js.html:15
 msgid "Are you sure you want to join?"
 msgstr "Êtes-vous sûr de vouloir rejoindre ?"
 
-#: templates/contest/list.html:32
+#: templates/contest/list.html:18
 msgid "Joining a contest for the first time starts your timer, after which it becomes unstoppable."
 msgstr ""
 
-#: templates/contest/list.html:84
+#: templates/contest/list.html:70
 msgid "private"
 msgstr "privé"
 
-#: templates/contest/list.html:89
+#: templates/contest/list.html:75
 msgid "rated"
 msgstr "évalué"
 
-#: templates/contest/list.html:116
+#: templates/contest/list.html:102
 #, python-format
 msgid "%(time_limit)s window"
 msgstr "Fenêtre de %(time_limit)s"
 
-#: templates/contest/list.html:119
+#: templates/contest/list.html:105
 #, python-format
 msgid "%(duration)s long"
 msgstr "durée de %(duration)s"
 
-#: templates/contest/list.html:139 templates/contest/list.html:151
+#: templates/contest/list.html:125 templates/contest/list.html:137
 msgid "Join"
 msgstr "Rejoindre"
 
-#: templates/contest/list.html:145
+#: templates/contest/list.html:131
 msgid "Spectate"
 msgstr "Observer"
 
-#: templates/contest/list.html:161
+#: templates/contest/list.html:147
 msgid "Active contests"
 msgstr "Concours actifs"
 
-#: templates/contest/list.html:165 templates/contest/list.html:207
-#: templates/contest/list.html:245 templates/contest/list.html:282
+#: templates/contest/list.html:151 templates/contest/list.html:193
+#: templates/contest/list.html:231 templates/contest/list.html:268
 msgid "Contest"
 msgstr "Concours"
 
-#: templates/contest/list.html:182
+#: templates/contest/list.html:168
 #, python-format
 msgid "Window ends in %(countdown)s"
 msgstr "La fenêtre se termine dans %(countdown)s"
 
-#: templates/contest/list.html:184 templates/contest/list.html:223
+#: templates/contest/list.html:170 templates/contest/list.html:209
 #, python-format
 msgid "Ends in %(countdown)s"
 msgstr "Se termine dans %(countdown)s"
 
-#: templates/contest/list.html:257
+#: templates/contest/list.html:243
 #, python-format
 msgid "Starting in %(countdown)s"
 msgstr "Commence dans %(countdown)s"
 
-#: templates/contest/list.html:268
+#: templates/contest/list.html:254
 msgid "There are no scheduled contests at this time."
 msgstr "Il n'y a aucun concours prévu pour le moment."
 
-#: templates/contest/list.html:274
+#: templates/contest/list.html:260
 msgid "Past contests"
 msgstr "Concours passés"
 
@@ -4534,7 +4549,7 @@ msgstr "Votre abonnement a été mis à jour avec succès."
 msgid "Your update request was successfully received and an activation email has been sent to you. In that email you will find a link which you need to follow in order to update your subscription."
 msgstr "Votre demande de mise à jour a été reçue avec succès et un courriel d'activation vous a été envoyé. Dans ce courriel, vous trouverez un lien que vous devez suivre afin de mettre à jour votre abonnement."
 
-#: templates/organization/edit.html:47
+#: templates/organization/edit.html:11
 #: templates/organization/requests/pending.html:34
 #: templates/ticket/edit-notes.html:4
 msgid "Update"
@@ -4600,7 +4615,7 @@ msgstr "Nom"
 msgid "Members"
 msgstr "Membres"
 
-#: templates/organization/new.html:10 templates/ticket/new.html:39
+#: templates/organization/new.html:10 templates/ticket/new.html:20
 msgid "Create"
 msgstr "Créer"
 
@@ -4660,7 +4675,7 @@ msgstr "Journal"
 msgid "Kick"
 msgstr "Expulser"
 
-#: templates/organization/users.html:34
+#: templates/organization/users.html:29
 msgid "Are you sure you want to kick this user?"
 msgstr "Êtes-vous sûr de vouloir expulser cet utilisateur ?"
 
@@ -4726,7 +4741,7 @@ msgstr "Ajouter un nouveau cas"
 
 #: templates/problem/data.html:436
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 #: templates/problem/editorial.html:23
 msgid "Remember to use this editorial **only** when stuck, and **not to copy-paste code from it**. Please be respectful to the problem author and editorialist."
@@ -4742,24 +4757,24 @@ msgid_plural "Authors:"
 msgstr[0] "Auteur :"
 msgstr[1] "Auteurs :"
 
-#: templates/problem/list.html:62
+#: templates/problem/list.html:58
 msgid "Filter by type..."
 msgstr "Filtrer par type..."
 
-#: templates/problem/list.html:180
+#: templates/problem/list.html:176
 msgid "Hot problems"
 msgstr "Problèmes populaires"
 
-#: templates/problem/list.html:202 templates/problem/list.html:220
+#: templates/problem/list.html:198 templates/problem/list.html:216
 #: templates/problem/search-form.html:35 templates/user/user-problems.html:59
 msgid "Category"
 msgstr "Catégorie"
 
-#: templates/problem/list.html:204 templates/problem/list.html:224
+#: templates/problem/list.html:200 templates/problem/list.html:220
 msgid "Types"
 msgstr "Types"
 
-#: templates/problem/list.html:231
+#: templates/problem/list.html:227
 #, python-format
 msgid "AC %%"
 msgstr "AC %%"
@@ -4783,11 +4798,11 @@ msgstr "L'ID de fin doit être après l'ID de début."
 #: templates/problem/manage_submission.html:90
 #, python-brace-format
 msgid "You are about to rejudge {count} submissions. Are you sure you want to do this?"
-msgstr ""
+msgstr "Vous êtes sur le point de juger {count} soumissions à nouveau. Êtes-vous sûr de vouloir continuer ?"
 
 #: templates/problem/manage_submission.html:96
 msgid "You are about to rejudge a few submissions. Are you sure you want to do this?"
-msgstr ""
+msgstr "Vous êtes sur le point de juger quelques soumissions à nouveau. Êtes-vous sûr de vouloir continuer ?"
 
 #: templates/problem/manage_submission.html:115
 msgid "Rejudge Submissions"
@@ -4953,11 +4968,11 @@ msgstr "Demander une clarification"
 msgid "Report an issue"
 msgstr "Reporter un problème"
 
-#: templates/problem/raw.html:62
+#: templates/problem/raw.html:61
 msgid "Time Limit:"
 msgstr "Limite de Temps :"
 
-#: templates/problem/raw.html:71
+#: templates/problem/raw.html:70
 msgid "Memory Limit:"
 msgstr "Limite de Mémoire :"
 
@@ -4999,13 +5014,26 @@ msgid "Point range"
 msgstr "Plage de points"
 
 #: templates/problem/search-form.html:68 templates/submission/list.html:326
-#: templates/ticket/list.html:220
+#: templates/ticket/list.html:188
 msgid "Go"
 msgstr "Aller"
 
 #: templates/problem/search-form.html:69
 msgid "Random"
 msgstr "Aléatoire"
+
+#: templates/problem/submission-diff.html:62
+#: templates/status/language-list.html:34 templates/ticket/list.html:199
+msgid "ID"
+msgstr "ID"
+
+#: templates/problem/submission-diff.html:64
+msgid "Result"
+msgstr "Résultat"
+
+#: templates/problem/submission-diff.html:66
+msgid "Date"
+msgstr "Date"
 
 #: templates/problem/submit.html:117
 msgid "Your source code must contain at most 65536 characters."
@@ -5054,7 +5082,7 @@ msgstr "Justification :"
 
 #: templates/problem/vote-ajax.html:27
 msgid "A short justification for your vote to this problem's point value (optional)."
-msgstr ""
+msgstr "Une courte justification de votre vote sur la valeur en points de ce problème (facultatif)."
 
 #: templates/problem/vote-ajax.html:33
 msgid "Vote!"
@@ -5107,7 +5135,7 @@ msgstr[1] ""
 #: templates/registration/activation_email.html:14
 #: templates/registration/activation_email.txt:8
 msgid "Please click on the following link to activate your account:"
-msgstr ""
+msgstr "Veuillez cliquer sur le lien suivant pour activer votre compte :"
 
 #: templates/registration/activation_email.html:18
 #: templates/registration/activation_email.txt:11
@@ -5128,13 +5156,13 @@ msgstr "À bientôt !"
 #, python-format
 msgid "Please activate your %(site_name)s account in the next %(count)s day."
 msgid_plural "Please activate your %(site_name)s account in the next %(count)s days."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Veuillez activer votre compte %(site_name)s dans le %(count)s prochain jour."
+msgstr[1] "Veuillez activer votre compte %(site_name)s dans les %(count)s prochains jours."
 
 #: templates/registration/activation_email_subject.txt:1
 #, python-format
 msgid "Activate your %(site_name)s account"
-msgstr ""
+msgstr "Activez votre compte %(site_name)s"
 
 #: templates/registration/login.html:35
 msgid "Invalid username or password."
@@ -5215,8 +5243,7 @@ msgstr ""
 #: templates/registration/password_reset_email.txt:1
 #, python-format
 msgid "You're receiving this email because you requested a password reset for your user account at %(site_name)s."
-msgstr "Vous recevez ce courrier électronique car vous avez demandé une réinitialisation de mot de passe\n"
-"pour votre compte utilisateur sur %(site_name)s."
+msgstr "Vous recevez ce courrier électronique car vous avez demandé une réinitialisation de mot de passe pour votre compte utilisateur sur %(site_name)s."
 
 #: templates/registration/password_reset_email.txt:3
 msgid "Please go to the following page and choose a new password:"
@@ -5352,8 +5379,8 @@ msgid "These codes will never be shown again after you enable two-factor authent
 msgstr "Ces codes ne seront plus jamais affichés après avoir activé l'authentification à deux facteurs."
 
 #: templates/registration/totp_enable.html:108
-msgid "Important"
-msgstr "Important"
+msgid "Important:"
+msgstr "Important :"
 
 #: templates/registration/totp_enable.html:109
 #, python-format
@@ -5426,10 +5453,6 @@ msgstr "N/A"
 msgid "There are no judges available at this time."
 msgstr "Il n'y a pas de juges disponibles pour le moment."
 
-#: templates/status/language-list.html:34 templates/ticket/list.html:231
-msgid "ID"
-msgstr "ID"
-
 #: templates/status/language-list.html:36
 msgid "Runtime Info"
 msgstr "Infos d'Exécution"
@@ -5441,6 +5464,11 @@ msgstr "Juges"
 #: templates/status/status-tabs.html:6
 msgid "Version Matrix"
 msgstr "Matrice de Version"
+
+#: templates/submission/info-base.html:8
+#, python-format
+msgid "%(date)s on %(judge)s"
+msgstr ""
 
 #: templates/submission/internal-error-message.html:3
 #, python-format
@@ -5627,41 +5655,49 @@ msgstr "Meilleur"
 msgid "%(user)s's"
 msgstr "De %(user)s"
 
-#: templates/ticket/list.html:102 templates/ticket/ticket.html:270
+#: templates/task_status.html:92
+msgid "Completed!"
+msgstr "Terminé !"
+
+#: templates/task_status.html:95
+msgid "Failed!"
+msgstr "Échec !"
+
+#: templates/ticket/list.html:70 templates/ticket/ticket.html:95
 msgid "Reopened: "
 msgstr "Réouvert : "
 
-#: templates/ticket/list.html:105 templates/ticket/ticket.html:271
+#: templates/ticket/list.html:73 templates/ticket/ticket.html:96
 msgid "Closed: "
 msgstr "Fermé : "
 
-#: templates/ticket/list.html:188
+#: templates/ticket/list.html:156
 msgid "Use desktop notification"
 msgstr "Utiliser la notification de bureau"
 
-#: templates/ticket/list.html:194
+#: templates/ticket/list.html:162
 msgid "Hide closed tickets"
 msgstr "Masquer les tickets fermés"
 
-#: templates/ticket/list.html:199
+#: templates/ticket/list.html:167
 msgid "Show my tickets only"
 msgstr "Afficher mes tickets uniquement"
 
-#: templates/ticket/list.html:203
+#: templates/ticket/list.html:171
 msgid "Filing user"
 msgstr "Utilisateur de dépôt"
 
-#: templates/ticket/list.html:212 templates/ticket/ticket.html:370
+#: templates/ticket/list.html:180 templates/ticket/ticket.html:196
 msgid "Assignee"
 msgid_plural "Assignees"
 msgstr[0] "Destinataire"
 msgstr[1] "Destinataires"
 
-#: templates/ticket/list.html:232
+#: templates/ticket/list.html:200
 msgid "Title"
 msgstr "Titre"
 
-#: templates/ticket/list.html:234
+#: templates/ticket/list.html:202
 msgid "Assignees"
 msgstr "Destinataires"
 
@@ -5683,32 +5719,32 @@ msgstr "Merci d'avoir ouvert un ticket !"
 msgid "Please keep in mind that this form is for reporting issues with a problem statement, and not for asking for help. If you require assistance on solving a problem, ask in the comments instead."
 msgstr "Gardez à l'esprit que ce formulaire sert à signaler des problèmes liés à l'énoncé d'un problème, et non à demander de l'aide. Si vous avez besoin d'aide pour résoudre un problème, demandez plutôt dans les commentaires."
 
-#: templates/ticket/ticket.html:205
+#: templates/ticket/ticket.html:30
 #, python-brace-format
 msgid "Could not change ticket: {error}"
 msgstr "Impossible de modifier le ticket : {error}"
 
-#: templates/ticket/ticket.html:363
+#: templates/ticket/ticket.html:189
 msgid "Associated object"
 msgstr "Objet associé"
 
-#: templates/ticket/ticket.html:380
+#: templates/ticket/ticket.html:206
 msgid "No one is assigned."
 msgstr "Personne n'est assigné."
 
-#: templates/ticket/ticket.html:386
+#: templates/ticket/ticket.html:212
 msgid "Close ticket"
 msgstr "Fermer le ticket"
 
-#: templates/ticket/ticket.html:388
+#: templates/ticket/ticket.html:214
 msgid "Reopen ticket"
 msgstr "Rouvrir le ticket"
 
-#: templates/ticket/ticket.html:392
+#: templates/ticket/ticket.html:218
 msgid "Assignee notes"
 msgstr "Notes du destinataire"
 
-#: templates/ticket/ticket.html:399 templates/widgets/select_all.html:4
+#: templates/ticket/ticket.html:225 templates/widgets/select_all.html:4
 msgid "Nothing here."
 msgstr "Rien ici."
 
@@ -5716,7 +5752,7 @@ msgstr "Rien ici."
 msgid "Rank"
 msgstr "Rang"
 
-#: templates/user/base-users.html:14 templates/user/base-users.html:64
+#: templates/user/base-users.html:14 templates/user/base-users.html:57
 msgid "Search by handle..."
 msgstr "Recherche par nom..."
 
@@ -5775,7 +5811,7 @@ msgstr "Vous ne pourrez plus voir vos codes scratch après avoir quitté cette p
 
 #: templates/user/edit-profile.html:278
 msgid "Self-description:"
-msgstr ""
+msgstr "Auto-description :"
 
 #: templates/user/edit-profile.html:285
 msgid "Select your closest major city"
@@ -5783,23 +5819,23 @@ msgstr "Sélectionnez votre ville principale la plus proche"
 
 #: templates/user/edit-profile.html:286
 msgid "Time zone:"
-msgstr ""
+msgstr "Fuseau horaire :"
 
 #: templates/user/edit-profile.html:290
 msgid "Language:"
-msgstr ""
+msgstr "Langage :"
 
 #: templates/user/edit-profile.html:294
 msgid "Editor theme:"
-msgstr ""
+msgstr "Thème de l'éditeur :"
 
 #: templates/user/edit-profile.html:299
 msgid "Math engine:"
-msgstr ""
+msgstr "Moteur mathématique :"
 
 #: templates/user/edit-profile.html:308
 msgid "Affiliated organizations:"
-msgstr ""
+msgstr "Organisations affiliées :"
 
 #: templates/user/edit-profile.html:334
 msgid "Change your avatar"
@@ -5811,11 +5847,7 @@ msgstr "Changer votre mot de passe"
 
 #: templates/user/edit-profile.html:352
 msgid "Two-factor Authentication is enabled:"
-msgstr ""
-
-#: templates/user/edit-profile.html:355 templates/user/edit-profile.html:358
-msgid "Disable"
-msgstr "Désactiver"
+msgstr "L'authentification à deux facteurs est activée :"
 
 #: templates/user/edit-profile.html:360
 msgid "Refresh"
@@ -5823,7 +5855,7 @@ msgstr "Réactiver"
 
 #: templates/user/edit-profile.html:363
 msgid "Scratch codes:"
-msgstr ""
+msgstr "Codes scratch :"
 
 #: templates/user/edit-profile.html:367 templates/user/edit-profile.html:399
 msgid "Hidden"
@@ -5835,19 +5867,15 @@ msgstr "Si vous avez besoin de plus de codes scratch, vous pouvez les régénér
 
 #: templates/user/edit-profile.html:385
 msgid "Two-factor Authentication is disabled:"
-msgstr ""
-
-#: templates/user/edit-profile.html:386
-msgid "Enable"
-msgstr "Activer"
+msgstr "L'authentification à deux facteurs est désactivée :"
 
 #: templates/user/edit-profile.html:393
 msgid "API token:"
-msgstr ""
+msgstr "Jeton API :"
 
 #: templates/user/edit-profile.html:410
 msgid "Security keys:"
-msgstr ""
+msgstr "Clés de sécurité :"
 
 #: templates/user/edit-profile.html:420
 msgid "Delete"
@@ -5863,7 +5891,7 @@ msgstr "Ajouter"
 
 #: templates/user/edit-profile.html:436
 msgid "User-script:"
-msgstr ""
+msgstr "Script utilisateur :"
 
 #: templates/user/edit-profile.html:440
 msgid "Update profile"
@@ -5929,96 +5957,96 @@ msgid "From"
 msgstr "De"
 
 #: templates/user/user-about.html:25
-msgid "Admin Notes"
-msgstr "Notes de l'Administrateur"
+msgid "Admin notes:"
+msgstr "Notes de l'administrateur :"
 
-#: templates/user/user-about.html:33 templates/user/user-tabs.html:4
+#: templates/user/user-about.html:32 templates/user/user-tabs.html:4
 msgid "About"
 msgstr "A propos"
 
-#: templates/user/user-about.html:40
+#: templates/user/user-about.html:39
 msgid "You have not shared any information."
 msgstr "Vous n'avez partagé aucune information."
 
-#: templates/user/user-about.html:42
+#: templates/user/user-about.html:41
 msgid "This user has not shared any information."
 msgstr "Cet utilisateur n'a partagé aucune information."
 
-#: templates/user/user-about.html:59
+#: templates/user/user-about.html:58
 msgid "Sun"
 msgstr "Dim"
 
-#: templates/user/user-about.html:64
+#: templates/user/user-about.html:63
 msgid "Mon"
 msgstr "Lun"
 
-#: templates/user/user-about.html:69
+#: templates/user/user-about.html:68
 msgid "Tues"
 msgstr "Mar"
 
-#: templates/user/user-about.html:74
+#: templates/user/user-about.html:73
 msgid "Wed"
 msgstr "Mer"
 
-#: templates/user/user-about.html:79
+#: templates/user/user-about.html:78
 msgid "Thurs"
 msgstr "Jeu"
 
-#: templates/user/user-about.html:84
+#: templates/user/user-about.html:83
 msgid "Fri"
 msgstr "Ven"
 
-#: templates/user/user-about.html:89
+#: templates/user/user-about.html:88
 msgid "Sat"
 msgstr "Sam"
 
-#: templates/user/user-about.html:98
+#: templates/user/user-about.html:97
 msgid "Less"
 msgstr "Moins"
 
-#: templates/user/user-about.html:104
+#: templates/user/user-about.html:103
 msgid "More"
 msgstr "Plus"
 
-#: templates/user/user-about.html:112
+#: templates/user/user-about.html:111
 msgid "Rating history"
 msgstr "Historique des classements"
 
-#: templates/user/user-base.html:35
+#: templates/user/user-base.html:18
 #, python-format
 msgid "%(counter)s problem solved"
 msgid_plural "%(counter)s problems solved"
 msgstr[0] "%(counter)s problème résolu"
 msgstr[1] "%(counter)s problèmes résolus"
 
-#: templates/user/user-base.html:43
+#: templates/user/user-base.html:26
 msgid "Rank by points:"
 msgstr "Rang par points :"
 
-#: templates/user/user-base.html:46
+#: templates/user/user-base.html:29
 msgid "Total points:"
 msgstr "Total des points :"
 
-#: templates/user/user-base.html:60
+#: templates/user/user-base.html:43
 #, python-format
 msgid "%(counter)s contest written"
 msgid_plural "%(counter)s contests written"
 msgstr[0] "%(counter)s concours écrit"
 msgstr[1] "%(counter)s concours écrits"
 
-#: templates/user/user-base.html:67
+#: templates/user/user-base.html:50
 msgid "Rank by rating:"
 msgstr "Rang par classement :"
 
-#: templates/user/user-base.html:69
+#: templates/user/user-base.html:52
 msgid "Rating:"
 msgstr "Classement :"
 
-#: templates/user/user-base.html:70
+#: templates/user/user-base.html:53
 msgid "Min. rating:"
 msgstr "Classement minimum :"
 
-#: templates/user/user-base.html:71
+#: templates/user/user-base.html:54
 msgid "Max rating:"
 msgstr "Classement maximale :"
 
