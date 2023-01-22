@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-20 23:43+0000\n"
-"PO-Revision-Date: 2022-12-21 00:44\n"
+"PO-Revision-Date: 2023-01-11 00:49\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -36,7 +36,7 @@ msgstr ""
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr ""
+msgstr "No se puede eliminar el voto: %s"
 
 #: resources/problem-vote.js:28
 #, javascript-format
@@ -50,7 +50,7 @@ msgstr ""
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
-msgstr ""
+msgstr "Número de votos para este valor de puntos"
 
 #: resources/user_profile.js:47
 msgid "past year"

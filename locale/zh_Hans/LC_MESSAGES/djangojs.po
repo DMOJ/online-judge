@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-20 23:43+0000\n"
-"PO-Revision-Date: 2022-12-21 00:43\n"
+"PO-Revision-Date: 2023-01-16 00:50\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -58,7 +58,7 @@ msgstr "最近一年"
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
-msgstr[0] "%(cnt)d 个提交"
+msgstr[0] "%(cnt)d个提交"
 
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
