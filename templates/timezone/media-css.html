@@ -1,15 +1,8 @@
 {% compress css %}
-    {% if TIMEZONE_BG %}
-        <style>
-            .map-wrap {
-                background: url('{{TIMEZONE_BG}}')
-            }
-        </style>
-    {% endif %}
     <link rel="stylesheet" href="{{ static('libs/timezone-map/timezone-map.css') }}">
     <style>
         .map-inset {
-            background: url('{{TIMEZONE_MAP}}') 50% 50%
+            background: url('{{ TIMEZONE_MAP }}') 50% 50%
         }
 
         .map-wrap {
