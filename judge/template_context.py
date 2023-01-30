@@ -24,7 +24,6 @@ def get_resource(request):
     else:
         scheme = 'http'
     return {
-        'STYLE_CSS': 'dark/style.css' if 'dark' in request.GET else 'style.css',
         'INLINE_JQUERY': settings.INLINE_JQUERY,
         'INLINE_FONTAWESOME': settings.INLINE_FONTAWESOME,
         'JQUERY_JS': settings.JQUERY_JS,
@@ -108,6 +107,19 @@ def site_name(request):
     return {'SITE_NAME': settings.SITE_NAME,
             'SITE_LONG_NAME': settings.SITE_LONG_NAME,
             'SITE_ADMIN_EMAIL': settings.SITE_ADMIN_EMAIL}
+
+
+def site_theme(request):
+    # Middleware populating `profile` may not have loaded at this point if we're called from an error context.
+    if hasattr(request.user, 'profile'):
+        preferred_css = settings.DMOJ_THEME_CSS.get(request.profile.site_theme)
+    else:
+        preferred_css = None
+    return {
+        'DARK_STYLE_CSS': settings.DMOJ_THEME_CSS['dark'],
+        'LIGHT_STYLE_CSS': settings.DMOJ_THEME_CSS['light'],
+        'PREFERRED_STYLE_CSS': preferred_css,
+    }
 
 
 def math_setting(request):

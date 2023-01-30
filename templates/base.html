@@ -44,7 +44,17 @@
         <link rel="stylesheet" href="{{ FONTAWESOME_CSS }}">
     {% endif %}
     {% compress css %}
-        <link rel="stylesheet" href="{{ static(STYLE_CSS) }}">
+        {# TODO: once dark mode support is better, enable for all users by deleting the else branch #}
+        {% if perms.judge.test_site %}
+            {% if PREFERRED_STYLE_CSS is not none %}
+                <link rel="stylesheet" href="{{ static(PREFERRED_STYLE_CSS) }}">
+            {% else %}
+                <link rel="stylesheet" href="{{ static(LIGHT_STYLE_CSS) }}" media="(prefers-color-scheme: light)">
+                <link rel="stylesheet" href="{{ static(DARK_STYLE_CSS) }}" media="(prefers-color-scheme: dark)">
+            {% endif %}
+        {% else %}
+            <link rel="stylesheet" href="{{ static(LIGHT_STYLE_CSS) }}">
+        {% endif %}
         {% if INLINE_FONTAWESOME %}<link rel="stylesheet" href="{{ static('libs/fontawesome/font-awesome.css') }}">{% endif %}
         <link rel="stylesheet" type="text/css" href="{{ static('libs/clipboard/tooltip.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ static('libs/select2/select2.css') }}">
