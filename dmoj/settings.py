@@ -101,6 +101,12 @@ DMOJ_API_PAGE_SIZE = 1000
 DMOJ_PASSWORD_RESET_LIMIT_WINDOW = 3600
 DMOJ_PASSWORD_RESET_LIMIT_COUNT = 10
 
+# At the bare minimum, dark and light theme CSS file locations must be declared
+DMOJ_THEME_CSS = {
+    'light': 'style.css',
+    'dark': 'dark/style.css',
+}
+
 MARKDOWN_STYLES = {}
 MARKDOWN_DEFAULT_STYLE = {}
 
@@ -337,6 +343,7 @@ TEMPLATES = [
                 'judge.template_context.general_info',
                 'judge.template_context.site',
                 'judge.template_context.site_name',
+                'judge.template_context.site_theme',
                 'judge.template_context.misc_config',
                 'judge.template_context.math_setting',
                 'social_django.context_processors.backends',
