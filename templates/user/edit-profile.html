@@ -19,10 +19,6 @@
             height: 70px
         }
 
-        .grayed {
-            color: #666;
-        }
-
         .inline-header {
             float: left;
             font-size: 1.1em;
@@ -31,7 +27,6 @@
         }
 
         .block-header {
-            color: #666;
             font-size: 1.1em;
         }
 
@@ -275,7 +270,7 @@
 
             {% csrf_token %}
 
-            <div style="padding-top:0.5em" class="block-header">{{ _('Self-description:') }}</div>
+            <div style="padding-top:0.5em" class="block-header grayed">{{ _('Self-description:') }}</div>
             {{ form.about }}
             <hr>
 
@@ -308,7 +303,7 @@
                 </div>
                 {% if form.organizations %}
                     <div class="pane">
-                        <div style="padding-bottom:0.3em; margin-top:0.3em" class="block-header">
+                        <div style="padding-bottom:0.3em; margin-top:0.3em" class="block-header grayed">
                             {{- _('Affiliated organizations:') -}}
                         </div>
                         {{ form.organizations }}
@@ -410,7 +405,7 @@
                     <br>
                     <span class="inline-header grayed">
                     {% if HAS_WEBAUTHN %}
-                        <div style="padding-bottom:0.4em" class="block-header">
+                        <div style="padding-bottom:0.4em" class="block-header grayed">
                             {{- _('Security keys:') -}}
                         </div>
                         <table class="table">
@@ -437,7 +432,7 @@
                 </div>
             </div>
             <hr>
-            <div class="block-header">{{ _('User-script:') }}</div>
+            <div class="block-header grayed">{{ _('User-script:') }}</div>
             {{ form.user_script }}
             <hr>
 
