@@ -122,6 +122,8 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
         context['current_contests'] = present
         context['future_contests'] = future
         context['finished_contests'] = finished
+        context['is_live'] = ContestParticipation.is_live
+        context['is_spectate'] = ContestParticipation.is_spectate
         context['now'] = self._now
         context['first_page_href'] = '.'
         context['page_suffix'] = '#past-contests'
@@ -191,6 +193,10 @@ class ContestMixin(object):
         context['is_tester'] = self.is_tester
         context['is_spectator'] = self.is_spectator
         context['can_edit'] = self.can_edit
+
+        participation_type = self.object.get_join_type(self.request.user)
+        context['can_live_join'] = participation_type == ContestParticipation.LIVE
+        context['can_spectate'] = participation_type == ContestParticipation.SPECTATE
 
         if not self.object.og_image or not self.object.summary:
             metadata = generate_opengraph('generated-meta-contest:%d' % self.object.id,
@@ -379,14 +385,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View):
                 else:
                     break
         else:
-            SPECTATE = ContestParticipation.SPECTATE
-            LIVE = ContestParticipation.LIVE
-
-            if contest.is_live_joinable_by(request.user):
-                participation_type = LIVE
-            elif contest.is_spectatable_by(request.user):
-                participation_type = SPECTATE
-            else:
+            participation_type = contest.get_join_type(request.user)
+            if participation_type is None:
                 return generic_message(request, _('Cannot enter'),
                                        _('You are not able to join this contest.'))
             try:
@@ -404,7 +404,7 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View):
             else:
                 if participation.ended:
                     participation = ContestParticipation.objects.get_or_create(
-                        contest=contest, user=profile, virtual=SPECTATE,
+                        contest=contest, user=profile, virtual=ContestParticipation.SPECTATE,
                         defaults={'real_start': timezone.now()},
                     )[0]
 
