@@ -18,6 +18,15 @@ $color_link200: #faa700;    // active
 
 $color_pageBg: #fff;
 
+$color_rating_none: #999;
+$color_rating_newbie: #999;
+$color_rating_amateur: #00a900;
+$color_rating_expert: blue;
+$color_rating_candidate_master: purple;
+$color_rating_master: #ffb100;
+$color_rating_grandmaster: #e00;
+$color_rating_target: #700;
+
 $path_to_root: '.';     // relative path from style.css to STATIC_ROOT
 
 @mixin vars-img {}
