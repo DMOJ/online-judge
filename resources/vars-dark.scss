@@ -18,6 +18,15 @@ $color_link200: #960;   // active
 
 $color_pageBg: #222;    // #222 because some elements should be darker than pageBg
 
+$color_rating_none: #aaa;
+$color_rating_newbie: #aaa;
+$color_rating_amateur: #00a900;
+$color_rating_expert: cornflowerblue;
+$color_rating_candidate_master: mediumpurple;
+$color_rating_master: #ffb100;
+$color_rating_grandmaster: #e00;
+$color_rating_target: #f55;
+
 $path_to_root: '..';    // relative path from style.css to STATIC_ROOT
 
 @mixin vars-img {

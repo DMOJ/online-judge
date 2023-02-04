@@ -37,33 +37,33 @@ svg.rate-box {
     }
 
     &.rate-newbie {
-        @include rate-svg-color(#999);
+        @include rate-svg-color($color_rating_newbie);
     }
 
     &.rate-amateur {
-        @include rate-svg-color(#00a900);
+        @include rate-svg-color($color_rating_amateur);
     }
 
     &.rate-expert {
-        @include rate-svg-color(#66f);
+        @include rate-svg-color($color_rating_expert);
     }
 
     &.rate-candidate-master {
-        @include rate-svg-color(#f6f);
+        @include rate-svg-color($color_rating_candidate_master);
     }
 
     &.rate-master {
-        @include rate-svg-color(#dc0);
+        @include rate-svg-color($color_rating_master);
     }
 
     &.rate-grandmaster, &.rate-target {
-        @include rate-svg-color(#e00);
+        @include rate-svg-color($color_rating_grandmaster);
     }
 
     &.rate-target {
         circle:last-child {
             stroke: none;
-            fill: #e00;
+            fill: $color_rating_grandmaster;
         }
     }
 }
@@ -77,36 +77,36 @@ svg.rate-box {
 }
 
 .rate-none, .rate-none a {
-    color: #999;
+    color: $color_rating_none;
     font-weight: normal;
 }
 
 .rate-newbie, .rate-newbie a {
-    color: #999;
+    color: $color_rating_newbie;
 }
 
 .rate-amateur, .rate-amateur a {
-    color: #00a900;
+    color: $color_rating_amateur;
 }
 
 .rate-expert, .rate-expert a {
-    color: blue;
+    color: $color_rating_expert;
 }
 
 .rate-candidate-master, .rate-candidate-master a {
-    color: purple;
+    color: $color_rating_candidate_master;
 }
 
 .rate-master, .rate-master a {
-    color: #ffb100;
+    color: $color_rating_master;
 }
 
 .rate-grandmaster, .rate-grandmaster a, .rate-target, .rate-target a {
-    color: #e00;
+    color: $color_rating_grandmaster;
 }
 
 .rate-target a::first-letter {
-    color: #700;
+    color: $color_rating_target;
 }
 
 .rate-group {
