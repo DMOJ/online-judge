@@ -269,19 +269,19 @@ img.user-gravatar {
                     background-color: $color_pageBg;
                 }
                 &.activity-0 {
-                    background-color: #ddd;
+                    background-color: $color_user_submission_activity0;
                 }
                 &.activity-1 {
-                    background-color: #9be9a8;
+                    background-color: $color_user_submission_activity1;
                 }
                 &.activity-2 {
-                    background-color: #40c463;
+                    background-color: $color_user_submission_activity2;
                 }
                 &.activity-3 {
-                    background-color: #2f9c4c;
+                    background-color: $color_user_submission_activity3;
                 }
                 &.activity-4 {
-                    background-color: #216e39;
+                    background-color: $color_user_submission_activity4;
                 }
             }
         }
