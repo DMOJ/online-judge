@@ -18,6 +18,7 @@ $color_link200: #d83;   // active
 
 $color_pageBg: #222;    // #222 because some elements should be darker than pageBg
 
+// custom one-off colours
 $color_rating_none: #aaa;
 $color_rating_newbie: #aaa;
 $color_rating_amateur: #00a900;
@@ -26,6 +27,12 @@ $color_rating_candidate_master: mediumpurple;
 $color_rating_master: #ffb100;
 $color_rating_grandmaster: #e00;
 $color_rating_target: #f55;
+
+$color_user_submission_activity0: #3b3b3b;
+$color_user_submission_activity1: #0e4429;
+$color_user_submission_activity2: #006d32;
+$color_user_submission_activity3: #26a641;
+$color_user_submission_activity4: #39d353;
 
 $path_to_root: '..';    // relative path from style.css to STATIC_ROOT
 

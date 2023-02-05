@@ -18,6 +18,7 @@ $color_link200: #faa700;    // active
 
 $color_pageBg: #fff;
 
+// custom one-off colours
 $color_rating_none: #999;
 $color_rating_newbie: #999;
 $color_rating_amateur: #00a900;
@@ -26,6 +27,12 @@ $color_rating_candidate_master: purple;
 $color_rating_master: #ffb100;
 $color_rating_grandmaster: #e00;
 $color_rating_target: #700;
+
+$color_user_submission_activity0: #ddd;
+$color_user_submission_activity1: #9be9a8;
+$color_user_submission_activity2: #40c463;
+$color_user_submission_activity3: #2f9c4c;
+$color_user_submission_activity4: #216e39;
 
 $path_to_root: '.';     // relative path from style.css to STATIC_ROOT
 
