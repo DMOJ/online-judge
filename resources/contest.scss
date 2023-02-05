@@ -188,8 +188,13 @@ form.contest-join-pseudotab {
 }
 
 #ranking-table {
-    .username {
+    .user-name {
         min-width: 20em;
+        position: relative;
+    }
+
+    .userinfo a, .user-name a, .user-name form {
+        display: inline-block !important;
     }
 
     .rating-column {
@@ -198,23 +203,19 @@ form.contest-join-pseudotab {
 
     td {
         height: 2.5em;
+
+        a:hover {
+            text-decoration: underline;
+        }
     }
 
     a {
         display: block;
     }
 
-    .userinfo a, .user-name a, .user-name form {
-        display: inline-block !important;
-    }
-
     /* Make problem table headers green on hover */
     th a:hover {
         color: #0F0;
-    }
-
-    td a:hover {
-        text-decoration: underline;
     }
 
     .rank {
@@ -226,7 +227,7 @@ form.contest-join-pseudotab {
     }
 
     .disqualified {
-        background-color: #ffa8a8 !important;
+        background-color: $color_contest_ranking_disqualified !important;
     }
 
     .full-score, .full-score a {
@@ -259,27 +260,23 @@ form.contest-join-pseudotab {
 
     .user-points, .user-points a {
         font-weight: bold;
-        color: black;
+        color: $color_primary100;
     }
 
     .solving-time {
-        color: gray;
+        color: $color_primary50;
         font-weight: normal;
         font-size: 0.75em;
         padding-bottom: -0.75em;
     }
 
     .point-denominator {
-        border-top: 1px solid gray;
+        border-top: 1px solid $color_primary50;
         font-size: 0.7em;
     }
 
     .start-time {
         display: none;
-    }
-
-    .user-name {
-        position: relative;
     }
 
     .organization-column {
@@ -288,7 +285,7 @@ form.contest-join-pseudotab {
         border-right: none !important;
 
         a {
-            color: gray !important;
+            color: $color_primary50;
             font-weight: 600;
         }
     }
