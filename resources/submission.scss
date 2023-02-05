@@ -54,6 +54,10 @@
         .score {
             font-size: 1.3em;
             color: #000;
+
+            .grading-spinner {
+                color: $color_primary100;
+            }
         }
     }
 
