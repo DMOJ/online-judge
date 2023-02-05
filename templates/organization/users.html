@@ -15,7 +15,7 @@
     </style>
 
     {% if is_admin %}
-        <style>#users-table td:nth-child(3), #users-table th:nth-child(3) {
+        <style>#organization-users-table td:nth-child(3), #organization-users th:nth-child(3) {
             border-right: none;
         }
         </style>
@@ -35,4 +35,7 @@
     </script>
 {% endblock %}
 
-{% block users_table %}{% include "organization/users-table.html" %}{% endblock %}
+{% block users_table %}
+    {% set table_id='organization-users-table' %}
+    {% include "organization/users-table.html" %}
+{% endblock %}
