@@ -9,19 +9,19 @@
 
 {% block users_media %}
     <style>
-        #users-table .username {
+        #ranking-table .username {
             min-width: 20em;
         }
 
-        #users-table .rating-column {
+        #ranking-table .rating-column {
             min-width: 3em;
         }
 
-        #users-table td {
+        #ranking-table td {
             height: 2.5em;
         }
 
-        #users-table a {
+        #ranking-table a {
             display: block;
         }
 
@@ -30,11 +30,11 @@
         }
 
         /* Make problem table headers green on hover */
-        #users-table th a:hover {
+        #ranking-table th a:hover {
             color: #0F0;
         }
 
-        #users-table td a:hover {
+        #ranking-table td a:hover {
             text-decoration: underline;
         }
 
@@ -234,5 +234,6 @@
 {% endblock %}
 
 {% block users_table %}
+    {% set table_id='ranking-table' %}
     {% include "contest/ranking-table.html" %}
 {% endblock %}
