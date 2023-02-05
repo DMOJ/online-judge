@@ -344,8 +344,7 @@ ul.pagination {
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
+    color: $color_primary100;
     filter: alpha(opacity=20);
     opacity: 0.2;
 }
@@ -356,7 +355,7 @@ a.close {
     line-height: 1;
 
     &:hover {
-        color: black !important;
+        color: $color_primary100;
     }
 }
 
