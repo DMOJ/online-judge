@@ -13,7 +13,6 @@ import datetime
 import os
 import tempfile
 
-from django.utils.translation import gettext_lazy as _
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 from jinja2 import select_autoescape
 
@@ -384,24 +383,24 @@ LOCALE_PATHS = [
 ]
 
 LANGUAGES = [
-    ('ca', _('Catalan')),
-    ('de', _('German')),
-    ('el', _('Greek')),
-    ('en', _('English')),
-    ('es', _('Spanish')),
-    ('fr', _('French')),
-    ('hr', _('Croatian')),
-    ('hu', _('Hungarian')),
-    ('ja', _('Japanese')),
-    ('ko', _('Korean')),
-    ('pt', _('Brazilian Portuguese')),
-    ('ro', _('Romanian')),
-    ('ru', _('Russian')),
-    ('sr-latn', _('Serbian (Latin)')),
-    ('tr', _('Turkish')),
-    ('vi', _('Vietnamese')),
-    ('zh-hans', _('Simplified Chinese')),
-    ('zh-hant', _('Traditional Chinese')),
+    ('ca', 'català (ca)'),
+    ('de', 'Deutsch (de)'),
+    ('el', 'Ελληνικά (el)'),
+    ('en', 'English (en)'),
+    ('es', 'español (es)'),
+    ('fr', 'français (fr)'),
+    ('hr', 'hrvatski (hr)'),
+    ('hu', 'magyar (hu)'),
+    ('ja', '日本語 (ja)'),
+    ('ko', '한국어 (ko)'),
+    ('pt', 'português (pt)'),
+    ('ro', 'română (ro)'),
+    ('ru', 'Русский (ru)'),
+    ('sr-latn', 'srpski (latinica) (sr-latn)'),
+    ('tr', 'Türkçe (tr)'),
+    ('vi', 'Tiếng Việt (vi)'),
+    ('zh-hans', '简体中文 (zh-hans)'),
+    ('zh-hant', '繁體中文 (zh-hant)'),
 ]
 
 BLEACH_USER_SAFE_TAGS = [

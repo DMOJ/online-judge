@@ -298,10 +298,8 @@
                 {% csrf_token %}
             <input name="next" type="hidden" value="{{ request.get_full_path() }}">
             <select name="language" onchange="form.submit()" style="height: 1.5em">
-                {% for language in language_info_list(LANGUAGES) %}
-                    <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %}>
-                        {{ language.name_local }} ({{ language.code }})
-                    </option>
+                {% for code, name in LANGUAGES %}
+                    <option value="{{ code }}" {% if code == LANGUAGE_CODE %}selected{% endif %}>{{ name }}</option>
                 {% endfor %}
             </select>
           </form>
