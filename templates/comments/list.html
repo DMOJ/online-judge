@@ -43,7 +43,7 @@
                             </div>
                             {% with author=node.author, user=node.author.user %}
                                 <a href="{{ url('user_page', user.username) }}" class="user gravatar-main">
-                                    <img src="{{ gravatar(author, 135) }}" class="gravatar">
+                                    <img src="{{ gravatar(author, 75) }}" class="user-gravatar">
                                 </a>
                             {% endwith %}
                         </div>
@@ -52,7 +52,7 @@
                                 <span>
                                     {% with author=node.author, user=node.author.user %}
                                         <a href="{{ url('user_page', user.username) }}" class="user gravatar-mobile">
-                                            <img src="{{ gravatar(author, 135) }}" class="gravatar">
+                                            <img src="{{ gravatar(author, 10) }}" class="user-gravatar">
                                         </a>
                                     {% endwith %}
                                     {{ link_user(node.author) }}&nbsp;
