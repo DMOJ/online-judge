@@ -144,11 +144,6 @@ a {
         display: flex;
     }
 
-    .gravatar {
-        width: 75px;
-        max-width: 75px;
-    }
-
     .gravatar-mobile {
         display: none;
     }
@@ -164,9 +159,9 @@ a {
     }
 
     @media (max-width: 760px) {
-        .gravatar {
-            width: 10px;
-            max-width: 10px;
+        img.user-gravatar {
+            display: inline-block;
+            border-radius: 2px;
         }
 
         .gravatar-mobile {
