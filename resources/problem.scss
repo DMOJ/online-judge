@@ -19,18 +19,12 @@
             width: 100%;
         }
 
-        &.users {
-            text-align: left;
-            padding: 0 1em;
-            white-space: nowrap;
-        }
-
         &.types {
             text-align: left;
             padding: 0 1em;
         }
 
-        &.solved, &.ac-rate, &.points, &.editorial {
+        &.solved, &.ac-rate, &.points, &.editorial, &.users {
             white-space: nowrap;
             padding: 0 10px;
         }
