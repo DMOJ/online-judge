@@ -131,7 +131,7 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
         return context
 
     def get_comment_page(self):
-        return 's:' + self.object.code
+        return 's:%s' % self.object.id
 
     def no_such_problem(self):
         code = self.kwargs.get(self.slug_url_kwarg, None)
@@ -144,7 +144,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
     template_name = 'problem/problem.html'
 
     def get_comment_page(self):
-        return 'p:%s' % self.object.code
+        return 'p:%s' % self.object.id
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDetail, self).get_context_data(**kwargs)

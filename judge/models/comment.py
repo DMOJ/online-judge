@@ -21,8 +21,7 @@ from judge.utils.cachedict import CacheDict
 
 __all__ = ['Comment', 'CommentLock', 'CommentVote']
 
-comment_validator = RegexValidator(r'^[pcs]:[a-z0-9]+$|^b:\d+$',
-                                   _(r'Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
+comment_validator = RegexValidator(r'^[bcps]:\d+$', _(r'Page code must be ^[bcps]:\d+$'))
 
 
 class VersionRelation(GenericRelation):
@@ -42,6 +41,7 @@ class Comment(MPTTModel):
     time = models.DateTimeField(verbose_name=_('posted time'), auto_now_add=True)
     page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
                             validators=[comment_validator])
+    page_old = models.CharField(max_length=30, verbose_name=_('associated page (old)'), null=True, blank=True)
     score = models.IntegerField(verbose_name=_('votes'), default=0)
     body = models.TextField(verbose_name=_('body of comment'), max_length=8192)
     hidden = models.BooleanField(verbose_name=_('hidden'), default=0)
@@ -61,14 +61,14 @@ class Comment(MPTTModel):
         queryset = cls.objects.filter(hidden=False).select_related('author__user') \
             .defer('author__about', 'body').order_by('-id')
 
-        problem_cache = CacheDict(lambda code: Problem.objects.defer('description', 'summary').get(code=code))
-        solution_cache = CacheDict(lambda code: Solution.objects.defer('content').get(problem__code=code))
-        contest_cache = CacheDict(lambda key: Contest.objects.defer('description').get(key=key))
+        problem_cache = CacheDict(lambda id: Problem.objects.defer('description', 'summary').get(id=id))
+        solution_cache = CacheDict(lambda id: Solution.objects.defer('content').get(problem_id=id))
+        contest_cache = CacheDict(lambda id: Contest.objects.defer('description').get(id=id))
         blog_cache = CacheDict(lambda id: BlogPost.objects.defer('summary', 'content').get(id=id))
 
-        problem_access = CacheDict(lambda code: problem_cache[code].is_accessible_by(user))
-        solution_access = CacheDict(lambda code: problem_access[code] and solution_cache[code].is_accessible_by(user))
-        contest_access = CacheDict(lambda key: contest_cache[key].is_accessible_by(user))
+        problem_access = CacheDict(lambda id: problem_cache[id].is_accessible_by(user))
+        solution_access = CacheDict(lambda id: problem_access[id] and solution_cache[id].is_accessible_by(user))
+        contest_access = CacheDict(lambda id: contest_cache[id].is_accessible_by(user))
         blog_access = CacheDict(lambda id: blog_cache[id].can_see(user))
 
         if batch is None:
@@ -109,9 +109,25 @@ class Comment(MPTTModel):
         try:
             link = None
             if self.page.startswith('p:'):
-                link = reverse('problem_detail', args=(self.page[2:],))
+                key = 'problem_code:%s' % self.page[2:]
+                val = cache.get(key)
+                if val is None:
+                    try:
+                        val = Problem.objects.get(id=self.page[2:]).code
+                    except ObjectDoesNotExist:
+                        val = ''
+                    cache.set(key, val, 3600)
+                link = reverse('problem_detail', args=(val,))
             elif self.page.startswith('c:'):
-                link = reverse('contest_view', args=(self.page[2:],))
+                key = 'contest_key:%s' % self.page[2:]
+                val = cache.get(key)
+                if val is None:
+                    try:
+                        val = Contest.objects.get(id=self.page[2:]).key
+                    except ObjectDoesNotExist:
+                        val = ''
+                    cache.set(key, val, 3600)
+                link = reverse('contest_view', args=(val,))
             elif self.page.startswith('b:'):
                 key = 'blog_slug:%s' % self.page[2:]
                 slug = cache.get(key)
@@ -123,7 +139,15 @@ class Comment(MPTTModel):
                     cache.set(key, slug, 3600)
                 link = reverse('blog_post', args=(self.page[2:], slug))
             elif self.page.startswith('s:'):
-                link = reverse('problem_editorial', args=(self.page[2:],))
+                key = 'problem_code:%s' % self.page[2:]
+                val = cache.get(key)
+                if val is None:
+                    try:
+                        val = Problem.objects.get(id=self.page[2:]).code
+                    except ObjectDoesNotExist:
+                        val = ''
+                    cache.set(key, val, 3600)
+                link = reverse('problem_editorial', args=(val,))
         except Exception:
             link = 'invalid'
         return link
@@ -132,13 +156,13 @@ class Comment(MPTTModel):
     def get_page_title(cls, page):
         try:
             if page.startswith('p:'):
-                return Problem.objects.values_list('name', flat=True).get(code=page[2:])
+                return Problem.objects.values_list('name', flat=True).get(id=page[2:])
             elif page.startswith('c:'):
-                return Contest.objects.values_list('name', flat=True).get(key=page[2:])
+                return Contest.objects.values_list('name', flat=True).get(id=page[2:])
             elif page.startswith('b:'):
                 return BlogPost.objects.values_list('title', flat=True).get(id=page[2:])
             elif page.startswith('s:'):
-                return _('Editorial for %s') % Problem.objects.values_list('name', flat=True).get(code=page[2:])
+                return _('Editorial for %s') % Problem.objects.values_list('name', flat=True).get(id=page[2:])
             return '<unknown>'
         except ObjectDoesNotExist:
             return '<deleted>'
@@ -150,11 +174,11 @@ class Comment(MPTTModel):
     def is_accessible_by(self, user):
         try:
             if self.page.startswith('p:'):
-                return Problem.objects.get(code=self.page[2:]).is_accessible_by(user)
+                return Problem.objects.get(id=self.page[2:]).is_accessible_by(user)
             elif self.page.startswith('s:'):
-                return Solution.objects.get(problem__code=self.page[2:]).is_accessible_by(user)
+                return Solution.objects.get(problem_id=self.page[2:]).is_accessible_by(user)
             elif self.page.startswith('c:'):
-                return Contest.objects.get(key=self.page[2:]).is_accessible_by(user)
+                return Contest.objects.get(id=self.page[2:]).is_accessible_by(user)
             elif self.page.startswith('b:'):
                 return BlogPost.objects.get(id=self.page[2:]).can_see(user)
             else:
@@ -195,6 +219,7 @@ class CommentVote(models.Model):
 class CommentLock(models.Model):
     page = models.CharField(max_length=30, verbose_name=_('associated page'), db_index=True,
                             validators=[comment_validator])
+    page_old = models.CharField(max_length=30, verbose_name=_('associated page (old)'), null=True, blank=True)
 
     class Meta:
         permissions = (
