@@ -238,6 +238,72 @@ ul.problem-list {
     .submit-bar {
         float: right;
     }
+
+    #submit-wrapper {
+        margin-top: 0.7em;
+
+        #editor, #language {
+            margin-top: 4px;
+        }
+
+        #id_language {
+            width: 100%;
+        }
+    }
+}
+
+#language-select2 {
+    &.select2-dropdown--above {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .select2-results__message {
+        white-space: nowrap
+    }
+
+    .select2-results__option {
+        color: $color_problem_submit_select2 !important;
+        background: $color_primary0 !important;
+    }
+
+    .select2-results__option--highlighted {
+        text-decoration: underline;
+    }
+
+    .select2-results__option[aria-selected=true] {
+        font-weight: bold;
+        color: $color_primary100 !important;
+    }
+
+    .select2-results__option {
+        padding: 4px 0px;
+    }
+
+    .select2-results__options {
+        overflow-y: visible !important;
+    }
+
+    .select2-results__option {
+        break-inside: avoid-column;
+    }
+
+    .select2-results {
+        -webkit-columns: 10 7em;
+        -moz-columns: 10 7em;
+        columns: 10 7em;
+        padding-left: 1.5em;
+        padding-top: 0.5em;
+    }
+
+    #result-version-info {
+        border-bottom: 1px solid $color_primary50;
+        margin: 0px 1em;
+        color: $color_problem_submit_select2;
+        font-weight: 600;
+        padding: 0.2em 0;
+        text-align: right;
+    }
 }
 
 @media (max-width: 550px) {
