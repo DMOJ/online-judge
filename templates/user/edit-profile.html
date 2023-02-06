@@ -345,10 +345,28 @@
                                 </a>
                             </td></tr>
                         {% endif %}
+                        <tr><td>
+                            <span id="api-token-td" class="inline-header grayed">
+                                {{ _('API token:') }}
+                                {% if profile.api_token %}
+                                    <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
+                                        class="button inline-button">{{ _('Regenerate') }}</a>
+                                    <a id="remove-api-token-button" href="{{ url('remove_api_token') }}"
+                                        class="button inline-button ml-5">{{ _('Remove') }}</a>
+                                    <div class="api-token" id="api-token">{{ _('Hidden') }}</div>
+                                {% else %}
+                                    <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
+                                        class="button inline-button">{{ _('Generate') }}</a>
+                                    <div class="api-token" id="api-token"></div>
+                                {% endif %}
+                            </span>
+                        </td></tr>
                     </table>
+                </div>
+                <div class="pane">
                     <div>
                         {% if profile.is_totp_enabled %}
-                            <div class="block-header grayed">{{ _('Two-factor Authentication is enabled:') }}</div>
+                            <div class="block-header grayed">{{ _('Two-factor authentication is enabled:') }}</div>
                             <div class="block-buttons">
                                 {% if require_staff_2fa and request.user.is_staff and not profile.is_webauthn_enabled %}
                                     <a id="disable-2fa-button" class="button inline-button">{{ _('Disable') }}</a>
@@ -386,24 +404,7 @@
                             </span>
                         {% endif %}
                     </div>
-                </div>
-                <div class="pane">
-                    <span id="api-token-td" class="inline-header grayed">
-                        {{ _('API token:') }}
-                        {% if profile.api_token %}
-                            <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
-                                class="button inline-button">{{ _('Regenerate') }}</a>
-                            <a id="remove-api-token-button" href="{{ url('remove_api_token') }}"
-                                class="button inline-button ml-5">{{ _('Remove') }}</a>
-                            <div class="api-token" id="api-token">{{ _('Hidden') }}</div>
-                        {% else %}
-                            <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
-                                class="button inline-button">{{ _('Generate') }}</a>
-                            <div class="api-token" id="api-token"></div>
-                        {% endif %}
-                    </span>
-                    <br>
-                    <span class="inline-header grayed">
+                    <span class="grayed">
                     {% if HAS_WEBAUTHN %}
                         <div style="padding-bottom:0.4em" class="block-header grayed">
                             {{- _('Security keys:') -}}
