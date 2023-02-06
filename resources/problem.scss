@@ -1,7 +1,7 @@
 @import "vars";
 
 #problem-table {
-    td {
+    td, th {
         &.category {
             text-align: left;
             padding: 0 1em;
@@ -32,10 +32,17 @@
 
         &.ac-rate {
             white-space: nowrap;
+            padding: 4px 10px;
         }
 
         &.points {
             white-space: nowrap;
+            padding: 4px 10px;
+        }
+        
+        &.editorial {
+            white-space: nowrap;
+            padding: 4px 10px;
         }
     }
 
@@ -322,12 +329,6 @@ ul.problem-list {
     #problem-table tr .category {
         display: none;
     }
-}
-
-#problem-table th a {
-    color: inherit;
-    display: block;
-    padding: 4px 10px;
 }
 
 #category, #types {
