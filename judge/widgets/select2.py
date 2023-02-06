@@ -64,6 +64,7 @@ class Select2Mixin(object):
     def build_attrs(self, base_attrs, extra_attrs=None):
         """Add select2 data attributes."""
         attrs = super(Select2Mixin, self).build_attrs(base_attrs, extra_attrs)
+        attrs.setdefault('data-theme', settings.DMOJ_SELECT2_THEME)
         if self.is_required:
             attrs.setdefault('data-allow-clear', 'false')
         else:
@@ -102,7 +103,7 @@ class AdminSelect2Mixin(Select2Mixin):
     def media(self):
         return forms.Media(
             js=['admin/js/jquery.init.js', settings.SELECT2_JS_URL, 'django_select2.js'],
-            css={'screen': [settings.SELECT2_CSS_URL]},
+            css={'screen': [settings.SELECT2_CSS_URL, 'select2-dmoj.css']},
         )
 
 
