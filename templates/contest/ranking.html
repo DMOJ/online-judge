@@ -81,6 +81,7 @@
             })).attr('placeholder');
 
             $('#search-contest').select2({
+                theme: '{{ DMOJ_SELECT2_THEME }}',
                 placeholder: placeholder,
                 ajax: {
                     url: '{{ url('contest_user_search_select2_ajax', contest.key) }}'

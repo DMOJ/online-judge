@@ -1,6 +1,15 @@
-.select2-container--default {
-    @import "single";
-    @import "multiple";
+@import "vars";
+
+/* Hack to make dropdown background follow theming */
+.select2-dropdown {
+    background-color: $color_primary0 !important;
+    border: 1px solid $color_primary33 !important;
+    color: $color_primary100 !important;
+}
+
+.select2-container--dmoj {
+    @import "select2/single";
+    @import "select2/multiple";
 
     &.select2-container--open.select2-container--above {
         .select2-selection--single, .select2-selection--multiple {
@@ -18,7 +27,9 @@
 
     .select2-search--dropdown {
         .select2-search__field {
-            border: 1px solid #aaa;
+            border: 1px solid $color_primary33;
+            background-color: $color_primary10;
+            color: $color_primary100;
         }
     }
 
@@ -35,6 +46,7 @@
     .select2-results > .select2-results__options {
         max-height: 200px;
         overflow-y: auto;
+        color: $color_primary100;
     }
 
     .select2-results__option {
@@ -43,11 +55,11 @@
         }
 
         &[aria-disabled=true] {
-            color: #999;
+            color: $color_primary50;
         }
 
         &[aria-selected=true] {
-            background-color: #ddd;
+            background-color: $color_primary25;
         }
 
         .select2-results__option {
@@ -85,8 +97,8 @@
     }
 
     .select2-results__option--highlighted[aria-selected] {
-        background-color: #5897fb;
-        color: white;
+        background-color: $highlight_blue;
+        color: $color_primary0;
     }
 
     .select2-results__group {

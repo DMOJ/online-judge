@@ -69,6 +69,7 @@
                 var customAdapter = $.fn.select2.amd.require('select2/data/customAdapter');
 
                 $("#id_language").select2({
+                    theme: '{{ DMOJ_SELECT2_THEME }}',
                     templateResult: format,
                     templateSelection: formatSelection,
                     resultsAdapter: customAdapter

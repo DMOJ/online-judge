@@ -51,11 +51,13 @@
     <script>
         $(function () {
             $('#by-lang-filter').select2({
+                theme: '{{ DMOJ_SELECT2_THEME }}',
                 multiple: true,
                 placeholder: '{{ _('Leave empty to not filter by language') }}'
             });
 
             $('#by-result-filter').select2({
+                theme: '{{ DMOJ_SELECT2_THEME }}',
                 multiple: true,
                 placeholder: '{{ _('Leave empty to not filter by result') }}'
             });

@@ -70,12 +70,14 @@
                 }
 
                 $('#status').select2({
+                    theme: '{{ DMOJ_SELECT2_THEME }}',
                     multiple: 1,
                     placeholder: '{{ _('Filter by status...') }}',
                     matcher: idAndTextMatcher,
                 }).css({'visibility': 'visible'});
 
                 $('#language').select2({
+                    theme: '{{ DMOJ_SELECT2_THEME }}',
                     multiple: 1,
                     placeholder: '{{ _('Filter by language...') }}',
                     matcher: idAndTextMatcher,

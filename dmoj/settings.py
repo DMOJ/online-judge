@@ -106,6 +106,7 @@ DMOJ_THEME_CSS = {
     'light': 'style.css',
     'dark': 'dark/style.css',
 }
+DMOJ_SELECT2_THEME = 'dmoj'
 
 MARKDOWN_STYLES = {}
 MARKDOWN_DEFAULT_STYLE = {}

@@ -20,6 +20,7 @@
                         style: 'width: 100%'
                     })).val();
                     $select.select2({
+                        theme: '{{ DMOJ_SELECT2_THEME }}',
                         data: window.valid_files,
                         allowClear: true,
                         placeholder: ''
