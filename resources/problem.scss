@@ -2,31 +2,19 @@
 
 #problem-table {
     td, th {
-        &.category {
+        // Text columns are left-aligned
+        &.problem, &.category, &.types {
             text-align: left;
             padding: 0 1em;
+        }
+        
+        // Numeric columns are center-aligned
+        &.solved, &.points, &.ac-rate, &.editorial, &.users {
+            padding: 0 10px;
         }
 
         &.problem {
-            text-align: left;
-            padding: 0 1em;
-            width: 100%;
-        }
-
-        &.pp {
-            text-align: left;
-            padding-left: 1em;
-            width: 100%;
-        }
-
-        &.types {
-            text-align: left;
-            padding: 0 1em;
-        }
-
-        &.solved, &.ac-rate, &.points, &.editorial, &.users {
-            white-space: nowrap;
-            padding: 0 10px;
+            width: 100%; // Fill up all spare space with problem titles
         }
     }
     
