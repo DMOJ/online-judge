@@ -126,5 +126,7 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
         form = super(ProfileAdmin, self).get_form(request, obj, **kwargs)
         if 'user_script' in form.base_fields:
             # form.base_fields['user_script'] does not exist when the user has only view permission on the model.
-            form.base_fields['user_script'].widget = AceWidget('javascript', request.profile.ace_theme)
+            form.base_fields['user_script'].widget = AceWidget(
+                mode='javascript', theme=request.profile.resolved_ace_theme,
+            )
         return form

@@ -308,7 +308,9 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         if 'problem_label_script' in form.base_fields:
             # form.base_fields['problem_label_script'] does not exist when the user has only view permission
             # on the model.
-            form.base_fields['problem_label_script'].widget = AceWidget('lua', request.profile.ace_theme)
+            form.base_fields['problem_label_script'].widget = AceWidget(
+                mode='lua', theme=request.profile.resolved_ace_theme,
+            )
 
         perms = ('edit_own_contest', 'edit_all_contest')
         form.base_fields['curators'].queryset = Profile.objects.filter(
