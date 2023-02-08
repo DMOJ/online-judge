@@ -18,6 +18,10 @@ $color_link75: #1958c1;     // default
 $color_link100: #0645ad;    // hover
 $color_link200: #faa700;    // active
 
+$color_header_text: $color_primary0;
+$color_header_bg: $color_primary75;
+$color_header_border: $color_primary50;
+
 $color_pageBg: #fff;
 
 // custom one-off colours
@@ -39,6 +43,8 @@ $color_user_submission_activity1: #9be9a8;
 $color_user_submission_activity2: #40c463;
 $color_user_submission_activity3: #2f9c4c;
 $color_user_submission_activity4: #216e39;
+
+$color_pagination_hover: $color_primary100;
 
 $color_problem_submit_select2: #757575;
 
