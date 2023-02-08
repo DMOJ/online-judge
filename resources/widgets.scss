@@ -244,7 +244,7 @@ textarea:focus {
 
 // Bootstrap-y pagination
 ul.pagination a:hover {
-    background: rgba($color_primary100, 0.55);
+    background: rgba($color_pagination_hover, 0.55);
 }
 
 ul.pagination {
@@ -278,9 +278,9 @@ ul.pagination {
                     padding: 4px 12px;
                     line-height: 1.42857;
                     text-decoration: none;
-                    color: $color_primary0;
-                    background-color: $color_primary75;
-                    border: 1px solid $color_primary50;
+                    color: $color_header_text;
+                    background-color: $color_header_bg;
+                    border: 1px solid $color_header_border;
                     margin-left: -1px;
                 }
             }
@@ -405,9 +405,9 @@ a.close {
 
 .sidebox h3 {
     margin: 0 -5px;
-    background: $color_primary75;
+    background: $color_header_bg;
     border-radius: $widget_border_radius $widget_border_radius 0 0;
-    color: $color_primary0;
+    color: $color_header_text;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 7px;
@@ -415,13 +415,13 @@ a.close {
 }
 
 .sidebox h3 .fa {
-    color: $color_primary0;
+    color: $color_header_text;
     float: right;
     margin: 0.2em 0.4em 0 0;
 }
 
 .sidebox-content {
-    border: 1px solid $color_primary25;
+    border: 1px solid $color_header_border;
     border-top: none;
     margin: 0 -5px;
     padding: 1px 0.5em 3px;
