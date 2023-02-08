@@ -101,7 +101,19 @@ input {
     }
 
     &[type=checkbox] {
+        appearance: none;
         vertical-align: middle;
+        border: 1px solid $color_primary50;
+        background: $color_primary0;
+        border-radius: 2px;
+        width: 0.95em;
+        height: 0.95em;
+        cursor: pointer;
+
+        &:checked {
+            appearance: auto;
+            accent-color: $highlight_blue;
+        }
     }
 }
 
