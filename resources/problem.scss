@@ -1,42 +1,25 @@
 @import "vars";
 
 #problem-table {
-    td {
-        &.category {
+    td, th {
+        // Text columns are left-aligned
+        &.problem, &.category, &.types {
             text-align: left;
             padding: 0 1em;
+        }
+        
+        // Numeric columns are center-aligned
+        &.solved, &.points, &.ac-rate, &.editorial, &.users {
+            padding: 0 10px;
         }
 
         &.problem {
-            text-align: left;
-            padding-left: 1em;
-            width: 100%;
+            width: 100%; // Fill up all spare space with problem titles
         }
-
-        &.pp {
-            text-align: left;
-            padding-left: 1em;
-            width: 100%;
-        }
-
-        &.users {
-            text-align: left;
-            padding: 0 1em;
-            white-space: nowrap;
-        }
-
-        &.types {
-            text-align: left;
-            padding: 0 1em;
-        }
-
-        &.ac-rate {
-            white-space: nowrap;
-        }
-
-        &.points {
-            white-space: nowrap;
-        }
+    }
+    
+    th a {
+        color: inherit;
     }
 
     tr {
@@ -322,12 +305,6 @@ ul.problem-list {
     #problem-table tr .category {
         display: none;
     }
-}
-
-#problem-table th a {
-    color: inherit;
-    display: block;
-    padding: 4px 10px;
 }
 
 #category, #types {
