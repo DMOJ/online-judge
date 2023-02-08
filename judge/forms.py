@@ -92,7 +92,7 @@ class ProfileForm(ModelForm):
             )
         if not self.fields['organizations'].queryset:
             self.fields.pop('organizations')
-        self.fields['user_script'].widget = AceWidget(theme=user.profile.ace_theme, mode='javascript')
+        self.fields['user_script'].widget = AceWidget(mode='javascript', theme=user.profile.resolved_ace_theme)
 
 
 class DownloadDataForm(Form):
