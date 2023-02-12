@@ -67,13 +67,13 @@ class Submission(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('user'), on_delete=models.CASCADE)
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), on_delete=models.CASCADE)
     date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True, db_index=True)
-    time = models.FloatField(verbose_name=_('execution time'), null=True, db_index=True)
+    time = models.FloatField(verbose_name=_('execution time'), null=True)
     memory = models.FloatField(verbose_name=_('memory usage'), null=True)
-    points = models.FloatField(verbose_name=_('points granted'), null=True, db_index=True)
+    points = models.FloatField(verbose_name=_('points granted'), null=True)
     language = models.ForeignKey(Language, verbose_name=_('submission language'), on_delete=models.CASCADE)
     status = models.CharField(verbose_name=_('status'), max_length=2, choices=STATUS, default='QU', db_index=True)
     result = models.CharField(verbose_name=_('result'), max_length=3, choices=SUBMISSION_RESULT,
-                              default=None, null=True, blank=True, db_index=True)
+                              default=None, null=True, blank=True)
     error = models.TextField(verbose_name=_('compile errors'), null=True, blank=True)
     current_testcase = models.IntegerField(default=0)
     batch = models.BooleanField(verbose_name=_('batched cases'), default=False)
@@ -229,6 +229,16 @@ class Submission(models.Model):
         )
         verbose_name = _('submission')
         verbose_name_plural = _('submissions')
+
+        indexes = [
+            # For problem submission rankings
+            models.Index(fields=['problem', 'user', '-points', '-time']),
+
+            # For main submission list filtering by some combination of result and language
+            models.Index(fields=['result', '-id']),
+            models.Index(fields=['result', 'language', '-id']),
+            models.Index(fields=['language', '-id']),
+        ]
 
 
 class SubmissionSource(models.Model):
