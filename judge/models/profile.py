@@ -151,9 +151,9 @@ class Profile(models.Model):
                                 default=settings.DEFAULT_USER_TIME_ZONE)
     language = models.ForeignKey('Language', verbose_name=_('preferred language'), on_delete=models.SET_DEFAULT,
                                  default=Language.get_default_language_pk)
-    points = models.FloatField(default=0, db_index=True)
-    performance_points = models.FloatField(default=0, db_index=True)
-    problem_count = models.IntegerField(default=0, db_index=True)
+    points = models.FloatField(default=0)
+    performance_points = models.FloatField(default=0)
+    problem_count = models.IntegerField(default=0)
     ace_theme = models.CharField(max_length=30, verbose_name=_('Ace theme'), choices=ACE_THEMES, default='auto')
     site_theme = models.CharField(max_length=10, verbose_name=_('site theme'), choices=SITE_THEMES, default='auto')
     last_access = models.DateTimeField(verbose_name=_('last access time'), default=now)
@@ -335,6 +335,12 @@ class Profile(models.Model):
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')
+
+        indexes = [
+            models.Index(fields=('is_unlisted', '-performance_points')),
+            models.Index(fields=('is_unlisted', '-rating')),
+            models.Index(fields=('is_unlisted', '-problem_count')),
+        ]
 
 
 class WebAuthnCredential(models.Model):
