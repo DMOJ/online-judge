@@ -11,8 +11,7 @@ from django.views.generic import RedirectView
 from martor.views import markdown_search_user
 
 from judge.feed import AtomBlogFeed, AtomCommentFeed, AtomProblemFeed, BlogFeed, CommentFeed, ProblemFeed
-from judge.sitemap import BlogPostSitemap, ContestSitemap, HomePageSitemap, OrganizationSitemap, ProblemSitemap, \
-    SolutionSitemap, UrlSitemap, UserSitemap
+from judge.sitemap import sitemaps
 from judge.views import TitledTemplateView, api, blog, comment, contests, language, license, mailgun, organization, \
     preview, problem, problem_manage, ranked_submission, register, stats, status, submission, tasks, ticket, \
     two_factor, user, widgets
@@ -346,18 +345,7 @@ urlpatterns = [
         path('/notes', ticket.TicketNotesEditView.as_view(), name='ticket_notes'),
     ])),
 
-    path('sitemap.xml', sitemap, {'sitemaps': {
-        'home': HomePageSitemap,
-        'pages': UrlSitemap([
-            {'location': '/about/', 'priority': 0.9},
-        ]),
-        'problem': ProblemSitemap,
-        'solutions': SolutionSitemap,
-        'blog': BlogPostSitemap,
-        'contest': ContestSitemap,
-        'organization': OrganizationSitemap,
-        'user': UserSitemap,
-    }}),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 
     path('judge-select2/', include([
         path('profile/', UserSelect2View.as_view(), name='profile_select2'),
