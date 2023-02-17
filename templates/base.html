@@ -145,7 +145,7 @@
         </script>
     {% endif %}
 
-    {% if request.user.is_authenticated %}
+    {% if request.user.is_authenticated and not tfa_in_progress %}
         <script>
             window.user = {
                 email: '{{ request.user.email|escapejs }}',
@@ -162,7 +162,7 @@
     {% endif %}
 
     {# Don't run userscript since it may be malicious #}
-    {% if request.user.is_authenticated and request.profile.user_script and not request.user.is_impersonate and not ignore_user_script %}
+    {% if request.user.is_authenticated and request.profile.user_script and not request.user.is_impersonate and not tfa_in_progress and not ignore_user_script %}
         <script type="text/javascript">{{ request.profile.user_script|safe }}</script>
     {% endif %}
 
