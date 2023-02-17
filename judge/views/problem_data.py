@@ -44,7 +44,19 @@ class ProblemDataForm(ModelForm):
     def clean_zipfile(self):
         if hasattr(self, 'zip_valid') and not self.zip_valid:
             raise ValidationError(_('Your zip file is invalid!'))
-        return self.cleaned_data['zipfile']
+
+        zipfile = self.cleaned_data['zipfile']
+        if zipfile and not zipfile.name.endswith('.zip'):
+            raise ValidationError(_("Zip files must end in '.zip'"))
+
+        return zipfile
+
+    def clean_generator(self):
+        generator = self.cleaned_data['generator']
+        if generator and generator.name == 'init.yml':
+            raise ValidationError(_('Generators must not be named init.yml.'))
+
+        return generator
 
     clean_checker_args = checker_args_cleaner
 
@@ -166,7 +178,7 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
             elif data.zipfile:
                 return ZipFile(data.zipfile.path).namelist()
         except BadZipfile:
-            return []
+            return None
         return []
 
     def get_context_data(self, **kwargs):
@@ -174,10 +186,10 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         if 'data_form' not in context:
             context['data_form'] = self.get_data_form()
             valid_files = context['valid_files'] = self.get_valid_files(context['data_form'].instance)
-            context['data_form'].zip_valid = valid_files is not False
             context['cases_formset'] = self.get_case_formset(valid_files)
-        context['valid_files_json'] = mark_safe(json.dumps(context['valid_files']))
-        context['valid_files'] = set(context['valid_files'])
+        if context['valid_files']:
+            context['valid_files_json'] = mark_safe(json.dumps(context['valid_files']))
+            context['valid_files'] = set(context['valid_files'])
         context['all_case_forms'] = chain(context['cases_formset'], [context['cases_formset'].empty_form])
         return context
 
@@ -185,7 +197,7 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         self.object = problem = self.get_object()
         data_form = self.get_data_form(post=True)
         valid_files = self.get_valid_files(data_form.instance, post=True)
-        data_form.zip_valid = valid_files is not False
+        data_form.zip_valid = valid_files is not None
         cases_formset = self.get_case_formset(valid_files, post=True)
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()
