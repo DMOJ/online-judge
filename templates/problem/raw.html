@@ -58,7 +58,7 @@
 <hr>
 <div align="center" style="position: relative;">
     <div class="problem-info-entry">
-        <b>{{ _('Time Limit:') }}</b> {{ problem.time_limit }}s
+        <b>{{ _('Time limit:') }}</b> {{ problem.time_limit }}s
         {% for name, limit in problem.language_time_limit %}
             <div class="lang-limit">
                 <span class="lang-name">{{ name }}</span>
@@ -67,7 +67,7 @@
         {% endfor %}
     </div>
     <div class="problem-info-entry">
-        <b>{{ _('Memory Limit:') }}</b> {{ problem.memory_limit|kbsimpleformat}}
+        <b>{{ _('Memory limit:') }}</b> {{ problem.memory_limit|kbsimpleformat}}
         {% for name, limit in problem.language_memory_limit %}
             <div class="lang-limit">
                 <span class="lang-name">{{ name }}</span>
