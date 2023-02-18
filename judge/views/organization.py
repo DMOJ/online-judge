@@ -64,6 +64,21 @@ class OrganizationMixin(object):
         return org.admins.filter(id=profile_id).exists()
 
 
+class BaseOrganizationListView(OrganizationMixin, ListView):
+    model = None
+    context_object_name = None
+
+    def get_object(self):
+        return Organization.objects.get(id=self.kwargs.get('pk'))
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(organization=self.object, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+
 class OrganizationDetailView(OrganizationMixin, DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
