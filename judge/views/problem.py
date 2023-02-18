@@ -11,7 +11,8 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
-from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Prefetch, Q, When
+from django.db.models import BooleanField, Case, CharField, Count, Exists, F, FilteredRelation, OuterRef, Prefetch, Q, \
+    When
 from django.db.models.functions import Coalesce
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
@@ -449,9 +450,11 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
                 org_filter |= Q(organizations__in=self.profile.organizations.all())
             filter &= org_filter
         if self.profile is not None:
-            filter |= Q(authors=self.profile)
-            filter |= Q(curators=self.profile)
-            filter |= Q(testers=self.profile)
+            # This is way faster than the obvious |= Q(authors=self.profile) et al. because we are not doing
+            # joins and then cleaning it up with .distinct().
+            filter |= Exists(Problem.authors.through.objects.filter(problem=OuterRef('pk'), profile=self.profile))
+            filter |= Exists(Problem.curators.through.objects.filter(problem=OuterRef('pk'), profile=self.profile))
+            filter |= Exists(Problem.testers.through.objects.filter(problem=OuterRef('pk'), profile=self.profile))
         queryset = Problem.objects.filter(filter).select_related('group').defer('description', 'summary')
         if self.profile is not None and self.hide_solved:
             queryset = queryset.exclude(id__in=Submission.objects.filter(user=self.profile, points=F('problem__points'))
