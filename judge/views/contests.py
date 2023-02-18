@@ -98,6 +98,8 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
             editor_or_tester=Exists(Contest.authors.through.objects.filter(contest=OuterRef('pk'), profile=profile))
             .bitor(Exists(Contest.curators.through.objects.filter(contest=OuterRef('pk'), profile=profile)))
             .bitor(Exists(Contest.testers.through.objects.filter(contest=OuterRef('pk'), profile=profile))),
+            completed_contest=Exists(ContestParticipation.objects.filter(contest=OuterRef('pk'), user=profile,
+                                                                         virtual=ContestParticipation.LIVE)),
         )
 
     def get_queryset(self):

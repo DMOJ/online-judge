@@ -398,7 +398,11 @@ class Contest(models.Model):
         if editor_or_tester:
             return False
 
-        if self.has_completed_contest(user):
+        completed_contest = getattr(self, 'completed_contest', None)
+        if completed_contest is None:
+            completed_contest = self.has_completed_contest(user)
+
+        if completed_contest:
             return False
 
         if self.limit_join_organizations:
