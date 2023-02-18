@@ -16,7 +16,10 @@ def submission_layout(submission, profile_id, user, completed_problem_ids, edita
     can_view = False
     can_edit = False
 
-    if user.has_perm('judge.edit_all_problem') or problem_id in editable_problem_ids:
+    if (user.has_perm('judge.edit_all_problem') or
+            (user.has_perm('judge.edit_public_problem') and submission.problem.is_public) or
+            # We try to avoid evaluating this as much as possible to keep it lazy.
+            problem_id in editable_problem_ids):
         can_view = True
         can_edit = True
     elif user.has_perm('judge.view_all_submission'):
