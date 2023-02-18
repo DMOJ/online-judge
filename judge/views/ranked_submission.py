@@ -18,10 +18,9 @@ class RankedSubmissions(ProblemSubmissions):
     def get_queryset(self):
         params = [self.problem.id]
         if self.in_contest:
-            contest_join = """INNER JOIN judge_contestsubmission AS cs ON (sub.id = cs.submission_id)
-                              INNER JOIN judge_contestparticipation AS cp ON (cs.participation_id = cp.id)"""
+            contest_join = 'INNER JOIN judge_contestsubmission AS cs ON (sub.id = cs.submission_id)'
             points = 'cs.points'
-            constraint = ' AND cp.contest_id = %s'
+            constraint = ' AND sub.contest_object_id = %s'
             params.append(self.contest.id)
         else:
             contest_join = ''
@@ -52,8 +51,8 @@ class RankedSubmissions(ProblemSubmissions):
                     GROUP BY sub.user_id, {points}
                 ) AS fastest ON (highscore.uid = fastest.uid AND highscore.points = fastest.points)
                     STRAIGHT_JOIN judge_submission AS sub
-                        ON (sub.user_id = fastest.uid AND sub.time = fastest.time) {contest_join}
-                WHERE sub.problem_id = %s AND {points} > 0 {constraint}
+                        ON (sub.user_id = fastest.uid AND sub.time = fastest.time)
+                WHERE sub.problem_id = %s {constraint}
                 GROUP BY sub.user_id
             """.format(points=points, contest_join=contest_join, constraint=constraint),
             params=params * 3, alias='best_subs', join_fields=[('id', 'id')], related_model=Submission,
