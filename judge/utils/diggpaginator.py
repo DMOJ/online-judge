@@ -189,6 +189,9 @@ class DiggPaginator(ExPaginator):
         # validate padding value
         max_padding = int(math.ceil(self.body / 2.0) - 1)
         self.padding = kwargs.pop('padding', min(4, max_padding))
+        count_override = kwargs.pop('count', None)
+        if count_override is not None:
+            self.__dict__['count'] = count_override
         if self.padding > max_padding:
             raise ValueError('padding too large for body (max %d)' % max_padding)
         super(DiggPaginator, self).__init__(*args, **kwargs)
