@@ -162,6 +162,8 @@ textarea:focus {
 // Bootstrap-y tabs
 .ul_tab_a_active {
     color: $color_primary100;
+    // Cover up the bottom border of active tabs with this color
+    background: $color_pageBg;
     cursor: default;
     border: 1px solid $color_primary25;
     border-bottom-color: $color_pageBg;
