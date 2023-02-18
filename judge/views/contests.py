@@ -12,7 +12,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.core.exceptions import ImproperlyConfigured, ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import BooleanField, Case, Count, F, FloatField, IntegerField, Max, Min, Q, Sum, Value, When
-from django.db.models.expressions import CombinedExpression
+from django.db.models.expressions import CombinedExpression, Exists, OuterRef
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import date as date_filter
@@ -80,7 +80,7 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
         return timezone.now()
 
     def _get_queryset(self):
-        return super().get_queryset().prefetch_related(
+        queryset = super().get_queryset().prefetch_related(
             'tags',
             'organizations',
             'authors',
@@ -88,6 +88,16 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
             'testers',
             'spectators',
             'classes',
+        )
+
+        profile = self.request.profile
+        if not profile:
+            return queryset
+
+        return queryset.annotate(
+            editor_or_tester=Exists(Contest.authors.through.objects.filter(contest=OuterRef('pk'), profile=profile))
+            .bitor(Exists(Contest.curators.through.objects.filter(contest=OuterRef('pk'), profile=profile)))
+            .bitor(Exists(Contest.testers.through.objects.filter(contest=OuterRef('pk'), profile=profile))),
         )
 
     def get_queryset(self):

@@ -390,7 +390,12 @@ class Contest(models.Model):
         if not user.is_authenticated:
             return False
 
-        if user.profile.id in self.editor_ids or user.profile.id in self.tester_ids:
+        # Can be populated using annotate for performance in list views.
+        editor_or_tester = getattr(self, 'editor_or_tester', None)
+        if editor_or_tester is None:
+            editor_or_tester = user.profile.id in self.editor_ids or user.profile.id in self.tester_ids
+
+        if editor_or_tester:
             return False
 
         if self.has_completed_contest(user):
