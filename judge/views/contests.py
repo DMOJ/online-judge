@@ -87,6 +87,7 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
             'curators',
             'testers',
             'spectators',
+            'classes',
         )
 
     def get_queryset(self):
