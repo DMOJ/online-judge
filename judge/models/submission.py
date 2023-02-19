@@ -238,6 +238,19 @@ class Submission(models.Model):
             models.Index(fields=['result', '-id']),
             models.Index(fields=['result', 'language', '-id']),
             models.Index(fields=['language', '-id']),
+
+            # For filtered main submission list result charts
+            models.Index(fields=['result', 'problem']),
+            models.Index(fields=['language', 'problem', 'result']),
+
+            # For problem submissions result chart
+            models.Index(fields=['problem', 'result']),
+
+            # For user_attempted_ids and own problem submissions result chart
+            models.Index(fields=['user', 'problem', 'result']),
+
+            # For user_completed_ids
+            models.Index(fields=['user', 'result']),
         ]
 
 
