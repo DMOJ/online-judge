@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0084_contest_formats'),
+        ('judge', '0001_squashed_0084_contest_formats'),
     ]
 
     operations = [
