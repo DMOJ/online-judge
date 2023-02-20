@@ -60,7 +60,7 @@ class ClassSelect2View(Select2View):
 class ProblemSelect2View(Select2View):
     def get_queryset(self):
         return Problem.get_visible_problems(self.request.user) \
-                      .filter(Q(code__icontains=self.term) | Q(name__icontains=self.term)).distinct()
+                      .filter(Q(code__icontains=self.term) | Q(name__icontains=self.term))
 
 
 class ContestSelect2View(Select2View):
