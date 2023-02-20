@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from django.db.models import Count, FilteredRelation, Q
+from django.db.models import FilteredRelation, Q
 from django.db.models.expressions import F, Value
 from django.db.models.functions import Coalesce
 from django.forms import ModelForm
@@ -112,7 +112,7 @@ class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):
         queryset = Comment.objects.filter(hidden=False, page=self.get_comment_page())
         context['has_comments'] = queryset.exists()
         context['comment_lock'] = self.is_comment_locked()
-        queryset = queryset.select_related('author__user').defer('author__about').annotate(revisions=Count('versions'))
+        queryset = queryset.select_related('author__user').defer('author__about')
 
         if self.request.user.is_authenticated:
             profile = self.request.profile

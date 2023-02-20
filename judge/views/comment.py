@@ -4,7 +4,8 @@ from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError
 from django.db.models import F
 from django.forms.models import ModelForm
-from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, \
+    HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
@@ -133,7 +134,11 @@ class CommentEditAjax(LoginRequiredMixin, CommentMixin, UpdateView):
         with revisions.create_revision(atomic=True):
             revisions.set_comment(_('Edited from site'))
             revisions.set_user(self.request.user)
-            return super(CommentEditAjax, self).form_valid(form)
+
+            self.object = comment = form.save(commit=False)
+            comment.revisions = F('revisions') + 1
+            comment.save()
+            return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return self.object.get_absolute_url()
