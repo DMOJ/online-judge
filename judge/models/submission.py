@@ -234,6 +234,9 @@ class Submission(models.Model):
             # For problem submission rankings
             models.Index(fields=['problem', 'user', '-points', '-time']),
 
+            # For contest problem submission rankings
+            models.Index(fields=['contest_object', 'problem', 'user', '-points', '-time']),
+
             # For main submission list filtering by some combination of result and language
             models.Index(fields=['result', '-id']),
             models.Index(fields=['result', 'language', '-id']),
