@@ -1,6 +1,5 @@
 import itertools
 
-from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator
@@ -11,7 +10,6 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-from reversion.models import Version
 
 from judge.models.contest import Contest
 from judge.models.interface import BlogPost
@@ -25,18 +23,6 @@ comment_validator = RegexValidator(r'^[pcs]:[a-z0-9]+$|^b:\d+$',
                                    _(r'Page code must be ^[pcs]:[a-z0-9]+$|^b:\d+$'))
 
 
-class VersionRelation(GenericRelation):
-    def __init__(self):
-        super(VersionRelation, self).__init__(Version, object_id_field='object_id')
-
-    def get_extra_restriction(self, where_class, alias, remote_alias):
-        cond = super(VersionRelation, self).get_extra_restriction(where_class, alias, remote_alias)
-        field = self.remote_field.model._meta.get_field('db')
-        lookup = field.get_lookup('exact')(field.get_col(remote_alias), 'default')
-        cond.add(lookup, 'AND')
-        return cond
-
-
 class Comment(MPTTModel):
     author = models.ForeignKey(Profile, verbose_name=_('commenter'), on_delete=CASCADE)
     time = models.DateTimeField(verbose_name=_('posted time'), auto_now_add=True)
@@ -47,7 +33,7 @@ class Comment(MPTTModel):
     hidden = models.BooleanField(verbose_name=_('hidden'), default=0)
     parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies',
                             on_delete=CASCADE)
-    versions = VersionRelation()
+    revisions = models.IntegerField(verbose_name=_('revisions'), default=0)
 
     class Meta:
         verbose_name = _('comment')
