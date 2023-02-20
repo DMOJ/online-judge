@@ -279,13 +279,16 @@ class Problem(models.Model):
             q = Q(is_public=True)
             if not (user.has_perm('judge.see_organization_problem') or edit_public_problem):
                 # Either not organization private or in the organization.
-                q &= (
-                    Q(is_organization_private=False) |
-                    Q(is_organization_private=True, organizations__in=user.profile.organizations.all())
+                q &= Q(is_organization_private=False) | cls.organization_filter_q(
+                    # Avoids needlessly joining Organization
+                    Profile.organizations.through.objects.filter(profile=user.profile).values('organization_id'),
                 )
 
             if edit_own_problem:
-                q |= Q(is_organization_private=True, organizations__in=user.profile.admin_of.all())
+                q |= cls.organization_filter_q(
+                    # Avoids needlessly joining Organization
+                    Organization.admins.through.objects.filter(profile=user.profile).values('organization_id'),
+                )
 
             # Authors, curators, and testers should always have access.
             q = cls.q_add_author_curator_tester(q, user.profile)
@@ -300,6 +303,12 @@ class Problem(models.Model):
         q |= Exists(Problem.authors.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.curators.through.objects.filter(problem=OuterRef('pk'), profile=profile))
         q |= Exists(Problem.testers.through.objects.filter(problem=OuterRef('pk'), profile=profile))
+        return q
+
+    @classmethod
+    def organization_filter_q(cls, queryset):
+        q = Q(is_organization_private=True)
+        q &= Exists(Problem.organizations.through.objects.filter(problem=OuterRef('pk'), organization__in=queryset))
         return q
 
     @classmethod
