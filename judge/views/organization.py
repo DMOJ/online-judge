@@ -276,7 +276,9 @@ class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateRespon
         return organization
 
     def get_requests(self):
-        queryset = self.object.requests.all()
+        queryset = self.object.requests.select_related('user__user').defer(
+            'user__about', 'user__notes', 'user__user_script',
+        )
         if not self.edit_all:
             queryset = queryset.filter(request_class__in=self.object.classes.filter(admins__id=self.request.profile.id))
         return queryset
