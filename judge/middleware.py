@@ -11,6 +11,11 @@ from django.urls import Resolver404, resolve, reverse
 from django.utils.encoding import force_bytes
 from requests.exceptions import HTTPError
 
+try:
+    import uwsgi
+except ImportError:
+    uwsgi = None
+
 
 class ShortCircuitMiddleware:
     def __init__(self, get_response):
@@ -34,6 +39,9 @@ class DMOJLoginMiddleware(object):
     def __call__(self, request):
         if request.user.is_authenticated:
             profile = request.profile = request.user.profile
+            if uwsgi:
+                uwsgi.set_logvar('username', request.user.username)
+
             logout_path = reverse('auth_logout')
             login_2fa_path = reverse('login_2fa')
             webauthn_path = reverse('webauthn_assert')
@@ -60,6 +68,8 @@ class DMOJImpersonationMiddleware(object):
 
     def __call__(self, request):
         if request.user.is_impersonate:
+            if uwsgi:
+                uwsgi.set_logvar('username', f'{request.impersonator.username} as {request.user.username}')
             request.no_profile_update = True
             request.profile = request.user.profile
         return self.get_response(request)
