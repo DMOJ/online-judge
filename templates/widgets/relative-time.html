@@ -1,6 +1,0 @@
-{% spaceless %}
-    <span data-iso="{{ time|utc|date('c') }}" class="time-with-rel" title="{{ time|date(format) }}"
-          data-format="{{ rel_format }}">
-        {{ abs_format.replace('{time}', time|date(format)) }}
-    </span>
-{% endspaceless %}
