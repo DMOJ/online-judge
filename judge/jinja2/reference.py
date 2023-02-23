@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from ansi2html import Ansi2HTMLConverter
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from lxml.html import Element
 
@@ -140,7 +141,6 @@ def item_title(item):
 
 
 @registry.function
-@registry.render_with('user/link.html')
 def link_user(user):
     if isinstance(user, Profile):
         user, profile = user.user, user
@@ -150,7 +150,9 @@ def link_user(user):
         user, profile = user.user, user
     else:
         raise ValueError('Expected profile or user, got %s' % (type(user),))
-    return {'user': user, 'profile': profile}
+    return mark_safe(f'<span class="{profile.css_class}">'
+                     f'<a href="{escape(reverse("user_page", args=[user.username]))}">'
+                     f'{escape(profile.display_name)}</a></span>')
 
 
 @registry.function
