@@ -3,11 +3,10 @@ from functools import partial
 from django.conf import settings
 from django.contrib.auth.context_processors import PermWrapper
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.cache import cache
 from django.utils.functional import SimpleLazyObject, new_method_proxy
 
 from judge.utils.caniuse import CanIUse, SUPPORT
-from .models import MiscConfig, NavigationBar, Profile
+from .models import NavigationBar, Profile
 
 
 class FixedSimpleLazyObject(SimpleLazyObject):
@@ -71,37 +70,8 @@ def site(request):
     return {'site': get_current_site(request)}
 
 
-class MiscConfigDict(dict):
-    __slots__ = ('language', 'site')
-
-    def __init__(self, language='', domain=None):
-        self.language = language
-        self.site = domain
-        super(MiscConfigDict, self).__init__()
-
-    def __missing__(self, key):
-        cache_key = 'misc_config:%s:%s:%s' % (self.site, self.language, key)
-        value = cache.get(cache_key)
-        if value is None:
-            keys = ['%s.%s' % (key, self.language), key] if self.language else [key]
-            if self.site is not None:
-                keys = ['%s:%s' % (self.site, key) for key in keys] + keys
-            map = dict(MiscConfig.objects.values_list('key', 'value').filter(key__in=keys))
-            for item in keys:
-                if item in map:
-                    value = map[item]
-                    break
-            else:
-                value = ''
-            cache.set(cache_key, value, 86400)
-        self[key] = value
-        return value
-
-
 def misc_config(request):
-    domain = get_current_site(request).domain
-    return {'misc_config': MiscConfigDict(domain=domain),
-            'i18n_config': MiscConfigDict(language=request.LANGUAGE_CODE, domain=domain)}
+    return {'misc_config': request.misc_config}
 
 
 def site_name(request):
