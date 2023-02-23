@@ -281,8 +281,8 @@
         <div id="content-body">{% block body %}{% endblock %}</div>
     </main>
 
-    {% if i18n_config.announcement %}
-        <div id="announcement">{{ i18n_config.announcement|safe }}</div>
+    {% if misc_config.announcement %}
+        <div id="announcement">{{ misc_config.announcement|safe }}</div>
     {% endif %}
 
     {% block bodyend %}{% endblock %}
@@ -291,8 +291,8 @@
         <span id="footer-content">
             <br>
             <a style="color: #808080" href="https://dmoj.ca">{{ _('proudly powered by **DMOJ**')|markdown('default', strip_paragraphs=True) }}</a> |
-            {% if i18n_config.footer %}
-                {{ i18n_config.footer|safe }} |
+            {% if misc_config.footer %}
+                {{ misc_config.footer|safe }} |
             {% endif %}
             <form action="{{ url('set_language') }}" method="post" style="display: inline">
                 {% csrf_token %}
