@@ -25,15 +25,12 @@ if settings.USE_SELENIUM:
     except ImportError:
         logger.warning('Failed to import Selenium', exc_info=True)
 
-HAS_PHANTOMJS = os.access(settings.PHANTOMJS, os.X_OK)
-HAS_SLIMERJS = os.access(settings.SLIMERJS, os.X_OK)
-
 NODE_PATH = settings.NODEJS
 PUPPETEER_MODULE = settings.PUPPETEER_MODULE
 HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE)
 
 HAS_PDF = (os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and
-           (HAS_PHANTOMJS or HAS_SLIMERJS or HAS_PUPPETEER or HAS_SELENIUM))
+           (HAS_PUPPETEER or HAS_SELENIUM))
 
 EXIFTOOL = settings.EXIFTOOL
 HAS_EXIFTOOL = os.access(EXIFTOOL, os.X_OK)
@@ -97,128 +94,6 @@ class BasePdfMaker(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.clean_up:
             shutil.rmtree(self.dir, ignore_errors=True)
-
-
-class PhantomJSPdfMaker(BasePdfMaker):
-    template = """\
-"use strict";
-var page = require('webpage').create();
-var param = {params};
-
-page.paperSize = {
-    format: param.paper, orientation: 'portrait', margin: '1cm',
-    footer: param.footer ? {
-        height: '1cm',
-        contents: phantom.callback(function(num, pages) {
-            return ('<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">'
-                  + param.footer.replace('[page]', num).replace('[topage]', pages) + '</center>');
-        })
-    } : {}
-};
-
-page.onCallback = function (data) {
-    if (data.action === 'snapshot') {
-        page.render(param.output);
-        phantom.exit();
-    }
-}
-
-page.open(param.input, function (status) {
-    if (status !== 'success') {
-        console.log('Unable to load the address!');
-        phantom.exit(1);
-    } else {
-        page.evaluate(function (zoom) {
-            document.documentElement.style.zoom = zoom;
-        }, param.zoom);
-        window.setTimeout(function () {
-            page.render(param.output);
-            phantom.exit();
-        }, param.timeout);
-    }
-});
-"""
-
-    def get_render_script(self):
-        return self.template.replace('{params}', json.dumps({
-            'zoom': settings.PHANTOMJS_PDF_ZOOM,
-            'timeout': int(settings.PHANTOMJS_PDF_TIMEOUT * 1000),
-            'input': 'input.html', 'output': 'output.pdf',
-            'paper': settings.PHANTOMJS_PAPER_SIZE,
-            'footer': gettext('Page [page] of [topage]') if self.footer else '',
-        }))
-
-    def _make(self, debug):
-        with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
-            f.write(self.get_render_script())
-        cmdline = [settings.PHANTOMJS, '_render.js']
-        env = {'OPENSSL_CONF': '/etc/ssl'}
-        self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir, env=env)
-        self.log = self.proc.communicate()[0]
-
-
-class SlimerJSPdfMaker(BasePdfMaker):
-    math_engine = 'mml'
-
-    template = """\
-"use strict";
-try {
-    var param = {params};
-
-    var {Cc, Ci} = require('chrome');
-    var prefs = Cc['@mozilla.org/preferences-service;1'].getService(Ci.nsIPrefService);
-    // Changing the serif font so that printed footers show up as Segoe UI.
-    var branch = prefs.getBranch('font.name.serif.');
-    branch.setCharPref('x-western', 'Segoe UI');
-
-    var page = require('webpage').create();
-
-    page.paperSize = {
-        format: param.paper, orientation: 'portrait', margin: '1cm', edge: '0.5cm',
-    };
-    if (param.footer)
-        page.paperSize.footerStr = { left: '', right: '', center: param.footer };
-
-    page.open(param.input, function (status) {
-        if (status !== 'success') {
-            console.log('Unable to load the address!');
-            slimer.exit(1);
-        } else {
-            page.render(param.output, { ratio: param.zoom });
-            slimer.exit();
-        }
-    });
-} catch (e) {
-    console.error(e);
-    slimer.exit(1);
-}
-"""
-
-    def get_render_script(self):
-        if self.footer:
-            footer = gettext('Page [page] of [topage]').replace('[page]', '&P').replace('[topage]', '&L')
-        else:
-            footer = ''
-        return self.template.replace('{params}', json.dumps({
-            'zoom': settings.SLIMERJS_PDF_ZOOM,
-            'input': 'input.html', 'output': 'output.pdf',
-            'paper': settings.SLIMERJS_PAPER_SIZE,
-            'footer': footer,
-        }))
-
-    def _make(self, debug):
-        with io.open(os.path.join(self.dir, '_render.js'), 'w', encoding='utf-8') as f:
-            f.write(self.get_render_script())
-
-        env = None
-        firefox = settings.SLIMERJS_FIREFOX_PATH
-        if firefox:
-            env = os.environ.copy()
-            env['SLIMERJSLAUNCHER'] = firefox
-
-        cmdline = [settings.SLIMERJS, '--headless', '_render.js']
-        self.proc = subprocess.Popen(cmdline, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=self.dir, env=env)
-        self.log = self.proc.communicate()[0]
 
 
 class PuppeteerPDFRender(BasePdfMaker):
@@ -328,9 +203,5 @@ if HAS_PUPPETEER:
     DefaultPdfMaker = PuppeteerPDFRender
 elif HAS_SELENIUM:
     DefaultPdfMaker = SeleniumPDFRender
-elif HAS_SLIMERJS:
-    DefaultPdfMaker = SlimerJSPdfMaker
-elif HAS_PHANTOMJS:
-    DefaultPdfMaker = PhantomJSPdfMaker
 else:
     DefaultPdfMaker = None
