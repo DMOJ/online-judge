@@ -7,7 +7,9 @@ import os
 import shutil
 import subprocess
 import uuid
+from base64 import b64decode
 
+import requests
 from django.conf import settings
 from django.utils.translation import gettext
 
@@ -29,8 +31,11 @@ NODE_PATH = settings.NODEJS
 PUPPETEER_MODULE = settings.PUPPETEER_MODULE
 HAS_PUPPETEER = os.access(NODE_PATH, os.X_OK) and os.path.isdir(PUPPETEER_MODULE)
 
+PDFOID_URL = settings.PDFOID_URL
+HAS_PDFOID = settings.USE_PDFOID and PDFOID_URL
+
 HAS_PDF = (os.path.isdir(settings.DMOJ_PDF_PROBLEM_CACHE) and
-           (HAS_PUPPETEER or HAS_SELENIUM))
+           (HAS_PDFOID or HAS_PUPPETEER or HAS_SELENIUM))
 
 EXIFTOOL = settings.EXIFTOOL
 HAS_EXIFTOOL = os.access(EXIFTOOL, os.X_OK)
@@ -195,7 +200,90 @@ class SeleniumPDFRender(BasePdfMaker):
         self.success = True
 
 
-if HAS_PUPPETEER:
+# TODO(tbrindus): this class intentionally duplicates parts of DefaultPdfMaker, as it intends to
+# entirely replace it once pdfoid is functional.
+class PdfoidPDFRender(object):
+    # TODO(tbrindus): temporarily needed to keep judge/views/problem.py happy.
+    math_engine = 'jax'
+    wait_for_class = 'math-loaded'
+    wait_for_duration_secs = 15
+
+    @property
+    def footer_template(self):
+        return ('<center style="margin: 0 auto; font-family: Segoe UI; font-size: 10px">' +
+                gettext('Page {page_number} of {total_pages}') +
+                '</center>')
+
+    def __init__(self, dir=None, clean_up=True, footer=True):
+        self.html = None
+        self.title = None
+        self.log = None
+        self.success = False
+        self.clean_up = clean_up
+        self.footer = footer
+        self.dir = dir or os.path.join(settings.DMOJ_PDF_PROBLEM_TEMP_DIR, str(uuid.uuid1()))
+        self.pdffile = os.path.join(self.dir, 'output.pdf')
+
+    def make(self, debug=False):
+        try:
+            assert self.html is not None
+            assert self.title is not None
+
+            response = requests.post(
+                PDFOID_URL,
+                data={
+                    'html': self.html,
+                    'title': self.title,
+                    'footer-template': self.footer_template if self.footer else None,
+                    'wait-for-class': self.wait_for_class,
+                    'wait-for-duration-secs': str(self.wait_for_duration_secs),
+                },
+            )
+            response.raise_for_status()
+        except requests.HTTPError as e:
+            if e.response.status_code == 400:
+                logger.error('pdfoid failed to render: %s', e.response.text)
+            else:
+                logger.exception('Failed to connect to pdfoid')
+        except Exception:
+            logger.exception('Failed to connect to pdfoid')
+            return
+
+        try:
+            data = response.json()
+        except ValueError:
+            logger.exception('Invalid pdfoid response: %s', response.text)
+
+        self.success = data['success']
+        if not self.success:
+            self.log = data['error']
+        else:
+            with open(self.pdffile, 'wb') as pdffile:
+                pdffile.write(b64decode(data['pdf']))
+
+    def load(self, _name, _path):
+        pass
+
+    @property
+    def created(self):
+        return os.path.exists(self.pdffile)
+
+    def __enter__(self):
+        try:
+            os.makedirs(self.dir)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.clean_up:
+            shutil.rmtree(self.dir, ignore_errors=True)
+
+
+if HAS_PDFOID:
+    DefaultPdfMaker = PdfoidPDFRender
+elif HAS_PUPPETEER:
     DefaultPdfMaker = PuppeteerPDFRender
 elif HAS_SELENIUM:
     DefaultPdfMaker = SeleniumPDFRender

@@ -146,6 +146,9 @@ USE_SELENIUM = False
 SELENIUM_CUSTOM_CHROME_PATH = None
 SELENIUM_CHROMEDRIVER_PATH = 'chromedriver'
 
+USE_PDFOID = False
+PDFOID_URL = ''
+
 INLINE_JQUERY = True
 INLINE_FONTAWESOME = True
 JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'
