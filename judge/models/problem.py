@@ -118,7 +118,8 @@ class Problem(models.Model):
                             validators=[RegexValidator('^[a-z0-9]+$', _('Problem code must be ^[a-z0-9]+$'))],
                             help_text=_('A short, unique code for the problem, used in the URL after /problem/'))
     name = models.CharField(max_length=100, verbose_name=_('problem name'), db_index=True,
-                            help_text=_('The full name of the problem, as shown in the problem list.'))
+                            help_text=_('The full name of the problem, as shown in the problem list.'),
+                            validators=[disallowed_characters_validator])
     description = models.TextField(verbose_name=_('problem body'), validators=[disallowed_characters_validator])
     authors = models.ManyToManyField(Profile, verbose_name=_('creators'), blank=True, related_name='authored_problems',
                                      help_text=_('These users will be able to edit the problem, '
