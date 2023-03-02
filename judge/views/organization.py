@@ -10,6 +10,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Count, IntegerField, OuterRef, Q, Subquery, Value
 from django.forms import Form, modelformset_factory
 from django.http import Http404, HttpResponsePermanentRedirect, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
@@ -69,7 +70,7 @@ class BaseOrganizationListView(OrganizationMixin, ListView):
     context_object_name = None
 
     def get_object(self):
-        return Organization.objects.get(id=self.kwargs.get('pk'))
+        return get_object_or_404(Organization, id=self.kwargs.get('pk'))
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(organization=self.object, **kwargs)
