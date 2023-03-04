@@ -85,8 +85,6 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-chtml.min.js"></script>
     <script type="text/javascript">
         MathJax.typesetPromise().then(function () {
-            if (typeof window.callPhantom === 'function')
-                window.callPhantom({'action': 'snapshot'});
             document.body.classList.add('math-loaded');
         });
     </script>
