@@ -52,10 +52,6 @@ class BasePdfMaker(object):
         self.clean_up = clean_up
         self.footer = footer
 
-    def load(self, file, source):
-        with open(os.path.join(self.dir, file), 'w') as target, open(source) as source:
-            target.write(source.read())
-
     def make(self, debug=False):
         self._make(debug)
 
