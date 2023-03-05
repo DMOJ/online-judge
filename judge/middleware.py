@@ -45,6 +45,7 @@ class DMOJLoginMiddleware(object):
             profile = request.profile = request.user.profile
             if uwsgi:
                 uwsgi.set_logvar('username', request.user.username)
+                uwsgi.set_logvar('language', request.LANGUAGE_CODE)
 
             logout_path = reverse('auth_logout')
             login_2fa_path = reverse('login_2fa')
