@@ -78,7 +78,7 @@ class UserSearchSelect2View(BaseListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return _get_user_queryset(self.term)
+        return _get_user_queryset(self.term).filter(is_unlisted=False)
 
     def get(self, request, *args, **kwargs):
         self.request = request
