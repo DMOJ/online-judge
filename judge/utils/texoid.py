@@ -32,7 +32,7 @@ class TexoidRenderer(object):
             })
             response.raise_for_status()
         except requests.HTTPError as e:
-            if e.response.status == 400:
+            if e.response.status_code == 400:
                 logger.error('Texoid failed to render: %s\n%s', document, e.response.text)
             else:
                 logger.exception('Failed to connect to texoid for: %s', document)
