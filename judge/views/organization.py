@@ -67,6 +67,7 @@ class OrganizationMixin(object):
 class BaseOrganizationListView(OrganizationMixin, ListView):
     model = None
     context_object_name = None
+    slug_url_kwarg = 'slug'
 
     def get_object(self):
         return Organization.objects.get(id=self.kwargs.get('pk'))
