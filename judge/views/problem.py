@@ -1,7 +1,6 @@
 import logging
 import os
 import re
-import shutil
 from datetime import timedelta
 from operator import itemgetter
 from random import randrange
@@ -31,9 +30,9 @@ from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemPointsVoteForm, ProblemSubmitForm
 from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVote, \
     ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource
-from judge.pdf_problems import DefaultPdfMaker, HAS_PDF
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
+from judge.utils.pdfoid import PDF_RENDERING_ENABLED, render_pdf
 from judge.utils.problems import contest_attempted_ids, contest_completed_ids, hot_problems, user_attempted_ids, \
     user_completed_ids
 from judge.utils.strings import safe_float_or_none, safe_int_or_none
@@ -167,7 +166,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
 
         context['available_judges'] = Judge.objects.filter(online=True, problems=self.object)
         context['show_languages'] = self.object.allowed_languages.count() != Language.objects.count()
-        context['has_pdf_render'] = HAS_PDF
+        context['has_pdf_render'] = PDF_RENDERING_ENABLED
         context['completed_problem_ids'] = self.get_completed_problems()
         context['attempted_problems'] = self.get_attempted_problems()
 
@@ -297,7 +296,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
     languages = set(map(itemgetter(0), settings.LANGUAGES))
 
     def get(self, request, *args, **kwargs):
-        if not HAS_PDF:
+        if not PDF_RENDERING_ENABLED:
             raise Http404()
 
         language = kwargs.get('language', self.request.LANGUAGE_CODE)
@@ -305,43 +304,47 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
             raise Http404()
 
         problem = self.get_object()
-        try:
-            trans = problem.translations.get(language=language)
-        except ProblemTranslation.DoesNotExist:
-            trans = None
+        pdf_basename = '%s.%s.pdf' % (problem.code, language)
 
-        cache = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, '%s.%s.pdf' % (problem.code, language))
+        def render_problem_pdf():
+            self.logger.info('Rendering PDF in %s: %s', language, problem.code)
 
-        if not os.path.exists(cache):
-            self.logger.info('Rendering: %s.%s.pdf', problem.code, language)
-            with DefaultPdfMaker() as maker, translation.override(language):
-                problem_name = problem.name if trans is None else trans.name
-                maker.html = get_template('problem/raw.html').render({
-                    'problem': problem,
-                    'problem_name': problem_name,
-                    'description': problem.description if trans is None else trans.description,
-                    'url': request.build_absolute_uri(),
-                    'math_engine': maker.math_engine,
-                }).replace('"//', '"https://').replace("'//", "'https://")
-                maker.title = problem_name
+            with translation.override(language):
+                try:
+                    trans = problem.translations.get(language=language)
+                except ProblemTranslation.DoesNotExist:
+                    trans = None
 
-                maker.make()
-                if not maker.success:
-                    self.logger.error('Failed to render PDF for %s', problem.code)
-                    return HttpResponse(maker.log, status=500, content_type='text/plain')
-                shutil.move(maker.pdffile, cache)
+                problem_name = trans.problem_name if trans else problem.name
+                return render_pdf(
+                    html=get_template('problem/raw.html').render({
+                        'problem': problem,
+                        'problem_name': problem_name,
+                        'description': trans.description if trans else problem.description,
+                        'url': request.build_absolute_uri(),
+                    }).replace('"//', '"https://').replace("'//", "'https://"),
+                    title=problem_name,
+                )
 
         response = HttpResponse()
-
-        if hasattr(settings, 'DMOJ_PDF_PROBLEM_INTERNAL'):
-            url_path = '%s/%s.%s.pdf' % (settings.DMOJ_PDF_PROBLEM_INTERNAL, problem.code, language)
-        else:
-            url_path = None
-
-        add_file_response(request, response, url_path, cache)
-
         response['Content-Type'] = 'application/pdf'
-        response['Content-Disposition'] = 'inline; filename=%s.%s.pdf' % (problem.code, language)
+        response['Content-Disposition'] = f'inline; filename={pdf_basename}'
+
+        if settings.DMOJ_PDF_PROBLEM_CACHE:
+            pdf_filename = os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, pdf_basename)
+            if not os.path.exists(pdf_filename):
+                with open(pdf_filename, 'wb') as f:
+                    f.write(render_problem_pdf())
+
+            if settings.DMOJ_PDF_PROBLEM_INTERNAL:
+                url_path = f'{settings.DMOJ_PDF_PROBLEM_INTERNAL}/{pdf_basename}'
+            else:
+                url_path = None
+
+            add_file_response(request, response, url_path, pdf_filename)
+        else:
+            response.content = render_problem_pdf()
+
         return response
 
 
