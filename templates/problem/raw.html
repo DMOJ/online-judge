@@ -78,16 +78,14 @@
 </div>
 <hr style="clear: both;">
 <div class="content-description printing">
-    {{ description|markdown(problem.markdown_style, 'tex' if math_engine == 'jax' else math_engine)|reference|absolutify(url)|str|safe }}
+    {{ description|markdown(problem.markdown_style, 'tex')|reference|absolutify(url)|str|safe }}
 </div>
-{% if math_engine == 'jax' %}
-    <script type="text/javascript" src="{{ urljoin(url, static('mathjax_config.js')) }}"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-chtml.min.js"></script>
-    <script type="text/javascript">
-        MathJax.typesetPromise().then(function () {
-            document.body.classList.add('math-loaded');
-        });
-    </script>
-{% endif %}
+<script type="text/javascript" src="{{ urljoin(url, static('mathjax_config.js')) }}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-chtml.min.js"></script>
+<script type="text/javascript">
+    MathJax.typesetPromise().then(function () {
+        document.body.classList.add('math-loaded');
+    });
+</script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 import errno
 import os
+from typing import Optional
 
 from django.conf import settings
 from django.core.cache import cache
@@ -12,7 +13,10 @@ from .models import BlogPost, Comment, Contest, ContestSubmission, EFFECTIVE_MAT
     MiscConfig, Organization, Problem, Profile, Submission, WebAuthnCredential
 
 
-def get_pdf_path(basename):
+def get_pdf_path(basename: str) -> Optional[str]:
+    if not settings.DMOJ_PDF_PROBLEM_CACHE:
+        return None
+
     return os.path.join(settings.DMOJ_PDF_PROBLEM_CACHE, basename)
 
 
@@ -41,7 +45,9 @@ def problem_update(sender, instance, **kwargs):
     cache.delete_many(['generated-meta-problem:%s:%d' % (lang, instance.id) for lang, _ in settings.LANGUAGES])
 
     for lang, _ in settings.LANGUAGES:
-        unlink_if_exists(get_pdf_path('%s.%s.pdf' % (instance.code, lang)))
+        cached_pdf_filename = get_pdf_path('%s.%s.pdf' % (instance.code, lang))
+        if cached_pdf_filename is not None:
+            unlink_if_exists(cached_pdf_filename)
 
 
 @receiver(post_save, sender=Profile)
