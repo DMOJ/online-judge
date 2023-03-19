@@ -427,6 +427,7 @@ BLEACH_USER_SAFE_ATTRS = {
     'audio': ['autoplay', 'controls', 'crossorigin', 'muted', 'loop', 'preload', 'src'],
     'video': ['autoplay', 'controls', 'crossorigin', 'height', 'muted', 'loop', 'poster', 'preload', 'src', 'width'],
     'source': ['src', 'srcset', 'type'],
+    'li': ['value'],
 }
 
 MARKDOWN_STAFF_EDITABLE_STYLE = {
