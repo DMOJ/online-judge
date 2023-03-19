@@ -11,7 +11,8 @@ dmoj-wpadmin @ git+https://github.com/DMOJ/dmoj-wpadmin.git
 lxml
 Pygments
 mistune<2
-social-auth-app-django
+social-auth-core==4.3.0
+social-auth-app-django==5.0.0
 pytz
 django-statici18n
 pika
