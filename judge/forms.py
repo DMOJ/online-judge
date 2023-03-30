@@ -180,7 +180,7 @@ class NoAutoCompleteCharField(forms.CharField):
 class TOTPForm(Form):
     TOLERANCE = settings.DMOJ_TOTP_TOLERANCE_HALF_MINUTES
 
-    totp_or_scratch_code = NoAutoCompleteCharField(required=False)
+    totp_or_scratch_code = NoAutoCompleteCharField(required=False, widget=forms.TextInput(attrs={'autofocus': True}))
 
     def __init__(self, *args, **kwargs):
         self.profile = kwargs.pop('profile')
