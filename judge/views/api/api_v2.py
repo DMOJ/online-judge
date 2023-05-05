@@ -9,6 +9,7 @@ from django.utils.functional import cached_property
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.list import BaseListView
 
+from judge.jinja2.markdown import markdown
 from judge.models import (
     Contest, ContestParticipation, ContestTag, Judge, Language, Organization, Problem, ProblemType, Profile, Rating,
     Submission,
@@ -449,6 +450,7 @@ class APIProblemDetail(APIDetailView):
         return {
             'code': problem.code,
             'name': problem.name,
+            'description': markdown(problem.description, problem.markdown_style, 'tex'),
             'authors': list(problem.authors.values_list('user__username', flat=True)),
             'types': list(problem.types.values_list('full_name', flat=True)),
             'group': problem.group.full_name,
