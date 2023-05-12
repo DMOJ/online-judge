@@ -1,7 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from judge.models import Problem, ProblemGroup, ProblemType
-from judge.models.runtime import Language
+from judge.models import Problem, ProblemGroup, ProblemType, Language
 
 
 class Command(BaseCommand):
@@ -27,7 +26,7 @@ class Command(BaseCommand):
         problem.name = options['name']
         problem.description = options['body']
         problem.group = ProblemGroup.objects.get(name=options['group'])
-        problem.time_limit = options["time_limit"]
+        problem.time_limit = options['time_limit']
         problem.memory_limit = options["memory_limit"]
         problem.points = options["points"]
         if options['pr_pts']:
@@ -36,5 +35,5 @@ class Command(BaseCommand):
 
         problem.types.set([ProblemType.objects.get(name=options['type'])])
         if options['all_lang']:
-            problem.allowed_languages.set([l for l in Language.objects.all()])
+            problem.allowed_languages.set(Language.objects.all())
         problem.save()
