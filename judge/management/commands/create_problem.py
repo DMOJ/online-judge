@@ -27,8 +27,8 @@ class Command(BaseCommand):
         problem.description = options['body']
         problem.group = ProblemGroup.objects.get(name=options['group'])
         problem.time_limit = options['time_limit']
-        problem.memory_limit = options["memory_limit"]
-        problem.points = options["points"]
+        problem.memory_limit = options['memory_limit']
+        problem.points = options['points']
         if options['pr_pts']:
             problem.partial = 1
         problem.save()
