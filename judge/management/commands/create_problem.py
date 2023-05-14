@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from judge.models import Problem, ProblemGroup, ProblemType, Language
+from judge.models import Language, Problem, ProblemGroup, ProblemType
 
 
 class Command(BaseCommand):
@@ -16,9 +16,9 @@ class Command(BaseCommand):
         parser.add_argument('memory_limit', help='memory limit in kilobytes')
         parser.add_argument('points', help='problem points')
         parser.add_argument('--partial-points', help='allow partial points',
-            action='store_true', default=False, dest='pr_pts')
+                            action='store_true', default=False, dest='pr_pts')
         parser.add_argument('--all-languages', help='allow all languages',
-            action='store_true', default=False, dest='all_lang')
+                            action='store_true', default=False, dest='all_lang')
 
     def handle(self, *args, **options):
         problem = Problem()
