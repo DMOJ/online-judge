@@ -7,6 +7,7 @@ import yaml
 from judge.models.problem import Problem, ProblemGroup
 from judge.models.problem_data import ProblemData, ProblemTestCase
 from judge.tasks.polygon import parce_task_from_polygon
+from judge.template_context import get_profile
 from judge.utils.views import TitleMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -27,8 +28,9 @@ class NewProblemFromCFView(PermissionRequiredMixin, TitleMixin, TemplateView):
         problem_code = request.POST.get('problem_code')
         problem_name = request.POST.get('problem_name')
         polygon_link = request.POST.get('polygon_link')
-
-        parce_task_from_polygon.delay(problem_code, problem_name, polygon_link, request.user.id)
+        
+        profile_id = get_profile(request).id
+        parce_task_from_polygon.delay(problem_code, problem_name, polygon_link, profile_id)
         
         return HttpResponseRedirect("/problems")
     
