@@ -1,0 +1,39 @@
+{% extends "common-content.html" %}
+
+{% block content_js_media %}
+    {% include "blog/media-js.html" %}
+{% endblock %}
+
+{% block body %}
+{% if request.user.is_authenticated and blog_form %}
+	<div id="new-blog" class="form-area blog-submit">
+		{% block blog_submit_title %}
+			<h3>{{ _('New blog') }}</h3>
+			<hr>
+		{% endblock %}
+		{% if is_new_user %}
+			<div style="margin-bottom: 0" class="alert alert-info">
+				{{ _('You must solve at least one problem before your voice can be heard.') }}
+			</div>
+		{% else %}
+			<form class="blog-submit-form" action="" method="post">
+				{% csrf_token %}
+				{% if blog_form.errors %}
+					<div id="form-errors">
+						{{ blog_form.non_field_errors() }}
+						{% if blog_form.content.errors %}{{ _('Invalid blog content.') }}{% endif %}
+					</div>
+				{% endif %}
+				<div class="blog-post-wrapper">
+					<div id="blog-form-title">{{ blog_form.title }}</div>
+					<div id="blog-form-slug">{{ blog_form.slug }}</div>
+					<div id="blog-form-content">{{ blog_form.content }}</div>
+					<div id="blog-form-summary">{{ blog_form.summary }}</div>
+				</div>
+				<hr>
+				<input style="float:right" type="submit" value="{{ _('Post!') }}" class="button">
+			</form>
+		{% endif %}
+	</div>
+{% endif %}	
+{% endblock %}

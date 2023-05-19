@@ -1,0 +1,34 @@
+import io
+import zipfile
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import TemplateView
+import requests
+import yaml
+from judge.models.problem import Problem, ProblemGroup
+from judge.models.problem_data import ProblemData, ProblemTestCase
+from judge.tasks.polygon import parce_task_from_polygon
+from judge.utils.views import TitleMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.utils.translation import gettext as _
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
+class NewProblemFromCFView(PermissionRequiredMixin, TitleMixin, TemplateView):
+    permission_required = 'judge.add_problem'
+    template_name = 'problem/data_from_cf.html'
+    title = 'New problem from polygon'
+    
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        return super().get(self, request, *args, **kwargs)
+    
+    @method_decorator(login_required)
+    def post(self, request, *args, **kwargs):
+        problem_code = request.POST.get('problem_code')
+        problem_name = request.POST.get('problem_name')
+        polygon_link = request.POST.get('polygon_link')
+
+        parce_task_from_polygon.delay(problem_code, problem_name, polygon_link, request.user.id)
+        
+        return HttpResponseRedirect("/problems")
+    
