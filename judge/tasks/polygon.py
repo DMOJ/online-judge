@@ -10,13 +10,13 @@ from django.core.files.base import File
 from judge.models.problem import Problem, ProblemGroup
 from judge.models.problem_data import ProblemData, ProblemTestCase
 from judge.models.profile import Profile
-
+from django.conf import settings
 
 @shared_task
 def parce_task_from_polygon(problem_code, problem_name, polygon_link, author_id):
 	response = requests.post(polygon_link, data={
-			"login": 'vasyamer',
-			"password": '7ea7d6e7b4bf149f77f2ea1485e06f43',
+			"login": settings.POLYGON_LOGIN,
+			"password": settings.POLYGON_PASSWORD,
 			"type": "linux"
 		})
 
