@@ -4,6 +4,7 @@ from math import ceil
 import zipfile
 from celery import shared_task
 import requests
+from zipfile import ZipFile
 import xml.etree.ElementTree as ET
 from django.core.files.base import File
 
@@ -11,6 +12,7 @@ from judge.models.problem import Problem, ProblemGroup
 from judge.models.problem_data import ProblemData, ProblemTestCase
 from judge.models.profile import Profile
 from django.conf import settings
+from judge.utils.problem_data import ProblemDataCompiler
 
 @shared_task
 def parce_task_from_polygon(problem_code, problem_name, polygon_link, author_id):
@@ -60,6 +62,9 @@ def parce_task_from_polygon(problem_code, problem_name, polygon_link, author_id)
 		p_case.points = case["points"]
 		p_case.is_pretest = False
 		p_case.save()
+
+	valid_files = ZipFile(problem_data.zipfile.path).namelist()
+	ProblemDataCompiler.generate(problem, problem_data, problem.cases.order_by('order'), valid_files)
 
 
 class ProblemXMLParser:

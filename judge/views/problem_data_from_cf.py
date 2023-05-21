@@ -1,11 +1,5 @@
-import io
-import zipfile
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
-import requests
-import yaml
-from judge.models.problem import Problem, ProblemGroup
-from judge.models.problem_data import ProblemData, ProblemTestCase
 from judge.tasks.polygon import parce_task_from_polygon
 from judge.template_context import get_profile
 from judge.utils.views import TitleMixin
@@ -32,5 +26,5 @@ class NewProblemFromCFView(PermissionRequiredMixin, TitleMixin, TemplateView):
         profile_id = get_profile(request).id
         parce_task_from_polygon.delay(problem_code, problem_name, polygon_link, profile_id)
         
-        return HttpResponseRedirect("/problems")
+        return HttpResponseRedirect(f"/problem/{problem_code}/test_data")
     
