@@ -1,5 +1,6 @@
 
 import io
+import json
 from math import ceil
 import zipfile
 from celery import shared_task
@@ -8,7 +9,7 @@ from zipfile import ZipFile
 import xml.etree.ElementTree as ET
 from django.core.files.base import File
 
-from judge.models.problem import Problem, ProblemGroup
+from judge.models.problem import Problem, ProblemGroup, ProblemTranslation
 from judge.models.problem_data import ProblemData, ProblemTestCase
 from judge.models.profile import Profile
 from django.conf import settings
@@ -65,7 +66,27 @@ def parce_task_from_polygon(problem_code, problem_name, polygon_link, author_id)
 
 	valid_files = ZipFile(problem_data.zipfile.path).namelist()
 	ProblemDataCompiler.generate(problem, problem_data, problem.cases.order_by('order'), valid_files)
+ 
+	description_languages = problem_parser.get_languages()
+	descriptions = []
+	with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+		for language in description_languages:
+			problem_description_json_file = zip_ref.open(f"statements/{language}/problem-properties.json")
+			descriptions.append(json.load(problem_description_json_file))
+			problem_description_json_file.close()
+   
+	for description in descriptions:
+		language_code = polygon_language_code_to_dmoj(description['language'])
+		if language_code is None:
+			continue
 
+		translation = ProblemTranslation()
+		translation.problem = problem
+		translation.language = language_code
+		translation.name = description['name']
+		translation.description = polygon_description_to_dmoj(description)
+
+		translation.save()
 
 class ProblemXMLParser:
     def __init__(self, xml_text: str) -> None:
@@ -82,6 +103,13 @@ class ProblemXMLParser:
     def get_memory_limit(self) -> float:
         bytes = int(self.root.find("judging/testset/memory-limit").text)
         return ceil(bytes / 1000)
+    
+    def get_languages(self):
+        languages = set()
+        
+        for statement in self.root.find("statements").iter("statement"):
+            languages.add(statement.get('language'))
+        return list(languages)
     
     def get_tests(self):
         tests = []
@@ -112,3 +140,44 @@ class ProblemXMLParser:
 		}
         return res
          
+
+def polygon_language_code_to_dmoj(origin):
+    languages = {
+		"ukrainian": 'en',
+		"english": 'ru'
+	}
+    return languages.get(origin)
+
+def polygon_description_to_dmoj(description) -> str:
+    def foo_input(test):
+        return '\n    '.join(test['input'].split('\n'))
+    def foo_output(test):
+        return '\n    '.join(test['output'].split('\n'))
+    
+    def sample_to_md(case):
+        id, test = case
+        return f"""## Sample Input {id + 1}
+
+    {foo_input(test)}
+## Sample Output {id + 1}
+
+    {foo_output(test)}
+"""
+    
+    samples = '\n'.join(map(sample_to_md, enumerate(description['sampleTests'])))
+
+    return \
+    f"""{description['legend']}
+
+## Input Specification
+
+{description['input']}
+
+## Output Specification
+
+{description['output']}
+
+{samples}
+
+"""
+
