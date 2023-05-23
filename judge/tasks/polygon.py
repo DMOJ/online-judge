@@ -160,8 +160,8 @@ class ProblemXMLParser:
 
 def polygon_language_code_to_dmoj(origin):
     languages = {
-		"ukrainian": 'en',
-		"english": 'ru'
+		"ukrainian": 'uk',
+		"english": 'en'
 	}
     return languages.get(origin)
 
