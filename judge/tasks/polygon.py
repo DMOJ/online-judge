@@ -16,7 +16,7 @@ from django.conf import settings
 from judge.utils.problem_data import ProblemDataCompiler
 
 @shared_task
-def parce_task_from_polygon(problem_code, problem_name, polygon_link, author_id):
+def parce_task_from_polygon(problem_code, polygon_link, author_id):
 	response = requests.post(polygon_link, data={
 			"login": settings.POLYGON_LOGIN,
 			"password": settings.POLYGON_PASSWORD,
@@ -39,7 +39,7 @@ def parce_task_from_polygon(problem_code, problem_name, polygon_link, author_id)
 	
 	problem = Problem()
 	problem.code = problem_code
-	problem.name = problem_name
+	problem.name = problem_parser.get_problem_short_name()
 	problem.description = ""
 	problem.time_limit = problem_parser.get_time_limit()
 	problem.memory_limit = problem_parser.get_memory_limit()
