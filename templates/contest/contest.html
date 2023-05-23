@@ -27,7 +27,8 @@
 {% block body %}
     <div id="banner">
         <a href="https://www.timeanddate.com/worldclock/fixedtime.html?msg={{ contest.name|urlquote('') }}&amp;iso=
-                {{- contest.start_time|utc|date('Y-m-d\TH:i:s') }}" class="date">
+                {% if contest.start_time > now %} {{- contest.start_time|utc|date('Y-m-d\TH:i:s') }}
+                {% else %} {{- contest.end_time|utc|date('Y-m-d\TH:i:s') }} {% endif %}" class="date">
             {%- if contest.is_in_contest(request.user) and not request.participation.live -%}
                 {% if request.participation.spectate %}
                     {{- _('Spectating, contest ends in %(countdown)s.', countdown=as_countdown(contest.time_before_end)) -}}
