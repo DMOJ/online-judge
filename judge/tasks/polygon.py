@@ -8,6 +8,7 @@ import requests
 from zipfile import ZipFile
 import xml.etree.ElementTree as ET
 from django.core.files.base import File
+from django.utils.translation import activate, gettext as _
 
 from judge.models.problem import Problem, ProblemGroup, ProblemTranslation
 from judge.models.problem_data import ProblemData, ProblemTestCase
@@ -82,13 +83,15 @@ def parce_task_from_polygon(problem_code, polygon_link, author_id):
 		if language_code is None:
 			continue
 		
-		parsed_description = polygon_description_to_dmoj(description)
+		parsed_description = polygon_description_to_dmoj(description, language_code)
 
 		if language_code == 'en':
+			problem = Problem.objects.get(code=problem_code)
 			problem.name = description['name']
 			problem.description = parsed_description
 			has_description = True
-			problem.save()
+
+			problem.save(update_fields=['name', 'description'])
 
 		translation = ProblemTranslation()
 		translation.problem = problem
@@ -165,7 +168,9 @@ def polygon_language_code_to_dmoj(origin):
 	}
     return languages.get(origin)
 
-def polygon_description_to_dmoj(description) -> str:
+def polygon_description_to_dmoj(description, language) -> str:
+    activate(language)
+    
     def foo_input(test):
         return '\n    '.join(test['input'].split('\n'))
     def foo_output(test):
@@ -173,10 +178,10 @@ def polygon_description_to_dmoj(description) -> str:
     
     def sample_to_md(case):
         id, test = case
-        return f"""## Sample Input {id + 1}
+        return f"""## {_("Sample Input")} {id + 1}
 
     {foo_input(test)}
-## Sample Output {id + 1}
+## {_("Sample Output")} {id + 1}
 
     {foo_output(test)}
 """
@@ -186,11 +191,11 @@ def polygon_description_to_dmoj(description) -> str:
     return \
     f"""{description['legend']}
 
-## Input Specification
+## {_("Input Specification")}
 
 {description['input']}
 
-## Output Specification
+## {_("Output Specification")}
 
 {description['output']}
 
