@@ -75,18 +75,35 @@ def parce_task_from_polygon(problem_code, polygon_link, author_id):
 			descriptions.append(json.load(problem_description_json_file))
 			problem_description_json_file.close()
    
+	has_description = False
+	
 	for description in descriptions:
 		language_code = polygon_language_code_to_dmoj(description['language'])
 		if language_code is None:
 			continue
+		
+		parsed_description = polygon_description_to_dmoj(description)
+
+		if language_code == 'en':
+			problem.name = description['name']
+			problem.description = parsed_description
+			has_description = True
+			problem.save()
 
 		translation = ProblemTranslation()
 		translation.problem = problem
 		translation.language = language_code
 		translation.name = description['name']
-		translation.description = polygon_description_to_dmoj(description)
+		translation.description = parsed_description
 
 		translation.save()
+  
+	if not has_description:
+		language_code = polygon_language_code_to_dmoj(descriptions[0]['language'])
+		translation = ProblemTranslation.objects.get(problem=problem, language=language_code)
+		problem.name = translation.name
+		problem.description = translation.description
+		problem.save()
 
 class ProblemXMLParser:
     def __init__(self, xml_text: str) -> None:
