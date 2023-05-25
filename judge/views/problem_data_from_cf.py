@@ -24,6 +24,7 @@ class NewProblemFromCFView(PermissionRequiredMixin, TitleMixin, TemplateView):
         
         profile_id = get_profile(request).id
         parce_task_from_polygon.delay(problem_code, polygon_link, profile_id)
-        
+        # parce_task_from_polygon(problem_code, polygon_link, profile_id)
+
         return HttpResponseRedirect(f"/problem/{problem_code}/test_data")
     

@@ -25,9 +25,9 @@ def parce_task_from_polygon(problem_code, polygon_link, author_id):
 		})
 
 	author = Profile.objects.get(id=author_id)
-        
+    
 	if response.status_code != requests.codes.ok:
-		raise Exception("Cannot download file")
+		raise Exception(f"Cannot download file {polygon_link}, status: {response.status_code}")
 	
 	zip_file = io.BytesIO(response.content)
 	problem_xml = ""
@@ -104,6 +104,7 @@ def parce_task_from_polygon(problem_code, polygon_link, author_id):
 	if not has_description:
 		language_code = polygon_language_code_to_dmoj(descriptions[0]['language'])
 		translation = ProblemTranslation.objects.get(problem=problem, language=language_code)
+		problem = Problem.objects.get(code=problem_code)
 		problem.name = translation.name
 		problem.description = translation.description
 		problem.save()
