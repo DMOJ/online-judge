@@ -14,6 +14,7 @@ class ClassForm(ModelForm):
     class Meta:
         widgets = {
             'admins': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'members': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
         }
 
 
@@ -54,7 +55,7 @@ class ClassAdmin(VersionAdmin):
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj, change, **kwargs)
-        if 'organization' in form.base_fields:
+        if 'organization' in form.base_fields and not request.user.has_perm('judge.edit_all_organization'):
             form.base_fields['organization'].queryset = Organization.objects.filter(admins__id=request.profile.id)
         return form
 
