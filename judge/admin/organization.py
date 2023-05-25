@@ -14,6 +14,7 @@ class ClassForm(ModelForm):
     class Meta:
         widgets = {
             'admins': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'members': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
         }
 
 
