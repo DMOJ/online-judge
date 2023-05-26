@@ -66,7 +66,7 @@ def parse_task_from_polygon(problem_code, polygon_link, author_id):
 		problem_data = ProblemData.objects.get(problem=problem)
 		problem_data.checker = "bridged"
 		problem_data.checker_args = json.dumps({
-			"files": ["testlib.h", checker_name],
+			"files": [checker_name, "testlib.h"],
 			"lang": checker_lang,
 			"type": "testlib"
 		})
