@@ -9,7 +9,7 @@ from zipfile import ZipFile
 import xml.etree.ElementTree as ET
 from django.core.files.base import File
 from django.utils.translation import activate, gettext as _
-
+from judge.models import CHECKERS
 from judge.models.problem import Problem, ProblemGroup, ProblemTranslation
 from judge.models.problem_data import ProblemData, ProblemTestCase
 from judge.models.profile import Profile
@@ -54,6 +54,20 @@ def parce_task_from_polygon(problem_code, polygon_link, author_id):
 	problem_data.problem = problem
 	problem_data.zipfile.save('problem.zip', File(zip_file))
 	problem_data.save()
+	
+	with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+		checker_name = problem_parser.get_checker_name()
+		checker_lang = problem_parser.get_checker_lang()
+  
+		zip_ref.extract(checker_name, f"{settings.DMOJ_PROBLEM_DATA_ROOT}/{problem_code}")
+		zip_ref.extract("files/testlib.h", f"{settings.DMOJ_PROBLEM_DATA_ROOT}/{problem_code}")
+		problem_data = ProblemData.objects.get(problem=problem)
+		problem_data.checker = "bridget"
+		problem_data.checker_args = json.dumps({
+			"files": ["testlib.h", checker_name],
+			"lang": checker_lang,
+			"type": "testlib"
+		})
 	
 	for i, case in enumerate(problem_parser.get_tests()):
 		p_case = ProblemTestCase()
@@ -123,7 +137,7 @@ class ProblemXMLParser:
     
     def get_memory_limit(self) -> float:
         bytes = int(self.root.find("judging/testset/memory-limit").text)
-        return ceil(bytes / 1000)
+        return ceil(bytes / 1024)
     
     def get_languages(self):
         languages = set()
@@ -153,6 +167,14 @@ class ProblemXMLParser:
 				})
             
         return tests
+    
+    def get_checker_name(self):
+        return self.root.find("assets/checker/copy").get("path")
+    
+    def get_checker_lang(self):
+        lang_type = self.root.find("assets/checker/source").get("type")
+        return "CPP20"
+    
     
     def get_yaml_dict(self):
         res = {
