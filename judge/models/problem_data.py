@@ -28,7 +28,7 @@ CHECKERS = (
     ('sorted', _('Sorted')),
     ('identical', _('Byte identical')),
     ('linecount', _('Line-by-line')),
-    ('bridget', _('Bridget')),
+    ('bridged', _('Bridged')),
 )
 
 

@@ -62,7 +62,7 @@ def parse_task_from_polygon(problem_code, polygon_link, author_id):
 		zip_ref.extract(checker_name, f"{settings.DMOJ_PROBLEM_DATA_ROOT}/{problem_code}")
 		zip_ref.extract("files/testlib.h", f"{settings.DMOJ_PROBLEM_DATA_ROOT}/{problem_code}")
 		problem_data = ProblemData.objects.get(problem=problem)
-		problem_data.checker = "bridget"
+		problem_data.checker = "bridged"
 		problem_data.checker_args = json.dumps({
 			"files": ["testlib.h", checker_name],
 			"lang": checker_lang,
