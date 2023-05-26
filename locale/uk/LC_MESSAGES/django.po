@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-21 00:48+0000\n"
-"PO-Revision-Date: 2023-05-25 20:03+0300\n"
+"PO-Revision-Date: 2023-05-26 16:21+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -191,7 +191,7 @@ msgstr "Доступ"
 
 #: judge/admin/contest.py:131 judge/admin/problem.py:136
 msgid "Justice"
-msgstr ""
+msgstr "Справедливість"
 
 #: judge/admin/contest.py:229
 #, python-format
@@ -481,13 +481,13 @@ msgstr "Перетестувати вибрані розв'язки"
 #, python-format
 msgid "%d submission was successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%d розв'язок було успішно оцінено."
+msgstr[1] "%d розв'язки було успішно оцінено."
+msgstr[2] "%d розв'язків було успішно оцінено."
 
 #: judge/admin/submission.py:207
 msgid "Rescore the selected submissions"
-msgstr ""
+msgstr "Оцінити вибрані розв'язки"
 
 #: judge/admin/submission.py:211
 msgid "Problem code"
@@ -870,7 +870,7 @@ msgstr "коментарі"
 #: judge/models/problem.py:547
 #, python-format
 msgid "Editorial for %s"
-msgstr ""
+msgstr "Редагування %s"
 
 #: judge/models/comment.py:169
 #, python-format
@@ -891,11 +891,11 @@ msgstr ""
 
 #: judge/models/comment.py:203
 msgid "comment lock"
-msgstr ""
+msgstr "коментар заблокоавно"
 
 #: judge/models/comment.py:204
 msgid "comment locks"
-msgstr ""
+msgstr "коментарі заблоковано"
 
 #: judge/models/contest.py:28
 msgid "Invalid colour."
@@ -1146,16 +1146,18 @@ msgid ""
 "set during a contest, then unset prior to rejudging user submissions when "
 "the contest ends."
 msgstr ""
+"Чи сервер повинен оцінювати тільки претести, чи і тести теж. Зазвичай "
+"використовується під час змагань, потім знімається для перетестування."
 
 #: judge/models/contest.py:135
 msgid "show short form settings display"
-msgstr ""
+msgstr "показувати обмеженні налаштування"
 
 #: judge/models/contest.py:136
 msgid ""
 "Whether to show a section containing contest settings on the contest page or "
 "not."
-msgstr ""
+msgstr "Чи буде на сторінці змагання відображатися короткі налаштування."
 
 #: judge/models/contest.py:139 judge/models/problem.py:180
 msgid "private to organizations"
@@ -1168,19 +1170,19 @@ msgstr "організації"
 
 #: judge/models/contest.py:141
 msgid "If non-empty, only these organizations may see the contest."
-msgstr ""
+msgstr "Ці організації зможуть переглядати змагання."
 
 #: judge/models/contest.py:142
 msgid "limit organizations that can join"
-msgstr ""
+msgstr "обмежити список організацій, що можуть приєднатися"
 
 #: judge/models/contest.py:143
 msgid "join organizations"
-msgstr ""
+msgstr "приєднати організації"
 
 #: judge/models/contest.py:144
 msgid "If non-empty, only these organizations may join the contest."
-msgstr ""
+msgstr "Якщо не пусто, тільки ці організації можуть приєднуватися."
 
 #: judge/models/contest.py:146 judge/models/profile.py:143
 msgid "classes"
@@ -1198,7 +1200,7 @@ msgstr "Зображення OpenGraph"
 
 #: judge/models/contest.py:149 judge/models/profile.py:58
 msgid "logo override image"
-msgstr ""
+msgstr "логотип"
 
 #: judge/models/contest.py:151
 msgid ""
@@ -1236,7 +1238,7 @@ msgstr "персона нон-ґрату"
 
 #: judge/models/contest.py:161
 msgid "Bans the selected users from joining this contest."
-msgstr ""
+msgstr "Забороняє зазначеним користувачам брати участь."
 
 #: judge/models/contest.py:162
 msgid "contest format"
@@ -1248,7 +1250,7 @@ msgstr ""
 
 #: judge/models/contest.py:164
 msgid "contest format configuration"
-msgstr ""
+msgstr "конфігурація формату змагання"
 
 #: judge/models/contest.py:165
 msgid ""
@@ -1256,6 +1258,9 @@ msgid ""
 "module. Leave empty to use None. Exact format depends on the contest format "
 "selected."
 msgstr ""
+"JSON об'єкт використовується, як конфігурація формату обраного змагання. "
+"Залиште пустим, щоб не застосовувати. Формат об'єкта відрізняється від "
+"формату змагання."
 
 #: judge/models/contest.py:168
 msgid "contest problem label script"
@@ -1275,7 +1280,7 @@ msgstr "заблокувати змагання"
 #: judge/models/contest.py:173
 msgid ""
 "Prevent submissions from this contest from being rejudged after this date."
-msgstr ""
+msgstr "Заборонити перетестовувати рішення після цього дня."
 
 #: judge/models/contest.py:175
 msgid "precision points"
@@ -1349,7 +1354,7 @@ msgstr "результат"
 
 #: judge/models/contest.py:494
 msgid "cumulative time"
-msgstr ""
+msgstr "сумарний час"
 
 #: judge/models/contest.py:495
 msgid "is disqualified"
@@ -1369,11 +1374,11 @@ msgstr ""
 
 #: judge/models/contest.py:499
 msgid "0 means non-virtual, otherwise the n-th virtual participation."
-msgstr ""
+msgstr "0 означає не віртуальний, а число n-тий віртуальний."
 
 #: judge/models/contest.py:500
 msgid "contest format specific data"
-msgstr ""
+msgstr "специфічний формат змагання"
 
 #: judge/models/contest.py:568
 #, python-format
@@ -1471,7 +1476,7 @@ msgstr "рейтинг"
 
 #: judge/models/contest.py:629
 msgid "raw rating"
-msgstr ""
+msgstr "необроблений рейтинг"
 
 #: judge/models/contest.py:630
 msgid "contest performance"
@@ -1487,7 +1492,7 @@ msgstr "рейтинг змагання"
 
 #: judge/models/contest.py:636
 msgid "contest ratings"
-msgstr ""
+msgstr "рейтинги змагання"
 
 #: judge/models/contest.py:655
 msgid "contest moss result"
@@ -1507,19 +1512,19 @@ msgstr "значення"
 
 #: judge/models/interface.py:24
 msgid "configuration item"
-msgstr ""
+msgstr "конфігурація"
 
 #: judge/models/interface.py:25
 msgid "miscellaneous configuration"
-msgstr ""
+msgstr "інші налаштування"
 
 #: judge/models/interface.py:37
 msgid "navigation item"
-msgstr ""
+msgstr "пункт меню сайту"
 
 #: judge/models/interface.py:38
 msgid "navigation bar"
-msgstr ""
+msgstr "меню сайту"
 
 #: judge/models/interface.py:44
 msgid "identifier"
@@ -1531,7 +1536,7 @@ msgstr "надпис"
 
 #: judge/models/interface.py:47
 msgid "highlight regex"
-msgstr "виділити regex"
+msgstr "regex виділення"
 
 #: judge/models/interface.py:48
 msgid "parent item"
@@ -1551,7 +1556,7 @@ msgstr "публічна видимість"
 
 #: judge/models/interface.py:70
 msgid "sticky"
-msgstr ""
+msgstr "прикрплене"
 
 #: judge/models/interface.py:71
 msgid "publish after"
@@ -1678,7 +1683,7 @@ msgstr "код задачі"
 #: judge/models/problem.py:119
 msgid "A short, unique code for the problem, used in the URL after /problem/"
 msgstr ""
-"Короткий унікальний код задачі (використовується в URL після  /problem/)"
+"Короткий унікальний код задачі (використовується в URL після /problem/)"
 
 #: judge/models/problem.py:120
 msgid "problem name"
@@ -1717,7 +1722,7 @@ msgstr "Тип задачі, як написано у списку задач."
 
 #: judge/models/problem.py:135
 msgid "The group of problem, shown under Category in the problem list."
-msgstr ""
+msgstr "Група задач, що мають певну категорію у списку задач."
 
 #: judge/models/problem.py:137
 msgid ""
@@ -1761,11 +1766,11 @@ msgstr "Список дозволених мов програмування."
 
 #: judge/models/problem.py:155
 msgid "manually managed"
-msgstr ""
+msgstr "ручне управління"
 
 #: judge/models/problem.py:156
 msgid "Whether judges should be allowed to manage data or not."
-msgstr ""
+msgstr "Чи дозволено серверам тестування керувати інформацією."
 
 #: judge/models/problem.py:157
 msgid "date of publishing"
@@ -1940,7 +1945,7 @@ msgstr "час голосування"
 
 #: judge/models/problem.py:578
 msgid "The time this vote was cast."
-msgstr ""
+msgstr "Час коли голос було отримано."
 
 #: judge/models/problem.py:580
 msgid "note"
@@ -1956,7 +1961,7 @@ msgstr ""
 
 #: judge/models/problem.py:585
 msgid "problem votes"
-msgstr ""
+msgstr "oцінки задач"
 
 #: judge/models/problem.py:588
 #, python-format
@@ -2085,19 +2090,19 @@ msgstr "назва організації"
 
 #: judge/models/profile.py:43
 msgid "organization slug"
-msgstr ""
+msgstr "адреса сторінки організації"
 
 #: judge/models/profile.py:44
 msgid "Organization name shown in URLs."
-msgstr ""
+msgstr "Назва організації вказана у адресі сторінки."
 
 #: judge/models/profile.py:46
 msgid "Displayed beside user name during contests."
-msgstr ""
+msgstr "Відображається поміж логінами користувачів під час змагання."
 
 #: judge/models/profile.py:47
 msgid "organization description"
-msgstr ""
+msgstr "опис організації"
 
 #: judge/models/profile.py:48 judge/models/profile.py:112
 msgid "administrators"
@@ -2105,7 +2110,7 @@ msgstr "адміністратори"
 
 #: judge/models/profile.py:49
 msgid "Those who can edit this organization."
-msgstr ""
+msgstr "Ті, хто можуть редагувати цю організацію."
 
 #: judge/models/profile.py:50
 msgid "creation date"
@@ -2278,7 +2283,7 @@ msgstr "Користувачу не буде переобраховуватис�
 
 #: judge/models/profile.py:172
 msgid "banned from voting on problem point values"
-msgstr ""
+msgstr "заборонено голосувати за бали до цієї задачі"
 
 #: judge/models/profile.py:173
 msgid "User will not be able to vote on problems' point values."
@@ -2428,44 +2433,44 @@ msgstr ""
 
 #: judge/models/profile.py:365
 msgid "request time"
-msgstr ""
+msgstr "час запиту"
 
 #: judge/models/profile.py:366
 msgid "state"
-msgstr ""
+msgstr "стан"
 
 #: judge/models/profile.py:367 templates/organization/requests/tabs.html:4
 msgid "Pending"
-msgstr ""
+msgstr "В очікуванні"
 
 #: judge/models/profile.py:368 templates/organization/requests/tabs.html:10
 msgid "Approved"
-msgstr ""
+msgstr "Погоджено"
 
 #: judge/models/profile.py:369 templates/organization/requests/tabs.html:13
 msgid "Rejected"
-msgstr ""
+msgstr "Відхилено"
 
 #: judge/models/profile.py:372
 msgid "reason"
-msgstr ""
+msgstr "причина"
 
 #: judge/models/profile.py:381
 msgid "organization join request"
-msgstr ""
+msgstr "запит на приєднання організації"
 
 #: judge/models/profile.py:382
 msgid "organization join requests"
-msgstr ""
+msgstr "запити на приєднання організацій"
 
 #: judge/models/runtime.py:19
 msgid "short identifier"
-msgstr "короткий індетифікатор"
+msgstr "коротке ID"
 
 #: judge/models/runtime.py:20
 msgid ""
 "The identifier for this language; the same as its executor id for judges."
-msgstr ""
+msgstr "ID мови, аналогічний до того, який вказаний на сервері тестування."
 
 #: judge/models/runtime.py:22
 msgid "long name"
@@ -2480,6 +2485,8 @@ msgid ""
 "More readable, but short, name to display publicly; e.g. \"PY2\" or \"C+"
 "+11\". If left blank, it will default to the short identifier."
 msgstr ""
+"Більш читабельне, але не коротке, ім'я для публічного висвітлення; Наприклад "
+"\"PY2\" чи \"C++11\". Залиште пустим, зоб використовувати коротку форму."
 
 #: judge/models/runtime.py:29
 msgid "common name"
@@ -2509,7 +2516,7 @@ msgstr ""
 
 #: judge/models/runtime.py:36
 msgid "Language ID for Pygments highlighting in source windows."
-msgstr ""
+msgstr "ID мови для правильної підсвітки у вікні перегляду коду."
 
 #: judge/models/runtime.py:37
 msgid "code template"
@@ -2573,11 +2580,11 @@ msgstr ""
 
 #: judge/models/runtime.py:124
 msgid "judge name"
-msgstr ""
+msgstr "назва сервера"
 
 #: judge/models/runtime.py:124
 msgid "Server name, hostname-style."
-msgstr ""
+msgstr "Назва сервера, стиль назви хоста."
 
 #: judge/models/runtime.py:126
 msgid "time of creation"
@@ -2585,29 +2592,29 @@ msgstr "час створення"
 
 #: judge/models/runtime.py:127
 msgid "A key to authenticate this judge."
-msgstr ""
+msgstr "Ключ для підключення сервера тестування."
 
 #: judge/models/runtime.py:128
 msgid "authentication key"
-msgstr ""
+msgstr "ключ автенфікації"
 
 #: judge/models/runtime.py:129
 msgid "block judge"
-msgstr ""
+msgstr "заблокувати сервер"
 
 #: judge/models/runtime.py:130
 msgid ""
 "Whether this judge should be blocked from connecting, even if its key is "
 "correct."
-msgstr ""
+msgstr "Чи цей сервер має бути заблокований, навіть якщо ключ вірний."
 
 #: judge/models/runtime.py:132
 msgid "disable judge"
-msgstr ""
+msgstr "відключити сервер тестування"
 
 #: judge/models/runtime.py:133
 msgid "Whether this judge should be removed from judging queue."
-msgstr ""
+msgstr "Виключити цей сервер із черги."
 
 #: judge/models/runtime.py:134
 msgid "judge online status"
@@ -2615,11 +2622,11 @@ msgstr "статус сервера перевірки"
 
 #: judge/models/runtime.py:135
 msgid "judge start time"
-msgstr ""
+msgstr "час запуску сервера тестування"
 
 #: judge/models/runtime.py:136
 msgid "response time"
-msgstr ""
+msgstr "час відповіді"
 
 #: judge/models/runtime.py:137
 msgid "system load"
@@ -2628,6 +2635,8 @@ msgstr "системне навантаження"
 #: judge/models/runtime.py:138
 msgid "Load for the last minute, divided by processors to be fair."
 msgstr ""
+"Навантаження протягом останньої хвилини було поділено рівномірно між "
+"серверами."
 
 #: judge/models/runtime.py:140
 msgid "last connected IP"
@@ -2639,7 +2648,7 @@ msgstr "судді"
 
 #: judge/models/runtime.py:190
 msgid "judge"
-msgstr ""
+msgstr "суддя"
 
 #: judge/models/submission.py:22 judge/models/submission.py:50
 #: judge/utils/problems.py:66
@@ -2660,15 +2669,15 @@ msgstr "Перевищено обмеження пам'яті"
 
 #: judge/models/submission.py:26 judge/models/submission.py:55
 msgid "Output Limit Exceeded"
-msgstr ""
+msgstr "Перевищено об'єм вихідних даних"
 
 #: judge/models/submission.py:27 judge/models/submission.py:56
 msgid "Invalid Return"
-msgstr ""
+msgstr "Некоректне значення, що повертається"
 
 #: judge/models/submission.py:28 judge/models/submission.py:57
 msgid "Runtime Error"
-msgstr ""
+msgstr "Помилка виконання"
 
 #: judge/models/submission.py:29 judge/models/submission.py:44
 #: judge/models/submission.py:58 judge/utils/problems.py:68
@@ -2677,7 +2686,7 @@ msgstr "Помилка компіляції"
 
 #: judge/models/submission.py:30 judge/models/submission.py:43
 msgid "Internal Error"
-msgstr ""
+msgstr "Внутрішня помилка"
 
 #: judge/models/submission.py:31 judge/models/submission.py:52
 msgid "Short Circuited"
@@ -2706,7 +2715,7 @@ msgstr "Завершено"
 
 #: judge/models/submission.py:59
 msgid "Internal Error (judging server error)"
-msgstr ""
+msgstr "Внутрішня помилка сервера (помилка сервера тестування)"
 
 #: judge/models/submission.py:69
 msgid "submission time"
@@ -2738,7 +2747,7 @@ msgstr "результат"
 
 #: judge/models/submission.py:77
 msgid "compile errors"
-msgstr ""
+msgstr "помилки компіляції"
 
 #: judge/models/submission.py:79
 msgid "batched cases"
@@ -2746,11 +2755,11 @@ msgstr ""
 
 #: judge/models/submission.py:80
 msgid "test case points"
-msgstr ""
+msgstr "бали за тест"
 
 #: judge/models/submission.py:81
 msgid "test case total points"
-msgstr ""
+msgstr "кінцевий бал за тест"
 
 #: judge/models/submission.py:82
 msgid "judged on"
@@ -2758,19 +2767,19 @@ msgstr "протестовано на"
 
 #: judge/models/submission.py:84
 msgid "submission judge time"
-msgstr ""
+msgstr "час тестування"
 
 #: judge/models/submission.py:85
 msgid "last rejudge date by admin"
-msgstr ""
+msgstr "востаннє протестовано одміністратором"
 
 #: judge/models/submission.py:86
 msgid "was ran on pretests only"
-msgstr ""
+msgstr "було протестовано тільки на претестах"
 
 #: judge/models/submission.py:89
 msgid "submission lock"
-msgstr ""
+msgstr "заблокувати розв'язок"
 
 #: judge/models/submission.py:197
 #, python-format
@@ -2779,19 +2788,19 @@ msgstr "Розв'язок %(id)d задачі %(problem)s користувача
 
 #: judge/models/submission.py:222
 msgid "Abort any submission"
-msgstr ""
+msgstr "Відхилити будь-який розв'язок"
 
 #: judge/models/submission.py:223
 msgid "Rejudge the submission"
-msgstr ""
+msgstr "Перетестувати спробу"
 
 #: judge/models/submission.py:224
 msgid "Rejudge a lot of submissions"
-msgstr ""
+msgstr "Перетестувати кілька спроб"
 
 #: judge/models/submission.py:225
 msgid "Submit without limit"
-msgstr ""
+msgstr "Надіслати без обмежень"
 
 #: judge/models/submission.py:226
 msgid "View all submission"
@@ -2811,7 +2820,7 @@ msgstr "розв'язки"
 
 #: judge/models/submission.py:235 judge/models/submission.py:251
 msgid "associated submission"
-msgstr ""
+msgstr "пов'язані відправки"
 
 #: judge/models/submission.py:237
 msgid "source code"
@@ -2820,7 +2829,7 @@ msgstr "код"
 #: judge/models/submission.py:240
 #, python-format
 msgid "Source of %(submission)s"
-msgstr ""
+msgstr "Код %(submission)s"
 
 #: judge/models/submission.py:243
 msgid "submission source"
@@ -2828,11 +2837,11 @@ msgstr "код спроби"
 
 #: judge/models/submission.py:244
 msgid "submission sources"
-msgstr ""
+msgstr "коди спроб"
 
 #: judge/models/submission.py:253
 msgid "test case ID"
-msgstr ""
+msgstr "ID тесту"
 
 #: judge/models/submission.py:254
 msgid "status flag"
@@ -2848,11 +2857,11 @@ msgstr ""
 
 #: judge/models/submission.py:260
 msgid "judging feedback"
-msgstr ""
+msgstr "відгук системи тестування"
 
 #: judge/models/submission.py:261
 msgid "extended judging feedback"
-msgstr ""
+msgstr "розширити відгук сервера тестування"
 
 #: judge/models/submission.py:262
 msgid "program output"
@@ -2860,19 +2869,19 @@ msgstr "вивід програми"
 
 #: judge/models/submission.py:276
 msgid "submission test case"
-msgstr ""
+msgstr "тест"
 
 #: judge/models/submission.py:277
 msgid "submission test cases"
-msgstr ""
+msgstr "тести"
 
 #: judge/models/ticket.py:10
 msgid "ticket title"
-msgstr ""
+msgstr "назва завдання"
 
 #: judge/models/ticket.py:11
 msgid "ticket creator"
-msgstr ""
+msgstr "автор завдання"
 
 #: judge/models/ticket.py:13
 msgid "creation time"
@@ -2880,7 +2889,7 @@ msgstr ""
 
 #: judge/models/ticket.py:14
 msgid "assignees"
-msgstr ""
+msgstr "призначений"
 
 #: judge/models/ticket.py:16
 msgid "quick notes"
@@ -2900,41 +2909,41 @@ msgstr ""
 
 #: judge/models/ticket.py:22
 msgid "is ticket open?"
-msgstr ""
+msgstr "завдання відкрите?"
 
 #: judge/models/ticket.py:25 judge/models/ticket.py:30
 msgid "ticket"
-msgstr ""
+msgstr "завдання"
 
 #: judge/models/ticket.py:26
 msgid "tickets"
-msgstr ""
+msgstr "завдання"
 
 #: judge/models/ticket.py:34
 msgid "message body"
-msgstr ""
+msgstr "текст повідомлення"
 
 #: judge/models/ticket.py:35
 msgid "message time"
-msgstr ""
+msgstr "час повідомлення"
 
 #: judge/models/ticket.py:38
 msgid "ticket message"
-msgstr ""
+msgstr "текст завдання"
 
 #: judge/models/ticket.py:39
 msgid "ticket messages"
-msgstr ""
+msgstr "текст завдань"
 
 #: judge/pdf_problems.py:148 judge/pdf_problems.py:199
 #: judge/pdf_problems.py:266
 msgid "Page [page] of [topage]"
-msgstr ""
+msgstr "Сторінка [page] з [topage]"
 
 #: judge/pdf_problems.py:288
 #, python-format
 msgid "Page %s of %s"
-msgstr ""
+msgstr "Сторінка %s з %s"
 
 #: judge/ratings.py:194
 msgid "Newbie"
@@ -2978,7 +2987,7 @@ msgstr ""
 
 #: judge/tasks/submission.py:60
 msgid "Recalculating user points"
-msgstr ""
+msgstr "Переобчислення балів користувача"
 
 #: judge/tasks/user.py:49
 msgid "Applying filters"
@@ -2994,7 +3003,7 @@ msgstr ""
 
 #: judge/utils/problem_data.py:63
 msgid "Empty batches not allowed."
-msgstr ""
+msgstr "Пусті душки заборонені."
 
 #: judge/utils/problem_data.py:82
 #, python-format
@@ -3009,7 +3018,7 @@ msgstr ""
 #: judge/utils/problem_data.py:90
 #, python-format
 msgid "Output file for case %d does not exist: %s"
-msgstr ""
+msgstr "Вихідного файлу для тесту № %d не існує: %s"
 
 #: judge/utils/problem_data.py:115
 #, python-format
@@ -3043,7 +3052,7 @@ msgstr "Помилка"
 
 #: judge/utils/pwned.py:109
 msgid "This password is too common."
-msgstr ""
+msgstr "Пароль надто поширений."
 
 #: judge/utils/pwned.py:112
 msgid "Your password can't be a commonly used password."
@@ -3110,7 +3119,7 @@ msgstr "Ви вже проголосували."
 
 #: judge/views/comment.py:134 judge/views/organization.py:359
 msgid "Edited from site"
-msgstr ""
+msgstr "Відредаговано через сайт"
 
 #: judge/views/comment.py:155
 msgid "Editing comment"
@@ -3119,12 +3128,12 @@ msgstr "Редагування кометарю"
 #: judge/views/contests.py:58 judge/views/contests.py:231
 #: judge/views/contests.py:234 judge/views/contests.py:439
 msgid "No such contest"
-msgstr ""
+msgstr "Нема такого змагання"
 
 #: judge/views/contests.py:59 judge/views/contests.py:232
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
-msgstr ""
+msgstr "Н вдалось знайти змагання з ключем \"%s\"."
 
 #: judge/views/contests.py:72
 msgid "Contests"
@@ -3146,26 +3155,27 @@ msgstr "Дублювати змагання"
 #: judge/views/contests.py:317
 #, python-format
 msgid "Cloned contest from %s"
-msgstr ""
+msgstr "Змагання склоновано з %s"
 
 #: judge/views/contests.py:353
 msgid "Contest not ongoing"
-msgstr ""
+msgstr "Змагання не відбувається зараз"
 
 #: judge/views/contests.py:354
 #, python-format
 msgid "\"%s\" is not currently ongoing."
-msgstr ""
+msgstr "\"%s\" не відбувається зараз."
 
 #: judge/views/contests.py:359
 msgid "Banned from joining"
-msgstr ""
+msgstr "Заборонено приєднання"
 
 #: judge/views/contests.py:360
 msgid ""
 "You have been declared persona non grata for this contest. You are "
 "permanently barred from joining this contest."
 msgstr ""
+"Ви в списику персон нон-ґрата на це змагання. Вам заборонене приєднання."
 
 #: judge/views/contests.py:390
 msgid "Cannot enter"
@@ -3183,7 +3193,7 @@ msgstr "Уведіть код доступу для \"%s\""
 #: judge/views/contests.py:440
 #, python-format
 msgid "You are not in contest \"%s\"."
-msgstr ""
+msgstr "Ви не берете участь у \"%s\"."
 
 #: judge/views/contests.py:498
 #, python-format
@@ -3202,7 +3212,7 @@ msgstr "%s Статистика"
 #: judge/views/contests.py:730
 #, python-format
 msgid "%s Rankings"
-msgstr ""
+msgstr "%s Рейтинг"
 
 #: judge/views/contests.py:738
 msgid "???"
@@ -3216,7 +3226,7 @@ msgstr "Ваша участь у %(contest)s"
 #: judge/views/contests.py:755
 #, python-format
 msgid "%(user)s's participation in %(contest)s"
-msgstr ""
+msgstr "участь користувача %(user)s у %(contest)s"
 
 #: judge/views/contests.py:764
 msgid "Live"
@@ -3263,20 +3273,20 @@ msgstr "пошкоджена сторінка \"%s\""
 #: judge/views/language.py:12 templates/status/judge-status-table.html:10
 #: templates/status/status-tabs.html:5
 msgid "Runtimes"
-msgstr ""
+msgstr "Тестування"
 
 #: judge/views/organization.py:52 judge/views/organization.py:55
 msgid "No such organization"
-msgstr ""
+msgstr "Не існує такої організації"
 
 #: judge/views/organization.py:53
 #, python-format
 msgid "Could not find an organization with the key \"%s\"."
-msgstr ""
+msgstr "Не вдалось знайти організацію з ключем \"%s\"."
 
 #: judge/views/organization.py:56
 msgid "Could not find such organization."
-msgstr ""
+msgstr "Не вдалось знайти організацію."
 
 #: judge/views/organization.py:81 judge/views/register.py:33
 #: templates/user/user-list-tabs.html:5
@@ -3286,12 +3296,12 @@ msgstr "Організації"
 #: judge/views/organization.py:118
 #, python-format
 msgid "%s Members"
-msgstr ""
+msgstr "%s Користувачів"
 
 #: judge/views/organization.py:142 judge/views/organization.py:145
 #: judge/views/organization.py:150
 msgid "Joining organization"
-msgstr ""
+msgstr "Приєднання до організації"
 
 #: judge/views/organization.py:142
 msgid "You are already in the organization."
@@ -3327,49 +3337,49 @@ msgstr "Зробити запит на вступ до %s"
 
 #: judge/views/organization.py:224
 msgid "Join request detail"
-msgstr ""
+msgstr "Деталі запиту на приєднання"
 
 #: judge/views/organization.py:263
 #, python-format
 msgid "Managing join requests for %s"
-msgstr ""
+msgstr "Перегляд запиту на приєднання %s"
 
 #: judge/views/organization.py:295
 #, python-format
 msgid "Your organization can only receive %d more member."
 msgid_plural "Your organization can only receive %d more members."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ваша організація зможе прийняти ще %d учасника."
+msgstr[1] "Ваша організація зможе прийняти ще %d учасників."
+msgstr[2] "Ваша організація зможе прийняти ще %d учасників."
 
 #: judge/views/organization.py:297
 #, python-format
 msgid "You cannot approve %d user."
 msgid_plural "You cannot approve %d users."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ви не можете підтвердити %d користувача."
+msgstr[1] "Ви не можете підтвердити %d користувачів."
+msgstr[2] "Ви не можете підтвердити %d користувачів."
 
 #: judge/views/organization.py:312
 #, python-format
 msgid "Approved %d user."
 msgid_plural "Approved %d users."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Підтверджено %d користувача."
+msgstr[1] "Підтверджено %d користувачів."
+msgstr[2] "Підтверджено %d користувачів."
 
 #: judge/views/organization.py:313
 #, python-format
 msgid "Rejected %d user."
 msgid_plural "Rejected %d users."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Відхилено приєднання %d користувача."
+msgstr[1] "Відхилено приєднання %d користувачів."
+msgstr[2] "Відхилено приєднання %d користувачів."
 
 #: judge/views/organization.py:343
 #, python-format
 msgid "Editing %s"
-msgstr ""
+msgstr "Редагування %s"
 
 #: judge/views/organization.py:367 judge/views/organization.py:375
 msgid "Can't edit organization"
@@ -3385,7 +3395,7 @@ msgstr "Вам не можна видаляти людей із організа
 
 #: judge/views/organization.py:381 judge/views/organization.py:385
 msgid "Can't kick user"
-msgstr ""
+msgstr "Не вдалося вигнати користувача"
 
 #: judge/views/organization.py:382
 msgid "The user you are trying to kick does not exist!"
@@ -3411,11 +3421,11 @@ msgstr "Група {name} - {organization}"
 #: judge/views/organization.py:457
 #, python-brace-format
 msgid "Request to join {name} in {organization}"
-msgstr ""
+msgstr "Запит на приєднання {name} до {organization}"
 
 #: judge/views/problem.py:72
 msgid "No such problem"
-msgstr ""
+msgstr "Не існує такої задачі"
 
 #: judge/views/problem.py:73
 #, python-format
@@ -3425,11 +3435,11 @@ msgstr "Не вдалося знайти задачу із кодом \"%s\"."
 #: judge/views/problem.py:115 judge/views/problem.py:118
 #, python-brace-format
 msgid "Editorial for {0}"
-msgstr ""
+msgstr "Розбір для {0}"
 
 #: judge/views/problem.py:138
 msgid "No such editorial"
-msgstr ""
+msgstr "Не існує такого розбору"
 
 #: judge/views/problem.py:139
 #, python-format
@@ -3438,11 +3448,11 @@ msgstr "Не вдалося знайти розбір із кодом \"%s\"."
 
 #: judge/views/problem.py:240
 msgid "Not allowed to vote on this problem."
-msgstr ""
+msgstr "Заборонено голосувати за цю задачу."
 
 #: judge/views/problem.py:263
 msgid "Not allowed to delete votes on this problem."
-msgstr ""
+msgstr "Заборонено видаляти голоси для цієї задачі."
 
 #: judge/views/problem.py:266
 msgid "success"
@@ -3451,25 +3461,27 @@ msgstr "успіх"
 #: judge/views/problem.py:654 judge/views/problem.py:662
 #, python-format
 msgid "Submit to %s"
-msgstr ""
+msgstr "Здати %s"
 
 #: judge/views/problem.py:707
 msgid "You submitted too many submissions."
-msgstr ""
+msgstr "Ви надіслали за багато розв'язків."
 
 #: judge/views/problem.py:711
 msgid "Banned from submitting"
-msgstr ""
+msgstr "Вам заборонено надсилання"
 
 #: judge/views/problem.py:712
 msgid ""
 "You have been declared persona non grata for this problem. You are "
 "permanently barred from submitting to this problem."
 msgstr ""
+"Ви були оголошені персоною нон-ґрата для цієї задачі. Вам заборонено "
+"надсилати розв'язки до цієї задачі на постійній основі."
 
 #: judge/views/problem.py:716
 msgid "Too many submissions"
-msgstr ""
+msgstr "Забагато розв'язків"
 
 #: judge/views/problem.py:717
 msgid "You have exceeded the submission limit for this problem."
@@ -3533,15 +3545,15 @@ msgstr ""
 #: judge/views/problem_manage.py:111
 #, python-format
 msgid "Rescoring all submissions for %s..."
-msgstr ""
+msgstr "Змінення оцінок усіх розв'язків для задачі %s..."
 
 #: judge/views/problem_manage.py:120
 #, python-format
 msgid "Successfully scheduled %d submission for rejudging."
 msgid_plural "Successfully scheduled %d submissions for rejudging."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Успішно заплановано повторне тестування %d розв'язку."
+msgstr[1] "Успішно заплановано повторне тестування %d розв'язків."
+msgstr[2] "Успішно заплановано повторне тестування %d розв'язків."
 
 #: judge/views/ranked_submission.py:68 judge/views/ranked_submission.py:71
 #, python-format
@@ -3551,12 +3563,12 @@ msgstr "Найкращий розв'язок %s"
 #: judge/views/ranked_submission.py:85 judge/views/ranked_submission.py:94
 #, python-format
 msgid "Best solutions for %(problem)s in %(contest)s"
-msgstr ""
+msgstr "Найкращий розв'язок %(problem)s на змаганні %(contest)s"
 
 #: judge/views/ranked_submission.py:88 judge/views/ranked_submission.py:100
 #, python-format
 msgid "Best solutions for problem %(number)s in %(contest)s"
-msgstr ""
+msgstr "Найкращий розв'язок для задачі %(number)s на змаганні %(contest)s"
 
 #: judge/views/register.py:26
 msgid "A username must contain letters, numbers, or underscores."
@@ -3564,7 +3576,7 @@ msgstr "Логін має містити літери, цифри та підк�
 
 #: judge/views/register.py:30
 msgid "Preferred language"
-msgstr ""
+msgstr "Мова, якій надаю перевагу"
 
 #: judge/views/register.py:37
 msgid "Subscribe to newsletter?"
@@ -3576,12 +3588,16 @@ msgid ""
 "The email address \"%s\" is already taken. Only one registration is allowed "
 "per address."
 msgstr ""
+"На адресу \"%s\" вже зареєстрований обліковий запис. Реєстрація двох записів "
+"на одну пошту категорично заборонена."
 
 #: judge/views/register.py:50
 msgid ""
 "Your email provider is not allowed due to history of abuse. Please use a "
 "reputable email provider."
 msgstr ""
+"Ваша поштова адреса належить провайдеру з поганою репутацією. Будь ласка, "
+"використовуйте пошту від надійних провайдерів."
 
 #: judge/views/register.py:65
 msgid "Register"
@@ -3589,11 +3605,11 @@ msgstr "Зареєструватись"
 
 #: judge/views/register.py:103
 msgid "Activation Key Invalid"
-msgstr ""
+msgstr "Некоректний ключ активації"
 
 #: judge/views/register.py:114
 msgid "Authentication failure"
-msgstr ""
+msgstr "Помилка аутенфікації"
 
 #: judge/views/stats.py:23
 msgid "Other"
@@ -3609,7 +3625,7 @@ msgstr "Стан"
 
 #: judge/views/status.py:108
 msgid "Version matrix"
-msgstr ""
+msgstr "Матриця версій"
 
 #: judge/views/submission.py:70
 #, python-format
@@ -3628,7 +3644,7 @@ msgstr "У доступі відмовлено."
 #: judge/views/submission.py:81 judge/views/submission.py:88
 #, python-format
 msgid "Submission of %(problem)s by %(user)s"
-msgstr ""
+msgstr "Розвязок %(problem)s користувача %(user)s"
 
 #: judge/views/submission.py:232 judge/views/submission.py:233
 #: templates/problem/problem.html:132
@@ -3652,69 +3668,70 @@ msgstr "Усі розв'язки для задачі %s"
 #: judge/views/submission.py:490 judge/views/submission.py:497
 #, python-format
 msgid "My submissions for %(problem)s"
-msgstr ""
+msgstr "Мій розв'язок задачі %(problem)s"
 
 #: judge/views/submission.py:491 judge/views/submission.py:501
 #, python-format
 msgid "%(user)s's submissions for %(problem)s"
-msgstr ""
+msgstr "Розв'язок задачі %(problem)s користувача %(user)s"
 
 #: judge/views/submission.py:601 judge/views/submission.py:616
 #, python-format
 msgid "My submissions in %(contest)s"
-msgstr ""
+msgstr "Мої розв'язки із змагання %(contest)s"
 
 #: judge/views/submission.py:602 judge/views/submission.py:620
 #, python-format
 msgid "%(user)s's submissions in %(contest)s"
-msgstr ""
+msgstr "Розв'язок із змагання %(contest)s користувача %(user)s"
 
 #: judge/views/submission.py:638 judge/views/submission.py:656
 #, python-brace-format
 msgid "{user}'s submissions for {problem} in {contest}"
-msgstr ""
+msgstr "Розв'язок користувача {user} задачі {problem} із змагання {contest}"
 
 #: judge/views/submission.py:643 judge/views/submission.py:664
 #, python-brace-format
 msgid "{user}'s submissions for problem {number} in {contest}"
 msgstr ""
+"Розв'язок користувача {user} задачі номер {number} із змагання {contest}"
 
 #: judge/views/ticket.py:33 judge/views/ticket.py:39
 msgid "Ticket title"
-msgstr ""
+msgstr "Назва завдання"
 
 #: judge/views/ticket.py:40
 msgid "Issue description"
-msgstr ""
+msgstr "Опис проблеми"
 
 #: judge/views/ticket.py:48
 msgid "You must solve at least one problem before you can create a ticket."
-msgstr ""
+msgstr "Ви повинні розв'язати хоча б одну задачу, щоб створити завдання."
 
 #: judge/views/ticket.py:91 judge/views/ticket.py:94
 #, python-format
 msgid "New ticket for %s"
-msgstr ""
+msgstr "Нове завдання щодо %s"
 
 #: judge/views/ticket.py:148
 #, python-format
 msgid "%(title)s - Ticket %(id)d"
-msgstr ""
+msgstr "%(title)s - Завдання %(id)d"
 
 #: judge/views/ticket.py:255
 #, python-format
 msgid "Tickets - Page %(number)d of %(total)d"
-msgstr ""
+msgstr "Завдання - Сторінка %(number)d з %(total)d"
 
 #: judge/views/ticket.py:307
 #, python-format
 msgid "New Ticket: %s"
-msgstr ""
+msgstr "Нове завдання: %s"
 
 #: judge/views/ticket.py:308
 #, python-format
 msgid "#%(id)d, assigned to: %(users)s"
-msgstr ""
+msgstr "#%(id)d, призначений виконавець: %(users)s"
 
 #: judge/views/ticket.py:310
 msgid ", "
@@ -3727,7 +3744,7 @@ msgstr "ніхто"
 #: judge/views/ticket.py:330
 #, python-format
 msgid "New Ticket Message For: %s"
-msgstr ""
+msgstr "Текст нового завдання для: %s"
 
 #: judge/views/two_factor.py:49
 msgid "Enable Two-factor Authentication"
@@ -3759,7 +3776,7 @@ msgstr ""
 
 #: judge/views/user.py:77
 msgid "No such user"
-msgstr ""
+msgstr "Не існує такого користувача"
 
 #: judge/views/user.py:77
 #, python-format
@@ -3793,7 +3810,7 @@ msgstr ""
 
 #: judge/views/user.py:354
 msgid "Updated on site"
-msgstr ""
+msgstr "Оновлено на сайті"
 
 #: judge/views/user.py:387 templates/admin/auth/user/change_form.html:14
 #: templates/admin/auth/user/change_form.html:17 templates/base.html:213
@@ -3827,12 +3844,12 @@ msgstr "Ви надіслали забагато запитів на зміну 
 
 #: templates/admin/judge/contest/change_form.html:9
 msgid "Are you sure you want to rejudge ALL the submissions?"
-msgstr ""
+msgstr "Ви дійсно бажаєте перетестувати УСІ розв'язки?"
 
 #: templates/admin/judge/contest/change_form.html:17
 #: templates/admin/judge/contest/change_form.html:20
 msgid "Rate"
-msgstr ""
+msgstr "Оцінити"
 
 #: templates/admin/judge/contest/change_list.html:9
 msgid "Rate all ratable contests"
@@ -3989,11 +4006,11 @@ msgstr "Нові задачі"
 
 #: templates/blog/list.html:191
 msgid "My open tickets"
-msgstr ""
+msgstr "Мої відкриті завдання"
 
 #: templates/blog/list.html:210
 msgid "New tickets"
-msgstr ""
+msgstr "Нові завдання"
 
 #: templates/comments/edit-ajax.html:16 templates/comments/list.html:163
 #: templates/ticket/ticket.html:181
@@ -4019,17 +4036,17 @@ msgstr "Увійдіть у систему, щоб проголосувати"
 #: templates/comments/list.html:60
 #, python-brace-format
 msgid "commented on {time}"
-msgstr ""
+msgstr "прокоментовано {time}"
 
 #: templates/comments/list.html:60
 #, python-brace-format
 msgid "commented {time}"
-msgstr ""
+msgstr "прокоментовано о {time}"
 
 #: templates/comments/list.html:71
 #, python-format
 msgid "edit %(edits)s"
-msgstr ""
+msgstr "редагувати %(edits)s"
 
 #: templates/comments/list.html:73 templates/comments/media-js.html:77
 msgid "edited"
@@ -4319,8 +4336,11 @@ msgid ""
 msgid_plural ""
 "Special thanks to %(link_testers)s for testing and feedback on the problems."
 msgstr[0] ""
+"Гарно дякуємо %(link_testers)s за тестування наших задач та відгуки про них."
 msgstr[1] ""
+"Гарно дякуємо %(link_testers)s за тестування наших задач та відгуки про них."
 msgstr[2] ""
+"Гарно дякуємо %(link_testers)s за тестування наших задач та відгуки про них."
 
 #: templates/contest/contest.html:98
 #, python-format
@@ -4438,6 +4458,7 @@ msgstr ""
 #: templates/contest/contest.html:165
 msgid "The scoreboard will be **hidden** until your window is over."
 msgstr ""
+"Протягом вашої участі **буде прихована** таблиця результатів учасників."
 
 #: templates/contest/contest.html:167
 msgid ""
@@ -4483,6 +4504,8 @@ msgid ""
 "Joining a contest for the first time starts your timer, after which it "
 "becomes unstoppable."
 msgstr ""
+"Приєднання до цього змагання вперше запускає Ваш таймер, який не можливо "
+"зупинити."
 
 #: templates/contest/list.html:70
 msgid "private"
@@ -4495,7 +4518,7 @@ msgstr "рейтинговий"
 #: templates/contest/list.html:102
 #, python-format
 msgid "%(time_limit)s window"
-msgstr ""
+msgstr "%(time_limit)s проміжок часу"
 
 #: templates/contest/list.html:105
 #, python-format
@@ -4522,7 +4545,7 @@ msgstr "Змагання"
 #: templates/contest/list.html:168
 #, python-format
 msgid "Window ends in %(countdown)s"
-msgstr ""
+msgstr "Проміжок завершиться за %(countdown)s"
 
 #: templates/contest/list.html:170 templates/contest/list.html:209
 #, python-format
@@ -4557,12 +4580,14 @@ msgstr ""
 #: templates/contest/media-js.html:10
 msgid ""
 "Joining a contest starts your timer, after which it becomes unstoppable."
-msgstr ""
+msgstr "Приєднання до змагання запускає Ваш таймер, який не можливо зупинити."
 
 #: templates/contest/media-js.html:16
 #, python-format
 msgid "Joining this contest will leave %(contest)s."
 msgstr ""
+"Якщо ви візьмете участь у цьому змаганні, то не зможете більше брати участь "
+"у %(contest)s."
 
 #: templates/contest/moss.html:28
 msgid "Are you sure you want to MOSS the contest?"
@@ -4660,7 +4685,7 @@ msgstr "Показати організацію"
 
 #: templates/contest/stats.html:38
 msgid "Problem Status Distribution"
-msgstr ""
+msgstr "Поширення статусу задачі"
 
 #: templates/contest/stats.html:43
 msgid "Problem AC Rate"
@@ -4717,7 +4742,7 @@ msgstr "Ви дійсно бажаєте відписатися від наши�
 
 #: templates/newsletter/subscription_unsubscribe_user.html:21
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Відписатися"
 
 #: templates/newsletter/subscription_update.html:3
 #: templates/newsletter/subscription_update.html:6
@@ -4738,7 +4763,7 @@ msgstr "Оновити підписку"
 
 #: templates/newsletter/subscription_update_activated.html:8
 msgid "Your subscription has successfully been updated."
-msgstr ""
+msgstr "Ваша підписка успішно оновлена."
 
 #: templates/newsletter/subscription_update_email_sent.html:8
 msgid ""
@@ -4907,7 +4932,7 @@ msgstr ""
 
 #: templates/problem/data.html:362 templates/problem/data.html:383
 msgid "Output limit"
-msgstr ""
+msgstr "Ліміт вихідних даних"
 
 #: templates/problem/data.html:366 templates/problem/data.html:384
 msgid "Checker"
@@ -4951,7 +4976,7 @@ msgid ""
 "code from it**. Please be respectful to the problem author and editorialist."
 msgstr ""
 "Використовуйте цей розбір **виключно** коли не маєте жодних ідей, та**не "
-"копіюйте код звідси**. Поважайте авторів задач і розборів!"
+"копіюйте код звідси**. Поважайте авторів задач і розборів."
 
 #: templates/problem/editorial.html:24
 msgid ""
@@ -5048,27 +5073,27 @@ msgstr "Перетестувати обрані розв'язки"
 
 #: templates/problem/manage_submission.html:157
 msgid "Rescore Everything"
-msgstr ""
+msgstr "Повторно оцінити все"
 
 #: templates/problem/manage_submission.html:158
 #, python-format
 msgid "This will rescore %(count)s submission."
 msgid_plural "This will rescore %(count)s submissions."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Буде переоцінено %(count)s розв'язок."
+msgstr[1] "Буде переоцінено %(count)s розв'язки."
+msgstr[2] "Буде переоцінено %(count)s розв'язків."
 
 #: templates/problem/manage_submission.html:166
 #, python-format
 msgid "Are you sure you want to rescore %(count)s submission?"
 msgid_plural "Are you sure you want to rescore %(count)s submissions?"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Ви дійсно бажаєте змінити оцінки для %(count)s розв'язку?"
+msgstr[1] "Ви дійсно бажаєте змінити оцінки для %(count)s розв'язків?"
+msgstr[2] "Ви дійсно бажаєте змінити оцінки для %(count)s розв'язків?"
 
 #: templates/problem/manage_submission.html:171
 msgid "Rescore all submissions"
-msgstr ""
+msgstr "Змінити оцінку для усіх розв'язків"
 
 #: templates/problem/problem.html:96
 msgid "View as PDF"
@@ -5101,12 +5126,12 @@ msgstr "Найкращі розв'язки"
 
 #: templates/problem/problem.html:140
 msgid "Vote on problem points"
-msgstr ""
+msgstr "Голосувати за бал задачі"
 
 #: templates/problem/problem.html:142
 #, python-format
 msgid "Edit points vote (%(points)d)"
-msgstr ""
+msgstr "Редагувати оцінку (%(points)d)"
 
 #: templates/problem/problem.html:146 templates/problem/vote-stats-ajax.html:3
 msgid "Voting statistics"
@@ -5118,7 +5143,7 @@ msgstr "Прочитати розбір"
 
 #: templates/problem/problem.html:156
 msgid "Manage tickets"
-msgstr ""
+msgstr "Керування завданнями"
 
 #: templates/problem/problem.html:160
 msgid "Edit problem"
@@ -5130,7 +5155,7 @@ msgstr "Редагувати тест"
 
 #: templates/problem/problem.html:167
 msgid "My tickets"
-msgstr ""
+msgstr "Мої завадання"
 
 #: templates/problem/problem.html:175
 msgid "Manage submissions"
@@ -5260,7 +5285,7 @@ msgstr "Ваш код повинен містити не більше ніж 655
 
 #: templates/problem/submit.html:204
 msgid "Warning!"
-msgstr "Попередження!"
+msgstr "Увага!"
 
 #: templates/problem/submit.html:205
 #, python-format
@@ -5297,11 +5322,11 @@ msgstr "Востаннє проголосовано %(date)s"
 
 #: templates/problem/vote-ajax.html:11
 msgid "Cast vote"
-msgstr ""
+msgstr "Голос"
 
 #: templates/problem/vote-ajax.html:25
 msgid "Justification:"
-msgstr ""
+msgstr "Справедливість:"
 
 #: templates/problem/vote-ajax.html:27
 msgid ""
@@ -5803,6 +5828,7 @@ msgstr "Загалом:"
 #: templates/submission/list.html:350
 msgid "You were disconnected. Refresh to show latest updates."
 msgstr ""
+"Ви втратили з'єдання. Оновіть сторінку щоб переглянути актуальну інформацію."
 
 #: templates/submission/row.html:44
 #, python-format
@@ -5823,7 +5849,7 @@ msgstr "Рішення заблоковане і не може бути пере
 
 #: templates/submission/row.html:65
 msgid "locked"
-msgstr ""
+msgstr "заблоковано"
 
 #: templates/submission/row.html:71
 msgid "admin"
@@ -5971,22 +5997,22 @@ msgstr "Отримуйте сповіщення на робочому столі
 
 #: templates/ticket/list.html:162
 msgid "Hide closed tickets"
-msgstr ""
+msgstr "Сховати закриті завдання"
 
 #: templates/ticket/list.html:167
 msgid "Show my tickets only"
-msgstr ""
+msgstr "Показати тільки мої завдання"
 
 #: templates/ticket/list.html:171
 msgid "Filing user"
-msgstr ""
+msgstr "Користувач, що заповнив"
 
 #: templates/ticket/list.html:180 templates/ticket/ticket.html:196
 msgid "Assignee"
 msgid_plural "Assignees"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Призначений"
+msgstr[1] "Призначені"
+msgstr[2] "Призначені"
 
 #: templates/ticket/list.html:200
 msgid "Title"
@@ -5994,21 +6020,21 @@ msgstr "Заголовок"
 
 #: templates/ticket/list.html:202
 msgid "Assignees"
-msgstr ""
+msgstr "Призначені"
 
 #: templates/ticket/message.html:11
 #, python-brace-format
 msgid "messaged on {time}"
-msgstr ""
+msgstr "повідомлено {time}"
 
 #: templates/ticket/message.html:11
 #, python-brace-format
 msgid "messaged {time}"
-msgstr ""
+msgstr "повідолено о {time}"
 
 #: templates/ticket/new_problem.html:7
 msgid "Thanks for opening a ticket!"
-msgstr ""
+msgstr "Дякуємо за відкриття проблеми!"
 
 #: templates/ticket/new_problem.html:9
 msgid ""
@@ -6016,15 +6042,17 @@ msgid ""
 "statement, and not for asking for help. If you require assistance on solving "
 "a problem, ask in the comments instead."
 msgstr ""
+"Пам'ятайте! Повідомлення про проблему - не запит про допомогу! Якщо ви "
+"потребуєте допомоги, напишіть в коментарях."
 
 #: templates/ticket/ticket.html:30
 #, python-brace-format
 msgid "Could not change ticket: {error}"
-msgstr ""
+msgstr "Не вдалося відредагувати завдання: {error}"
 
 #: templates/ticket/ticket.html:189
 msgid "Associated object"
-msgstr ""
+msgstr "Пов'язані об'єкти"
 
 #: templates/ticket/ticket.html:206
 msgid "No one is assigned."
@@ -6032,11 +6060,11 @@ msgstr "Ніхто не призначений."
 
 #: templates/ticket/ticket.html:212
 msgid "Close ticket"
-msgstr ""
+msgstr "Закрити завдання"
 
 #: templates/ticket/ticket.html:214
 msgid "Reopen ticket"
-msgstr ""
+msgstr "Повторно відкрити завдання"
 
 #: templates/ticket/ticket.html:218
 msgid "Assignee notes"
