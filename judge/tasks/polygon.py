@@ -17,7 +17,7 @@ from django.conf import settings
 from judge.utils.problem_data import ProblemDataCompiler
 
 @shared_task
-def parce_task_from_polygon(problem_code, polygon_link, author_id):
+def parse_task_from_polygon(problem_code, polygon_link, author_id):
 	response = requests.post(polygon_link, data={
 			"login": settings.POLYGON_LOGIN,
 			"password": settings.POLYGON_PASSWORD,
@@ -68,6 +68,8 @@ def parce_task_from_polygon(problem_code, polygon_link, author_id):
 			"lang": checker_lang,
 			"type": "testlib"
 		})
+		problem_data.save()
+
 	
 	for i, case in enumerate(problem_parser.get_tests()):
 		p_case = ProblemTestCase()

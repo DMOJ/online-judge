@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
-from judge.tasks.polygon import parce_task_from_polygon
+from judge.tasks.polygon import parse_task_from_polygon
 from judge.template_context import get_profile
 from judge.utils.views import TitleMixin
 from django.contrib.auth.decorators import login_required
@@ -23,8 +23,8 @@ class NewProblemFromCFView(PermissionRequiredMixin, TitleMixin, TemplateView):
         polygon_link = request.POST.get('polygon_link')
         
         profile_id = get_profile(request).id
-        parce_task_from_polygon.delay(problem_code, polygon_link, profile_id)
-        # parce_task_from_polygon(problem_code, polygon_link, profile_id)
+        # parse_task_from_polygon.delay(problem_code, polygon_link, profile_id)
+        parse_task_from_polygon(problem_code, polygon_link, profile_id)
 
         return HttpResponseRedirect(f"/problem/{problem_code}/test_data")
     
