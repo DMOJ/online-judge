@@ -60,12 +60,13 @@ def parse_task_from_polygon(problem_code, polygon_link, author_id):
 		checker_lang = problem_parser.get_checker_lang()
   
 		zip_ref.extract(checker_name, f"{settings.DMOJ_PROBLEM_DATA_ROOT}/{problem_code}")
-		zip_ref.extract("files/testlib.h", f"{settings.DMOJ_PROBLEM_DATA_ROOT}/{problem_code}")
+		with open(f"{settings.DMOJ_PROBLEM_DATA_ROOT}/{problem_code}/testlib.h", 'wb') as f:
+			f.write(zip_ref.read("files/testlib.h"))
 
 		problem_data = ProblemData.objects.get(problem=problem)
 		problem_data.checker = "bridged"
 		problem_data.checker_args = json.dumps({
-			"files": ["files/testlib.h", checker_name],
+			"files": ["testlib.h", checker_name],
 			"lang": checker_lang,
 			"type": "testlib"
 		})

@@ -23,8 +23,8 @@ class NewProblemFromCFView(PermissionRequiredMixin, TitleMixin, TemplateView):
         polygon_link = request.POST.get('polygon_link')
         
         profile_id = get_profile(request).id
-        # parse_task_from_polygon.delay(problem_code, polygon_link, profile_id)
-        parse_task_from_polygon(problem_code, polygon_link, profile_id)
+        parse_task_from_polygon.delay(problem_code, polygon_link, profile_id)
+        # parse_task_from_polygon(problem_code, polygon_link, profile_id)
 
         return HttpResponseRedirect(f"/problem/{problem_code}/test_data")
     
