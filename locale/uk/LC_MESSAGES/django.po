@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-21 00:48+0000\n"
-"PO-Revision-Date: 2023-05-26 16:21+0300\n"
+"PO-Revision-Date: 2023-05-28 21:38+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -609,6 +609,8 @@ msgstr ""
 msgid ""
 "There is a **%d bonus** for fully solving on your first non-CE submission."
 msgstr ""
+"Для успішної здачі із першої спроби (спроби що отримали помилку компіляції "
+"не враховуються) буде нарахований **%d бонус**."
 
 #: judge/contest_format/ecoo.py:141
 #, python-format
@@ -1205,7 +1207,7 @@ msgstr "логотип"
 #: judge/models/contest.py:151
 msgid ""
 "This image will replace the default site logo for users inside the contest."
-msgstr ""
+msgstr "Це зображення замінить логотип сайту під час змагання."
 
 #: judge/models/contest.py:154
 msgid "the amount of live participants"
@@ -1217,7 +1219,7 @@ msgstr "підсумок змагання"
 
 #: judge/models/contest.py:156 judge/models/problem.py:166
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
-msgstr ""
+msgstr "Текст, що відображається у мета тегах (наприклад для соцмереж)."
 
 #: judge/models/contest.py:157 judge/models/profile.py:57
 #: judge/models/profile.py:110
@@ -1246,7 +1248,7 @@ msgstr "формат змагання"
 
 #: judge/models/contest.py:163
 msgid "The contest format module to use."
-msgstr ""
+msgstr "Формат змагання, що буде використовуватись."
 
 #: judge/models/contest.py:164
 msgid "contest format configuration"
@@ -1957,7 +1959,7 @@ msgstr ""
 
 #: judge/models/problem.py:584
 msgid "problem vote"
-msgstr ""
+msgstr "оцінка задачі"
 
 #: judge/models/problem.py:585
 msgid "problem votes"
@@ -1966,7 +1968,7 @@ msgstr "oцінки задач"
 #: judge/models/problem.py:588
 #, python-format
 msgid "Points vote by %(voter)s for %(problem)s"
-msgstr ""
+msgstr "Оцінка %(voter)s для %(problem)s"
 
 #: judge/models/problem_data.py:23
 msgid "Standard"
@@ -1998,7 +2000,7 @@ msgstr ""
 
 #: judge/models/problem_data.py:30
 msgid "Line-by-line"
-msgstr ""
+msgstr "Лінія за лінією"
 
 #: judge/models/problem_data.py:37
 msgid "data zip file"
@@ -2026,7 +2028,7 @@ msgstr "чекер"
 
 #: judge/models/problem_data.py:45
 msgid "enable unicode"
-msgstr ""
+msgstr "дозволити юнікод"
 
 #: judge/models/problem_data.py:46
 msgid "disable bigInteger / bigDecimal"
@@ -2050,7 +2052,7 @@ msgstr ""
 
 #: judge/models/problem_data.py:82
 msgid "case type"
-msgstr ""
+msgstr "вид тести"
 
 #: judge/models/problem_data.py:83
 msgid "Normal case"
@@ -2287,7 +2289,7 @@ msgstr "заборонено голосувати за бали до цієї з
 
 #: judge/models/profile.py:173
 msgid "User will not be able to vote on problems' point values."
-msgstr ""
+msgstr "Користувач не зможе оцінити задачу."
 
 #: judge/models/profile.py:177
 msgid "user script"
@@ -2303,11 +2305,11 @@ msgstr "поточне змагання"
 
 #: judge/models/profile.py:181
 msgid "math engine"
-msgstr ""
+msgstr "математичний процесор"
 
 #: judge/models/profile.py:183
 msgid "The rendering engine used to render math."
-msgstr ""
+msgstr "Процесор, що використовуватиметься для відтворення формул."
 
 #: judge/models/profile.py:184
 msgid "TOTP 2FA enabled"
@@ -2368,7 +2370,7 @@ msgstr ""
 
 #: judge/models/profile.py:204
 msgid "internal notes"
-msgstr ""
+msgstr "внутрішні примітки"
 
 #: judge/models/profile.py:205
 msgid "Notes for administrators regarding this user."
@@ -2885,7 +2887,7 @@ msgstr "автор завдання"
 
 #: judge/models/ticket.py:13
 msgid "creation time"
-msgstr ""
+msgstr "час створення"
 
 #: judge/models/ticket.py:14
 msgid "assignees"
@@ -4928,7 +4930,7 @@ msgstr "Показати колонки:"
 
 #: templates/problem/data.html:358 templates/problem/data.html:382
 msgid "Output prefix"
-msgstr ""
+msgstr "Префікс вихідних даних"
 
 #: templates/problem/data.html:362 templates/problem/data.html:383
 msgid "Output limit"
@@ -6146,7 +6148,7 @@ msgstr "Про мене:"
 
 #: templates/user/edit-profile.html:285
 msgid "Select your closest major city"
-msgstr ""
+msgstr "Оберіть найближче до Вас велике місто"
 
 #: templates/user/edit-profile.html:286
 msgid "Time zone:"
@@ -6299,11 +6301,11 @@ msgstr "Про систему"
 
 #: templates/user/user-about.html:39
 msgid "You have not shared any information."
-msgstr ""
+msgstr "Ви ще не ділилися жодною інформацією."
 
 #: templates/user/user-about.html:41
 msgid "This user has not shared any information."
-msgstr ""
+msgstr "Цей користувач ще нічим не ділився."
 
 #: templates/user/user-about.html:58
 msgid "Sun"
