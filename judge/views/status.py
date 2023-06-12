@@ -105,7 +105,7 @@ def version_matrix(request):
 
     languages = sorted(languages, key=lambda lang: version.parse(lang.name))
     return render(request, 'status/versions.html', {
-        'title': _('Version matrix'),
+        'title': _('Version'),
         'judges': sorted(matrix.keys()),
         'languages': languages,
         'matrix': matrix,
