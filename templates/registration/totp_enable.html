@@ -86,8 +86,8 @@
                 <span class="fullwidth">{{ form.totp_or_scratch_code }}</span>
             </div>
             <button style="margin-top: 0.5em" class="button" type="submit">
-                {%- if is_refresh -%}
-                    {{ _('Refresh Two Factor Authentication') }}
+                {%- if is_edit -%}
+                    {{ _('Edit Two Factor Authentication') }}
                 {%- else -%}
                     {{ _('Enable Two Factor Authentication') }}
                 {%- endif -%}
