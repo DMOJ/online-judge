@@ -66,7 +66,7 @@ register_patterns = [
 
     path('2fa/', two_factor.TwoFactorLoginView.as_view(), name='login_2fa'),
     path('2fa/enable/', two_factor.TOTPEnableView.as_view(), name='enable_2fa'),
-    path('2fa/refresh/', two_factor.TOTPRefreshView.as_view(), name='refresh_2fa'),
+    path('2fa/edit/', two_factor.TOTPEditView.as_view(), name='edit_2fa'),
     path('2fa/disable/', two_factor.TOTPDisableView.as_view(), name='disable_2fa'),
     path('2fa/webauthn/attest/', two_factor.WebAuthnAttestationView.as_view(), name='webauthn_attest'),
     path('2fa/webauthn/assert/', two_factor.WebAuthnAttestView.as_view(), name='webauthn_assert'),

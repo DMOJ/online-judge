@@ -50,7 +50,7 @@ class TOTPEnableView(TOTPView):
     title = gettext_lazy('Enable Two-factor Authentication')
     form_class = TOTPEnableForm
     template_name = 'registration/totp_enable.html'
-    is_refresh = False
+    is_edit = False
 
     def get(self, request, *args, **kwargs):
         profile = self.profile
@@ -76,9 +76,9 @@ class TOTPEnableView(TOTPView):
     def get_context_data(self, **kwargs):
         context = super(TOTPEnableView, self).get_context_data(**kwargs)
         context['totp_key'] = self.request.session['totp_enable_key']
-        context['scratch_codes'] = [] if self.is_refresh else json.loads(self.profile.scratch_codes)
+        context['scratch_codes'] = [] if self.is_edit else json.loads(self.profile.scratch_codes)
         context['qr_code'] = self.render_qr_code(self.request.user.username, context['totp_key'])
-        context['is_refresh'] = self.is_refresh
+        context['is_edit'] = self.is_edit
         context['is_hardcore'] = settings.DMOJ_2FA_HARDCORE
         return context
 
@@ -106,9 +106,9 @@ class TOTPEnableView(TOTPView):
         return 'data:image/png;base64,' + base64.b64encode(buf.getvalue()).decode('ascii')
 
 
-class TOTPRefreshView(TOTPEnableView):
-    title = gettext_lazy('Refresh Two-factor Authentication')
-    is_refresh = True
+class TOTPEditView(TOTPEnableView):
+    title = gettext_lazy('Edit Two-factor Authentication')
+    is_edit = True
 
     def check_skip(self):
         return not self.profile.is_totp_enabled
