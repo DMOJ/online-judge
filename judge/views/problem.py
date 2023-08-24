@@ -315,7 +315,7 @@ class ProblemPdfView(ProblemMixin, SingleObjectMixin, View):
                 except ProblemTranslation.DoesNotExist:
                     trans = None
 
-                problem_name = trans.problem_name if trans else problem.name
+                problem_name = trans.name if trans else problem.name
                 return render_pdf(
                     html=get_template('problem/raw.html').render({
                         'problem': problem,
