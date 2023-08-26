@@ -207,23 +207,23 @@ class SubmissionAdmin(VersionAdmin):
                                             '%d submissions were successfully rescored.',
                                             len(submissions)) % len(submissions))
 
-    @admin.display(description=_('Problem code'), ordering='problem__code')
+    @admin.display(description=_('problem code'), ordering='problem__code')
     def problem_code(self, obj):
         return obj.problem.code
 
-    @admin.display(description=_('Problem name'), ordering='problem__name')
+    @admin.display(description=_('problem name'), ordering='problem__name')
     def problem_name(self, obj):
         return obj.problem.name
 
-    @admin.display(description=_('User'), ordering='user__user__username')
+    @admin.display(description=_('user'), ordering='user__user__username')
     def user_column(self, obj):
         return obj.user.user.username
 
-    @admin.display(description=_('Time'), ordering='time')
+    @admin.display(description=_('time'), ordering='time')
     def execution_time(self, obj):
         return round(obj.time, 2) if obj.time is not None else 'None'
 
-    @admin.display(description=_('Memory'), ordering='memory')
+    @admin.display(description=_('memory'), ordering='memory')
     def pretty_memory(self, obj):
         memory = obj.memory
         if memory is None:
@@ -233,7 +233,7 @@ class SubmissionAdmin(VersionAdmin):
         else:
             return gettext('%.2f MB') % (memory / 1024)
 
-    @admin.display(description=_('Language'), ordering='language__name')
+    @admin.display(description=_('language'), ordering='language__name')
     def language_column(self, obj):
         return obj.language.name
 
