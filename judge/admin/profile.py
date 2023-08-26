@@ -87,31 +87,28 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
             fields += ('is_totp_enabled',)
         return fields
 
+    @admin.display(description='')
     def show_public(self, obj):
         return format_html('<a href="{0}" style="white-space:nowrap;">{1}</a>',
                            obj.get_absolute_url(), gettext('View on site'))
-    show_public.short_description = ''
 
+    @admin.display(description=_('User'), ordering='user__username')
     def admin_user_admin(self, obj):
         return obj.username
-    admin_user_admin.admin_order_field = 'user__username'
-    admin_user_admin.short_description = _('User')
 
+    @admin.display(description=_('Email'), ordering='user__email')
     def email(self, obj):
         return obj.user.email
-    email.admin_order_field = 'user__email'
-    email.short_description = _('Email')
 
+    @admin.display(description=_('Timezone'), ordering='timezone')
     def timezone_full(self, obj):
         return obj.timezone
-    timezone_full.admin_order_field = 'timezone'
-    timezone_full.short_description = _('Timezone')
 
+    @admin.display(description=_('date joined'), ordering='user__date_joined')
     def date_joined(self, obj):
         return obj.user.date_joined
-    date_joined.admin_order_field = 'user__date_joined'
-    date_joined.short_description = _('date joined')
 
+    @admin.display(description=_('Recalculate scores'))
     def recalculate_points(self, request, queryset):
         count = 0
         for profile in queryset:
@@ -120,7 +117,6 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
         self.message_user(request, ngettext('%d user had scores recalculated.',
                                             '%d users had scores recalculated.',
                                             count) % count)
-    recalculate_points.short_description = _('Recalculate scores')
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ProfileAdmin, self).get_form(request, obj, **kwargs)

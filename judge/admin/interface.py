@@ -25,9 +25,9 @@ class NavigationBarAdmin(DraggableMPTTAdmin):
         super(NavigationBarAdmin, self).__init__(*args, **kwargs)
         self.__save_model_calls = 0
 
+    @admin.display(description=_('link path'))
     def linked_path(self, obj):
         return format_html('<a href="{0}" target="_blank">{0}</a>', obj.path)
-    linked_path.short_description = _('link path')
 
     def save_model(self, request, obj, form, change):
         self.__save_model_calls += 1
@@ -151,6 +151,7 @@ class LogEntryAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return False
 
+    @admin.display(description=_('object'), ordering='object_repr')
     def object_link(self, obj):
         if obj.is_deletion():
             link = obj.object_repr
@@ -162,8 +163,6 @@ class LogEntryAdmin(admin.ModelAdmin):
             except NoReverseMatch:
                 link = obj.object_repr
         return link
-    object_link.admin_order_field = 'object_repr'
-    object_link.short_description = _('object')
 
     def queryset(self, request):
         return super().queryset(request).prefetch_related('content_type')
