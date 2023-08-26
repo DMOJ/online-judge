@@ -51,7 +51,7 @@ class CommentAdmin(VersionAdmin):
                                             '%d comments successfully unhidden.',
                                             count) % count)
 
-    @admin.display(description=_('Associated page'), ordering='page')
+    @admin.display(description=_('associated page'), ordering='page')
     def linked_page(self, obj):
         link = obj.link
         if link is not None:

@@ -92,15 +92,15 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
         return format_html('<a href="{0}" style="white-space:nowrap;">{1}</a>',
                            obj.get_absolute_url(), gettext('View on site'))
 
-    @admin.display(description=_('User'), ordering='user__username')
+    @admin.display(description=_('user'), ordering='user__username')
     def admin_user_admin(self, obj):
         return obj.username
 
-    @admin.display(description=_('Email'), ordering='user__email')
+    @admin.display(description=_('email'), ordering='user__email')
     def email(self, obj):
         return obj.user.email
 
-    @admin.display(description=_('Timezone'), ordering='timezone')
+    @admin.display(description=_('timezone'), ordering='timezone')
     def timezone_full(self, obj):
         return obj.timezone
 

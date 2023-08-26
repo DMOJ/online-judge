@@ -174,7 +174,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
                 fields += ('description',)
         return fields
 
-    @admin.display(description=_('Authors'))
+    @admin.display(description=_('authors'))
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
 
