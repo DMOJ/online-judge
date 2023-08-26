@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db.models import F
 from django.forms import ModelForm
 from django.urls import reverse_lazy
@@ -36,28 +37,27 @@ class CommentAdmin(VersionAdmin):
     def get_queryset(self, request):
         return Comment.objects.order_by('-time')
 
+    @admin.display(description=_('Hide comments'))
     def hide_comment(self, request, queryset):
         count = queryset.update(hidden=True)
         self.message_user(request, ngettext('%d comment successfully hidden.',
                                             '%d comments successfully hidden.',
                                             count) % count)
-    hide_comment.short_description = _('Hide comments')
 
+    @admin.display(description=_('Unhide comments'))
     def unhide_comment(self, request, queryset):
         count = queryset.update(hidden=False)
         self.message_user(request, ngettext('%d comment successfully unhidden.',
                                             '%d comments successfully unhidden.',
                                             count) % count)
-    unhide_comment.short_description = _('Unhide comments')
 
+    @admin.display(description=_('Associated page'), ordering='page')
     def linked_page(self, obj):
         link = obj.link
         if link is not None:
             return format_html('<a href="{0}">{1}</a>', link, obj.page)
         else:
             return format_html('{0}', obj.page)
-    linked_page.short_description = _('Associated page')
-    linked_page.admin_order_field = 'page'
 
     def save_model(self, request, obj, form, change):
         obj.revisions = F('revisions') + 1

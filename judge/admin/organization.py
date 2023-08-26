@@ -77,11 +77,10 @@ class OrganizationAdmin(VersionAdmin):
     actions_on_bottom = True
     form = OrganizationForm
 
+    @admin.display(description='')
     def show_public(self, obj):
         return format_html('<a href="{0}" style="white-space:nowrap;">{1}</a>',
                            obj.get_absolute_url(), gettext('View on site'))
-
-    show_public.short_description = ''
 
     def get_readonly_fields(self, request, obj=None):
         fields = self.readonly_fields
@@ -108,7 +107,6 @@ class OrganizationRequestAdmin(admin.ModelAdmin):
     list_display = ('username', 'organization', 'state', 'time')
     readonly_fields = ('user', 'organization', 'request_class')
 
+    @admin.display(description=_('username'), ordering='user__user__username')
     def username(self, obj):
         return obj.user.user.username
-    username.short_description = _('username')
-    username.admin_order_field = 'user__user__username'

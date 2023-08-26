@@ -174,28 +174,26 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
                 fields += ('description',)
         return fields
 
+    @admin.display(description=_('Authors'))
     def show_authors(self, obj):
         return ', '.join(map(attrgetter('user.username'), obj.authors.all()))
 
-    show_authors.short_description = _('Authors')
-
+    @admin.display(description='')
     def show_public(self, obj):
         return format_html('<a href="{1}">{0}</a>', gettext('View on site'), obj.get_absolute_url())
-
-    show_public.short_description = ''
 
     def _rescore(self, request, problem_id):
         from judge.tasks import rescore_problem
         transaction.on_commit(rescore_problem.s(problem_id).delay)
 
+    @admin.display(description=_('Set publish date to now'))
     def update_publish_date(self, request, queryset):
         count = queryset.update(date=timezone.now())
         self.message_user(request, ngettext("%d problem's publish date successfully updated.",
                                             "%d problems' publish date successfully updated.",
                                             count) % count)
 
-    update_publish_date.short_description = _('Set publish date to now')
-
+    @admin.display(description=_('Mark problems as public'))
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         for problem_id in queryset.values_list('id', flat=True):
@@ -204,8 +202,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
                                             '%d problems successfully marked as public.',
                                             count) % count)
 
-    make_public.short_description = _('Mark problems as public')
-
+    @admin.display(description=_('Mark problems as private'))
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         for problem_id in queryset.values_list('id', flat=True):
@@ -213,8 +210,6 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         self.message_user(request, ngettext('%d problem successfully marked as private.',
                                             '%d problems successfully marked as private.',
                                             count) % count)
-
-    make_private.short_description = _('Mark problems as private')
 
     def get_queryset(self, request):
         return Problem.get_editable_problems(request.user).prefetch_related('authors__user').distinct()
@@ -270,8 +265,7 @@ class ProblemPointsVoteAdmin(admin.ModelAdmin):
     def lookup_allowed(self, key, value):
         return super().lookup_allowed(key, value) or key in ('problem__code',)
 
+    @admin.display(description=_('problem'), ordering='problem__name')
     def linked_problem(self, obj):
         link = reverse('problem_detail', args=[obj.problem.code])
         return format_html('<a href="{0}">{1}</a>', link, obj.problem.name)
-    linked_problem.short_description = _('problem')
-    linked_problem.admin_order_field = 'problem__name'

@@ -156,6 +156,7 @@ class SubmissionAdmin(VersionAdmin):
     def lookup_allowed(self, key, value):
         return super(SubmissionAdmin, self).lookup_allowed(key, value) or key in ('problem__code',)
 
+    @admin.display(description=_('Rejudge the selected submissions'))
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
             self.message_user(request, gettext('You do not have the permission to rejudge submissions.'),
@@ -176,8 +177,8 @@ class SubmissionAdmin(VersionAdmin):
         self.message_user(request, ngettext('%d submission was successfully scheduled for rejudging.',
                                             '%d submissions were successfully scheduled for rejudging.',
                                             judged) % judged)
-    judge.short_description = _('Rejudge the selected submissions')
 
+    @admin.display(description=_('Rescore the selected submissions'))
     def recalculate_score(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
             self.message_user(request, gettext('You do not have the permission to rejudge submissions.'),
@@ -205,28 +206,24 @@ class SubmissionAdmin(VersionAdmin):
         self.message_user(request, ngettext('%d submission was successfully rescored.',
                                             '%d submissions were successfully rescored.',
                                             len(submissions)) % len(submissions))
-    recalculate_score.short_description = _('Rescore the selected submissions')
 
+    @admin.display(description=_('Problem code'), ordering='problem__code')
     def problem_code(self, obj):
         return obj.problem.code
-    problem_code.short_description = _('Problem code')
-    problem_code.admin_order_field = 'problem__code'
 
+    @admin.display(description=_('Problem name'), ordering='problem__name')
     def problem_name(self, obj):
         return obj.problem.name
-    problem_name.short_description = _('Problem name')
-    problem_name.admin_order_field = 'problem__name'
 
+    @admin.display(description=_('User'), ordering='user__user__username')
     def user_column(self, obj):
         return obj.user.user.username
-    user_column.admin_order_field = 'user__user__username'
-    user_column.short_description = _('User')
 
+    @admin.display(description=_('Time'), ordering='time')
     def execution_time(self, obj):
         return round(obj.time, 2) if obj.time is not None else 'None'
-    execution_time.short_description = _('Time')
-    execution_time.admin_order_field = 'time'
 
+    @admin.display(description=_('Memory'), ordering='memory')
     def pretty_memory(self, obj):
         memory = obj.memory
         if memory is None:
@@ -235,21 +232,18 @@ class SubmissionAdmin(VersionAdmin):
             return gettext('%d KB') % memory
         else:
             return gettext('%.2f MB') % (memory / 1024)
-    pretty_memory.admin_order_field = 'memory'
-    pretty_memory.short_description = _('Memory')
 
+    @admin.display(description=_('Language'), ordering='language__name')
     def language_column(self, obj):
         return obj.language.name
-    language_column.admin_order_field = 'language__name'
-    language_column.short_description = _('Language')
 
+    @admin.display(description='')
     def judge_column(self, obj):
         if obj.is_locked:
             return format_html('<input type="button" disabled value="{0}"/>', _('Locked'))
         else:
             return format_html('<input type="button" value="{0}" onclick="location.href=\'{1}\'"/>', _('Rejudge'),
                                reverse('admin:judge_submission_rejudge', args=(obj.id,)))
-    judge_column.short_description = ''
 
     def get_urls(self):
         return [
