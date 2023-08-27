@@ -404,7 +404,7 @@ class Problem(models.Model):
             self.ac_rate = 0
         self.save()
 
-    update_stats.alters_data = True
+    update_stats.alters_data = True  # type: ignore[attr-defined]
 
     def _get_limits(self, key):
         global_limit = getattr(self, key)
@@ -462,7 +462,7 @@ class Problem(models.Model):
             else:
                 problem_data._update_code(self.__original_code, self.code)
 
-    save.alters_data = True
+    save.alters_data = True  # type: ignore[attr-defined]
 
     def is_solved_by(self, user):
         # Return true if a full AC submission to the problem from the user exists.

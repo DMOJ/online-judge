@@ -1,14 +1,20 @@
+from typing import Dict, Generic, Tuple, Type, TypeVar
+
 from django.contrib.auth.models import AnonymousUser, Permission, User
+from django.db import models
 from django.utils import timezone
 
 from judge.models import BlogPost, Contest, ContestParticipation, ContestProblem, ContestTag, Language, Organization, \
     Problem, ProblemGroup, ProblemType, Profile, Solution
 
 
-class CreateModel:
-    model = None
-    m2m_fields = {}
-    required_fields = ()
+_M = TypeVar('_M', bound=models.Model)
+
+
+class CreateModel(Generic[_M]):
+    model: Type[_M]
+    m2m_fields: Dict[str, Tuple[Type[models.Model], str]] = {}
+    required_fields: Tuple[str, ...] = ()
 
     def get_defaults(self, required_kwargs, kwargs):
         return {}
@@ -22,7 +28,7 @@ class CreateModel:
     def on_created_object(self, obj):
         pass
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, **kwargs) -> _M:
         # in case the required fields are passed as arguments instead of keyword arguments
         if len(args) == len(self.required_fields):
             for field, arg in zip(self.required_fields, args):

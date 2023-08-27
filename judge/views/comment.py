@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import PermissionDenied
@@ -87,9 +89,9 @@ def downvote_comment(request):
 
 
 class CommentMixin(object):
-    model = Comment
+    model: type = Comment
     pk_url_kwarg = 'id'
-    context_object_name = 'comment'
+    context_object_name: Optional[str] = 'comment'
 
     def get_object(self, queryset=None):
         comment = super().get_object(queryset)

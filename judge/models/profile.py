@@ -144,7 +144,7 @@ class Class(models.Model):
         constraints = [UniqueConstraint(fields=['name'], condition=Q(is_active=True), name='unique_active_name')]
 
 
-class Profile(models.Model):
+class Profile(models.Model):  # type: ignore[django-manager-missing]
     user = models.OneToOneField(User, verbose_name=_('user associated'), on_delete=models.CASCADE)
     about = models.TextField(verbose_name=_('self-description'), null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name=_('time zone'), choices=TIMEZONE,
@@ -263,7 +263,7 @@ class Profile(models.Model):
             self.save(update_fields=['points', 'problem_count', 'performance_points'])
         return points
 
-    calculate_points.alters_data = True
+    calculate_points.alters_data = True  # type: ignore[attr-defined]
 
     def generate_api_token(self):
         secret = secrets.token_bytes(32)
@@ -272,7 +272,7 @@ class Profile(models.Model):
         token = base64.urlsafe_b64encode(struct.pack('>I32s', self.user.id, secret))
         return token.decode('utf-8')
 
-    generate_api_token.alters_data = True
+    generate_api_token.alters_data = True  # type: ignore[attr-defined]
 
     def generate_scratch_codes(self):
         def generate_scratch_code():
@@ -282,20 +282,20 @@ class Profile(models.Model):
         self.save(update_fields=['scratch_codes'])
         return codes
 
-    generate_scratch_codes.alters_data = True
+    generate_scratch_codes.alters_data = True  # type: ignore[attr-defined]
 
     def remove_contest(self):
         self.current_contest = None
         self.save()
 
-    remove_contest.alters_data = True
+    remove_contest.alters_data = True  # type: ignore[attr-defined]
 
     def update_contest(self):
         contest = self.current_contest
         if contest is not None and (contest.ended or not contest.contest.is_accessible_by(self.user)):
             self.remove_contest()
 
-    update_contest.alters_data = True
+    update_contest.alters_data = True  # type: ignore[attr-defined]
 
     def check_totp_code(self, code):
         totp = pyotp.TOTP(self.totp_key)
@@ -308,7 +308,7 @@ class Profile(models.Model):
                 return True
         return False
 
-    check_totp_code.alters_data = True
+    check_totp_code.alters_data = True  # type: ignore[attr-defined]
 
     def get_absolute_url(self):
         return reverse('user_page', args=(self.user.username,))

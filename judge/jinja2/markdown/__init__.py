@@ -1,6 +1,7 @@
 import logging
 import re
 from html import unescape
+from typing import Dict
 from urllib.parse import urlparse
 
 import mistune
@@ -111,7 +112,7 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
         return super(AwesomeRenderer, self).header(text, level + 2, *args, **kwargs)
 
 
-cleaner_cache = {}
+cleaner_cache: Dict[str, Cleaner] = {}
 
 
 def get_cleaner(name, params):

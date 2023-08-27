@@ -1,0 +1,8 @@
+mypy
+celery-stubs
+django-stubs
+git+https://github.com/lxml/lxml-stubs.git
+types-PyMySQL
+types-Pygments
+types-bleach
+types-requests

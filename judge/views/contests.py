@@ -5,6 +5,7 @@ from datetime import date, datetime, time, timedelta
 from functools import partial
 from itertools import chain
 from operator import attrgetter, itemgetter
+from typing import Optional
 
 from django import forms
 from django.conf import settings
@@ -70,7 +71,7 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
     paginate_by = 20
     template_name = 'contest/list.html'
     title = gettext_lazy('Contests')
-    context_object_name = 'past_contests'
+    context_object_name: Optional[str] = 'past_contests'
     all_sorts = frozenset(('name', 'user_count', 'start_time'))
     default_desc = frozenset(('name', 'user_count'))
     default_sort = '-start_time'
@@ -157,8 +158,8 @@ class PrivateContestError(Exception):
 
 
 class ContestMixin(object):
-    context_object_name = 'contest'
-    model = Contest
+    context_object_name: Optional[str] = 'contest'
+    model: type = Contest
     slug_field = 'key'
     slug_url_kwarg = 'contest'
 
@@ -715,7 +716,7 @@ def contest_ranking_ajax(request, contest, participation=None):
 
 class ContestRankingBase(ContestMixin, TitleMixin, DetailView):
     template_name = 'contest/ranking.html'
-    tab = None
+    tab: Optional[str] = None
 
     def get_title(self):
         raise NotImplementedError()
@@ -876,7 +877,7 @@ class ContestMossDelete(ContestMossMixin, SingleObjectMixin, View):
 class ContestTagDetailAjax(DetailView):
     model = ContestTag
     slug_field = slug_url_kwarg = 'name'
-    context_object_name = 'tag'
+    context_object_name: Optional[str] = 'tag'
     template_name = 'contest/tag-ajax.html'
 
 

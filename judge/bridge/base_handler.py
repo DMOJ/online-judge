@@ -3,6 +3,7 @@ import socket
 import struct
 import zlib
 from itertools import chain
+from typing import List, Tuple
 
 from netaddr import IPGlob, IPSet
 
@@ -50,7 +51,7 @@ class RequestHandlerMeta(type):
 
 
 class ZlibPacketHandler(metaclass=RequestHandlerMeta):
-    proxies = []
+    proxies: List[Tuple[str, int]] = []
 
     def __init__(self, request, client_address, server):
         self.request = request

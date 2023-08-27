@@ -72,7 +72,7 @@ class ProblemData(models.Model):
         if self.generator:
             self.generator.name = _problem_directory_file(new, self.generator.name)
         self.save()
-    _update_code.alters_data = True
+    _update_code.alters_data = True  # type: ignore[attr-defined]
 
 
 class ProblemTestCase(models.Model):

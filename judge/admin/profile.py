@@ -108,7 +108,7 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
     def date_joined(self, obj):
         return obj.user.date_joined
 
-    @admin.display(description=_('Recalculate scores'))
+    @admin.action(description=_('Recalculate scores'))
     def recalculate_points(self, request, queryset):
         count = 0
         for profile in queryset:

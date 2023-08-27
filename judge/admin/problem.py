@@ -186,14 +186,14 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         from judge.tasks import rescore_problem
         transaction.on_commit(rescore_problem.s(problem_id).delay)
 
-    @admin.display(description=_('Set publish date to now'))
+    @admin.action(description=_('Set publish date to now'))
     def update_publish_date(self, request, queryset):
         count = queryset.update(date=timezone.now())
         self.message_user(request, ngettext("%d problem's publish date successfully updated.",
                                             "%d problems' publish date successfully updated.",
                                             count) % count)
 
-    @admin.display(description=_('Mark problems as public'))
+    @admin.action(description=_('Mark problems as public'))
     def make_public(self, request, queryset):
         count = queryset.update(is_public=True)
         for problem_id in queryset.values_list('id', flat=True):
@@ -202,7 +202,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
                                             '%d problems successfully marked as public.',
                                             count) % count)
 
-    @admin.display(description=_('Mark problems as private'))
+    @admin.action(description=_('Mark problems as private'))
     def make_private(self, request, queryset):
         count = queryset.update(is_public=False)
         for problem_id in queryset.values_list('id', flat=True):

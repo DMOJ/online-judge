@@ -11,10 +11,17 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import datetime
 import os
+from typing import Any, Dict, List, Literal, Optional, Sequence, Set, TYPE_CHECKING, Tuple, Union
 
 from django.utils.translation import gettext_lazy as _
 from django_jinja.builtins import DEFAULT_EXTENSIONS
 from jinja2 import select_autoescape
+
+import django_stubs_ext  # noqa: I100, I102, I202
+django_stubs_ext.monkeypatch()
+
+if TYPE_CHECKING:
+    from django_stubs_ext import StrOrPromise
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
@@ -22,141 +29,141 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '5*9f5q57mqmlz2#f$x1h76&jxy#yortjl1v+l*6hd18$d*yx#0'
+SECRET_KEY: str = '5*9f5q57mqmlz2#f$x1h76&jxy#yortjl1v+l*6hd18$d*yx#0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG: bool = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: List[str] = []
 
-SITE_ID = 1
-SITE_NAME = 'DMOJ'
-SITE_LONG_NAME = 'DMOJ: Modern Online Judge'
-SITE_ADMIN_EMAIL = ''
+SITE_ID: int = 1
+SITE_NAME: str = 'DMOJ'
+SITE_LONG_NAME: str = 'DMOJ: Modern Online Judge'
+SITE_ADMIN_EMAIL: str = ''
 
-DMOJ_REQUIRE_STAFF_2FA = True
+DMOJ_REQUIRE_STAFF_2FA: bool = True
 # Display warnings that admins will not perform 2FA recovery.
-DMOJ_2FA_HARDCORE = False
+DMOJ_2FA_HARDCORE: bool = False
 
 # Set to 1 to use HTTPS if request was made to https://
 # Set to 2 to always use HTTPS for links
 # Set to 0 to always use HTTP for links
-DMOJ_SSL = 0
+DMOJ_SSL: int = 0
 
 # Refer to https://dmoj.ca/post/103-point-system-rework
-DMOJ_PP_STEP = 0.95
-DMOJ_PP_ENTRIES = 100
+DMOJ_PP_STEP: float = 0.95
+DMOJ_PP_ENTRIES: int = 100
 DMOJ_PP_BONUS_FUNCTION = lambda n: 300 * (1 - 0.997 ** n)  # noqa: E731
 
-ACE_URL = '//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3'
-SELECT2_JS_URL = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
-SELECT2_CSS_URL = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
+ACE_URL: str = '//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3'
+SELECT2_JS_URL: str = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js'
+SELECT2_CSS_URL: str = '//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css'
 
-DMOJ_CAMO_URL = None
-DMOJ_CAMO_KEY = None
-DMOJ_CAMO_HTTPS = False
-DMOJ_CAMO_EXCLUDE = ()
+DMOJ_CAMO_URL: Optional[str] = None
+DMOJ_CAMO_KEY: Optional[str] = None
+DMOJ_CAMO_HTTPS: bool = False
+DMOJ_CAMO_EXCLUDE: Tuple[str, ...] = ()
 
-DMOJ_PROBLEM_DATA_ROOT = None
+DMOJ_PROBLEM_DATA_ROOT: Optional[str] = None
 
-DMOJ_PROBLEM_MIN_TIME_LIMIT = 0  # seconds
-DMOJ_PROBLEM_MAX_TIME_LIMIT = 60  # seconds
-DMOJ_PROBLEM_MIN_MEMORY_LIMIT = 0  # kilobytes
-DMOJ_PROBLEM_MAX_MEMORY_LIMIT = 1048576  # kilobytes
-DMOJ_PROBLEM_MIN_PROBLEM_POINTS = 0
-DMOJ_PROBLEM_MIN_USER_POINTS_VOTE = 1  # when voting on problem, minimum point value user can select
-DMOJ_PROBLEM_MAX_USER_POINTS_VOTE = 50  # when voting on problem, maximum point value user can select
-DMOJ_PROBLEM_HOT_PROBLEM_COUNT = 7
+DMOJ_PROBLEM_MIN_TIME_LIMIT: int = 0  # seconds
+DMOJ_PROBLEM_MAX_TIME_LIMIT: int = 60  # seconds
+DMOJ_PROBLEM_MIN_MEMORY_LIMIT: int = 0  # kilobytes
+DMOJ_PROBLEM_MAX_MEMORY_LIMIT: int = 1048576  # kilobytes
+DMOJ_PROBLEM_MIN_PROBLEM_POINTS: int = 0
+DMOJ_PROBLEM_MIN_USER_POINTS_VOTE: int = 1  # when voting on problem, minimum point value user can select
+DMOJ_PROBLEM_MAX_USER_POINTS_VOTE: int = 50  # when voting on problem, maximum point value user can select
+DMOJ_PROBLEM_HOT_PROBLEM_COUNT: int = 7
 
-DMOJ_PROBLEM_STATEMENT_DISALLOWED_CHARACTERS = {'“', '”', '‘', '’', '−', 'ﬀ', 'ﬁ', 'ﬂ', 'ﬃ', 'ﬄ'}
-DMOJ_RATING_COLORS = True
-DMOJ_EMAIL_THROTTLING = (10, 60)
+DMOJ_PROBLEM_STATEMENT_DISALLOWED_CHARACTERS: Set[str] = {'“', '”', '‘', '’', '−', 'ﬀ', 'ﬁ', 'ﬂ', 'ﬃ', 'ﬄ'}
+DMOJ_RATING_COLORS: bool = True
+DMOJ_EMAIL_THROTTLING: Tuple[int, int] = (10, 60)
 
 # Maximum number of submissions a single user can queue without the `spam_submission` permission
-DMOJ_SUBMISSION_LIMIT = 2
-DMOJ_SUBMISSIONS_REJUDGE_LIMIT = 10
+DMOJ_SUBMISSION_LIMIT: int = 2
+DMOJ_SUBMISSIONS_REJUDGE_LIMIT: int = 10
 
 # Whether to allow users to view source code: 'all' | 'all-solved' | 'only-own'
-DMOJ_SUBMISSION_SOURCE_VISIBILITY = 'all-solved'
-DMOJ_BLOG_NEW_PROBLEM_COUNT = 7
-DMOJ_TOTP_TOLERANCE_HALF_MINUTES = 1
-DMOJ_SCRATCH_CODES_COUNT = 5
-DMOJ_USER_MAX_ORGANIZATION_COUNT = 3
+DMOJ_SUBMISSION_SOURCE_VISIBILITY: Union[Literal['all'], Literal['all-solved'], Literal['only-own']] = 'all-solved'
+DMOJ_BLOG_NEW_PROBLEM_COUNT: int = 7
+DMOJ_TOTP_TOLERANCE_HALF_MINUTES: int = 1
+DMOJ_SCRATCH_CODES_COUNT: int = 5
+DMOJ_USER_MAX_ORGANIZATION_COUNT: int = 3
 
 # Whether to allow users to download their data
-DMOJ_USER_DATA_DOWNLOAD = False
-DMOJ_USER_DATA_CACHE = ''
+DMOJ_USER_DATA_DOWNLOAD: bool = False
+DMOJ_USER_DATA_CACHE: str = ''
 DMOJ_USER_DATA_DOWNLOAD_RATELIMIT = datetime.timedelta(days=1)
 
-DMOJ_COMMENT_VOTE_HIDE_THRESHOLD = -5
+DMOJ_COMMENT_VOTE_HIDE_THRESHOLD: int = -5
 DMOJ_COMMENT_REPLY_TIMEFRAME = datetime.timedelta(days=365)
 
-DMOJ_PDF_PDFOID_URL = None
+DMOJ_PDF_PDFOID_URL: Optional[str] = None
 # Optional but recommended to save resources, path on disk to cache PDFs
-DMOJ_PDF_PROBLEM_CACHE = None
+DMOJ_PDF_PROBLEM_CACHE: Optional[str] = None
 # Optional, URL serving DMOJ_PDF_PROBLEM_CACHE with X-Accel-Redirect
-DMOJ_PDF_PROBLEM_INTERNAL = None
+DMOJ_PDF_PROBLEM_INTERNAL: Optional[str] = None
 
-DMOJ_STATS_LANGUAGE_THRESHOLD = 10
-DMOJ_STATS_SUBMISSION_RESULT_COLORS = {
+DMOJ_STATS_LANGUAGE_THRESHOLD: int = 10
+DMOJ_STATS_SUBMISSION_RESULT_COLORS: Dict[str, str] = {
     'TLE': '#a3bcbd',
     'AC': '#00a92a',
     'WA': '#ed4420',
     'CE': '#42586d',
     'ERR': '#ffa71c',
 }
-DMOJ_API_PAGE_SIZE = 1000
+DMOJ_API_PAGE_SIZE: int = 1000
 
-DMOJ_PASSWORD_RESET_LIMIT_WINDOW = 3600
-DMOJ_PASSWORD_RESET_LIMIT_COUNT = 10
+DMOJ_PASSWORD_RESET_LIMIT_WINDOW: int = 3600
+DMOJ_PASSWORD_RESET_LIMIT_COUNT: int = 10
 
 # At the bare minimum, dark and light theme CSS file locations must be declared
-DMOJ_THEME_CSS = {
+DMOJ_THEME_CSS: Dict[str, str] = {
     'light': 'style.css',
     'dark': 'dark/style.css',
 }
 # At the bare minimum, dark and light ace themes must be declared
-DMOJ_THEME_DEFAULT_ACE_THEME = {
+DMOJ_THEME_DEFAULT_ACE_THEME: Dict[str, str] = {
     'light': 'github',
     'dark': 'twilight',
 }
-DMOJ_SELECT2_THEME = 'dmoj'
+DMOJ_SELECT2_THEME: str = 'dmoj'
 
-MARKDOWN_STYLES = {}
-MARKDOWN_DEFAULT_STYLE = {}
+MARKDOWN_STYLES: Dict[str, Dict[str, Any]] = {}
+MARKDOWN_DEFAULT_STYLE: Dict[str, Any] = {}
 
-MATHOID_URL = False
-MATHOID_GZIP = False
-MATHOID_MML_CACHE = None
-MATHOID_CSS_CACHE = 'default'
-MATHOID_DEFAULT_TYPE = 'auto'
-MATHOID_MML_CACHE_TTL = 86400
-MATHOID_CACHE_ROOT = ''
-MATHOID_CACHE_URL = False
+MATHOID_URL: Union[Literal[False], str] = False
+MATHOID_GZIP: bool = False
+MATHOID_MML_CACHE: Optional[str] = None
+MATHOID_CSS_CACHE: str = 'default'
+MATHOID_DEFAULT_TYPE: str = 'auto'
+MATHOID_MML_CACHE_TTL: int = 86400
+MATHOID_CACHE_ROOT: str = ''
+MATHOID_CACHE_URL: bool = False
 
-TEXOID_GZIP = False
-TEXOID_META_CACHE = 'default'
-TEXOID_META_CACHE_TTL = 86400
-DMOJ_NEWSLETTER_ID_ON_REGISTER = None
+TEXOID_GZIP: bool = False
+TEXOID_META_CACHE: str = 'default'
+TEXOID_META_CACHE_TTL: int = 86400
+DMOJ_NEWSLETTER_ID_ON_REGISTER: Optional[int] = None
 
-BAD_MAIL_PROVIDERS = ()
+BAD_MAIL_PROVIDERS: Tuple[str, ...] = ()
 BAD_MAIL_PROVIDER_REGEX = ()
-NOFOLLOW_EXCLUDED = set()
+NOFOLLOW_EXCLUDED: Set[str] = set()
 
-TIMEZONE_MAP = 'https://static.dmoj.ca/assets/earth.jpg'
+TIMEZONE_MAP: str = 'https://static.dmoj.ca/assets/earth.jpg'
 
-TERMS_OF_SERVICE_URL = None
-DEFAULT_USER_LANGUAGE = 'PY3'
+TERMS_OF_SERVICE_URL: Optional[str] = None
+DEFAULT_USER_LANGUAGE: str = 'PY3'
 
-INLINE_JQUERY = True
-INLINE_FONTAWESOME = True
-JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'
-FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
-DMOJ_CANONICAL = ''
+INLINE_JQUERY: bool = True
+INLINE_FONTAWESOME: bool = True
+JQUERY_JS: str = '//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'
+FONTAWESOME_CSS: str = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
+DMOJ_CANONICAL: str = ''
 
 # Application definition
 
-INSTALLED_APPS = ()
+INSTALLED_APPS: Tuple[str, ...] = ()
 
 try:
     import wpadmin
@@ -271,7 +278,7 @@ INSTALLED_APPS += (
     'adminsortable2',
 )
 
-MIDDLEWARE = (
+MIDDLEWARE: Tuple[str, ...] = (
     'judge.middleware.ShortCircuitMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -293,12 +300,12 @@ MIDDLEWARE = (
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
 )
 
-IMPERSONATE_REQUIRE_SUPERUSER = True
-IMPERSONATE_DISABLE_LOGGING = True
+IMPERSONATE_REQUIRE_SUPERUSER: bool = True
+IMPERSONATE_DISABLE_LOGGING: bool = True
 
-ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_ACTIVATION_DAYS: int = 7
 
-AUTH_PASSWORD_VALIDATORS = [
+AUTH_PASSWORD_VALIDATORS: List[Dict[str, str]] = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
@@ -313,14 +320,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-SILENCED_SYSTEM_CHECKS = ['urls.W002', 'fields.W342']
+SILENCED_SYSTEM_CHECKS: List[str] = ['urls.W002', 'fields.W342']
 
-ROOT_URLCONF = 'dmoj.urls'
-LOGIN_REDIRECT_URL = '/user'
-WSGI_APPLICATION = 'dmoj.wsgi.application'
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+ROOT_URLCONF: str = 'dmoj.urls'
+LOGIN_REDIRECT_URL: str = '/user'
+WSGI_APPLICATION: str = 'dmoj.wsgi.application'
+DEFAULT_AUTO_FIELD: str = 'django.db.models.AutoField'
 
-TEMPLATES = [
+TEMPLATES: List[Dict[str, Any]] = [
     {
         'BACKEND': 'django_jinja.backend.Jinja2',
         'DIRS': [
@@ -377,11 +384,11 @@ TEMPLATES = [
     },
 ]
 
-LOCALE_PATHS = [
+LOCALE_PATHS: List[str] = [
     os.path.join(BASE_DIR, 'locale'),
 ]
 
-LANGUAGES = [
+LANGUAGES: List[Tuple[str, 'StrOrPromise']] = [
     ('ca', _('Catalan')),
     ('de', _('German')),
     ('el', _('Greek')),
@@ -402,7 +409,7 @@ LANGUAGES = [
     ('zh-hant', _('Traditional Chinese')),
 ]
 
-BLEACH_USER_SAFE_TAGS = [
+BLEACH_USER_SAFE_TAGS: List[str] = [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'b', 'i', 'strong', 'em', 'tt', 'del', 'kbd', 's', 'abbr', 'cite', 'mark', 'q', 'samp', 'small',
     'u', 'var', 'wbr', 'dfn', 'ruby', 'rb', 'rp', 'rt', 'rtc', 'sub', 'sup', 'time', 'data',
@@ -414,7 +421,7 @@ BLEACH_USER_SAFE_TAGS = [
     'style', 'noscript', 'center',
 ]
 
-BLEACH_USER_SAFE_ATTRS = {
+BLEACH_USER_SAFE_ATTRS: Dict[str, List[str]] = {
     '*': ['id', 'class', 'style'],
     'img': ['src', 'alt', 'title', 'width', 'height', 'data-src', 'align'],
     'a': ['href', 'alt', 'title'],
@@ -482,7 +489,7 @@ MARKDOWN_STYLES = {
     'ticket': MARKDOWN_USER_LARGE_STYLE,
 }
 
-MARTOR_ENABLE_CONFIGS = {
+MARTOR_ENABLE_CONFIGS: Dict[str, Union[Literal['false'], Literal['true']]] = {
     'imgur': 'true',
     'mention': 'true',
     'jquery': 'false',
@@ -490,81 +497,81 @@ MARTOR_ENABLE_CONFIGS = {
     'spellcheck': 'false',
     'hljs': 'false',
 }
-MARTOR_MARKDOWNIFY_URL = '/widgets/preview/default'
-MARTOR_SEARCH_USERS_URL = '/widgets/martor/search-user'
-MARTOR_UPLOAD_URL = '/widgets/martor/upload-image'
-MARTOR_MARKDOWN_BASE_MENTION_URL = '/user/'
+MARTOR_MARKDOWNIFY_URL: str = '/widgets/preview/default'
+MARTOR_SEARCH_USERS_URL: str = '/widgets/martor/search-user'
+MARTOR_UPLOAD_URL: str = '/widgets/martor/upload-image'
+MARTOR_MARKDOWN_BASE_MENTION_URL: str = '/user/'
 
 # Directory under MEDIA_ROOT to use to store image uploaded through martor.
-MARTOR_UPLOAD_MEDIA_DIR = 'martor'
-MARTOR_UPLOAD_SAFE_EXTS = {'.jpg', '.png', '.gif'}
+MARTOR_UPLOAD_MEDIA_DIR: str = 'martor'
+MARTOR_UPLOAD_SAFE_EXTS: Set[str] = {'.jpg', '.png', '.gif'}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+DATABASES: Dict[str, Dict[str, Any]] = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
 }
 
-ENABLE_FTS = False
+ENABLE_FTS: bool = False
 
 # Bridged configuration
-BRIDGED_JUDGE_ADDRESS = [('localhost', 9999)]
-BRIDGED_JUDGE_PROXIES = None
-BRIDGED_DJANGO_ADDRESS = [('localhost', 9998)]
-BRIDGED_DJANGO_CONNECT = None
+BRIDGED_JUDGE_ADDRESS: List[Tuple[str, int]] = [('localhost', 9999)]
+BRIDGED_JUDGE_PROXIES: Optional[List[Tuple[str, int]]] = None
+BRIDGED_DJANGO_ADDRESS: List[Tuple[str, int]] = [('localhost', 9998)]
+BRIDGED_DJANGO_CONNECT: Optional[List[Tuple[str, int]]] = None
 
 # Event Server configuration
-EVENT_DAEMON_USE = False
-EVENT_DAEMON_POST = 'ws://localhost:9997/'
-EVENT_DAEMON_GET = 'ws://localhost:9996/'
-EVENT_DAEMON_POLL = '/channels/'
-EVENT_DAEMON_KEY = None
-EVENT_DAEMON_AMQP_EXCHANGE = 'dmoj-events'
-EVENT_DAEMON_SUBMISSION_KEY = '6Sdmkx^%pk@GsifDfXcwX*Y7LRF%RGT8vmFpSxFBT$fwS7trc8raWfN#CSfQuKApx&$B#Gh2L7p%W!Ww'
+EVENT_DAEMON_USE: bool = False
+EVENT_DAEMON_POST: str = 'ws://localhost:9997/'
+EVENT_DAEMON_GET: str = 'ws://localhost:9996/'
+EVENT_DAEMON_POLL: str = '/channels/'
+EVENT_DAEMON_KEY: Optional[str] = None
+EVENT_DAEMON_AMQP_EXCHANGE: str = 'dmoj-events'
+EVENT_DAEMON_SUBMISSION_KEY: str = '6Sdmkx^%pk@GsifDfXcwX*Y7LRF%RGT8vmFpSxFBT$fwS7trc8raWfN#CSfQuKApx&$B#Gh2L7p%W!Ww'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 # Whatever you do, this better be one of the entries in `LANGUAGES`.
-LANGUAGE_CODE = 'en'
-TIME_ZONE = 'UTC'
-DEFAULT_USER_TIME_ZONE = 'America/Toronto'
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
+LANGUAGE_CODE: str = 'en'
+TIME_ZONE: str = 'UTC'
+DEFAULT_USER_TIME_ZONE: str = 'America/Toronto'
+USE_I18N: bool = True
+USE_L10N: bool = True
+USE_TZ: bool = True
 
 # Cookies
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_ENGINE: str = 'django.contrib.sessions.backends.cached_db'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 DMOJ_RESOURCES = os.path.join(BASE_DIR, 'resources')
-STATICFILES_FINDERS = (
+STATICFILES_FINDERS: Tuple[str, ...] = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-STATICFILES_DIRS = [
+STATICFILES_DIRS: List[str] = [
     os.path.join(BASE_DIR, 'resources'),
 ]
-STATIC_URL = '/static/'
+STATIC_URL: str = '/static/'
 
 # Define a cache
-CACHES = {}
+CACHES: Dict[str, Dict[str, Any]] = {}
 
 # Authentication
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS: Sequence[str] = (
     'social_core.backends.google.GoogleOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
     'judge.social_auth.GitHubSecureEmailOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_PIPELINE = (
+SOCIAL_AUTH_PIPELINE: Tuple[str, ...] = (
     'social_core.pipeline.social_auth.social_details',
     'social_core.pipeline.social_auth.social_uid',
     'social_core.pipeline.social_auth.auth_allowed',
@@ -580,14 +587,14 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.user.user_details',
 )
 
-SOCIAL_AUTH_GITHUB_SECURE_SCOPE = ['user:email']
-SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
-SOCIAL_AUTH_SLUGIFY_USERNAMES = True
-SOCIAL_AUTH_SLUGIFY_FUNCTION = 'judge.social_auth.slugify_username'
+SOCIAL_AUTH_GITHUB_SECURE_SCOPE: List[str] = ['user:email']
+SOCIAL_AUTH_FACEBOOK_SCOPE: List[str] = ['email']
+SOCIAL_AUTH_SLUGIFY_USERNAMES: bool = True
+SOCIAL_AUTH_SLUGIFY_FUNCTION: str = 'judge.social_auth.slugify_username'
 
-MOSS_API_KEY = None
+MOSS_API_KEY: Optional[str] = None
 
-CELERY_WORKER_HIJACK_ROOT_LOGGER = False
+CELERY_WORKER_HIJACK_ROOT_LOGGER: bool = False
 
 WEBAUTHN_RP_ID = None
 

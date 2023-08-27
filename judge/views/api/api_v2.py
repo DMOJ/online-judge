@@ -1,4 +1,5 @@
 from operator import attrgetter
+from typing import Tuple, Union
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
@@ -129,8 +130,8 @@ class APIMixin:
 
 class APIListView(APIMixin, InfinitePaginationMixin, BaseListView):
     paginate_by = settings.DMOJ_API_PAGE_SIZE
-    basic_filters = ()
-    list_filters = ()
+    basic_filters: Tuple[Tuple[str, Union[str, BaseSimpleFilter]], ...] = ()
+    list_filters: Tuple[Tuple[str, Union[str, BaseListFilter]], ...] = ()
 
     @property
     def use_infinite_pagination(self):

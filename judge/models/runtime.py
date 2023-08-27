@@ -147,14 +147,14 @@ class Judge(models.Model):
     def disconnect(self, force=False):
         disconnect_judge(self, force=force)
 
-    disconnect.alters_data = True
+    disconnect.alters_data = True  # type: ignore[attr-defined]
 
     def toggle_disabled(self):
         self.is_disabled = not self.is_disabled
         update_disable_judge(self)
         self.save(update_fields=['is_disabled'])
 
-    toggle_disabled.alters_data = True
+    toggle_disabled.alters_data = True  # type: ignore[attr-defined]
 
     @classmethod
     def runtime_versions(cls):

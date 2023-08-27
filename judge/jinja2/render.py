@@ -1,10 +1,12 @@
+from typing import Dict, Union
+
 from django.template import (Context, Template as DjangoTemplate, TemplateSyntaxError as DjangoTemplateSyntaxError,
                              VariableDoesNotExist)
 
 from . import registry
 
 MAX_CACHE = 100
-django_cache = {}
+django_cache: Dict[Union[DjangoTemplate, str], DjangoTemplate] = {}
 
 
 def compile_template(code):

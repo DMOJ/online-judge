@@ -318,7 +318,7 @@ class Contest(models.Model):
         self.user_count = self.users.filter(virtual=0).count()
         self.save()
 
-    update_user_count.alters_data = True
+    update_user_count.alters_data = True  # type: ignore[attr-defined]
 
     class Inaccessible(Exception):
         pass
@@ -516,7 +516,7 @@ class ContestParticipation(models.Model):
                 self.cumtime = 0
                 self.tiebreaker = 0
                 self.save(update_fields=['score', 'cumtime', 'tiebreaker'])
-    recompute_results.alters_data = True
+    recompute_results.alters_data = True  # type: ignore[attr-defined]
 
     def set_disqualified(self, disqualified):
         self.is_disqualified = disqualified
@@ -529,7 +529,7 @@ class ContestParticipation(models.Model):
             self.contest.banned_users.add(self.user)
         else:
             self.contest.banned_users.remove(self.user)
-    set_disqualified.alters_data = True
+    set_disqualified.alters_data = True  # type: ignore[attr-defined]
 
     @property
     def live(self):

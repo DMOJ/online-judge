@@ -25,7 +25,7 @@ def render_pdf(*, title: str, html: str, footer: bool = False) -> bytes:
         footer_template = None
 
     response = requests.post(
-        PDFOID_URL,
+        PDFOID_URL,  # type: ignore[arg-type]
         data={
             'html': html,
             'title': title,

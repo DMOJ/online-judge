@@ -24,9 +24,11 @@ from judge.utils.views import SingleObjectFormView, TitleMixin, paginate_query_c
 from judge.views.problem import ProblemMixin
 from judge.widgets import HeavyPreviewPageDownWidget
 
-ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
-                 HeavyPreviewPageDownWidget(preview=reverse_lazy('ticket_preview'),
-                                            preview_timeout=1000, hide_preview_button=True))
+if HeavyPreviewPageDownWidget is None:
+    ticket_widget = forms.Textarea()
+else:
+    ticket_widget = HeavyPreviewPageDownWidget(preview=reverse_lazy('ticket_preview'),
+                                               preview_timeout=1000, hide_preview_button=True)
 
 
 class TicketForm(forms.Form):
@@ -106,7 +108,7 @@ class TicketCommentForm(forms.Form):
 
 
 class TicketMixin(LoginRequiredMixin):
-    model = Ticket
+    model: type = Ticket
 
     def get_object(self, queryset=None):
         ticket = super(TicketMixin, self).get_object(queryset)

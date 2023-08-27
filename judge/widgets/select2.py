@@ -1,3 +1,4 @@
+# mypy: disable-error-code="misc"
 # -*- coding: utf-8 -*-
 """
 Select2 Widgets based on https://github.com/applegrew/django-select2.

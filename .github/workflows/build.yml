@@ -5,24 +5,46 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.7
+    - name: Set up Python 3.8
       uses: actions/setup-python@v4
       with:
-        python-version: '3.7'
+        python-version: 3.8
     - name: Install flake8
       run: pip install flake8 flake8-import-order flake8-future-import flake8-commas flake8-logging-format flake8-quotes
     - name: Lint with flake8
       run: |
         flake8 --version
         flake8
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
+    - name: Cache pip
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pip
+        key: pip-${{ runner.os }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('requirements-mypy.txt') }}
+    - name: Install mypy dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install -r requirements-mypy.txt
+        pip install mysqlclient
+        cp .ci.settings.py dmoj/local_settings.py
+    - name: Run typecheck with mypy
+      run: |
+        PYTHONPATH=. mypy judge
   unit:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python 3.7
+    - name: Set up Python 3.8
       uses: actions/setup-python@v4
       with:
-        python-version: '3.7'
+        python-version: 3.8
     - name: Cache pip
       uses: actions/cache@v2
       with:

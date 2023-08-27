@@ -10,9 +10,9 @@ from django.conf import settings  # noqa: E402, I202, django must be imported he
 app.config_from_object(settings, namespace='CELERY')
 
 if hasattr(settings, 'CELERY_BROKER_URL_SECRET'):
-    app.conf.broker_url = settings.CELERY_BROKER_URL_SECRET
+    app.conf.broker_url = settings.CELERY_BROKER_URL_SECRET  # type: ignore[misc]
 if hasattr(settings, 'CELERY_RESULT_BACKEND_SECRET'):
-    app.conf.result_backend = settings.CELERY_RESULT_BACKEND_SECRET
+    app.conf.result_backend = settings.CELERY_RESULT_BACKEND_SECRET  # type: ignore[misc]
 
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()

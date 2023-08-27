@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.forms.utils import flatatt
 from django.template.loader import get_template
 from django.utils.encoding import force_str
@@ -7,6 +9,10 @@ from judge.widgets.mixins import CompressorWidgetMixin
 
 __all__ = ['PagedownWidget', 'MathJaxPagedownWidget', 'HeavyPreviewPageDownWidget']
 
+PagedownWidget: Optional[type]
+MathJaxPagedownWidget: Optional[type]
+HeavyPreviewPageDownWidget: Optional[type]
+
 try:
     from pagedown.widgets import PagedownWidget as OldPagedownWidget
 except ImportError:
@@ -14,7 +20,7 @@ except ImportError:
     MathJaxPagedownWidget = None
     HeavyPreviewPageDownWidget = None
 else:
-    class PagedownWidget(CompressorWidgetMixin, OldPagedownWidget):
+    class NewPagedownWidget(CompressorWidgetMixin, OldPagedownWidget):
         # The goal here is to compress all the pagedown JS into one file.
         # We do not want any further compress down the chain, because
         # 1. we'll create multiple large JS files to download.
@@ -26,7 +32,7 @@ else:
             super(PagedownWidget, self).__init__(*args, **kwargs)
 
 
-    class MathJaxPagedownWidget(PagedownWidget):
+    class NewMathJaxPagedownWidget(NewPagedownWidget):
         class Media:
             js = [
                 'mathjax_config.js',
@@ -35,7 +41,7 @@ else:
             ]
 
 
-    class HeavyPreviewPageDownWidget(PagedownWidget):
+    class NewHeavyPreviewPageDownWidget(NewPagedownWidget):
         def __init__(self, *args, **kwargs):
             kwargs.setdefault('template', 'pagedown.html')
             self.preview_url = kwargs.pop('preview')
@@ -65,3 +71,8 @@ else:
 
         class Media:
             js = ['dmmd-preview.js']
+
+
+    PagedownWidget = NewPagedownWidget
+    MathJaxPagedownWidget = NewMathJaxPagedownWidget
+    HeavyPreviewPageDownWidget = NewHeavyPreviewPageDownWidget

@@ -1,9 +1,11 @@
+from typing import Callable, Dict, List
+
 from django_jinja.library import render_with
 
-globals = {}
-tests = {}
-filters = {}
-extensions = []
+globals: Dict[str, Callable] = {}
+tests: Dict[str, Callable] = {}
+filters: Dict[str, Callable] = {}
+extensions: List[type] = []
 
 __all__ = ['render_with', 'function', 'filter', 'test', 'extension']
 
