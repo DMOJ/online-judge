@@ -60,6 +60,9 @@ register_patterns = [
         template_name='registration/password_reset_done.html',
     ), name='password_reset_done'),
     path('social/error/', register.social_auth_error, name='social_auth_error'),
+    path('email/change/', user.EmailChangeRequestView.as_view(), name='email_change'),
+    path('email/change/activate/<str:activation_key>/',
+         user.EmailChangeActivateView.as_view(), name='email_change_activate'),
 
     path('2fa/', two_factor.TwoFactorLoginView.as_view(), name='login_2fa'),
     path('2fa/enable/', two_factor.TOTPEnableView.as_view(), name='enable_2fa'),

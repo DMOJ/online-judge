@@ -1,3 +1,5 @@
+import base64
+import binascii
 import itertools
 import json
 import os
@@ -8,9 +10,11 @@ from django.conf import settings
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Permission, User
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, redirect_to_login
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.sites.shortcuts import get_current_site
+from django.core import signing
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, Max, Min
@@ -27,13 +31,14 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, FormView, ListView, TemplateView, View
 from reversion import revisions
 
-from judge.forms import CustomAuthenticationForm, DownloadDataForm, ProfileForm, newsletter_id
+from judge.forms import CustomAuthenticationForm, DownloadDataForm, EmailChangeForm, ProfileForm, newsletter_id
 from judge.models import Profile, Submission
 from judge.performance_points import get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
 from judge.tasks import prepare_user_data
 from judge.utils.celery import task_status_by_id, task_status_url_by_id
 from judge.utils.infinite_paginator import InfinitePaginationMixin
+from judge.utils.mail import send_mail
 from judge.utils.problems import contest_completed_ids, user_completed_ids
 from judge.utils.pwned import PwnedPasswordsValidator
 from judge.utils.ranker import ranker
@@ -494,6 +499,9 @@ class UserLogoutView(TitleMixin, TemplateView):
         return HttpResponseRedirect(request.get_full_path())
 
 
+MINUTES_TO_SECONDS = 60
+
+
 class CustomPasswordResetView(PasswordResetView):
     template_name = 'registration/password_reset.html'
     html_email_template_name = 'registration/password_reset_email.html'
@@ -502,8 +510,120 @@ class CustomPasswordResetView(PasswordResetView):
 
     def post(self, request, *args, **kwargs):
         key = f'pwreset!{request.META["REMOTE_ADDR"]}'
-        cache.add(key, 0, timeout=settings.DMOJ_PASSWORD_RESET_LIMIT_WINDOW)
+        cache.add(key, 0, timeout=settings.DMOJ_PASSWORD_RESET_LIMIT_WINDOW * MINUTES_TO_SECONDS)
         if cache.incr(key) > settings.DMOJ_PASSWORD_RESET_LIMIT_COUNT:
             return HttpResponse(_('You have sent too many password reset requests. Please try again later.'),
                                 content_type='text/plain', status=429)
         return super().post(request, *args, **kwargs)
+
+
+class EmailChangeRequestView(LoginRequiredMixin, TitleMixin, FormView):
+    title = _('Change your email')
+    template_name = 'registration/email_change.html'
+    form_class = EmailChangeForm
+
+    activate_html_email_template_name = 'registration/email_change_activate_email.html'
+    activate_email_template_name = 'registration/email_change_activate_email.txt'
+    activate_subject_template_name = 'registration/email_change_activate_subject.txt'
+    notify_html_email_template_name = 'registration/email_change_notify_email.html'
+    notify_email_template_name = 'registration/email_change_notify_email.txt'
+    notify_subject_template_name = 'registration/email_change_notify_subject.txt'
+
+    def form_valid(self, form):
+        signer = signing.TimestampSigner()
+        new_email = form.cleaned_data['email']
+        activation_key = base64.urlsafe_b64encode(signer.sign_object({
+            'id': self.request.user.id,
+            'email': new_email,
+        }).encode()).decode()
+
+        current_site = get_current_site(self.request)
+        context = {
+            'domain': current_site.domain,
+            'site_name': current_site.name,
+            'protocol': 'https' if self.request.is_secure() else 'http',
+            'site_admin_email': settings.SITE_ADMIN_EMAIL,
+            'expiry_minutes': settings.DMOJ_EMAIL_CHANGE_EXPIRY_MINUTES,
+            'user': self.request.user,
+            'activation_key': activation_key,
+            'new_email': new_email,
+        }
+        send_mail(
+            context,
+            to_email=self.request.user.email,
+            subject_template_name=self.notify_subject_template_name,
+            email_template_name=self.notify_email_template_name,
+            html_email_template_name=self.notify_html_email_template_name,
+        )
+        send_mail(
+            context,
+            to_email=new_email,
+            subject_template_name=self.activate_subject_template_name,
+            email_template_name=self.activate_email_template_name,
+            html_email_template_name=self.activate_html_email_template_name,
+        )
+
+        return generic_message(
+            self.request,
+            _('Email change requested'),
+            _('Please click on the link sent to %s.') % new_email,
+        )
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        key = f'emailchange!{request.META["REMOTE_ADDR"]}'
+        cache.add(key, 0, timeout=settings.DMOJ_EMAIL_CHANGE_LIMIT_WINDOW * MINUTES_TO_SECONDS)
+        if cache.incr(key) > settings.DMOJ_EMAIL_CHANGE_LIMIT_COUNT:
+            return HttpResponse(_('You have sent too many email change requests. Please try again later.'),
+                                content_type='text/plain', status=429)
+        return super().post(request, *args, **kwargs)
+
+
+class EmailChangeActivateView(LoginRequiredMixin, View):
+    class EmailChangeFailedError(Exception):
+        pass
+
+    def update_user_email(self, request, activation_key):
+        signer = signing.TimestampSigner()
+        try:
+            data = signer.unsign_object(
+                base64.urlsafe_b64decode(activation_key.encode()).decode(),
+                max_age=settings.DMOJ_EMAIL_CHANGE_EXPIRY_MINUTES * MINUTES_TO_SECONDS,
+            )
+        except (binascii.Error, signing.BadSignature):
+            raise self.EmailChangeFailedError(_('Invalid activation key. Please try again.'))
+        except signing.SignatureExpired:
+            raise self.EmailChangeFailedError(_('This request has expired. Please try again.'))
+        if data['id'] != request.user.id:
+            raise self.EmailChangeFailedError(
+                _('Please try again while logged in to the account this email change was originally requested from.'),
+            )
+        from_email = request.user.email
+        to_email = data['email']
+        with revisions.create_revision(atomic=True):
+            if User.objects.filter(email=to_email).exists():
+                raise self.EmailChangeFailedError(
+                    _('The email you originally requested has since been registered by another user. '
+                      'Please try again with a new email.'),
+                )
+            request.user.email = to_email
+            request.user.save()
+            revisions.set_user(request.user)
+            revisions.set_comment(_('Changed email address from %s to %s') % (from_email, to_email))
+        return to_email
+
+    def get(self, request, *args, **kwargs):
+        try:
+            to_email = self.update_user_email(request, kwargs['activation_key'])
+        except self.EmailChangeFailedError as e:
+            return generic_message(request, _('Email change failed'), str(e), status=403)
+        else:
+            return generic_message(
+                request,
+                _('Email successfully changed'),
+                _('The email attached to your account has been changed to %s.') % to_email,
+            )

@@ -1,0 +1,24 @@
+<div style="border:2px solid #fd0;margin:4px 0;"><div style="background:#000;border:6px solid #000;">
+<a href="{{ protocol }}://{{ domain }}"><img src="{{ protocol }}://{{ domain }}/static/icons/logo.svg" alt="{{ site_name }}" width="160" height="44"></a>
+</div></div>
+
+<div style="border:2px solid #337ab7;margin:4px 0;"><div style="background:#fafafa;border:12px solid #fafafa;font-family:segoe ui,lucida grande,Arial,sans-serif;font-size:14px;">
+<br><br>
+{{ user.get_username() }},
+<br>
+{% trans %}You have requested to change your email address to this email for your user account at {{ site_name }}.{% endtrans %}
+<br><br>
+{% trans trimmed count=expiry_minutes %}
+Please click the link to confirm this email change. The link will expire in {{ count }} minute.
+{% pluralize %}
+Please click the link to confirm this email change. The link will expire in {{ count }} minutes.
+{% endtrans %}
+<br>
+<a href="{{ protocol }}://{{ domain }}{{ url('email_change_activate', activation_key=activation_key) }}">{{ protocol }}://{{ domain }}{{ url('email_change_activate', activation_key=activation_key) }}</a>
+<br><br>
+{% if site_admin_email %}
+{% with link='<a href="mailto:%(email)s">%(email)s</a>'|safe|format(email=site_admin_email) %}
+{{ _('If you have encounter any problems, feel free to shoot us an email at %(email)s.', email=link) }}
+{% endwith %}
+{% endif %}
+</div></div>

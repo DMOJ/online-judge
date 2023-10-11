@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block media %}
+<style>
+.errorlist {
+    list-style-type: none;
+    margin-block-start: 0;
+    margin-block-end: 0.5em;
+    padding: 0;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="centered-form" style="text-align: center">
+        <form action="" method="post" class="form-area">
+            {% csrf_token %}
+            <table border="0" class="django-as-table">{{ form.as_table() }}</table>
+            <hr>
+            <button class="submit-bar" type="submit">{{ _('Request email change') }}</button>
+        </form>
+    </div>
+{% endblock %}
