@@ -1,0 +1,23 @@
+<div style="border:2px solid #fd0;margin:4px 0;"><div style="background:#000;border:6px solid #000;">
+<a href="{{ protocol }}://{{ domain }}"><img src="{{ protocol }}://{{ domain }}/static/icons/logo.svg" alt="{{ site_name }}" width="160" height="44"></a>
+</div></div>
+
+<div style="border:2px solid #337ab7;margin:4px 0;"><div style="background:#fafafa;border:12px solid #fafafa;font-family:segoe ui,lucida grande,Arial,sans-serif;font-size:14px;">
+<br><br>
+{{ user.get_username() }},
+<br>
+{% trans %}Someone (hopefully you!) has requested to change the email address associated with your user account at {{ site_name }} to {{ new_email }}. {% endtrans %}
+<br><br>
+{{ _('If this was you, no further action is required.') }}
+
+<br>
+<b>
+{% if site_admin_email %}
+{% with link='<a href="mailto:%(email)s">%(email)s</a>'|safe|format(email=site_admin_email) %}
+{{ _('If this was not you, please change your password and email us immediately at %(email)s.', email=link) }}
+{% endwith %}
+{% else %}
+{{ _('If this was not you, please change your password and reply to this email immediately.') }}
+{% endif %}
+</b>
+</div></div>

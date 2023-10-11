@@ -6,6 +6,7 @@ import webauthn
 from django import forms
 from django.conf import settings
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db.models import Q
@@ -17,6 +18,7 @@ from django.utils.translation import gettext_lazy as _, ngettext_lazy
 from django_ace import AceWidget
 from judge.models import Contest, Language, Organization, Problem, ProblemPointsVote, Profile, Submission, \
     WebAuthnCredential
+from judge.utils.mail import validate_email_domain
 from judge.utils.subscription import newsletter_id
 from judge.widgets import HeavyPreviewPageDownWidget, Select2MultipleWidget, Select2Widget
 
@@ -93,6 +95,26 @@ class ProfileForm(ModelForm):
         if not self.fields['organizations'].queryset:
             self.fields.pop('organizations')
         self.fields['user_script'].widget = AceWidget(mode='javascript', theme=user.profile.resolved_ace_theme)
+
+
+class EmailChangeForm(Form):
+    password = CharField(widget=forms.PasswordInput())
+    email = forms.EmailField()
+
+    def __init__(self, *args, user, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+    def clean_email(self):
+        if User.objects.filter(email=self.cleaned_data['email']).exists():
+            raise ValidationError(_('This email address is already taken.'))
+        validate_email_domain(self.cleaned_data['email'])
+        return self.cleaned_data['email']
+
+    def clean_password(self):
+        if not self.user.check_password(self.cleaned_data['password']):
+            raise ValidationError(_('Invalid password'))
+        return self.cleaned_data['password']
 
 
 class DownloadDataForm(Form):

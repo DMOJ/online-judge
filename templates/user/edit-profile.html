@@ -338,6 +338,11 @@
                                 {{ _('Change your password') }}
                             </a>
                         </td></tr>
+                        <tr><td>
+                            <a href="{{ url('email_change') }}" class="inline-header">
+                                {{ _('Change your email') }}
+                            </a>
+                        </td></tr>
                         {% if can_download_data %}
                             <tr><td>
                                 <a href="{{ url('user_prepare_data') }}" class="inline-header">

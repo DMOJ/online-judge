@@ -1,0 +1,9 @@
+{{ user.get_username() }},
+{% trans %}Someone (hopefully you!) has requested to change the email address associated with your user account at {{ site_name }} to {{ new_email }}. {% endtrans %}
+
+{{ _('If this was you, no further action is required.') }}
+{% if site_admin_email %}
+{{ _('If this was not you, please change your password and email us immediately at %(email)s.', email=site_admin_email) }}
+{% else %}
+{{ _('If this was not you, please change your password and reply to this email immediately.') }}
+{% endif %}

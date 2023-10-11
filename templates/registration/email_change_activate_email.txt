@@ -1,0 +1,15 @@
+{{ user.get_username() }},
+
+{% trans %}You have requested to change your email address to this email for your user account at {{ site_name }}.{% endtrans %}
+
+{% trans trimmed count=expiry_minutes %}
+Please go to this page to confirm this email change. The link will expire in {{ count }} minute.
+{% pluralize %}
+Please go to this page to confirm this email change. The link will expire in {{ count }} minutes.
+{% endtrans %}
+
+{{ protocol }}://{{ domain }}{{ url('email_change_activate', activation_key=activation_key) }}
+
+{% if site_admin_email %}
+{{ _('If you have encounter any problems, feel free to shoot us an email at %(email)s.', email=site_admin_email) }}
+{% endif %}
