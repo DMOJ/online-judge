@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as OldUserAdmin
 from django.forms import ModelForm
 from django.urls import reverse_lazy
 from django.utils.html import format_html
@@ -69,6 +70,17 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
     form = ProfileForm
     inlines = [WebAuthnInline]
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    # We can't use has_delete_permission here because we still want user profiles to be
+    # deleteable through related objects (i.e. User). Thus, we simply hide the delete button.
+    # If an admin wants to go directly to the delete endpoint to delete a profile, more
+    # power to them.
+    def render_change_form(self, request, context, **kwargs):
+        context['show_delete'] = False
+        return super().render_change_form(request, context, **kwargs)
+
     def get_queryset(self, request):
         return super(ProfileAdmin, self).get_queryset(request).select_related('user')
 
@@ -126,3 +138,10 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
                 mode='javascript', theme=request.profile.resolved_ace_theme,
             )
         return form
+
+
+class UserAdmin(OldUserAdmin):
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if not change:
+            Profile.objects.create(user=obj)
