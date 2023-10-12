@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from moss import *
+from moss import MOSS, MOSS_LANG_C, MOSS_LANG_CC, MOSS_LANG_JAVA, MOSS_LANG_PYTHON
 
 from judge.models import Contest, ContestParticipation, Submission
 

@@ -1,5 +1,6 @@
 import hmac
 from hashlib import sha1
+from typing import Optional
 
 from django.conf import settings
 
@@ -39,6 +40,8 @@ class CamoClient(object):
             if obj.get('data'):
                 obj.set('data', self.rewrite_url(obj.get('data')))
 
+
+client: Optional[CamoClient]
 
 if settings.DMOJ_CAMO_URL and settings.DMOJ_CAMO_KEY:
     client = CamoClient(settings.DMOJ_CAMO_URL, key=settings.DMOJ_CAMO_KEY,

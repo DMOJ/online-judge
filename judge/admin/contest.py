@@ -16,11 +16,11 @@ from django_ace import AceWidget
 from judge.models import Class, Contest, ContestProblem, ContestSubmission, Profile, Rating, Submission
 from judge.ratings import rate_contest
 from judge.utils.views import NoBatchDeleteMixin
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
-    AdminSelect2MultipleWidget, AdminSelect2Widget
+from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget as OldAdminHeavySelect2Widget, \
+    AdminMartorWidget, AdminSelect2MultipleWidget, AdminSelect2Widget
 
 
-class AdminHeavySelect2Widget(AdminHeavySelect2Widget):
+class AdminHeavySelect2Widget(OldAdminHeavySelect2Widget):
     @property
     def is_hidden(self):
         return False
@@ -222,7 +222,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         from judge.tasks import rescore_contest
         transaction.on_commit(rescore_contest.s(contest_key).delay)
 
-    @admin.display(description=_('Mark contests as visible'))
+    @admin.action(description=_('Mark contests as visible'))
     def make_visible(self, request, queryset):
         if not request.user.has_perm('judge.change_contest_visibility'):
             queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
@@ -231,7 +231,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
                                             '%d contests successfully marked as visible.',
                                             count) % count)
 
-    @admin.display(description=_('Mark contests as hidden'))
+    @admin.action(description=_('Mark contests as hidden'))
     def make_hidden(self, request, queryset):
         if not request.user.has_perm('judge.change_contest_visibility'):
             queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
@@ -240,7 +240,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
                                             '%d contests successfully marked as hidden.',
                                             count) % count)
 
-    @admin.display(description=_('Lock contest submissions'))
+    @admin.action(description=_('Lock contest submissions'))
     def set_locked(self, request, queryset):
         for row in queryset:
             self.set_locked_after(row, timezone.now())
@@ -249,7 +249,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
                                             '%d contests successfully locked.',
                                             count) % count)
 
-    @admin.display(description=_('Unlock contest submissions'))
+    @admin.action(description=_('Unlock contest submissions'))
     def set_unlocked(self, request, queryset):
         for row in queryset:
             self.set_locked_after(row, None)
@@ -350,7 +350,7 @@ class ContestParticipationAdmin(admin.ModelAdmin):
         if form.changed_data and 'is_disqualified' in form.changed_data:
             obj.set_disqualified(obj.is_disqualified)
 
-    @admin.display(description=_('Recalculate results'))
+    @admin.action(description=_('Recalculate results'))
     def recalculate_results(self, request, queryset):
         count = 0
         for participation in queryset:

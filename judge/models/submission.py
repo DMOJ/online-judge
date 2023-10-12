@@ -130,12 +130,12 @@ class Submission(models.Model):
                     revisions.add_to_revision(self)
             judge_submission(self, *args, rejudge=rejudge, **kwargs)
 
-    judge.alters_data = True
+    judge.alters_data = True  # type: ignore[attr-defined]
 
     def abort(self):
         abort_submission(self)
 
-    abort.alters_data = True
+    abort.alters_data = True  # type: ignore[attr-defined]
 
     def can_see_detail(self, user):
         if not user.is_authenticated:
@@ -183,7 +183,7 @@ class Submission(models.Model):
         contest.save()
         contest.participation.recompute_results()
 
-    update_contest.alters_data = True
+    update_contest.alters_data = True  # type: ignore[attr-defined]
 
     @property
     def is_graded(self):

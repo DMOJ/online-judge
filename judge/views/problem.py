@@ -56,7 +56,7 @@ def get_contest_submission_count(problem, profile, virtual):
 
 
 class ProblemMixin(object):
-    model = Problem
+    model: type = Problem
     slug_url_kwarg = 'problem'
     slug_field = 'code'
 

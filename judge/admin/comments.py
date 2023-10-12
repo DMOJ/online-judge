@@ -37,14 +37,14 @@ class CommentAdmin(VersionAdmin):
     def get_queryset(self, request):
         return Comment.objects.order_by('-time')
 
-    @admin.display(description=_('Hide comments'))
+    @admin.action(description=_('Hide comments'))
     def hide_comment(self, request, queryset):
         count = queryset.update(hidden=True)
         self.message_user(request, ngettext('%d comment successfully hidden.',
                                             '%d comments successfully hidden.',
                                             count) % count)
 
-    @admin.display(description=_('Unhide comments'))
+    @admin.action(description=_('Unhide comments'))
     def unhide_comment(self, request, queryset):
         count = queryset.update(hidden=False)
         self.message_user(request, ngettext('%d comment successfully unhidden.',

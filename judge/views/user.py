@@ -3,6 +3,7 @@ import json
 import os
 from datetime import datetime
 from operator import attrgetter, itemgetter
+from typing import Optional
 
 from django.conf import settings
 from django.contrib.auth import logout as auth_logout
@@ -51,10 +52,10 @@ def remap_keys(iterable, mapping):
 
 
 class UserMixin(object):
-    model = Profile
+    model: type = Profile
     slug_field = 'user__username'
     slug_url_kwarg = 'user'
-    context_object_name = 'user'
+    context_object_name: Optional[str] = 'user'
 
     def render_to_response(self, context, **response_kwargs):
         return super(UserMixin, self).render_to_response(context, **response_kwargs)

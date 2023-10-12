@@ -80,7 +80,7 @@ class ContestSubmissionInline(admin.StackedInline):
                                                                          contest__problems=submission.problem) \
                     .only('id', 'contest__name', 'virtual')
 
-                def label(obj):
+                def label(obj):  # noqa: F811, label is used, erroneous error
                     if obj.spectate:
                         return gettext('%s (spectating)') % obj.contest.name
                     if obj.virtual:
@@ -156,7 +156,7 @@ class SubmissionAdmin(VersionAdmin):
     def lookup_allowed(self, key, value):
         return super(SubmissionAdmin, self).lookup_allowed(key, value) or key in ('problem__code',)
 
-    @admin.display(description=_('Rejudge the selected submissions'))
+    @admin.action(description=_('Rejudge the selected submissions'))
     def judge(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission') or not request.user.has_perm('judge.edit_own_problem'):
             self.message_user(request, gettext('You do not have the permission to rejudge submissions.'),
@@ -178,7 +178,7 @@ class SubmissionAdmin(VersionAdmin):
                                             '%d submissions were successfully scheduled for rejudging.',
                                             judged) % judged)
 
-    @admin.display(description=_('Rescore the selected submissions'))
+    @admin.action(description=_('Rescore the selected submissions'))
     def recalculate_score(self, request, queryset):
         if not request.user.has_perm('judge.rejudge_submission'):
             self.message_user(request, gettext('You do not have the permission to rejudge submissions.'),

@@ -1,8 +1,13 @@
+from typing import FrozenSet, Optional, TYPE_CHECKING
+
 from django.shortcuts import render
 from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin
 
 from judge.utils.diggpaginator import DiggPaginator
+
+if TYPE_CHECKING:
+    from django_stubs_ext import StrOrPromise
 
 
 def generic_message(request, title, message, status=None):
@@ -45,8 +50,8 @@ class NoBatchDeleteMixin(object):
 
 
 class TitleMixin(object):
-    title = '(untitled)'
-    content_title = None
+    title: 'StrOrPromise' = '(untitled)'
+    content_title: Optional['StrOrPromise'] = None
 
     def get_context_data(self, **kwargs):
         context = super(TitleMixin, self).get_context_data(**kwargs)
@@ -71,9 +76,9 @@ class DiggPaginatorMixin(object):
 
 
 class QueryStringSortMixin(object):
-    all_sorts = None
-    default_sort = None
-    default_desc = ()
+    all_sorts: Optional[FrozenSet[str]] = None
+    default_sort: Optional[str] = None
+    default_desc: FrozenSet[str] = frozenset()
 
     def get_default_sort_order(self, request):
         return self.default_sort

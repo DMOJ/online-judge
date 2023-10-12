@@ -2,6 +2,7 @@ import json
 from collections import namedtuple
 from itertools import groupby
 from operator import attrgetter
+from typing import Optional
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -45,8 +46,8 @@ class SubmissionPermissionDenied(PermissionDenied):
 
 
 class SubmissionMixin(object):
-    model = Submission
-    context_object_name = 'submission'
+    model: type = Submission
+    context_object_name: Optional[str] = 'submission'
     pk_url_kwarg = 'submission'
 
 
@@ -576,11 +577,11 @@ class AllSubmissions(InfinitePaginationMixin, SubmissionsListBase):
 
 
 class ForceContestMixin(object):
-    @property
+    @cached_property
     def in_contest(self):
         return True
 
-    @property
+    @cached_property
     def contest(self):
         return self._contest
 

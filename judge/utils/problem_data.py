@@ -10,7 +10,9 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 if os.altsep:
-    def split_path_first(path, repath=re.compile('[%s]' % re.escape(os.sep + os.altsep))):
+    repath = re.compile('[%s]' % re.escape(os.sep + os.altsep))
+
+    def split_path_first(path):
         return repath.split(path, 1)
 else:
     def split_path_first(path):

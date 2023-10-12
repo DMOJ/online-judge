@@ -1,4 +1,5 @@
 from operator import attrgetter
+from typing import Optional, Type
 
 from django import forms
 from django.conf import settings
@@ -36,8 +37,8 @@ def users_for_template(users, order):
 
 
 class OrganizationMixin(object):
-    context_object_name = 'organization'
-    model = Organization
+    context_object_name: Optional[str] = 'organization'
+    model: type = Organization
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -66,8 +67,8 @@ class OrganizationMixin(object):
 
 
 class BaseOrganizationListView(OrganizationMixin, ListView):
-    model = None
-    context_object_name = None
+    model: Optional[type] = None  # type: ignore[assignment]
+    context_object_name: Optional[str] = None
     slug_url_kwarg = 'slug'
 
     def get_object(self):
@@ -125,6 +126,7 @@ class OrganizationHome(OrganizationDetailView):
 
 
 class OrganizationUsers(QueryStringSortMixin, DiggPaginatorMixin, BaseOrganizationListView):
+    model: Optional[type]
     template_name = 'organization/users.html'
     all_sorts = frozenset(('problem_count', 'rating', 'performance_points'))
     default_desc = all_sorts
@@ -197,9 +199,10 @@ class OrganizationRequestForm(Form):
 
     def __init__(self, *args, class_required: bool, class_queryset, **kwargs) -> None:
         super().__init__(*args, **kwargs)
+        assert isinstance(self.fields['class_'], forms.ModelChoiceField)
         self.fields['class_'].required = class_required
         self.fields['class_'].queryset = class_queryset
-        self.fields['class_'].label_from_instance = attrgetter('name')
+        self.fields['class_'].label_from_instance = attrgetter('name')  # type: ignore[method-assign]
         self.show_classes = class_required or bool(class_queryset)
 
 
@@ -258,14 +261,15 @@ class OrganizationRequestDetail(LoginRequiredMixin, TitleMixin, DetailView):
         return object
 
 
-OrganizationRequestFormSet = modelformset_factory(OrganizationRequest, extra=0, fields=('state',), can_delete=True)
+OrganizationRequestFormSet: Type[forms.BaseModelFormSet[OrganizationRequest, forms.ModelForm]] = \
+    modelformset_factory(OrganizationRequest, extra=0, fields=('state',), can_delete=True)
 
 
 class OrganizationRequestBaseView(LoginRequiredMixin, SingleObjectTemplateResponseMixin, SingleObjectMixin, View):
     model = Organization
     slug_field = 'key'
     slug_url_kwarg = 'key'
-    tab = None
+    tab: Optional[str] = None
 
     def get_object(self, queryset=None):
         organization = super(OrganizationRequestBaseView, self).get_object(queryset)
