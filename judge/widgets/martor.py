@@ -12,8 +12,6 @@ class MartorWidget(OldMartorWidget):
 
 
 class AdminMartorWidget(OldAdminMartorWidget):
-    UPLOADS_ENABLED = True
-
     class Media:
         css = MartorWidget.Media.css
         js = ['admin/js/jquery.init.js', 'martor-mathjax.js']

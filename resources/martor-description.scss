@@ -2,8 +2,6 @@
 
 form .martor-preview {
     @include content-description;
-
-    min-height: 400px;
     
     ul li {
         list-style: unset !important;
@@ -23,7 +21,7 @@ form .martor-preview {
 }
 
 .section-martor {
-    div[data-tab^="editor-tab-"] {
+    div[data-tab="editor-tab-description"] {
         padding: 0;
     }
 
@@ -33,12 +31,6 @@ form .martor-preview {
 
     .tab-martor-menu a.item {
         font-size: 0.8rem;
-    }
-
-    .martor-toolbar {
-        flex: 0 1 auto !important;
-        overflow-x: auto;
-        overflow-y: hidden;
     }
 
     .martor-field {
