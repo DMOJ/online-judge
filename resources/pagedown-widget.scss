@@ -1,0 +1,125 @@
+@import "vars";
+
+.wmd-panel {
+    margin: 0;
+    width: 100%;
+    min-width: 0;
+}
+
+.wmd-button-bar {
+    width: 100%;
+    background-color: Silver;
+}
+
+.wmd-input {
+    height: 300px;
+    width: 100%;
+    max-width: 100%;
+    background: $color_primary0;
+    border: 1px solid $color_primary50;
+    font-family: Consolas, "Liberation Mono", Monaco, "Courier New", monospace !important;
+}
+
+.wmd-preview {
+    background: none;
+    word-break: break-word;
+}
+
+.wmd-button-row {
+    margin: 5px;
+    padding: 0;
+    line-height: 0;
+}
+
+.wmd-spacer {
+    width: 15px;
+    height: 20px;
+    display: inline-block;
+    list-style: none;
+}
+
+.wmd-button {
+    width: 20px;
+    height: 20px;
+    padding-left: 2px;
+    padding-right: 3px;
+    display: inline-block;
+    list-style: none;
+    cursor: pointer;
+}
+
+.wmd-button > span {
+    @include vars-img;
+    background: url($path_to_root + '/pagedown/wmd-buttons.png') no-repeat 0 0;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+.wmd-prompt-background {
+    background-color: Black;
+}
+
+.wmd-prompt-dialog {
+    border: 1px solid $color_primary25;
+    background-color: $color_primary5;
+}
+
+.wmd-prompt-dialog > div {
+    font-size: 0.8em;
+    font-family: arial, helvetica, sans-serif;
+}
+
+.wmd-prompt-dialog > form > input[type="text"] {
+    border: 1px solid $color_primary25;
+    color: $color_primary100;
+}
+
+.wmd-prompt-dialog > form > input[type="button"] {
+    border: 1px solid $color_primary50;
+    font-family: trebuchet MS, helvetica, sans-serif;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.wmd-wrapper {
+    padding-right: 0 !important;
+}
+
+.wmd-preview {
+    margin-top: 15px;
+    padding: 7px;
+    background: $color_primary0;
+    line-height: 1.5em;
+    font-size: 1em;
+    border: 1px solid $color_primary50;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.wmd-preview:empty {
+    display: none;
+}
+
+.wmd-preview h1, .wmd-preview h2, .wmd-preview h3, .wmd-preview h4, .wmd-preview h5, .wmd-preview h6 {
+    font-weight: bold !important;
+    margin-left: 0 !important;
+}
+
+.wmd-preview:not(.dmmd-preview) h1 {
+    font-size: 1.6em !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.wmd-preview:not(.dmmd-preview) h2 {
+    font-size: 1.4em !important
+}
+
+.wmd-preview:not(.dmmd-preview) h3 {
+    font-size: 1em !important
+}
+
+.wmd-preview:not(.dmmd-preview) h4, .wmd-preview:not(.dmmd-preview) h5, .wmd-preview:not(.dmmd-preview) h6 {
+    font-size: .9em !important
+}
