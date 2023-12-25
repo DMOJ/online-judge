@@ -119,5 +119,5 @@ def abort_submission(submission):
     # and returns a bad-request, the submission is not falsely shown as "Aborted" when it will still be judged.
     if not response.get('judge-aborted', True):
         Submission.objects.filter(id=submission.id).update(status='AB', result='AB', points=0)
-        event.post('sub_%s' % Submission.get_id_secret(submission.id), {'type': 'aborted-submission'})
+        event.post('sub_%s' % Submission.get_id_secret(submission.id), {'type': 'aborted'})
         _post_update_submission(submission, done=True)
