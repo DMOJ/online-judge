@@ -125,9 +125,9 @@ class Problem(models.Model):
                                      help_text=_('These users will be able to edit the problem, '
                                                  'and be listed as authors.'))
     authorship_name = models.CharField(max_length=100, verbose_name=_("Author's name"), blank=True,
-                                       help_text=_("Use it for attribution purposes, the original autor's name will "
+                                       help_text=_("Use it for attribution purposes, the original author's name will "
                                                    'be added at the end of the problem.'))
-    authorship_uri = models.CharField(max_length=255, verbose_name=_("Autor's URI"), blank=True)
+    authorship_uri = models.CharField(max_length=255, verbose_name=_("Author's URI"), blank=True)
     curators = models.ManyToManyField(Profile, verbose_name=_('curators'), blank=True, related_name='curated_problems',
                                       help_text=_('These users will be able to edit the problem, '
                                                   'but not be listed as authors.'))

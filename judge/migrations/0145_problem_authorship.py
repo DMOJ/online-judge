@@ -15,12 +15,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='problem',
             name='authorship_name',
-            field=models.CharField(blank=True, help_text="Use it for attribution purposes, the original autor's name will be added at the end of the problem.", max_length=100, verbose_name="Author's name"),
+            field=models.CharField(blank=True, help_text="Use it for attribution purposes, the original author's name will be added at the end of the problem.", max_length=100, verbose_name="Author's name"),
         ),
         migrations.AddField(
             model_name='problem',
             name='authorship_uri',
-            field=models.CharField(blank=True, max_length=255, verbose_name="Autor's URI"),
+            field=models.CharField(blank=True, max_length=255, verbose_name="Author's URI"),
         ),
         migrations.AlterField(
             model_name='problem',
