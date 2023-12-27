@@ -4,7 +4,7 @@ from operator import attrgetter
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericRelation
 from django.core.cache import cache
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models import CASCADE, Exists, F, FilteredRelation, OuterRef, Q, SET_NULL
@@ -467,8 +467,11 @@ class Problem(models.Model):
                 problem_data._update_code(self.__original_code, self.code)
 
         if self.include_test_cases:
-            self.data_files.setup_test_cases_content()
-            self.data_files.save()
+            try:
+                self.data_files.setup_test_cases_content()
+                self.data_files.save()
+            except ObjectDoesNotExist:
+                pass
 
     save.alters_data = True
 
