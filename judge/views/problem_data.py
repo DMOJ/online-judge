@@ -53,7 +53,7 @@ class ProblemDataForm(ModelForm):
         fields = ['zipfile', 'generator', 'infer_from_zip', 'unicode', 'nobigmath', 'output_limit', 'output_prefix',
                   'checker', 'checker_args']
         widgets = {
-            'checker_args': HiddenInput
+            'checker_args': HiddenInput,
         }
 
 
@@ -188,10 +188,10 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         # When inferinf test-cases, new ones can be created but also existing
         # ones can be reused. Only the old-ones should be removed.
         for case in old:
-            if not case in infer:
+            if case not in infer:
                 case.delete()
 
-        for case in infer:                    
+        for case in infer:
             case.save()
 
     def post(self, request, *args, **kwargs):
@@ -211,33 +211,33 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
                 self.infer_test_cases_from_zip(data)
 
             elif rebuild_from_yml:
-                data.reload_test_cases_from_yml()                
+                data.reload_test_cases_from_yml()
 
             if infer_from_zip or rebuild_from_yml:
                 # The data.zipfile property has been loaded from the file system
-                valid_files = sorted(ZipFile(data.zipfile).namelist())  
-                cases_formset = self.get_case_formset(valid_files, post=True) 
+                valid_files = sorted(ZipFile(data.zipfile).namelist())
+                cases_formset = self.get_case_formset(valid_files, post=True)
                 data.save()
 
-            else:    
+            else:
                 for case in cases_formset.save(commit=False):
                     case.dataset_id = problem.id
                     case.save()
 
                 for case in cases_formset.deleted_objects:
                     case.delete()
-                
+
                 if data.infer_from_zip:
                     if not data.zipfile:
                         # Removing all entries to keep consistency (infering from no zip)
                         for case in ProblemTestCase.objects.filter(dataset_id=self.object.pk):
                             case.delete()
-                    else:                               
+                    else:
                         self.infer_test_cases_from_zip(data)
 
             ProblemDataCompiler.generate(problem, data, problem.cases.order_by('order'), valid_files)
             return HttpResponseRedirect(request.get_full_path())
-        
+
         return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
                                                              valid_files=valid_files))
 

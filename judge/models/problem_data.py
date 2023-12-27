@@ -3,7 +3,6 @@ import os
 from zipfile import ZipFile
 
 import yaml
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -61,13 +60,18 @@ class ProblemData(models.Model):
         if not self.zipfile:
             # Test cases not loaded through the site, but some data has been found within the problem folder
             if self.has_yml():
-                self.feedback = "Warning: problem data found within the file system, but none has been setup using this site. No actions are needed if the problem is working as intended; otherwise, you can <a id='perform_infer_test_cases' href='javascript:void(0);'>infer the testcases using the existing zip file (one entry per file within the zip)</a> or <a id='perform_rebuild_test_cases' href='javascript:void(0);'>rebuild the test cases using the existing yml file as a template (only works with simple problems)</a>."
+                self.feedback = 'Warning: problem data found within the file system, but none has been setup '
+                'using this site. No actions are needed if the problem is working as intended; otherwise, you '
+                "can <a id='perform_infer_test_cases' href='javascript:void(0);'>infer the testcases using the"
+                "existing zip file (one entry per file within the zip)</a> or <a id='perform_rebuild_test_cases' "
+                "href='javascript:void(0);'>rebuild the test cases using the existing yml file as a template (only "
+                'works with simple problems)</a>.'
 
     def save(self, *args, **kwargs):
         zipfile = self.zipfile
         if self.zipfile != self.__original_zipfile:
-            self.__original_zipfile.delete(save=False) # This clears both zip fields (original and current)
-            self.zipfile = zipfile # Needed to restore the newly uploaded zip file when replacing an old one
+            self.__original_zipfile.delete(save=False)  # This clears both zip fields (original and current)
+            self.zipfile = zipfile  # Needed to restore the newly uploaded zip file when replacing an old one
         return super(ProblemData, self).save(*args, **kwargs)
 
     def has_yml(self):
@@ -105,9 +109,11 @@ class ProblemData(models.Model):
 
         cases = []
         for i in range(len(input)):
-            list = ProblemTestCase.objects.filter(dataset_id=self.problem.pk, input_file=input[i], output_file=output[i])
+            list = ProblemTestCase.objects.filter(dataset_id=self.problem.pk, input_file=input[i],
+                                                  output_file=output[i])
             if len(list) >= 1:
-                # Multiple test-cases for the same data is allowed, but strange. Using object.get() produces an exception.
+                # Multiple test-cases for the same data is allowed, but strange. Using object.get() produces an
+                # exception.
                 ptc = list[0]
             else:
                 ptc = ProblemTestCase()
@@ -117,11 +123,11 @@ class ProblemData(models.Model):
                 ptc.input_file = input[i]
                 ptc.output_file = output[i]
                 ptc.points = 0
-            
+
             cases.append(ptc)
 
         return cases
-    
+
     def reload_test_cases_from_yml(self):
         if self.has_yml():
             yml = problem_data_storage.open('%s/init.yml' % self.problem.code)
@@ -208,6 +214,7 @@ class ProblemData(models.Model):
                     ptc.checker_args = chk['args']
 
             ptc.save()
+
 
 class ProblemTestCase(models.Model):
     dataset = models.ForeignKey('Problem', verbose_name=_('problem data set'), related_name='cases',
