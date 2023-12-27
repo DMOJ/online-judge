@@ -179,7 +179,7 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         context['valid_files_json'] = mark_safe(json.dumps(context['valid_files']))
         context['valid_files'] = set(context['valid_files'])
         context['all_case_forms'] = chain(context['cases_formset'], [context['cases_formset'].empty_form])
-        return context    
+        return context
 
     def post(self, request, *args, **kwargs):
         self.object = problem = self.get_object()
@@ -227,16 +227,16 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
             # Enabling the 'display test cases' option for the problem should display the test cases after
             # the problem statement. Otherwise, the problem data must be saved additionally to display the
             # data for the first time. So, to avoid this additional step, the problem is the one which
-            # calls to setup the test-cases within problem data. Also, the update is needed to refresh the 
-            # cache so must be called from here anyways. 
-            data.problem.save()              
+            # calls to setup the test-cases within problem data. Also, the update is needed to refresh the
+            # cache so must be called from here anyways.
+            data.problem.save()
 
             ProblemDataCompiler.generate(problem, data, problem.cases.order_by('order'), valid_files)
             return HttpResponseRedirect(request.get_full_path())
 
         return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
                                                              valid_files=valid_files))
-    
+
     def infer_test_cases_from_zip(self, data):
         old = ProblemTestCase.objects.filter(dataset_id=self.object.pk)
         infer = data.infer_test_cases_from_zip()

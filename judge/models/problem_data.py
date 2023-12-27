@@ -62,11 +62,12 @@ class ProblemData(models.Model):
             # Test cases not loaded through the site, but some data has been found within the problem folder
             if self.has_yml():
                 self.feedback = 'Warning: problem data found within the file system, but none has been setup '\
-                'using this site. No actions are needed if the problem is working as intended; otherwise, you '\
-                "can <a id='perform_infer_test_cases' href='javascript:void(0);'>infer the testcases using the"\
-                "existing zip file (one entry per file within the zip)</a> or <a id='perform_rebuild_test_cases' "\
-                "href='javascript:void(0);'>rebuild the test cases using the existing yml file as a template (only "\
-                'works with simple problems)</a>.'
+                                'using this site. No actions are needed if the problem is working as intended; '\
+                                "otherwise, you can <a id='perform_infer_test_cases' href='javascript:void(0);'>"\
+                                'infer the testcases using the existing zip file (one entry per file within the '\
+                                "zip)</a> or <a id='perform_rebuild_test_cases' href='javascript:void(0);'>"\
+                                'rebuild the test cases using the existing yml file as a template (only works'\
+                                'with simple problems)</a>.'
 
     def save(self, *args, **kwargs):
         zipfile = self.zipfile
