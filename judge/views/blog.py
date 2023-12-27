@@ -107,6 +107,8 @@ class PostView(TitleMixin, CommentedDetailView):
                                       self.object.summary or self.object.content, 'blog')
         context['meta_description'] = metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+        context['enable_comments'] = settings.DMOJ_ENABLE_COMMENTS
+        context['enable_social'] = settings.DMOJ_ENABLE_SOCIAL
 
         return context
 

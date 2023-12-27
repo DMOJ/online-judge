@@ -127,6 +127,7 @@ class ProblemSolution(SolvedProblemMixin, ProblemMixin, TitleMixin, CommentedDet
             raise Http404()
         context['solution'] = solution
         context['has_solved_problem'] = self.object.id in self.get_completed_problems()
+        context['enable_comments'] = settings.DMOJ_ENABLE_COMMENTS
         return context
 
     def get_comment_page(self):
@@ -201,6 +202,7 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                                           context['description'], 'problem')
         context['meta_description'] = self.object.summary or metadata[0]
         context['og_image'] = self.object.og_image or metadata[1]
+        context['enable_comments'] = settings.DMOJ_ENABLE_COMMENTS
 
         context['vote_perm'] = self.object.vote_permission_for_user(user)
         if context['vote_perm'].can_vote():
