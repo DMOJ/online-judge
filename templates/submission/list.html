@@ -31,7 +31,7 @@
         {% if request.user.is_authenticated and perms.judge.rejudge_submission %}
             <script type="text/javascript">
                 window.rejudge_submission = function (id, e) {
-                    if ((typeof e !== 'undefined' && e.ctrlKey) ||
+                    if ((typeof e !== 'undefined' && (e.ctrlKey || e.metaKey)) ||
                         confirm('{{ _('Are you sure you want to rejudge?') }}')) {
                         $.ajax({
                             url: '{{ url('submission_rejudge') }}',

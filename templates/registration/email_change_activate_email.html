@@ -18,7 +18,7 @@ Please click the link to confirm this email change. The link will expire in {{ c
 <br><br>
 {% if site_admin_email %}
 {% with link='<a href="mailto:%(email)s">%(email)s</a>'|safe|format(email=site_admin_email) %}
-{{ _('If you have encounter any problems, feel free to shoot us an email at %(email)s.', email=link) }}
+{{ _('If you have encountered any problems, feel free to shoot us an email at %(email)s.', email=link) }}
 {% endwith %}
 {% endif %}
 </div></div>

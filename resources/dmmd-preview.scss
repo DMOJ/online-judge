@@ -1,0 +1,43 @@
+@import "vars";
+
+div.dmmd-preview {
+    padding: 0;
+}
+
+div.dmmd-preview-update {
+    background: $color_primary25;
+    color: $color_primary75;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    height: 2em;
+    line-height: 2em;
+}
+
+div.dmmd-preview-content {
+    padding: 0 7px;
+}
+
+div.dmmd-preview.dmmd-preview-has-content div.dmmd-preview-update {
+    border-radius: 4px 4px 0 0;
+}
+
+div.dmmd-preview-has-content div.dmmd-preview-content {
+    padding-bottom: 7px;
+}
+
+div.dmmd-no-button div.dmmd-preview-update {
+	display: none;
+}
+
+div.dmmd-no-button div.dmmd-preview-content {
+	padding-bottom: 0;
+}
+
+div.dmmd-no-button:not(.dmmd-preview-has-content) {
+	display: none;
+}
+
+div.dmmd-preview-stale {
+	background: repeating-linear-gradient(-45deg, $color_primary0, $color_primary0 10px, $color_primary5 10px, $color_primary5 20px);
+}
