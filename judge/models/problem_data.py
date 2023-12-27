@@ -42,6 +42,7 @@ class ProblemData(models.Model):
     generator = models.FileField(verbose_name=_('generator file'), storage=problem_data_storage, null=True, blank=True,
                                  upload_to=problem_directory_file)
     infer_from_zip = models.BooleanField(verbose_name=_('infer test cases from zip'), null=True, blank=True)
+    test_cases_content = models.TextField(verbose_name=_('test cases content'), blank=True)
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
     feedback = models.TextField(verbose_name=_('init.yml generation feedback'), blank=True)
@@ -60,11 +61,11 @@ class ProblemData(models.Model):
         if not self.zipfile:
             # Test cases not loaded through the site, but some data has been found within the problem folder
             if self.has_yml():
-                self.feedback = 'Warning: problem data found within the file system, but none has been setup '
-                'using this site. No actions are needed if the problem is working as intended; otherwise, you '
-                "can <a id='perform_infer_test_cases' href='javascript:void(0);'>infer the testcases using the"
-                "existing zip file (one entry per file within the zip)</a> or <a id='perform_rebuild_test_cases' "
-                "href='javascript:void(0);'>rebuild the test cases using the existing yml file as a template (only "
+                self.feedback = 'Warning: problem data found within the file system, but none has been setup '\
+                'using this site. No actions are needed if the problem is working as intended; otherwise, you '\
+                "can <a id='perform_infer_test_cases' href='javascript:void(0);'>infer the testcases using the"\
+                "existing zip file (one entry per file within the zip)</a> or <a id='perform_rebuild_test_cases' "\
+                "href='javascript:void(0);'>rebuild the test cases using the existing yml file as a template (only "\
                 'works with simple problems)</a>.'
 
     def save(self, *args, **kwargs):
@@ -89,6 +90,30 @@ class ProblemData(models.Model):
             self.generator.name = _problem_directory_file(new, self.generator.name)
         self.save()
     _update_code.alters_data = True
+
+    def setup_test_cases_content(self):
+        self.test_cases_content = ''
+
+        if self.zipfile:
+            zip = ZipFile(self.zipfile)
+
+            content = []
+            for i, tc in enumerate([x for x in ProblemTestCase.objects.filter(dataset_id=self.problem.pk)
+                                    if not x.is_pretest]):
+                content.append(f'## Sample Input {i+1}')
+                content.append('')
+                content.append('```')
+                content.append(zip.read(tc.input_file).decode('utf-8'))
+                content.append('```')
+                content.append('')
+                content.append(f'## Sample Output {i+1}')
+                content.append('')
+                content.append('```')
+                content.append(zip.read(tc.output_file).decode('utf-8'))
+                content.append('```')
+                content.append('')
+
+            self.test_cases_content = '\n'.join(content)
 
     def infer_test_cases_from_zip(self):
         # Just infers the zip data into ProblemTestCase objects, without changes in the database.
@@ -129,6 +154,7 @@ class ProblemData(models.Model):
         return cases
 
     def reload_test_cases_from_yml(self):
+        cases = []
         if self.has_yml():
             yml = problem_data_storage.open('%s/init.yml' % self.problem.code)
             doc = yaml.safe_load(yml)
@@ -166,12 +192,15 @@ class ProblemData(models.Model):
                         self.nobigmath = True
 
             if doc.get('pretest_test_cases'):
-                self._load_test_case_from_doc(doc, 'pretest_test_cases', True)
+                cases += self._load_test_case_from_doc(doc, 'pretest_test_cases', True)
 
             if doc.get('test_cases'):
-                self._load_test_case_from_doc(doc, 'test_cases', False)
+                cases += self._load_test_case_from_doc(doc, 'test_cases', False)
+
+        return cases
 
     def _load_test_case_from_doc(self, doc, field, is_pretest):
+        cases = []
         for i, test in enumerate(doc[field]):
             ptc = ProblemTestCase()
             ptc.dataset = self.problem
@@ -213,7 +242,9 @@ class ProblemData(models.Model):
                     ptc.checker = chk['name']
                     ptc.checker_args = chk['args']
 
-            ptc.save()
+            cases.append(ptc)
+
+        return cases
 
 
 class ProblemTestCase(models.Model):

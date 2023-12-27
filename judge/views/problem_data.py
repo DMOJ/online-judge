@@ -179,20 +179,7 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         context['valid_files_json'] = mark_safe(json.dumps(context['valid_files']))
         context['valid_files'] = set(context['valid_files'])
         context['all_case_forms'] = chain(context['cases_formset'], [context['cases_formset'].empty_form])
-        return context
-
-    def infer_test_cases_from_zip(self, data):
-        old = ProblemTestCase.objects.filter(dataset_id=self.object.pk)
-        infer = data.infer_test_cases_from_zip()
-
-        # When inferinf test-cases, new ones can be created but also existing
-        # ones can be reused. Only the old-ones should be removed.
-        for case in old:
-            if case not in infer:
-                case.delete()
-
-        for case in infer:
-            case.save()
+        return context    
 
     def post(self, request, *args, **kwargs):
         self.object = problem = self.get_object()
@@ -201,6 +188,7 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         data_form.zip_valid = valid_files is not False
         cases_formset = self.get_case_formset(valid_files, post=True)
 
+        # This options only appears when file are found in the file-system but no test-case exists in the BBDD.
         infer_from_zip = request.POST.get('perform_infer_test_cases', 0) != 0
         rebuild_from_yml = request.POST.get('perform_rebuild_test_cases', 0) != 0
 
@@ -211,7 +199,8 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
                 self.infer_test_cases_from_zip(data)
 
             elif rebuild_from_yml:
-                data.reload_test_cases_from_yml()
+                for case in data.reload_test_cases_from_yml():
+                    case.save()
 
             if infer_from_zip or rebuild_from_yml:
                 # The data.zipfile property has been loaded from the file system
@@ -235,11 +224,31 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
                     else:
                         self.infer_test_cases_from_zip(data)
 
+            # Enabling the 'display test cases' option for the problem should display the test cases after
+            # the problem statement. Otherwise, the problem data must be saved additionally to display the
+            # data for the first time. So, to avoid this additional step, the problem is the one which
+            # calls to setup the test-cases within problem data. Also, the update is needed to refresh the 
+            # cache so must be called from here anyways. 
+            data.problem.save()              
+
             ProblemDataCompiler.generate(problem, data, problem.cases.order_by('order'), valid_files)
             return HttpResponseRedirect(request.get_full_path())
 
         return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
                                                              valid_files=valid_files))
+    
+    def infer_test_cases_from_zip(self, data):
+        old = ProblemTestCase.objects.filter(dataset_id=self.object.pk)
+        infer = data.infer_test_cases_from_zip()
+
+        # When inferinf test-cases, new ones can be created but also existing
+        # ones can be reused. Only the old-ones should be removed.
+        for case in old:
+            if case not in infer:
+                case.delete()
+
+        for case in infer:
+            case.save()
 
     put = post
 
