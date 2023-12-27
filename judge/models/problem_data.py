@@ -105,9 +105,11 @@ class ProblemData(models.Model):
 
         cases = []
         for i in range(len(input)):
-            try:
-                ptc = ProblemTestCase.objects.get(dataset_id=self.problem.pk, input_file=input[i], output_file=output[i])
-            except ObjectDoesNotExist:
+            list = ProblemTestCase.objects.filter(dataset_id=self.problem.pk, input_file=input[i], output_file=output[i])
+            if len(list) >= 1:
+                # Multiple test-cases for the same data is allowed, but strange. Using object.get() produces an exception.
+                ptc = list[0]
+            else:
                 ptc = ProblemTestCase()
                 ptc.dataset = self.problem
                 ptc.is_pretest = False
