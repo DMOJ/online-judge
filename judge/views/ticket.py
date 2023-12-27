@@ -22,9 +22,11 @@ from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.tickets import filter_visible_tickets, own_ticket_filter
 from judge.utils.views import SingleObjectFormView, TitleMixin, paginate_query_context
 from judge.views.problem import ProblemMixin
-from judge.widgets import MartorWidget
+from judge.widgets import HeavyPreviewPageDownWidget
 
-ticket_widget = MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('ticket_preview')})
+ticket_widget = (forms.Textarea() if HeavyPreviewPageDownWidget is None else
+                 HeavyPreviewPageDownWidget(preview=reverse_lazy('ticket_preview'),
+                                            preview_timeout=1000, hide_preview_button=True))
 
 
 class TicketForm(forms.Form):

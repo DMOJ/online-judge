@@ -38,6 +38,7 @@
                     "{{ EVENT_DAEMON_LOCATION }}", "{{ EVENT_DAEMON_POLL_LOCATION }}",
                     ['sub_{{ submission.id_secret }}'], {{ last_msg }}, function (message) {
                         switch (message.type) {
+                            case 'aborted':
                             case 'internal-error':
                             case 'grading-end':
                             case 'compile-error':
