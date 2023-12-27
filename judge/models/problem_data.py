@@ -1,10 +1,13 @@
 import errno
 import os
+from zipfile import ZipFile
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from judge.utils.problem_data import ProblemDataStorage
+
 
 __all__ = ['problem_data_storage', 'problem_directory_file', 'ProblemData', 'ProblemTestCase', 'CHECKERS']
 
@@ -38,6 +41,7 @@ class ProblemData(models.Model):
                                upload_to=problem_directory_file)
     generator = models.FileField(verbose_name=_('generator file'), storage=problem_data_storage, null=True, blank=True,
                                  upload_to=problem_directory_file)
+    infer_from_zip = models.BooleanField(verbose_name=_('infer test cases from zip'), null=True, blank=True)
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
     output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
     feedback = models.TextField(verbose_name=_('init.yml generation feedback'), blank=True)
@@ -54,8 +58,10 @@ class ProblemData(models.Model):
         self.__original_zipfile = self.zipfile
 
     def save(self, *args, **kwargs):
+        zipfile = self.zipfile
         if self.zipfile != self.__original_zipfile:
-            self.__original_zipfile.delete(save=False)
+            self.__original_zipfile.delete(save=False) # This clears both zip fields (original and current)
+            self.zipfile = zipfile # Needed to restore the newly uploaded zip file when replacing an old one
         return super(ProblemData, self).save(*args, **kwargs)
 
     def has_yml(self):
@@ -73,6 +79,31 @@ class ProblemData(models.Model):
             self.generator.name = _problem_directory_file(new, self.generator.name)
         self.save()
     _update_code.alters_data = True
+
+    def infer_test_cases_from_zip(self):
+        # Just infers the zip data into ProblemTestCase objects, without changes in the database.
+        # It will try to mantain existing test cases data if the input and output entries are the same.
+
+        files = sorted(ZipFile(self.zipfile).namelist())
+        input = [x for x in files if '.in' in x or ('input' in x and '.' in x)]
+        output = [x for x in files if '.out' in x or ('output' in x and '.' in x)]
+
+        cases = []
+        for i in range(len(input)):
+            try:
+                ptc = ProblemTestCase.objects.get(dataset_id=self.problem.pk, input_file=input[i], output_file=output[i])
+            except ObjectDoesNotExist:
+                ptc = ProblemTestCase()
+                ptc.dataset = self.problem
+                ptc.is_pretest = False
+                ptc.order = i
+                ptc.input_file = input[i]
+                ptc.output_file = output[i]
+                ptc.points = 0
+            
+            cases.append(ptc)
+
+        return cases
 
 
 class ProblemTestCase(models.Model):
