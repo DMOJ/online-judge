@@ -5,7 +5,19 @@
     <script type="text/javascript" src="{{ static('libs/featherlight/featherlight.min.js') }}"></script>
     <script type="text/javascript">
         window.valid_files = {{ valid_files_json }};
-        $(function () {
+        $(function () {            
+            $('#perform_infer_test_cases').on('click', function(){
+                var $form = $('form')[1];
+                var $input = $('<input>').attr({type:'hidden',id:'perform_infer_test_cases',name:'perform_infer_test_cases',value:'1'}).appendTo($form);
+                $form.submit();
+            });
+
+            $('#perform_rebuild_test_cases').on('click', function(){
+                var $form = $('form')[1];
+                var $input = $('<input>').attr({type:'hidden',id:'perform_rebuild_test_cases',name:'perform_rebuild_test_cases',value:'1'}).appendTo($form);
+                $form.submit();
+            });
+
             function autofill_if_exists($select, file) {
                 if (!$select.val() && ~window.valid_files.indexOf(file))
                     $select.val(file).trigger('change');
@@ -162,7 +174,7 @@
                 $table.trigger('add-row', [$(this)]);
             });
 
-            $('form').submit(function () {
+            $('form').submit(function () {                
                 $table.find('tbody:first').find('tr').each(function () {
                     var filled = false;
                     $(this).find('input, select').each(function () {
@@ -331,6 +343,11 @@
             padding-bottom: 1em;
             background: #e99;
         }
+
+        ul.errorlist a{
+            cursor: pointer;
+        }
+
     </style>
 {% endblock %}
 
@@ -345,7 +362,7 @@
 {% block body %}
     {% if data_form.instance.feedback %}
         <ul class="errorlist">
-            <li>{{ data_form.instance.feedback }}</li>
+            <li>{{ data_form.instance.feedback|safe }}</li>
         </ul>
     {% endif %}
     <form action="" method="POST" enctype="multipart/form-data">

@@ -2,6 +2,7 @@ import errno
 import os
 from zipfile import ZipFile
 
+import yaml
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -57,6 +58,11 @@ class ProblemData(models.Model):
         super(ProblemData, self).__init__(*args, **kwargs)
         self.__original_zipfile = self.zipfile
 
+        if not self.zipfile:
+            # Test cases not loaded through the site, but some data has been found within the problem folder
+            if self.has_yml():
+                self.feedback = "Warning: problem data found within the file system, but none has been setup using this site. No actions are needed if the problem is working as intended; otherwise, you can <a id='perform_infer_test_cases' href='javascript:void(0);'>infer the testcases using the existing zip file (one entry per file within the zip)</a> or <a id='perform_rebuild_test_cases' href='javascript:void(0);'>rebuild the test cases using the existing yml file as a template (only works with simple problems)</a>."
+
     def save(self, *args, **kwargs):
         zipfile = self.zipfile
         if self.zipfile != self.__original_zipfile:
@@ -83,6 +89,15 @@ class ProblemData(models.Model):
     def infer_test_cases_from_zip(self):
         # Just infers the zip data into ProblemTestCase objects, without changes in the database.
         # It will try to mantain existing test cases data if the input and output entries are the same.
+        if not self.zipfile:
+            # The zip file will be loaded from the file system if not provided
+            files = problem_data_storage.listdir(self.problem.code)[1]
+            zipfiles = [x for x in files if '.zip' in x]
+
+            if len(zipfiles) > 0:
+                self.zipfile = _problem_directory_file(self.problem.code, zipfiles[0])
+            else:
+                raise FileNotFoundError
 
         files = sorted(ZipFile(self.zipfile).namelist())
         input = [x for x in files if '.in' in x or ('input' in x and '.' in x)]
@@ -104,7 +119,93 @@ class ProblemData(models.Model):
             cases.append(ptc)
 
         return cases
+    
+    def reload_test_cases_from_yml(self):
+        if self.has_yml():
+            yml = problem_data_storage.open('%s/init.yml' % self.problem.code)
+            doc = yaml.safe_load(yml)
 
+            # Load same YML data as in site/judge/utils/problem_data.py -> ProblemDataCompiler()
+            if doc.get('archive'):
+                self.zipfile = _problem_directory_file(self.problem.code, doc['archive'])
+
+            if doc.get('generator'):
+                self.generator = _problem_directory_file(self.problem.code, doc['generator'])
+
+            if doc.get('pretest_test_cases'):
+                self.pretest_test_cases = doc['pretest_test_cases']
+
+            if doc.get('output_limit_length'):
+                self.output_limit = doc['output_limit_length']
+
+            if doc.get('output_prefix_length'):
+                self.output_prefix = doc['output_prefix_length']
+
+            if doc.get('unicode'):
+                self.unicode = doc['unicode']
+
+            if doc.get('nobigmath'):
+                self.nobigmath = doc['nobigmath']
+
+            if doc.get('checker'):
+                self.checker = doc['checker']
+
+            if doc.get('hints'):
+                for h in doc['hints']:
+                    if h == 'unicode':
+                        self.unicode = True
+                    if h == 'nobigmath':
+                        self.nobigmath = True
+
+            if doc.get('pretest_test_cases'):
+                self._load_test_case_from_doc(doc, 'pretest_test_cases', True)
+
+            if doc.get('test_cases'):
+                self._load_test_case_from_doc(doc, 'test_cases', False)
+
+    def _load_test_case_from_doc(self, doc, field, is_pretest):
+        for i, test in enumerate(doc[field]):
+            ptc = ProblemTestCase()
+            ptc.dataset = self.problem
+            ptc.is_pretest = is_pretest
+            ptc.order = i
+
+            if test.get('type'):
+                ptc.type = test['type']
+
+            if test.get('in'):
+                ptc.input_file = test['in']
+
+            if test.get('out'):
+                ptc.output_file = test['out']
+
+            if test.get('points'):
+                ptc.points = test['points']
+            else:
+                ptc.points = 0
+
+            if test.get('generator_args'):
+                args = []
+                for arg in test['generator_args']:
+                    args.append(arg)
+
+                ptc.generator_args = '\n'.join(args)
+
+            if test.get('output_prefix_length'):
+                ptc.output_prefix = doc['output_prefix_length']
+
+            if test.get('output_limit_length'):
+                ptc.output_limit = doc['output_limit_length']
+
+            if test.get('checker'):
+                chk = test['checker']
+                if isinstance(chk, str):
+                    ptc.checker = chk
+                else:
+                    ptc.checker = chk['name']
+                    ptc.checker_args = chk['args']
+
+            ptc.save()
 
 class ProblemTestCase(models.Model):
     dataset = models.ForeignKey('Problem', verbose_name=_('problem data set'), related_name='cases',

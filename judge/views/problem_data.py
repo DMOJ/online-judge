@@ -181,6 +181,19 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         context['all_case_forms'] = chain(context['cases_formset'], [context['cases_formset'].empty_form])
         return context
 
+    def infer_test_cases_from_zip(self, data):
+        old = ProblemTestCase.objects.filter(dataset_id=self.object.pk)
+        infer = data.infer_test_cases_from_zip()
+
+        # When inferinf test-cases, new ones can be created but also existing
+        # ones can be reused. Only the old-ones should be removed.
+        for case in old:
+            if not case in infer:
+                case.delete()
+
+        for case in infer:                    
+            case.save()
+
     def post(self, request, *args, **kwargs):
         self.object = problem = self.get_object()
         data_form = self.get_data_form(post=True)
@@ -188,36 +201,43 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         data_form.zip_valid = valid_files is not False
         cases_formset = self.get_case_formset(valid_files, post=True)
 
+        infer_from_zip = request.POST.get('perform_infer_test_cases', 0) != 0
+        rebuild_from_yml = request.POST.get('perform_rebuild_test_cases', 0) != 0
+
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()
 
-            for case in cases_formset.save(commit=False):
-                case.dataset_id = problem.id
-                case.save()
+            if infer_from_zip:
+                self.infer_test_cases_from_zip(data)
 
-            for case in cases_formset.deleted_objects:
-                case.delete()
-            
-            if data.infer_from_zip:
-                if not data.zipfile:
-                    # Removing all entries to keep consistency (infering from no zip)
-                    for case in ProblemTestCase.objects.filter(dataset_id=self.object.pk):
-                        case.delete()
-                else:                               
-                    old = ProblemTestCase.objects.filter(dataset_id=self.object.pk)
-                    infer = data.infer_test_cases_from_zip()
+            elif rebuild_from_yml:
+                data.reload_test_cases_from_yml()                
 
-                    # When inferinf test-cases, new ones can be created but also existing
-                    # ones can be reused. Only the old-ones should be removed.
-                    for case in old:
-                        if not case in infer:
+            if infer_from_zip or rebuild_from_yml:
+                # The data.zipfile property has been loaded from the file system
+                valid_files = sorted(ZipFile(data.zipfile).namelist())  
+                cases_formset = self.get_case_formset(valid_files, post=True) 
+                data.save()
+
+            else:    
+                for case in cases_formset.save(commit=False):
+                    case.dataset_id = problem.id
+                    case.save()
+
+                for case in cases_formset.deleted_objects:
+                    case.delete()
+                
+                if data.infer_from_zip:
+                    if not data.zipfile:
+                        # Removing all entries to keep consistency (infering from no zip)
+                        for case in ProblemTestCase.objects.filter(dataset_id=self.object.pk):
                             case.delete()
-
-                    for case in infer:                    
-                        case.save()
+                    else:                               
+                        self.infer_test_cases_from_zip(data)
 
             ProblemDataCompiler.generate(problem, data, problem.cases.order_by('order'), valid_files)
             return HttpResponseRedirect(request.get_full_path())
+        
         return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
                                                              valid_files=valid_files))
 
