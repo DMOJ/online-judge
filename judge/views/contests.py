@@ -293,8 +293,8 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
                 problem_count=Count('id'),
             ),
         )
-        context['disable_comments'] = settings.DMOJ_DISABLE_COMMENTS
-        context['disable_social'] = settings.DMOJ_DISABLE_SOCIAL
+        context['enable_comments'] = settings.DMOJ_ENABLE_COMMENTS
+        context['enable_social'] = settings.DMOJ_ENABLE_SOCIAL
         return context
 
 

@@ -36,7 +36,7 @@
         </div>
     </div>
     
-    {% if not disable_social %}
+    {% if enable_social %}
         <hr>
         <span class="social">
             {{ post_to_facebook(request, contest, '<i class="fa fa-facebook-official"></i>') }}
@@ -44,7 +44,7 @@
         </span>
     {% endif %}
 
-    {% if not disable_comments %}
+    {% if enable_comments %}
         {% include "comments/list.html" %}
     {% endif %}
 {% endblock %}
