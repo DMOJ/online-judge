@@ -129,6 +129,9 @@ DMOJ_THEME_DEFAULT_ACE_THEME = {
 }
 DMOJ_SELECT2_THEME = 'dmoj'
 
+DMOJ_ENABLE_COMMENTS = True
+DMOJ_ENABLE_SOCIAL = True
+
 MARKDOWN_STYLES = {}
 MARKDOWN_DEFAULT_STYLE = {}
 
@@ -160,9 +163,6 @@ INLINE_FONTAWESOME = True
 JQUERY_JS = '//ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'
 FONTAWESOME_CSS = '//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'
 DMOJ_CANONICAL = ''
-
-DMOJ_ENABLE_COMMENTS = True
-DMOJ_ENABLE_SOCIAL = True
 
 # Application definition
 
