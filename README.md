@@ -1,19 +1,3 @@
-<h1 align="center">
-  <img src="https://avatars2.githubusercontent.com/u/6934864?v=3&s=1000" width="120px">
-  <br>
-  DMOJ: Modern Online Judge
-</h1>
-<p align="center">
-  <a href="https://github.com/DMOJ/online-judge/actions?query=workflow%3Abuild">
-    <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DMOJ/online-judge/build.yml?branch=master"/>
-  </a>
-  <a href="LICENSE.md">
-    <img alt="License" src="https://img.shields.io/github/license/DMOJ/online-judge"/>
-  </a>
-  <a href="https://dmoj.ca/about/discord/">
-    <img src="https://img.shields.io/discord/677340492651954177?color=%237289DA&label=Discord"/>
-  </a>
-</p>
 
 A modern open-source online judge and contest platform system. It has been used to host thousands of competitions, including several national olympiads.
 
