@@ -6,3 +6,4 @@
 	path = resources/libs
 	url = https://github.com/DMOJ/site-assets.git
 	branch = master
+	ignore = dirty
