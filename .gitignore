@@ -14,4 +14,4 @@ resources/style.css
 resources/vars.scss
 sass_processed
 <desired bridge log path>
-resources/libs
+ignore = dirty
