@@ -12,10 +12,6 @@
     margin-bottom: 0.5em;
     background: rgba($color_primary100, 0.01);
 
-    &.striped tr:nth-child(even) {
-        background: rgba($color_primary100, 0.03);
-    }
-
     th {
         height: 2em;
         color: $color_primary0;
@@ -61,4 +57,8 @@
     tbody tr:last-child th:first-child {
         border-bottom-left-radius: $table_header_rounding;
     }
+}
+
+.striped tr:nth-child(even) {
+    background: rgba($color_primary100, 0.03);
 }
