@@ -32,24 +32,24 @@
     font-weight: 400;
     line-height: 1.4;
     background: rgb(51, 122, 183) none repeat scroll 0 (0% / auto) padding-box border-box;
-    background: -webkit-linear-gradient(top, #337ab7 0, #265a88 100%) repeat-x;
-    background: linear-gradient(to bottom, #337ab7 0, #265a88 100%) repeat-x;
+    background: -webkit-linear-gradient(top, #EB5728 0, #C2390D 100%) repeat-x;
+    background: linear-gradient(to bottom, #EB5728 0, #C2390D 100%) repeat-x;
     border-radius: $widget_border_radius;
     padding: 6px 12px;
     display: block;
-    border: 1px solid #245580;
+    border: 1px solid #9A2500;
     text-align: center;
 
     // 4k hack
     font-size: $base_font_size;
 
     &:hover {
-        background: #265a88;
+        background: #C2390D;
     }
 
     &:active {
-        border-color: #245580;
-        background: #265a88;
+        border-color: #9A2500;
+        background: #C2390D;
     }
 
     &.full {
