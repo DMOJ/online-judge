@@ -1,6 +1,7 @@
 @charset "UTF-8";
 
 @import "vars";
+@import "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,700;1,9..40,400;1,9..40,700&display=swap%27";
 
 @-ms-viewport {
     min-width: 480px;
@@ -112,7 +113,7 @@ body {
     font-size: $base_font_size;
     line-height: 1.231;
     background: $color_primary5;
-    font-family: "Segoe UI", "Lucida Grande", Arial, sans-serif;
+    font-family: "DM Sans", "Segoe UI", "Lucida Grande", Arial, sans-serif;
     color: $color_primary100;
     height: 100%;
 }

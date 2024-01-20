@@ -66,7 +66,7 @@
 }
 
 #nav-container {
-    background: #EB5728;
+    background: #E45F3F;
 
     // opacity: 0.77
     // filter: alpha(opacity=77)
@@ -136,14 +136,14 @@ nav {
                 left: 5px;
                 display: none;
                 color: #fff;
-                background: #EB5728;
+                background: #E45F3F;
                 margin: 0 !important;
                 box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 
                 li {
                     &:first-child {
                         a.active {
-                            border-top: 1px solid #EB5728;
+                            border-top: 1px solid #E45F3F;
                         }
                     }
                 }
@@ -228,7 +228,7 @@ nav {
         margin: 0;
         position: fixed;
         top: 36px;
-        background: #EB5728;
+        background: #E45F3F;
         bottom: 0;
         width: 8em;
         left: 0;
