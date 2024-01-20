@@ -126,7 +126,7 @@
             } catch (e) {}
         });
     </script>
-    {% if form.captcha %}
+    {% if form.recaptcha %}
         {{ recaptcha_init(LANGUAGE_CODE) }}
     {% endif %}
 {% endblock %}
@@ -196,10 +196,17 @@
                 </div>
             {% endif %}
 
-            {% if form.captcha %}
-                <div style="margin-top: 0.5em">{{ form.captcha }}</div>
-                {% if form.captcha.errors %}
-                    <div class="form-field-error">{{ form.captcha.errors }}</div>
+            {% if form.recaptcha %}
+                <div style="margin-top: 0.5em">{{ form.recaptcha }}</div>
+                {% if form.recaptcha.errors %}
+                    <div class="form-field-error">{{ form.recaptcha.errors }}</div>
+                {% endif %}
+            {% endif %}
+
+            {% if form.hcaptcha %}
+                <div style="margin-top: 0.5em">{{ form.hcaptcha }}</div>
+                {% if form.hcaptcha.errors %}
+                    <div class="form-field-error">{{ form.hcaptcha.errors }}</div>
                 {% endif %}
             {% endif %}
 
