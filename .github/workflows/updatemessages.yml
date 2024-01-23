@@ -33,7 +33,7 @@ jobs:
         python manage.py makemessages -l en -d djangojs
     - name: Download strings from Crowdin
       env:
-        CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
+        CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_V2_TOKEN }}
       run: |
         cat > crowdin.yaml <<EOF
         project_id: 142963
