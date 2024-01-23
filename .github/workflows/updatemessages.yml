@@ -1,5 +1,6 @@
 name: updatemessages
 on:
+  push:
   schedule:
     - cron: '0 0 * * *'
 jobs:
@@ -21,7 +22,7 @@ jobs:
     - name: Install requirements
       run: |
         sudo apt-get install gettext
-        curl -O https://artifacts.crowdin.com/repo/deb/crowdin.deb
+        wget https://artifacts.crowdin.com/repo/deb/crowdin3.deb -O crowdin.deb
         sudo dpkg -i crowdin.deb
         pip install -r requirements.txt
         pip install pymysql
