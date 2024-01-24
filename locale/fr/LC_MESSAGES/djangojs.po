@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 23:43+0000\n"
-"PO-Revision-Date: 2022-12-21 00:43\n"
+"POT-Creation-Date: 2023-01-23 05:23+0000\n"
+"PO-Revision-Date: 2023-04-25 00:45\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -17,14 +17,14 @@ msgstr ""
 "X-Crowdin-File: djangojs.po\n"
 "X-Crowdin-File-ID: 12\n"
 
-#: resources/common.js:195
+#: resources/common.js:194
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d jour %h:%m:%s"
 msgstr[1] "%d jours %h:%m:%s"
 
-#: resources/common.js:198
+#: resources/common.js:197
 msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr "%h:%m:%s"
@@ -65,8 +65,8 @@ msgstr[1] "%(cnt)d soumissions au total"
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
-msgstr[0] "%(cnt)d soumission l'année dernière"
-msgstr[1] "%(cnt)d soumissions l'année dernière"
+msgstr[0] "%(cnt)d soumission au cours de la dernière année"
+msgstr[1] "%(cnt)d soumissions au cours de la dernière année"
 
 #: resources/user_profile.js:74
 msgid "%(cnt)d submission in %(year)d"

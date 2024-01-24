@@ -3,17 +3,17 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2023-08-01 00:54\n"
+"PO-Revision-Date: 2024-01-24 00:44\n"
 "Last-Translator: \n"
-"Language-Team: Serbian (Latin)\n"
-"Language: sr_CS\n"
+"Language-Team: Kazakh\n"
+"Language: kk_KZ\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: dmoj\n"
 "X-Crowdin-Project-ID: 142963\n"
-"X-Crowdin-Language: sr-CS\n"
+"X-Crowdin-Language: kk\n"
 "X-Crowdin-File: djangojs.po\n"
 "X-Crowdin-File-ID: 12\n"
 
@@ -21,9 +21,8 @@ msgstr ""
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
-msgstr[0] "%d dan i %h:%m:%s"
-msgstr[1] "%d dana i %h:%m:%s"
-msgstr[2] "%d dana %h:%m:%s"
+msgstr[0] "%d күн %h:%m:%s"
+msgstr[1] "%d күн %h:%m:%s"
 
 #: resources/common.js:197
 msgctxt "time format without day"
@@ -32,56 +31,52 @@ msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr "Glasajte za poene zadatka"
+msgstr "Есеп ұпайларына дауыс беріңіз"
 
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr "Neuspešno brisanje glasa: %s"
+msgstr "Берілген дауысты жою мүмкін емес: %s"
 
 #: resources/problem-vote.js:28
 #, javascript-format
 msgid "Edit points vote (%s)"
-msgstr "Promeni glas za poene (%s)"
+msgstr "Ұпайлар дауысын өзгерту (%s)"
 
 #: resources/problem-vote.js:34
 #, javascript-format
 msgid "Unable to cast vote: %s"
-msgstr "Neuspešno slanje glasa: %s"
+msgstr "Дауыс беру мүмкін емес: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
-msgstr "Broj glasova za ovaj broj poena"
+msgstr "Осы ұпай мәніне берілген дауыстар саны"
 
 #: resources/user_profile.js:47
 msgid "past year"
-msgstr "protekle godine"
+msgstr "өткен жыл"
 
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
-msgstr[0] "%(cnt)d poslato rešenje"
-msgstr[1] "%(cnt)d poslata rešenje"
-msgstr[2] "%(cnt)d poslatih rešenja "
+msgstr[0] "%(cnt)d барлық тапсырылым"
+msgstr[1] "%(cnt)d барлық тапсырылым"
 
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
-msgstr[0] "%(cnt)d poslato rešenje u proteklih godinu dana"
-msgstr[1] "%(cnt)d poslata rešenja u proteklih godinu dana"
-msgstr[2] "%(cnt)d poslatih rešenja u proteklih godinu dana"
+msgstr[0] "%(cnt)d тапсырылым cоңғы жылда"
+msgstr[1] "%(cnt)d тапсырылым cоңғы жылда"
 
 #: resources/user_profile.js:74
 msgid "%(cnt)d submission in %(year)d"
 msgid_plural "%(cnt)d submissions in %(year)d"
-msgstr[0] "%(cnt)d poslato rešenje u %(year)d"
-msgstr[1] "%(cnt)d poslata rešenja u %(year)d"
-msgstr[2] "%(cnt)d poslatih rešenja u %(year)d"
+msgstr[0] "%(cnt)d тапсырылым %(year)d жылы"
+msgstr[1] "%(cnt)d тапсырылым %(year)d жылы"
 
 #: resources/user_profile.js:88
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
-msgstr[0] "%(cnt)d poslato rešenje %(date)s"
-msgstr[1] "%(cnt)d poslata rešenja %(date)s"
-msgstr[2] "%(cnt)d poslatih rešenja %(date)s"
+msgstr[0] "%(cnt)d тапсырылым %(date)s жылы"
+msgstr[1] "%(cnt)d тапсырылым %(date)s жылы"
 
