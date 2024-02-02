@@ -3,17 +3,19 @@ import hmac
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import models
+from django.db import models, transaction
+from django.db.models.query import QuerySet
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from reversion import revisions
 
-from judge.judgeapi import abort_submission, judge_submission
+from judge.judgeapi import abort_submission, batch_judge_submission, judge_submission
 from judge.models.problem import Problem, SubmissionSourceAccess
 from judge.models.profile import Profile
 from judge.models.runtime import Language
+from judge.utils.iterator import chunk
 from judge.utils.unicode import utf8bytes
 
 __all__ = ['SUBMISSION_RESULT', 'Submission', 'SubmissionSource', 'SubmissionTestCase']
@@ -31,6 +33,28 @@ SUBMISSION_RESULT = (
     ('SC', _('Short Circuited')),
     ('AB', _('Aborted')),
 )
+
+
+class BatchJudgeSubmissionQuerySet(QuerySet):
+    def batch_judge(self, *, rejudge=False, force_judge=False, rejudge_user=None, chunk_size=100, **kwargs):
+        # Don't trust the caller to follow related objects that we need.
+        submissions = self.select_related('problem', 'language', 'source', 'contest_object')
+
+        if not force_judge:
+            submissions = submissions.exclude(locked_after__lt=timezone.now())
+
+        for current_chunk in chunk(submissions.iterator(chunk_size=chunk_size), chunk_size):
+            if rejudge:
+                with transaction.atomic():
+                    for submission in current_chunk:
+                        with revisions.create_revision(manage_manually=True):
+                            if rejudge_user:
+                                revisions.set_user(rejudge_user)
+                            revisions.set_comment('Rejudged')
+                            revisions.add_to_revision(submission)
+
+            batch_judge_submission(current_chunk, rejudge=rejudge, **kwargs)
+            yield len(current_chunk)
 
 
 @revisions.register(follow=['test_cases'])
@@ -89,6 +113,8 @@ class Submission(models.Model):
                                        on_delete=models.SET_NULL, related_name='+', db_index=False)
     locked_after = models.DateTimeField(verbose_name=_('submission lock'), null=True, blank=True)
 
+    objects = BatchJudgeSubmissionQuerySet()
+
     @classmethod
     def result_class_from_code(cls, result, case_points, case_total):
         if result == 'AC':
@@ -120,7 +146,7 @@ class Submission(models.Model):
     def is_locked(self):
         return self.locked_after is not None and self.locked_after < timezone.now()
 
-    def judge(self, *args, rejudge=False, force_judge=False, rejudge_user=None, **kwargs):
+    def judge(self, *, rejudge=False, force_judge=False, rejudge_user=None, **kwargs):
         if force_judge or not self.is_locked:
             if rejudge:
                 with revisions.create_revision(manage_manually=True):
@@ -128,7 +154,7 @@ class Submission(models.Model):
                         revisions.set_user(rejudge_user)
                     revisions.set_comment('Rejudged')
                     revisions.add_to_revision(self)
-            judge_submission(self, *args, rejudge=rejudge, **kwargs)
+            judge_submission(self, rejudge=rejudge, **kwargs)
 
     judge.alters_data = True
 

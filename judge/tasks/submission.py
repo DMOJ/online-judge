@@ -31,11 +31,9 @@ def rejudge_problem_filter(self, problem_id, id_range=None, languages=None, resu
 
     rejudged = 0
     with Progress(self, queryset.count()) as p:
-        for submission in queryset.iterator():
-            submission.judge(rejudge=True, batch_rejudge=True, rejudge_user=user)
-            rejudged += 1
-            if rejudged % 10 == 0:
-                p.done = rejudged
+        for completed in queryset.batch_judge(rejudge=True, rejudge_user=user):
+            p.did(completed)
+            rejudged += completed
     return rejudged
 
 

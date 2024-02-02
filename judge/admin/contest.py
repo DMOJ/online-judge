@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _, ngettext
 from reversion.admin import VersionAdmin
 
 from django_ace import AceWidget
-from judge.models import Class, Contest, ContestProblem, ContestSubmission, Profile, Rating, Submission
+from judge.models import Class, Contest, ContestProblem, Profile, Rating, Submission
 from judge.ratings import rate_contest
 from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
@@ -273,13 +273,13 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
-        queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
-        for model in queryset:
-            model.submission.judge(rejudge=True, rejudge_user=request.user)
+        judged = sum(Submission.objects.filter(contest__problem_id=problem_id).batch_judge(
+            rejudge=True, rejudge_user=request.user,
+        ))
 
         self.message_user(request, ngettext('%d submission was successfully scheduled for rejudging.',
                                             '%d submissions were successfully scheduled for rejudging.',
-                                            len(queryset)) % len(queryset))
+                                            judged) % judged)
         return HttpResponseRedirect(reverse('admin:judge_contest_change', args=(contest_id,)))
 
     def rate_all_view(self, request):
