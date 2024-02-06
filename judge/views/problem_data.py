@@ -2,6 +2,7 @@ import json
 import mimetypes
 import os
 from itertools import chain
+from typing import List
 from zipfile import BadZipfile, ZipFile
 
 from django.conf import settings
@@ -44,7 +45,19 @@ class ProblemDataForm(ModelForm):
     def clean_zipfile(self):
         if hasattr(self, 'zip_valid') and not self.zip_valid:
             raise ValidationError(_('Your zip file is invalid!'))
-        return self.cleaned_data['zipfile']
+
+        zipfile = self.cleaned_data['zipfile']
+        if zipfile and not zipfile.name.endswith('.zip'):
+            raise ValidationError(_("Zip files must end in '.zip'"))
+
+        return zipfile
+
+    def clean_generator(self):
+        generator = self.cleaned_data['generator']
+        if generator and generator.name == 'init.yml':
+            raise ValidationError(_('Generators must not be named init.yml.'))
+
+        return generator
 
     clean_checker_args = checker_args_cleaner
 
@@ -62,10 +75,11 @@ class ProblemCaseForm(ModelForm):
 
     class Meta:
         model = ProblemTestCase
-        fields = ('order', 'type', 'input_file', 'output_file', 'points',
-                  'is_pretest', 'output_limit', 'output_prefix', 'checker', 'checker_args', 'generator_args')
+        fields = ('order', 'type', 'input_file', 'output_file', 'points', 'is_pretest', 'output_limit',
+                  'output_prefix', 'checker', 'checker_args', 'generator_args', 'batch_dependencies')
         widgets = {
             'generator_args': HiddenInput,
+            'batch_dependencies': HiddenInput,
             'type': Select(attrs={'style': 'width: 100%'}),
             'points': NumberInput(attrs={'style': 'width: 4em'}),
             'output_prefix': NumberInput(attrs={'style': 'width: 4.5em'}),
@@ -157,7 +171,7 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
         return ProblemCaseFormSet(data=self.request.POST if post else None, prefix='cases', valid_files=files,
                                   queryset=ProblemTestCase.objects.filter(dataset_id=self.object.pk).order_by('order'))
 
-    def get_valid_files(self, data, post=False):
+    def get_valid_files(self, data, post=False) -> List[str]:
         try:
             if post and 'problem-data-zipfile-clear' in self.request.POST:
                 return []
@@ -166,26 +180,35 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
             elif data.zipfile:
                 return ZipFile(data.zipfile.path).namelist()
         except BadZipfile:
-            return []
+            raise
         return []
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDataView, self).get_context_data(**kwargs)
+        valid_files = []
         if 'data_form' not in context:
             context['data_form'] = self.get_data_form()
-            valid_files = context['valid_files'] = self.get_valid_files(context['data_form'].instance)
-            context['data_form'].zip_valid = valid_files is not False
-            context['cases_formset'] = self.get_case_formset(valid_files)
-        context['valid_files_json'] = mark_safe(json.dumps(context['valid_files']))
-        context['valid_files'] = set(context['valid_files'])
+            try:
+                valid_files = self.get_valid_files(context['data_form'].instance)
+            except BadZipfile:
+                pass
+        context['valid_files'] = set(valid_files)
+        context['valid_files_json'] = mark_safe(json.dumps(valid_files))
+
+        context['cases_formset'] = self.get_case_formset(valid_files)
         context['all_case_forms'] = chain(context['cases_formset'], [context['cases_formset'].empty_form])
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = problem = self.get_object()
         data_form = self.get_data_form(post=True)
-        valid_files = self.get_valid_files(data_form.instance, post=True)
-        data_form.zip_valid = valid_files is not False
+        try:
+            valid_files = self.get_valid_files(data_form.instance, post=True)
+            data_form.zip_valid = True
+        except BadZipfile:
+            valid_files = []
+            data_form.zip_valid = False
+
         cases_formset = self.get_case_formset(valid_files, post=True)
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()

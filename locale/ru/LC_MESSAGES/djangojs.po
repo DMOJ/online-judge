@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 23:43+0000\n"
-"PO-Revision-Date: 2022-12-21 00:44\n"
+"POT-Creation-Date: 2023-01-23 05:23+0000\n"
+"PO-Revision-Date: 2023-10-25 01:00\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Crowdin-File: djangojs.po\n"
 "X-Crowdin-File-ID: 12\n"
 
-#: resources/common.js:195
+#: resources/common.js:194
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
@@ -26,42 +26,42 @@ msgstr[1] "%d дней %h:%m:%s"
 msgstr[2] "%d дней %h:%m:%s"
 msgstr[3] "%d дней %h:%m:%s"
 
-#: resources/common.js:198
+#: resources/common.js:197
 msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr ""
+msgstr "Голосовать за точки задач"
 
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr ""
+msgstr "Не удалось удалить голосование: %s"
 
 #: resources/problem-vote.js:28
 #, javascript-format
 msgid "Edit points vote (%s)"
-msgstr ""
+msgstr "Редактировать голос очков (%s)"
 
 #: resources/problem-vote.js:34
 #, javascript-format
 msgid "Unable to cast vote: %s"
-msgstr ""
+msgstr "Невозможно проголосовать: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
-msgstr ""
+msgstr "Количество голосов за это значение"
 
 #: resources/user_profile.js:47
 msgid "past year"
-msgstr ""
+msgstr "прошедший год"
 
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
-msgstr[0] ""
+msgstr[0] "Всего сабмитов %(cnt)d"
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
@@ -69,7 +69,7 @@ msgstr[3] ""
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
-msgstr[0] ""
+msgstr[0] "%(cnt)d сабмит за последний год"
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
@@ -77,7 +77,7 @@ msgstr[3] ""
 #: resources/user_profile.js:74
 msgid "%(cnt)d submission in %(year)d"
 msgid_plural "%(cnt)d submissions in %(year)d"
-msgstr[0] ""
+msgstr[0] "%(cnt)d отправлено в %(year)d"
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
@@ -85,7 +85,7 @@ msgstr[3] ""
 #: resources/user_profile.js:88
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
-msgstr[0] ""
+msgstr[0] "%(cnt)d отправлено в %(date)s"
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""

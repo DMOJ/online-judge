@@ -401,6 +401,7 @@ LANGUAGES = [
     ('hr', _('Croatian')),
     ('hu', _('Hungarian')),
     ('ja', _('Japanese')),
+    ('kk', _('Kazakh')),
     ('ko', _('Korean')),
     ('pt', _('Brazilian Portuguese')),
     ('ro', _('Romanian')),
