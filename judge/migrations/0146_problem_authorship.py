@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('judge', '0144_submission_index_cleanup'),
+        ('judge', '0145_site_data_batch_prerequisites'),
     ]
 
     operations = [
