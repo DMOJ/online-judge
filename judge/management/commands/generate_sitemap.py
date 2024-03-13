@@ -10,7 +10,7 @@ from judge.sitemap import sitemaps
 
 
 class Command(BaseCommand):
-    requires_system_checks = False
+    requires_system_checks = []
 
     def add_arguments(self, parser):
         parser.add_argument('directory', help='directory to generate the sitemap in')
