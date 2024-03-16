@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-20 23:43+0000\n"
-"PO-Revision-Date: 2023-01-16 00:50\n"
+"POT-Creation-Date: 2023-01-23 05:23+0000\n"
+"PO-Revision-Date: 2023-10-20 00:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -17,39 +17,39 @@ msgstr ""
 "X-Crowdin-File: djangojs.po\n"
 "X-Crowdin-File-ID: 12\n"
 
-#: resources/common.js:195
+#: resources/common.js:194
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d 天 %h:%m:%s"
 
-#: resources/common.js:198
+#: resources/common.js:197
 msgctxt "time format without day"
 msgid "%h:%m:%s"
 msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr ""
+msgstr "评分题目"
 
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr ""
+msgstr "删除评分投票失败: %s"
 
 #: resources/problem-vote.js:28
 #, javascript-format
 msgid "Edit points vote (%s)"
-msgstr ""
+msgstr "修改评分 (%s)"
 
 #: resources/problem-vote.js:34
 #, javascript-format
 msgid "Unable to cast vote: %s"
-msgstr ""
+msgstr "无法评分: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
-msgstr ""
+msgstr "该分值的评分人数"
 
 #: resources/user_profile.js:47
 msgid "past year"

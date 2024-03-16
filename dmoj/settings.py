@@ -129,6 +129,9 @@ DMOJ_THEME_DEFAULT_ACE_THEME = {
 }
 DMOJ_SELECT2_THEME = 'dmoj'
 
+DMOJ_ENABLE_COMMENTS = True
+DMOJ_ENABLE_SOCIAL = True
+
 MARKDOWN_STYLES = {}
 MARKDOWN_DEFAULT_STYLE = {}
 
@@ -398,6 +401,7 @@ LANGUAGES = [
     ('hr', _('Croatian')),
     ('hu', _('Hungarian')),
     ('ja', _('Japanese')),
+    ('kk', _('Kazakh')),
     ('ko', _('Korean')),
     ('pt', _('Brazilian Portuguese')),
     ('ro', _('Romanian')),

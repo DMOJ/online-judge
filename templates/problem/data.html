@@ -125,37 +125,42 @@
                         .find('input[id$=points], input[id$=pretest]').toggle(!disabled);
                 }).change();
 
-                var tooltip_classes = 'tooltipped tooltipped-s';
-                $tr.find('a.edit-generator-args').mouseover(function () {
-                    switch ($tr.attr('data-type')) {
-                        case 'C':
-                        case 'S':
-                            var $this = $(this).addClass(tooltip_classes);
-                            $this.attr('aria-label', $this.prev().val() || '(none)');
-                    }
-                }).mouseout(function () {
-                    $(this).removeClass(tooltip_classes).removeAttr('aria-label');
-                }).featherlight($('.generator-args-editor'), {
-                    beforeOpen: function () {
+                function addToolTip(linkClass, editorClass) {
+                    var tooltip_classes = 'tooltipped tooltipped-s';
+                    $tr.find(linkClass).mouseover(function () {
                         switch ($tr.attr('data-type')) {
                             case 'C':
                             case 'S':
-                                return true;
-                            default:
-                                return false;
+                            var $this = $(this).addClass(tooltip_classes);
+                            $this.attr('aria-label', $this.prev().val() || '(none)');
                         }
-                    },
-                    afterOpen: function () {
-                        var $input = this.$currentTarget.prev();
-                        this.$instance.find('.generator-args-editor')
+                    }).mouseout(function () {
+                        $(this).removeClass(tooltip_classes).removeAttr('aria-label');
+                    }).featherlight($(editorClass), {
+                        beforeOpen: function () {
+                            switch ($tr.attr('data-type')) {
+                                case 'C':
+                                case 'S':
+                                return true;
+                                default:
+                                return false;
+                            }
+                        },
+                        afterOpen: function () {
+                            var $input = this.$currentTarget.prev();
+                            this.$instance.find(editorClass)
                             .find('textarea').val($input.val()).end()
                             .find('.button').click(function () {
-                            $input.val($(this).prev().val());
-                            $.featherlight.current().close();
-                        }).end()
+                                $input.val($(this).prev().val());
+                                $.featherlight.current().close();
+                            }).end()
                             .show();
-                    }
-                });
+                        }
+                    });
+                }
+
+                addToolTip('a.edit-generator-args', '.generator-args-editor');
+                addToolTip('a.edit-batch-dependencies', '.batch-dependencies-editor');
 
                 checker_precision($tr.find('select[id$=checker]'));
             }).find('tbody:first').find('tr').each(function () {
@@ -300,18 +305,18 @@
             cursor: move;
         }
 
-        .edit-generator-args {
+        .edit-generator-args, .edit-batch-dependencies {
             position: relative;
         }
 
-        .generator-args-editor textarea {
+        .generator-args-editor textarea, .batch-dependencies-editor textarea {
             display: block;
             width: 100%;
             margin-bottom: 0.5em;
             height: 8em;
         }
 
-        .generator-args-editor .button {
+        .generator-args-editor .button, .batch-dependencies-editor .button {
             display: block;
             float: right;
         }
@@ -370,6 +375,10 @@
                 <input type="checkbox" data-suffix="generator_args">
                 {{ _('Generator args') }}
             </label>
+            <label>
+                <input type="checkbox" data-suffix="batch_dependencies">
+                {{ _('Batch dependencies') }}
+            </label>
         </div>
         <table id="case-table" class="table">
             <thead>
@@ -384,6 +393,7 @@
                 <th class="output-limit">{{ _('Output limit') }}</th>
                 <th class="checker">{{ _('Checker') }}</th>
                 <th class="generator-args">{{ _('Generator args') }}</th>
+                <th class="batch-dependencies">{{ _('Batch Dependencies') }}</th>
                 {% if cases_formset.can_delete %}
                     <th>{{ _('Delete?') }}</th>
                 {% endif %}
@@ -424,6 +434,12 @@
                             {{ _('Edit') }}
                         </a>
                     </td>
+                    <td class="batch-dependencies">{{ form.batch_dependencies.errors }}{{ form.batch_dependencies }}
+                        <a href="javascript:void(0)" class="edit-batch-dependencies">
+                            <i class="fa fa-pencil"></i>
+                            {{ _('Edit') }}
+                        </a>
+                    </td>
                     {% if cases_formset.can_delete %}
                         <td>{{ form.DELETE }}</td>
                     {% endif %}
@@ -435,4 +451,5 @@
         <a id="add-case-row" href="#"><i class="fa fa-plus"></i> {{ _('Add new case') }}</a>
     </form>
     <div style="display: none" class="generator-args-editor"><textarea></textarea><a class="button">{{ _('Save') }}</a></div>
+    <div style="display: none" class="batch-dependencies-editor"><textarea></textarea><a class="button">{{ _('Save') }}</a></div>
 {% endblock %}
