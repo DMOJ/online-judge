@@ -73,7 +73,6 @@ class ContestSubmissionInline(admin.StackedInline):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         submission = kwargs.pop('obj', None)
-        label = None
         if submission:
             if db_field.name == 'participation':
                 kwargs['queryset'] = ContestParticipation.objects.filter(user=submission.user,
@@ -94,6 +93,10 @@ class ContestSubmissionInline(admin.StackedInline):
                     return pgettext('contest problem', '%(problem)s in %(contest)s') % {
                         'problem': obj.problem.name, 'contest': obj.contest.name,
                     }
+            else:
+                label = None
+        else:
+            label = None
         field = super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
         if label is not None:
             field.label_from_instance = label
@@ -258,4 +261,4 @@ class SubmissionAdmin(VersionAdmin):
                 not submission.problem.is_editor(request.profile):
             raise PermissionDenied()
         submission.judge(rejudge=True, rejudge_user=request.user)
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return HttpResponseRedirect(request.headers.get('referer', '/'))
