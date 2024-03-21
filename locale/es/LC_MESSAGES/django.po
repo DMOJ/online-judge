@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 07:07+0000\n"
-"PO-Revision-Date: 2024-01-23 05:41\n"
+"POT-Creation-Date: 2024-02-09 04:48+0000\n"
+"PO-Revision-Date: 2024-02-10 00:38\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -17,75 +17,79 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 
-#: dmoj/settings.py:392
+#: dmoj/settings.py:395
 msgid "Catalan"
 msgstr "Catalán"
 
-#: dmoj/settings.py:393
+#: dmoj/settings.py:396
 msgid "German"
 msgstr "Alemán"
 
-#: dmoj/settings.py:394
+#: dmoj/settings.py:397
 msgid "Greek"
 msgstr "Griego"
 
-#: dmoj/settings.py:395
+#: dmoj/settings.py:398
 msgid "English"
 msgstr "Inglés"
 
-#: dmoj/settings.py:396
+#: dmoj/settings.py:399
 msgid "Spanish"
 msgstr "Español"
 
-#: dmoj/settings.py:397
+#: dmoj/settings.py:400
 msgid "French"
 msgstr "Francés"
 
-#: dmoj/settings.py:398
+#: dmoj/settings.py:401
 msgid "Croatian"
 msgstr "Croata"
 
-#: dmoj/settings.py:399
+#: dmoj/settings.py:402
 msgid "Hungarian"
 msgstr "Húngaro"
 
-#: dmoj/settings.py:400
+#: dmoj/settings.py:403
 msgid "Japanese"
 msgstr "Japonés"
 
-#: dmoj/settings.py:401
+#: dmoj/settings.py:404
+msgid "Kazakh"
+msgstr "Kazajo"
+
+#: dmoj/settings.py:405
 msgid "Korean"
 msgstr "Coreano"
 
-#: dmoj/settings.py:402
+#: dmoj/settings.py:406
 msgid "Brazilian Portuguese"
 msgstr "Portugués (Brasil)"
 
-#: dmoj/settings.py:403
+#: dmoj/settings.py:407
 msgid "Romanian"
 msgstr "Rumano"
 
-#: dmoj/settings.py:404
+#: dmoj/settings.py:408
 msgid "Russian"
 msgstr "Ruso"
 
-#: dmoj/settings.py:405
+#: dmoj/settings.py:409
 msgid "Serbian (Latin)"
 msgstr "Serbio (Latino)"
 
-#: dmoj/settings.py:406
+#: dmoj/settings.py:410
 msgid "Turkish"
 msgstr "Turco"
 
-#: dmoj/settings.py:407
+#: dmoj/settings.py:411
 msgid "Vietnamese"
 msgstr "Vietnamita"
 
-#: dmoj/settings.py:408
+#: dmoj/settings.py:412
 msgid "Simplified Chinese"
 msgstr "Chino Simplificado"
 
-#: dmoj/settings.py:409
+#: dmoj/settings.py:413
 msgid "Traditional Chinese"
 msgstr "Chino Tradicional"
 
@@ -147,7 +151,7 @@ msgstr "Concursos incluidos"
 msgid "Problem"
 msgstr "Problema"
 
-#: judge/admin/contest.py:66 judge/views/problem.py:353
+#: judge/admin/contest.py:66 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
@@ -1342,7 +1346,7 @@ msgstr "anular la longitud del prefijo de salida"
 
 #: judge/models/contest.py:600
 msgid "max submissions"
-msgstr "Envíos máximos"
+msgstr "envíos máximos"
 
 #: judge/models/contest.py:601
 msgid "Maximum number of submissions for this problem, or leave blank for no limit."
@@ -1394,7 +1398,7 @@ msgstr "puntuación bruta"
 
 #: judge/models/contest.py:639
 msgid "contest performance"
-msgstr "Máximo de envíos"
+msgstr "rendimiento del concurso"
 
 #: judge/models/contest.py:640
 msgid "last rated"
@@ -1828,7 +1832,7 @@ msgstr "votante"
 
 #: judge/models/problem.py:595
 msgid "vote time"
-msgstr "Hora de votar"
+msgstr "hora de votar"
 
 #: judge/models/problem.py:595
 msgid "The time this vote was cast."
@@ -1913,7 +1917,7 @@ msgstr "verificador"
 
 #: judge/models/problem_data.py:45
 msgid "enable unicode"
-msgstr "Activar Unicode"
+msgstr "activar unicode"
 
 #: judge/models/problem_data.py:46
 msgid "disable bigInteger / bigDecimal"
@@ -2041,7 +2045,7 @@ msgstr "Esta imagen reemplazará el logo del sitio para los usuarios que estén 
 
 #: judge/models/profile.py:62
 msgid "class membership required"
-msgstr "Membresía de clase requerida"
+msgstr "membresía de clase requerida"
 
 #: judge/models/profile.py:63
 msgid "Whether members are compelled to select a class when joining."
@@ -3011,7 +3015,7 @@ msgid "Editing comment"
 msgstr "Editando comentario"
 
 #: judge/views/contests.py:58 judge/views/contests.py:248
-#: judge/views/contests.py:251 judge/views/contests.py:456
+#: judge/views/contests.py:251 judge/views/contests.py:458
 msgid "No such contest"
 msgstr "No hay tal concurso"
 
@@ -3033,109 +3037,109 @@ msgstr "No se pudo encontrar dicho concurso."
 msgid "Access to contest \"%s\" denied"
 msgstr "Acceso al concurso \"%s\" denegado"
 
-#: judge/views/contests.py:300
+#: judge/views/contests.py:302
 msgid "Clone Contest"
 msgstr "Clonar Concurso"
 
-#: judge/views/contests.py:334
+#: judge/views/contests.py:336
 #, python-format
 msgid "Cloned contest from %s"
 msgstr "Concurso clonado de %s"
 
-#: judge/views/contests.py:370
+#: judge/views/contests.py:372
 msgid "Contest not ongoing"
 msgstr "Concurso no en curso"
 
-#: judge/views/contests.py:371
+#: judge/views/contests.py:373
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "\"%s\" no esta actualmente en curso."
 
-#: judge/views/contests.py:376
+#: judge/views/contests.py:378
 msgid "Banned from joining"
 msgstr "PUM Baneado"
 
-#: judge/views/contests.py:377
+#: judge/views/contests.py:379
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr "Has sido declarado persona non grata para este concurso. Quedas desterrado para siempre."
 
-#: judge/views/contests.py:407
+#: judge/views/contests.py:409
 msgid "Cannot enter"
 msgstr "No se puede entrar"
 
-#: judge/views/contests.py:408
+#: judge/views/contests.py:410
 msgid "You are not able to join this contest."
 msgstr "No puedes unirte a este concurso."
 
-#: judge/views/contests.py:446
+#: judge/views/contests.py:448
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr "Ingrese el código de acceso para \"%s\""
 
-#: judge/views/contests.py:457
+#: judge/views/contests.py:459
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "No estás en el concurso \"%s\"."
 
-#: judge/views/contests.py:515
+#: judge/views/contests.py:517
 #, python-format
 msgid "Contests in %(month)s"
 msgstr "Concursos en %(month)s"
 
-#: judge/views/contests.py:515
+#: judge/views/contests.py:517
 msgid "F Y"
 msgstr "F \\d\\e Y"
 
-#: judge/views/contests.py:573
+#: judge/views/contests.py:575
 #, python-format
 msgid "%s Statistics"
 msgstr "%s Estadísticas"
 
-#: judge/views/contests.py:748
+#: judge/views/contests.py:750
 #, python-format
 msgid "%s Rankings"
 msgstr "%s Clasificaciones"
 
-#: judge/views/contests.py:756
+#: judge/views/contests.py:758
 msgid "???"
 msgstr "???"
 
-#: judge/views/contests.py:772
+#: judge/views/contests.py:774
 #, python-format
 msgid "Your participation in %(contest)s"
 msgstr "Su participación en %(contest)s"
 
-#: judge/views/contests.py:773
+#: judge/views/contests.py:775
 #, python-format
 msgid "%(user)s's participation in %(contest)s"
 msgstr "Participación de %(user)s en %(contest)s"
 
-#: judge/views/contests.py:782
+#: judge/views/contests.py:784
 msgid "Live"
 msgstr "En vivo"
 
-#: judge/views/contests.py:794 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:796 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr "Participación"
 
-#: judge/views/contests.py:838
+#: judge/views/contests.py:840
 #, python-format
 msgid "%s MOSS Results"
 msgstr "%s Resultados del Sistema antiplagio MOSS"
 
-#: judge/views/contests.py:865
+#: judge/views/contests.py:867
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr "Ejecutando sistema antiplagio MOSS para %s..."
 
-#: judge/views/contests.py:888
+#: judge/views/contests.py:890
 #, python-format
 msgid "Contest tag: %s"
 msgstr "Etiqueta de concurso: %s"
 
 #: judge/views/error.py:14
 msgid "404 error"
-msgstr "error 404"
+msgstr "Error 404"
 
 #: judge/views/error.py:15
 #, python-format
@@ -3313,61 +3317,61 @@ msgstr "No se pudo encontrar el problema con el código \"%s\"."
 msgid "Editorial for {0}"
 msgstr "Editorial para {0}"
 
-#: judge/views/problem.py:137
+#: judge/views/problem.py:138
 msgid "No such editorial"
 msgstr "No hay tal editorial"
 
-#: judge/views/problem.py:138
+#: judge/views/problem.py:139
 #, python-format
 msgid "Could not find an editorial with the code \"%s\"."
 msgstr "No se pudo encontrar una editorial con el código \"%s\"."
 
-#: judge/views/problem.py:239
+#: judge/views/problem.py:241
 msgid "Not allowed to vote on this problem."
 msgstr "No se permite votar sobre este problema."
 
-#: judge/views/problem.py:262
+#: judge/views/problem.py:264
 msgid "Not allowed to delete votes on this problem."
 msgstr "No se permite borrar votos sobre este problema."
 
-#: judge/views/problem.py:265
+#: judge/views/problem.py:267
 msgid "success"
 msgstr "éxito"
 
-#: judge/views/problem.py:648 judge/views/problem.py:656
+#: judge/views/problem.py:650 judge/views/problem.py:658
 #, python-format
 msgid "Submit to %s"
 msgstr "Enviar a %s"
 
-#: judge/views/problem.py:701
+#: judge/views/problem.py:703
 msgid "You submitted too many submissions."
 msgstr "Ha enviado demasiados envíos."
 
-#: judge/views/problem.py:705
+#: judge/views/problem.py:707
 msgid "Banned from submitting"
 msgstr "Esta prohibido enviarlo"
 
-#: judge/views/problem.py:706
+#: judge/views/problem.py:708
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting to this problem."
 msgstr "Usted ha sido declarado persona no grata por este problema. Usted está permanentemente impedido de enviar a este problema."
 
-#: judge/views/problem.py:710
+#: judge/views/problem.py:712
 msgid "Too many submissions"
 msgstr "Demasiados envíos"
 
-#: judge/views/problem.py:711
+#: judge/views/problem.py:713
 msgid "You have exceeded the submission limit for this problem."
 msgstr "Usted ha excedido el límite de envíos para este problema."
 
-#: judge/views/problem.py:761
+#: judge/views/problem.py:763
 msgid "Do you want me to ban you?"
 msgstr "¿Quieres que te banee?"
 
-#: judge/views/problem.py:779
+#: judge/views/problem.py:781
 msgid "Clone Problem"
 msgstr "Clonar Problema"
 
-#: judge/views/problem.py:806
+#: judge/views/problem.py:808
 #, python-format
 msgid "Cloned problem from %s"
 msgstr ""
