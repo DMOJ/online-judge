@@ -408,7 +408,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         return self.request.profile
 
     def get_contest_queryset(self):
-        queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
+        queryset = self.profile.current_contest.contest.contest_problems.select_related('problem') \
+            .select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
             .annotate(user_count=Count('submission__participation', distinct=True)) \
             .annotate(i18n_translation=FilteredRelation(
@@ -425,8 +426,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             'points': p['points'],
             'partial': p['partial'],
             'user_count': p['user_count'],
-        } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
-                                   'problem__group__full_name', 'points', 'partial', 'user_count')]
+            'types_list': q.problem.types_list,
+        } for p, q in zip(queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
+                                          'problem__group__full_name', 'points', 'partial', 'user_count'), queryset)]
 
     @staticmethod
     def apply_full_text(queryset, query):
@@ -490,7 +492,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = 0 if self.in_contest else int(self.hide_solved)
-        context['show_types'] = 0 if self.in_contest else int(self.show_types)
+        if self.in_contest:
+            self.show_types = int(not self.contest.hide_problem_tags)
+        context['show_types'] = int(self.show_types)
         context['has_public_editorial'] = 0 if self.in_contest else int(self.has_public_editorial)
         context['full_text'] = 0 if self.in_contest else int(self.full_text)
         context['category'] = self.category
