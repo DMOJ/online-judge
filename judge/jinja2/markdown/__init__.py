@@ -62,8 +62,8 @@ class AwesomeRenderer(MathRenderer, mistune.Renderer):
 
     def table(self, header, body):
         return (
-            '<table class="table">\n<thead>%s</thead>\n'
-            '<tbody>\n%s</tbody>\n</table>\n'
+            '<div class="h-scrollable-table">\n<table class="table">\n<thead>%s</thead>\n'
+            '<tbody>\n%s</tbody>\n</table>\n</div>\n'
         ) % (header, body)
 
     def link(self, link, title, text):
