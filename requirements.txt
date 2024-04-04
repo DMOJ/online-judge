@@ -8,7 +8,7 @@ django-social-share
 django-sortedm2m>=3.1.0
 django-impersonate
 dmoj-wpadmin @ git+https://github.com/DMOJ/dmoj-wpadmin.git
-lxml
+lxml[html_clean]
 Pygments
 mistune<2
 social-auth-core==4.3.0

@@ -45,10 +45,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Node 14
-        uses: actions/setup-node@v2
+      - name: Set up Node 18
+        uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: 18
       - name: Install npm packages
         run: npm install -g sass postcss-cli postcss autoprefixer
       - name: Build style.css
