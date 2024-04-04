@@ -411,7 +411,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
             .annotate(user_count=Count('submission__participation', distinct=True)) \
-            .annotate(types_list=Func(F('problem__types__name'), function='GROUP_CONCAT')) \
+            .annotate(types_list=Func(F('problem__types__full_name'), function='GROUP_CONCAT')) \
             .annotate(i18n_translation=FilteredRelation(
                 'problem__translations', condition=Q(problem__translations__language=self.request.LANGUAGE_CODE),
             )).annotate(i18n_name=Coalesce(
