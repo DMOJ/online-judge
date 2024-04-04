@@ -492,8 +492,6 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = 0 if self.in_contest else int(self.hide_solved)
-        if self.in_contest:
-            self.show_types = int(not self.contest.hide_problem_tags)
         context['show_types'] = int(self.show_types)
         context['has_public_editorial'] = 0 if self.in_contest else int(self.has_public_editorial)
         context['full_text'] = 0 if self.in_contest else int(self.full_text)
@@ -549,7 +547,11 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
 
     def setup_problem_list(self, request):
         self.hide_solved = self.GET_with_session(request, 'hide_solved')
-        self.show_types = self.GET_with_session(request, 'show_types')
+        if self.in_contest:
+            self.show_types = int(not self.contest.hide_problem_tags)
+        else:
+            self.show_types = self.GET_with_session(request, 'show_types')
+
         self.full_text = self.GET_with_session(request, 'full_text')
         self.has_public_editorial = self.GET_with_session(request, 'has_public_editorial')
 
