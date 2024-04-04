@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
-from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Prefetch, Q, When, Func
+from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Func, Prefetch, Q, When
 from django.db.models.functions import Coalesce
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
