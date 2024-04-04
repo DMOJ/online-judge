@@ -426,7 +426,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             'points': p['points'],
             'partial': p['partial'],
             'user_count': p['user_count'],
-            'types_list': p['types_list'].split(","),
+            'types_list': p['types_list'].split(','),
         } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
                                    'problem__group__full_name', 'points', 'partial', 'user_count', 'types_list')]
 
