@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
-from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Prefetch, Q, When
+from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Prefetch, Q, When, Func
 from django.db.models.functions import Coalesce
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
@@ -408,10 +408,10 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         return self.request.profile
 
     def get_contest_queryset(self):
-        queryset = self.profile.current_contest.contest.contest_problems.select_related('problem') \
-            .select_related('problem__group') \
+        queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
             .annotate(user_count=Count('submission__participation', distinct=True)) \
+            .annotate(types_list=Func(F('problem__types__name'), function='GROUP_CONCAT')) \
             .annotate(i18n_translation=FilteredRelation(
                 'problem__translations', condition=Q(problem__translations__language=self.request.LANGUAGE_CODE),
             )).annotate(i18n_name=Coalesce(
@@ -426,9 +426,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             'points': p['points'],
             'partial': p['partial'],
             'user_count': p['user_count'],
-            'types_list': q.problem.types_list,
-        } for p, q in zip(queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
-                                          'problem__group__full_name', 'points', 'partial', 'user_count'), queryset)]
+            'types_list': p['types_list'].split(","),
+        } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
+                                   'problem__group__full_name', 'points', 'partial', 'user_count', 'types_list')]
 
     @staticmethod
     def apply_full_text(queryset, query):
