@@ -413,7 +413,8 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             .defer('problem__description').order_by('problem__code') \
             .annotate(user_count=Count('submission__participation', distinct=True)) \
             .annotate(types_list=Func(F('problem__types__full_name'), function='GROUP_CONCAT',
-                      template='%(function)s(%(expressions)s%(ordering)s)', ordering=' ORDER BY 1 ASC')) \
+                      template='%(function)s(%(expressions)s%(ordering)s)', 
+                      ordering=' ORDER BY judge_problemtype.full_name ASC')) \
             .annotate(i18n_translation=FilteredRelation(
                 'problem__translations', condition=Q(problem__translations__language=self.request.LANGUAGE_CODE),
             )).annotate(i18n_name=Coalesce(
