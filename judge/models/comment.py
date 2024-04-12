@@ -33,7 +33,7 @@ class Comment(MPTTModel):
     hidden = models.BooleanField(verbose_name=_('hidden'), default=0)
     parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies',
                             on_delete=CASCADE)
-    revisions = models.IntegerField(verbose_name=_('revisions'), default=0)
+    revisions = models.IntegerField(verbose_name=_('revisions'), default=1)
 
     class Meta:
         verbose_name = _('comment')
