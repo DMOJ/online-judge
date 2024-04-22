@@ -273,6 +273,9 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
         ] + super(ContestAdmin, self).get_urls()
 
     def rejudge_view(self, request, contest_id, problem_id):
+        contest = get_object_or_404(Contest, id=contest_id)
+        if not self.has_change_permission(request, contest):
+            raise PermissionDenied()
         queryset = ContestSubmission.objects.filter(problem_id=problem_id).select_related('submission')
         for model in queryset:
             model.submission.judge(rejudge=True, rejudge_user=request.user)

@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.db.models import TextField
 from django.forms import ModelForm, TextInput
 from django.http import HttpResponseRedirect
@@ -85,13 +86,21 @@ class JudgeAdmin(VersionAdmin):
         return HttpResponseRedirect(reverse('admin:judge_judge_changelist'))
 
     def disconnect_view(self, request, id):
+        judge = get_object_or_404(Judge, id=id)
+        if not self.has_change_permission(request, judge):
+            raise PermissionDenied()
         return self.disconnect_judge(id)
 
     def terminate_view(self, request, id):
+        judge = get_object_or_404(Judge, id=id)
+        if not self.has_change_permission(request, judge):
+            raise PermissionDenied()
         return self.disconnect_judge(id, force=True)
 
     def disable_view(self, request, id):
         judge = get_object_or_404(Judge, id=id)
+        if not self.has_change_permission(request, judge):
+            raise PermissionDenied()
         judge.toggle_disabled()
         return HttpResponseRedirect(reverse('admin:judge_judge_change', args=(judge.id,)))
 
