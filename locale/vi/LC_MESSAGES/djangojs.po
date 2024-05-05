@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2023-04-23 00:51\n"
+"PO-Revision-Date: 2024-05-05 00:45\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -30,7 +30,7 @@ msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr "Vote điểm điểm cho bài tập"
+msgstr "Bình chọn điểm của bài tập"
 
 #: resources/problem-vote.js:16
 #, javascript-format
@@ -49,7 +49,7 @@ msgstr "Không thể sửa điểm: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
-msgstr "Số lượng vote cho điểm này"
+msgstr "Số lượng bình chọn cho điểm này"
 
 #: resources/user_profile.js:47
 msgid "past year"

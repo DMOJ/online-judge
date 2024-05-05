@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 07:07+0000\n"
-"PO-Revision-Date: 2024-01-22 00:45\n"
+"POT-Creation-Date: 2024-02-09 04:48+0000\n"
+"PO-Revision-Date: 2024-03-15 00:41\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -17,75 +17,79 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 
-#: dmoj/settings.py:392
+#: dmoj/settings.py:395
 msgid "Catalan"
 msgstr "加泰隆语"
 
-#: dmoj/settings.py:393
+#: dmoj/settings.py:396
 msgid "German"
 msgstr "德语"
 
-#: dmoj/settings.py:394
+#: dmoj/settings.py:397
 msgid "Greek"
 msgstr "希腊语"
 
-#: dmoj/settings.py:395
+#: dmoj/settings.py:398
 msgid "English"
 msgstr "英语"
 
-#: dmoj/settings.py:396
+#: dmoj/settings.py:399
 msgid "Spanish"
 msgstr "西班牙语"
 
-#: dmoj/settings.py:397
+#: dmoj/settings.py:400
 msgid "French"
 msgstr "法语"
 
-#: dmoj/settings.py:398
+#: dmoj/settings.py:401
 msgid "Croatian"
 msgstr "克罗地亚语"
 
-#: dmoj/settings.py:399
+#: dmoj/settings.py:402
 msgid "Hungarian"
 msgstr "匈牙利语"
 
-#: dmoj/settings.py:400
+#: dmoj/settings.py:403
 msgid "Japanese"
 msgstr "日语"
 
-#: dmoj/settings.py:401
+#: dmoj/settings.py:404
+msgid "Kazakh"
+msgstr "哈萨克语"
+
+#: dmoj/settings.py:405
 msgid "Korean"
 msgstr "韩语"
 
-#: dmoj/settings.py:402
+#: dmoj/settings.py:406
 msgid "Brazilian Portuguese"
 msgstr "巴西葡萄牙语"
 
-#: dmoj/settings.py:403
+#: dmoj/settings.py:407
 msgid "Romanian"
 msgstr "罗马尼亚语"
 
-#: dmoj/settings.py:404
+#: dmoj/settings.py:408
 msgid "Russian"
 msgstr "俄语"
 
-#: dmoj/settings.py:405
+#: dmoj/settings.py:409
 msgid "Serbian (Latin)"
 msgstr "塞尔维亚文（拉丁字母）"
 
-#: dmoj/settings.py:406
+#: dmoj/settings.py:410
 msgid "Turkish"
 msgstr "土耳其语"
 
-#: dmoj/settings.py:407
+#: dmoj/settings.py:411
 msgid "Vietnamese"
 msgstr "越南语"
 
-#: dmoj/settings.py:408
+#: dmoj/settings.py:412
 msgid "Simplified Chinese"
 msgstr "简体中文"
 
-#: dmoj/settings.py:409
+#: dmoj/settings.py:413
 msgid "Traditional Chinese"
 msgstr "繁体中文"
 
@@ -145,7 +149,7 @@ msgstr "带标签的竞赛"
 msgid "Problem"
 msgstr "题目"
 
-#: judge/admin/contest.py:66 judge/views/problem.py:353
+#: judge/admin/contest.py:66 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
@@ -578,7 +582,7 @@ msgstr "ICPC"
 
 #: judge/contest_format/icpc.py:137
 msgid "Ties will be broken by the sum of the last score altering submission time on problems with a non-zero score, followed by the time of the last score altering submission."
-msgstr ""
+msgstr "得分相同时，首先比较所有非零分数题目首次达到最高分时间之和，若仍相同，比较首次达到总分的时间。"
 
 #: judge/contest_format/ioi.py:11
 msgid "IOI"
@@ -590,7 +594,7 @@ msgstr "每一题目批次的最高分将会被使用。"
 
 #: judge/contest_format/ioi.py:99 judge/contest_format/legacy_ioi.py:100
 msgid "Ties will be broken by the sum of the last score altering submission time on problems with a non-zero score."
-msgstr ""
+msgstr "得分相同时，比较所有非零分数题目首次达到最高分时间之和。"
 
 #: judge/contest_format/legacy_ioi.py:18
 msgid "IOI (pre-2016)"
@@ -634,11 +638,11 @@ msgstr[0] "你不能参与超过{count}个组织。"
 
 #: judge/forms.py:110
 msgid "This email address is already taken."
-msgstr ""
+msgstr "该邮件地址已被占用。"
 
 #: judge/forms.py:116
 msgid "Invalid password"
-msgstr ""
+msgstr "密码不正确"
 
 #: judge/forms.py:121
 msgid "Download comments?"
@@ -914,7 +918,7 @@ msgstr "测试人员看到记分板"
 
 #: judge/models/contest.py:81
 msgid "If testers can see the scoreboard."
-msgstr "排行榜是否对选手可见"
+msgstr "排行榜是否对选手可见。"
 
 #: judge/models/contest.py:82
 msgid "testers see submissions"
@@ -922,7 +926,7 @@ msgstr "测试人员看到提交"
 
 #: judge/models/contest.py:83
 msgid "If testers can see in-contest submissions."
-msgstr "赛时提交是否对选手可见"
+msgstr "赛时提交是否对选手可见。"
 
 #: judge/models/contest.py:84
 msgid "spectators"
@@ -992,7 +996,7 @@ msgstr "记分板可见性"
 
 #: judge/models/contest.py:107
 msgid "Scoreboard visibility through the duration of the contest."
-msgstr "赛时排行榜是否可见"
+msgstr "赛时排行榜是否可见。"
 
 #: judge/models/contest.py:109
 msgid "no comments"
@@ -1068,11 +1072,11 @@ msgstr "设置裁判服务器是否只运行预测试而不是所有测试。通
 
 #: judge/models/contest.py:135
 msgid "show short form settings display"
-msgstr ""
+msgstr "显示简短设置"
 
 #: judge/models/contest.py:136
 msgid "Whether to show a section containing contest settings on the contest page or not."
-msgstr "是否在比赛首页显示比赛设置"
+msgstr "是否在比赛首页显示比赛设置。"
 
 #: judge/models/contest.py:139 judge/models/problem.py:181
 msgid "private to organizations"
@@ -1085,7 +1089,7 @@ msgstr "组织"
 
 #: judge/models/contest.py:141
 msgid "If non-empty, only these organizations may see the contest."
-msgstr "如果非空，该比赛只对这些组织的成员可见"
+msgstr "如果非空，该比赛只对这些组织的成员可见。"
 
 #: judge/models/contest.py:142
 msgid "limit organizations that can join"
@@ -1105,7 +1109,7 @@ msgstr "类"
 
 #: judge/models/contest.py:147
 msgid "If organization private, only these classes may see the contest."
-msgstr ""
+msgstr "如果是私密组织，只有这些用户可以看到比赛。"
 
 #: judge/models/contest.py:148 judge/models/interface.py:74
 #: judge/models/problem.py:165
@@ -1171,7 +1175,7 @@ msgstr "竞赛题目标签脚本"
 
 #: judge/models/contest.py:169
 msgid "A custom Lua function to generate problem labels. Requires a single function with an integer parameter, the zero-indexed contest problem index, and returns a string, the label."
-msgstr ""
+msgstr "使用自定义 Lua 函数生成题目标签时，需要一个函数：仅 1 个整数参数，即从 0 开始的题目编号，返回一个字符串，即对应的题目标签。"
 
 #: judge/models/contest.py:172
 msgid "contest lock"
@@ -1179,7 +1183,7 @@ msgstr "竞赛锁定"
 
 #: judge/models/contest.py:173
 msgid "Prevent submissions from this contest from being rejudged after this date."
-msgstr ""
+msgstr "请勿在这个日期之后重新测评来自这场比赛的提交。"
 
 #: judge/models/contest.py:175
 msgid "precision points"
@@ -1799,11 +1803,11 @@ msgstr "题目讲解"
 
 #: judge/models/problem.py:585
 msgid "proposed points"
-msgstr ""
+msgstr "恰当的评分"
 
 #: judge/models/problem.py:586
 msgid "The amount of points the voter thinks this problem deserves."
-msgstr ""
+msgstr "评分者认为该问题应得的分数。"
 
 #: judge/models/problem.py:592
 msgid "voter"
@@ -1815,7 +1819,7 @@ msgstr "投票时间"
 
 #: judge/models/problem.py:595
 msgid "The time this vote was cast."
-msgstr ""
+msgstr "该评分发起时间"
 
 #: judge/models/problem.py:597
 msgid "note"
@@ -1823,7 +1827,7 @@ msgstr "备注"
 
 #: judge/models/problem.py:597
 msgid "Justification for problem point value."
-msgstr ""
+msgstr "评分理由"
 
 #: judge/models/problem.py:601
 msgid "problem vote"
@@ -1836,7 +1840,7 @@ msgstr "题目投票"
 #: judge/models/problem.py:605
 #, python-format
 msgid "Points vote by %(voter)s for %(problem)s"
-msgstr ""
+msgstr "由 %(voter)s 对 %(problem)s 给出评分"
 
 #: judge/models/problem_data.py:23
 msgid "Standard"
@@ -1860,7 +1864,7 @@ msgstr "无尾随空格"
 
 #: judge/models/problem_data.py:28
 msgid "Sorted"
-msgstr ""
+msgstr "有序的"
 
 #: judge/models/problem_data.py:29
 msgid "Byte identical"
@@ -2164,7 +2168,7 @@ msgstr ""
 
 #: judge/models/profile.py:174
 msgid "User will not be able to vote on problems' point values."
-msgstr ""
+msgstr "用户无法对问题评分。。"
 
 #: judge/models/profile.py:178
 msgid "user script"
@@ -2991,7 +2995,7 @@ msgid "Editing comment"
 msgstr "编辑评论"
 
 #: judge/views/contests.py:58 judge/views/contests.py:248
-#: judge/views/contests.py:251 judge/views/contests.py:456
+#: judge/views/contests.py:251 judge/views/contests.py:458
 msgid "No such contest"
 msgstr "该竞赛不存在"
 
@@ -3013,102 +3017,102 @@ msgstr "找不到该竞赛。"
 msgid "Access to contest \"%s\" denied"
 msgstr "对竞赛”%s“的访问被拒绝"
 
-#: judge/views/contests.py:300
+#: judge/views/contests.py:302
 msgid "Clone Contest"
 msgstr "复制竞赛"
 
-#: judge/views/contests.py:334
+#: judge/views/contests.py:336
 #, python-format
 msgid "Cloned contest from %s"
 msgstr "从 %s 克隆的竞赛"
 
-#: judge/views/contests.py:370
+#: judge/views/contests.py:372
 msgid "Contest not ongoing"
 msgstr "竞赛不在进行"
 
-#: judge/views/contests.py:371
+#: judge/views/contests.py:373
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "“%s“不在进行。"
 
-#: judge/views/contests.py:376
+#: judge/views/contests.py:378
 msgid "Banned from joining"
 msgstr "禁止加入"
 
-#: judge/views/contests.py:377
+#: judge/views/contests.py:379
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr "您在该竞赛不受欢迎。您被永久禁止参加该竞赛。"
 
-#: judge/views/contests.py:407
+#: judge/views/contests.py:409
 msgid "Cannot enter"
 msgstr "无法输入"
 
-#: judge/views/contests.py:408
+#: judge/views/contests.py:410
 msgid "You are not able to join this contest."
 msgstr "您不能加入这场竞赛。"
 
-#: judge/views/contests.py:446
+#: judge/views/contests.py:448
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr "输入“%s”的访问码"
 
-#: judge/views/contests.py:457
+#: judge/views/contests.py:459
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "你不是在竞赛\"%s\"中。"
 
-#: judge/views/contests.py:515
+#: judge/views/contests.py:517
 #, python-format
 msgid "Contests in %(month)s"
 msgstr "%(month)s的竞赛"
 
-#: judge/views/contests.py:515
+#: judge/views/contests.py:517
 msgid "F Y"
 msgstr "Y年n月"
 
-#: judge/views/contests.py:573
+#: judge/views/contests.py:575
 #, python-format
 msgid "%s Statistics"
 msgstr "%s 数据"
 
-#: judge/views/contests.py:748
+#: judge/views/contests.py:750
 #, python-format
 msgid "%s Rankings"
 msgstr "%s 排行榜"
 
-#: judge/views/contests.py:756
+#: judge/views/contests.py:758
 msgid "???"
 msgstr "???"
 
-#: judge/views/contests.py:772
+#: judge/views/contests.py:774
 #, python-format
 msgid "Your participation in %(contest)s"
 msgstr "你在 %(contest)s 中的参与历史"
 
-#: judge/views/contests.py:773
+#: judge/views/contests.py:775
 #, python-format
 msgid "%(user)s's participation in %(contest)s"
 msgstr "%(user)s 在 %(contest)s 中的参与历史"
 
-#: judge/views/contests.py:782
+#: judge/views/contests.py:784
 msgid "Live"
 msgstr "实时"
 
-#: judge/views/contests.py:794 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:796 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr "参与历史"
 
-#: judge/views/contests.py:838
+#: judge/views/contests.py:840
 #, python-format
 msgid "%s MOSS Results"
 msgstr "%s MOSS 结果"
 
-#: judge/views/contests.py:865
+#: judge/views/contests.py:867
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr "正在为 %s 运行 MOSS…"
 
-#: judge/views/contests.py:888
+#: judge/views/contests.py:890
 #, python-format
 msgid "Contest tag: %s"
 msgstr "竞赛标签：%s"
@@ -3289,61 +3293,61 @@ msgstr "找不到代码为“%s”的题目。"
 msgid "Editorial for {0}"
 msgstr "{0} 的题解"
 
-#: judge/views/problem.py:137
+#: judge/views/problem.py:138
 msgid "No such editorial"
 msgstr "没有这种题解"
 
-#: judge/views/problem.py:138
+#: judge/views/problem.py:139
 #, python-format
 msgid "Could not find an editorial with the code \"%s\"."
 msgstr "找不到标识符为“%s”的题解。"
 
-#: judge/views/problem.py:239
+#: judge/views/problem.py:241
 msgid "Not allowed to vote on this problem."
-msgstr ""
+msgstr "不允许对这个问题进行评分。"
 
-#: judge/views/problem.py:262
+#: judge/views/problem.py:264
 msgid "Not allowed to delete votes on this problem."
-msgstr ""
+msgstr "不允许删除对这个问题的评分。"
 
-#: judge/views/problem.py:265
+#: judge/views/problem.py:267
 msgid "success"
 msgstr "成功"
 
-#: judge/views/problem.py:648 judge/views/problem.py:656
+#: judge/views/problem.py:650 judge/views/problem.py:658
 #, python-format
 msgid "Submit to %s"
 msgstr "提交给 %s"
 
-#: judge/views/problem.py:701
+#: judge/views/problem.py:703
 msgid "You submitted too many submissions."
 msgstr "您提交了太多次。"
 
-#: judge/views/problem.py:705
+#: judge/views/problem.py:707
 msgid "Banned from submitting"
 msgstr "禁止提交"
 
-#: judge/views/problem.py:706
+#: judge/views/problem.py:708
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting to this problem."
 msgstr "您在该题目不受欢迎。您被永久禁止为该题目提交解决程序。"
 
-#: judge/views/problem.py:710
+#: judge/views/problem.py:712
 msgid "Too many submissions"
 msgstr "提交太多了"
 
-#: judge/views/problem.py:711
+#: judge/views/problem.py:713
 msgid "You have exceeded the submission limit for this problem."
 msgstr "您已超出此题目的提交限制。"
 
-#: judge/views/problem.py:761
+#: judge/views/problem.py:763
 msgid "Do you want me to ban you?"
 msgstr ""
 
-#: judge/views/problem.py:779
+#: judge/views/problem.py:781
 msgid "Clone Problem"
 msgstr "复制题目"
 
-#: judge/views/problem.py:806
+#: judge/views/problem.py:808
 #, python-format
 msgid "Cloned problem from %s"
 msgstr "从 %s 克隆的题目"
@@ -3362,7 +3366,7 @@ msgstr "您的 zip 文件是无效的！"
 
 #: judge/views/problem_data.py:51
 msgid "Zip files must end in '.zip'"
-msgstr ""
+msgstr "Zip 文件必须以 '.zip ' 结尾"
 
 #: judge/views/problem_data.py:58
 msgid "Generators must not be named init.yml."
@@ -3730,16 +3734,16 @@ msgstr ""
 
 #: judge/views/user.py:623
 msgid "Email change failed"
-msgstr ""
+msgstr "电子邮件修改失败"
 
 #: judge/views/user.py:627
 msgid "Email successfully changed"
-msgstr ""
+msgstr "电子邮件修改成功"
 
 #: judge/views/user.py:628
 #, python-format
 msgid "The email attached to your account has been changed to %s."
-msgstr ""
+msgstr "您帐户绑定的电子邮件已更改为 %s。"
 
 #: templates/admin/judge/contest/change_form.html:9
 msgid "Are you sure you want to rejudge ALL the submissions?"
@@ -3785,7 +3789,7 @@ msgstr "查看提交历史"
 #: templates/admin/judge/problem/change_form.html:20
 #: templates/admin/judge/problem/change_form.html:23
 msgid "View problem votes"
-msgstr ""
+msgstr "题目评分"
 
 #: templates/admin/judge/profile/change_form.html:14
 #: templates/admin/judge/profile/change_form.html:17
@@ -3828,7 +3832,7 @@ msgstr "本网站启用 JavaScript 效果最好。"
 
 #: templates/base.html:293
 msgid "proudly powered by **DMOJ**"
-msgstr ""
+msgstr "自豪地由 **DMOJ** 打造"
 
 #: templates/blog/content.html:13 templates/comments/list.html:89
 #: templates/comments/list.html:105 templates/contest/contest-tabs.html:23
@@ -3962,7 +3966,7 @@ msgstr "回复"
 
 #: templates/comments/list.html:93 templates/comments/votes.html:1
 msgid "Votes"
-msgstr "投票"
+msgstr "评分"
 
 #: templates/comments/list.html:94
 msgid "Hide"
@@ -4025,7 +4029,7 @@ msgstr "无法编辑评论：{error}"
 
 #: templates/comments/votes.html:5
 msgid "Voter"
-msgstr "投票者"
+msgstr "评分人"
 
 #: templates/comments/votes.html:6 templates/user/user-problems.html:103
 msgid "Score"
@@ -4033,7 +4037,7 @@ msgstr "得分"
 
 #: templates/comments/votes.html:17
 msgid "No votes"
-msgstr "没有投票"
+msgstr "没有评分"
 
 #: templates/common-content.html:32 templates/user/edit-profile.html:214
 msgid "Click to copy"
@@ -4236,17 +4240,17 @@ msgstr[0] "特别感谢 %(link_testers)s 测试题目并提供反馈。"
 #: templates/contest/contest.html:98
 #, python-format
 msgid "This contest will be **rated** for **all** participants who have a rating between **%(rating_floor)d** and **%(rating_ceiling)d**, inclusive."
-msgstr ""
+msgstr "这场比赛将为所有评分在**%(rating_floor)d**和**%(rating_ceiling)d**之间的参与者**计算评分**。"
 
 #: templates/contest/contest.html:100
 #, python-format
 msgid "This contest will be **rated** for **all** participants who have a rating of at least **%(rating_floor)d**."
-msgstr ""
+msgstr "这场比赛将给评分至少 **%(rating_floor)d**的参与者**评分**。"
 
 #: templates/contest/contest.html:102
 #, python-format
 msgid "This contest will be **rated** for **all** participants who have a rating of at most **%(rating_ceiling)d**."
-msgstr ""
+msgstr "这场比赛将给评分至多 **%(rating_ceiling)d**的参与者**评分**。"
 
 #: templates/contest/contest.html:104
 msgid "This contest will be **rated** for **all** participants."
@@ -4255,7 +4259,7 @@ msgstr "这场竞赛将给**所有**参与者**评分**。"
 #: templates/contest/contest.html:108
 #, python-format
 msgid "This contest will be **rated** for participants who submit at least once and have a rating between **%(rating_floor)d** and **%(rating_ceiling)d**, inclusive."
-msgstr ""
+msgstr "这场比赛将为所有评分在**%(rating_floor)d**和**%(rating_ceiling)d**之间且至少提交一次的参与者**计算评分**。"
 
 #: templates/contest/contest.html:110
 #, python-format
@@ -4279,11 +4283,11 @@ msgstr "这个竞赛将**不**评分。"
 #, python-format
 msgid "There is **%(count)s** problem in this contest."
 msgid_plural "There are **%(count)s** problems in this contest."
-msgstr[0] ""
+msgstr[0] "这场比赛共**%(count)s**题。"
 
 #: templates/contest/contest.html:132
 msgid "**Partial scoring is enabled** for some or all of these problems."
-msgstr ""
+msgstr "这场比赛题目有可能有部分分。"
 
 #: templates/contest/contest.html:134
 msgid "This contest **will not use partial scoring**."
@@ -4291,11 +4295,11 @@ msgstr "竞赛**没有部分分**。"
 
 #: templates/contest/contest.html:139
 msgid "The pretest system **will be used** for some or all of these problems."
-msgstr ""
+msgstr "预评试机制 **将被**用于这些问题（部分或全部）。"
 
 #: templates/contest/contest.html:141
 msgid "The pretest system **will not be used** for this contest."
-msgstr ""
+msgstr "预测试机制 **不会被用于** 这次比赛。"
 
 #: templates/contest/contest.html:146
 msgid "Some or all of these problems **have a submission limit**."
@@ -4955,16 +4959,16 @@ msgstr "提交排行"
 
 #: templates/problem/problem.html:140
 msgid "Vote on problem points"
-msgstr ""
+msgstr "对题目评分"
 
 #: templates/problem/problem.html:142
 #, python-format
 msgid "Edit points vote (%(points)d)"
-msgstr ""
+msgstr "修改评分 (%(points)d)"
 
 #: templates/problem/problem.html:146 templates/problem/vote-stats-ajax.html:3
 msgid "Voting statistics"
-msgstr ""
+msgstr "评分统计"
 
 #: templates/problem/problem.html:151
 msgid "Read editorial"
@@ -5125,51 +5129,51 @@ msgstr "此题目没有可用的裁判服务器。"
 
 #: templates/problem/vote-ajax.html:4
 msgid "Change vote"
-msgstr ""
+msgstr "更改评分"
 
 #: templates/problem/vote-ajax.html:7
 #, python-format
 msgid "Last voted on %(date)s"
-msgstr ""
+msgstr "上一次评分在 %(date)s"
 
 #: templates/problem/vote-ajax.html:11
 msgid "Cast vote"
-msgstr ""
+msgstr "发起评分"
 
 #: templates/problem/vote-ajax.html:25
 msgid "Justification:"
-msgstr ""
+msgstr "理由"
 
 #: templates/problem/vote-ajax.html:27
 msgid "A short justification for your vote to this problem's point value (optional)."
-msgstr ""
+msgstr "评分理由（可选）"
 
 #: templates/problem/vote-ajax.html:33
 msgid "Vote!"
-msgstr ""
+msgstr "评分！"
 
 #: templates/problem/vote-ajax.html:35
 msgid "Delete vote"
-msgstr ""
+msgstr "删除评分"
 
 #: templates/problem/vote-stats-ajax.html:7
 msgid "No votes available!"
-msgstr ""
+msgstr "暂无评分"
 
 #: templates/problem/vote-stats-ajax.html:16
 #, python-format
 msgid "Median vote: %(val)s"
-msgstr ""
+msgstr "评分中位数：%(val)s"
 
 #: templates/problem/vote-stats-ajax.html:17
 #, python-format
 msgid "Mean vote: %(val)s"
-msgstr ""
+msgstr "评分平均数：%(val)s"
 
 #: templates/problem/vote-stats-ajax.html:18
 #, python-format
 msgid "Number of votes: %(val)d"
-msgstr ""
+msgstr "评分数：%(val)d"
 
 #: templates/registration/activate.html:3
 #, python-format
