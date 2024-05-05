@@ -26,7 +26,7 @@
     <script type="text/javascript">
         $(function () {
             $('form.kick-form').find('a.button').click(function () {
-                if (confirm("{{ _('Are you sure you want to kick this user?') }}")) {
+                if (confirm({{ _('Are you sure you want to kick this user?')|htmltojs }})) {
                     $(this).parent().submit();
                 }
                 return false;

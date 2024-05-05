@@ -78,7 +78,7 @@
         {% compress js %}
             <script type="text/javascript">
                 window.confirm_and_rejudge = function (form) {
-                    if (confirm("{{ _('Are you sure you want to rejudge?') }}")) {
+                    if (confirm({{ _('Are you sure you want to rejudge?')|htmltojs }})) {
                         form.submit();
                     }
                 };
