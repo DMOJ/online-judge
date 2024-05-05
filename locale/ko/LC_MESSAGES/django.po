@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 07:07+0000\n"
-"PO-Revision-Date: 2024-01-23 05:41\n"
+"POT-Creation-Date: 2024-02-09 04:48+0000\n"
+"PO-Revision-Date: 2024-02-10 00:38\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -17,75 +17,79 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 
-#: dmoj/settings.py:392
+#: dmoj/settings.py:395
 msgid "Catalan"
 msgstr "카탈루냐어"
 
-#: dmoj/settings.py:393
+#: dmoj/settings.py:396
 msgid "German"
 msgstr "독일어"
 
-#: dmoj/settings.py:394
+#: dmoj/settings.py:397
 msgid "Greek"
 msgstr "그리스어"
 
-#: dmoj/settings.py:395
+#: dmoj/settings.py:398
 msgid "English"
 msgstr "영어"
 
-#: dmoj/settings.py:396
+#: dmoj/settings.py:399
 msgid "Spanish"
 msgstr "스페인어"
 
-#: dmoj/settings.py:397
+#: dmoj/settings.py:400
 msgid "French"
 msgstr "프랑스어"
 
-#: dmoj/settings.py:398
+#: dmoj/settings.py:401
 msgid "Croatian"
 msgstr "크로아티아어"
 
-#: dmoj/settings.py:399
+#: dmoj/settings.py:402
 msgid "Hungarian"
 msgstr "헝가리어"
 
-#: dmoj/settings.py:400
+#: dmoj/settings.py:403
 msgid "Japanese"
 msgstr "일본어"
 
-#: dmoj/settings.py:401
+#: dmoj/settings.py:404
+msgid "Kazakh"
+msgstr "카자흐어"
+
+#: dmoj/settings.py:405
 msgid "Korean"
 msgstr "한국어"
 
-#: dmoj/settings.py:402
+#: dmoj/settings.py:406
 msgid "Brazilian Portuguese"
 msgstr "포르투갈어 (브라질)"
 
-#: dmoj/settings.py:403
+#: dmoj/settings.py:407
 msgid "Romanian"
 msgstr "루마니아어"
 
-#: dmoj/settings.py:404
+#: dmoj/settings.py:408
 msgid "Russian"
 msgstr "러시아어"
 
-#: dmoj/settings.py:405
+#: dmoj/settings.py:409
 msgid "Serbian (Latin)"
 msgstr "세르비아어(라틴문자)"
 
-#: dmoj/settings.py:406
+#: dmoj/settings.py:410
 msgid "Turkish"
 msgstr "터키어"
 
-#: dmoj/settings.py:407
+#: dmoj/settings.py:411
 msgid "Vietnamese"
 msgstr "베트남어"
 
-#: dmoj/settings.py:408
+#: dmoj/settings.py:412
 msgid "Simplified Chinese"
 msgstr "중국어(간체)"
 
-#: dmoj/settings.py:409
+#: dmoj/settings.py:413
 msgid "Traditional Chinese"
 msgstr "중국어(번체)"
 
@@ -145,7 +149,7 @@ msgstr "포함된 대회"
 msgid "Problem"
 msgstr "문제"
 
-#: judge/admin/contest.py:66 judge/views/problem.py:353
+#: judge/admin/contest.py:66 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
@@ -2991,7 +2995,7 @@ msgid "Editing comment"
 msgstr "코멘트 수정"
 
 #: judge/views/contests.py:58 judge/views/contests.py:248
-#: judge/views/contests.py:251 judge/views/contests.py:456
+#: judge/views/contests.py:251 judge/views/contests.py:458
 msgid "No such contest"
 msgstr "그런 대회는 존재하지 않습니다"
 
@@ -3013,102 +3017,102 @@ msgstr "그런 대회를 찾을 수 있습니다."
 msgid "Access to contest \"%s\" denied"
 msgstr "%s 대회 접근이 거부되었습니다"
 
-#: judge/views/contests.py:300
+#: judge/views/contests.py:302
 msgid "Clone Contest"
 msgstr "콘테스트 복제"
 
-#: judge/views/contests.py:334
+#: judge/views/contests.py:336
 #, python-format
 msgid "Cloned contest from %s"
 msgstr "%s의 복제된 콘테스트"
 
-#: judge/views/contests.py:370
+#: judge/views/contests.py:372
 msgid "Contest not ongoing"
 msgstr "현재 진행중인 대회가 아닙니다"
 
-#: judge/views/contests.py:371
+#: judge/views/contests.py:373
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "%s는 현재 진행중이 아닙니다."
 
-#: judge/views/contests.py:376
+#: judge/views/contests.py:378
 msgid "Banned from joining"
 msgstr ""
 
-#: judge/views/contests.py:377
+#: judge/views/contests.py:379
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr "당신은 이 콘테스트에 대해 무료로 선언되지 않았습니다. 당신은 이 콘테스트에 영구적으로 참가할 수 없습니다."
 
-#: judge/views/contests.py:407
+#: judge/views/contests.py:409
 msgid "Cannot enter"
 msgstr ""
 
-#: judge/views/contests.py:408
+#: judge/views/contests.py:410
 msgid "You are not able to join this contest."
 msgstr ""
 
-#: judge/views/contests.py:446
+#: judge/views/contests.py:448
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr "\"%s\"에 대한 액세스 코드를 입력하십시오"
 
-#: judge/views/contests.py:457
+#: judge/views/contests.py:459
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "현재 대회 %s에 참가중이 아닙니다."
 
-#: judge/views/contests.py:515
+#: judge/views/contests.py:517
 #, python-format
 msgid "Contests in %(month)s"
 msgstr "%(month)s의 콘테스트"
 
-#: judge/views/contests.py:515
+#: judge/views/contests.py:517
 msgid "F Y"
 msgstr "Y년 n월"
 
-#: judge/views/contests.py:573
+#: judge/views/contests.py:575
 #, python-format
 msgid "%s Statistics"
 msgstr ""
 
-#: judge/views/contests.py:748
+#: judge/views/contests.py:750
 #, python-format
 msgid "%s Rankings"
 msgstr "%s 순위"
 
-#: judge/views/contests.py:756
+#: judge/views/contests.py:758
 msgid "???"
 msgstr "???"
 
-#: judge/views/contests.py:772
+#: judge/views/contests.py:774
 #, python-format
 msgid "Your participation in %(contest)s"
 msgstr ""
 
-#: judge/views/contests.py:773
+#: judge/views/contests.py:775
 #, python-format
 msgid "%(user)s's participation in %(contest)s"
 msgstr ""
 
-#: judge/views/contests.py:782
+#: judge/views/contests.py:784
 msgid "Live"
 msgstr "실시간"
 
-#: judge/views/contests.py:794 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:796 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr "참여"
 
-#: judge/views/contests.py:838
+#: judge/views/contests.py:840
 #, python-format
 msgid "%s MOSS Results"
 msgstr "%s MOSS 결과"
 
-#: judge/views/contests.py:865
+#: judge/views/contests.py:867
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr ""
 
-#: judge/views/contests.py:888
+#: judge/views/contests.py:890
 #, python-format
 msgid "Contest tag: %s"
 msgstr "대회 태그: %s"
@@ -3289,61 +3293,61 @@ msgstr "%s 문제를 찾을 수 없습니다."
 msgid "Editorial for {0}"
 msgstr ""
 
-#: judge/views/problem.py:137
+#: judge/views/problem.py:138
 msgid "No such editorial"
 msgstr "그런 사설이 없습니다"
 
-#: judge/views/problem.py:138
+#: judge/views/problem.py:139
 #, python-format
 msgid "Could not find an editorial with the code \"%s\"."
 msgstr ""
 
-#: judge/views/problem.py:239
+#: judge/views/problem.py:241
 msgid "Not allowed to vote on this problem."
 msgstr ""
 
-#: judge/views/problem.py:262
+#: judge/views/problem.py:264
 msgid "Not allowed to delete votes on this problem."
 msgstr ""
 
-#: judge/views/problem.py:265
+#: judge/views/problem.py:267
 msgid "success"
 msgstr ""
 
-#: judge/views/problem.py:648 judge/views/problem.py:656
+#: judge/views/problem.py:650 judge/views/problem.py:658
 #, python-format
 msgid "Submit to %s"
 msgstr ""
 
-#: judge/views/problem.py:701
+#: judge/views/problem.py:703
 msgid "You submitted too many submissions."
 msgstr ""
 
-#: judge/views/problem.py:705
+#: judge/views/problem.py:707
 msgid "Banned from submitting"
 msgstr ""
 
-#: judge/views/problem.py:706
+#: judge/views/problem.py:708
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting to this problem."
 msgstr ""
 
-#: judge/views/problem.py:710
+#: judge/views/problem.py:712
 msgid "Too many submissions"
 msgstr "제출이 너무 많습니다"
 
-#: judge/views/problem.py:711
+#: judge/views/problem.py:713
 msgid "You have exceeded the submission limit for this problem."
 msgstr "이 문제에 허용된 제출 횟수를 초과했습니다."
 
-#: judge/views/problem.py:761
+#: judge/views/problem.py:763
 msgid "Do you want me to ban you?"
 msgstr ""
 
-#: judge/views/problem.py:779
+#: judge/views/problem.py:781
 msgid "Clone Problem"
 msgstr "문제 복사"
 
-#: judge/views/problem.py:806
+#: judge/views/problem.py:808
 #, python-format
 msgid "Cloned problem from %s"
 msgstr ""
@@ -6141,11 +6145,11 @@ msgstr[0] "%(counter)s 개의 문제를 품"
 
 #: templates/user/user-base.html:26
 msgid "Rank by points:"
-msgstr "포인트 순위"
+msgstr "포인트 순위:"
 
 #: templates/user/user-base.html:29
 msgid "Total points:"
-msgstr "총점"
+msgstr "총점:"
 
 #: templates/user/user-base.html:43
 #, python-format
@@ -6155,7 +6159,7 @@ msgstr[0] "%(counter)s 개의 대회를 작성함"
 
 #: templates/user/user-base.html:50
 msgid "Rank by rating:"
-msgstr "등급 순위"
+msgstr "등급 순위:"
 
 #: templates/user/user-base.html:52
 msgid "Rating:"

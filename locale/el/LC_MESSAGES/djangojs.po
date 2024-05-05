@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2023-04-09 00:45\n"
+"PO-Revision-Date: 2024-01-25 00:43\n"
 "Last-Translator: \n"
 "Language-Team: Greek\n"
 "Language: el_GR\n"
@@ -31,7 +31,7 @@ msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr "Ψηφίστε για προβληματικούς πόντους."
+msgstr "Ψηφίστε για προβληματικούς πόντους"
 
 #: resources/problem-vote.js:16
 #, javascript-format
@@ -50,33 +50,33 @@ msgstr "Αδυναμία μετάδοσης ψήφου: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
-msgstr "Αριθμός ψήφων για αυτή την τιμή πόντων."
+msgstr "Αριθμός ψήφων για αυτή την τιμή πόντων"
 
 #: resources/user_profile.js:47
 msgid "past year"
-msgstr "Προηγούμενο έτος."
+msgstr "προηγούμενο έτος"
 
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
-msgstr[0] ""
-msgstr[1] "%(cnt)d συνολικές υποβολές."
+msgstr[0] "%(cnt)d συνολική υποβολή"
+msgstr[1] "%(cnt)d συνολικές υποβολές"
 
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
-msgstr[0] ""
-msgstr[1] "%(cnt)d υποβολές το τελευταίο έτος."
+msgstr[0] "%(cnt)d υποβολή το τελευταίο έτος"
+msgstr[1] "%(cnt)d υποβολές το τελευταίο έτος"
 
 #: resources/user_profile.js:74
 msgid "%(cnt)d submission in %(year)d"
 msgid_plural "%(cnt)d submissions in %(year)d"
-msgstr[0] ""
-msgstr[1] "%(cnt)d υποβολές σε %(year)d."
+msgstr[0] "%(cnt)d υποβολή το %(year)d"
+msgstr[1] "%(cnt)d υποβολές το %(year)d"
 
 #: resources/user_profile.js:88
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
-msgstr[0] ""
-msgstr[1] "%(cnt)d υποβολές στις %(date)s."
+msgstr[0] "%(cnt)d υποβολή στις %(date)s"
+msgstr[1] "%(cnt)d υποβολές στις %(date)s"
 

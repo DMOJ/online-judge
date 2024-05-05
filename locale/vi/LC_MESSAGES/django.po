@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 07:07+0000\n"
-"PO-Revision-Date: 2024-01-23 05:41\n"
+"POT-Creation-Date: 2024-02-09 04:48+0000\n"
+"PO-Revision-Date: 2024-05-05 00:45\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -17,75 +17,79 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 
-#: dmoj/settings.py:392
+#: dmoj/settings.py:395
 msgid "Catalan"
 msgstr "Tiếng Catalan"
 
-#: dmoj/settings.py:393
+#: dmoj/settings.py:396
 msgid "German"
 msgstr "Tiếng Đức"
 
-#: dmoj/settings.py:394
+#: dmoj/settings.py:397
 msgid "Greek"
 msgstr "Tiếng Hy Lạp"
 
-#: dmoj/settings.py:395
+#: dmoj/settings.py:398
 msgid "English"
 msgstr "Tiếng Anh"
 
-#: dmoj/settings.py:396
+#: dmoj/settings.py:399
 msgid "Spanish"
 msgstr "Tiếng Tây Ban Nha"
 
-#: dmoj/settings.py:397
+#: dmoj/settings.py:400
 msgid "French"
 msgstr "Tiếng Pháp"
 
-#: dmoj/settings.py:398
+#: dmoj/settings.py:401
 msgid "Croatian"
 msgstr "Tiếng Croatia"
 
-#: dmoj/settings.py:399
+#: dmoj/settings.py:402
 msgid "Hungarian"
 msgstr "Tiếng Hung-ga-ri"
 
-#: dmoj/settings.py:400
+#: dmoj/settings.py:403
 msgid "Japanese"
 msgstr "Tiếng Nhật Bản"
 
-#: dmoj/settings.py:401
+#: dmoj/settings.py:404
+msgid "Kazakh"
+msgstr "Tiếng Kazakh"
+
+#: dmoj/settings.py:405
 msgid "Korean"
 msgstr "Tiếng Hàn Quốc"
 
-#: dmoj/settings.py:402
+#: dmoj/settings.py:406
 msgid "Brazilian Portuguese"
 msgstr "Tiếng Braxin-Bồ Đào Nha"
 
-#: dmoj/settings.py:403
+#: dmoj/settings.py:407
 msgid "Romanian"
 msgstr "Tiếng Romania"
 
-#: dmoj/settings.py:404
+#: dmoj/settings.py:408
 msgid "Russian"
 msgstr "Tiếng Nga"
 
-#: dmoj/settings.py:405
+#: dmoj/settings.py:409
 msgid "Serbian (Latin)"
 msgstr "Tiếng Séc-bi (Latin)"
 
-#: dmoj/settings.py:406
+#: dmoj/settings.py:410
 msgid "Turkish"
 msgstr "Tiếng Thổ Nhĩ Kỳ"
 
-#: dmoj/settings.py:407
+#: dmoj/settings.py:411
 msgid "Vietnamese"
 msgstr "Tiếng Việt"
 
-#: dmoj/settings.py:408
+#: dmoj/settings.py:412
 msgid "Simplified Chinese"
 msgstr "Tiếng Trung (Giản thể)"
 
-#: dmoj/settings.py:409
+#: dmoj/settings.py:413
 msgid "Traditional Chinese"
 msgstr "Tiếng Trung (Phồn thể)"
 
@@ -145,7 +149,7 @@ msgstr "Các cuộc thi"
 msgid "Problem"
 msgstr "Đề bài"
 
-#: judge/admin/contest.py:66 judge/views/problem.py:353
+#: judge/admin/contest.py:66 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
@@ -638,7 +642,7 @@ msgstr "Địa chỉ email này đã được sử dụng."
 
 #: judge/forms.py:116
 msgid "Invalid password"
-msgstr ""
+msgstr "Mật khẩu không hợp lệ"
 
 #: judge/forms.py:121
 msgid "Download comments?"
@@ -1823,7 +1827,7 @@ msgstr "ghi chú"
 
 #: judge/models/problem.py:597
 msgid "Justification for problem point value."
-msgstr "phanvchung"
+msgstr "Giải thích số điểm đã cho bài tập này."
 
 #: judge/models/problem.py:601
 msgid "problem vote"
@@ -1960,11 +1964,11 @@ msgstr "kiểm tra đối số như là một đối tượng JSON"
 
 #: judge/models/problem_data.py:97
 msgid "batch dependencies"
-msgstr ""
+msgstr "nhóm phụ thuộc"
 
 #: judge/models/problem_data.py:98
 msgid "batch dependencies as a comma-separated list of integers"
-msgstr ""
+msgstr "nhóm phụ thuộc dưới dạng danh sách số nguyên được phân tách bằng dấu phẩy"
 
 #: judge/models/profile.py:42
 msgid "organization title"
@@ -2164,7 +2168,7 @@ msgstr "bị cấm vote điểm cho bài tập"
 
 #: judge/models/profile.py:174
 msgid "User will not be able to vote on problems' point values."
-msgstr "Người dùng không thể bình chọn số điểm cho bài tập này"
+msgstr "Người dùng không thể bình chọn số điểm cho bài tập này."
 
 #: judge/models/profile.py:178
 msgid "user script"
@@ -2991,7 +2995,7 @@ msgid "Editing comment"
 msgstr "Đang chỉnh sửa bình luận"
 
 #: judge/views/contests.py:58 judge/views/contests.py:248
-#: judge/views/contests.py:251 judge/views/contests.py:456
+#: judge/views/contests.py:251 judge/views/contests.py:458
 msgid "No such contest"
 msgstr "Không có cuộc thi như vậy"
 
@@ -3013,109 +3017,109 @@ msgstr "Không thể tìm thấy các cuộc thi như vậy."
 msgid "Access to contest \"%s\" denied"
 msgstr "Truy cập vào cuộc thi \"%s\" từ chối"
 
-#: judge/views/contests.py:300
+#: judge/views/contests.py:302
 msgid "Clone Contest"
 msgstr "Nhân bản kỳ thi"
 
-#: judge/views/contests.py:334
+#: judge/views/contests.py:336
 #, python-format
 msgid "Cloned contest from %s"
 msgstr "Cuộc thi được nhân bàn từ %s"
 
-#: judge/views/contests.py:370
+#: judge/views/contests.py:372
 msgid "Contest not ongoing"
 msgstr "Cuộc thi không đang diễn ra"
 
-#: judge/views/contests.py:371
+#: judge/views/contests.py:373
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "\"%s\" không đang diễn ra."
 
-#: judge/views/contests.py:376
+#: judge/views/contests.py:378
 msgid "Banned from joining"
 msgstr "Cấm tham gia"
 
-#: judge/views/contests.py:377
+#: judge/views/contests.py:379
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr "Bạn đã được xác định không phải đối tượng tham gia của cuộc thi này. Bạn bị cấm vĩnh viễn khỏi cuộc thi này."
 
-#: judge/views/contests.py:407
+#: judge/views/contests.py:409
 msgid "Cannot enter"
 msgstr "Không thể vào"
 
-#: judge/views/contests.py:408
+#: judge/views/contests.py:410
 msgid "You are not able to join this contest."
 msgstr "Bạn không thể tham gia cuộc thi này."
 
-#: judge/views/contests.py:446
+#: judge/views/contests.py:448
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr "Nhập mã đăng nhập cho \"%s\""
 
-#: judge/views/contests.py:457
+#: judge/views/contests.py:459
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "Bạn đang không tham gia cuộc thi \"%s\"."
 
-#: judge/views/contests.py:515
+#: judge/views/contests.py:517
 #, python-format
 msgid "Contests in %(month)s"
 msgstr "Cuộc thi tại %(month)s"
 
-#: judge/views/contests.py:515
+#: judge/views/contests.py:517
 msgid "F Y"
 msgstr "\\t\\há\\n\\g n \\nă\\m Y"
 
-#: judge/views/contests.py:573
+#: judge/views/contests.py:575
 #, python-format
 msgid "%s Statistics"
 msgstr "Thống kê của %s"
 
-#: judge/views/contests.py:748
+#: judge/views/contests.py:750
 #, python-format
 msgid "%s Rankings"
 msgstr "%s xếp hạng"
 
-#: judge/views/contests.py:756
+#: judge/views/contests.py:758
 msgid "???"
 msgstr "???"
 
-#: judge/views/contests.py:772
+#: judge/views/contests.py:774
 #, python-format
 msgid "Your participation in %(contest)s"
 msgstr "Tham gia của bạn vào %(contest)s"
 
-#: judge/views/contests.py:773
+#: judge/views/contests.py:775
 #, python-format
 msgid "%(user)s's participation in %(contest)s"
 msgstr "Sự tham gia của %(user)s vào %(contest)s"
 
-#: judge/views/contests.py:782
+#: judge/views/contests.py:784
 msgid "Live"
 msgstr "Trực tuyến"
 
-#: judge/views/contests.py:794 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:796 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr "Tham gia"
 
-#: judge/views/contests.py:838
+#: judge/views/contests.py:840
 #, python-format
 msgid "%s MOSS Results"
 msgstr "Kết quả MOSS của %s"
 
-#: judge/views/contests.py:865
+#: judge/views/contests.py:867
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr "Đang chạy MOSS cho %s..."
 
-#: judge/views/contests.py:888
+#: judge/views/contests.py:890
 #, python-format
 msgid "Contest tag: %s"
 msgstr "Thẻ cuộc thi: %s"
 
 #: judge/views/error.py:14
 msgid "404 error"
-msgstr "lỗi 404"
+msgstr "Lỗi 404"
 
 #: judge/views/error.py:15
 #, python-format
@@ -3289,61 +3293,61 @@ msgstr "Không thể tìm thấy một đề bài với mã \"%s\"."
 msgid "Editorial for {0}"
 msgstr "Hướng giải của {0}"
 
-#: judge/views/problem.py:137
+#: judge/views/problem.py:138
 msgid "No such editorial"
 msgstr "Không có lời giải"
 
-#: judge/views/problem.py:138
+#: judge/views/problem.py:139
 #, python-format
 msgid "Could not find an editorial with the code \"%s\"."
 msgstr "Không thể tìm thấy một hướng dẫn với mã \"%s\"."
 
-#: judge/views/problem.py:239
+#: judge/views/problem.py:241
 msgid "Not allowed to vote on this problem."
 msgstr "Không được phép bình chọn trong bài tập này."
 
-#: judge/views/problem.py:262
+#: judge/views/problem.py:264
 msgid "Not allowed to delete votes on this problem."
 msgstr "Không được phép xóa bình chọn trong bài tập này."
 
-#: judge/views/problem.py:265
+#: judge/views/problem.py:267
 msgid "success"
 msgstr "thành công"
 
-#: judge/views/problem.py:648 judge/views/problem.py:656
+#: judge/views/problem.py:650 judge/views/problem.py:658
 #, python-format
 msgid "Submit to %s"
 msgstr "Nộp cho %s"
 
-#: judge/views/problem.py:701
+#: judge/views/problem.py:703
 msgid "You submitted too many submissions."
 msgstr "Bạn đã gửi quá nhiều lần."
 
-#: judge/views/problem.py:705
+#: judge/views/problem.py:707
 msgid "Banned from submitting"
 msgstr "Cấm nộp bài"
 
-#: judge/views/problem.py:706
+#: judge/views/problem.py:708
 msgid "You have been declared persona non grata for this problem. You are permanently barred from submitting to this problem."
 msgstr "Bạn đã được coi là cá nhận không tính điểm cho đề này. Bạn không thể nộp bài."
 
-#: judge/views/problem.py:710
+#: judge/views/problem.py:712
 msgid "Too many submissions"
 msgstr "Quá nhiều bài nộp"
 
-#: judge/views/problem.py:711
+#: judge/views/problem.py:713
 msgid "You have exceeded the submission limit for this problem."
 msgstr "Bạn đã vượt quá giới hạn lần nộp của bài này."
 
-#: judge/views/problem.py:761
+#: judge/views/problem.py:763
 msgid "Do you want me to ban you?"
 msgstr "Bạn có muốn bị tôi ngăn chặn?"
 
-#: judge/views/problem.py:779
+#: judge/views/problem.py:781
 msgid "Clone Problem"
 msgstr "Nhân bản bài tập"
 
-#: judge/views/problem.py:806
+#: judge/views/problem.py:808
 #, python-format
 msgid "Cloned problem from %s"
 msgstr "Nhân bản bài tập từ %s"
@@ -3362,11 +3366,11 @@ msgstr "File nén bị lỗi!"
 
 #: judge/views/problem_data.py:51
 msgid "Zip files must end in '.zip'"
-msgstr ""
+msgstr "Tệp zip bắt buộc phải kết thúc bằng '.zip'"
 
 #: judge/views/problem_data.py:58
 msgid "Generators must not be named init.yml."
-msgstr ""
+msgstr "File sinh không được tên là init.yml."
 
 #: judge/views/problem_data.py:119 judge/views/problem_data.py:122
 #, python-brace-format
@@ -3596,7 +3600,7 @@ msgstr "Kích hoạt xác thực 2 yếu tố"
 
 #: judge/views/two_factor.py:110
 msgid "Edit Two-factor Authentication"
-msgstr ""
+msgstr "Chỉnh sửa xác thực hai yếu tố"
 
 #: judge/views/two_factor.py:118
 msgid "Disable Two-factor Authentication"
@@ -3692,7 +3696,7 @@ msgstr "Bạn đã gửi quá nhiều yêu cầu đặt lại mật khẩu. Hãy
 
 #: judge/views/user.py:521 templates/user/edit-profile.html:343
 msgid "Change your email"
-msgstr ""
+msgstr "Thay đổi email"
 
 #: judge/views/user.py:568
 msgid "Email change requested"
@@ -3701,19 +3705,19 @@ msgstr "Đã yêu cầu thay đồi Email"
 #: judge/views/user.py:569
 #, python-format
 msgid "Please click on the link sent to %s."
-msgstr ""
+msgstr "Vui lòng nhấn vào link đã được gửi tới %s."
 
 #: judge/views/user.py:581
 msgid "You have sent too many email change requests. Please try again later."
-msgstr ""
+msgstr "Bạn đã gửi quá nhiều yêu cầu đổi email, vui lòng thử lại sau."
 
 #: judge/views/user.py:598
 msgid "Invalid activation key. Please try again."
-msgstr ""
+msgstr "Mã kích hoạt không hợp lệ. Vui lòng thử lại."
 
 #: judge/views/user.py:600
 msgid "This request has expired. Please try again."
-msgstr ""
+msgstr "Yêu cầu này đã hết hạn. Vui lòng thử lại."
 
 #: judge/views/user.py:603
 msgid "Please try again while logged in to the account this email change was originally requested from."
@@ -3721,25 +3725,25 @@ msgstr ""
 
 #: judge/views/user.py:610
 msgid "The email you originally requested has since been registered by another user. Please try again with a new email."
-msgstr ""
+msgstr "Email bạn đang yêu cầu đã được sử dụng bởi một người dùng khác. Vui lòng thử lại với một email mới."
 
 #: judge/views/user.py:616
 #, python-format
 msgid "Changed email address from %s to %s"
-msgstr ""
+msgstr "Đã đổi email từ %s thành %s"
 
 #: judge/views/user.py:623
 msgid "Email change failed"
-msgstr ""
+msgstr "Đổi email thất bại"
 
 #: judge/views/user.py:627
 msgid "Email successfully changed"
-msgstr ""
+msgstr "Email đã thay đổi thành công"
 
 #: judge/views/user.py:628
 #, python-format
 msgid "The email attached to your account has been changed to %s."
-msgstr ""
+msgstr "Email được gắn với tài khoản của bạn đã được đổi thành %s."
 
 #: templates/admin/judge/contest/change_form.html:9
 msgid "Are you sure you want to rejudge ALL the submissions?"
@@ -5224,63 +5228,63 @@ msgstr "Kích hoạt tài khoản %(site_name)s của bạn"
 
 #: templates/registration/email_change.html:20
 msgid "Request email change"
-msgstr ""
+msgstr "Yêu cầu đổi email"
 
 #: templates/registration/email_change_activate_email.html:9
 #: templates/registration/email_change_activate_email.txt:3
 #, python-format
 msgid "You have requested to change your email address to this email for your user account at %(site_name)s."
-msgstr ""
+msgstr "Bạn đã yêu cầu đổi email của bạn sang mail này với tài khoản tại %(site_name)s."
 
 #: templates/registration/email_change_activate_email.html:11
 #, python-format
 msgid "Please click the link to confirm this email change. The link will expire in %(count)s minute."
 msgid_plural "Please click the link to confirm this email change. The link will expire in %(count)s minutes."
-msgstr[0] ""
+msgstr[0] "Vui lòng nhấn vào liên kết để xác nhận việc thay đổi email. Liên kết sẽ hết hạn trong %(count)s phút."
 
 #: templates/registration/email_change_activate_email.html:21
 #: templates/registration/email_change_activate_email.txt:14
 #, python-format
 msgid "If you have encountered any problems, feel free to shoot us an email at %(email)s."
-msgstr ""
+msgstr "Nếu bạn gặp bất kỳ vấn đề nào, hãy gửi cho chúng tôi một email tại %(email)s."
 
 #: templates/registration/email_change_activate_email.txt:5
 #, python-format
 msgid "Please go to this page to confirm this email change. The link will expire in %(count)s minute."
 msgid_plural "Please go to this page to confirm this email change. The link will expire in %(count)s minutes."
-msgstr[0] ""
+msgstr[0] "Vui lòng vào trang này để xác nhận việc thay đổi email. Liên kết sẽ hết hạn trong %(count)s phút."
 
 #: templates/registration/email_change_activate_subject.txt:1
 #, python-format
 msgid "Email change request on %(site_name)s"
-msgstr ""
+msgstr "Yêu cầu đổi email tại %(site_name)s"
 
 #: templates/registration/email_change_notify_email.html:9
 #: templates/registration/email_change_notify_email.txt:2
 #, python-format
 msgid "Someone (hopefully you!) has requested to change the email address associated with your user account at %(site_name)s to %(new_email)s."
-msgstr ""
+msgstr "Ai đó (hi vọng là bạn!) đã yêu cầu thay đổi email liên kết với tài khoản của bạn tại %(site_name)s thành %(new_email)s."
 
 #: templates/registration/email_change_notify_email.html:11
 #: templates/registration/email_change_notify_email.txt:4
 msgid "If this was you, no further action is required."
-msgstr ""
+msgstr "Nếu đó là bạn, bạn không cần thực hiện bất cứ hành động gì."
 
 #: templates/registration/email_change_notify_email.html:17
 #: templates/registration/email_change_notify_email.txt:6
 #, python-format
 msgid "If this was not you, please change your password and email us immediately at %(email)s."
-msgstr ""
+msgstr "Nếu đó không phải là bạn, vui lòng hãy đổi mật khẩu ngay lập tức và gửi email cho chúng tôi tại %(email)s."
 
 #: templates/registration/email_change_notify_email.html:20
 #: templates/registration/email_change_notify_email.txt:8
 msgid "If this was not you, please change your password and reply to this email immediately."
-msgstr ""
+msgstr "Nếu đó không phải là bạn, hãy đổi mật khẩu và trả lời email này ngay lập tức."
 
 #: templates/registration/email_change_notify_subject.txt:1
 #, python-format
 msgid "Alert: Email change request on %(site_name)s"
-msgstr ""
+msgstr "Cảnh báo: Yêu cầu đổi email tại %(site_name)s"
 
 #: templates/registration/login.html:35
 msgid "Invalid username or password."
@@ -5466,7 +5470,7 @@ msgstr "Nhập mã 6 chữ số sinh ra bởi ứng dụng của bạn:"
 
 #: templates/registration/totp_enable.html:90
 msgid "Edit Two Factor Authentication"
-msgstr ""
+msgstr "Chỉnh sửa xác thực hai yếu tố"
 
 #: templates/registration/totp_enable.html:92
 msgid "Enable Two Factor Authentication"
@@ -5879,7 +5883,7 @@ msgstr "Tìm kiếm theo tên..."
 
 #: templates/user/edit-profile.html:102
 msgid "The administrators for this site require all the staff to have Two-factor Authentication enabled, so it may not be disabled at this time."
-msgstr "Các quản trị viên của trang web này yêu cầu tất cả nhân viên phải bật Xác thực hai yếu tố, vì vậy hiện tại không thể vô hiệu hóa"
+msgstr "Các quản trị viên của trang web này yêu cầu tất cả nhân viên phải bật Xác thực hai yếu tố, vì vậy hiện tại không thể vô hiệu hóa."
 
 #: templates/user/edit-profile.html:107
 msgid "Are you sure you want to generate or regenerate your API token?"
