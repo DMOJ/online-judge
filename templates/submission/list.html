@@ -32,7 +32,7 @@
             <script type="text/javascript">
                 window.rejudge_submission = function (id, e) {
                     if ((typeof e !== 'undefined' && (e.ctrlKey || e.metaKey)) ||
-                        confirm('{{ _('Are you sure you want to rejudge?') }}')) {
+                        confirm({{ _('Are you sure you want to rejudge?')|htmltojs }})) {
                         $.ajax({
                             url: '{{ url('submission_rejudge') }}',
                             type: "POST",
@@ -72,14 +72,14 @@
                 $('#status').select2({
                     theme: '{{ DMOJ_SELECT2_THEME }}',
                     multiple: 1,
-                    placeholder: '{{ _('Filter by status...') }}',
+                    placeholder: {{ _('Filter by status...')|htmltojs }},
                     matcher: idAndTextMatcher,
                 }).css({'visibility': 'visible'});
 
                 $('#language').select2({
                     theme: '{{ DMOJ_SELECT2_THEME }}',
                     multiple: 1,
-                    placeholder: '{{ _('Filter by language...') }}',
+                    placeholder: {{ _('Filter by language...')|htmltojs }},
                     matcher: idAndTextMatcher,
                 }).css({'visibility': 'visible'});
             });

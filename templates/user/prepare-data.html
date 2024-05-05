@@ -61,7 +61,7 @@
                 check($(this), 300);
             });
             $('#prepare-download').click(function() {
-                return confirm("{{ _('Are you sure you want to prepare a download?') }}");
+                return confirm({{ _('Are you sure you want to prepare a download?')|htmltojs }});
             });
         });
         $(document).ready(function () {

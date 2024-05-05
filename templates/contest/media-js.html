@@ -1,19 +1,19 @@
 <script type="text/javascript">
     $(function () {
         $('.leaving-forever').click(function () {
-            return confirm('{{ _('Are you sure you want to leave?') }}\n' +
-                '{{ _('You cannot come back to a virtual participation. You will have to start a new one.') }}');
+            return confirm({{ _('Are you sure you want to leave?')|htmltojs }} + '\n' +
+                {{ _('You cannot come back to a virtual participation. You will have to start a new one.')|htmltojs }});
         });
 
         $('.first-join').click(function () {
-            return confirm('{{ _('Are you sure you want to join?') }}\n' +
-                '{{ _('Joining a contest starts your timer, after which it becomes unstoppable.') }}');
+            return confirm({{ _('Are you sure you want to join?')|htmltojs }} + '\n' +
+                {{ _('Joining a contest starts your timer, after which it becomes unstoppable.')|htmltojs }});
         });
 
         {% if request.in_contest %}
             $('.contest-join').click(function () {
-                return confirm('{{ _('Are you sure you want to join?') }}\n' +
-                    '{{ _('Joining this contest will leave %(contest)s.', contest=request.participation.contest.name) }}');
+                return confirm({{ _('Are you sure you want to join?')|htmltojs }} + '\n' +
+                    {{ _('Joining this contest will leave %(contest)s.', contest=request.participation.contest.name)|htmltojs }});
             });
         {% endif %}
     });

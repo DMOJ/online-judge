@@ -43,12 +43,12 @@
             $(function () {
                 $('a.disqualify-participation').click(function (e) {
                     e.preventDefault();
-                    if (e.ctrlKey || e.metaKey || confirm("{{ _('Are you sure you want to disqualify this participation?') }}"))
+                    if (e.ctrlKey || e.metaKey || confirm({{ _('Are you sure you want to disqualify this participation?')|htmltojs }}))
                         $(this).closest('form').submit();
                 })
                 $('a.un-disqualify-participation').click(function (e) {
                     e.preventDefault();
-                    if (e.ctrlKey || e.metaKey || confirm("{{ _('Are you sure you want to un-disqualify this participation?') }}"))
+                    if (e.ctrlKey || e.metaKey || confirm({{ _('Are you sure you want to un-disqualify this participation?')|htmltojs }}))
                         $(this).closest('form').submit();
                 })
             });

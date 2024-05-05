@@ -67,10 +67,10 @@
                     var $status = $row.find('td').first().find('i');
                     if (ticket.open) {
                         $status.removeClass('fa-check-circle-o').addClass('fa-exclamation-circle');
-                        notify('ticket', '{{ _('Reopened: ') }}' + ticket.title);
+                        notify('ticket', {{ _('Reopened: ')|htmltojs }} + ticket.title);
                     } else {
                         $status.removeClass('fa-exclamation-circle').addClass('fa-check-circle-o');
-                        notify('ticket', '{{ _('Closed: ') }}' + ticket.title);
+                        notify('ticket', {{ _('Closed: ')|htmltojs }} + ticket.title);
                     }
                 }
             }

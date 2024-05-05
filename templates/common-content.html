@@ -29,8 +29,8 @@
                             .append(copyButton = $('<span>', {
                                 'class': 'btn-clipboard',
                                 'data-clipboard-text': $(this).text(),
-                                'title': '{{ _('Click to copy') }}'
-                            }).text('{{ _('Copy') }}')));
+                                'title': {{ _('Click to copy')|htmltojs }}
+                            }).text({{ _('Copy')|htmltojs }})));
 
                         $(copyButton.get(0)).mouseleave(function () {
                             $(this).attr('class', 'btn-clipboard');
@@ -41,7 +41,7 @@
 
                         curClipboard.on('success', function (e) {
                             e.clearSelection();
-                            showTooltip(e.trigger, '{{ _('Copied!') }}');
+                            showTooltip(e.trigger, {{ _('Copied!')|htmltojs }});
                         });
 
                         curClipboard.on('error', function (e) {

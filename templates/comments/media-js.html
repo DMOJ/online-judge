@@ -9,7 +9,7 @@
                 var new_id = 'id' + parent + '_body';
                 if ($comment_reply.find('#' + reply_id).length == 0) {
                     var $reply_form = $('#new-comment').clone(true).prop('id', reply_id);
-                    $reply_form.find('h3').html('{{ _('Replying to comment') }}');
+                    $reply_form.find('h3').html({{ _('Replying to comment')|htmltojs }});
                     $reply_form.prepend('<a class="close">x</a>');
                     $reply_form.find('form.comment-submit-form input#id_parent').val(parent);
                     $reply_form.find('div#id_body-wmd-wrapper').prop('id', new_id + '-wmd-wrapper');
@@ -69,12 +69,12 @@
                     $comment.find('.next-revision').css({visibility: show_revision == max_revision ? 'hidden' : ''});
                     var $content = $comment.find('.content').html(body);
 
-                    var edit_text = '{{ _('edit {edits}') }}'.replace("{edits}", show_revision);
+                    var edit_text = {{ _('edit {edits}')|htmltojs }}.replace('{edits}', show_revision);
 
                     if (show_revision == 0) {
-                        edit_text = '{{ _('original') }}';
+                        edit_text = {{ _('original')|htmltojs }};
                     } else if (show_revision == max_revision && max_revision == 1) {
-                        edit_text = '{{ _('edited') }}';
+                        edit_text = {{ _('edited')|htmltojs }};
                     }
 
                     $comment.find('.comment-edit-text').text(' ' + edit_text + ' ');
@@ -98,7 +98,7 @@
                             on_success();
                     },
                     error: function (data, textStatus, jqXHR) {
-                        alert('{{ _('Could not vote: {error}') }}'.replace('{error}', data.responseText));
+                        alert({{ _('Could not vote: {error}')|htmltojs }}.replace('{error}', data.responseText));
                     }
                 });
             }
@@ -134,7 +134,7 @@
             var $comments = $('.comments');
             $comments.find('a.hide-comment').click(function (e) {
                 e.preventDefault();
-                if (!(e.ctrlKey || e.metaKey || confirm('{{ _('Are you sure you want to hide this comment?') }}')))
+                if (!(e.ctrlKey || e.metaKey || confirm({{ _('Are you sure you want to hide this comment?')|htmltojs }})))
                     return;
 
                 var id = $(this).attr('data-id');
@@ -142,7 +142,7 @@
                     $('#comment-' + id).remove();
                     $('#comment-' + id + '-children').remove();
                 }).catch(function () {
-                    alert('{{ _('Could not hide comment.') }}');
+                    alert({{ _('Could not hide comment.')|htmltojs }});
                 });
             });
 
@@ -177,12 +177,12 @@
                                 if (window.add_code_copy_buttons)
                                     window.add_code_copy_buttons($area);
                                 var $edits = $comment.find('.comment-edits').first();
-                                $edits.text('{{ _('updated') }}');
+                                $edits.text({{ _('updated')|htmltojs }});
                             }).fail(function () {
-                                alert('{{ _('Failed to update comment body.') }}');
+                                alert({{ _('Failed to update comment body.')|htmltojs }});
                             });
                         }).fail(function (data) {
-                            alert('{{ _('Could not edit comment: {error}') }}'.replace('{error}', data.responseText));
+                            alert({{ _('Could not edit comment: {error}')|htmltojs }}.replace('{error}', data.responseText));
                         });
                     });
                 },

@@ -28,7 +28,7 @@
                                     <a href="javascript:comment_upvote({{ node.id }})"
                                        class="upvote-link fa fa-chevron-up fa-fw{% if node.vote_score == 1 %} voted{% endif %}"></a>
                                 {% else %}
-                                    <a href="javascript:alert('{{ _('Please log in to vote')|escapejs }}')" title="{{ _('Please log in to vote') }}"
+                                    <a href="javascript:alert({{ _('Please log in to vote')|htmltojs }})" title="{{ _('Please log in to vote') }}"
                                        class="upvote-link fa fa-chevron-up fa-fw"></a>
                                 {% endif %}
                                 <br>
@@ -37,7 +37,7 @@
                                     <a href="javascript:comment_downvote({{ node.id }})"
                                        class="downvote-link fa fa-chevron-down fa-fw{% if node.vote_score == -1 %} voted{% endif %}"></a>
                                 {% else %}
-                                    <a href="javascript:alert('{{ _('Please log in to vote')|escapejs }}')" title="{{ _('Please log in to vote') }}"
+                                    <a href="javascript:alert({{ _('Please log in to vote')|htmltojs }})" title="{{ _('Please log in to vote') }}"
                                        class="downvote-link fa fa-chevron-down fa-fw"></a>
                                 {% endif %}
                             </div>

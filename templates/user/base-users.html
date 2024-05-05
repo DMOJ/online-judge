@@ -12,7 +12,7 @@
             var in_user_redirect = false;
             $('#search-handle').select2({
                 theme: '{{ DMOJ_SELECT2_THEME }}',
-                placeholder: '{{ _('Search by handle...') }}',
+                placeholder: {{ _('Search by handle...')|htmltojs }},
                 ajax: {
                     url: '{{ url('user_search_select2_ajax') }}'
                 },

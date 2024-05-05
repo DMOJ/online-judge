@@ -27,7 +27,7 @@
                         update_ticket_state(open);
                     },
                     error: function (data) {
-                        alert('{{ _('Could not change ticket: {error}') }}'.replace('{error}', data.responseText));
+                        alert({{ _('Could not change ticket: {error}')|htmltojs }}.replace('{error}', data.responseText));
                     }
                 });
             });
@@ -92,8 +92,8 @@
             function ticket_status(ticket) {
                 update_ticket_state(ticket.open);
                 if (is_highest_ref())
-                    notify('ticket', (ticket.open ? '{{ _('Reopened: ') }}' :
-                        '{{ _('Closed: ') }}') + $title.text());
+                    notify('ticket', (ticket.open ? {{ _('Reopened: ')|htmltojs }} :
+                        {{ _('Closed: ')|htmltojs }}) + $title.text());
             }
 
             function ticket_message(ticket) {

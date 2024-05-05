@@ -68,7 +68,7 @@
                 var $precision = $('<input>', {
                     type: 'number',
                     value: try_parse_json($args.val()).precision || 6,
-                    title: '{{ _('precision (decimal digits)') }}',
+                    title: {{ _('precision (decimal digits)')|htmltojs }},
                     style: 'width: 4em'
                 }).change(function () {
                     if ($checker.val().startsWith('floats'))

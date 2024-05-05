@@ -46,7 +46,7 @@
                 }).css({'visibility': 'visible'}).change(clean_submit);
                 $('#types').select2({
                     theme: '{{ DMOJ_SELECT2_THEME }}',
-                    multiple: 1, placeholder: '{{ _('Filter by type...') }}'
+                    multiple: 1, placeholder: {{ _('Filter by type...')|htmltojs }}
                 }).css({'visibility': 'visible'});
 
                 // This is incredibly nasty to do but it's needed because otherwise the select2 steals the focus

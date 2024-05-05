@@ -30,7 +30,7 @@
                 event.preventDefault();
 
                 if (typeof window.PublicKeyCredential === 'undefined') {
-                    alert('{{ _('WebAuthn is not supported by your browser.') }}');
+                    alert({{ _('WebAuthn is not supported by your browser.')|htmltojs }});
                     return;
                 }
 
@@ -51,7 +51,7 @@
                                 $('#2fa-form').submit();
                             });
                     })
-                    .fail(() => alert('{{ _('Failed to contact server.') }}'));
+                    .fail(() => alert({{ _('Failed to contact server.')|htmltojs }}));
             })
         });
     </script>
