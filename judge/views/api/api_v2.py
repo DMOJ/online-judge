@@ -42,6 +42,11 @@ class ProblemSimpleFilter(BaseSimpleFilter):
         return Problem.objects.get(code=key)
 
 
+class ContestSimpleFilter(BaseSimpleFilter):
+    def get_object(self, key):
+        return Contest.objects.get(key=key)
+
+
 class BaseListFilter:
     def to_filter(self, key_list):
         raise NotImplementedError()
@@ -566,6 +571,7 @@ class APISubmissionList(APIListView):
     basic_filters = (
         ('user', ProfileSimpleFilter('user')),
         ('problem', ProblemSimpleFilter('problem')),
+        ('contest', ContestSimpleFilter('contest_object')),
     )
     list_filters = (
         ('id', 'id'),
@@ -590,7 +596,7 @@ class APISubmissionList(APIListView):
         )
         return (
             queryset
-            .select_related('problem', 'user__user', 'language')
+            .select_related('problem', 'contest', 'contest__participation', 'contest_object', 'user__user', 'language')
             .order_by('id')
             .only(
                 'id',
@@ -602,6 +608,10 @@ class APISubmissionList(APIListView):
                 'memory',
                 'points',
                 'result',
+                'contest_object__key',
+                'contest__points',
+                'contest__participation__virtual',
+                'contest__participation__real_start',
             )
         )
 
@@ -616,6 +626,12 @@ class APISubmissionList(APIListView):
             'memory': submission.memory,
             'points': submission.points,
             'result': submission.result,
+            'contest': None if not submission.contest_object else {
+                'key': submission.contest_object.key,
+                'points': submission.contest.points,
+                'virtual_participation_number': submission.contest.participation.virtual,
+                'time_since_start_of_participation': submission.date - submission.contest.participation.real_start,
+            },
         }
 
 
