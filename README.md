@@ -91,9 +91,9 @@ Use the site in whatever language you're most comfortable in &mdash; visit [tran
 ### Highly featured administration interface
 The DMOJ admin interface is highly versatile, and can be efficiently used for anything from managing users to authoring problem statements.
 
-![](https://dmoj.ml/data/_other/readme/problem-admin.png)
+![](https://static.dmoj.ca/data/_other/readme/problem-admin.png)
 
-![](https://dmoj.ml/data/_other/readme/admin-dashboard.png)
+![](https://static.dmoj.ca/data/_other/readme/admin-dashboard.png)
 
 ## Supported languages
 
