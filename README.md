@@ -110,6 +110,7 @@ Supported languages include:
 
 The judge can also grade in the languages listed below:
 * Ada
+* Algol 68
 * AWK
 * COBOL
 * D
