@@ -33,7 +33,7 @@ jobs:
         CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_V2_TOKEN }}
       run: |
         cat > crowdin.yaml <<EOF
-        id: 142963
+        project_id: 142963
 
         files:
           - source: /locale/en/LC_MESSAGES/django.po
