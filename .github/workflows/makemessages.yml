@@ -30,10 +30,10 @@ jobs:
         python manage.py makemessages -l en -d djangojs
     - name: Upload strings to Crowdin
       env:
-        CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
+        CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_V2_TOKEN }}
       run: |
         cat > crowdin.yaml <<EOF
-        project_identifier: dmoj
+        id: 142963
 
         files:
           - source: /locale/en/LC_MESSAGES/django.po
@@ -49,5 +49,5 @@ jobs:
                 zh-CN: zh_Hans
                 sr-CS: sr_Latn
         EOF
-        echo "api_key: ${CROWDIN_API_TOKEN}" >> crowdin.yaml
+        echo "api_token: ${CROWDIN_API_TOKEN}" >> crowdin.yaml
         crowdin upload sources
