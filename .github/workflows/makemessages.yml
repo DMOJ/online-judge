@@ -20,7 +20,7 @@ jobs:
       run: |
          sudo apt-get install gettext
          curl -O https://artifacts.crowdin.com/repo/deb/crowdin3.deb
-         sudo dpkg -i crowdin.deb
+         sudo dpkg -i crowdin3.deb
          pip install -r requirements.txt
          pip install pymysql
     - name: Collect localizable strings
