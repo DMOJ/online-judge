@@ -146,7 +146,7 @@
                     {{ _('You must solve at least one problem before your voice can be heard.') }}
                 </div>
             {% else %}
-                <form class="comment-submit-form" action="" method="post">
+                <form class="comment-submit-form{% if comment_warn_code %} comment-warn-code{% endif %}" action="" method="post">
                     {% csrf_token %}
                     {% if comment_form.errors %}
                         <div id="form-errors">
