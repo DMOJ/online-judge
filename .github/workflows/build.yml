@@ -4,9 +4,9 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python 3.7
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.7'
     - name: Install flake8
@@ -18,13 +18,13 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python 3.7
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.7'
     - name: Cache pip
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: pip-${{ runner.os }}-${{ secrets.CACHE_VERSION }}-${{ hashFiles('requirements.txt') }}
@@ -40,15 +40,15 @@ jobs:
       run: coverage run --source=. manage.py test judge
     - name: Generate coverage report
       run: coverage xml
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v4
   styles:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node 18
+      - uses: actions/checkout@v4
+      - name: Set up Node 20
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - name: Install npm packages
         run: npm install -g sass postcss-cli postcss autoprefixer
       - name: Build style.css
