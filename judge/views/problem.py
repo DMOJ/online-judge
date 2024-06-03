@@ -204,6 +204,14 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
         context['og_image'] = self.object.og_image or metadata[1]
         context['enable_comments'] = settings.DMOJ_ENABLE_COMMENTS
 
+        if self.object.include_test_cases:
+            try:
+                context['test_cases'] = self.object.data_files.test_cases_content
+            except ObjectDoesNotExist:
+                context['test_cases'] = ''
+        else:
+            context['test_cases'] = ''
+
         context['vote_perm'] = self.object.vote_permission_for_user(user)
         if context['vote_perm'].can_vote():
             try:
