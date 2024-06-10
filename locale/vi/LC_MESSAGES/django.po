@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 04:48+0000\n"
-"PO-Revision-Date: 2024-05-05 00:45\n"
+"POT-Creation-Date: 2024-05-27 21:31+0000\n"
+"PO-Revision-Date: 2024-05-29 00:47\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -212,7 +212,7 @@ msgstr[0] "%d kỳ thi đã được đánh dấu là ẩn."
 
 #: judge/admin/contest.py:243
 msgid "Lock contest submissions"
-msgstr "Khóa nạp bài cho kỳ thi"
+msgstr "Khóa các bài nộp của kỳ thi"
 
 #: judge/admin/contest.py:248
 #, python-format
@@ -230,27 +230,27 @@ msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
 msgstr[0] "Mở khóa %d cuộc thi thành công."
 
-#: judge/admin/contest.py:280 judge/admin/submission.py:177
+#: judge/admin/contest.py:283 judge/admin/submission.py:177
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d bài nộp đã được lên lịch để chấm lại."
 
-#: judge/admin/contest.py:353
+#: judge/admin/contest.py:356
 msgid "Recalculate results"
 msgstr "Tính lại kết quả"
 
-#: judge/admin/contest.py:359
+#: judge/admin/contest.py:362
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
 msgstr[0] "%d tham gia tính lại."
 
-#: judge/admin/contest.py:363 judge/admin/organization.py:110
+#: judge/admin/contest.py:366 judge/admin/organization.py:110
 msgid "username"
 msgstr "tên người dùng"
 
-#: judge/admin/contest.py:367 templates/base.html:259
+#: judge/admin/contest.py:370 templates/base.html:259
 msgid "virtual"
 msgstr "ảo"
 
@@ -380,21 +380,21 @@ msgid "%d user had scores recalculated."
 msgid_plural "%d users had scores recalculated."
 msgstr[0] "%d người dùng có tính lại điểm."
 
-#: judge/admin/runtime.py:52 templates/user/edit-profile.html:119
+#: judge/admin/runtime.py:53 templates/user/edit-profile.html:119
 #: templates/user/edit-profile.html:241 templates/user/edit-profile.html:358
 #: templates/user/edit-profile.html:388
 msgid "Regenerate"
 msgstr "Tạo lại"
 
-#: judge/admin/runtime.py:66
+#: judge/admin/runtime.py:67
 msgid "Description"
 msgstr "Mô tả"
 
-#: judge/admin/runtime.py:67
+#: judge/admin/runtime.py:68
 msgid "Information"
 msgstr "Thông tin"
 
-#: judge/admin/runtime.py:68
+#: judge/admin/runtime.py:69
 msgid "Capabilities"
 msgstr "Khả năng"
 

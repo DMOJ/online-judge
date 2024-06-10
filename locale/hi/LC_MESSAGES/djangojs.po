@@ -1,0 +1,82 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: dmoj\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-23 05:23+0000\n"
+"PO-Revision-Date: 2024-06-02 00:47\n"
+"Last-Translator: \n"
+"Language-Team: Hindi\n"
+"Language: hi_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Crowdin-Project: dmoj\n"
+"X-Crowdin-Project-ID: 142963\n"
+"X-Crowdin-Language: hi\n"
+"X-Crowdin-File: djangojs.po\n"
+"X-Crowdin-File-ID: 12\n"
+
+#: resources/common.js:194
+msgctxt "time format with day"
+msgid "%d day %h:%m:%s"
+msgid_plural "%d days %h:%m:%s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: resources/common.js:197
+msgctxt "time format without day"
+msgid "%h:%m:%s"
+msgstr "%h:%m:%s"
+
+#: resources/problem-vote.js:11
+msgid "Vote on problem points"
+msgstr "समस्या अंक पे मतदान"
+
+#: resources/problem-vote.js:16
+#, javascript-format
+msgid "Unable to delete vote: %s"
+msgstr "मतदान हटाना विफल रहा: %s"
+
+#: resources/problem-vote.js:28
+#, javascript-format
+msgid "Edit points vote (%s)"
+msgstr ""
+
+#: resources/problem-vote.js:34
+#, javascript-format
+msgid "Unable to cast vote: %s"
+msgstr ""
+
+#: resources/problem-vote.js:63
+msgid "Number of votes for this point value"
+msgstr ""
+
+#: resources/user_profile.js:47
+msgid "past year"
+msgstr "पिछले साल"
+
+#: resources/user_profile.js:64
+msgid "%(cnt)d total submission"
+msgid_plural "%(cnt)d total submissions"
+msgstr[0] "%(cnt)d कुल प्रस्तुतियाँ"
+msgstr[1] ""
+
+#: resources/user_profile.js:69
+msgid "%(cnt)d submission in the last year"
+msgid_plural "%(cnt)d submissions in the last year"
+msgstr[0] ""
+msgstr[1] ""
+
+#: resources/user_profile.js:74
+msgid "%(cnt)d submission in %(year)d"
+msgid_plural "%(cnt)d submissions in %(year)d"
+msgstr[0] ""
+msgstr[1] ""
+
+#: resources/user_profile.js:88
+msgid "%(cnt)d submission on %(date)s"
+msgid_plural "%(cnt)d submissions on %(date)s"
+msgstr[0] ""
+msgstr[1] ""
+
