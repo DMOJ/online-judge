@@ -14,24 +14,24 @@
 {% block after_field_sets %}{{ block.super }}
     {% if original %}
         <a style="display: none" title="{% trans "Disconnect" %}" href="{% url 'admin:judge_judge_disconnect' original.pk %}"
-           class="button disconnect-link">
+           class="button disconnect-link action-link">
             <i class="fa fa-lg fa-power-off"></i>
             <span class="text">{% trans "Disconnect" %}</span>
         </a>
         <a style="display: none" title="{% trans "Terminate" %}" href="{% url 'admin:judge_judge_terminate' original.pk %}"
-           class="button terminate-link">
+           class="button terminate-link action-link">
             <i class="fa fa-lg fa-plug"></i>
             <span class="text">{% trans "Terminate" %}</span>
         </a>
         {% if not original.is_disabled %}
             <a style="display: none" title="{% trans "Disable" %}" href="{% url 'admin:judge_judge_disable' original.pk %}"
-            class="button disable-link">
+            class="button disable-link action-link">
                 <i class="fa fa-lg fa-times"></i>
                 <span class="text">{% trans "Disable" %}</span>
             </a>
         {% else %}
             <a style="display: none" title="{% trans "Enable" %}" href="{% url 'admin:judge_judge_disable' original.pk %}"
-            class="button disable-link">
+            class="button disable-link action-link">
                 <i class="fa fa-lg fa-check"></i>
                 <span class="text">{% trans "Enable" %}</span>
             </a>

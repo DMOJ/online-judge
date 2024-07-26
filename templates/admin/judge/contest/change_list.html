@@ -5,7 +5,7 @@
     {{ block.super }}
     {% if not is_popup and perms.judge.contest_rating %}
         <li>
-            <a href="{% url 'admin:judge_contest_rate_all' %}" class="ratealllink">
+            <a href="{% url 'admin:judge_contest_rate_all' %}" class="ratealllink action-link">
                 <i class="fa fa-signal"></i> {% trans "Rate all ratable contests" %}
             </a>
         </li>

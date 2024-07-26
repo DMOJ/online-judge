@@ -12,7 +12,7 @@
 {% block after_field_sets %}{{ block.super }}
     {% if original and not original.is_locked %}
         <a style="display: none" title="{% trans "Rejudge" %}" href="{% url 'admin:judge_submission_rejudge' original.pk %}"
-           class="button rejudgelink">
+           class="button rejudgelink action-link">
             <i class="fa fa-lg fa-refresh"></i>
             <span class="text">{% trans "Rejudge" %}</span>
         </a>
