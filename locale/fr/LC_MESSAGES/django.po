@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 04:48+0000\n"
-"PO-Revision-Date: 2024-02-11 00:43\n"
+"POT-Creation-Date: 2024-07-31 22:14+0000\n"
+"PO-Revision-Date: 2024-08-01 00:54\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -140,125 +140,125 @@ msgstr[1] "%d commentaires non cachés avec succès."
 msgid "associated page"
 msgstr "page associée"
 
-#: judge/admin/contest.py:31
+#: judge/admin/contest.py:33
 msgid "Included contests"
 msgstr "Concours inclus"
 
-#: judge/admin/contest.py:65 templates/contest/contest.html:195
+#: judge/admin/contest.py:67 templates/contest/contest.html:195
 #: templates/contest/moss.html:41 templates/problem/list.html:188
 #: templates/problem/list.html:204 templates/user/user-problems.html:58
 #: templates/user/user-problems.html:102
 msgid "Problem"
 msgstr "Problème"
 
-#: judge/admin/contest.py:66 judge/views/problem.py:355
+#: judge/admin/contest.py:68 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
 msgstr "Problèmes"
 
-#: judge/admin/contest.py:77 judge/admin/submission.py:245
+#: judge/admin/contest.py:79 judge/admin/submission.py:247
 #: templates/admin/judge/submission/change_form.html:14
 #: templates/admin/judge/submission/change_form.html:17
 #: templates/submission/source.html:34 templates/submission/status.html:90
 msgid "Rejudge"
 msgstr "Rejuger"
 
-#: judge/admin/contest.py:122
+#: judge/admin/contest.py:124
 msgid "Settings"
 msgstr "Réglages"
 
-#: judge/admin/contest.py:125
+#: judge/admin/contest.py:127
 msgid "Scheduling"
 msgstr "Planification"
 
-#: judge/admin/contest.py:126
+#: judge/admin/contest.py:128
 msgid "Details"
 msgstr "Détails"
 
-#: judge/admin/contest.py:127
+#: judge/admin/contest.py:129
 msgid "Format"
 msgstr "Format"
 
-#: judge/admin/contest.py:128 templates/contest/ranking-table.html:5
+#: judge/admin/contest.py:130 templates/contest/ranking-table.html:5
 msgid "Rating"
 msgstr "Classement"
 
-#: judge/admin/contest.py:129
+#: judge/admin/contest.py:131
 msgid "Access"
 msgstr "Accès"
 
-#: judge/admin/contest.py:131 judge/admin/problem.py:136
+#: judge/admin/contest.py:133 judge/admin/problem.py:136
 msgid "Justice"
 msgstr "Justice"
 
-#: judge/admin/contest.py:225
+#: judge/admin/contest.py:227
 msgid "Mark contests as visible"
 msgstr "Marquer les concours comme visibles"
 
-#: judge/admin/contest.py:230
+#: judge/admin/contest.py:232
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
 msgstr[0] "%d concours marqué visible avec succès."
 msgstr[1] "%d concours marqués visibles avec succès."
 
-#: judge/admin/contest.py:234
+#: judge/admin/contest.py:236
 msgid "Mark contests as hidden"
 msgstr "Marquer les concours comme invisibles"
 
-#: judge/admin/contest.py:239
+#: judge/admin/contest.py:241
 #, python-format
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
 msgstr[0] "%d concours marqué invisible avec succès."
 msgstr[1] "%d concours marqués invisibles avec succès."
 
-#: judge/admin/contest.py:243
+#: judge/admin/contest.py:245
 msgid "Lock contest submissions"
 msgstr "Verrouiller les soumissions au concours"
 
-#: judge/admin/contest.py:248
+#: judge/admin/contest.py:250
 #, python-format
 msgid "%d contest successfully locked."
 msgid_plural "%d contests successfully locked."
 msgstr[0] "%d concours a été verrouillé avec succès."
 msgstr[1] "%d concours ont été verrouillés avec succès."
 
-#: judge/admin/contest.py:252
+#: judge/admin/contest.py:254
 msgid "Unlock contest submissions"
 msgstr "Déverrouiller les soumissions au concours"
 
-#: judge/admin/contest.py:257
+#: judge/admin/contest.py:259
 #, python-format
 msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
 msgstr[0] "%d concours a été déverrouillé avec succès."
 msgstr[1] "%d concours ont été déverrouillés avec succès."
 
-#: judge/admin/contest.py:280 judge/admin/submission.py:177
+#: judge/admin/contest.py:286 judge/admin/submission.py:179
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d soumission a été programmée pour être rejugée avec succès."
 msgstr[1] "%d soumissions ont été programmées pour être rejugées avec succès."
 
-#: judge/admin/contest.py:353
+#: judge/admin/contest.py:361
 msgid "Recalculate results"
 msgstr "Recalculer les résultats"
 
-#: judge/admin/contest.py:359
+#: judge/admin/contest.py:367
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
 msgstr[0] "%d participation recalculée."
 msgstr[1] "%d participations recalculées."
 
-#: judge/admin/contest.py:363 judge/admin/organization.py:110
+#: judge/admin/contest.py:371 judge/admin/organization.py:110
 msgid "username"
 msgstr "nom d'utilisateur"
 
-#: judge/admin/contest.py:367 templates/base.html:259
+#: judge/admin/contest.py:375 templates/base.html:259
 msgid "virtual"
 msgstr "virtuel"
 
@@ -271,7 +271,7 @@ msgid "Summary"
 msgstr "Résumé"
 
 #: judge/admin/interface.py:125 judge/admin/profile.py:107
-#: judge/admin/submission.py:218 judge/models/contest.py:500
+#: judge/admin/submission.py:220 judge/models/contest.py:500
 #: judge/models/contest.py:632 judge/models/profile.py:349
 #: judge/models/profile.py:380 judge/models/submission.py:67
 #: judge/models/ticket.py:32
@@ -392,112 +392,112 @@ msgid_plural "%d users had scores recalculated."
 msgstr[0] "%d utilisateur a des notes recalculées."
 msgstr[1] "%d utilisateurs ont des notes recalculées."
 
-#: judge/admin/runtime.py:52 templates/user/edit-profile.html:119
+#: judge/admin/runtime.py:55 templates/user/edit-profile.html:119
 #: templates/user/edit-profile.html:241 templates/user/edit-profile.html:358
 #: templates/user/edit-profile.html:388
 msgid "Regenerate"
 msgstr "Régénérer"
 
-#: judge/admin/runtime.py:66
+#: judge/admin/runtime.py:69
 msgid "Description"
 msgstr "Description"
 
-#: judge/admin/runtime.py:67
+#: judge/admin/runtime.py:70
 msgid "Information"
 msgstr "Information"
 
-#: judge/admin/runtime.py:68
+#: judge/admin/runtime.py:71
 msgid "Capabilities"
 msgstr "Capacités"
 
-#: judge/admin/submission.py:24 judge/admin/submission.py:43
-#: judge/admin/submission.py:230
+#: judge/admin/submission.py:26 judge/admin/submission.py:45
+#: judge/admin/submission.py:232
 msgid "None"
 msgstr "Rien"
 
-#: judge/admin/submission.py:24
+#: judge/admin/submission.py:26
 msgid "Not done"
 msgstr "Pas finit"
 
-#: judge/admin/submission.py:24
+#: judge/admin/submission.py:26
 msgid "Exceptional"
 msgstr "Exceptionnel"
 
-#: judge/admin/submission.py:43
+#: judge/admin/submission.py:45
 msgid "Unaccepted"
 msgstr "Non accepté"
 
-#: judge/admin/submission.py:85
+#: judge/admin/submission.py:87
 #, python-format
 msgid "%s (spectating)"
 msgstr "%s (observateur)"
 
-#: judge/admin/submission.py:87
+#: judge/admin/submission.py:89
 #, python-format
 msgid "%s (virtual %d)"
 msgstr "%s (virtuel %d)"
 
-#: judge/admin/submission.py:94
+#: judge/admin/submission.py:96
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr "%(problem)s dans %(contest)s"
 
-#: judge/admin/submission.py:159
+#: judge/admin/submission.py:161
 msgid "Rejudge the selected submissions"
 msgstr "Rejuger les soumissions sélectionnées"
 
-#: judge/admin/submission.py:162 judge/admin/submission.py:184
+#: judge/admin/submission.py:164 judge/admin/submission.py:186
 msgid "You do not have the permission to rejudge submissions."
 msgstr "Vous n'avez pas le droit de rejuger des soumissions."
 
-#: judge/admin/submission.py:168
+#: judge/admin/submission.py:170
 msgid "You do not have the permission to rejudge THAT many submissions."
 msgstr "Vous n'avez pas le droit de rejuger AUTANT de soumissions."
 
-#: judge/admin/submission.py:181
+#: judge/admin/submission.py:183
 msgid "Rescore the selected submissions"
 msgstr "Recompter les soumissions sélectionnées"
 
-#: judge/admin/submission.py:206 judge/views/problem_manage.py:129
+#: judge/admin/submission.py:208 judge/views/problem_manage.py:129
 #, python-format
 msgid "%d submission was successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d soumission a été recomptée avec succès."
 msgstr[1] "%d soumissions ont été recomptées avec succès."
 
-#: judge/admin/submission.py:210 judge/models/problem.py:117
+#: judge/admin/submission.py:212 judge/models/problem.py:117
 msgid "problem code"
 msgstr "code du problème"
 
-#: judge/admin/submission.py:214 judge/models/problem.py:120
+#: judge/admin/submission.py:216 judge/models/problem.py:120
 msgid "problem name"
 msgstr "nom du problème"
 
-#: judge/admin/submission.py:222
+#: judge/admin/submission.py:224
 msgid "time"
 msgstr "temps"
 
-#: judge/admin/submission.py:226
+#: judge/admin/submission.py:228
 msgid "memory"
 msgstr "mémoire"
 
-#: judge/admin/submission.py:232
+#: judge/admin/submission.py:234
 #, python-format
 msgid "%d KB"
 msgstr "%d Ko"
 
-#: judge/admin/submission.py:234
+#: judge/admin/submission.py:236
 #, python-format
 msgid "%.2f MB"
 msgstr "%.2f Mo"
 
-#: judge/admin/submission.py:236 judge/models/problem.py:511
+#: judge/admin/submission.py:238 judge/models/problem.py:511
 #: judge/models/problem.py:534 judge/models/runtime.py:111
 msgid "language"
 msgstr "langue"
 
-#: judge/admin/submission.py:243
+#: judge/admin/submission.py:245
 msgid "Locked"
 msgstr "Verrouillé"
 

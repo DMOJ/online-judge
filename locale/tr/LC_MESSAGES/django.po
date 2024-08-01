@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 04:48+0000\n"
-"PO-Revision-Date: 2024-02-10 00:38\n"
+"POT-Creation-Date: 2024-07-31 22:14+0000\n"
+"PO-Revision-Date: 2024-08-01 00:54\n"
 "Last-Translator: \n"
 "Language-Team: Turkish\n"
 "Language: tr_TR\n"
@@ -140,125 +140,125 @@ msgstr[1] "%d yorum gösterildi."
 msgid "associated page"
 msgstr "ilişkili sayfa"
 
-#: judge/admin/contest.py:31
+#: judge/admin/contest.py:33
 msgid "Included contests"
 msgstr "Yarışmalar"
 
-#: judge/admin/contest.py:65 templates/contest/contest.html:195
+#: judge/admin/contest.py:67 templates/contest/contest.html:195
 #: templates/contest/moss.html:41 templates/problem/list.html:188
 #: templates/problem/list.html:204 templates/user/user-problems.html:58
 #: templates/user/user-problems.html:102
 msgid "Problem"
 msgstr "Sorun"
 
-#: judge/admin/contest.py:66 judge/views/problem.py:355
+#: judge/admin/contest.py:68 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
 msgstr "Sorunlar"
 
-#: judge/admin/contest.py:77 judge/admin/submission.py:245
+#: judge/admin/contest.py:79 judge/admin/submission.py:247
 #: templates/admin/judge/submission/change_form.html:14
 #: templates/admin/judge/submission/change_form.html:17
 #: templates/submission/source.html:34 templates/submission/status.html:90
 msgid "Rejudge"
 msgstr "Yeniden değerlendir"
 
-#: judge/admin/contest.py:122
+#: judge/admin/contest.py:124
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: judge/admin/contest.py:125
+#: judge/admin/contest.py:127
 msgid "Scheduling"
 msgstr "Planlama"
 
-#: judge/admin/contest.py:126
+#: judge/admin/contest.py:128
 msgid "Details"
 msgstr "Ayrıntılar"
 
-#: judge/admin/contest.py:127
+#: judge/admin/contest.py:129
 msgid "Format"
 msgstr "Biçim"
 
-#: judge/admin/contest.py:128 templates/contest/ranking-table.html:5
+#: judge/admin/contest.py:130 templates/contest/ranking-table.html:5
 msgid "Rating"
 msgstr "Derecelendirme"
 
-#: judge/admin/contest.py:129
+#: judge/admin/contest.py:131
 msgid "Access"
 msgstr "Erişim"
 
-#: judge/admin/contest.py:131 judge/admin/problem.py:136
+#: judge/admin/contest.py:133 judge/admin/problem.py:136
 msgid "Justice"
 msgstr "Demir yumruk"
 
-#: judge/admin/contest.py:225
+#: judge/admin/contest.py:227
 msgid "Mark contests as visible"
 msgstr "Yarışmaları görünür olarak işaretle"
 
-#: judge/admin/contest.py:230
+#: judge/admin/contest.py:232
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
 msgstr[0] "%d yarışma başarıyla görünür olarak işaretlendi."
 msgstr[1] "%d yarışma başarıyla görünür olarak işaretlendi."
 
-#: judge/admin/contest.py:234
+#: judge/admin/contest.py:236
 msgid "Mark contests as hidden"
 msgstr "Yarışmaları gizli olarak işaretleme"
 
-#: judge/admin/contest.py:239
+#: judge/admin/contest.py:241
 #, python-format
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
 msgstr[0] "%d yarışma başarıyla gizli olarak işaretlendi."
 msgstr[1] "%d yarışmalar başarıyla gizli olarak işaretlendi."
 
-#: judge/admin/contest.py:243
+#: judge/admin/contest.py:245
 msgid "Lock contest submissions"
 msgstr "Yarışma gönderimlerini kilitle"
 
-#: judge/admin/contest.py:248
+#: judge/admin/contest.py:250
 #, python-format
 msgid "%d contest successfully locked."
 msgid_plural "%d contests successfully locked."
 msgstr[0] "%d yarışma başarıyla kilitlendi."
 msgstr[1] "%d yarışmalar başarıyla kilitlendi."
 
-#: judge/admin/contest.py:252
+#: judge/admin/contest.py:254
 msgid "Unlock contest submissions"
 msgstr "Yarışma gönderimlerinin kilidini açın"
 
-#: judge/admin/contest.py:257
+#: judge/admin/contest.py:259
 #, python-format
 msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
 msgstr[0] "%d yarışma başarıyla açıldı."
 msgstr[1] "%d yarışmalar başarıyla açıldı."
 
-#: judge/admin/contest.py:280 judge/admin/submission.py:177
+#: judge/admin/contest.py:286 judge/admin/submission.py:179
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d gönderim başarıyla yeniden değerlendirmeye alındı."
 msgstr[1] "%d gönderimler başarıyla yeniden değerlendirmeye alındı."
 
-#: judge/admin/contest.py:353
+#: judge/admin/contest.py:361
 msgid "Recalculate results"
 msgstr "Sonuçları yeniden hesapla"
 
-#: judge/admin/contest.py:359
+#: judge/admin/contest.py:367
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
 msgstr[0] "%d katılım yeniden hesaplandı."
 msgstr[1] "%d katılımlar yeniden hesaplandı."
 
-#: judge/admin/contest.py:363 judge/admin/organization.py:110
+#: judge/admin/contest.py:371 judge/admin/organization.py:110
 msgid "username"
 msgstr "kullanıcı adı"
 
-#: judge/admin/contest.py:367 templates/base.html:259
+#: judge/admin/contest.py:375 templates/base.html:259
 msgid "virtual"
 msgstr "sanal"
 
@@ -271,7 +271,7 @@ msgid "Summary"
 msgstr "Özet"
 
 #: judge/admin/interface.py:125 judge/admin/profile.py:107
-#: judge/admin/submission.py:218 judge/models/contest.py:500
+#: judge/admin/submission.py:220 judge/models/contest.py:500
 #: judge/models/contest.py:632 judge/models/profile.py:349
 #: judge/models/profile.py:380 judge/models/submission.py:67
 #: judge/models/ticket.py:32
@@ -392,112 +392,112 @@ msgid_plural "%d users had scores recalculated."
 msgstr[0] "%d kullanıcının puanları yeniden hesaplandı."
 msgstr[1] "%d kullanıcının puanları yeniden hesaplandı."
 
-#: judge/admin/runtime.py:52 templates/user/edit-profile.html:119
+#: judge/admin/runtime.py:55 templates/user/edit-profile.html:119
 #: templates/user/edit-profile.html:241 templates/user/edit-profile.html:358
 #: templates/user/edit-profile.html:388
 msgid "Regenerate"
 msgstr "Yeniden oluştur"
 
-#: judge/admin/runtime.py:66
+#: judge/admin/runtime.py:69
 msgid "Description"
 msgstr "Tanım"
 
-#: judge/admin/runtime.py:67
+#: judge/admin/runtime.py:70
 msgid "Information"
 msgstr "Bilgi"
 
-#: judge/admin/runtime.py:68
+#: judge/admin/runtime.py:71
 msgid "Capabilities"
 msgstr "Desteklenenler"
 
-#: judge/admin/submission.py:24 judge/admin/submission.py:43
-#: judge/admin/submission.py:230
+#: judge/admin/submission.py:26 judge/admin/submission.py:45
+#: judge/admin/submission.py:232
 msgid "None"
 msgstr "Hiç"
 
-#: judge/admin/submission.py:24
+#: judge/admin/submission.py:26
 msgid "Not done"
 msgstr "Bitmemiş"
 
-#: judge/admin/submission.py:24
+#: judge/admin/submission.py:26
 msgid "Exceptional"
 msgstr "Sıra dışı"
 
-#: judge/admin/submission.py:43
+#: judge/admin/submission.py:45
 msgid "Unaccepted"
 msgstr "Kabul edilmemiş"
 
-#: judge/admin/submission.py:85
+#: judge/admin/submission.py:87
 #, python-format
 msgid "%s (spectating)"
 msgstr "%s (izleniyor)"
 
-#: judge/admin/submission.py:87
+#: judge/admin/submission.py:89
 #, python-format
 msgid "%s (virtual %d)"
 msgstr "%s (sanal %d)"
 
-#: judge/admin/submission.py:94
+#: judge/admin/submission.py:96
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr "%(problem)s - %(contest)s"
 
-#: judge/admin/submission.py:159
+#: judge/admin/submission.py:161
 msgid "Rejudge the selected submissions"
 msgstr "Seçili çözümleri yeniden değerlendir"
 
-#: judge/admin/submission.py:162 judge/admin/submission.py:184
+#: judge/admin/submission.py:164 judge/admin/submission.py:186
 msgid "You do not have the permission to rejudge submissions."
 msgstr "Çözümleri yeniden değerlendirme yetkin yok."
 
-#: judge/admin/submission.py:168
+#: judge/admin/submission.py:170
 msgid "You do not have the permission to rejudge THAT many submissions."
 msgstr "Bu miktarda çözümü yeniden değerlendirme yetkin yok."
 
-#: judge/admin/submission.py:181
+#: judge/admin/submission.py:183
 msgid "Rescore the selected submissions"
 msgstr "Seçili çözümleri yeniden puanla"
 
-#: judge/admin/submission.py:206 judge/views/problem_manage.py:129
+#: judge/admin/submission.py:208 judge/views/problem_manage.py:129
 #, python-format
 msgid "%d submission was successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d çözüm yeniden puanlandı."
 msgstr[1] "%d çözüm yeniden puanlandı."
 
-#: judge/admin/submission.py:210 judge/models/problem.py:117
+#: judge/admin/submission.py:212 judge/models/problem.py:117
 msgid "problem code"
 msgstr "problem kodu"
 
-#: judge/admin/submission.py:214 judge/models/problem.py:120
+#: judge/admin/submission.py:216 judge/models/problem.py:120
 msgid "problem name"
 msgstr "problem adı"
 
-#: judge/admin/submission.py:222
+#: judge/admin/submission.py:224
 msgid "time"
 msgstr "zaman"
 
-#: judge/admin/submission.py:226
+#: judge/admin/submission.py:228
 msgid "memory"
 msgstr "bellek"
 
-#: judge/admin/submission.py:232
+#: judge/admin/submission.py:234
 #, python-format
 msgid "%d KB"
 msgstr "%d KB"
 
-#: judge/admin/submission.py:234
+#: judge/admin/submission.py:236
 #, python-format
 msgid "%.2f MB"
 msgstr "%.2f MB"
 
-#: judge/admin/submission.py:236 judge/models/problem.py:511
+#: judge/admin/submission.py:238 judge/models/problem.py:511
 #: judge/models/problem.py:534 judge/models/runtime.py:111
 msgid "language"
 msgstr "dil"
 
-#: judge/admin/submission.py:243
+#: judge/admin/submission.py:245
 msgid "Locked"
 msgstr "Kilitli"
 
