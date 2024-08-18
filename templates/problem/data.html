@@ -404,6 +404,7 @@
                 <th class="type-column">{{ _('Type') }}</th>
                 <th>{{ _('Input file') }}</th>
                 <th>{{ _('Output file') }}</th>
+                <th>{{ _('Explanation file') }}</th>
                 <th>{{ _('Points') }}</th>
                 <th>{{ _('Pretest?') }}</th>
                 <th>{{ _('Private?') }}</th>
@@ -438,6 +439,10 @@
                     <td{% if not (form.empty_permitted or form['type'].value() != 'C' or
                                   form['output_file'].value() in valid_files) %} class="bad-file"{% endif %}>
                         {{ form.output_file.errors }}{{ form.output_file }}
+                    </td>
+                    <td{% if not (form.empty_permitted or form['type'].value() != 'C' or form['explanation_file'].value() == '' or 
+                                    form['explanation_file'].value() in valid_files) %} class="bad-file"{% endif %}>
+                        {{ form.explanation_file.errors }}{{ form.explanation_file }}
                     </td>
                     <td>{{ form.points.errors }}{{ form.points }}</td>
                     <td>{{ form.is_pretest.errors }}{{ form.is_pretest }}</td>

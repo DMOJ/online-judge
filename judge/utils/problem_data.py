@@ -92,11 +92,16 @@ class ProblemDataCompiler(object):
                     if case.output_file not in self.files:
                         raise ProblemDataError(_('Output file for case %d does not exist: %s') %
                                                (i, case.output_file))
+                    if case.explanation_file != '' and case.explanation_file not in self.files:
+                        raise ProblemDataError(_('Explanation file for case %d does not exist: %s') %
+                                               (i, case.explanation_file))
 
                 if case.input_file:
                     data['in'] = case.input_file
                 if case.output_file:
                     data['out'] = case.output_file
+                if case.explanation_file:
+                    data['xpl'] = case.explanation_file
                 if case.points is not None:
                     data['points'] = case.points
                 if case.generator_args:
@@ -151,6 +156,7 @@ class ProblemDataCompiler(object):
                     case.checker_args = ''
                 case.input_file = ''
                 case.output_file = ''
+                case.explanation_file = ''
                 case.save(update_fields=('checker_args', 'input_file', 'output_file'))
             elif case.type == 'E':
                 if not batch:
@@ -159,6 +165,7 @@ class ProblemDataCompiler(object):
                 case.is_private = batch['is_private']
                 case.input_file = ''
                 case.output_file = ''
+                case.explanation_file = ''
                 case.generator_args = ''
                 case.checker = ''
                 case.checker_args = ''
