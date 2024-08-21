@@ -65,12 +65,12 @@ class JudgeAdmin(VersionAdmin):
     readonly_fields = ('created', 'online', 'start_time', 'ping', 'load', 'last_ip', 'runtimes', 'problems',
                        'is_disabled')
     fieldsets = (
-        (None, {'fields': ('name', 'auth_key', 'is_blocked', 'is_disabled')}),
+        (None, {'fields': ('name', 'auth_key', 'is_blocked', 'is_disabled', 'tier')}),
         (_('Description'), {'fields': ('description',)}),
         (_('Information'), {'fields': ('created', 'online', 'last_ip', 'start_time', 'ping', 'load')}),
         (_('Capabilities'), {'fields': ('runtimes',)}),
     )
-    list_display = ('name', 'online', 'is_disabled', 'start_time', 'ping', 'load', 'last_ip')
+    list_display = ('name', 'online', 'is_disabled', 'tier', 'start_time', 'ping', 'load', 'last_ip')
     ordering = ['-online', 'name']
     formfield_overrides = {
         TextField: {'widget': AdminMartorWidget},
