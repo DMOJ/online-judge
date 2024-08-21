@@ -59,6 +59,7 @@ class JudgeHandler(ZlibPacketHandler):
         self.load = 1e100
         self.name = None
         self.is_disabled = False
+        self.tier = None
         self.batch_id = None
         self.in_batch = False
         self._stop_ping = threading.Event()
@@ -106,6 +107,9 @@ class JudgeHandler(ZlibPacketHandler):
         if judge.is_blocked:
             json_log.warning(self._make_json_log(action='auth', judge=id, info='judge authenticated but is blocked'))
             return False
+
+        # Cache judge tier for use by JudgeList
+        self.tier = judge.tier
 
         return True
 
