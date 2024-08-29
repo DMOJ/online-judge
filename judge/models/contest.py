@@ -114,7 +114,9 @@ class Contest(models.Model):
     rating_ceiling = models.IntegerField(verbose_name=_('rating ceiling'),
                                          help_text=_('Do not rate users who have a higher rating.'),
                                          null=True, blank=True)
-    rate_all = models.BooleanField(verbose_name=_('rate all'), help_text=_('Rate all users who joined.'), default=False)
+    rate_all = models.BooleanField(verbose_name=_('rate all'),
+                                   help_text=_('Rate users even if they make no submissions.'),
+                                   default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
     is_private = models.BooleanField(verbose_name=_('private to specific users'), default=False)
