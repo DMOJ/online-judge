@@ -19,7 +19,7 @@
                 {% endif %}
             </span>
         </div>
-        <div class="content content-description">
+        <div class="content content-description ticket-body">
             {{ message.body|markdown('ticket', MATH_ENGINE)|reference|str|safe }}
         </div>
     </div>
