@@ -81,7 +81,7 @@ class UserPage(TitleMixin, UserMixin, DetailView):
             return super(UserPage, self).dispatch(request, *args, **kwargs)
         except Http404:
             return generic_message(request, _('No such user'), _('No user handle "%s".') %
-                                   self.kwargs.get(self.slug_url_kwarg, None))
+                                   self.kwargs.get(self.slug_url_kwarg, None), status=404)
 
     def get_title(self):
         return (_('My account') if self.request.user == self.object.user else
