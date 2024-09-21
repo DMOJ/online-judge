@@ -14,6 +14,7 @@ from sortedm2m.forms import SortedMultipleChoiceField
 from judge.models import Language, Organization, Profile, TIMEZONE
 from judge.utils.mail import validate_email_domain
 from judge.utils.recaptcha import ReCaptchaField, ReCaptchaWidget
+from judge.utils.hcaptcha import hCaptchaField, hCaptchaWidget
 from judge.utils.subscription import Subscription, newsletter_id
 from judge.widgets import Select2MultipleWidget, Select2Widget
 
@@ -34,7 +35,10 @@ class CustomRegistrationForm(RegistrationForm):
         newsletter = forms.BooleanField(label=_('Subscribe to newsletter?'), initial=True, required=False)
 
     if ReCaptchaField is not None:
-        captcha = ReCaptchaField(widget=ReCaptchaWidget())
+        recaptcha = ReCaptchaField(widget=ReCaptchaWidget())
+    
+    if hCaptchaField is not None:
+        hcaptcha = hCaptchaField()
 
     def clean_email(self):
         if User.objects.filter(email=self.cleaned_data['email']).exists():
