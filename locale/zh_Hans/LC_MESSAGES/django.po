@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 04:48+0000\n"
-"PO-Revision-Date: 2024-03-15 00:41\n"
+"POT-Creation-Date: 2024-07-31 22:14+0000\n"
+"PO-Revision-Date: 2024-08-01 00:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -138,119 +138,119 @@ msgstr[0] "%d个评论成功取消隐藏。"
 msgid "associated page"
 msgstr "关联页"
 
-#: judge/admin/contest.py:31
+#: judge/admin/contest.py:33
 msgid "Included contests"
 msgstr "带标签的竞赛"
 
-#: judge/admin/contest.py:65 templates/contest/contest.html:195
+#: judge/admin/contest.py:67 templates/contest/contest.html:195
 #: templates/contest/moss.html:41 templates/problem/list.html:188
 #: templates/problem/list.html:204 templates/user/user-problems.html:58
 #: templates/user/user-problems.html:102
 msgid "Problem"
 msgstr "题目"
 
-#: judge/admin/contest.py:66 judge/views/problem.py:355
+#: judge/admin/contest.py:68 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
 msgstr "题目"
 
-#: judge/admin/contest.py:77 judge/admin/submission.py:245
+#: judge/admin/contest.py:79 judge/admin/submission.py:247
 #: templates/admin/judge/submission/change_form.html:14
 #: templates/admin/judge/submission/change_form.html:17
 #: templates/submission/source.html:34 templates/submission/status.html:90
 msgid "Rejudge"
 msgstr "重新评分"
 
-#: judge/admin/contest.py:122
+#: judge/admin/contest.py:124
 msgid "Settings"
 msgstr "设置"
 
-#: judge/admin/contest.py:125
+#: judge/admin/contest.py:127
 msgid "Scheduling"
 msgstr "时间计划"
 
-#: judge/admin/contest.py:126
+#: judge/admin/contest.py:128
 msgid "Details"
 msgstr "详细信息"
 
-#: judge/admin/contest.py:127
+#: judge/admin/contest.py:129
 msgid "Format"
 msgstr "格式"
 
-#: judge/admin/contest.py:128 templates/contest/ranking-table.html:5
+#: judge/admin/contest.py:130 templates/contest/ranking-table.html:5
 msgid "Rating"
 msgstr "评分"
 
-#: judge/admin/contest.py:129
+#: judge/admin/contest.py:131
 msgid "Access"
 msgstr "访问权限"
 
-#: judge/admin/contest.py:131 judge/admin/problem.py:136
+#: judge/admin/contest.py:133 judge/admin/problem.py:136
 msgid "Justice"
 msgstr "司法"
 
-#: judge/admin/contest.py:225
+#: judge/admin/contest.py:227
 msgid "Mark contests as visible"
 msgstr "标记竞赛为可见"
 
-#: judge/admin/contest.py:230
+#: judge/admin/contest.py:232
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
 msgstr[0] "%d个竞赛已成功公开。"
 
-#: judge/admin/contest.py:234
+#: judge/admin/contest.py:236
 msgid "Mark contests as hidden"
 msgstr "隐藏选定竞赛"
 
-#: judge/admin/contest.py:239
+#: judge/admin/contest.py:241
 #, python-format
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
 msgstr[0] "%d个竞赛已成功隐藏。"
 
-#: judge/admin/contest.py:243
+#: judge/admin/contest.py:245
 msgid "Lock contest submissions"
 msgstr "锁定竞赛提交"
 
-#: judge/admin/contest.py:248
+#: judge/admin/contest.py:250
 #, python-format
 msgid "%d contest successfully locked."
 msgid_plural "%d contests successfully locked."
 msgstr[0] "%d个竞赛锁定成功。"
 
-#: judge/admin/contest.py:252
+#: judge/admin/contest.py:254
 msgid "Unlock contest submissions"
 msgstr "解锁竞赛提交"
 
-#: judge/admin/contest.py:257
+#: judge/admin/contest.py:259
 #, python-format
 msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
 msgstr[0] "%d个竞赛解锁成功。"
 
-#: judge/admin/contest.py:280 judge/admin/submission.py:177
+#: judge/admin/contest.py:286 judge/admin/submission.py:179
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d个提交被计划重新评分。"
 
-#: judge/admin/contest.py:353
+#: judge/admin/contest.py:361
 msgid "Recalculate results"
 msgstr "重新计算结果"
 
-#: judge/admin/contest.py:359
+#: judge/admin/contest.py:367
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
 msgstr[0] "重新计算了%d个参与。"
 
-#: judge/admin/contest.py:363 judge/admin/organization.py:110
+#: judge/admin/contest.py:371 judge/admin/organization.py:110
 msgid "username"
 msgstr "用户名"
 
-#: judge/admin/contest.py:367 templates/base.html:259
+#: judge/admin/contest.py:375 templates/base.html:259
 msgid "virtual"
 msgstr "模拟竞赛"
 
@@ -263,7 +263,7 @@ msgid "Summary"
 msgstr "概要"
 
 #: judge/admin/interface.py:125 judge/admin/profile.py:107
-#: judge/admin/submission.py:218 judge/models/contest.py:500
+#: judge/admin/submission.py:220 judge/models/contest.py:500
 #: judge/models/contest.py:632 judge/models/profile.py:349
 #: judge/models/profile.py:380 judge/models/submission.py:67
 #: judge/models/ticket.py:32
@@ -380,111 +380,111 @@ msgid "%d user had scores recalculated."
 msgid_plural "%d users had scores recalculated."
 msgstr[0] "%d个用户的总分已被重新计算。"
 
-#: judge/admin/runtime.py:52 templates/user/edit-profile.html:119
+#: judge/admin/runtime.py:55 templates/user/edit-profile.html:119
 #: templates/user/edit-profile.html:241 templates/user/edit-profile.html:358
 #: templates/user/edit-profile.html:388
 msgid "Regenerate"
 msgstr "重新生成"
 
-#: judge/admin/runtime.py:66
+#: judge/admin/runtime.py:69
 msgid "Description"
 msgstr "描述"
 
-#: judge/admin/runtime.py:67
+#: judge/admin/runtime.py:70
 msgid "Information"
 msgstr "信息"
 
-#: judge/admin/runtime.py:68
+#: judge/admin/runtime.py:71
 msgid "Capabilities"
 msgstr "能力"
 
-#: judge/admin/submission.py:24 judge/admin/submission.py:43
-#: judge/admin/submission.py:230
+#: judge/admin/submission.py:26 judge/admin/submission.py:45
+#: judge/admin/submission.py:232
 msgid "None"
 msgstr "无"
 
-#: judge/admin/submission.py:24
+#: judge/admin/submission.py:26
 msgid "Not done"
 msgstr "未完成"
 
-#: judge/admin/submission.py:24
+#: judge/admin/submission.py:26
 msgid "Exceptional"
 msgstr "错误"
 
-#: judge/admin/submission.py:43
+#: judge/admin/submission.py:45
 msgid "Unaccepted"
 msgstr "未被接受"
 
-#: judge/admin/submission.py:85
+#: judge/admin/submission.py:87
 #, python-format
 msgid "%s (spectating)"
 msgstr "%s（旁观中）"
 
-#: judge/admin/submission.py:87
+#: judge/admin/submission.py:89
 #, python-format
 msgid "%s (virtual %d)"
 msgstr "%s（模拟竞赛第%d）"
 
-#: judge/admin/submission.py:94
+#: judge/admin/submission.py:96
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr "%(contest)s 中的 %(problem)s"
 
-#: judge/admin/submission.py:159
+#: judge/admin/submission.py:161
 msgid "Rejudge the selected submissions"
 msgstr "重新评分选定的程序"
 
-#: judge/admin/submission.py:162 judge/admin/submission.py:184
+#: judge/admin/submission.py:164 judge/admin/submission.py:186
 msgid "You do not have the permission to rejudge submissions."
 msgstr "您没有为程序重新评分的权利。"
 
-#: judge/admin/submission.py:168
+#: judge/admin/submission.py:170
 msgid "You do not have the permission to rejudge THAT many submissions."
 msgstr "您没有为这么多程序重新评分的权利。"
 
-#: judge/admin/submission.py:181
+#: judge/admin/submission.py:183
 msgid "Rescore the selected submissions"
 msgstr "重新计算选定程序的分数"
 
-#: judge/admin/submission.py:206 judge/views/problem_manage.py:129
+#: judge/admin/submission.py:208 judge/views/problem_manage.py:129
 #, python-format
 msgid "%d submission was successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d个程序提交的分数已被重新计算。"
 
-#: judge/admin/submission.py:210 judge/models/problem.py:117
+#: judge/admin/submission.py:212 judge/models/problem.py:117
 msgid "problem code"
 msgstr "题目代码"
 
-#: judge/admin/submission.py:214 judge/models/problem.py:120
+#: judge/admin/submission.py:216 judge/models/problem.py:120
 msgid "problem name"
 msgstr "题目名称"
 
-#: judge/admin/submission.py:222
+#: judge/admin/submission.py:224
 msgid "time"
 msgstr "时间"
 
-#: judge/admin/submission.py:226
+#: judge/admin/submission.py:228
 msgid "memory"
 msgstr "内存"
 
-#: judge/admin/submission.py:232
+#: judge/admin/submission.py:234
 #, python-format
 msgid "%d KB"
 msgstr "%d KB"
 
-#: judge/admin/submission.py:234
+#: judge/admin/submission.py:236
 #, python-format
 msgid "%.2f MB"
 msgstr "%.2f MB"
 
-#: judge/admin/submission.py:236 judge/models/problem.py:511
+#: judge/admin/submission.py:238 judge/models/problem.py:511
 #: judge/models/problem.py:534 judge/models/runtime.py:111
 msgid "language"
 msgstr "语言"
 
-#: judge/admin/submission.py:243
+#: judge/admin/submission.py:245
 msgid "Locked"
 msgstr "已锁定"
 
