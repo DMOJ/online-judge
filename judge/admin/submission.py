@@ -244,7 +244,7 @@ class SubmissionAdmin(VersionAdmin):
         if obj.is_locked:
             return format_html('<input type="button" disabled value="{0}"/>', _('Locked'))
         else:
-            return format_html('<input type="button" value="{0}" onclick="location.href=\'{1}\'"/>', _('Rejudge'),
+            return format_html('<a class="button action-link" href="{1}">{0}</a>', _('Rejudge'),
                                reverse('admin:judge_submission_rejudge', args=(obj.id,)))
 
     def get_urls(self):
