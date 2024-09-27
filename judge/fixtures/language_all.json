@@ -942,5 +942,21 @@
         "description": "",
         "extension": "cpp"
     }
+},
+{
+    "model": "judge.language",
+    "pk": 77,
+    "fields": {
+        "key": "NODEJS",
+        "name": "JavaScript (Node.js)",
+        "short_name": "Node.js",
+        "common_name": "JS",
+        "ace": "javascript",
+        "pygments": "javascript",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": "js"
+    }
 }
 ]
