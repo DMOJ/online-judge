@@ -485,47 +485,69 @@ class DisallowedCharactersValidatorTestCase(SimpleTestCase):
 
 
 @skipIf(connection.vendor != 'mysql', 'FULLTEXT search is only supported on MySQL')
-class FullTextSearchTestCase(TestCase):
-    def setUp(self):
-        Problem.objects.create(code='P1', name='Django Test', description='A test problem for Django')
-        Problem.objects.create(code='P2', name='Python Challenge', description='A challenging Python problem')
-        Problem.objects.create(code='P3', name='Database Query', description='A problem about SQL and databases')
+class FullTextSearchTestCase(CommonDataMixin, TestCase):
+    def setUpTestData(self):
+        super().setUpTestData()
 
-    def test_fulltext_search_name(self):
-        results = Problem.objects.filter(name__search='Python')
-        self.assertEqual(results.count(), 1)
-        self.assertEqual(results[0].code, 'P2')
+        languages = [
+            ('P1', 'Django Test', 'A test problem for Django'),
+            ('P2', 'Python Challenge', 'A challenging Python problem'),
+            ('P3', 'Database Query', 'A problem about SQL and databases'),
+        ]
 
-    def test_fulltext_search_description(self):
-        results = Problem.objects.filter(description__search='database')
-        self.assertEqual(results.count(), 1)
-        self.assertEqual(results[0].code, 'P3')
+        for code, name, description in languages:
+            create_problem_type(
+                name=name,
+                code=code,
+                description=description,
+                allowed_languages=Language.objects.values_list('key', flat=True),
+                types=('type',),
+                authors=('normal',),
+                testers=('staff_problem_edit_public',),
+            )
 
-    def test_fulltext_search_multiple_columns(self):
-        results = Problem.objects.filter(name__search='test') | Problem.objects.filter(description__search='test')
-        self.assertEqual(results.count(), 1)
-        self.assertEqual(results[0].code, 'P1')
 
-    def test_fulltext_search_ranking(self):
-        Problem.objects.create(code='P4', name='Advanced Python', description='Python for advanced users')
-        Problem.objects.create(code='P5', name='Python Basics', description='Introduction to Python programming')
+def test_fulltext_search_name(self):
+    results = Problem.objects.filter(name__search='Python')
+    self.assertEqual(results.count(), 1)
+    self.assertEqual(results[0].code, 'P2')
 
-        results = Problem.objects.filter(name__search='Python') | Problem.objects.filter(description__search='Python')
-        results = results.annotate(relevance=F('name__search') + F('description__search')).order_by('-relevance')
 
-        self.assertTrue(len(results) > 1)
-        self.assertEqual(results[0].code, 'P2')
+def test_fulltext_search_description(self):
+    results = Problem.objects.filter(description__search='database')
+    self.assertEqual(results.count(), 1)
+    self.assertEqual(results[0].code, 'P3')
 
-    def test_fulltext_search_boolean_mode(self):
-        results = Problem.objects.filter(description__search='+SQL -Python')
-        self.assertEqual(results.count(), 1)
-        self.assertEqual(results[0].code, 'P3')
 
-    def test_fulltext_search_no_results(self):
-        results = Problem.objects.filter(name__search='NonexistentTerm')
-        self.assertEqual(results.count(), 0)
+def test_fulltext_search_multiple_columns(self):
+    results = Problem.objects.filter(name__search='test') | Problem.objects.filter(description__search='test')
+    self.assertEqual(results.count(), 1)
+    self.assertEqual(results[0].code, 'P1')
 
-    @classmethod
-    def tearDownClass(cls):
-        Problem.objects.all().delete()
-        super().tearDownClass()
+
+def test_fulltext_search_ranking(self):
+    Problem.objects.create(code='P4', name='Advanced Python', description='Python for advanced users')
+    Problem.objects.create(code='P5', name='Python Basics', description='Introduction to Python programming')
+
+    results = Problem.objects.filter(name__search='Python') | Problem.objects.filter(description__search='Python')
+    results = results.annotate(relevance=F('name__search') + F('description__search')).order_by('-relevance')
+
+    self.assertTrue(len(results) > 1)
+    self.assertEqual(results[0].code, 'P2')
+
+
+def test_fulltext_search_boolean_mode(self):
+    results = Problem.objects.filter(description__search='+SQL -Python')
+    self.assertEqual(results.count(), 1)
+    self.assertEqual(results[0].code, 'P3')
+
+
+def test_fulltext_search_no_results(self):
+    results = Problem.objects.filter(name__search='NonexistentTerm')
+    self.assertEqual(results.count(), 0)
+
+
+@classmethod
+def tearDownClass(cls):
+    Problem.objects.all().delete()
+    super().tearDownClass()
