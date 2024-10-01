@@ -92,7 +92,7 @@ class ContestSubmissionInline(admin.StackedInline):
                 kwargs['queryset'] = ContestProblem.objects.filter(problem=submission.problem) \
                     .only('id', 'problem__name', 'contest__name')
 
-                def label(obj): # noqa: F811
+                def label(obj):  # noqa: F811
                     return pgettext('contest problem', '%(problem)s in %(contest)s') % {
                         'problem': obj.problem.name, 'contest': obj.contest.name,
                     }
