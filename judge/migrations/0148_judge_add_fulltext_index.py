@@ -3,7 +3,7 @@
 from django.db import migrations
 
 
-def execute_mysql_command(apps, schema_editor, sql, error_msg, success_msg):
+def execute_mysql_command(apps, schema_editor, sql, error_msg):
     if schema_editor.connection.vendor != 'mysql':
         return
 
@@ -13,7 +13,6 @@ def execute_mysql_command(apps, schema_editor, sql, error_msg, success_msg):
     with schema_editor.connection.cursor() as cursor:
         try:
             cursor.execute(formatted_sql)
-            print(success_msg)
         except Exception as e:
             if error_msg in str(e):
                 print(f'Info: {error_msg}')
@@ -27,7 +26,6 @@ def add_fulltext_index(apps, schema_editor):
         schema_editor,
         'ALTER TABLE {} ADD FULLTEXT(code, name, description)',
         'Duplicate key name',
-        'FULLTEXT index added successfully.',
     )
 
 
@@ -37,7 +35,6 @@ def remove_fulltext_index(apps, schema_editor):
         schema_editor,
         'ALTER TABLE {} DROP INDEX code',
         'check that column/key exists',
-        'FULLTEXT index removed successfully.',
     )
 
 
