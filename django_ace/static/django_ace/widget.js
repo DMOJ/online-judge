@@ -111,9 +111,15 @@
                 }
 
                 setEditorTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(ev) {
-                    setEditorTheme(ev.matches);
-                })
+                try {
+                    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(ev) {
+                        setEditorTheme(ev.matches);
+                    })
+                } catch (err) {
+                    window.matchMedia('(prefers-color-scheme: dark)').addListener(function(ev) {
+                        setEditorTheme(ev.matches);
+                    })
+                }
             }
         }
         if (wordwrap == "true") {
