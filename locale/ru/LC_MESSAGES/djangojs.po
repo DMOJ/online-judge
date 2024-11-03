@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2024-02-07 00:38\n"
+"PO-Revision-Date: 2024-06-10 00:46\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -22,9 +22,9 @@ msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
 msgstr[0] "%d день %h:%m:%s"
-msgstr[1] "%d дней %h:%m:%s"
+msgstr[1] "%d дня %h:%m:%s"
 msgstr[2] "%d дней %h:%m:%s"
-msgstr[3] "%d дней %h:%m:%s"
+msgstr[3] "%d дня %h:%m:%s"
 
 #: resources/common.js:197
 msgctxt "time format without day"
@@ -33,22 +33,22 @@ msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr "Голосовать за точки задач"
+msgstr "Голосовать за оценку задачи"
 
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr "Не удалось удалить голосование: %s"
+msgstr "Не удалось удалить голос: %s"
 
 #: resources/problem-vote.js:28
 #, javascript-format
 msgid "Edit points vote (%s)"
-msgstr "Редактировать голос очков (%s)"
+msgstr "Изменить оценку задачи (%s)"
 
 #: resources/problem-vote.js:34
 #, javascript-format
 msgid "Unable to cast vote: %s"
-msgstr "Невозможно проголосовать: %s"
+msgstr "Не удалось проголосовать: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
@@ -56,7 +56,7 @@ msgstr "Количество голосов за указанное количе
 
 #: resources/user_profile.js:47
 msgid "past year"
-msgstr "прошедший год"
+msgstr "последний год"
 
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
@@ -85,8 +85,8 @@ msgstr[3] "%(cnt)d посылок в %(year)d"
 #: resources/user_profile.js:88
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
-msgstr[0] "%(cnt)d посылка в %(date)s"
-msgstr[1] "%(cnt)d посылки в %(date)s"
-msgstr[2] "%(cnt)d посылок в %(date)s"
-msgstr[3] "%(cnt)d посылок в %(date)s"
+msgstr[0] "%(cnt)d посылка %(date)s"
+msgstr[1] "%(cnt)d посылки %(date)s"
+msgstr[2] "%(cnt)d посылок %(date)s"
+msgstr[3] "%(cnt)d посылок %(date)s"
 
