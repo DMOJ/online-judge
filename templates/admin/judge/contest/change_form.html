@@ -5,8 +5,12 @@
     <script>
         django.jQuery(function ($) {
             $('.rerate-link').appendTo('div#bottombar').show();
-            $('.rejudge-link').click(function () {
-                return confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}');
+            $('.rejudge-link').click(function (event) {
+                if (confirm('{{ _('Are you sure you want to rejudge ALL the submissions?') }}')) {
+                    return true;
+                }
+                event.stopImmediatePropagation();
+                return false;
             });
         });
     </script>
