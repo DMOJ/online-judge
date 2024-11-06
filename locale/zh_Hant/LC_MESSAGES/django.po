@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-22 03:00+0000\n"
-"PO-Revision-Date: 2024-11-03 00:59\n"
+"PO-Revision-Date: 2024-11-06 00:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -3914,7 +3914,7 @@ msgstr "評論動態"
 
 #: templates/blog/list.html:174
 msgid "New problems"
-msgstr "我的題目"
+msgstr "最新題目"
 
 #: templates/blog/list.html:191
 msgid "My open tickets"
