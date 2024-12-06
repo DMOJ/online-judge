@@ -237,7 +237,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     def make_hidden(self, request, queryset):
         if not request.user.has_perm('judge.change_contest_visibility'):
             queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
-        count = queryset.update(is_visible=True)
+        count = queryset.update(is_visible=False)
         self.message_user(request, ngettext('%d contest successfully marked as hidden.',
                                             '%d contests successfully marked as hidden.',
                                             count) % count)
