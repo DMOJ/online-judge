@@ -2,6 +2,7 @@ from operator import attrgetter
 
 from django import forms
 from django.contrib import admin
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.forms import ModelForm
 from django.urls import reverse, reverse_lazy
@@ -150,7 +151,8 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     def get_actions(self, request):
         actions = super(ProblemAdmin, self).get_actions(request)
 
-        if request.user.has_perm('judge.change_public_visibility'):
+        if request.user.has_perm('judge.change_public_visibility') or \
+                request.user.has_perm('judge.create_private_problem'):
             func, name, desc = self.get_action('make_public')
             actions[name] = (func, name, desc)
 
@@ -164,8 +166,10 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         fields = self.readonly_fields
-        if not request.user.has_perm('judge.change_public_visibility'):
-            fields += ('is_public',)
+        if not request.user.has_perm('judge.create_private_problem'):
+            fields += ('organizations',)
+            if not request.user.has_perm('judge.change_public_visibility'):
+                fields += ('is_public',)
         if not request.user.has_perm('judge.change_manually_managed'):
             fields += ('is_manually_managed',)
         if not request.user.has_perm('judge.problem_full_markup'):
@@ -233,6 +237,13 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         # `organizations` will not appear in `cleaned_data` if user cannot edit it
         if form.changed_data and 'organizations' in form.changed_data:
             obj.is_organization_private = bool(form.cleaned_data['organizations'])
+
+        if form.cleaned_data.get('is_public') and not request.user.has_perm('judge.change_public_visibility'):
+            if not obj.is_organization_private:
+                raise PermissionDenied
+            if not request.user.has_perm('judge.create_private_problem'):
+                raise PermissionDenied
+
         super(ProblemAdmin, self).save_model(request, obj, form, change)
         if (
             form.changed_data and
