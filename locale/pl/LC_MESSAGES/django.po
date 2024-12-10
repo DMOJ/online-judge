@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-22 03:00+0000\n"
-"PO-Revision-Date: 2024-08-23 00:48\n"
+"POT-Creation-Date: 2024-12-06 06:53+0000\n"
+"PO-Revision-Date: 2024-12-07 00:59\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -3832,8 +3832,8 @@ msgstr ""
 msgid "Are you sure you want to rejudge ALL the submissions?"
 msgstr ""
 
-#: templates/admin/judge/contest/change_form.html:17
-#: templates/admin/judge/contest/change_form.html:20
+#: templates/admin/judge/contest/change_form.html:21
+#: templates/admin/judge/contest/change_form.html:24
 msgid "Rate"
 msgstr ""
 
@@ -4108,6 +4108,13 @@ msgstr ""
 #: templates/comments/media-js.html:185
 #, python-brace-format
 msgid "Could not edit comment: {error}"
+msgstr ""
+
+#: templates/comments/media-js.html:225
+msgid "Looks like you're trying to post some source code!\n\n"
+"The comment section is not for posting source code.\n"
+"If you want to submit your solution, please use the \"Submit solution\" button.\n\n"
+"Are you sure you want to post this?"
 msgstr ""
 
 #: templates/comments/votes.html:5
