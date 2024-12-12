@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-22 03:00+0000\n"
-"PO-Revision-Date: 2024-11-02 00:54\n"
+"POT-Creation-Date: 2024-12-06 06:53+0000\n"
+"PO-Revision-Date: 2024-12-12 00:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -103,7 +103,7 @@ msgstr "注册完成"
 
 #: dmoj/urls.py:43
 msgid "Registration Not Allowed"
-msgstr "不允许注册"
+msgstr "注册被禁止"
 
 #: dmoj/urls.py:95 templates/base.html:193
 msgid "Home"
@@ -244,7 +244,7 @@ msgstr "重新计算结果"
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
-msgstr[0] "重新计算了%d个参与。"
+msgstr[0] "%d个参与者的得分已成功计算"
 
 #: judge/admin/contest.py:371 judge/admin/organization.py:110
 msgid "username"
@@ -3757,8 +3757,8 @@ msgstr "您帐户绑定的电子邮件已更改为 %s。"
 msgid "Are you sure you want to rejudge ALL the submissions?"
 msgstr "您确定您要重新评判所有提交？"
 
-#: templates/admin/judge/contest/change_form.html:17
-#: templates/admin/judge/contest/change_form.html:20
+#: templates/admin/judge/contest/change_form.html:21
+#: templates/admin/judge/contest/change_form.html:24
 msgid "Rate"
 msgstr "评分"
 
@@ -4034,6 +4034,16 @@ msgstr "更新评论失败。"
 #, python-brace-format
 msgid "Could not edit comment: {error}"
 msgstr "无法编辑评论：{error}"
+
+#: templates/comments/media-js.html:225
+msgid "Looks like you're trying to post some source code!\n\n"
+"The comment section is not for posting source code.\n"
+"If you want to submit your solution, please use the \"Submit solution\" button.\n\n"
+"Are you sure you want to post this?"
+msgstr "你似乎想发布一些源代码。\n\n"
+"请不要在评论区发表源代码。\n"
+"如果你想提交你的解答，请使用”提交程序“。\n\n"
+"你确定你想要发布这些内容吗？"
 
 #: templates/comments/votes.html:5
 msgid "Voter"
