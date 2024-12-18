@@ -9,8 +9,8 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from .caching import finished_submission
-from .models import BlogPost, Comment, Contest, ContestSubmission, EFFECTIVE_MATH_ENGINES, Judge, Language, License, \
-    MiscConfig, Organization, Problem, Profile, Submission, WebAuthnCredential
+from .models import BlogPost, Comment, Contest, ContestProblem, ContestSubmission, EFFECTIVE_MATH_ENGINES, Judge, \
+    Language, License, MiscConfig, Organization, Problem, Profile, Submission, WebAuthnCredential
 
 
 def get_pdf_path(basename: str) -> Optional[str]:
@@ -77,6 +77,13 @@ def contest_update(sender, instance, **kwargs):
     cache.delete_many(['generated-meta-contest:%d' % instance.id] +
                       [make_template_fragment_key('contest_html', (instance.id, engine))
                        for engine in EFFECTIVE_MATH_ENGINES])
+
+
+@receiver(post_delete, sender=ContestProblem)
+def contest_problem_delete(sender, instance, **kwargs):
+    # `contest_object` is the `Contest` object indirectly associated with the `Submission` object
+    # `contest` is the `ContestSubmission` object associated with the `Submission` object
+    Submission.objects.filter(contest_object=instance.contest, contest__isnull=True).update(contest_object=None)
 
 
 @receiver(post_save, sender=License)
