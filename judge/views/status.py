@@ -95,7 +95,7 @@ def version_matrix(request):
 
     for data in matrix.values():
         for language, versions in data.items():
-            versions.versions = [version.parse(runtime.version) for runtime in versions]
+            versions.versions = [version.parse(runtime.version) for runtime in versions if runtime.version]
             if versions.versions > latest[language]:
                 latest[language] = versions.versions
 
