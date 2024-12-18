@@ -12,7 +12,7 @@ lxml[html_clean]
 Pygments
 mistune<2
 social-auth-core==4.3.0
-social-auth-app-django==5.0.0
+social-auth-app-django==5.4.1
 pytz
 django-statici18n
 pika
