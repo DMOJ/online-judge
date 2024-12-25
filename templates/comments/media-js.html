@@ -30,7 +30,7 @@
                 var reply_id = 'reply-' + parent;
                 if ($comment_reply.find('#' + reply_id).length == 0) {
                     var $reply_form = $('#new-comment').clone(false).prop('id', reply_id);
-                    $reply_form.find('h3').html('{{ _('Replying to comment')|htmltojs }}');
+                    $reply_form.find('h3').html({{ _('Replying to comment')|htmltojs }});
                     $reply_form.prepend('<a class="close">x</a>');
                     $reply_form.appendTo($comment_reply);
                     $reply_form.find('form.comment-submit-form input#id_parent').val(parent);
