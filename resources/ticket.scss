@@ -3,7 +3,7 @@
 form#ticket-form {
     display: block;
     margin: 0 auto;
-    max-width: 750px;
+    max-width: 800px;
     padding-top: 1em;
 
     #id_title {
@@ -72,7 +72,7 @@ div.ticket-title {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap-reverse;
-    max-width: 1000px;
+    max-width: 1200px;
 }
 
 .ticket-sidebar {

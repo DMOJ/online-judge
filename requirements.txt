@@ -1,7 +1,6 @@
 Django>=4.2,<5
 django_compressor>=3
 django-mptt>=0.13
-django-pagedown<2
 django-registration-redux>=2.10
 django-reversion>=5
 django-social-share
