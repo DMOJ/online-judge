@@ -32,11 +32,11 @@ celery
 ansi2html @ git+https://github.com/DMOJ/ansi2html.git
 sqlparse
 lupa
-martor @ git+https://github.com/DMOJ/martor.git
 netaddr
 webauthn<1
 bleach[css]
 django-admin-sortable2
 icalendar
+Markdown
 # This is a celery dependency whose latest major version is breaking everything.
 importlib-metadata<5

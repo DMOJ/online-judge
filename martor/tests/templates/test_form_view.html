@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <title>Martor</title>
+</head>
+<body>
+  <div class="ui container main-container">
+    <div class="ui segment">
+      <form class="ui form" method="post">{% csrf_token %}
+        <div class="field">
+          {{ form.description }}
+        </div>
+        <div class="field">
+          {{ form.wiki }}
+        </div>
+        <div class="field">
+          <div class="ui clearing segment">
+            <button class="ui right floated positive button">
+              <i class="save icon"></i> Save Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

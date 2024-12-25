@@ -1,0 +1,151 @@
+{% load i18n static %}
+<div class="ui medium modal scrolling transition modal-help-guide">
+  <i class="close icon"></i>
+  <div class="header"><i class="help circle icon"></i> {% trans "Markdown Guide" %}</div>
+  <div class="content" style="width: auto; margin-bottom: 2.5em;">
+    <p>{% blocktrans with doc_url='http://commonmark.org/help/' %}This site is powered by Markdown. For full documentation, <a href="{{ doc_url }}" target="_blank">click here</a>.{% endblocktrans %}</p>
+    <table class="ui celled table markdown-reference">
+      <thead>
+        <tr>
+          <th>{% trans "Code" %}</th>
+          <th>{% trans "Or" %}</th>
+          <th>Linux/Windows</th>
+          <th>Mac OS</th>
+          <th>{% trans "... to Get" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if emoji_enabled %}
+          <tr>
+            <td>:emoji_name:</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td>&mdash;</td>
+            <td><img class="marked-emoji" src="{% static 'plugins/images/heart.png' %}"></td>
+          </tr>
+        {% endif %}
+
+        {% if mentions_enabled %}
+          <tr>
+            <td>[user:username]</td>
+            <td>&mdash;</td>
+            <td>Ctrl+M</td>
+            <td>Command+M</td>
+            <td><a href="#">username</a></td>
+          </tr>
+        {% endif %}
+
+        {% if emoji_enabled or mentions_enabled %}
+          <tr><td colspan="5"></td></tr>
+        {% endif %}
+
+        <tr>
+          <td>*Italic*</td>
+          <td>&mdash;</td>
+          <td>Ctrl+I</td>
+          <td>Command+I</td>
+          <td><em>Italic</em></td>
+        </tr>
+        <tr>
+          <td>**Bold**</td>
+          <td>&mdash;</td>
+          <td>Ctrl+B</td>
+          <td>Command+B</td>
+          <td><strong>Bold</strong></td>
+        </tr>
+        <tr>
+          <td><span>~</span><span>~</span>Strikethrough<span>~</span><span>~</span></td>
+          <td>&mdash;</td>
+          <td>Shift+S</td>
+          <td>Option+S</td>
+          <td><del>Strikethrough</del></td>
+        </tr>
+        <tr>
+          <td># Heading 1</td>
+          <td>Heading 1<br> =========</td>
+          <td>Ctrl+Alt+1</td>
+          <td>Command+Option+1</td>
+          <td><h1>Heading 1</h1></td>
+        </tr>
+        <tr>
+          <td>## Heading 2</td>
+          <td>Heading 2<br> -----------</td>
+          <td>Ctrl+Alt+2</td>
+          <td>Command+Option+2</td>
+          <td><h2>Heading 2</h2></td>
+        </tr>
+        <tr>
+          <td>[Link](http://a.com)</td>
+          <td>[Link][1]<br> &#8285;<br> [1]: http://b.org</td>
+          <td>Ctrl+L</td>
+          <td>Command+L</td>
+          <td><a href="http://commonmark.org/">Link</a></td>
+        </tr>
+        <tr>
+          <td>![Image](http://url/a.png)</td>
+          <td>![Image][1]<br> &#8285;<br> [1]: http://url/b.jpg</td>
+          <td>Ctrl+Shift+I</td>
+          <td>Command+Option+I</td>
+          <td><img src="{% static 'plugins/images/commonmark.png' %}" width="36" height="36" alt="Markdown"></td>
+        </tr>
+        <tr>
+          <td>&gt; Blockquote</td>
+          <td>&mdash;</td>
+          <td>Ctrl+Q</td>
+          <td>Command+Q</td>
+          <td><blockquote>Blockquote</blockquote></td>
+        </tr>
+        <tr>
+          <td>A paragraph.<br><br> A paragraph after 1 blank line.</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td><p>A paragraph.</p><p>A paragraph after 1 blank line.</p></td>
+        </tr>
+        <tr>
+          <td><p>* List<br> * List<br> * List</p></td>
+          <td><p> - List<br> - List<br> - List<br></p></td>
+          <td>Ctrl+U</td>
+          <td>Command+U</td>
+          <td><ul><li>List</li><li>List</li><li>List</li></ul>
+          </td>
+        </tr>
+        <tr>
+          <td><p> 1. One<br> 2. Two<br> 3. Three</p></td>
+          <td><p> 1) One<br> 2) Two<br> 3) Three</p></td>
+          <td>Ctrl+Shift+O</td>
+          <td>Command+Option+O</td>
+          <td><ol><li>One</li><li>Two</li><li>Three</li></ol></td>
+        </tr>
+        <tr>
+          <td>Horizontal Rule<br><br> -----------</td>
+          <td>Horizontal Rule<br><br> ***********</td>
+          <td>Ctrl+H</td>
+          <td>Command+H</td>
+          <td>Horizontal Rule <hr></td>
+        </tr>
+        <tr>
+          <td>`Inline code` with backticks</td>
+          <td>&mdash;</td>
+          <td>Ctrl+Alt+C</td>
+          <td>Command+Option+C</td>
+          <td><code>Inline code</code> with backticks</td>
+        </tr>
+        <tr>
+          <td>```<br> def whatever(foo):<br>&nbsp;&nbsp;&nbsp;&nbsp;return foo<br>```</td>
+          <td><b>with tab / 4 spaces</b><br>....def whatever(foo):<br>....&nbsp;&nbsp;&nbsp;&nbsp;return foo</td>
+          <td>Ctrl+Alt+P</td>
+          <td>Command+Option+P</td>
+          <td><pre>def whatever(foo):<br />    return foo</pre></td>
+        </tr>
+        <tr>
+          <td><span>~</span>x^2<span>~</span></td>
+          <td>&mdash;</td>
+          <td>Ctrl+Alt+I</td>
+          <td>Command+Option+I</td>
+          <td>~x^2~</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
