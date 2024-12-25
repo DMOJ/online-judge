@@ -83,14 +83,16 @@ def site_name(request):
 def site_theme(request):
     # Middleware populating `profile` may not have loaded at this point if we're called from an error context.
     if hasattr(request.user, 'profile'):
-        preferred_css = settings.DMOJ_THEME_CSS.get(request.profile.site_theme)
+        site_theme = request.profile.site_theme
+        preferred_css = settings.DMOJ_THEME_CSS.get(site_theme)
     else:
+        site_theme = 'auto'
         preferred_css = None
     return {
         'DARK_STYLE_CSS': settings.DMOJ_THEME_CSS['dark'],
         'LIGHT_STYLE_CSS': settings.DMOJ_THEME_CSS['light'],
         'PREFERRED_STYLE_CSS': preferred_css,
-        'SITE_THEME_NAME': request.profile.site_theme,
+        'SITE_THEME_NAME': site_theme,
     }
 
 
