@@ -8,7 +8,6 @@ from django.urls import include, path, re_path, reverse
 from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import RedirectView
-from martor.views import markdown_search_user
 
 from judge.feed import AtomBlogFeed, AtomCommentFeed, AtomProblemFeed, BlogFeed, CommentFeed, ProblemFeed
 from judge.sitemap import sitemaps
@@ -22,6 +21,7 @@ from judge.views.select2 import AssigneeSelect2View, ClassSelect2View, CommentSe
     ContestUserSearchSelect2View, OrganizationSelect2View, ProblemSelect2View, TicketUserSelect2View, \
     UserSearchSelect2View, UserSelect2View
 from judge.views.widgets import martor_image_uploader
+from martor.views import markdown_search_user
 
 admin.autodiscover()
 

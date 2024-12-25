@@ -31,8 +31,8 @@ import markdown
 from markdown.inlinepatterns import SimpleTagPattern
 
 
-DEL_RE = r"(\~\~)(.+?)(\~\~)"
-INS_RE = r"(\+\+)(.+?)(\+\+)"
+DEL_RE = r'(\~\~)(.+?)(\~\~)'
+INS_RE = r'(\+\+)(.+?)(\+\+)'
 
 
 class DelInsExtension(markdown.extensions.Extension):
@@ -49,6 +49,6 @@ def makeExtension(*args, **kwargs):
     return DelInsExtension(*args, **kwargs)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import doctest
     doctest.testmod()
