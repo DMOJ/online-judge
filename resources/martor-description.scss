@@ -44,13 +44,4 @@ form .martor-preview {
     .martor-field {
         height: 400px;
     }
-
-    @if not $is_light_theme {
-        background: white;
-        border-radius: 4px;
-
-        .martor-preview {
-            background: black !important;
-        }
-    }
 }
