@@ -1,0 +1,147 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-21 10:54+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: templates/martor/editor.html:5
+msgid "Editor"
+msgstr ""
+
+#: templates/martor/editor.html:6
+msgid "Preview"
+msgstr "Pratinjau"
+
+#: templates/martor/editor.html:11
+msgid "Uploading... please wait..."
+msgstr "Sedang mengupload... silahkan tunggu..."
+
+#: templates/martor/editor.html:18
+msgid "Nothing to preview"
+msgstr "Tidak ada yang bisa dilihat"
+
+#: templates/martor/emoji.html:4
+msgid "Select Emoji to Insert"
+msgstr "Pilih Emoji untuk menyisipkan"
+
+#: templates/martor/emoji.html:8
+msgid "Preparing emojis..."
+msgstr "Sedang menyiapkan emoji..."
+
+#: templates/martor/guide.html:4
+msgid "Markdown Guide"
+msgstr "Bantuan Penggunaan Markdown"
+
+#: templates/martor/guide.html:6
+#, python-format
+msgid ""
+"This site is powered by Markdown. For full documentation, <a href="
+"\"%(doc_url)s\" target=\"_blank\">click here</a>."
+msgstr ""
+"Situs ini menggunakan Markdown. Untuk dokumentasi lengkapnya <a href="
+"\"%(doc_url)s\" target=\"_blank\">klik disini</a>."
+
+#: templates/martor/guide.html:10 templates/martor/toolbar.html:26
+msgid "Code"
+msgstr "Kode"
+
+#: templates/martor/guide.html:11
+msgid "Or"
+msgstr "Atau"
+
+#: templates/martor/guide.html:14
+msgid "... to Get"
+msgstr "... untuk Mendapatkan"
+
+#: templates/martor/toolbar.html:4
+msgid "Bold"
+msgstr "Tebal"
+
+#: templates/martor/toolbar.html:7
+msgid "Italic"
+msgstr "Miring"
+
+#: templates/martor/toolbar.html:10
+msgid "Horizontal Line"
+msgstr "Garis Horisontal"
+
+#: templates/martor/toolbar.html:13 templates/martor/toolbar.html:16
+#: templates/martor/toolbar.html:17 templates/martor/toolbar.html:18
+msgid "Heading"
+msgstr ""
+
+#: templates/martor/toolbar.html:22
+msgid "Pre or Code"
+msgstr "Pre atau Kode"
+
+#: templates/martor/toolbar.html:25
+msgid "Pre"
+msgstr ""
+
+#: templates/martor/toolbar.html:29
+msgid "Quote"
+msgstr "Kutipan"
+
+#: templates/martor/toolbar.html:32
+msgid "Unordered List"
+msgstr "Daftar tak berurut"
+
+#: templates/martor/toolbar.html:35
+msgid "Ordered List"
+msgstr "Daftar berurut"
+
+#: templates/martor/toolbar.html:39
+msgid "URL/Link"
+msgstr ""
+
+#: templates/martor/toolbar.html:42
+msgid "Insert Image Link"
+msgstr "Sisipkan Link Gambar"
+
+#: templates/martor/toolbar.html:45 templates/martor/toolbar.html:47
+msgid "Upload an Image"
+msgstr "Unggah Gambar"
+
+#: templates/martor/toolbar.html:49
+msgid "Insert Emoji"
+msgstr "Sisipkan Emoji"
+
+#: templates/martor/toolbar.html:52
+msgid "Direct Mention a User"
+msgstr "Sebutkan Pengguna secara Langsung"
+
+#: templates/martor/toolbar.html:56
+msgid "Full Screen"
+msgstr "Layar Penuh"
+
+#: templates/martor/toolbar.html:59
+msgid "Markdown Guide (Help)"
+msgstr "Bantuan Penggunaan Markdown"
+
+#: views.py:18 views.py:32 views.py:33
+msgid "Invalid request!"
+msgstr "Permintaan tidak valid"
+
+#: views.py:75
+#, python-format
+msgid "No users registered as `%(username)s` or user is unactived."
+msgstr ""
+"Tidak ada pengguna terdaftar sebagai `%(username)s` atau pengguna telah "
+"nonaktif."
+
+#: views.py:81
+msgid "Validation Failed for field `username`"
+msgstr "Validasi Gagal untuk field `username`"

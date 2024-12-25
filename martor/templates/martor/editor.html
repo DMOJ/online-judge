@@ -1,0 +1,24 @@
+{% load i18n %}
+<div class="main-martor main-martor-{{ field_name }}" data-field-name="{{ field_name }}">
+  <div class="section-martor">
+    <div class="ui top attached tabular pointing secondary menu tab-martor-menu">
+      <a class="item active" data-tab="editor-tab-{{ field_name }}"><i class="edit icon"></i> {% trans "Editor" %}</a>
+      <a class="item" data-tab="preview-tab-{{ field_name }}"><i class="eye icon"></i>{% trans "Preview" %}</a>
+      {% include "martor/toolbar.html" %}
+    </div>
+    <div class="ui bottom attached tab segment active" data-tab="editor-tab-{{ field_name }}">
+      <div class="ui active dimmer upload-progress" style="display:none">
+        <div class="ui text loader">{% trans "Uploading... please wait..." %}</div>
+      </div>
+      <div id="martor-{{ field_name }}" class="martor-field martor-field-{{ field_name }}"></div>
+      {{ martor }}
+      <i class="angle double down grey icon expand-editor"></i>
+    </div>
+    <div class="ui bottom attached tab segment martor-preview" data-tab="preview-tab-{{ field_name }}">
+      <p>{% trans "Nothing to preview" %}</p>
+    </div>
+  </div><!-- end  /.section-martor -->
+
+  {% include 'martor/guide.html' %}
+  {% include 'martor/emoji.html' %}
+</div>
