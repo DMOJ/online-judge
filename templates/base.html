@@ -178,7 +178,7 @@
         </style>
     </noscript>
 </head>
-<body>
+<body{% if perms.judge.test_site %} data-theme="{{ SITE_THEME_NAME }}"{% endif %}>
 <svg width="0" height="0" style="display: block">
     <defs>
         <clipPath id="rating-clip"><circle cx="8" cy="8" r="7"/></clipPath>

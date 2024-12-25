@@ -90,6 +90,7 @@ def site_theme(request):
         'DARK_STYLE_CSS': settings.DMOJ_THEME_CSS['dark'],
         'LIGHT_STYLE_CSS': settings.DMOJ_THEME_CSS['light'],
         'PREFERRED_STYLE_CSS': preferred_css,
+        'SITE_THEME_NAME': request.profile.site_theme,
     }
 
 
