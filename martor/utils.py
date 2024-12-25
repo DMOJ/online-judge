@@ -1,12 +1,12 @@
-from django.utils.functional import Promise
-from django.utils.encoding import force_str
-from django.core.serializers.json import DjangoJSONEncoder
-
 import markdown
+from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.encoding import force_str
+from django.utils.functional import Promise
+
 from .settings import (
-    MARTOR_MARKDOWN_SAFE_MODE,
     MARTOR_MARKDOWN_EXTENSIONS,
-    MARTOR_MARKDOWN_EXTENSION_CONFIGS
+    MARTOR_MARKDOWN_EXTENSION_CONFIGS,
+    MARTOR_MARKDOWN_SAFE_MODE,
 )
 
 
@@ -30,11 +30,11 @@ def markdownify(markdown_content):
             markdown_content,
             safe_mode=MARTOR_MARKDOWN_SAFE_MODE,
             extensions=MARTOR_MARKDOWN_EXTENSIONS,
-            extension_configs=MARTOR_MARKDOWN_EXTENSION_CONFIGS
+            extension_configs=MARTOR_MARKDOWN_EXTENSION_CONFIGS,
         )
     except Exception:
         raise VersionNotCompatible("The markdown isn't compatible, please reinstall "
-                                   "your python markdown into Markdown>=3.0")
+                                   'your python markdown into Markdown>=3.0')
 
 
 class LazyEncoder(DjangoJSONEncoder):

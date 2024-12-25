@@ -1,7 +1,8 @@
 import django
-from .views import (markdownfy_view,
-                    markdown_imgur_uploader,
-                    markdown_search_user)
+
+from .views import (markdown_imgur_uploader,
+                    markdown_search_user,
+                    markdownfy_view)
 
 
 if django.VERSION >= (2, 0):

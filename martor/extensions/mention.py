@@ -1,8 +1,9 @@
 import markdown
 from django.contrib.auth import get_user_model
+
 from ..settings import (
     MARTOR_ENABLE_CONFIGS,
-    MARTOR_MARKDOWN_BASE_MENTION_URL
+    MARTOR_MARKDOWN_BASE_MENTION_URL,
 )
 
 """
@@ -46,6 +47,7 @@ class MentionExtension(markdown.Extension):
 def makeExtension(*args, **kwargs):
     return MentionExtension(*args, **kwargs)
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     import doctest
     doctest.testmod()

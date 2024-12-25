@@ -1,7 +1,10 @@
-import json
 import base64
+import json
+
+
 import requests
-from .settings import (MARTOR_IMGUR_CLIENT_ID, MARTOR_IMGUR_API_KEY)
+
+from .settings import MARTOR_IMGUR_API_KEY, MARTOR_IMGUR_CLIENT_ID
 
 requests.packages.urllib3.disable_warnings()
 
@@ -24,8 +27,8 @@ def imgur_uploader(image):
             'key': MARTOR_IMGUR_API_KEY,
             'image': base64.b64encode(image.read()),
             'type': 'base64',
-            'name': image.name
-        }
+            'name': image.name,
+        },
     )
 
     """
@@ -40,15 +43,15 @@ def imgur_uploader(image):
         return json.dumps({
             'status': respdata['status'],
             'link': respdata['data']['link'],
-            'name': respdata['data']['name']
+            'name': respdata['data']['name'],
         })
     elif response.status_code == 415:
         # Unsupport File type
         return json.dumps({
             'status': response.status_code,
-            'error': response.reason
+            'error': response.reason,
         })
     return json.dumps({
         'status': response.status_code,
-        'error': response.content.decode('utf-8')
+        'error': response.content.decode('utf-8'),
     })

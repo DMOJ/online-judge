@@ -1,13 +1,13 @@
 from django import forms
-from django.template.loader import get_template
 from django.contrib.admin import widgets
+from django.template.loader import get_template
 
 from .settings import (
     MARTOR_ENABLE_CONFIGS,
-    MARTOR_UPLOAD_URL,
     MARTOR_MARKDOWNIFY_URL,
+    MARTOR_MARKDOWN_BASE_EMOJI_URL,
     MARTOR_SEARCH_USERS_URL,
-    MARTOR_MARKDOWN_BASE_EMOJI_URL
+    MARTOR_UPLOAD_URL,
 )
 
 
@@ -21,7 +21,7 @@ class MartorWidget(forms.Textarea):
             'data-upload-url': MARTOR_UPLOAD_URL,
             'data-markdownfy-url': MARTOR_MARKDOWNIFY_URL,
             'data-search-users-url': MARTOR_SEARCH_USERS_URL,
-            'data-base-emoji-url': MARTOR_MARKDOWN_BASE_EMOJI_URL
+            'data-base-emoji-url': MARTOR_MARKDOWN_BASE_EMOJI_URL,
         }
 
         # Make sure that the martor value is in the class attr passed in
@@ -58,7 +58,7 @@ class MartorWidget(forms.Textarea):
                 'plugins/css/ace.min.css',
                 'plugins/css/semantic.css',
                 'plugins/css/resizable.min.css',
-            )
+            ),
         }
         js = (
             'plugins/js/ace.js',

@@ -1,10 +1,11 @@
 import json
-from django.http import HttpResponse
-from django.utils.module_loading import import_string
-from django.utils.translation import gettext_lazy as _
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.http import HttpResponse
+from django.utils.module_loading import import_string
+from django.utils.translation import gettext_lazy as _
 
 from .api import imgur_uploader
 from .settings import MARTOR_MARKDOWNIFY_FUNCTION
@@ -60,12 +61,12 @@ def markdown_search_user(request):
             and username != '' \
             and ' ' not in username:
         users = User.objects.filter(
-            Q(username__icontains=username)
+            Q(username__icontains=username),
         ).filter(is_active=True)
         if users.exists():
             data.update({
                 'status': 200,
-                'data': [{'username': u.username} for u in users]
+                'data': [{'username': u.username} for u in users],
             })
             return HttpResponse(
                 json.dumps(data, cls=LazyEncoder),
@@ -73,12 +74,12 @@ def markdown_search_user(request):
         data.update({
             'status': 204,
             'error': _('No users registered as `%(username)s` '
-                       'or user is unactived.') % {'username': username}
+                       'or user is unactived.') % {'username': username},
         })
     else:
         data.update({
             'status': 204,
-            'error': _('Validation Failed for field `username`')
+            'error': _('Validation Failed for field `username`'),
         })
     return HttpResponse(
         json.dumps(data, cls=LazyEncoder),

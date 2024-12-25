@@ -1,12 +1,11 @@
 from django.contrib import admin
-from django.db import models
 
-from .widgets import AdminMartorWidget
 from .models import MartorField
+from .widgets import AdminMartorWidget
 
 
 class MartorModelAdmin(admin.ModelAdmin):
 
     formfield_overrides = {
-        MartorField: {'widget': AdminMartorWidget}
+        MartorField: {'widget': AdminMartorWidget},
     }

@@ -61,12 +61,12 @@ class UrlizePattern(markdown.inlinepatterns.Pattern):
         text = url
 
         if not url.split('://')[0] in ('http', 'https', 'ftp'):
-            if '@' in url and not '/' in url:
+            if '@' in url and '/' not in url:
                 url = 'mailto:' + url
             else:
                 url = 'http://' + url
 
-        el = markdown.util.etree.Element("a")
+        el = markdown.util.etree.Element('a')
         el.set('href', url)
         el.text = markdown.util.AtomicString(text)
         return el
@@ -83,6 +83,7 @@ class UrlizeExtension(markdown.Extension):
 def makeExtension(*args, **kwargs):
     return UrlizeExtension(*args, **kwargs)
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     import doctest
     doctest.testmod()

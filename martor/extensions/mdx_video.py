@@ -30,7 +30,7 @@ class VideoExtension(markdown.Extension):
         pattern = klass(re)
         pattern.md = md
         pattern.ext = self
-        md.inlinePatterns.add(name, pattern, "<reference")
+        md.inlinePatterns.add(name, pattern, '<reference')
 
     def extendMarkdown(self, md, md_globals):
         self.add_inline(md, 'dailymotion', Dailymotion,
@@ -134,6 +134,6 @@ def makeExtension(**kwargs):
     return VideoExtension(**kwargs)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import doctest
     doctest.testmod()

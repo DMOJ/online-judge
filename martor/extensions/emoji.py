@@ -99,7 +99,7 @@ class EmojiPattern(markdown.inlinepatterns.Pattern):
         if emoji not in EMOJIS:
             return emoji
         url = '{0}{1}.png'.format(
-            MARTOR_MARKDOWN_BASE_EMOJI_URL, emoji.replace(':', '')
+            MARTOR_MARKDOWN_BASE_EMOJI_URL, emoji.replace(':', ''),
         )
         if MARTOR_MARKDOWN_BASE_EMOJI_USE_STATIC is True:
             url = static(url)
@@ -121,6 +121,6 @@ def makeExtension(*args, **kwargs):
     return EmojiExtension(*args, **kwargs)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import doctest
     doctest.testmod()
