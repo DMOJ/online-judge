@@ -25,7 +25,7 @@ class FakeJoinField:
     def get_joining_columns(self):
         return self.joining_columns
 
-    def get_extra_restriction(self, where_class, alias, remote_alias):
+    def get_extra_restriction(self, alias, remote_alias):
         pass
 
 

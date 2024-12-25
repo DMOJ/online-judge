@@ -8,10 +8,10 @@ import qrcode
 import webauthn
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import SuccessURLAllowedHostsMixin
+from django.contrib.auth.views import RedirectURLMixin
 from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _, gettext_lazy
 from django.views.generic import FormView, View
 from django.views.generic.base import ContextMixin
@@ -226,7 +226,7 @@ class WebAuthnDeleteView(SingleObjectMixin, WebAuthnView):
         return HttpResponse()
 
 
-class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView, ContextMixin):
+class TwoFactorLoginView(RedirectURLMixin, TOTPView, ContextMixin):
     form_class = TwoFactorLoginForm
     title = gettext_lazy('Perform Two-factor Authentication')
     template_name = 'registration/two_factor_auth.html'
@@ -244,7 +244,7 @@ class TwoFactorLoginView(SuccessURLAllowedHostsMixin, TOTPView, ContextMixin):
 
     def next_page(self):
         redirect_to = self.request.GET.get('next', '')
-        url_is_safe = is_safe_url(
+        url_is_safe = url_has_allowed_host_and_scheme(
             url=redirect_to,
             allowed_hosts=self.get_success_url_allowed_hosts(),
             require_https=self.request.is_secure(),

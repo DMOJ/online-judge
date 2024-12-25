@@ -42,7 +42,7 @@
 
     $(function () {
         $('.django-select2:not([id*=__prefix__])').djangoSelect2({
-            dropdownAutoWidth: true
+            width: 'style'
         });
     });
 
@@ -51,7 +51,7 @@
             $row.find('.django-select2').each(function () {
                 // Notice how we are passing it into a different jQuery.
                 $(this).djangoSelect2({
-                    dropdownAutoWidth: true
+                    width: 'style'
                 })
             });
         });

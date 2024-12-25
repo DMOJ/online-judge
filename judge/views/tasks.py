@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from judge.tasks import failure, progress, success
 from judge.utils.celery import redirect_to_task_status
@@ -34,7 +34,7 @@ def task_status(request, task_id):
         raise Http404()
 
     redirect = request.GET.get('redirect')
-    if not is_safe_url(redirect, allowed_hosts={request.get_host()}):
+    if not url_has_allowed_host_and_scheme(redirect, allowed_hosts={request.get_host()}):
         redirect = None
 
     status = get_task_status(task_id)

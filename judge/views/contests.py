@@ -95,9 +95,9 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
             return queryset
 
         return queryset.annotate(
-            editor_or_tester=Exists(Contest.authors.through.objects.filter(contest=OuterRef('pk'), profile=profile))
-            .bitor(Exists(Contest.curators.through.objects.filter(contest=OuterRef('pk'), profile=profile)))
-            .bitor(Exists(Contest.testers.through.objects.filter(contest=OuterRef('pk'), profile=profile))),
+            editor_or_tester=Exists(Contest.authors.through.objects.filter(contest=OuterRef('pk'), profile=profile)) |
+            Exists(Contest.curators.through.objects.filter(contest=OuterRef('pk'), profile=profile)) |
+            Exists(Contest.testers.through.objects.filter(contest=OuterRef('pk'), profile=profile)),
             completed_contest=Exists(ContestParticipation.objects.filter(contest=OuterRef('pk'), user=profile,
                                                                          virtual=ContestParticipation.LIVE)),
         )
@@ -283,8 +283,16 @@ class ContestDetail(ContestMixin, TitleMixin, CommentedDetailView):
         context['metadata'].update(
             **self.object.contest_problems
             .annotate(
-                partials_enabled=F('partial').bitand(F('problem__partial')),
-                pretests_enabled=F('is_pretested').bitand(F('contest__run_pretests_only')),
+                partials_enabled=Case(
+                    When(partial=True, problem__partial=True, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                ),
+                pretests_enabled=Case(
+                    When(is_pretested=True, contest__run_pretests_only=True, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                ),
             )
             .aggregate(
                 has_partials=Sum('partials_enabled'),
