@@ -59,8 +59,8 @@ form .martor-preview {
         box-shadow: 0px 0px 0px 0px $color_primary0 inset !important;
     }
 
-    .ui.secondary.inverted.pointing.menu .active.item {
-        border-bottom-width: 4px;
+    .ui.attached.inverted.menu {
+        border-bottom: 2px solid $color_primary33 !important;
     }
 
     /* Scroll bar */
