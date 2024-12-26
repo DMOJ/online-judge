@@ -15,16 +15,6 @@
         </tr>
       </thead>
       <tbody>
-        {% if emoji_enabled %}
-          <tr>
-            <td>:emoji_name:</td>
-            <td>&mdash;</td>
-            <td>&mdash;</td>
-            <td>&mdash;</td>
-            <td><img class="marked-emoji" src="{% static 'plugins/images/heart.png' %}"></td>
-          </tr>
-        {% endif %}
-
         {% if mentions_enabled %}
           <tr>
             <td>[user:username]</td>
@@ -35,7 +25,7 @@
           </tr>
         {% endif %}
 
-        {% if emoji_enabled or mentions_enabled %}
+        {% if mentions_enabled %}
           <tr><td colspan="5"></td></tr>
         {% endif %}
 

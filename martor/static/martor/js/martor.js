@@ -86,24 +86,6 @@
 
             obj.addEventListener('paste', handleContentPasteClick);
 
-            var emojiWordCompleter = {
-                getCompletions: function(editor, session, pos, prefix, callback) {
-                    var wordList = typeof(emojis) != "undefined" ? emojis : []; // from `atwho/emojis.min.js`
-                    var obj = editor.getSession().getTokenAt(pos.row, pos.column.count);
-                    var curTokens = obj.value.split(/\s+/);
-                    var lastToken = curTokens[curTokens.length-1];
-
-                    if (lastToken[0] == ':') {
-                      callback(null, wordList.map(function(word) {
-                          return {
-                              caption: word,
-                              value: word.replace(':', '') + ' ',
-                              meta: 'emoji' // this should return as text only.
-                          };
-                      }));
-                    }
-                }
-            }
             var mentionWordCompleter = {
                 getCompletions: function(editor, session, pos, prefix, callback) {
                     var obj = editor.getSession().getTokenAt(pos.row, pos.column.count);
@@ -145,9 +127,9 @@
             }
             // Set autocomplete for ace editor
             if (editorConfig.mention === 'true') {
-                editor.completers = [emojiWordCompleter, mentionWordCompleter]
+                editor.completers = [mentionWordCompleter]
             }else {
-                editor.completers = [emojiWordCompleter]
+                editor.completers = []
             }
 
             // set css `display:none` fot this textarea.
@@ -157,7 +139,6 @@
             $(obj).find('.martor-toolbar').find('.markdown-selector').attr({'data-field-name': field_name});
             $(obj).find('.upload-progress').attr({'data-field-name': field_name});
             $(obj).find('.modal-help-guide').attr({'data-field-name': field_name});
-            $(obj).find('.modal-emoji').attr({'data-field-name': field_name});
 
             // Set if editor has changed.
             editor.on('change', function(evt){
@@ -584,13 +565,6 @@
                   )
                 }
             };
-            // Insert Emoji to text editor: $('.insert-emoji').data('emoji-target')
-            var markdownToEmoji = function(editor, data_target) {
-                var curpos = editor.getCursorPosition();
-                editor.session.insert(curpos, ' '+data_target+' ');
-                editor.focus();
-                editor.selection.moveTo(curpos.row, curpos.column+data_target.length+2);
-            };
             // Markdown Image Uploader auto insert to editor.
             // with special insert, eg: ![avatar.png](i.imgur.com/DytfpTz.png)
             var markdownToUploadImage = function(editor, imageData) {
@@ -863,7 +837,7 @@
                 $('.markdown-reference tbody tr')[1].remove();
             }
 
-            // Modal Popup for Help Guide & Emoji Cheat Sheet
+            // Modal Popup for Help Guide Cheat Sheet
             $('.markdown-help[data-field-name='+field_name+']').click(function(){
                 $('.modal-help-guide[data-field-name='+field_name+']').modal('show');
             });
@@ -910,37 +884,6 @@
               if (e.keyCode == 27 && mainMartor.hasClass('main-martor-fullscreen')) {
                 $('.minimize.icon').trigger('click');
               }
-            });
-
-            // markdown insert emoji from the modal
-            $('.markdown-emoji[data-field-name='+field_name+']').click(function(){
-                var modalEmoji = $('.modal-emoji[data-field-name='+field_name+']');
-                var emojiList = typeof(emojis) != "undefined" ? emojis : []; // from `plugins/js/emojis.min.js`
-                var segmentEmoji = modalEmoji.find('.emoji-content-body');
-                var loaderInit  = modalEmoji.find('.emoji-loader-init');
-
-                // setup initial loader
-                segmentEmoji.html('');
-                loaderInit.show();
-                modalEmoji.modal({
-                    onVisible: function () {
-                        for (var i = 0; i < emojiList.length; i++) {
-                            var linkEmoji = textareaId.data('base-emoji-url') + emojiList[i].replace(/:/g, '') + '.png';
-                            segmentEmoji.append(''
-                                +'<div class="four wide column">'
-                                + '<p><a data-emoji-target="'+emojiList[i]+'" class="insert-emoji">'
-                                + '<img class="marked-emoji" src="'+linkEmoji+'"> '+emojiList[i]
-                                + '</a></p>'
-                                +'</div>');
-                            $('a[data-emoji-target="'+emojiList[i]+'"]').click(function(){
-                                markdownToEmoji(editor, $(this).data('emoji-target'));
-                                modalEmoji.modal('hide', 100);
-                            });
-                        }
-                        loaderInit.hide();
-                        modalEmoji.modal('refresh');
-                    }
-                }).modal('show');
             });
 
             // Set initial value if has the content before.
