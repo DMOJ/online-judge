@@ -209,14 +209,6 @@
                 $(this).closest('.tab-martor-menu').find('.martor-toolbar').show();
             });
 
-            if (editorConfig.spellcheck == 'true') {
-              try {
-                enable_spellcheck(editorId);
-              }catch (e) {
-                console.log("Spellcheck lib doesn't installed.");
-              }
-            }
-
             // win/linux: Ctrl+B, mac: Command+B
             var markdownToBold = function(editor) {
                 var originalRange = editor.getSelectionRange();
