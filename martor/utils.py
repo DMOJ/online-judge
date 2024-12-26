@@ -1,40 +1,6 @@
-import markdown
 from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.encoding import force_str
 from django.utils.functional import Promise
-
-from .settings import (
-    MARTOR_MARKDOWN_EXTENSIONS,
-    MARTOR_MARKDOWN_EXTENSION_CONFIGS,
-    MARTOR_MARKDOWN_SAFE_MODE,
-)
-
-
-class VersionNotCompatible(Exception):
-    pass
-
-
-def markdownify(markdown_content):
-    """
-    Render the markdown content to HTML.
-
-    Basic:
-        >>> from martor.utils import markdownify
-        >>> content = "![awesome](http://i.imgur.com/hvguiSn.jpg)"
-        >>> markdownify(content)
-        '<p><img alt="awesome" src="http://i.imgur.com/hvguiSn.jpg" /></p>'
-        >>>
-    """
-    try:
-        return markdown.markdown(
-            markdown_content,
-            safe_mode=MARTOR_MARKDOWN_SAFE_MODE,
-            extensions=MARTOR_MARKDOWN_EXTENSIONS,
-            extension_configs=MARTOR_MARKDOWN_EXTENSION_CONFIGS,
-        )
-    except Exception:
-        raise VersionNotCompatible("The markdown isn't compatible, please reinstall "
-                                   'your python markdown into Markdown>=3.0')
 
 
 class LazyEncoder(DjangoJSONEncoder):

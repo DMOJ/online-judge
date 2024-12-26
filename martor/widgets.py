@@ -5,7 +5,6 @@ from django.template.loader import get_template
 from .settings import (
     MARTOR_ENABLE_CONFIGS,
     MARTOR_MARKDOWNIFY_URL,
-    MARTOR_MARKDOWN_BASE_EMOJI_URL,
     MARTOR_SEARCH_USERS_URL,
     MARTOR_UPLOAD_URL,
 )
@@ -21,7 +20,6 @@ class MartorWidget(forms.Textarea):
             'data-upload-url': MARTOR_UPLOAD_URL,
             'data-markdownfy-url': MARTOR_MARKDOWNIFY_URL,
             'data-search-users-url': MARTOR_SEARCH_USERS_URL,
-            'data-base-emoji-url': MARTOR_MARKDOWN_BASE_EMOJI_URL,
         }
 
         # Make sure that the martor value is in the class attr passed in
@@ -41,13 +39,11 @@ class MartorWidget(forms.Textarea):
         widget = super(MartorWidget, self).render(name, value, attributes_to_pass)
 
         template = get_template('martor/editor.html')
-        emoji_enabled = MARTOR_ENABLE_CONFIGS.get('emoji') == 'true'
         mentions_enabled = MARTOR_ENABLE_CONFIGS.get('mention') == 'true'
 
         return template.render({
             'martor': widget,
             'field_name': name,
-            'emoji_enabled': emoji_enabled,
             'mentions_enabled': mentions_enabled,
             'uploads_enabled': self.UPLOADS_ENABLED,
         })
@@ -69,7 +65,6 @@ class MartorWidget(forms.Textarea):
             'plugins/js/theme-twilight.js',
             'plugins/js/highlight.min.js',
             'plugins/js/resizable.min.js',
-            'plugins/js/emojis.min.js',
             'martor/js/martor.js',
         )
 

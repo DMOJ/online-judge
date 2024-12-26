@@ -53,7 +53,7 @@ def django_uploader(image):
 def martor_image_uploader(request):
     if not request.user.is_staff:
         return HttpResponseNotFound()
-    if request.method != 'POST' or not request.is_ajax() or 'markdown-image-upload' not in request.FILES:
+    if request.method != 'POST' or 'markdown-image-upload' not in request.FILES:
         return HttpResponseBadRequest('Invalid request')
 
     image = request.FILES['markdown-image-upload']

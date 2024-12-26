@@ -2,36 +2,10 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.http import HttpResponse
-from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from .api import imgur_uploader
-from .settings import MARTOR_MARKDOWNIFY_FUNCTION
 from .utils import LazyEncoder
-
-
-def markdownfy_view(request):
-    if request.method == 'POST':
-        markdownify = import_string(MARTOR_MARKDOWNIFY_FUNCTION)
-        return HttpResponse(markdownify(request.POST['content']))
-    return HttpResponse(_('Invalid request!'))
-
-
-@login_required
-def markdown_imgur_uploader(request):
-    """
-    Makdown image upload for uploading to imgur.com
-    and represent as json to markdown editor.
-    """
-    if request.method == 'POST' and request.is_ajax():
-        if 'markdown-image-upload' in request.FILES:
-            image = request.FILES['markdown-image-upload']
-            data = imgur_uploader(image)
-            return HttpResponse(data, content_type='application/json')
-        return HttpResponse(_('Invalid request!'))
-    return HttpResponse(_('Invalid request!'))
 
 
 @login_required
@@ -60,10 +34,8 @@ def markdown_search_user(request):
     if username is not None \
             and username != '' \
             and ' ' not in username:
-        users = User.objects.filter(
-            Q(username__icontains=username),
-        ).filter(is_active=True)
-        if users.exists():
+        users = User.objects.filter(username__icontains=username, is_active=True)
+        if users:
             data.update({
                 'status': 200,
                 'data': [{'username': u.username} for u in users],
