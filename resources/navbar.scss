@@ -1,5 +1,5 @@
 // Navbar should look the same in every theme, so vars-common should be enough.
-@import "vars-common";
+@use "vars-common" as *;
 
 #user-links {
     top: 0;

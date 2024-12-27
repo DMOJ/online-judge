@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars" as *;
 
 .mwe-math-mathml-inline {
   display: inline !important;

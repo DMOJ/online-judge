@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars" as *;
 
 .h-scrollable-table {
     overflow-x: auto;

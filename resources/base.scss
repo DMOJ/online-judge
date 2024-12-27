@@ -1,6 +1,4 @@
-@charset "UTF-8";
-
-@import "vars";
+@use "vars" as *;
 
 @-ms-viewport {
     min-width: 480px;

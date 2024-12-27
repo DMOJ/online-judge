@@ -1,7 +1,8 @@
-@import "base-description";
+@use "vars" as *;
+@use "base-description";
 
 form .martor-preview {
-    @include content-description;
+    @include base-description.content-description;
 
     min-height: 400px;
 
