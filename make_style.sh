@@ -21,6 +21,7 @@ build_style() {
   cp resources/vars-$1.scss resources/vars.scss
   sass resources:sass_processed
   postcss sass_processed/style.css sass_processed/martor-description.css sass_processed/select2-dmoj.css --verbose --use autoprefixer -d $2
+  rm resources/vars.scss
 }
 
 build_style 'default' 'resources'

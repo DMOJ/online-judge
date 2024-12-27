@@ -1,4 +1,5 @@
-@import "vars";
+@use "vars" as *;
+@use "select2/select2";
 
 /* Hack to make dropdown background follow theming */
 .select2-dropdown {
@@ -8,8 +9,8 @@
 }
 
 .select2-container--dmoj {
-    @import "select2/single";
-    @import "select2/multiple";
+    @include select2.single;
+    @include select2.multiple;
 
     &.select2-container--open.select2-container--above {
         .select2-selection--single, .select2-selection--multiple {
