@@ -25,10 +25,7 @@ class AceWidget(forms.Textarea):
     def media(self):
         js = [urljoin(settings.ACE_URL, 'ace.js')] if self.ace_media else []
         js.append('django_ace/widget.js')
-        css = {
-            'screen': ['django_ace/widget.css'],
-        }
-        return forms.Media(js=js, css=css)
+        return forms.Media(js=js)
 
     def render(self, name, value, attrs=None, renderer=None):
         attrs = attrs or {}

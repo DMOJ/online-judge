@@ -11,9 +11,8 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from reversion.admin import VersionAdmin
 
-from django_ace import AceWidget
 from judge.models import Judge
-from judge.widgets import AdminMartorWidget
+from judge.widgets import AdminAceWidget, AdminMartorWidget
 
 
 class LanguageForm(ModelForm):
@@ -30,7 +29,7 @@ class LanguageAdmin(VersionAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(LanguageAdmin, self).get_form(request, obj, **kwargs)
         if obj is not None:
-            form.base_fields['template'].widget = AceWidget(
+            form.base_fields['template'].widget = AdminAceWidget(
                 mode=obj.ace, theme=request.profile.resolved_ace_theme,
             )
         return form
