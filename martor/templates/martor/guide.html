@@ -3,7 +3,7 @@
   <i class="close icon"></i>
   <div class="header"><i class="help circle icon"></i> {% trans "Markdown Guide" %}</div>
   <div class="content" style="width: auto; margin-bottom: 2.5em;">
-    <p>{% blocktrans with doc_url='http://commonmark.org/help/' %}This site is powered by Markdown. For full documentation, <a href="{{ doc_url }}" target="_blank">click here</a>.{% endblocktrans %}</p>
+    <p>{% blocktrans with doc_url='https://commonmark.org/help/' %}This site is powered by Markdown. For full documentation, <a href="{{ doc_url }}" target="_blank">click here</a>.{% endblocktrans %}</p>
     <table class="ui celled table markdown-reference">
       <thead>
         <tr>
@@ -51,29 +51,29 @@
           <td><del>Strikethrough</del></td>
         </tr>
         <tr>
-          <td># Heading 1</td>
-          <td>Heading 1<br> =========</td>
+          <td># Heading 3</td>
+          <td>Heading 3<br> =========</td>
           <td>Ctrl+Alt+1</td>
           <td>Command+Option+1</td>
-          <td><h1>Heading 1</h1></td>
+          <td><h3>Heading 3</h3></td>
         </tr>
         <tr>
-          <td>## Heading 2</td>
-          <td>Heading 2<br> -----------</td>
+          <td>## Heading 4</td>
+          <td>Heading 4<br> -----------</td>
           <td>Ctrl+Alt+2</td>
           <td>Command+Option+2</td>
-          <td><h2>Heading 2</h2></td>
+          <td><h4>Heading 4</h4></td>
         </tr>
         <tr>
-          <td>[Link](http://a.com)</td>
-          <td>[Link][1]<br> &#8285;<br> [1]: http://b.org</td>
+          <td>[Link](https://a.com)</td>
+          <td>[Link][1]<br> &#8285;<br> [1]: https://b.org</td>
           <td>Ctrl+L</td>
           <td>Command+L</td>
-          <td><a href="http://commonmark.org/">Link</a></td>
+          <td><a href="https://commonmark.org/">Link</a></td>
         </tr>
         <tr>
-          <td>![Image](http://url/a.png)</td>
-          <td>![Image][1]<br> &#8285;<br> [1]: http://url/b.jpg</td>
+          <td>![Image](https://url/a.png)</td>
+          <td>![Image][1]<br> &#8285;<br> [1]: https://url/b.jpg</td>
           <td>Ctrl+Shift+I</td>
           <td>Command+Option+I</td>
           <td><img src="{% static 'plugins/images/commonmark.png' %}" width="36" height="36" alt="Markdown"></td>
@@ -102,7 +102,7 @@
         </tr>
         <tr>
           <td><p> 1. One<br> 2. Two<br> 3. Three</p></td>
-          <td><p> 1) One<br> 2) Two<br> 3) Three</p></td>
+          <td>&mdash;</td>
           <td>Ctrl+Shift+O</td>
           <td>Command+Option+O</td>
           <td><ol><li>One</li><li>Two</li><li>Three</li></ol></td>

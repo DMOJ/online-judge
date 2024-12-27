@@ -494,13 +494,13 @@
                 var originalRange = editor.getSelectionRange();
                 if (editor.selection.isEmpty()) {
                     var curpos = editor.getCursorPosition();
-                    editor.session.insert(curpos, ' [](http://) ');
+                    editor.session.insert(curpos, ' [](https://) ');
                     editor.focus();
                     editor.selection.moveTo(curpos.row, curpos.column+2);
                 }else {
                   var range = editor.getSelectionRange();
                   var text = editor.session.getTextRange(range);
-                  editor.session.replace(range, '['+text+'](http://) ');
+                  editor.session.replace(range, '['+text+'](https://) ');
                   editor.focus();
                   editor.selection.moveTo(
                       originalRange.end.row,
@@ -515,13 +515,13 @@
                 if (typeof(imageData) === 'undefined') {
                     if (editor.selection.isEmpty()) {
                         var curpos = editor.getCursorPosition();
-                        editor.session.insert(curpos, ' ![](http://)');
+                        editor.session.insert(curpos, ' ![](https://)');
                         editor.focus();
                         editor.selection.moveTo(curpos.row, curpos.column+3);
                     }else {
                         var range = editor.getSelectionRange();
                         var text = editor.session.getTextRange(range);
-                        editor.session.replace(range, '!['+text+'](http://)');
+                        editor.session.replace(range, '!['+text+'](https://)');
                         editor.focus();
                         editor.selection.moveTo(
                             originalRange.end.row,
