@@ -15,10 +15,10 @@ from django.utils.translation import gettext, gettext_lazy as _, ngettext, pgett
 from django.views.decorators.http import require_POST
 from reversion.admin import VersionAdmin
 
-from django_ace import AceWidget
 from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Profile, Submission, \
     SubmissionSource, SubmissionTestCase
 from judge.utils.raw_sql import use_straight_join
+from judge.widgets import AdminAceWidget
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
@@ -112,7 +112,7 @@ class SubmissionSourceInline(admin.StackedInline):
     extra = 0
 
     def get_formset(self, request, obj=None, **kwargs):
-        kwargs.setdefault('widgets', {})['source'] = AceWidget(
+        kwargs.setdefault('widgets', {})['source'] = AdminAceWidget(
             mode=obj and obj.language.ace, theme=request.profile.resolved_ace_theme,
         )
         return super().get_formset(request, obj, **kwargs)
