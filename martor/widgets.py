@@ -68,9 +68,6 @@ class MartorWidget(forms.Textarea):
             'martor/js/martor.js',
         )
 
-        if MARTOR_ENABLE_CONFIGS.get('jquery') == 'true':
-            js = ('plugins/js/jquery.min.js',).__add__(js)
-
 
 class AdminMartorWidget(MartorWidget, widgets.AdminTextareaWidget):
     pass
