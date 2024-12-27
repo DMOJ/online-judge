@@ -10,7 +10,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Download Can I use... data
       run: |
-        curl -s https://raw.githubusercontent.com/Fyrd/caniuse/master/data.json | python3 -m json.tool > resources/caniuse.json
+        curl -s https://raw.githubusercontent.com/Fyrd/caniuse/main/data.json | python3 -m json.tool > resources/caniuse.json
     - name: Create pull request
       uses: peter-evans/create-pull-request@v6
       with:
@@ -19,7 +19,7 @@ jobs:
         committer: dmoj-build <build@dmoj.ca>
         title: Import latest Can I use... data
         commit-message: Import latest Can I use... data
-        body: This PR has been auto-generated to pull in the latest copy of Can I use... `data.json` from [upstream](https://github.com/Fyrd/caniuse/blob/master/data.json).
+        body: This PR has been auto-generated to pull in the latest copy of Can I use... `data.json` from [upstream](https://github.com/Fyrd/caniuse/blob/main/data.json).
         labels: compat
         reviewers: Xyene, quantum5
         branch: update-caniuse

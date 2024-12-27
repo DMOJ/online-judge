@@ -95,7 +95,7 @@ standard_styles = [
 ]
 
 all_prefixed_styles = [
-    # From http://peter.sh/experiments/vendor-prefixed-css-property-overview/
+    # From https://peter.sh/experiments/vendor-prefixed-css-property-overview/
     '-ms-accelerator', '-webkit-app-region', '-webkit-appearance',
     '-webkit-appearance', '-moz-appearance', '-webkit-aspect-ratio',
     '-webkit-backdrop-filter', 'backface-visibility',
