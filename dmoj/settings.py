@@ -495,7 +495,6 @@ MARKDOWN_STYLES = {
 MARTOR_ENABLE_CONFIGS = {
     'imgur': 'true',
     'mention': 'true',
-    'jquery': 'false',
     'living': 'false',
     'hljs': 'false',
 }
