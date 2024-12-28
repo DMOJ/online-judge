@@ -1,10 +1,9 @@
 {% load i18n static %}
-<div class="ui medium modal scrolling transition modal-help-guide">
-  <i class="close icon"></i>
-  <div class="header"><i class="help circle icon"></i> {% trans "Markdown Guide" %}</div>
-  <div class="content" style="width: auto; margin-bottom: 2.5em;">
+<div style="display: none;">
+  <div class="modal-help-guide">
+    <h2><i class="help circle icon"></i> {% trans "Markdown Guide" %}</h2>
     <p>{% blocktrans with doc_url='https://commonmark.org/help/' %}This site is powered by Markdown. For full documentation, <a href="{{ doc_url }}" target="_blank">click here</a>.{% endblocktrans %}</p>
-    <table class="ui celled table markdown-reference">
+    <table class="table striped">
       <thead>
         <tr>
           <th>{% trans "Code" %}</th>
@@ -23,10 +22,6 @@
             <td>Command+M</td>
             <td><a href="#">username</a></td>
           </tr>
-        {% endif %}
-
-        {% if mentions_enabled %}
-          <tr><td colspan="5"></td></tr>
         {% endif %}
 
         <tr>

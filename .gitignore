@@ -7,10 +7,11 @@
 *~
 *.swp
 dmoj/local_settings.py
+resources/ace-dmoj.css
 resources/dark
+resources/featherlight.css
 resources/martor-description.css
 resources/select2-dmoj.css
-resources/ace-dmoj.css
 resources/style.css
 resources/vars.scss
 sass_processed
