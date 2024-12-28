@@ -54,7 +54,7 @@
             var editorConfig = JSON.parse(textareaId.data('enable-configs').replace(/'/g, '"'));
 
             if (darkMode) {
-                mainMartor.find('.ui').toggleClass('inverted');
+                mainMartor.find('.ui').addClass('inverted');
             }
 
             editor.setTheme('ace/theme/' + ace_theme);
