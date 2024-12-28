@@ -829,11 +829,6 @@
                 $('.markdown-reference tbody tr')[1].remove();
             }
 
-            // Modal Popup for Help Guide Cheat Sheet
-            $('.markdown-help[data-field-name=' + field_name + ']').click(function () {
-                $('.modal-help-guide[data-field-name=' + field_name + ']').modal('show');
-            });
-
             // Handle tabs.
             mainMartor.find('.ui.martor-toolbar .ui.dropdown').dropdown();
             mainMartor.find('.ui.tab-martor-menu .item').tab();

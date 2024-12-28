@@ -13,6 +13,6 @@ class AdminMartorWidget(OldAdminMartorWidget):
 
     class Media:
         css = {
-            'all': ['martor-description.css'],
+            'all': ['martor-description.css', 'featherlight.css'],
         }
-        js = ['admin/js/jquery.init.js', 'martor-mathjax.js']
+        js = ['admin/js/jquery.init.js', 'martor-mathjax.js', 'libs/featherlight/featherlight.min.js']
