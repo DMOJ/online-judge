@@ -34,18 +34,8 @@
     list-style-type: inherit;
 }
 
-select[id^=id_contest_problems] {
-    width: 20em !important;
-}
-
-select#id_authors.django-select2,
-select#id_curators.django-select2,
-select#id_testers.django-select2,
-select#id_spectators.django-select2,
-select#id_organizations.django-select2,
-select#id_join_organizations.django-select2,
-select#id_tags.django-select2 {
-    width: 20em;
+.select2-container--dmoj {
+    min-width: 20em;
 }
 
 @media (max-width: 780px) {
