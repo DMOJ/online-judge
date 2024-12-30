@@ -325,21 +325,21 @@ ul.pagination {
 }
 
 .alert-info {
-    color: #31708f;
-    background-color: #d9edf7;
-    border-color: #bce8f1;
+    color: $color_info100;
+    background-color: $color_info25;
+    border-color: $color_info50;
 }
 
 .alert-warning {
-    color: #8a6d3b;
-    background-color: #fcf8e3;
-    border-color: #faebcc;
+    color: $color_warning100;
+    background-color: $color_warning25;
+    border-color: $color_warning50;
 }
 
 .alert-danger {
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1;
+    color: $color_danger100;
+    background-color: $color_danger25;
+    border-color: $color_danger50;
 }
 
 .alert-dismissable, .alert-dismissible {
