@@ -78,10 +78,12 @@ class ProblemDataCompiler(object):
                 if batch:
                     case.points = None
                     case.is_pretest = batch['is_pretest']
+                    case.is_private = batch['is_private']
                 else:
                     if case.points is None:
                         raise ProblemDataError(_('Points must be defined for non-batch case #%d.') % i)
                     data['is_pretest'] = case.is_pretest
+                    data['is_private'] = case.is_private
 
                 if not self.generator:
                     if case.input_file not in self.files:
@@ -90,11 +92,16 @@ class ProblemDataCompiler(object):
                     if case.output_file not in self.files:
                         raise ProblemDataError(_('Output file for case %d does not exist: %s') %
                                                (i, case.output_file))
+                    if case.explanation_file != '' and case.explanation_file not in self.files:
+                        raise ProblemDataError(_('Explanation file for case %d does not exist: %s') %
+                                               (i, case.explanation_file))
 
                 if case.input_file:
                     data['in'] = case.input_file
                 if case.output_file:
                     data['out'] = case.output_file
+                if case.explanation_file:
+                    data['xpl'] = case.explanation_file
                 if case.points is not None:
                     data['points'] = case.points
                 if case.generator_args:
@@ -107,7 +114,7 @@ class ProblemDataCompiler(object):
                     data['checker'] = make_checker(case)
                 else:
                     case.checker_args = ''
-                case.save(update_fields=('checker_args', 'is_pretest'))
+                case.save(update_fields=('checker_args', 'is_pretest', 'is_private'))
                 (batch['batched'] if batch else cases).append(data)
             elif case.type == 'S':
                 batch_count += 1
@@ -134,6 +141,7 @@ class ProblemDataCompiler(object):
                     'points': case.points,
                     'batched': [],
                     'is_pretest': case.is_pretest,
+                    'is_private': case.is_private,
                     'dependencies': dependencies,
                 }
                 if case.generator_args:
@@ -148,13 +156,16 @@ class ProblemDataCompiler(object):
                     case.checker_args = ''
                 case.input_file = ''
                 case.output_file = ''
+                case.explanation_file = ''
                 case.save(update_fields=('checker_args', 'input_file', 'output_file'))
             elif case.type == 'E':
                 if not batch:
                     raise ProblemDataError(_('Attempt to end batch outside of one in case #%d.') % i)
                 case.is_pretest = batch['is_pretest']
+                case.is_private = batch['is_private']
                 case.input_file = ''
                 case.output_file = ''
+                case.explanation_file = ''
                 case.generator_args = ''
                 case.checker = ''
                 case.checker_args = ''
