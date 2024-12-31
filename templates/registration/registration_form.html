@@ -126,7 +126,7 @@
             } catch (e) {}
         });
     </script>
-    {% if form.captcha %}
+    {% if form.captcha and form.is_recaptcha|default:false %}
         {{ recaptcha_init(LANGUAGE_CODE) }}
     {% endif %}
 {% endblock %}
