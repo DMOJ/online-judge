@@ -180,21 +180,33 @@ class ContestAdmin(NoBatchDeleteMixin, SortableAdminBase, VersionAdmin):
         return readonly
 
     def save_model(self, request, obj, form, change):
-        # `private_contestants` and `organizations` will not appear in `cleaned_data` if user cannot edit it
+        # Conditions for save:
+        #   - visibility (is_public and private_contestants and organizations) is unchanged
+        #   - otherwise
+        #       - can change visibility (`judge.change_contest_visibility`)
+        #       - not is_visible contest
+        #       - otherwise
+        #           - (is_private or is_organization_private) and `judge.create_private_contest`
         if form.changed_data:
+            visibility_changed = 'is_visible' in form.changed_data
+
+            # `private_contestants`, `organizations`, etc will not appear in `cleaned_data` if user cannot edit it
             if 'private_contestants' in form.changed_data:
                 obj.is_private = bool(form.cleaned_data['private_contestants'])
+                visibility_changed = True
             if 'organizations' in form.changed_data or 'classes' in form.changed_data:
                 obj.is_organization_private = bool(form.cleaned_data['organizations'] or form.cleaned_data['classes'])
+                visibility_changed = True
             if 'join_organizations' in form.cleaned_data:
                 obj.limit_join_organizations = bool(form.cleaned_data['join_organizations'])
 
-        # `is_visible` will not appear in `cleaned_data` if user cannot edit it
-        if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):
-            if not obj.is_private and not obj.is_organization_private:
-                raise PermissionDenied
-            if not request.user.has_perm('judge.create_private_contest'):
-                raise PermissionDenied
+            if visibility_changed:
+                # `is_visible` will not appear in `cleaned_data` if user cannot edit it
+                if form.cleaned_data.get('is_visible') and not request.user.has_perm('judge.change_contest_visibility'):
+                    if not obj.is_private and not obj.is_organization_private:
+                        raise PermissionDenied
+                    if not request.user.has_perm('judge.create_private_contest'):
+                        raise PermissionDenied
 
         super().save_model(request, obj, form, change)
         # We need this flag because `save_related` deals with the inlines, but does not know if we have already rescored

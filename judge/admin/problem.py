@@ -238,15 +238,24 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
         return form
 
     def save_model(self, request, obj, form, change):
-        # `organizations` will not appear in `cleaned_data` if user cannot edit it
-        if form.changed_data and 'organizations' in form.changed_data:
-            obj.is_organization_private = bool(form.cleaned_data['organizations'])
+        # Conditions for save:
+        #   - visibility (is_public and organizations) is unchanged
+        #   - otherwise
+        #       - can change visibility (`judge.change_public_visibility`)
+        #       - not is_public problem
+        #       - otherwise
+        #           - is_organization_private and `judge.create_private_problem`
+        if form.changed_data:
+            # `organizations` will not appear in `cleaned_data` if user cannot edit it
+            if 'organizations' in form.changed_data:
+                obj.is_organization_private = bool(form.cleaned_data['organizations'])
 
-        if form.cleaned_data.get('is_public') and not request.user.has_perm('judge.change_public_visibility'):
-            if not obj.is_organization_private:
-                raise PermissionDenied
-            if not request.user.has_perm('judge.create_private_problem'):
-                raise PermissionDenied
+            if 'is_public' in form.changed_data or 'organizations' in form.changed.data:
+                if form.cleaned_data.get('is_public') and not request.user.has_perm('judge.change_public_visibility'):
+                    if not obj.is_organization_private:
+                        raise PermissionDenied
+                    if not request.user.has_perm('judge.create_private_problem'):
+                        raise PermissionDenied
 
         super(ProblemAdmin, self).save_model(request, obj, form, change)
         if (
