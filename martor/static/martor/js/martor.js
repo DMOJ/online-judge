@@ -46,18 +46,29 @@
         this.each(function (i, obj) {
             var mainMartor   = $(obj);
             var field_name   = mainMartor.data('field-name');
-            var darkMode     = isDarkMode();
-            var ace_theme    = darkMode ? 'twilight' : 'github';
             var textareaId   = $('#id_' + field_name);
             var editorId     = 'martor-' + field_name;
             var editor       = ace.edit(editorId);
             var editorConfig = JSON.parse(textareaId.data('enable-configs').replace(/'/g, '"'));
 
-            if (darkMode) {
-                mainMartor.find('.ui').addClass('inverted');
+            var setupTheme = function () {
+                if (isDarkMode()) {
+                    mainMartor.find('.ui').addClass('inverted');
+                    editor.setTheme('ace/theme/twilight');
+                }
+                else {
+                    mainMartor.find('.ui').removeClass('inverted');
+                    editor.setTheme('ace/theme/github');
+                }
             }
 
-            editor.setTheme('ace/theme/' + ace_theme);
+            setupTheme();
+            if ($('body').data('theme') === 'auto' && window.matchMedia) {
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+                    setupTheme();
+                });
+            }
+
             editor.getSession().setMode('ace/mode/markdown');
             editor.getSession().setUseWrapMode(true);
             editor.$blockScrolling = Infinity; // prevents ace from logging annoying warnings
