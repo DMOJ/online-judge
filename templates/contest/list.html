@@ -3,13 +3,6 @@
     <meta name="description" content="The {{ SITE_NAME }}'s contest list - past, present, and future.">
 {% endblock %}
 
-{% block media %}
-    <style>
-        .top-pagination-bar {
-            justify-content: space-between;
-        }
-    </style>
-{% endblock %}
 
 {% block js_media %}
     <script src="{{ static('libs/featherlight/featherlight.min.js') }}" type="text/javascript"></script>
@@ -314,12 +307,12 @@
                 {% endfor %}
                 </tbody>
             </table>
-            {% if page_obj and page_obj.has_other_pages() %}
-                <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
-            {% endif %}
         {% else %}
             <i>{{ _('There are no past contests.') }}</i>
             <br>
+        {% endif %}
+        {% if past_contests and page_obj and page_obj.has_other_pages() %}
+            <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
         {% endif %}
     </div>
 {% endblock %}
