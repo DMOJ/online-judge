@@ -104,12 +104,12 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
 
     def get_queryset(self):
         self.search_query = None
-        query_set = self._get_queryset().order_by(self.order, 'key').filter(end_time__lt=self._now)
+        queryset = self._get_queryset().order_by(self.order, 'key').filter(end_time__lt=self._now)
         if 'search' in self.request.GET:
             self.search_query = search_query = ' '.join(self.request.GET.getlist('search')).strip()
             if search_query:
-                query_set = query_set.filter(Q(key__icontains=search_query) | Q(name__icontains=search_query))
-        return query_set
+                queryset = queryset.filter(Q(key__icontains=search_query) | Q(name__icontains=search_query))
+        return queryset
 
     def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True, **kwargs):
         return super().get_paginator(queryset, per_page, orphans, allow_empty_first_page,
