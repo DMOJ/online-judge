@@ -257,7 +257,7 @@
         <br>
 
         <h4 id="past-contests">{{ _('Past contests') }}</h4>
-        {% if past_contests %}
+        {% if page_obj or search_query %}  
             <div class="top-pagination-bar">
                 {% include "list-pages.html" %}
                 <form id="search-form" name="form" action="" method="get">
@@ -267,6 +267,8 @@
                     </div>
                 </form>
             </div>
+        {% endif %}
+        {% if past_contests %}
             <table class="contest-list table striped">
                 <thead>
                 <tr>
