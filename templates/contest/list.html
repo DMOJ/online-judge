@@ -256,11 +256,19 @@
         {% endif %}
         <br>
 
+        <h4 id="past-contests">{{ _('Past contests') }}</h4>
+        {% if page_obj or search_query %}
+            <div class="top-pagination-bar">
+                {% include "list-pages.html" %}
+                <form id="search-form" name="form" action="" method="get">
+                    <div>
+                        <input id="search" type="text" name="search" value="{{ search_query or '' }}"
+                            placeholder="{{ _('Search contests...') }}">
+                    </div>
+                </form>
+            </div>
+        {% endif %}
         {% if past_contests %}
-            <h4 id="past-contests">{{ _('Past contests') }}</h4>
-            {% if page_obj and page_obj.has_other_pages() %}
-                <div class="top-pagination-bar">{% include "list-pages.html" %}</div>
-            {% endif %}
             <table class="contest-list table striped">
                 <thead>
                 <tr>
@@ -301,6 +309,9 @@
             {% if page_obj and page_obj.has_other_pages() %}
                 <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
             {% endif %}
+        {% else %}
+            <i>{{ _('There are no past contests.') }}</i>
+            <br>
         {% endif %}
     </div>
 {% endblock %}
