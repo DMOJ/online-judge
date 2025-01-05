@@ -87,7 +87,6 @@
         {% else %}
             <div class="time">---</div>
         {% endif %}
-        {# No one actually likes IEC prefixes, Jinja2. #}
-        <div class="memory">{{ (submission.memory_bytes|filesizeformat(True)).replace('i', '') }}</div>
+        <div class="memory">{{ submission.memory|kbdetailformat }}</div>
     {% endif %}
 </div>
