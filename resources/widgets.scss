@@ -476,33 +476,33 @@ a.close {
         border-radius: 5px;
 
         &.debug {
-            color: #383d41;
-            background-color: #e2e3e5;
-            border-color: #d6d8db;
+            color: $color_primary75;
+            background-color: $color_primary10;
+            border-color: $color_primary25;
         }
 
         &.info {
-            color: #0c5460;
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
+            color: $color_info100;
+            background-color: $color_info25;
+            border-color: $color_info50;
         }
 
         &.success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
+            color: $color_success100;
+            background-color: $color_success25;
+            border-color: $color_success50;
         }
 
         &.warning {
-            color: #856404;
-            background-color: #fff3cd;
-            border-color: #ffeeba;
+            color: $color_warning100;
+            background-color: $color_warning25;
+            border-color: $color_warning50;
         }
 
         &.error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
+            color: $color_danger100;
+            background-color: $color_danger25;
+            border-color: $color_danger50;
         }
     }
 }
