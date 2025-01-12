@@ -1,7 +1,7 @@
 <h1 align="center">
-  <img src="https://github.com/DMOJ/online-judge/blob/master/logo.png?raw=true" width="120px">
+  <img src="https://www.vlu.edu.vn/_next/static/media/logo.8e5334db.svg" width="400px">
   <br>
-  DMOJ: Modern Online Judge
+  VLOJ: Van Lang Online Judge
 </h1>
 <p align="center">
   <a href="https://github.com/DMOJ/online-judge/actions?query=workflow%3Abuild">
@@ -17,7 +17,7 @@
 
 A modern open-source online judge and contest platform system. It has been used to host thousands of competitions, including several national olympiads.
 
-See it live at [dmoj.ca](https://dmoj.ca/)!
+See it live at [vloj.vlu.edu.vn](https://vloj.vlu.edu.vn/)!
 
 ## Features
 
