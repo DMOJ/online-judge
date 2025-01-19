@@ -62,23 +62,41 @@
                 }
             }
 
-            function checker_precision($checker) {
+            function checker_args($checker) {
                 var $td = $checker.parent();
-                var $args = $td.find('input');
+                var $args = $td.find('input').first();
+                var json = try_parse_json($args.val());                
+
                 var $precision = $('<input>', {
                     type: 'number',
-                    value: try_parse_json($args.val()).precision || 6,
+                    value: json.precision || 6,
                     title: {{ _('precision (decimal digits)')|htmltojs }},
                     style: 'width: 4em'
-                }).change(function () {
+                }).appendTo($td);
+                               
+                var $exception = $('<input>', {
+                    type: 'text',
+                    value: json.exceptionType || '',
+                    title: {{ _('expected exception type')|htmltojs }},
+                    placeholder: "Leave blank to match any exception type.",
+                    style: 'width: 20em'
+                }).appendTo($td);
+                
+                var onchange = function(){                    
                     if ($checker.val().startsWith('floats'))
-                        $args.val(JSON.stringify({precision: parseInt($(this).val())}));
+                        $args.val(JSON.stringify({precision: parseInt($precision.val())}));
+                    else if ($checker.val().startsWith('exception'))
+                        $args.val(JSON.stringify({exceptionType: $exception.val()}));
                     else
                         $args.val('');
-                }).appendTo($td);
+                }
 
+                $precision.change(onchange);
+                $exception.change(onchange);
+                
                 $checker.change(function () {
-                    $precision.toggle($checker.val().startsWith('floats')).change();
+                    $precision.toggle($checker.val().startsWith('floats')).change();                
+                    $exception.toggle($checker.val().startsWith('exception')).change();
                 }).change();
             }
 
@@ -93,7 +111,7 @@
                 handle_table_reorder();
             }
 
-            checker_precision($('#id_problem-data-checker'));
+            checker_args($('#id_problem-data-checker'));
 
             $table.on('add-row', function (e, $tr) {
                 var $order = $tr.find('input').filter('[id$=order]').attr('type', 'hidden').val(++order);
@@ -162,7 +180,7 @@
                 addToolTip('a.edit-generator-args', '.generator-args-editor');
                 addToolTip('a.edit-batch-dependencies', '.batch-dependencies-editor');
 
-                checker_precision($tr.find('select[id$=checker]'));
+                checker_args($tr.find('select[id$=checker]'));
             }).find('tbody:first').find('tr').each(function () {
                 $table.trigger('add-row', [$(this)]);
             });
