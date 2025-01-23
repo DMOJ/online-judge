@@ -1,4 +1,4 @@
-from adminsortable2.admin import SortableInlineAdminMixin
+from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import connection, transaction
@@ -14,12 +14,11 @@ from django.utils.translation import gettext_lazy as _, ngettext
 from django.views.decorators.http import require_POST
 from reversion.admin import VersionAdmin
 
-from django_ace import AceWidget
 from judge.models import Class, Contest, ContestProblem, ContestSubmission, Profile, Rating, Submission
 from judge.ratings import rate_contest
 from judge.utils.views import NoBatchDeleteMixin
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget, \
-    AdminSelect2MultipleWidget, AdminSelect2Widget
+from judge.widgets import AdminAceWidget, AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, \
+    AdminMartorWidget, AdminSelect2MultipleWidget, AdminSelect2Widget
 
 
 class AdminHeavySelect2Widget(AdminHeavySelect2Widget):
@@ -101,23 +100,19 @@ class ContestForm(ModelForm):
             'curators': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'testers': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'spectators': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
-            'private_contestants': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                                   attrs={'style': 'width: 100%'}),
+            'private_contestants': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
             'classes': AdminHeavySelect2MultipleWidget(data_view='class_select2'),
             'join_organizations': AdminHeavySelect2MultipleWidget(data_view='organization_select2'),
             'tags': AdminSelect2MultipleWidget,
-            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                            attrs={'style': 'width: 100%'}),
-            'view_contest_scoreboard': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                                       attrs={'style': 'width: 100%'}),
-            'view_contest_submissions': AdminHeavySelect2MultipleWidget(data_view='profile_select2',
-                                                                        attrs={'style': 'width: 100%'}),
+            'banned_users': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'view_contest_scoreboard': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
+            'view_contest_submissions': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
             'description': AdminMartorWidget(attrs={'data-markdownfy-url': reverse_lazy('contest_preview')}),
         }
 
 
-class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
+class ContestAdmin(NoBatchDeleteMixin, SortableAdminBase, VersionAdmin):
     fieldsets = (
         (None, {'fields': ('key', 'name', 'authors', 'curators', 'testers', 'tester_see_submissions',
                            'tester_see_scoreboard', 'spectators')}),
@@ -237,7 +232,7 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
     def make_hidden(self, request, queryset):
         if not request.user.has_perm('judge.change_contest_visibility'):
             queryset = queryset.filter(Q(is_private=True) | Q(is_organization_private=True))
-        count = queryset.update(is_visible=True)
+        count = queryset.update(is_visible=False)
         self.message_user(request, ngettext('%d contest successfully marked as hidden.',
                                             '%d contests successfully marked as hidden.',
                                             count) % count)
@@ -309,14 +304,14 @@ class ContestAdmin(NoBatchDeleteMixin, VersionAdmin):
             raise Http404()
         with transaction.atomic():
             contest.rate()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', reverse('admin:judge_contest_changelist')))
+        return HttpResponseRedirect(request.headers.get('referer', reverse('admin:judge_contest_changelist')))
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(ContestAdmin, self).get_form(request, obj, **kwargs)
         if 'problem_label_script' in form.base_fields:
             # form.base_fields['problem_label_script'] does not exist when the user has only view permission
             # on the model.
-            form.base_fields['problem_label_script'].widget = AceWidget(
+            form.base_fields['problem_label_script'].widget = AdminAceWidget(
                 mode='lua', theme=request.profile.resolved_ace_theme,
             )
 

@@ -1,0 +1,77 @@
+@use "vars" as *;
+
+.django-ace-widget {
+    display: inline-block;
+    position: relative;
+    > div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    &.loading {
+        display: none;
+    }
+
+    /* Scroll bar */
+    ::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        border-radius: 10px;
+        background-color: $color_primary5;
+    }
+
+    ::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+        background-color: $color_primary5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: $color_primary66;
+    }
+}
+
+.django-ace-toolbar {
+    font-size: 12px;
+    text-align: left;
+    color: $color_primary66;
+    text-shadow: 0 1px 0 $color_primary0;
+    border-bottom: 1px solid $color_primary25;
+    background-image: linear-gradient(rgba(0,0,0,0), $color_primary10);
+    background-repeat: repeat-x;
+    clear: both;
+    overflow: hidden;
+}
+
+.django-ace-max_min {
+    float: right;
+    padding: 5px;
+
+    background: url($path_to_root + '/ace/img/expand.png') no-repeat 5px 5px;
+    @include vars-img;
+    display: block;
+    height: 16px;
+    width: 16px;
+}
+
+.django-ace-editor {
+    position: relative;
+}
+
+.django-ace-editor-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 1000;
+
+    .django-ace-max_min {
+        background-image: url($path_to_root + '/ace/img/contract.png');
+        @include vars-img;
+    }
+}

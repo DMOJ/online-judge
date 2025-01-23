@@ -2,25 +2,40 @@
 {% compress js %}
     {{ comment_form.media.js }}
     <script type="text/javascript">
+        function rename_martor_widget(widget, old_name, new_name) {
+            function rename_data(data_name, prefix) {
+                widget.find('[data-' + data_name + '=' + prefix + old_name + ']')
+                      .data(data_name, prefix + new_name)
+                      .attr('data-' + data_name, prefix + new_name);
+            }
+            function rename_id(prefix) {
+                widget.find('#' + prefix + old_name).prop('id', prefix + new_name);
+            }
+            function rename_class(prefix) {
+                widget.find('.' + prefix + old_name).removeClass(prefix + old_name).addClass(prefix + new_name);
+            }
+            rename_data('tab', 'editor-tab-');
+            rename_data('tab', 'preview-tab-');
+            rename_data('field-name', '');
+            rename_id('id_');
+            rename_id('martor-');
+            rename_class('martor-field-');
+            rename_class('main-martor-');
+            widget.find('.main-martor').martor();
+        }
+
         $(document).ready(function () {
             window.reply_comment = function (parent) {
                 var $comment_reply = $('#comment-' + parent + '-reply');
                 var reply_id = 'reply-' + parent;
-                var new_id = 'id' + parent + '_body';
                 if ($comment_reply.find('#' + reply_id).length == 0) {
-                    var $reply_form = $('#new-comment').clone(true).prop('id', reply_id);
+                    var $reply_form = $('#new-comment').clone(false).prop('id', reply_id);
                     $reply_form.find('h3').html({{ _('Replying to comment')|htmltojs }});
                     $reply_form.prepend('<a class="close">x</a>');
-                    $reply_form.find('form.comment-submit-form input#id_parent').val(parent);
-                    $reply_form.find('div#id_body-wmd-wrapper').prop('id', new_id + '-wmd-wrapper');
-                    $reply_form.find('div#id_body_wmd_button_bar').empty().prop('id', new_id + '_wmd_button_bar');
-                    $reply_form.find('textarea.wmd-input').val('').prop('id', new_id);
-                    $reply_form.find('div#id_body-preview').attr('data-textarea-id', new_id).prop('id', new_id + '-preview');
                     $reply_form.appendTo($comment_reply);
-                    register_dmmd_preview($reply_form.find('div#' + new_id + '-preview'));
-                    if ('DjangoPagedown' in window) {
-                        window.DjangoPagedown.createEditor($reply_form.find('textarea.wmd-input').get(0));
-                    }
+                    $reply_form.find('form.comment-submit-form input#id_parent').val(parent);
+                    rename_martor_widget($reply_form, 'body', reply_id);
+                    ace.edit('martor-' + reply_id).setValue('');
                 }
                 $comment_reply.fadeIn();
 
@@ -148,19 +163,8 @@
 
             $comments.find('a.edit-link').featherlight({
                 afterOpen: function () {
-                    if ('DjangoPagedown' in window) {
-                        var $wmd = $('.featherlight .wmd-input');
-                        if ($wmd.length) {
-                            window.DjangoPagedown.createEditor($wmd.get(0));
-                            if ('MathJax' in window) {
-                                var preview = $('.featherlight div.wmd-preview')[0];
-                                window.editors[$wmd.attr('id')].hooks.chain('onPreviewRefresh', function () {
-                                    MathJax.typesetPromise([preview]);
-                                });
-                                MathJax.typesetPromise([preview]);
-                            }
-                        }
-                    }
+                    var $widget = $('.featherlight #comment-form-body');
+                    rename_martor_widget($widget, 'body', 'edit');
                     $('#comment-edit').submit(function (event) {
                         event.preventDefault();
                         var id = $('#comment-edit').find('.comment-id').text();
@@ -186,14 +190,6 @@
                         });
                     });
                 },
-                beforeClose: function () {
-                    if ('DjangoPagedown' in window) {
-                        var $wmd = $('.featherlight .wmd-input');
-                        if ($wmd.length) {
-                            window.DjangoPagedown.destroyEditor($wmd.get(0));
-                        }
-                    }
-                },
                 variant: 'featherlight-edit'
             });
 
@@ -217,6 +213,16 @@
                 $comment.find('.comment-body').show();
                 $comment.find('.bad-comment-body').hide();
             };
+
+            var code_regex = [/input\(/, /#include/, /void\s+main/, /fn\s+main/, /func\s+main/];
+            $(document).on('click', 'form.comment-warn-code .button[type=submit]', function (e) {
+                var text = $(this).parents('form').find('#id_body').val();
+                if (code_regex.some(function (regex) {return regex.test(text);})) {
+                    if (!confirm({{ _('Looks like you\'re trying to post some source code!\n\nThe comment section is not for posting source code.\nIf you want to submit your solution, please use the "Submit solution" button.\n\nAre you sure you want to post this?')|htmltojs }})) {
+                        e.preventDefault();
+                    }
+                }
+            });
         });
     </script>
 {% endcompress %}

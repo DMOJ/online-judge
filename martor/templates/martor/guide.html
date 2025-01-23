@@ -1,0 +1,136 @@
+{% load i18n static %}
+<div style="display: none;">
+  <div class="modal-help-guide">
+    <h2><i class="question circle icon"></i> {% trans "Markdown Guide" %}</h2>
+    <p>{% blocktrans with doc_url='https://commonmark.org/help/' %}This site is powered by Markdown. For full documentation, <a href="{{ doc_url }}" target="_blank">click here</a>.{% endblocktrans %}</p>
+    <table class="table striped">
+      <thead>
+        <tr>
+          <th>{% trans "Code" %}</th>
+          <th>{% trans "Or" %}</th>
+          <th>Linux/Windows</th>
+          <th>Mac OS</th>
+          <th>{% trans "... to Get" %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if mentions_enabled %}
+          <tr>
+            <td>[user:username]</td>
+            <td>&mdash;</td>
+            <td>Ctrl+M</td>
+            <td>Command+M</td>
+            <td><a href="#">username</a></td>
+          </tr>
+        {% endif %}
+
+        <tr>
+          <td>*Italic*</td>
+          <td>&mdash;</td>
+          <td>Ctrl+I</td>
+          <td>Command+I</td>
+          <td><em>Italic</em></td>
+        </tr>
+        <tr>
+          <td>**Bold**</td>
+          <td>&mdash;</td>
+          <td>Ctrl+B</td>
+          <td>Command+B</td>
+          <td><strong>Bold</strong></td>
+        </tr>
+        <tr>
+          <td><span>~</span><span>~</span>Strikethrough<span>~</span><span>~</span></td>
+          <td>&mdash;</td>
+          <td>Shift+S</td>
+          <td>Option+S</td>
+          <td><del>Strikethrough</del></td>
+        </tr>
+        <tr>
+          <td># Heading 3</td>
+          <td>Heading 3<br> =========</td>
+          <td>Ctrl+Alt+1</td>
+          <td>Command+Option+1</td>
+          <td><h3>Heading 3</h3></td>
+        </tr>
+        <tr>
+          <td>## Heading 4</td>
+          <td>Heading 4<br> -----------</td>
+          <td>Ctrl+Alt+2</td>
+          <td>Command+Option+2</td>
+          <td><h4>Heading 4</h4></td>
+        </tr>
+        <tr>
+          <td>[Link](https://a.com)</td>
+          <td>[Link][1]<br> &#8285;<br> [1]: https://b.org</td>
+          <td>Ctrl+L</td>
+          <td>Command+L</td>
+          <td><a href="https://commonmark.org/">Link</a></td>
+        </tr>
+        <tr>
+          <td>![Image](https://url/a.png)</td>
+          <td>![Image][1]<br> &#8285;<br> [1]: https://url/b.jpg</td>
+          <td>Ctrl+Shift+I</td>
+          <td>Command+Option+I</td>
+          <td><img src="{% static 'plugins/images/commonmark.png' %}" width="36" height="36" alt="Markdown"></td>
+        </tr>
+        <tr>
+          <td>&gt; Blockquote</td>
+          <td>&mdash;</td>
+          <td>Ctrl+Q</td>
+          <td>Command+Q</td>
+          <td><blockquote>Blockquote</blockquote></td>
+        </tr>
+        <tr>
+          <td>A paragraph.<br><br> A paragraph after 1 blank line.</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td><p>A paragraph.</p><p>A paragraph after 1 blank line.</p></td>
+        </tr>
+        <tr>
+          <td><p>* List<br> * List<br> * List</p></td>
+          <td><p> - List<br> - List<br> - List<br></p></td>
+          <td>Ctrl+U</td>
+          <td>Command+U</td>
+          <td><ul><li>List</li><li>List</li><li>List</li></ul>
+          </td>
+        </tr>
+        <tr>
+          <td><p> 1. One<br> 2. Two<br> 3. Three</p></td>
+          <td>&mdash;</td>
+          <td>Ctrl+Shift+O</td>
+          <td>Command+Option+O</td>
+          <td><ol><li>One</li><li>Two</li><li>Three</li></ol></td>
+        </tr>
+        <tr>
+          <td>Horizontal Rule<br><br> -----------</td>
+          <td>Horizontal Rule<br><br> ***********</td>
+          <td>Ctrl+H</td>
+          <td>Command+H</td>
+          <td>Horizontal Rule <hr></td>
+        </tr>
+        <tr>
+          <td>`Inline code` with backticks</td>
+          <td>&mdash;</td>
+          <td>Ctrl+Alt+C</td>
+          <td>Command+Option+C</td>
+          <td><code>Inline code</code> with backticks</td>
+        </tr>
+        <tr>
+          <td>```<br> def whatever(foo):<br>&nbsp;&nbsp;&nbsp;&nbsp;return foo<br>```</td>
+          <td><b>with tab / 4 spaces</b><br>....def whatever(foo):<br>....&nbsp;&nbsp;&nbsp;&nbsp;return foo</td>
+          <td>Ctrl+Alt+P</td>
+          <td>Command+Option+P</td>
+          <td><pre>def whatever(foo):<br />    return foo</pre></td>
+        </tr>
+        <tr>
+          <td><span>~</span>x^2<span>~</span></td>
+          <td>&mdash;</td>
+          <td>Ctrl+Alt+I</td>
+          <td>Command+Option+I</td>
+          <td>~x^2~</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

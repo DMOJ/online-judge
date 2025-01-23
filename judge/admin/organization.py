@@ -105,7 +105,7 @@ class OrganizationAdmin(VersionAdmin):
 
 class OrganizationRequestAdmin(admin.ModelAdmin):
     list_display = ('username', 'organization', 'state', 'time')
-    readonly_fields = ('user', 'organization', 'request_class')
+    readonly_fields = ('user', 'organization', 'state', 'request_class')
 
     @admin.display(description=_('username'), ordering='user__user__username')
     def username(self, obj):

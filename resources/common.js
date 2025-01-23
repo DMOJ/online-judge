@@ -16,7 +16,7 @@ if (!String.prototype.endsWith) {
     };
 }
 
-// http://stackoverflow.com/a/1060034/1090657
+// https://stackoverflow.com/a/1060034/1090657
 $(function () {
     var hidden = 'hidden';
 

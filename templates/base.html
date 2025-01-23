@@ -49,7 +49,7 @@
             {% if PREFERRED_STYLE_CSS is not none %}
                 <link rel="stylesheet" href="{{ static(PREFERRED_STYLE_CSS) }}">
             {% else %}
-                <link rel="stylesheet" href="{{ static(LIGHT_STYLE_CSS) }}" media="(prefers-color-scheme: light)">
+                <link rel="stylesheet" href="{{ static(LIGHT_STYLE_CSS) }}">
                 <link rel="stylesheet" href="{{ static(DARK_STYLE_CSS) }}" media="(prefers-color-scheme: dark)">
             {% endif %}
         {% else %}
@@ -178,7 +178,7 @@
         </style>
     </noscript>
 </head>
-<body>
+<body{% if perms.judge.test_site %} data-theme="{{ SITE_THEME_NAME }}"{% endif %}>
 <svg width="0" height="0" style="display: block">
     <defs>
         <clipPath id="rating-clip"><circle cx="8" cy="8" r="7"/></clipPath>

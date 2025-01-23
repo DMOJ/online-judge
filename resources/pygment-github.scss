@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars" as *;
 
 code {
     @if $is_light_theme {

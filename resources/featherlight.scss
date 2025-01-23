@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars" as *;
 
 // Based on Featherlight 1.7.14
 
@@ -34,7 +34,7 @@
         border-radius: 10px;
         margin-left: 5%;
         margin-right: 5%;
-        max-height: 95%;
+        max-height: 85%;
         background: $color_pageBg;
         cursor: auto;
         white-space: normal;

@@ -343,11 +343,8 @@
             {% endif %}
         </div>
     {% elif enable_comments %}
-        {% include "comments/list.html" %}
+        {% with comment_warn_code=true %}
+            {% include "comments/list.html" %}
+        {% endwith %}
     {% endif %}
-{% endblock %}
-
-{% block bodyend %}
-    {{ super() }}
-    {% include "comments/math.html" %}
 {% endblock %}

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2023-01-24 00:52\n"
+"PO-Revision-Date: 2024-08-28 00:50\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -31,7 +31,7 @@ msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr ""
+msgstr "Votar en puntos problemáticos"
 
 #: resources/problem-vote.js:16
 #, javascript-format
@@ -41,12 +41,12 @@ msgstr "No se puede eliminar el voto: %s"
 #: resources/problem-vote.js:28
 #, javascript-format
 msgid "Edit points vote (%s)"
-msgstr ""
+msgstr "Editar voto de puntos (%s)"
 
 #: resources/problem-vote.js:34
 #, javascript-format
 msgid "Unable to cast vote: %s"
-msgstr ""
+msgstr "No se puede emitir voto: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"

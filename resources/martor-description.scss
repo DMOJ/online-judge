@@ -1,8 +1,11 @@
-@import "base-description";
+@use "vars" as *;
+@use "base-description";
 
 form .martor-preview {
-    @include content-description;
-    
+    @include base-description.content-description;
+
+    min-height: 400px;
+
     ul li {
         list-style: unset !important;
     }
@@ -21,7 +24,7 @@ form .martor-preview {
 }
 
 .section-martor {
-    div[data-tab="editor-tab-description"] {
+    div[data-tab^="editor-tab-"] {
         padding: 0;
     }
 
@@ -33,7 +36,167 @@ form .martor-preview {
         font-size: 0.8rem;
     }
 
+    .martor-toolbar {
+        flex: 0 1 auto !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
     .martor-field {
         height: 400px;
     }
+
+    .ui.tabular.menu + .attached:not(.top).segment,
+    .ui.tabular.menu + .attached:not(.top).segment + .attached:not(.top).segment {
+        width: auto !important;
+    }
+
+    .resizable .resizable-b {
+        background: $color_martor_resize_dragger !important;
+    }
+
+    /* Hacks for dark mode only */
+    .ui.basic.inverted.buttons .button, .ui.basic.inverted.button {
+        box-shadow: 0px 0px 0px 0px $color_primary0 inset !important;
+    }
+
+    .ui.attached.inverted.menu {
+        border-bottom: 2px solid $color_primary33 !important;
+    }
+
+    /* Scroll bar */
+    ::-webkit-scrollbar-track {
+	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	    border-radius: 10px;
+	    background-color: $color_primary5;
+    }
+
+    ::-webkit-scrollbar {
+        height: 6px;
+	    width: 6px;
+	    background-color: $color_primary5;
+    }
+
+    ::-webkit-scrollbar-thumb {
+	    border-radius: 10px;
+	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	    background-color: $color_primary66;
+    }
+}
+
+.ace_scrollbar-v {
+    cursor: ns-resize;
+}
+
+.main-martor {}
+
+.martor-toolbar {
+    padding: 0 0.85714286em !important;
+    padding-bottom: 4px !important;
+
+    .ui.icon .markdown-image-upload {
+        position: relative;
+        overflow: hidden;
+
+        input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 25px;
+            padding: 0;
+            padding-left: 35px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            cursor: inherit;
+            display: block;
+        }
+    }
+}
+
+.emoji-loader-init {
+    min-height: 200px !important;
+}
+
+.insert-emoji {
+    cursor: pointer;
+}
+
+/* Full Screen Mode */
+.main-martor-fullscreen {
+    background: $color_primary0;
+    position: fixed;
+    z-index: 999;
+    max-height: 100%;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    left: 0;
+    top: 0;
+
+    .fields.martor-toolbar {
+        border-bottom: 1px solid $color_primary10;
+        margin: 0;
+    }
+
+    .section-martor {
+        height: 90%;
+        position: relative;
+    }
+}
+
+.marked-emoji {
+    max-width: 20px;
+}
+
+.martor {
+    height: 500px;
+    max-height: 500px;
+}
+
+.martor-field {
+    width: 100%;
+    height: 250px;
+    min-height: 100px;
+}
+
+form .martor-preview-stale {
+    background: repeating-linear-gradient(-45deg, $color_primary0, $color_primary0 10px, $color_primary5 10px, $color_primary5 20px) !important;
+}
+
+.icon.expand-editor {
+    position: absolute;
+    bottom: .8em;
+    right: 0;
+}
+
+.no-border {
+    border: none !important;
+}
+
+/* Live Preview */
+form .enable-living {
+    .martor-preview {
+        display: block !important;
+    }
+
+    .tab-martor-menu a.item {
+        display: none !important;
+    }
+}
+
+/* Django Admin */
+.submit-row a {
+    box-sizing: content-box;
+}
+
+body.overflow {
+    overflow: hidden !important;
+}
+
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    padding: 5px 15px;
 }

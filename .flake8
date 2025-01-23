@@ -1,6 +1,6 @@
 [flake8]
 max-line-length = 120
-application-import-names = dmoj,judge,django_ace
+application-import-names = dmoj,judge,django_ace,martor
 import-order-style = pycharm
 enable-extensions = G
 ignore =
@@ -18,9 +18,6 @@ per-file-ignores =
     ./judge/management/commands/runmoss.py:F403,F405
     # E501: line too long, ignore in migrations
     ./judge/migrations/*.py:E501
-    # E303: too many blank lines
-    # PyCharm likes to have double lines between class/def in an if statement.
-    ./judge/widgets/pagedown.py:E303
 exclude =
     # belongs to the user
     ./dmoj/local_settings.py,

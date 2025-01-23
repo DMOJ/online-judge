@@ -6,9 +6,9 @@ from urllib.parse import urljoin
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, \
+    HttpResponseRedirect
 from django.views.decorators.http import require_POST
-from martor.api import imgur_uploader
 
 from judge.models import Submission
 
@@ -51,12 +51,11 @@ def django_uploader(image):
 
 @login_required
 def martor_image_uploader(request):
-    if request.method != 'POST' or not request.is_ajax() or 'markdown-image-upload' not in request.FILES:
+    if not request.user.is_staff:
+        return HttpResponseNotFound()
+    if request.method != 'POST' or 'markdown-image-upload' not in request.FILES:
         return HttpResponseBadRequest('Invalid request')
 
     image = request.FILES['markdown-image-upload']
-    if request.user.is_staff:
-        data = django_uploader(image)
-    else:
-        data = imgur_uploader(image)
+    data = django_uploader(image)
     return HttpResponse(data, content_type='application/json')

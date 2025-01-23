@@ -15,10 +15,10 @@ from django.utils.translation import gettext, gettext_lazy as _, ngettext, pgett
 from django.views.decorators.http import require_POST
 from reversion.admin import VersionAdmin
 
-from django_ace import AceWidget
 from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Profile, Submission, \
     SubmissionSource, SubmissionTestCase
 from judge.utils.raw_sql import use_straight_join
+from judge.widgets import AdminAceWidget
 
 
 class SubmissionStatusFilter(admin.SimpleListFilter):
@@ -75,7 +75,6 @@ class ContestSubmissionInline(admin.StackedInline):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         submission = kwargs.pop('obj', None)
-        label = None
         if submission:
             if db_field.name == 'participation':
                 kwargs['queryset'] = ContestParticipation.objects.filter(user=submission.user,
@@ -96,6 +95,10 @@ class ContestSubmissionInline(admin.StackedInline):
                     return pgettext('contest problem', '%(problem)s in %(contest)s') % {
                         'problem': obj.problem.name, 'contest': obj.contest.name,
                     }
+            else:
+                label = None
+        else:
+            label = None
         field = super(ContestSubmissionInline, self).formfield_for_dbfield(db_field, **kwargs)
         if label is not None:
             field.label_from_instance = label
@@ -109,7 +112,7 @@ class SubmissionSourceInline(admin.StackedInline):
     extra = 0
 
     def get_formset(self, request, obj=None, **kwargs):
-        kwargs.setdefault('widgets', {})['source'] = AceWidget(
+        kwargs.setdefault('widgets', {})['source'] = AdminAceWidget(
             mode=obj and obj.language.ace, theme=request.profile.resolved_ace_theme,
         )
         return super().get_formset(request, obj, **kwargs)
@@ -244,7 +247,7 @@ class SubmissionAdmin(VersionAdmin):
         if obj.is_locked:
             return format_html('<input type="button" disabled value="{0}"/>', _('Locked'))
         else:
-            return format_html('<input type="button" value="{0}" onclick="location.href=\'{1}\'"/>', _('Rejudge'),
+            return format_html('<a class="button action-link" href="{1}">{0}</a>', _('Rejudge'),
                                reverse('admin:judge_submission_rejudge', args=(obj.id,)))
 
     def get_urls(self):
@@ -261,4 +264,4 @@ class SubmissionAdmin(VersionAdmin):
                 not submission.problem.is_editor(request.profile):
             raise PermissionDenied()
         submission.judge(rejudge=True, rejudge_user=request.user)
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        return HttpResponseRedirect(request.headers.get('referer', '/'))

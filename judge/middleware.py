@@ -103,7 +103,7 @@ class APIMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        full_token = request.META.get('HTTP_AUTHORIZATION', '')
+        full_token = request.headers.get('authorization', '')
         if not full_token:
             return self.get_response(request)
 

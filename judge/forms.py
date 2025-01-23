@@ -15,12 +15,11 @@ from django.urls import reverse_lazy
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _, ngettext_lazy
 
-from django_ace import AceWidget
 from judge.models import Contest, Language, Organization, Problem, ProblemPointsVote, Profile, Submission, \
     WebAuthnCredential
 from judge.utils.mail import validate_email_domain
 from judge.utils.subscription import newsletter_id
-from judge.widgets import HeavyPreviewPageDownWidget, Select2MultipleWidget, Select2Widget
+from judge.widgets import AceWidget, MartorWidget, Select2MultipleWidget, Select2Widget
 
 TOTP_CODE_LENGTH = 6
 
@@ -63,11 +62,7 @@ class ProfileForm(ModelForm):
             fields.append('math_engine')
             widgets['math_engine'] = Select2Widget(attrs={'style': 'width:200px'})
 
-        if HeavyPreviewPageDownWidget is not None:
-            widgets['about'] = HeavyPreviewPageDownWidget(
-                preview=reverse_lazy('profile_preview'),
-                attrs={'style': 'max-width:700px;min-width:700px;width:700px'},
-            )
+        widgets['about'] = MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('profile_preview')})
 
     def clean_about(self):
         if 'about' in self.changed_data and not self.instance.has_any_solves:
@@ -173,8 +168,7 @@ class EditOrganizationForm(ModelForm):
         model = Organization
         fields = ['about', 'logo_override_image', 'admins']
         widgets = {'admins': Select2MultipleWidget(attrs={'style': 'width: 200px'})}
-        if HeavyPreviewPageDownWidget is not None:
-            widgets['about'] = HeavyPreviewPageDownWidget(preview=reverse_lazy('organization_preview'))
+        widgets['about'] = MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('organization_preview')})
 
 
 class CustomAuthenticationForm(AuthenticationForm):

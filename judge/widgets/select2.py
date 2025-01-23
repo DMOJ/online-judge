@@ -90,7 +90,7 @@ class Select2Mixin(object):
         Construct Media as a dynamic property.
 
         .. Note:: For more information visit
-            https://docs.djangoproject.com/en/1.8/topics/forms/media/#media-as-a-dynamic-property
+            https://docs.djangoproject.com/en/4.2/topics/forms/media/#media-as-a-dynamic-property
         """
         return forms.Media(
             js=[settings.SELECT2_JS_URL, 'django_select2.js'],

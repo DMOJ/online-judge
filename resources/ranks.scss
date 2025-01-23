@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars" as *;
 
 .admin a, .admin {
     color: $color_primary100 !important;

@@ -1,4 +1,4 @@
-@import "vars";
+@use "vars" as *;
 
 .comment-score {
     font-weight: bold;
@@ -58,6 +58,10 @@ a {
     padding-right: 15px;
     width: 100%;
     box-sizing: border-box;
+}
+
+.comment-edit-form {
+    min-width: 60em;
 }
 
 .comment-post-wrapper {

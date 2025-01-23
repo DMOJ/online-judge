@@ -163,7 +163,7 @@ class Judge(models.Model):
     def runtime_versions(cls):
         qs = (RuntimeVersion.objects.filter(judge__online=True)
               .values('judge__name', 'language__key', 'language__name', 'version', 'name')
-              .order_by('language__key', 'priority'))
+              .order_by('language__name', 'priority'))
 
         ret = defaultdict(OrderedDict)
 

@@ -1,0 +1,72 @@
+{% load i18n %}
+<div class="ui right floated item martor-toolbar">
+  <div class="ui basic tiny icon buttons no-border">
+    <div class="ui icon button no-border markdown-selector markdown-bold" title="{% trans 'Bold' %} (Ctrl+B)">
+      <i class="bold icon"></i>
+    </div>
+    <div class="ui icon button no-border markdown-selector markdown-italic" title="{% trans 'Italic' %} (Ctrl+I)">
+      <i class="italic icon"></i>
+    </div>
+    <div class="ui icon button no-border markdown-selector markdown-horizontal" title="{% trans 'Horizontal Line' %} (Ctrl+H)">
+      <i class="minus icon"></i>
+    </div>
+    <div class="ui icon button top left pointing dropdown no-border" title="{% trans 'Heading' %}">
+      <i class="header icon"></i>
+      <div class="menu">
+        <div class="item markdown-selector markdown-h1" title="">{% trans 'Heading' %} 1 (Ctrl+Alt+1)</div>
+        <div class="item markdown-selector markdown-h2" title="">{% trans 'Heading' %} 2 (Ctrl+Alt+2)</div>
+        <div class="item markdown-selector markdown-h3" title="">{% trans 'Heading' %} 3 (Ctrl+Alt+3)</div>
+      </div>
+    </div>
+
+    <div class="ui icon button top left pointing dropdown no-border" title="{% trans 'Pre or Code' %}">
+      <i class="code icon"></i>
+      <div class="menu">
+        <div class="item markdown-selector markdown-pre" title="">{% trans 'Pre' %} (Ctrl+Alt+P)</div>
+        <div class="item markdown-selector markdown-code" title="">{% trans 'Code' %} (Ctrl+Alt+C)</div>
+      </div>
+    </div>
+
+    <div class="ui icon button top left pointing dropdown no-border" title="{% trans 'Math' %}">
+      <i class="superscript icon"></i>
+      <div class="menu">
+        <div class="item markdown-selector markdown-inline-math" title="">{% trans 'Inline Math' %} (Ctrl+Alt+I)</div>
+        <div class="item markdown-selector markdown-display-math" title="">{% trans 'Display Math' %} (Ctrl+Alt+D)</div>
+        <div class="item markdown-selector markdown-latex" title="">{% trans 'LaTeX' %} (Ctrl+Alt+L)</div>
+      </div>
+    </div>
+
+    <div class="ui icon button no-border markdown-selector markdown-blockquote" title="{% trans 'Quote' %} (Ctrl+Q)">
+      <i class="quote left icon"></i>
+    </div>
+    <div class="ui icon button no-border markdown-selector markdown-unordered-list" title="{% trans 'Unordered List' %} (Ctrl+U)">
+      <i class="unordered list icon"></i>
+    </div>
+    <div class="ui icon button no-border markdown-selector markdown-ordered-list" title="{% trans 'Ordered List' %} (Ctrl+Shift+O)">
+      <i class="ordered list icon"></i>
+    </div>
+
+    <div class="ui icon button no-border markdown-selector markdown-link" title="{% trans 'URL/Link' %} (Ctrl+L)">
+      <i class="linkify icon"></i>
+    </div>
+    <div class="ui icon button no-border markdown-selector markdown-image-link" title="{% trans 'Insert Image Link' %} (Ctrl+Shift+I)">
+      <i class="image icon"></i>
+    </div>
+    {% if uploads_enabled %}
+      <div class="ui icon button no-border markdown-selector markdown-image-upload" title="{% trans 'Upload an Image' %}">
+        <i class="upload icon"></i>
+        <input name="markdown-image-upload" class="button" type="file" accept="image/*" title="{% trans 'Upload an Image' %}">
+      </div>
+    {% endif %}
+    <div class="ui icon button no-border markdown-selector markdown-direct-mention" title="{% trans 'Direct Mention a User' %} (Ctrl+M)">
+      <i class="at icon"></i>
+    </div>
+
+    <div class="ui icon button no-border markdown-selector markdown-toggle-maximize" title="{% trans 'Full Screen' %}">
+      <i class="window maximize outline icon"></i>
+    </div>
+    <a class="ui icon button no-border markdown-selector markdown-help" title="{% trans 'Markdown Guide (Help)' %}" data-featherlight=".modal-help-guide[data-field-name={{ field_name }}]" href="javascript:void(0)">
+      <i class="question circle icon"></i>
+    </a>
+  </div>
+</div>
