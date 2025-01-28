@@ -15,6 +15,21 @@ jobs:
       run: |
         flake8 --version
         flake8
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install mypy
+        run:
+          pip install mypy
+          pip install -r requirements-mypy.txt
+      - name: Run typecheck with mypy
+        run: |
+          PYTHONPATH=. mypy judge
   unit:
     runs-on: ubuntu-latest
     steps:
