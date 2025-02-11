@@ -9,9 +9,7 @@
                 {{ form.body.errors }}
             </div>
         {% endif %}
-        <div class="comment-post-wrapper">
-            <div id="comment-form-body">{{ form.body }}</div>
-        </div>
+        <div id="comment-form-body">{{ form.body }}</div>
         <hr>
         <input style="float: right" type="submit" value="{{ _('Post!') }}" class="button">
     </form>

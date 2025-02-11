@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.admin import widgets
+from django.core.exceptions import ImproperlyConfigured
 from django.template.loader import get_template
 
 from .settings import (
@@ -12,6 +13,15 @@ from .settings import (
 
 class MartorWidget(forms.Textarea):
     UPLOADS_ENABLED = False
+
+    # editor_msg: Display a message under the editor. This message does not appear during preview.
+    # button_text: Display a button that is disabled during editing and enabled during preview.
+    def __init__(self, editor_msg=None, button_text=None, *args, **kwargs):
+        if (editor_msg and not button_text) or (not editor_msg and button_text):
+            raise ImproperlyConfigured('Unsupported use of editor_msg and button_text')
+        self.editor_msg = editor_msg
+        self.button_text = button_text
+        super().__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, renderer=None, **kwargs):
         # Make the settings the default attributes to pass
@@ -46,6 +56,8 @@ class MartorWidget(forms.Textarea):
             'field_name': name,
             'mentions_enabled': mentions_enabled,
             'uploads_enabled': self.UPLOADS_ENABLED,
+            'editor_msg': self.editor_msg,
+            'button_text': self.button_text,
         })
 
     class Media:

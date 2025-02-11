@@ -31,12 +31,15 @@ class CommentForm(ModelForm):
             'parent': forms.HiddenInput(),
         }
 
-        widgets['body'] = MartorWidget(attrs={'data-markdownfy-url': reverse_lazy('comment_preview')})
+        widgets['body'] = MartorWidget(
+            editor_msg=_('Please click on "Preview" before posting your comment.'),
+            button_text=_('Post!'),
+            attrs={'data-markdownfy-url': reverse_lazy('comment_preview')},
+        )
 
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super(CommentForm, self).__init__(*args, **kwargs)
-        self.fields['body'].widget.attrs.update({'placeholder': _('Comment body')})
 
     def clean(self):
         if self.request is not None and self.request.user.is_authenticated:

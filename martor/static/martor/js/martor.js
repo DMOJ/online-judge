@@ -206,8 +206,8 @@
 
             if (editorConfig.living !== 'true') {
                 previewTabButton.click(function () {
-                    // hide the `.martor-toolbar` for this current editor if under preview.
-                    $(this).closest('.tab-martor-menu').find('.martor-toolbar').hide();
+                    mainMartor.find('.show-on-editor').hide();
+                    mainMartor.find('.show-on-preview').show();
                     refreshPreview();
                 });
             } else {
@@ -216,8 +216,8 @@
 
             var editorTabButton = $('.item[data-tab=editor-tab-' + field_name + ']');
             editorTabButton.click(function () {
-                // show the `.martor-toolbar` for this current editor if under preview.
-                $(this).closest('.tab-martor-menu').find('.martor-toolbar').show();
+                mainMartor.find('.show-on-editor').show();
+                mainMartor.find('.show-on-preview').hide();
             });
 
             // win/linux: Ctrl+B, mac: Command+B
