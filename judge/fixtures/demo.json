@@ -55,9 +55,9 @@
             ],
             "creation_date": "2017-12-02T08:50:25.199Z",
             "is_open": true,
-            "slug": "dmoj",
-            "name": "DMOJ: Modern Online Judge",
-            "short_name": "DMOJ",
+            "slug": "vloj",
+            "name": "VLOJ: Van Lang Online Judge",
+            "short_name": "VLOJ",
             "slots": null
         },
         "model": "judge.organization",
@@ -164,7 +164,7 @@
     {
         "fields": {
             "domain": "localhost:8081",
-            "name": "DMOJ: Modern Online Judge"
+            "name": "VLOJ: Van Lang Online Judge"
         },
         "model": "sites.site",
         "pk": 1
