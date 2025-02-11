@@ -156,11 +156,7 @@
                         </div>
                     {% endif %}
                     {{ comment_form.parent }}
-                    <div class="comment-post-wrapper">
-                        <div id="comment-form-body">{{ comment_form.body }}</div>
-                    </div>
-                    <hr>
-                    <input style="float:right" type="submit" value="{{ _('Post!') }}" class="button">
+                    <div id="comment-form-body">{{ comment_form.body }}</div>
                 </form>
             {% endif %}
         </div>

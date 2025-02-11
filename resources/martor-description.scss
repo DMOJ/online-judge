@@ -88,7 +88,9 @@ form .martor-preview {
     cursor: ns-resize;
 }
 
-.main-martor {}
+.main-martor {
+    overflow: hidden;
+}
 
 .martor-toolbar {
     padding: 0 0.85714286em !important;

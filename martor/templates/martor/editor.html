@@ -17,6 +17,18 @@
     <div class="ui bottom attached tab segment martor-preview" data-tab="preview-tab-{{ field_name }}">
       <p>{% trans "Nothing to preview" %}</p>
     </div>
+    {% if editor_msg and button_text %}
+      <hr>
+      <div class="ui tab show-on-editor active">
+        <input style="float: right" type="submit" value="{{ button_text }}" class="button disabled" disabled>
+      </div>
+      <div class="ui tab show-on-preview">
+        <input style="float: right" type="submit" value="{{ button_text }}" class="button">
+      </div>
+      <div class="ui tab show-on-editor active">
+        <p>{{ editor_msg }}</p>
+      </div>
+    {% endif %}
   </div><!-- end  /.section-martor -->
 
   {% include 'martor/guide.html' %}

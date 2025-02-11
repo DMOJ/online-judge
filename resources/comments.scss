@@ -64,18 +64,6 @@ a {
     min-width: 60em;
 }
 
-.comment-post-wrapper {
-    padding-bottom: 5px;
-
-    input, textarea {
-        min-width: 100%;
-        max-width: 100%;
-
-        // Hack for 4k on Chrome
-        font-size: $base_font_size;
-    }
-}
-
 .comment {
     list-style: none none;
     border-radius: $widget_border_radius;
