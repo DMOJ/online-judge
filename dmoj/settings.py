@@ -27,7 +27,7 @@ SECRET_KEY = '5*9f5q57mqmlz2#f$x1h76&jxy#yortjl1v+l*6hd18$d*yx#0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['*']
 
 SITE_ID = 1
 SITE_NAME = 'DMOJ'
@@ -393,7 +393,7 @@ LOCALE_PATHS = [
 LANGUAGES = [
     ('en', _('English')),
     ('ru', _('Russian')),
-    ('vi', _('Vietnamese'))
+    ('vi', _('Vietnamese')),
 ]
 
 BLEACH_USER_SAFE_TAGS = [
