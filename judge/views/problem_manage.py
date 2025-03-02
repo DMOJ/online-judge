@@ -82,15 +82,17 @@ class BaseRejudgeSubmissionsView(PermissionRequiredMixin, ManageProblemSubmissio
         except ValueError:
             return HttpResponseBadRequest()
 
-        return self.generate_response(id_range, languages, self.request.POST.getlist('result'))
+        archive_locked = self.request.POST.get('archive_locked', 'off') == 'on'
 
-    def generate_response(self, id_range, languages, results):
+        return self.generate_response(id_range, languages, self.request.POST.getlist('result'), archive_locked)
+
+    def generate_response(self, id_range, languages, results, archive_locked):
         raise NotImplementedError()
 
 
 class RejudgeSubmissionsView(BaseRejudgeSubmissionsView):
-    def generate_response(self, id_range, languages, results):
-        status = rejudge_problem_filter.delay(self.object.id, id_range, languages, results,
+    def generate_response(self, id_range, languages, results, archive_locked):
+        status = rejudge_problem_filter.delay(self.object.id, id_range, languages, results, archive_locked,
                                               user_id=self.request.user.id)
         return redirect_to_task_status(
             status, message=_('Rejudging selected submissions for %s...') % (self.object.name,),
@@ -99,8 +101,9 @@ class RejudgeSubmissionsView(BaseRejudgeSubmissionsView):
 
 
 class PreviewRejudgeSubmissionsView(BaseRejudgeSubmissionsView):
-    def generate_response(self, id_range, languages, results):
-        queryset = apply_submission_filter(self.object.submission_set.all(), id_range, languages, results)
+    def generate_response(self, id_range, languages, results, archive_locked):
+        queryset = apply_submission_filter(self.object.submission_set.all(),
+                                           id_range, languages, results, archive_locked)
         return HttpResponse(str(queryset.count()))
 
 
