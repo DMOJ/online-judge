@@ -251,6 +251,8 @@ class ProblemTestCase(CommonDataMixin, TestCase):
             problem=self.basic_problem,
             result='AC',
             points=self.basic_problem.points if points is None else points,
+            case_points=(self.basic_problem.points if points is None else points) * 100,
+            case_total=self.basic_problem.points * 100,
             language=Language.get_python3(),
         )
 
@@ -294,8 +296,8 @@ class ProblemTestCase(CommonDataMixin, TestCase):
         self.assertEqual(self.basic_problem.vote_permission_for_user(self.users['normal']), VotePermission.VOTE)
 
         partial_ac = create_user(username='partial_ac')
-        self.give_basic_problem_ac(partial_ac, 0.5)  # ensure this value is not equal to its point value
-        self.assertNotEqual(self.basic_problem.points, 0.5)
+        self.give_basic_problem_ac(partial_ac, 0.5)  # ensure this value is less than its point value
+        self.assertLess(0.5, self.basic_problem.points)
         self.assertEqual(self.basic_problem.vote_permission_for_user(partial_ac), VotePermission.VIEW)
 
     def test_problems_list(self):
