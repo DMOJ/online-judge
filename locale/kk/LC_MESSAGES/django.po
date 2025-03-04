@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-22 03:00+0000\n"
-"PO-Revision-Date: 2024-08-23 00:48\n"
+"POT-Creation-Date: 2025-03-03 17:18+0000\n"
+"PO-Revision-Date: 2025-03-04 00:57\n"
 "Last-Translator: \n"
 "Language-Team: Kazakh\n"
 "Language: kk_KZ\n"
@@ -17,79 +17,79 @@ msgstr ""
 "X-Crowdin-File: django.po\n"
 "X-Crowdin-File-ID: 10\n"
 
-#: dmoj/settings.py:395
+#: dmoj/settings.py:394
 msgid "Catalan"
 msgstr "Каталан"
 
-#: dmoj/settings.py:396
+#: dmoj/settings.py:395
 msgid "German"
 msgstr "Немісше"
 
-#: dmoj/settings.py:397
+#: dmoj/settings.py:396
 msgid "Greek"
 msgstr "Грекше"
 
-#: dmoj/settings.py:398
+#: dmoj/settings.py:397
 msgid "English"
 msgstr "Ағылшынша"
 
-#: dmoj/settings.py:399
+#: dmoj/settings.py:398
 msgid "Spanish"
 msgstr "Испанша"
 
-#: dmoj/settings.py:400
+#: dmoj/settings.py:399
 msgid "French"
 msgstr "Французша"
 
-#: dmoj/settings.py:401
+#: dmoj/settings.py:400
 msgid "Croatian"
 msgstr "Хорватша"
 
-#: dmoj/settings.py:402
+#: dmoj/settings.py:401
 msgid "Hungarian"
 msgstr "Мажар тілі"
 
-#: dmoj/settings.py:403
+#: dmoj/settings.py:402
 msgid "Japanese"
 msgstr "Жапонша"
 
-#: dmoj/settings.py:404
+#: dmoj/settings.py:403
 msgid "Kazakh"
 msgstr "Қазақ тілі"
 
-#: dmoj/settings.py:405
+#: dmoj/settings.py:404
 msgid "Korean"
 msgstr "Кәрісше"
 
-#: dmoj/settings.py:406
+#: dmoj/settings.py:405
 msgid "Brazilian Portuguese"
 msgstr "Бразилиялық португалша"
 
-#: dmoj/settings.py:407
+#: dmoj/settings.py:406
 msgid "Romanian"
 msgstr "Румынше"
 
-#: dmoj/settings.py:408
+#: dmoj/settings.py:407
 msgid "Russian"
 msgstr "Орысша"
 
-#: dmoj/settings.py:409
+#: dmoj/settings.py:408
 msgid "Serbian (Latin)"
 msgstr "Сербше (латынша)"
 
-#: dmoj/settings.py:410
+#: dmoj/settings.py:409
 msgid "Turkish"
 msgstr "Түрікше"
 
-#: dmoj/settings.py:411
+#: dmoj/settings.py:410
 msgid "Vietnamese"
 msgstr "Вьетнамша"
 
-#: dmoj/settings.py:412
+#: dmoj/settings.py:411
 msgid "Simplified Chinese"
 msgstr "Қытайша (Жеңілдетілген)"
 
-#: dmoj/settings.py:413
+#: dmoj/settings.py:412
 msgid "Traditional Chinese"
 msgstr "Қытайша (Дәстүрлі)"
 
@@ -140,125 +140,125 @@ msgstr[1] "%d пікір сәтті көрсетілді."
 msgid "associated page"
 msgstr "байланысты бет"
 
-#: judge/admin/contest.py:33
+#: judge/admin/contest.py:32
 msgid "Included contests"
 msgstr "Қосылған сайыстар"
 
-#: judge/admin/contest.py:67 templates/contest/contest.html:195
+#: judge/admin/contest.py:66 templates/contest/contest.html:195
 #: templates/contest/moss.html:41 templates/problem/list.html:188
 #: templates/problem/list.html:204 templates/user/user-problems.html:58
 #: templates/user/user-problems.html:102
 msgid "Problem"
 msgstr "Есеп"
 
-#: judge/admin/contest.py:68 judge/views/problem.py:355
+#: judge/admin/contest.py:67 judge/views/problem.py:355
 #: templates/contest/contest.html:191 templates/user/user-tabs.html:5
 #: templates/user/users-table.html:23
 msgid "Problems"
 msgstr "Есептер"
 
-#: judge/admin/contest.py:79 judge/admin/submission.py:247
+#: judge/admin/contest.py:78 judge/admin/submission.py:250
 #: templates/admin/judge/submission/change_form.html:14
 #: templates/admin/judge/submission/change_form.html:17
 #: templates/submission/source.html:34 templates/submission/status.html:90
 msgid "Rejudge"
 msgstr "Қайта тексеру"
 
-#: judge/admin/contest.py:124
+#: judge/admin/contest.py:119
 msgid "Settings"
 msgstr "Баптаулар"
 
-#: judge/admin/contest.py:127
+#: judge/admin/contest.py:122
 msgid "Scheduling"
 msgstr "Кесте"
 
-#: judge/admin/contest.py:128
+#: judge/admin/contest.py:123
 msgid "Details"
 msgstr "Егжей"
 
-#: judge/admin/contest.py:129
+#: judge/admin/contest.py:124
 msgid "Format"
 msgstr "Форматы"
 
-#: judge/admin/contest.py:130 templates/contest/ranking-table.html:5
+#: judge/admin/contest.py:125 templates/contest/ranking-table.html:5
 msgid "Rating"
 msgstr "Рейтинг"
 
-#: judge/admin/contest.py:131
+#: judge/admin/contest.py:126
 msgid "Access"
 msgstr "Рұқсат"
 
-#: judge/admin/contest.py:133 judge/admin/problem.py:136
+#: judge/admin/contest.py:128 judge/admin/problem.py:135
 msgid "Justice"
 msgstr "Әділет"
 
-#: judge/admin/contest.py:227
+#: judge/admin/contest.py:222
 msgid "Mark contests as visible"
 msgstr "Сайысты көрінетін етіп белгілеу"
 
-#: judge/admin/contest.py:232
+#: judge/admin/contest.py:227
 #, python-format
 msgid "%d contest successfully marked as visible."
 msgid_plural "%d contests successfully marked as visible."
 msgstr[0] "%d контест көрінетіндей болып белгіленді."
 msgstr[1] "%d контесттер көрінетіндей болып белгіленді."
 
-#: judge/admin/contest.py:236
+#: judge/admin/contest.py:231
 msgid "Mark contests as hidden"
 msgstr "Сайыстарды жасырын етіп белгілеу"
 
-#: judge/admin/contest.py:241
+#: judge/admin/contest.py:236
 #, python-format
 msgid "%d contest successfully marked as hidden."
 msgid_plural "%d contests successfully marked as hidden."
 msgstr[0] "%d контест көрінбейтіндей болып белгіленді."
 msgstr[1] "%d контесттер көрінбейтіндей болып белгіленді."
 
-#: judge/admin/contest.py:245
+#: judge/admin/contest.py:240
 msgid "Lock contest submissions"
 msgstr "Контест тапсырылымдарын бұғаттау"
 
-#: judge/admin/contest.py:250
+#: judge/admin/contest.py:245
 #, python-format
 msgid "%d contest successfully locked."
 msgid_plural "%d contests successfully locked."
 msgstr[0] "%d контест сәтті бұғатталды."
 msgstr[1] "%d контесттер сәтті бұғатталды."
 
-#: judge/admin/contest.py:254
+#: judge/admin/contest.py:249
 msgid "Unlock contest submissions"
 msgstr "Сайыс тапсырылымдарын ашу"
 
-#: judge/admin/contest.py:259
+#: judge/admin/contest.py:254
 #, python-format
 msgid "%d contest successfully unlocked."
 msgid_plural "%d contests successfully unlocked."
 msgstr[0] "%d контест бұғаттан сәтті ашылды."
 msgstr[1] "%d контесттер бұғаттан сәтті ашылды."
 
-#: judge/admin/contest.py:286 judge/admin/submission.py:179
+#: judge/admin/contest.py:281 judge/admin/submission.py:182
 #, python-format
 msgid "%d submission was successfully scheduled for rejudging."
 msgid_plural "%d submissions were successfully scheduled for rejudging."
 msgstr[0] "%d тапсырылымы қайта тексеру үшін күнтізбекке қойылды."
 msgstr[1] "%d тапсырылымдары қайта тексеру үшін күнтізбекке қойылды."
 
-#: judge/admin/contest.py:361
+#: judge/admin/contest.py:356
 msgid "Recalculate results"
 msgstr "Нәтижелерді қайта есептеу"
 
-#: judge/admin/contest.py:367
+#: judge/admin/contest.py:362
 #, python-format
 msgid "%d participation recalculated."
 msgid_plural "%d participations recalculated."
 msgstr[0] "%d қатысушысы қайта есептелді."
 msgstr[1] "%d қатысушыалыр қайта есептелді."
 
-#: judge/admin/contest.py:371 judge/admin/organization.py:110
+#: judge/admin/contest.py:366 judge/admin/organization.py:110
 msgid "username"
 msgstr "қолданушы аты"
 
-#: judge/admin/contest.py:375 templates/base.html:259
+#: judge/admin/contest.py:370 templates/base.html:261
 msgid "virtual"
 msgstr "виртуалды"
 
@@ -270,9 +270,9 @@ msgstr "сілтеме бумасы"
 msgid "Summary"
 msgstr "Қорытынды"
 
-#: judge/admin/interface.py:125 judge/admin/profile.py:107
-#: judge/admin/submission.py:220 judge/models/contest.py:500
-#: judge/models/contest.py:632 judge/models/profile.py:349
+#: judge/admin/interface.py:125 judge/admin/profile.py:106
+#: judge/admin/submission.py:223 judge/models/contest.py:502
+#: judge/models/contest.py:634 judge/models/profile.py:349
 #: judge/models/profile.py:380 judge/models/submission.py:67
 #: judge/models/ticket.py:32
 msgid "user"
@@ -282,136 +282,136 @@ msgstr "қолданушы"
 msgid "object"
 msgstr "объект"
 
-#: judge/admin/organization.py:83 judge/admin/problem.py:183
-#: judge/admin/profile.py:105
+#: judge/admin/organization.py:83 judge/admin/problem.py:185
+#: judge/admin/profile.py:104
 msgid "View on site"
 msgstr "Сайтта көру"
 
-#: judge/admin/problem.py:21
+#: judge/admin/problem.py:22
 msgid "Edit reason"
 msgstr "Өңдеу себебі"
 
-#: judge/admin/problem.py:30
+#: judge/admin/problem.py:31
 msgid "Describe the changes you made (optional)"
 msgstr "Жасаған өзгерістерді сипаттаңыз (міндетті емес)"
 
-#: judge/admin/problem.py:131
+#: judge/admin/problem.py:130
 msgid "Social Media"
 msgstr "Әлеуметтік Медиа"
 
-#: judge/admin/problem.py:132
+#: judge/admin/problem.py:131
 msgid "Taxonomy"
 msgstr "Таксономия"
 
-#: judge/admin/problem.py:133 templates/contest/contest.html:196
+#: judge/admin/problem.py:132 templates/contest/contest.html:196
 #: templates/problem/data.html:390 templates/problem/list.html:193
 #: templates/problem/list.html:215 templates/user/base-users-table.html:11
 #: templates/user/user-problems.html:60
 msgid "Points"
 msgstr "Ұпайлар"
 
-#: judge/admin/problem.py:134
+#: judge/admin/problem.py:133
 msgid "Limits"
 msgstr "Шектеулер"
 
-#: judge/admin/problem.py:135 templates/problem/submission-diff.html:65
+#: judge/admin/problem.py:134 templates/problem/submission-diff.html:65
 #: templates/stats/tabs.html:4 templates/submission/list.html:319
 msgid "Language"
 msgstr "Тіл"
 
-#: judge/admin/problem.py:137
+#: judge/admin/problem.py:136
 msgid "History"
 msgstr "Тарих"
 
-#: judge/admin/problem.py:177 judge/models/contest.py:70
-#: judge/models/interface.py:67 judge/models/problem.py:553
+#: judge/admin/problem.py:179 judge/models/contest.py:70
+#: judge/models/interface.py:67 judge/models/problem.py:554
 msgid "authors"
 msgstr "авторлар"
 
-#: judge/admin/problem.py:189
+#: judge/admin/problem.py:191
 msgid "Set publish date to now"
 msgstr "Жариялау күнін қазірге орнатыңыз"
 
-#: judge/admin/problem.py:192
+#: judge/admin/problem.py:194
 #, python-format
 msgid "%d problem's publish date successfully updated."
 msgid_plural "%d problems' publish date successfully updated."
 msgstr[0] "%d есептің жарияланған күні сәтті жаңартылды."
 msgstr[1] "%d есептің жарияланған күндері сәтті жаңартылды."
 
-#: judge/admin/problem.py:196
+#: judge/admin/problem.py:198
 msgid "Mark problems as public"
 msgstr "Есепті жалпыға ортақ етіп белгілеу"
 
-#: judge/admin/problem.py:201
+#: judge/admin/problem.py:205
 #, python-format
 msgid "%d problem successfully marked as public."
 msgid_plural "%d problems successfully marked as public."
 msgstr[0] "%d есеп жалпыға ортақ болып сәтті белгіленді."
 msgstr[1] "%d есеп жалпыға ортақ болып сәтті белгіленді."
 
-#: judge/admin/problem.py:205
+#: judge/admin/problem.py:209
 msgid "Mark problems as private"
 msgstr "Есепті жеке етіп белгілеу"
 
-#: judge/admin/problem.py:210
+#: judge/admin/problem.py:216
 #, python-format
 msgid "%d problem successfully marked as private."
 msgid_plural "%d problems successfully marked as private."
 msgstr[0] "%d есеп жеке ретінде сәтті белгіленді."
 msgstr[1] "%d есеп жеке ретінде сәтті белгіленді."
 
-#: judge/admin/problem.py:268 judge/models/contest.py:592
-#: judge/models/contest.py:617 judge/models/contest.py:657
-#: judge/models/problem.py:505 judge/models/problem.py:510
-#: judge/models/problem.py:533 judge/models/problem.py:593
+#: judge/admin/problem.py:281 judge/models/contest.py:594
+#: judge/models/contest.py:619 judge/models/contest.py:659
+#: judge/models/problem.py:506 judge/models/problem.py:511
+#: judge/models/problem.py:534 judge/models/problem.py:594
 #: judge/models/problem_data.py:35 judge/models/submission.py:68
 msgid "problem"
 msgstr "есеп"
 
-#: judge/admin/profile.py:36 judge/admin/profile.py:115
+#: judge/admin/profile.py:35 judge/admin/profile.py:114
 msgid "timezone"
 msgstr "уақыт белдеуі"
 
-#: judge/admin/profile.py:111
+#: judge/admin/profile.py:110
 msgid "email"
 msgstr "эл. пошта"
 
-#: judge/admin/profile.py:119
+#: judge/admin/profile.py:118
 msgid "date joined"
 msgstr "қосылу күні"
 
-#: judge/admin/profile.py:123
+#: judge/admin/profile.py:122
 msgid "Recalculate scores"
 msgstr "Ұпайларды қайта есептеу"
 
-#: judge/admin/profile.py:129
+#: judge/admin/profile.py:128
 #, python-format
 msgid "%d user had scores recalculated."
 msgid_plural "%d users had scores recalculated."
 msgstr[0] "%d қолданушының ұпайы қайта есептелді."
 msgstr[1] "%d қолданушының ұпайы қайта есептелді."
 
-#: judge/admin/runtime.py:55 templates/user/edit-profile.html:119
-#: templates/user/edit-profile.html:241 templates/user/edit-profile.html:358
-#: templates/user/edit-profile.html:388
+#: judge/admin/runtime.py:54 templates/user/edit-profile.html:120
+#: templates/user/edit-profile.html:242 templates/user/edit-profile.html:359
+#: templates/user/edit-profile.html:389
 msgid "Regenerate"
 msgstr "Қайта генерация жасау"
 
-#: judge/admin/runtime.py:69
+#: judge/admin/runtime.py:68
 msgid "Description"
 msgstr "Сипаттамасы"
 
-#: judge/admin/runtime.py:70
+#: judge/admin/runtime.py:69
 msgid "Information"
 msgstr "Ақпарат"
 
-#: judge/admin/runtime.py:71
+#: judge/admin/runtime.py:70
 msgid "Capabilities"
 msgstr "Мүмкіндіктер"
 
 #: judge/admin/submission.py:26 judge/admin/submission.py:45
-#: judge/admin/submission.py:232
+#: judge/admin/submission.py:235
 msgid "None"
 msgstr "Еш"
 
@@ -427,77 +427,77 @@ msgstr "Ерекше"
 msgid "Unaccepted"
 msgstr "Қабылданбады"
 
-#: judge/admin/submission.py:87
+#: judge/admin/submission.py:86
 #, python-format
 msgid "%s (spectating)"
 msgstr "%s (көрермен)"
 
-#: judge/admin/submission.py:89
+#: judge/admin/submission.py:88
 #, python-format
 msgid "%s (virtual %d)"
 msgstr "%s (виртуалды %d)"
 
-#: judge/admin/submission.py:96
+#: judge/admin/submission.py:95
 #, python-format
 msgctxt "contest problem"
 msgid "%(problem)s in %(contest)s"
 msgstr "%(problem)s - %(contest)s"
 
-#: judge/admin/submission.py:161
+#: judge/admin/submission.py:164
 msgid "Rejudge the selected submissions"
 msgstr "Таңдалған тапсырылымдарға қайта тексерту жасау"
 
-#: judge/admin/submission.py:164 judge/admin/submission.py:186
+#: judge/admin/submission.py:167 judge/admin/submission.py:189
 msgid "You do not have the permission to rejudge submissions."
 msgstr "Тапсырылымдарға қайта тексерту жасауға сіздің рұқсатыңыз жоқ."
 
-#: judge/admin/submission.py:170
+#: judge/admin/submission.py:173
 msgid "You do not have the permission to rejudge THAT many submissions."
 msgstr "МҰНША көп тапсырылымдарды қайта тексерту жасауға сіздің рұқсатыңыз жоқ."
 
-#: judge/admin/submission.py:183
+#: judge/admin/submission.py:186
 msgid "Rescore the selected submissions"
 msgstr "Таңдалған тапсырылымдар ұпайын қайта есептеу"
 
-#: judge/admin/submission.py:208 judge/views/problem_manage.py:129
+#: judge/admin/submission.py:211 judge/views/problem_manage.py:129
 #, python-format
 msgid "%d submission was successfully rescored."
 msgid_plural "%d submissions were successfully rescored."
 msgstr[0] "%d тапсырылымның ұпайы қайта есептелді."
 msgstr[1] "%d тапсырылымның ұпайы қайта есептелді."
 
-#: judge/admin/submission.py:212 judge/models/problem.py:117
+#: judge/admin/submission.py:215 judge/models/problem.py:117
 msgid "problem code"
 msgstr "есеп коды"
 
-#: judge/admin/submission.py:216 judge/models/problem.py:120
+#: judge/admin/submission.py:219 judge/models/problem.py:120
 msgid "problem name"
 msgstr "есеп атауы"
 
-#: judge/admin/submission.py:224
+#: judge/admin/submission.py:227
 msgid "time"
 msgstr "уақыт"
 
-#: judge/admin/submission.py:228
+#: judge/admin/submission.py:231
 msgid "memory"
 msgstr "жады"
 
-#: judge/admin/submission.py:234
+#: judge/admin/submission.py:237
 #, python-format
 msgid "%d KB"
 msgstr "%d KB"
 
-#: judge/admin/submission.py:236
+#: judge/admin/submission.py:239
 #, python-format
 msgid "%.2f MB"
 msgstr "%.2f MB"
 
-#: judge/admin/submission.py:238 judge/models/problem.py:511
-#: judge/models/problem.py:534 judge/models/runtime.py:111
+#: judge/admin/submission.py:241 judge/models/problem.py:512
+#: judge/models/problem.py:535 judge/models/runtime.py:111
 msgid "language"
 msgstr "тіл"
 
-#: judge/admin/submission.py:245
+#: judge/admin/submission.py:248
 msgid "Locked"
 msgstr "Бұғатталған"
 
@@ -517,20 +517,25 @@ msgstr "Аталмыш есептер мына типті есептеріне �
 msgid "Online Judge"
 msgstr "Online Judge"
 
-#: judge/comments.py:41
-msgid "Comment body"
-msgstr "Пікір денесі"
+#: judge/comments.py:35
+msgid "Please click on \"Preview\" before posting your comment."
+msgstr ""
 
-#: judge/comments.py:47 judge/views/comment.py:41 judge/views/ticket.py:46
+#: judge/comments.py:36 templates/comments/edit-ajax.html:14
+#: templates/ticket/ticket.html:181
+msgid "Post!"
+msgstr "Пост!"
+
+#: judge/comments.py:48 judge/views/comment.py:42 judge/views/ticket.py:47
 #: judge/views/user.py:353
 msgid "Your part is silent, little toad."
 msgstr "Тыныш отыр, балақай."
 
-#: judge/comments.py:49 templates/comments/list.html:146
+#: judge/comments.py:50 templates/comments/list.html:146
 msgid "You must solve at least one problem before your voice can be heard."
 msgstr "Дауысыңыз естілмес бұрын кем дегенде бір есепті шешуіңіз керек."
 
-#: judge/comments.py:96
+#: judge/comments.py:97
 msgid "Posted comment"
 msgstr "Жарияланған пікірлер"
 
@@ -615,129 +620,129 @@ msgstr "Байланыстар нөлдік емес баллмен соңғы �
 msgid "IOI (pre-2016)"
 msgstr "IOI (2016-ға дейін)"
 
-#: judge/forms.py:31
+#: judge/forms.py:30
 #, python-brace-format
 msgid "Two-factor authentication tokens must be {count} decimal digit."
 msgid_plural "Two-factor authentication tokens must be {count} decimal digits."
 msgstr[0] "Екі факторлы аутентификация таңбалауыштары {count} ондық цифры болуы керек."
 msgstr[1] "Екі факторлы аутентификация таңбалауыштары {count} ондық цифрлары болуы керек."
 
-#: judge/forms.py:36
+#: judge/forms.py:35
 msgid "Invalid two-factor authentication token."
 msgstr "Екі факторлы аутентификацияның жарамсыз белгісі."
 
-#: judge/forms.py:39
+#: judge/forms.py:38
 msgid "Scratch codes must be 16 Base32 characters."
 msgstr "Скретч-кодта 16 база 32 таңба болуы қажет."
 
-#: judge/forms.py:41 judge/forms.py:288
+#: judge/forms.py:40 judge/forms.py:282
 msgid "Invalid scratch code."
 msgstr "Жарамсыз скретч-код."
 
-#: judge/forms.py:48
+#: judge/forms.py:47
 msgid "Subscribe to contest updates"
 msgstr "Жаңартылған байқауға жазылу"
 
-#: judge/forms.py:49
+#: judge/forms.py:48
 msgid "Enable experimental features"
 msgstr "Тәжірибелік функцияларды қосу"
 
-#: judge/forms.py:74
+#: judge/forms.py:69
 msgid "You must solve at least one problem before you can update your profile."
 msgstr "Профильді жаңарту үшін кем дегенде бір есепті шешуіңіз керек."
 
-#: judge/forms.py:82 judge/views/organization.py:176 judge/views/register.py:50
+#: judge/forms.py:77 judge/views/organization.py:176 judge/views/register.py:50
 #, python-brace-format
 msgid "You may not be part of more than {count} public organization."
 msgid_plural "You may not be part of more than {count} public organizations."
 msgstr[0] "Сіз {count} астам қоғамдық ұйымның мүшесі бола алмайсыз."
 msgstr[1] "Сіз {count} астам қоғамдық ұйымның мүшесі бола алмайсыз."
 
-#: judge/forms.py:110
+#: judge/forms.py:105
 msgid "This email address is already taken."
 msgstr ""
 
-#: judge/forms.py:116
+#: judge/forms.py:111
 msgid "Invalid password"
 msgstr ""
 
-#: judge/forms.py:121
+#: judge/forms.py:116
 msgid "Download comments?"
 msgstr "Пікірлерді жүктеу?"
 
-#: judge/forms.py:122
+#: judge/forms.py:117
 msgid "Download submissions?"
 msgstr "Тапсырылымдарды жүктеу?"
 
-#: judge/forms.py:123
+#: judge/forms.py:118
 msgid "Filter by problem code glob:"
 msgstr "Есеп коды арқылы cүзгілеу:"
 
-#: judge/forms.py:127
+#: judge/forms.py:122
 msgid "Leave empty to include all submissions"
 msgstr "Барлық жіберілімдерді қосу үшін бос қалдырыңыз"
 
-#: judge/forms.py:130 templates/problem/manage_submission.html:144
+#: judge/forms.py:125 templates/problem/manage_submission.html:144
 msgid "Filter by result:"
 msgstr "Нәтижесі бойынша сүзгілеу:"
 
-#: judge/forms.py:136
+#: judge/forms.py:131
 msgid "Please select at least one thing to download."
 msgstr "Жүктеу үшін кем дегенде бір нәрсені таңдаңыз."
 
-#: judge/forms.py:162
+#: judge/forms.py:157
 msgid "Any judge"
 msgstr "Кез келген сот"
 
-#: judge/forms.py:183 judge/views/register.py:22
+#: judge/forms.py:177 judge/views/register.py:22
 #: templates/problem/submission-diff.html:63
 #: templates/registration/registration_form.html:139
 #: templates/user/base-users-table.html:6
 msgid "Username"
 msgstr "Қолданушы аты"
 
-#: judge/forms.py:184 templates/registration/registration_form.html:151
+#: judge/forms.py:178 templates/registration/registration_form.html:151
 #: templates/registration/registration_form.html:165
 msgid "Password"
 msgstr "Құпиясөз"
 
-#: judge/forms.py:216
+#: judge/forms.py:210
 msgid "Invalid code length."
 msgstr "Кодтың ұзындығы қате."
 
-#: judge/forms.py:247
+#: judge/forms.py:241
 msgid "Invalid WebAuthn response."
 msgstr "WebAuthn жауабы жарамсыз."
 
-#: judge/forms.py:250
+#: judge/forms.py:244
 msgid "No WebAuthn challenge issued."
 msgstr ""
 
-#: judge/forms.py:256
+#: judge/forms.py:250
 msgid "Invalid WebAuthn credential ID."
 msgstr "WebAuthn тіркелген ID дұрыс емес."
 
-#: judge/forms.py:286
+#: judge/forms.py:280
 msgid "Invalid two-factor authentication token or scratch code."
 msgstr "Жарамсыз екі факторлы аутентификация таңбалауышы немесе скреч коды."
 
-#: judge/forms.py:290
+#: judge/forms.py:284
 msgid "Must specify either totp_token or webauthn_response."
 msgstr "totp_token немесе webauthn_response көрсетілуі керек."
 
-#: judge/forms.py:294 judge/models/problem.py:118
+#: judge/forms.py:288 judge/models/problem.py:118
 msgid "Problem code must be ^[a-z0-9]+$"
 msgstr "Есеп коды ^[a-z0-9]+$ болуы тиіс"
 
-#: judge/forms.py:299
+#: judge/forms.py:293
 msgid "Problem with code already exists."
 msgstr "Мұндай кодты есеп әлдеқашан бар."
 
-#: judge/forms.py:304 judge/models/contest.py:68
+#: judge/forms.py:298 judge/models/contest.py:68
 msgid "Contest id must be ^[a-z0-9]+$"
 msgstr "Сайыс коды ^[a-z0-9]+$ болуы тиіс"
 
-#: judge/forms.py:309
+#: judge/forms.py:303
 msgid "Contest with key already exists."
 msgstr "Мұндай кілтті сайыс әлдеқашан бар."
 
@@ -745,6 +750,66 @@ msgstr "Мұндай кілтті сайыс әлдеқашан бар."
 #: templates/problem/vote-ajax.html:6 templates/submission/info-base.html:6
 msgid "N j, Y, g:i a"
 msgstr "N j, Y, g:i a"
+
+#: judge/jinja2/filesize.py:33
+#, python-format
+msgid "%s B"
+msgstr "%s Б"
+
+#: judge/jinja2/filesize.py:33
+#, python-format
+msgid "%s KB"
+msgstr "%s КБ"
+
+#: judge/jinja2/filesize.py:33
+#, python-format
+msgid "%s MB"
+msgstr "%s МБ"
+
+#: judge/jinja2/filesize.py:33
+#, python-format
+msgid "%s GB"
+msgstr "%s ГБ"
+
+#: judge/jinja2/filesize.py:33
+#, python-format
+msgid "%s TB"
+msgstr "%s ТБ"
+
+#: judge/jinja2/filesize.py:33
+#, python-format
+msgid "%s PB"
+msgstr "%s ПБ"
+
+#: judge/jinja2/filesize.py:40
+#, python-format
+msgid "%sB"
+msgstr "%sБ"
+
+#: judge/jinja2/filesize.py:40
+#, python-format
+msgid "%sK"
+msgstr "%sК"
+
+#: judge/jinja2/filesize.py:40
+#, python-format
+msgid "%sM"
+msgstr "%sМ"
+
+#: judge/jinja2/filesize.py:40
+#, python-format
+msgid "%sG"
+msgstr "%sГ"
+
+#: judge/jinja2/filesize.py:40
+#, python-format
+msgid "%sT"
+msgstr "%sТ"
+
+#: judge/jinja2/filesize.py:40
+#, python-format
+msgid "%sP"
+msgstr "%sП"
 
 #: judge/jinja2/rating.py:24
 msgid "Unrated"
@@ -827,7 +892,7 @@ msgid "comments"
 msgstr "пікірлер"
 
 #: judge/models/comment.py:75 judge/models/comment.py:127
-#: judge/models/problem.py:564
+#: judge/models/problem.py:565
 #, python-format
 msgid "Editorial for %s"
 msgstr "%s талдауы"
@@ -881,7 +946,7 @@ msgstr "белгі сипаттамасы"
 msgid "contest tag"
 msgstr "контест белгісі"
 
-#: judge/models/contest.py:53 judge/models/contest.py:153
+#: judge/models/contest.py:53 judge/models/contest.py:155
 msgid "contest tags"
 msgstr "контест белгілері"
 
@@ -957,12 +1022,12 @@ msgstr "Бұл пайдаланушылар байқауды бақылай ал
 msgid "description"
 msgstr "сипаттамасы"
 
-#: judge/models/contest.py:89 judge/models/problem.py:506
+#: judge/models/contest.py:89 judge/models/problem.py:507
 #: judge/models/runtime.py:144
 msgid "problems"
 msgstr "есептер"
 
-#: judge/models/contest.py:90 judge/models/contest.py:501
+#: judge/models/contest.py:90 judge/models/contest.py:503
 msgid "start time"
 msgstr "басталу уақыты"
 
@@ -971,7 +1036,7 @@ msgid "end time"
 msgstr "аяқталу уақыты"
 
 #: judge/models/contest.py:92 judge/models/problem.py:137
-#: judge/models/problem.py:535
+#: judge/models/problem.py:536
 msgid "time limit"
 msgstr "уақыт шектеуі"
 
@@ -1043,380 +1108,380 @@ msgstr "Жоғары рейтингі бар пайдаланушыларды б
 msgid "rate all"
 msgstr "барлығын бағалаңыз"
 
-#: judge/models/contest.py:117
-msgid "Rate all users who joined."
-msgstr "Қатысқан пайдаланушылардың барлығын бағалаңыз."
-
 #: judge/models/contest.py:118
+msgid "Rate users even if they make no submissions."
+msgstr ""
+
+#: judge/models/contest.py:120
 msgid "exclude from ratings"
 msgstr "рейтингтен шығарылсын"
 
-#: judge/models/contest.py:120
+#: judge/models/contest.py:122
 msgid "private to specific users"
 msgstr "белгілі бір пайдаланушылар үшін жабық"
 
-#: judge/models/contest.py:121
+#: judge/models/contest.py:123
 msgid "private contestants"
 msgstr "жеке қатысушылар"
 
-#: judge/models/contest.py:122
+#: judge/models/contest.py:124
 msgid "If non-empty, only these users may see the contest."
 msgstr "Егер орын бос болмаса, тек осы пайдаланушылар ғана байқауды көре алады."
 
-#: judge/models/contest.py:124
+#: judge/models/contest.py:126
 msgid "hide problem tags"
 msgstr "мәселе тегтерін жасыру"
 
-#: judge/models/contest.py:125
+#: judge/models/contest.py:127
 msgid "Whether problem tags should be hidden by default."
 msgstr "Есеп тегтері жасырылуы қажет пе."
 
-#: judge/models/contest.py:127
+#: judge/models/contest.py:129
 msgid "hide problem authors"
 msgstr "есептің авторларын жасыру"
 
-#: judge/models/contest.py:128
-msgid "Whether problem authors should be hidden by default."
-msgstr "Есеп тегтері жасырылуы қажет пе."
-
 #: judge/models/contest.py:130
+msgid "Whether problem authors should be hidden by default."
+msgstr "Есеп авторлары жасырылуы қажет пе."
+
+#: judge/models/contest.py:132
 msgid "run pretests only"
 msgstr "тек сынақ тесттерді іске қосу"
 
-#: judge/models/contest.py:131
+#: judge/models/contest.py:133
 msgid "Whether judges should grade pretests only, versus all testcases. Commonly set during a contest, then unset prior to rejudging user submissions when the contest ends."
 msgstr "Судьялар барлық тест тапсырмаларын емес, тек алдын-ала тесттерді бағалауы керек пе? Әдетте байқау кезінде орнатылады, содан кейін байқау аяқталғаннан кейін пайдаланушылардың өтінімдері алдын ала қаралғанға дейін қалпына келтіріледі."
 
-#: judge/models/contest.py:135
+#: judge/models/contest.py:137
 msgid "show short form settings display"
 msgstr "қысқа пішіннің нұсқауының сипатын көрсету"
 
-#: judge/models/contest.py:136
+#: judge/models/contest.py:138
 msgid "Whether to show a section containing contest settings on the contest page or not."
 msgstr "Байқау параметрлері бар бөлімді байқау бетінде көрсету керек пе, жоқ па."
 
-#: judge/models/contest.py:139 judge/models/problem.py:181
+#: judge/models/contest.py:141 judge/models/problem.py:181
 msgid "private to organizations"
 msgstr "жеке тұлғадан ұйымдарға"
 
-#: judge/models/contest.py:140 judge/models/problem.py:179
+#: judge/models/contest.py:142 judge/models/problem.py:179
 #: judge/models/profile.py:99
 msgid "organizations"
 msgstr "ұйымдар"
 
-#: judge/models/contest.py:141
+#: judge/models/contest.py:143
 msgid "If non-empty, only these organizations may see the contest."
 msgstr "Бос болмаса, тек осы ұйымдар ғана байқауға қосыла алады."
 
-#: judge/models/contest.py:142
+#: judge/models/contest.py:144
 msgid "limit organizations that can join"
 msgstr "қосыла алатын ұйымдарды шектеңіз"
 
-#: judge/models/contest.py:143
+#: judge/models/contest.py:145
 msgid "join organizations"
 msgstr "ұйымдарға қосылу"
 
-#: judge/models/contest.py:144
+#: judge/models/contest.py:146
 msgid "If non-empty, only these organizations may join the contest."
 msgstr "Бос болмаса, тек осы ұйымдар ғана контестке қосыла алады."
 
-#: judge/models/contest.py:146 judge/models/profile.py:143
+#: judge/models/contest.py:148 judge/models/profile.py:143
 msgid "classes"
 msgstr "сыныптар"
 
-#: judge/models/contest.py:147
+#: judge/models/contest.py:149
 msgid "If organization private, only these classes may see the contest."
 msgstr "Егер ұйым жеке болса, байқауды тек осы сыныптар көре алады."
 
-#: judge/models/contest.py:148 judge/models/interface.py:74
+#: judge/models/contest.py:150 judge/models/interface.py:74
 #: judge/models/problem.py:165
 msgid "OpenGraph image"
 msgstr "OpenGraph суреті"
 
-#: judge/models/contest.py:149 judge/models/profile.py:58
+#: judge/models/contest.py:151 judge/models/profile.py:58
 msgid "logo override image"
 msgstr "логотипті алмастыратын сурет"
 
-#: judge/models/contest.py:151
+#: judge/models/contest.py:153
 msgid "This image will replace the default site logo for users inside the contest."
 msgstr "Бұл сурет байқауға қатысатын пайдаланушылар үшін әдепкі сайт логотипін ауыстырады."
 
-#: judge/models/contest.py:154
+#: judge/models/contest.py:156
 msgid "the amount of live participants"
 msgstr "нақты қатысушылар саны"
 
-#: judge/models/contest.py:155
+#: judge/models/contest.py:157
 msgid "contest summary"
 msgstr ""
 
-#: judge/models/contest.py:156 judge/models/problem.py:167
+#: judge/models/contest.py:158 judge/models/problem.py:167
 msgid "Plain-text, shown in meta description tag, e.g. for social media."
 msgstr "Әлеуметтік желі үшін мета-бейнелеу тегінде көрсетілген кәдімгі текст."
 
-#: judge/models/contest.py:157 judge/models/profile.py:57
+#: judge/models/contest.py:159 judge/models/profile.py:57
 #: judge/models/profile.py:110
 msgid "access code"
 msgstr "кіру коды"
 
-#: judge/models/contest.py:158
+#: judge/models/contest.py:160
 msgid "An optional code to prompt contestants before they are allowed to join the contest. Leave it blank to disable."
 msgstr "Қатысушылардан конкурсқа қатысуға рұқсат етілгенге дейін сұралатын қосымша код. Өшіру үшін бұл өрісті бос қалдырыңыз."
 
-#: judge/models/contest.py:160 judge/models/problem.py:161
+#: judge/models/contest.py:162 judge/models/problem.py:161
 msgid "personae non gratae"
 msgstr "белгісіз тұлғалар"
 
-#: judge/models/contest.py:161
+#: judge/models/contest.py:163
 msgid "Bans the selected users from joining this contest."
 msgstr "Таңдалған пайдаланушыларға осы байқауға қатысуға тыйым салады."
 
-#: judge/models/contest.py:162
+#: judge/models/contest.py:164
 msgid "contest format"
 msgstr "байқау форматы"
 
-#: judge/models/contest.py:163
+#: judge/models/contest.py:165
 msgid "The contest format module to use."
 msgstr "Қолданылатын байқау форматының модулі."
 
-#: judge/models/contest.py:164
+#: judge/models/contest.py:166
 msgid "contest format configuration"
 msgstr "байқау форматын конфигурациясы"
 
-#: judge/models/contest.py:165
+#: judge/models/contest.py:167
 msgid "A JSON object to serve as the configuration for the chosen contest format module. Leave empty to use None. Exact format depends on the contest format selected."
 msgstr "Таңдалған байқау форматының модулі үшін конфигурация ретінде қызмет ететін JSON нысаны. None қолданбау үшін бос қалдырыңыз. Нақты формат таңдалған байқау форматына байланысты."
 
-#: judge/models/contest.py:168
+#: judge/models/contest.py:170
 msgid "contest problem label script"
 msgstr "байқау есептерінің жазу сценарийі"
 
-#: judge/models/contest.py:169
+#: judge/models/contest.py:171
 msgid "A custom Lua function to generate problem labels. Requires a single function with an integer parameter, the zero-indexed contest problem index, and returns a string, the label."
 msgstr "Есеп белгілерін жасау үшін Lua пайдаланушы функциясы. Бүтін параметрі бар жалғыз функция қажет, нөлдік индексі бар байқау есептерінің индексі және жолды, белгіні қайтарады."
 
-#: judge/models/contest.py:172
+#: judge/models/contest.py:174
 msgid "contest lock"
 msgstr "байқауды бұғаттау"
 
-#: judge/models/contest.py:173
+#: judge/models/contest.py:175
 msgid "Prevent submissions from this contest from being rejudged after this date."
 msgstr "Осы уақыттан кейін осы байқауға қатысуға өтінімдерді қайта қарауға жол бермеңіз."
 
-#: judge/models/contest.py:175
+#: judge/models/contest.py:177
 msgid "precision points"
 msgstr "нақты нүктелер"
 
-#: judge/models/contest.py:177
+#: judge/models/contest.py:179
 msgid "Number of digits to round points to."
 msgstr "Мәні дөңгелектелген сандар саны."
 
-#: judge/models/contest.py:479
+#: judge/models/contest.py:481
 msgid "See private contests"
 msgstr "Жеке байқауды қараңыз"
 
-#: judge/models/contest.py:480
+#: judge/models/contest.py:482
 msgid "Edit own contests"
 msgstr "Өз байқауларыңызды өңдеңіз"
 
-#: judge/models/contest.py:481
+#: judge/models/contest.py:483
 msgid "Edit all contests"
 msgstr "Барлық контестті өңдеу"
 
-#: judge/models/contest.py:482
+#: judge/models/contest.py:484
 msgid "Clone contest"
 msgstr "Клондар байқауы"
 
-#: judge/models/contest.py:483 templates/contest/moss.html:76
+#: judge/models/contest.py:485 templates/contest/moss.html:76
 msgid "MOSS contest"
 msgstr "MOSS контесті"
 
-#: judge/models/contest.py:484
+#: judge/models/contest.py:486
 msgid "Rate contests"
 msgstr "Контесттерді бағалау"
 
-#: judge/models/contest.py:485
+#: judge/models/contest.py:487
 msgid "Contest access codes"
 msgstr "Байқауға кіру кодтары"
 
-#: judge/models/contest.py:486
+#: judge/models/contest.py:488
 msgid "Create private contests"
 msgstr "Жеке байқауды жасаңыз"
 
-#: judge/models/contest.py:487
+#: judge/models/contest.py:489
 msgid "Change contest visibility"
 msgstr "Байқаудың көрінуін өзгерту"
 
-#: judge/models/contest.py:488
+#: judge/models/contest.py:490
 msgid "Edit contest problem label script"
 msgstr "Байқау есептерінің жазу сценарийі өңдеңіз"
 
-#: judge/models/contest.py:489
+#: judge/models/contest.py:491
 msgid "Change lock status of contest"
 msgstr "Байқаудың бұғаттау күйін өзгерту"
 
-#: judge/models/contest.py:491 judge/models/contest.py:593
-#: judge/models/contest.py:633 judge/models/contest.py:656
+#: judge/models/contest.py:493 judge/models/contest.py:595
+#: judge/models/contest.py:635 judge/models/contest.py:658
 #: judge/models/submission.py:88
 msgid "contest"
 msgstr "cайыс"
 
-#: judge/models/contest.py:492
+#: judge/models/contest.py:494
 msgid "contests"
 msgstr "контесттер"
 
-#: judge/models/contest.py:499
+#: judge/models/contest.py:501
 msgid "associated contest"
 msgstr "байланысты контест"
 
-#: judge/models/contest.py:502
+#: judge/models/contest.py:504
 msgid "score"
 msgstr "нәтиже"
 
-#: judge/models/contest.py:503
+#: judge/models/contest.py:505
 msgid "cumulative time"
 msgstr "жиынтық уақыт"
 
-#: judge/models/contest.py:504
+#: judge/models/contest.py:506
 msgid "is disqualified"
 msgstr "дисквалификацияланған"
 
-#: judge/models/contest.py:505
+#: judge/models/contest.py:507
 msgid "Whether this participation is disqualified."
 msgstr "Бұған қатысу дисквалификацияланады ма."
 
-#: judge/models/contest.py:506
+#: judge/models/contest.py:508
 msgid "tie-breaking field"
 msgstr "байланыстарды бөлу үшін өріс"
 
-#: judge/models/contest.py:507
+#: judge/models/contest.py:509
 msgid "virtual participation id"
 msgstr "виртуалды қатысушы идентификаторы"
 
-#: judge/models/contest.py:508
+#: judge/models/contest.py:510
 msgid "0 means non-virtual, otherwise the n-th virtual participation."
 msgstr "0 виртуалды емес, керісінше N-e виртуалды қатысуды білдіреді."
 
-#: judge/models/contest.py:509
+#: judge/models/contest.py:511
 msgid "contest format specific data"
 msgstr "байқау форматы туралы нақты деректер"
 
-#: judge/models/contest.py:577
+#: judge/models/contest.py:579
 #, python-format
 msgid "%(user)s spectating in %(contest)s"
 msgstr "%(user)s %(contest)s нысанында бақылайды"
 
-#: judge/models/contest.py:579
+#: judge/models/contest.py:581
 #, python-format
 msgid "%(user)s in %(contest)s, v%(id)d"
 msgstr "%(user)s %(contest)s, %(id)d"
 
-#: judge/models/contest.py:582
+#: judge/models/contest.py:584
 #, python-format
 msgid "%(user)s in %(contest)s"
 msgstr "%(user)s %(contest)s"
 
-#: judge/models/contest.py:585
+#: judge/models/contest.py:587
 msgid "contest participation"
 msgstr "байқауға қатысу"
 
-#: judge/models/contest.py:586
+#: judge/models/contest.py:588
 msgid "contest participations"
 msgstr "байқауға қатысушылар"
 
-#: judge/models/contest.py:594 judge/models/contest.py:621
+#: judge/models/contest.py:596 judge/models/contest.py:623
 #: judge/models/problem.py:148
 msgid "points"
 msgstr "ұпайлар"
 
-#: judge/models/contest.py:595
+#: judge/models/contest.py:597
 msgid "partial"
 msgstr "ішінара"
 
-#: judge/models/contest.py:596 judge/models/contest.py:622
+#: judge/models/contest.py:598 judge/models/contest.py:624
 msgid "is pretested"
 msgstr "қорғалған"
 
-#: judge/models/contest.py:597 judge/models/interface.py:43
+#: judge/models/contest.py:599 judge/models/interface.py:43
 msgid "order"
 msgstr "реті"
 
-#: judge/models/contest.py:598
+#: judge/models/contest.py:600
 msgid "output prefix length override"
 msgstr "шығыс префиксінің ұзындығын қайта анықтау"
 
-#: judge/models/contest.py:600
+#: judge/models/contest.py:602
 msgid "max submissions"
 msgstr "максималды тапсырмалар"
 
-#: judge/models/contest.py:601
+#: judge/models/contest.py:603
 msgid "Maximum number of submissions for this problem, or leave blank for no limit."
 msgstr "Осы тапсырмаға арналған өтінімдердің максималды саны немесе шектеусіз бос қалдырыңыз."
 
-#: judge/models/contest.py:604
+#: judge/models/contest.py:606
 msgid "Why include a problem you can't submit to?"
 msgstr "Неліктен сіз шеше алмайтын есепті қосу керек?"
 
-#: judge/models/contest.py:609
+#: judge/models/contest.py:611
 msgid "contest problem"
 msgstr "контест есебі"
 
-#: judge/models/contest.py:610
+#: judge/models/contest.py:612
 msgid "contest problems"
 msgstr "контест есептері"
 
-#: judge/models/contest.py:615 judge/models/submission.py:231
+#: judge/models/contest.py:617 judge/models/submission.py:231
 msgid "submission"
 msgstr "тапсырылымдар"
 
-#: judge/models/contest.py:619 judge/models/contest.py:634
+#: judge/models/contest.py:621 judge/models/contest.py:636
 msgid "participation"
 msgstr "қатысу"
 
-#: judge/models/contest.py:623
+#: judge/models/contest.py:625
 msgid "Whether this submission was ran only on pretests."
 msgstr "Бұл жөнелтулер тек алдын ала тесттермен тексерілді ме."
 
-#: judge/models/contest.py:627
+#: judge/models/contest.py:629
 msgid "contest submission"
 msgstr "контест тапсырылымы"
 
-#: judge/models/contest.py:628
+#: judge/models/contest.py:630
 msgid "contest submissions"
 msgstr "сайыс тапсырылымдары"
 
-#: judge/models/contest.py:636
+#: judge/models/contest.py:638
 msgid "rank"
 msgstr "дәреже"
 
-#: judge/models/contest.py:637
+#: judge/models/contest.py:639
 msgid "rating"
 msgstr "рейтинг"
 
-#: judge/models/contest.py:638
+#: judge/models/contest.py:640
 msgid "raw rating"
 msgstr "шикі рейтинг"
 
-#: judge/models/contest.py:639
+#: judge/models/contest.py:641
 msgid "contest performance"
 msgstr "байқауда сөз сөйлеу"
 
-#: judge/models/contest.py:640
+#: judge/models/contest.py:642
 msgid "last rated"
 msgstr "соңғы рейтинг"
 
-#: judge/models/contest.py:644
+#: judge/models/contest.py:646
 msgid "contest rating"
 msgstr "сайыс рейтингі"
 
-#: judge/models/contest.py:645
+#: judge/models/contest.py:647
 msgid "contest ratings"
 msgstr "байқау рейтингі"
 
-#: judge/models/contest.py:664
+#: judge/models/contest.py:666
 msgid "contest moss result"
 msgstr "moss байқау нәтижесі"
 
-#: judge/models/contest.py:665
+#: judge/models/contest.py:667
 msgid "contest moss results"
 msgstr "moss байқау нәтижелері"
 
@@ -1468,7 +1533,7 @@ msgstr "жазбаның тақырыбы"
 msgid "slug"
 msgstr "шырыш"
 
-#: judge/models/interface.py:69 judge/models/problem.py:551
+#: judge/models/interface.py:69 judge/models/problem.py:552
 msgid "public visibility"
 msgstr "көпшілікке көріну"
 
@@ -1519,11 +1584,11 @@ msgstr "есеп санатының атауы"
 
 #: judge/models/problem.py:42
 msgid "problem type"
-msgstr "есеп атауы"
+msgstr "есеп түрі"
 
 #: judge/models/problem.py:43 judge/models/problem.py:133
 msgid "problem types"
-msgstr "есеп атаулары"
+msgstr "есеп түрлері"
 
 #: judge/models/problem.py:47
 msgid "problem group ID"
@@ -1604,7 +1669,7 @@ msgstr "Есеп тізімінде көрсетілгендей есептің 
 
 #: judge/models/problem.py:123
 msgid "problem body"
-msgstr "есеп коды"
+msgstr "есеп мәтіні"
 
 #: judge/models/problem.py:124
 msgid "creators"
@@ -1634,7 +1699,7 @@ msgstr "Есептер тізіміндегі санат бөлімінде кө
 msgid "The time limit for this problem, in seconds. Fractional seconds (e.g. 1.5) are supported."
 msgstr "Осы есепті секундта шешу үшін уақыттың шектеулігі. Секундтың фракцияларына қолдау көрсетіледі (мысалы, 1,5)."
 
-#: judge/models/problem.py:142 judge/models/problem.py:538
+#: judge/models/problem.py:142 judge/models/problem.py:539
 msgid "memory limit"
 msgstr "жадты шектеу"
 
@@ -1750,111 +1815,115 @@ msgstr "is_manually_managed өрісінің өзгеруі"
 msgid "See organization-private problems"
 msgstr "Ұйымдастыру және жеке есептер бөлімін қараңыз"
 
-#: judge/models/problem.py:512
+#: judge/models/problem.py:504
+msgid "Create private problems"
+msgstr "Жеке есеп жасаңыз"
+
+#: judge/models/problem.py:513
 msgid "translated name"
 msgstr "атын аудару"
 
-#: judge/models/problem.py:513
+#: judge/models/problem.py:514
 msgid "translated description"
 msgstr "сипаттамасын аудару"
 
-#: judge/models/problem.py:518
+#: judge/models/problem.py:519
 msgid "problem translation"
 msgstr "есептерді аудару"
 
-#: judge/models/problem.py:519
+#: judge/models/problem.py:520
 msgid "problem translations"
 msgstr "есептердің аударылымдары"
 
-#: judge/models/problem.py:523
+#: judge/models/problem.py:524
 msgid "clarified problem"
 msgstr "нақтыланған есеп"
 
-#: judge/models/problem.py:524
+#: judge/models/problem.py:525
 msgid "clarification body"
 msgstr "түсіндіру жөніндегі орган"
 
-#: judge/models/problem.py:525
+#: judge/models/problem.py:526
 msgid "clarification timestamp"
 msgstr "уақыт белгісін нақтылау"
 
-#: judge/models/problem.py:528
+#: judge/models/problem.py:529
 msgid "problem clarification"
 msgstr "есептерді нақтылау"
 
-#: judge/models/problem.py:529
+#: judge/models/problem.py:530
 msgid "problem clarifications"
 msgstr "есептерді нақтылаулар"
 
-#: judge/models/problem.py:544
+#: judge/models/problem.py:545
 msgid "language-specific resource limit"
 msgstr "белгілі бір тіл үшін ресурстарды шектеу"
 
-#: judge/models/problem.py:545
+#: judge/models/problem.py:546
 msgid "language-specific resource limits"
 msgstr "белгілі бір тіл үшін ресурстарды шектеулер"
 
-#: judge/models/problem.py:549
+#: judge/models/problem.py:550
 msgid "associated problem"
 msgstr "байланысты есеп"
 
-#: judge/models/problem.py:552
+#: judge/models/problem.py:553
 msgid "publish date"
 msgstr "жариялау уақыты"
 
-#: judge/models/problem.py:554
+#: judge/models/problem.py:555
 msgid "editorial content"
 msgstr "редакциялық контент"
 
-#: judge/models/problem.py:577
+#: judge/models/problem.py:578
 msgid "See hidden solutions"
 msgstr "Жасырын шешімдерді қараңыз"
 
-#: judge/models/problem.py:579
+#: judge/models/problem.py:580
 msgid "solution"
 msgstr "шешім"
 
-#: judge/models/problem.py:580
+#: judge/models/problem.py:581
 msgid "solutions"
 msgstr "шешімдер"
 
-#: judge/models/problem.py:585
+#: judge/models/problem.py:586
 msgid "proposed points"
 msgstr "ұсынылатын тармақтар"
 
-#: judge/models/problem.py:586
+#: judge/models/problem.py:587
 msgid "The amount of points the voter thinks this problem deserves."
 msgstr "Дауыс беруші бұл есептерге лайық деп санайтын ұпайлар саны."
 
-#: judge/models/problem.py:592
+#: judge/models/problem.py:593
 msgid "voter"
 msgstr "дауыс беруші"
 
-#: judge/models/problem.py:595
+#: judge/models/problem.py:596
 msgid "vote time"
 msgstr "дауыс беру уақыты"
 
-#: judge/models/problem.py:595
+#: judge/models/problem.py:596
 msgid "The time this vote was cast."
 msgstr "Бұл дауыс берілген уақыт."
 
-#: judge/models/problem.py:597
+#: judge/models/problem.py:598
 msgid "note"
 msgstr "ескерту"
 
-#: judge/models/problem.py:597
+#: judge/models/problem.py:598
 msgid "Justification for problem point value."
 msgstr "Есептік нүктенің мәнін негіздеу."
 
-#: judge/models/problem.py:601
+#: judge/models/problem.py:602
 msgid "problem vote"
 msgstr "есептік дауыс беру"
 
-#: judge/models/problem.py:602
+#: judge/models/problem.py:603
 msgid "problem votes"
 msgstr "есептік дауыс берулер"
 
-#: judge/models/problem.py:605
+#: judge/models/problem.py:606
 #, python-format
 msgid "Points vote by %(voter)s for %(problem)s"
 msgstr "Шешуші %(voter)s %(problem)s үшін дауыс береді"
@@ -2994,40 +3063,40 @@ msgstr "%h:%m"
 msgid "Page %d of Posts"
 msgstr "%d хабарламалар беті"
 
-#: judge/views/comment.py:28
+#: judge/views/comment.py:29
 msgid "Messing around, are we?"
 msgstr "Жетіспейтін, солай емес пе?"
 
-#: judge/views/comment.py:37
+#: judge/views/comment.py:38
 msgid "You must solve at least one problem before you can vote."
 msgstr "Дауыс бермес бұрын кем дегенде бір есепті шешу керек."
 
-#: judge/views/comment.py:51
+#: judge/views/comment.py:52
 msgid "Comment not found."
 msgstr "Пікір табылмады."
 
-#: judge/views/comment.py:54
+#: judge/views/comment.py:55
 msgid "You cannot vote on your own comments."
 msgstr "Өз пікіріңізге дауыс бере алмайсыз."
 
-#: judge/views/comment.py:72
+#: judge/views/comment.py:73
 msgid "You already voted."
 msgstr "Дауыс беріп қойдыңыз."
 
-#: judge/views/comment.py:135 judge/views/organization.py:386
+#: judge/views/comment.py:142 judge/views/organization.py:386
 msgid "Edited from site"
 msgstr "Сайттан өңделген"
 
-#: judge/views/comment.py:160
+#: judge/views/comment.py:167
 msgid "Editing comment"
 msgstr "Пікірді өзгерту"
 
-#: judge/views/contests.py:58 judge/views/contests.py:248
-#: judge/views/contests.py:251 judge/views/contests.py:458
+#: judge/views/contests.py:58 judge/views/contests.py:255
+#: judge/views/contests.py:258 judge/views/contests.py:473
 msgid "No such contest"
 msgstr "Мұндай контест жоқ"
 
-#: judge/views/contests.py:59 judge/views/contests.py:249
+#: judge/views/contests.py:59 judge/views/contests.py:256
 #, python-format
 msgid "Could not find a contest with the key \"%s\"."
 msgstr "\"%s\" кілті бар контест табылмады."
@@ -3036,111 +3105,111 @@ msgstr "\"%s\" кілті бар контест табылмады."
 msgid "Contests"
 msgstr "Сайыстар"
 
-#: judge/views/contests.py:252
+#: judge/views/contests.py:259
 msgid "Could not find such contest."
 msgstr "Мұндай сайыс табылмады."
 
-#: judge/views/contests.py:255
+#: judge/views/contests.py:262
 #, python-format
 msgid "Access to contest \"%s\" denied"
 msgstr "\"%s\" сайысына рұқсат жоқ"
 
-#: judge/views/contests.py:302
+#: judge/views/contests.py:317
 msgid "Clone Contest"
 msgstr "Сайысты Клондау"
 
-#: judge/views/contests.py:336
+#: judge/views/contests.py:351
 #, python-format
 msgid "Cloned contest from %s"
 msgstr "%s сайысынан клондалды"
 
-#: judge/views/contests.py:372
+#: judge/views/contests.py:387
 msgid "Contest not ongoing"
 msgstr "Байқау өткізілмейді"
 
-#: judge/views/contests.py:373
+#: judge/views/contests.py:388
 #, python-format
 msgid "\"%s\" is not currently ongoing."
 msgstr "\"%s\" қазіргі уақытта жүргізілмейді."
 
-#: judge/views/contests.py:378
+#: judge/views/contests.py:393
 msgid "Banned from joining"
 msgstr "Қосылуға тыйым салынады"
 
-#: judge/views/contests.py:379
+#: judge/views/contests.py:394
 msgid "You have been declared persona non grata for this contest. You are permanently barred from joining this contest."
 msgstr "Сіз бұл байқауда non grata тұлғасы деп жарияландыңыз. Сізге бұл байқауға қатысуға біржола тыйым салынады."
 
-#: judge/views/contests.py:409
+#: judge/views/contests.py:424
 msgid "Cannot enter"
 msgstr "Кіру мүмкін емес"
 
-#: judge/views/contests.py:410
+#: judge/views/contests.py:425
 msgid "You are not able to join this contest."
 msgstr "Сіз бұл байқауға қатыса алмайсыз."
 
-#: judge/views/contests.py:448
+#: judge/views/contests.py:463
 #, python-format
 msgid "Enter access code for \"%s\""
 msgstr "\"%s\" кіру кодын енгізіңіз"
 
-#: judge/views/contests.py:459
+#: judge/views/contests.py:474
 #, python-format
 msgid "You are not in contest \"%s\"."
 msgstr "Сіз жарысқа қатыспайсыз \"%s\"."
 
-#: judge/views/contests.py:517
+#: judge/views/contests.py:532
 #, python-format
 msgid "Contests in %(month)s"
 msgstr "%(month)s байқаулар"
 
-#: judge/views/contests.py:517
+#: judge/views/contests.py:532
 msgid "F Y"
 msgstr "F Y"
 
-#: judge/views/contests.py:575
+#: judge/views/contests.py:590
 #, python-format
 msgid "%s Statistics"
 msgstr "%s Статистика"
 
-#: judge/views/contests.py:750
+#: judge/views/contests.py:765
 #, python-format
 msgid "%s Rankings"
 msgstr "%s Рейтингтер"
 
-#: judge/views/contests.py:758
+#: judge/views/contests.py:773
 msgid "???"
 msgstr "???"
 
-#: judge/views/contests.py:774
+#: judge/views/contests.py:789
 #, python-format
 msgid "Your participation in %(contest)s"
 msgstr "Сіздің %(contest)s қатысуыңыз"
 
-#: judge/views/contests.py:775
+#: judge/views/contests.py:790
 #, python-format
 msgid "%(user)s's participation in %(contest)s"
 msgstr "%(user)s %(contest)s қатысуыңыз"
 
-#: judge/views/contests.py:784
+#: judge/views/contests.py:799
 msgid "Live"
 msgstr "Тікелей эфир"
 
-#: judge/views/contests.py:796 templates/contest/contest-tabs.html:13
+#: judge/views/contests.py:811 templates/contest/contest-tabs.html:13
 msgid "Participation"
 msgstr "Қатысу"
 
-#: judge/views/contests.py:840
+#: judge/views/contests.py:855
 #, python-format
 msgid "%s MOSS Results"
 msgstr "%s MOSS Нәтиже"
 
-#: judge/views/contests.py:867
+#: judge/views/contests.py:882
 #, python-format
 msgid "Running MOSS for %s..."
 msgstr "Жүгіретін MOSS үшін %s..."
 
-#: judge/views/contests.py:890
+#: judge/views/contests.py:905
 #, python-format
 msgid "Contest tag: %s"
 msgstr "Контест белгісі: %s"
@@ -3577,52 +3646,56 @@ msgstr "{user}'лар тапсырылымдар {contest} дағы {problem} ү
 msgid "{user}'s submissions for problem {number} in {contest}"
 msgstr "{user}'лар {contest} да {number} есептер үшін тапсырылымдар"
 
-#: judge/views/ticket.py:33 judge/views/ticket.py:39
+#: judge/views/ticket.py:28
+msgid "Please click on \"Preview\" before creating your ticket."
+msgstr ""
+
+#: judge/views/ticket.py:29 templates/organization/new.html:10
+msgid "Create"
+msgstr "Жасау"
+
+#: judge/views/ticket.py:35 judge/views/ticket.py:41
 msgid "Ticket title"
 msgstr "Билет атауы"
 
-#: judge/views/ticket.py:40
-msgid "Issue description"
-msgstr "Мәселенің сипаттамасы"
-
-#: judge/views/ticket.py:48
+#: judge/views/ticket.py:49
 msgid "You must solve at least one problem before you can create a ticket."
 msgstr "Өтініш жасамас бұрын кем дегенде бір есепті шешу керек."
 
-#: judge/views/ticket.py:91 judge/views/ticket.py:94
+#: judge/views/ticket.py:92 judge/views/ticket.py:95
 #, python-format
 msgid "New ticket for %s"
 msgstr "%s үшін жаңа билет"
 
-#: judge/views/ticket.py:148
+#: judge/views/ticket.py:149
 #, python-format
 msgid "%(title)s - Ticket %(id)d"
 msgstr "%(title)s - Билет %(id)d"
 
-#: judge/views/ticket.py:255
+#: judge/views/ticket.py:256
 #, python-format
 msgid "Tickets - Page %(number)d of %(total)d"
 msgstr "Билеттер - Бет %(number)d %(total)d"
 
-#: judge/views/ticket.py:307
+#: judge/views/ticket.py:308
 #, python-format
 msgid "New Ticket: %s"
 msgstr "Жаңа билет: %s"
 
-#: judge/views/ticket.py:308
+#: judge/views/ticket.py:309
 #, python-format
 msgid "#%(id)d, assigned to: %(users)s"
 msgstr "#%(id)d, тағайындалған: %(users)s"
 
-#: judge/views/ticket.py:310
+#: judge/views/ticket.py:311
 msgid ", "
 msgstr ", "
 
-#: judge/views/ticket.py:310
+#: judge/views/ticket.py:311
 msgid "no one"
 msgstr "ешкім"
 
-#: judge/views/ticket.py:330
+#: judge/views/ticket.py:331
 #, python-format
 msgid "New Ticket Message For: %s"
 msgstr "Тіркелу туралы жаңа билет: %s"
@@ -3685,7 +3758,7 @@ msgstr "M j, Y, G:i"
 msgid "Preparing your data..."
 msgstr "Сіздің деректеріңізді дайындаймыз..."
 
-#: judge/views/user.py:304 templates/user/edit-profile.html:349
+#: judge/views/user.py:304 templates/user/edit-profile.html:350
 msgid "Download your data"
 msgstr "Деректерді жүктеп алыңыз"
 
@@ -3727,7 +3800,7 @@ msgstr "Сіз жүйеден сәтті шықтыңыз."
 msgid "You have sent too many password reset requests. Please try again later."
 msgstr "Сіз парольді қалпына келтіру туралы тым көп сұраулар жібердіңіз. Кейінірек қайталап көріңіз."
 
-#: judge/views/user.py:521 templates/user/edit-profile.html:343
+#: judge/views/user.py:521 templates/user/edit-profile.html:344
 msgid "Change your email"
 msgstr ""
 
@@ -3778,12 +3851,138 @@ msgstr ""
 msgid "The email attached to your account has been changed to %s."
 msgstr ""
 
+#: martor/templates/martor/editor.html:5
+msgid "Editor"
+msgstr ""
+
+#: martor/templates/martor/editor.html:6
+msgid "Preview"
+msgstr ""
+
+#: martor/templates/martor/editor.html:11
+msgid "Uploading... please wait..."
+msgstr ""
+
+#: martor/templates/martor/editor.html:18
+msgid "Nothing to preview"
+msgstr ""
+
+#: martor/templates/martor/guide.html:4
+msgid "Markdown Guide"
+msgstr ""
+
+#: martor/templates/martor/guide.html:5
+#, python-format
+msgid "This site is powered by Markdown. For full documentation, <a href=\"%(doc_url)s\" target=\"_blank\">click here</a>."
+msgstr ""
+
+#: martor/templates/martor/guide.html:9 martor/templates/martor/toolbar.html:26
+msgid "Code"
+msgstr ""
+
+#: martor/templates/martor/guide.html:10
+msgid "Or"
+msgstr ""
+
+#: martor/templates/martor/guide.html:13
+msgid "... to Get"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:4
+msgid "Bold"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:7
+msgid "Italic"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:10
+msgid "Horizontal Line"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:13
+#: martor/templates/martor/toolbar.html:16
+#: martor/templates/martor/toolbar.html:17
+#: martor/templates/martor/toolbar.html:18
+msgid "Heading"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:22
+msgid "Pre or Code"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:25
+msgid "Pre"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:30
+msgid "Math"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:33
+msgid "Inline Math"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:34
+msgid "Display Math"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:35
+msgid "LaTeX"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:39
+msgid "Quote"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:42
+msgid "Unordered List"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:45
+msgid "Ordered List"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:49
+msgid "URL/Link"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:52
+msgid "Insert Image Link"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:56
+#: martor/templates/martor/toolbar.html:58
+msgid "Upload an Image"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:61
+msgid "Direct Mention a User"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:65
+msgid "Full Screen"
+msgstr ""
+
+#: martor/templates/martor/toolbar.html:68
+msgid "Markdown Guide (Help)"
+msgstr ""
+
+#: martor/views.py:48
+#, python-format
+msgid "No users registered as `%(username)s` or user is unactived."
+msgstr ""
+
+#: martor/views.py:54
+msgid "Validation Failed for field `username`"
+msgstr ""
+
 #: templates/admin/judge/contest/change_form.html:9
 msgid "Are you sure you want to rejudge ALL the submissions?"
 msgstr "Сіз ұсынылған барлық тапсырылымдарды күткіңіз келетініне сенімдісіз бе?"
 
-#: templates/admin/judge/contest/change_form.html:17
-#: templates/admin/judge/contest/change_form.html:20
+#: templates/admin/judge/contest/change_form.html:21
+#: templates/admin/judge/contest/change_form.html:24
 msgid "Rate"
 msgstr "Бағалау"
 
@@ -3803,13 +4002,13 @@ msgstr "Тоқтату"
 
 #: templates/admin/judge/judge/change_form.html:27
 #: templates/admin/judge/judge/change_form.html:30
-#: templates/user/edit-profile.html:377 templates/user/edit-profile.html:380
+#: templates/user/edit-profile.html:378 templates/user/edit-profile.html:381
 msgid "Disable"
 msgstr "Өшіру"
 
 #: templates/admin/judge/judge/change_form.html:33
 #: templates/admin/judge/judge/change_form.html:36
-#: templates/user/edit-profile.html:408
+#: templates/user/edit-profile.html:409
 msgid "Enable"
 msgstr "Қосылды"
 
@@ -3847,23 +4046,23 @@ msgstr "Шығу"
 msgid "Log in"
 msgstr "Кіру"
 
-#: templates/base.html:240 templates/registration/registration_form.html:177
+#: templates/base.html:241 templates/registration/registration_form.html:177
 msgid "or"
 msgstr "немесе"
 
-#: templates/base.html:241
+#: templates/base.html:242
 msgid "Sign up"
 msgstr "Тіркелу"
 
-#: templates/base.html:253
+#: templates/base.html:255
 msgid "spectating"
 msgstr "бақылаушы"
 
-#: templates/base.html:266
+#: templates/base.html:268
 msgid "This site works best with JavaScript enabled."
 msgstr "Бұл сайт JavaScript қосылған кезде жақсы жұмыс істейді."
 
-#: templates/base.html:293
+#: templates/base.html:295
 msgid "proudly powered by **DMOJ**"
 msgstr "**DMOJ** базасында жақсы жұмыс жасайды"
 
@@ -3872,7 +4071,7 @@ msgstr "**DMOJ** базасында жақсы жұмыс жасайды"
 #: templates/contest/tag-title.html:9 templates/flatpages/admin_link.html:3
 #: templates/license.html:10 templates/problem/data.html:434
 #: templates/problem/data.html:440 templates/problem/editorial.html:14
-#: templates/user/edit-profile.html:382
+#: templates/user/edit-profile.html:383
 msgid "Edit"
 msgstr "Түзету"
 
@@ -3949,11 +4148,6 @@ msgstr "Менің ашық билеттерім"
 msgid "New tickets"
 msgstr "Жаңа билеттер"
 
-#: templates/comments/edit-ajax.html:16 templates/comments/list.html:163
-#: templates/ticket/ticket.html:181
-msgid "Post!"
-msgstr "Пост!"
-
 #: templates/comments/list.html:2 templates/user/prepare-data.html:98
 msgid "Comments"
 msgstr "Пікірлер"
@@ -3985,7 +4179,7 @@ msgstr "{time} түсініктемеде"
 msgid "edit %(edits)s"
 msgstr "өңдеу %(edits)s"
 
-#: templates/comments/list.html:73 templates/comments/media-js.html:77
+#: templates/comments/list.html:73 templates/comments/media-js.html:92
 msgid "edited"
 msgstr "өңделген"
 
@@ -4021,44 +4215,51 @@ msgstr "Жаңа пікірлер"
 msgid "Invalid comment body."
 msgstr "Жарамсыз түсініктеме мәтіні."
 
-#: templates/comments/media-js.html:12
+#: templates/comments/media-js.html:33
 msgid "Replying to comment"
 msgstr "Түсініктемеге жауап беру"
 
-#: templates/comments/media-js.html:72
+#: templates/comments/media-js.html:87
 #, python-brace-format
 msgid "edit {edits}"
 msgstr "өңдеу {edits}"
 
-#: templates/comments/media-js.html:75
+#: templates/comments/media-js.html:90
 msgid "original"
 msgstr "түпнұсқа"
 
-#: templates/comments/media-js.html:101
+#: templates/comments/media-js.html:116
 #, python-brace-format
 msgid "Could not vote: {error}"
 msgstr "Дауыс беру мүмкін болмады: {error}"
 
-#: templates/comments/media-js.html:137
+#: templates/comments/media-js.html:152
 msgid "Are you sure you want to hide this comment?"
 msgstr "Сіз бұл пікірді жасырғыңыз келетініне сенімдісіз бе?"
 
-#: templates/comments/media-js.html:145
+#: templates/comments/media-js.html:160
 msgid "Could not hide comment."
 msgstr "Түсініктемені жасыра алмады."
 
-#: templates/comments/media-js.html:180
+#: templates/comments/media-js.html:184
 msgid "updated"
 msgstr "жаңартулар"
 
-#: templates/comments/media-js.html:182
+#: templates/comments/media-js.html:186
 msgid "Failed to update comment body."
 msgstr "Түсініктеме мәтінін жаңарту мүмкін болмады."
 
-#: templates/comments/media-js.html:185
+#: templates/comments/media-js.html:189
 #, python-brace-format
 msgid "Could not edit comment: {error}"
 msgstr "Түсініктемені өңдеу мүмкін болмады: {error}"
+
+#: templates/comments/media-js.html:221
+msgid "Looks like you're trying to post some source code!\n\n"
+"The comment section is not for posting source code.\n"
+"If you want to submit your solution, please use the \"Submit solution\" button.\n\n"
+"Are you sure you want to post this?"
+msgstr ""
 
 #: templates/comments/votes.html:5
 msgid "Voter"
@@ -4072,15 +4273,15 @@ msgstr "Нәтиже"
 msgid "No votes"
 msgstr "Дауыстар жоқ"
 
-#: templates/common-content.html:32 templates/user/edit-profile.html:214
+#: templates/common-content.html:32 templates/user/edit-profile.html:215
 msgid "Click to copy"
 msgstr "Көшіру үшін басыңыз"
 
-#: templates/common-content.html:33 templates/user/edit-profile.html:215
+#: templates/common-content.html:33 templates/user/edit-profile.html:216
 msgid "Copy"
 msgstr "Көшіру"
 
-#: templates/common-content.html:44 templates/user/edit-profile.html:226
+#: templates/common-content.html:44 templates/user/edit-profile.html:227
 msgid "Copied!"
 msgstr "Көшірілді!"
 
@@ -4186,7 +4387,7 @@ msgstr "Клон"
 msgid "Leave contest"
 msgstr "Байқаудан шығу"
 
-#: templates/contest/contest-tabs.html:45 templates/contest/list.html:294
+#: templates/contest/contest-tabs.html:45 templates/contest/list.html:302
 msgid "Virtual join"
 msgstr "Виртуалды байланыс"
 
@@ -4375,7 +4576,7 @@ msgid "AC Rate"
 msgstr "AC рейтингісі"
 
 #: templates/contest/contest.html:198 templates/contest/list.html:152
-#: templates/contest/list.html:194 templates/contest/list.html:271
+#: templates/contest/list.html:194 templates/contest/list.html:279
 #: templates/problem/list.html:194 templates/problem/list.html:226
 msgid "Users"
 msgstr "Қолданушылар"
@@ -4428,7 +4629,7 @@ msgid "Active contests"
 msgstr "Контесттерді бағалау"
 
 #: templates/contest/list.html:151 templates/contest/list.html:193
-#: templates/contest/list.html:231 templates/contest/list.html:268
+#: templates/contest/list.html:231 templates/contest/list.html:276
 msgid "Contest"
 msgstr "Байқау"
 
@@ -4451,9 +4652,17 @@ msgstr "%(countdown)s басталды"
 msgid "There are no scheduled contests at this time."
 msgstr "Қазіргі уақытта жоспарланған байқаулар өткізілмейді."
 
-#: templates/contest/list.html:260
+#: templates/contest/list.html:259
 msgid "Past contests"
 msgstr "Өткен байқаулар"
+
+#: templates/contest/list.html:266
+msgid "Search contests..."
+msgstr ""
+
+#: templates/contest/list.html:313
+msgid "There are no past contests."
+msgstr ""
 
 #: templates/contest/media-js.html:4
 msgid "Are you sure you want to leave?"
@@ -4712,10 +4921,6 @@ msgstr "Аты"
 msgid "Members"
 msgstr "Мүшелер"
 
-#: templates/organization/new.html:10 templates/ticket/new.html:20
-msgid "Create"
-msgstr "Жасау"
-
 #: templates/organization/requests/detail.html:13
 msgid "User:"
 msgstr "Қолданушы:"
@@ -4786,10 +4991,6 @@ msgstr "Шығу"
 #: templates/organization/users.html:29
 msgid "Are you sure you want to kick this user?"
 msgstr "Сіз бұл пайдаланушыны шығарғыңыз келетініне сенімдісіз бе?"
-
-#: templates/pagedown.html:10
-msgid "Update preview"
-msgstr "Жаңартуды алдын ала қарау"
 
 #: templates/problem/clone.html:37
 msgid "Enter a new code for the cloned problem:"
@@ -5475,7 +5676,7 @@ msgid "Affiliated organizations"
 msgstr "Еншілес ұйымдар"
 
 #: templates/registration/registration_form.html:195
-#: templates/user/edit-profile.html:321
+#: templates/user/edit-profile.html:322
 msgid "Notify me about upcoming contests"
 msgstr "Алдағы байқаулар туралы маған хабарлаңыз"
 
@@ -5525,17 +5726,17 @@ msgid "Enable Two Factor Authentication"
 msgstr "Екі факторлы анықтауды қосу"
 
 #: templates/registration/totp_enable.html:98
-#: templates/user/edit-profile.html:396
+#: templates/user/edit-profile.html:397
 msgid "Below is a list of one-time use scratch codes."
 msgstr "Төменде бір реттік сызат кодтарының тізімі берілген."
 
 #: templates/registration/totp_enable.html:99
-#: templates/user/edit-profile.html:397
+#: templates/user/edit-profile.html:398
 msgid "These codes can only be used once and are for emergency use."
 msgstr "Бұл кодтарды тек бір рет қолдануға болады және төтенше жағдайда пайдалануға арналған."
 
 #: templates/registration/totp_enable.html:100
-#: templates/user/edit-profile.html:398
+#: templates/user/edit-profile.html:399
 msgid "You can use these codes to login to your account or disable two-factor authentication."
 msgstr "Сіз бұл кодтарды есептік жазбаңызға кіру үшін пайдалана аласыз немесе екі факторлы аутентификацияны өшіре аласыз."
 
@@ -5544,7 +5745,7 @@ msgid "If you ever need more scratch codes, you can regenerate them on the edit 
 msgstr "Егер сізге қосымша сызат кодтары қажет болса, оларды Профильді өңдеу қойындысынан қалпына келтіруге болады."
 
 #: templates/registration/totp_enable.html:102
-#: templates/user/edit-profile.html:400
+#: templates/user/edit-profile.html:401
 msgid "Please write these down and keep them in a secure location."
 msgstr "Мұны жазып, қауіпсіз жерде сақтаңыз."
 
@@ -5562,12 +5763,12 @@ msgid "If you lose your authentication device and are unable to use your scratch
 msgstr "Егер сіз аутентификация құрылғысын жоғалтсаңыз және сызат кодтарын пайдалана алмасаңыз, әкімшілерік %(site_name)s есептік жазбаңызды қалпына келтіре алмайды. Сызат кодтарын сақтаңыз!"
 
 #: templates/registration/two_factor_auth.html:33
-#: templates/user/edit-profile.html:159
+#: templates/user/edit-profile.html:160
 msgid "WebAuthn is not supported by your browser."
 msgstr "WebAuthn сіздің браузеріңізде көрсетпейді."
 
 #: templates/registration/two_factor_auth.html:54
-#: templates/user/edit-profile.html:183
+#: templates/user/edit-profile.html:184
 msgid "Failed to contact server."
 msgstr "Сервермен байланысу мүмкін болмады."
 
@@ -5930,144 +6131,144 @@ msgstr "Дәреже"
 msgid "Search by handle..."
 msgstr "Дескриптор бойынша іздеу..."
 
-#: templates/user/edit-profile.html:102
+#: templates/user/edit-profile.html:103
 msgid "The administrators for this site require all the staff to have Two-factor Authentication enabled, so it may not be disabled at this time."
 msgstr "Бұл сайттың әкімшілері барлық қызметкерлерден екі-факторлы аутентификацияны қосуды талап етеді, сондықтан оны қазір өшіруге болады."
 
-#: templates/user/edit-profile.html:107
+#: templates/user/edit-profile.html:108
 msgid "Are you sure you want to generate or regenerate your API token?"
 msgstr "Сіз өзіңіздің API таңбалауышыңызды жасағыңыз немесе қалпына келтіргіңіз келетініне сенімдісіз бе?"
 
-#: templates/user/edit-profile.html:108
+#: templates/user/edit-profile.html:109
 msgid "This will invalidate any previous API tokens."
 msgstr "Бұл барлық алдыңғы API таңбалауыштарының күшін жояды."
 
-#: templates/user/edit-profile.html:109
+#: templates/user/edit-profile.html:110
 msgid "It also allows access to your account without Two-factor Authentication."
 msgstr "Бұл сіздің есептік жазбаңызға екі факторлы аутентификациясыз кіруге мүмкіндік береді."
 
-#: templates/user/edit-profile.html:110
+#: templates/user/edit-profile.html:111
 msgid "You will not be able to view your API token after you leave this page!"
 msgstr "Осы беттен шыққаннан кейін API таңбалауышын көре алмайсыз!"
 
-#: templates/user/edit-profile.html:111 templates/user/edit-profile.html:205
+#: templates/user/edit-profile.html:112 templates/user/edit-profile.html:206
 msgid "Generating..."
 msgstr "Генерациялау..."
 
-#: templates/user/edit-profile.html:125 templates/user/edit-profile.html:360
+#: templates/user/edit-profile.html:126 templates/user/edit-profile.html:361
 msgid "Remove"
 msgstr "Жою"
 
-#: templates/user/edit-profile.html:135
+#: templates/user/edit-profile.html:136
 msgid "Are you sure you want to remove your API token?"
 msgstr "API таңбалауышыны жойғыңыз келетініне сенімдісіз бе?"
 
-#: templates/user/edit-profile.html:142 templates/user/edit-profile.html:364
-#: templates/user/edit-profile.html:392
+#: templates/user/edit-profile.html:143 templates/user/edit-profile.html:365
+#: templates/user/edit-profile.html:393
 msgid "Generate"
 msgstr "Генерация"
 
-#: templates/user/edit-profile.html:188
+#: templates/user/edit-profile.html:189
 msgid "Are you sure you want to delete this security key?"
 msgstr "Сіз бұл қауіпсіздік кілтін жойғыңыз келетініне сенімдісіз бе?"
 
-#: templates/user/edit-profile.html:202
+#: templates/user/edit-profile.html:203
 msgid "Are you sure you want to generate or regenerate a new set of scratch codes?"
 msgstr "Сіз жаңа сызат кодтарының жиынтығын жасағыңыз немесе қалпына келтіргіңіз келетініне сенімдісіз бе?"
 
-#: templates/user/edit-profile.html:203
+#: templates/user/edit-profile.html:204
 msgid "This will invalidate any previous scratch codes you have."
 msgstr "Бұл сізде бар барлық алдыңғы сызат кодтарының күшін жояды."
 
-#: templates/user/edit-profile.html:204 templates/user/edit-profile.html:401
+#: templates/user/edit-profile.html:205 templates/user/edit-profile.html:402
 msgid "You will not be able to view your scratch codes after you leave this page!"
 msgstr "Осы беттен шыққаннан кейін сызат кодтарын көре алмайсыз!"
 
-#: templates/user/edit-profile.html:273
+#: templates/user/edit-profile.html:274
 msgid "Self-description:"
 msgstr "Өзін-өзі сипаттау:"
 
-#: templates/user/edit-profile.html:280
+#: templates/user/edit-profile.html:281
 msgid "Select your closest major city"
 msgstr "Сізге жақын ірі қаланы таңдаңыз"
 
-#: templates/user/edit-profile.html:281
+#: templates/user/edit-profile.html:282
 msgid "Time zone:"
 msgstr "Уақыт белдеуі:"
 
-#: templates/user/edit-profile.html:285
+#: templates/user/edit-profile.html:286
 msgid "Language:"
 msgstr "Тілдер:"
 
-#: templates/user/edit-profile.html:289
+#: templates/user/edit-profile.html:290
 msgid "Site theme:"
 msgstr "Сайт тақырыбы:"
 
-#: templates/user/edit-profile.html:293
+#: templates/user/edit-profile.html:294
 msgid "Editor theme:"
 msgstr "Редактордың тақырыбы:"
 
-#: templates/user/edit-profile.html:298
+#: templates/user/edit-profile.html:299
 msgid "Math engine:"
 msgstr "Математикалық қозғалтқыш:"
 
-#: templates/user/edit-profile.html:307
+#: templates/user/edit-profile.html:308
 msgid "Affiliated organizations:"
 msgstr "Еншілес ұйымдар:"
 
-#: templates/user/edit-profile.html:333
+#: templates/user/edit-profile.html:334
 msgid "Change your avatar"
 msgstr "Аваңызды өзгертіңіз"
 
-#: templates/user/edit-profile.html:338
+#: templates/user/edit-profile.html:339
 msgid "Change your password"
 msgstr "Құпия сөзді өзгерту"
 
-#: templates/user/edit-profile.html:355
+#: templates/user/edit-profile.html:356
 msgid "API token:"
 msgstr "API белгі:"
 
-#: templates/user/edit-profile.html:361 templates/user/edit-profile.html:389
+#: templates/user/edit-profile.html:362 templates/user/edit-profile.html:390
 msgid "Hidden"
 msgstr "Жасырын"
 
-#: templates/user/edit-profile.html:374
+#: templates/user/edit-profile.html:375
 msgid "Two-factor authentication is enabled:"
 msgstr "Екі-факторлы авторизация қосылған:"
 
-#: templates/user/edit-profile.html:385
+#: templates/user/edit-profile.html:386
 msgid "Scratch codes:"
 msgstr "Скретч-коды:"
 
-#: templates/user/edit-profile.html:399
+#: templates/user/edit-profile.html:400
 msgid "If you ever need more scratch codes, you can regenerate them here."
 msgstr "Егер сізге қосымша сызат кодтары қажет болса, оларды осы жерден қалпына келтіруге болады."
 
-#: templates/user/edit-profile.html:407
+#: templates/user/edit-profile.html:408
 msgid "Two-factor Authentication is disabled:"
 msgstr "Екі факторлы аутентификация өшірілген:"
 
-#: templates/user/edit-profile.html:415
+#: templates/user/edit-profile.html:416
 msgid "Security keys:"
 msgstr "Қауіпсіздік кілттері:"
 
-#: templates/user/edit-profile.html:425
+#: templates/user/edit-profile.html:426
 msgid "Delete"
 msgstr "Жою"
 
-#: templates/user/edit-profile.html:432
+#: templates/user/edit-profile.html:433
 msgid "Enter a name for this key"
 msgstr "Осы кілттің атын енгізіңіз"
 
-#: templates/user/edit-profile.html:433
+#: templates/user/edit-profile.html:434
 msgid "Add"
 msgstr "Add"
 
-#: templates/user/edit-profile.html:441
+#: templates/user/edit-profile.html:442
 msgid "User-script:"
 msgstr "Пайдаланушы скрипі:"
 
-#: templates/user/edit-profile.html:445
+#: templates/user/edit-profile.html:446
 msgid "Update profile"
 msgstr "Профильді жаңарту"
 
