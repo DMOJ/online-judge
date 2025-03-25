@@ -59,7 +59,7 @@ def general_info(request):
     path = request.get_full_path()
     return {
         'nav_tab': FixedSimpleLazyObject(partial(__nav_tab, request.path)),
-        'nav_bar': NavigationBar.objects.all(),
+        'nav_bar': NavigationBar.for_user(request.user),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path,
         'REGISTRATION_OPEN': settings.REGISTRATION_OPEN,
         'perms': PermWrapper(request.user),
