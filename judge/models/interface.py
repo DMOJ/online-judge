@@ -1,5 +1,6 @@
 import re
 
+from django.contrib.auth.models import Permission
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
@@ -47,6 +48,8 @@ class NavigationBar(MPTTModel):
     regex = models.TextField(verbose_name=_('highlight regex'), validators=[validate_regex])
     parent = TreeForeignKey('self', verbose_name=_('parent item'), null=True, blank=True,
                             related_name='children', on_delete=models.CASCADE)
+    permission = models.ForeignKey(Permission, blank=True, null=True, verbose_name=_('permission'),
+                                   on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.label
@@ -60,6 +63,13 @@ class NavigationBar(MPTTModel):
         else:
             pattern = cache[self.regex] = re.compile(self.regex, re.VERBOSE)
             return pattern
+
+    @classmethod
+    def for_user(cls, user):
+        all_navbar_items = cls.objects.all()
+        return [item for item in all_navbar_items
+                if item.permission is None or
+                user.has_perm(f'{item.permission.content_type.app_label}.{item.permission.codename}')]
 
 
 class BlogPost(models.Model):
