@@ -27,7 +27,7 @@ pyotp
 qrcode[pil]
 jsonfield @ git+https://github.com/DMOJ/jsonfield.git
 pymoss
-packaging<22
+packaging
 celery
 ansi2html @ git+https://github.com/DMOJ/ansi2html.git
 sqlparse
