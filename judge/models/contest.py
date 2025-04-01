@@ -1,5 +1,3 @@
-from math import inf
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
@@ -304,7 +302,7 @@ class Contest(models.Model):
         elif self.rating_ceiling:
             return self.rating_ceiling + settings.DMOJ_CONTEST_PERF_CEILING_INCREMENT
         else:
-            return inf
+            return None
 
     @cached_property
     def ended(self):
