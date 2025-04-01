@@ -1,9 +1,9 @@
 import base64
 import binascii
+import datetime
 import itertools
 import json
 import os
-from datetime import datetime
 from operator import attrgetter, itemgetter
 
 from django.conf import settings
@@ -156,7 +156,7 @@ class CustomPasswordChangeView(PasswordChangeView):
         return super().form_valid(form)
 
 
-EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
+EPOCH = datetime.datetime(1970, 1, 1, tzinfo=datetime.timezone.utc)
 
 
 class UserAboutPage(UserPage):
