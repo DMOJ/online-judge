@@ -290,6 +290,7 @@ class APIContestDetail(APIDetailView):
             'has_rating': contest.ratings.exists(),
             'rating_floor': contest.rating_floor,
             'rating_ceiling': contest.rating_ceiling,
+            'performance_ceiling': contest.performance_ceiling,
             'hidden_scoreboard': contest.scoreboard_visibility in (contest.SCOREBOARD_AFTER_CONTEST,
                                                                    contest.SCOREBOARD_AFTER_PARTICIPATION,
                                                                    contest.SCOREBOARD_HIDDEN),

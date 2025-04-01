@@ -82,7 +82,9 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p, perf_ceil
     new_p = [0.] * n
     new_mean = [0.] * n
 
-    updated_bounds = [VALID_RANGE[0], min(VALID_RANGE[1], perf_ceiling)]
+    updated_bounds = VALID_RANGE[:]
+    if perf_ceiling is not None:
+        updated_bounds[1] = min(updated_bounds[1], perf_ceiling)
 
     # Note: pre-multiply delta by TANH_C to improve efficiency.
     delta = [TANH_C * sqrt(get_var(t) + VAR_PER_CONTEST + BETA2) for t in times_ranked]
