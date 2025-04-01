@@ -77,17 +77,19 @@ def get_var(times_ranked, cache=[VAR_INIT]):
     return cache[times_ranked]
 
 
-def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
+def recalculate_ratings(ranking, old_mean, times_ranked, historical_p, perf_ceiling):
     n = len(ranking)
     new_p = [0.] * n
     new_mean = [0.] * n
+
+    updated_bounds = [VALID_RANGE[0], min(VALID_RANGE[1], perf_ceiling)]
 
     # Note: pre-multiply delta by TANH_C to improve efficiency.
     delta = [TANH_C * sqrt(get_var(t) + VAR_PER_CONTEST + BETA2) for t in times_ranked]
     p_tanh_terms = [(m, d, 1) for m, d in zip(old_mean, delta)]
 
     # Calculate performance at index i.
-    def solve_idx(i, bounds=VALID_RANGE):
+    def solve_idx(i, bounds):
         r = ranking[i]
         y_tg = 0
         for d, s in zip(delta, ranking):
@@ -111,8 +113,8 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
         new_mean = list(old_mean)
     else:
         # Calculate performance.
-        solve_idx(0)
-        solve_idx(n - 1)
+        solve_idx(0, updated_bounds)
+        solve_idx(n - 1, updated_bounds)
         divconq(0, n - 1)
 
         # Calculate mean.
@@ -131,7 +133,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p):
                 w_sum += w / BETA2
             w0 = 1. / get_var(times_ranked[i] + 1) - w_sum
             p0 = eval_tanhs(tanh_terms[1:], old_mean[i]) / w0 + old_mean[i]
-            new_mean[i] = solve(tanh_terms, w0 * p0, lin_factor=w0)
+            new_mean[i] = solve(tanh_terms, w0 * p0, lin_factor=w0, bounds=updated_bounds)
 
     # Display a slightly lower rating to incentivize participation.
     # As times_ranked increases, new_rating converges to new_mean.
@@ -168,6 +170,7 @@ def rate_contest(contest):
     old_mean = list(map(itemgetter('last_mean'), users))
     times_ranked = list(map(itemgetter('times'), users))
     historical_p = [[] for _ in users]
+    perf_ceiling = contest.performance_ceiling
 
     user_id_to_idx = {uid: i for i, uid in enumerate(user_ids)}
     for h in Rating.objects.filter(user_id__in=user_ids) \
@@ -176,7 +179,7 @@ def rate_contest(contest):
         idx = user_id_to_idx[h['user_id']]
         historical_p[idx].append(h['performance'])
 
-    rating, mean, performance = recalculate_ratings(ranking, old_mean, times_ranked, historical_p)
+    rating, mean, performance = recalculate_ratings(ranking, old_mean, times_ranked, historical_p, perf_ceiling)
 
     now = timezone.now()
     ratings = [Rating(user_id=i, contest=contest, rating=r, mean=m, performance=perf,

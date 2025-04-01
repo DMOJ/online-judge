@@ -1,3 +1,6 @@
+from math import inf
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models, transaction
@@ -114,6 +117,11 @@ class Contest(models.Model):
     rating_ceiling = models.IntegerField(verbose_name=_('rating ceiling'),
                                          help_text=_('Do not rate users who have a higher rating.'),
                                          null=True, blank=True)
+    performance_ceiling_override = models.IntegerField(verbose_name=_('performance ceiling override'),
+                                                       help_text=_('Overrides the performance_ceiling parameter '
+                                                                   'used in computing ratings. '
+                                                                   "Do not modify unless you know what you're doing!"),
+                                                       null=True, blank=True)
     rate_all = models.BooleanField(verbose_name=_('rate all'),
                                    help_text=_('Rate users even if they make no submissions.'),
                                    default=False)
@@ -288,6 +296,15 @@ class Contest(models.Model):
             return self.end_time - self._now
         else:
             return None
+
+    @cached_property
+    def performance_ceiling(self):
+        if self.performance_ceiling_override is not None:
+            return self.performance_ceiling_override
+        elif self.rating_ceiling:
+            return self.rating_ceiling + settings.DMOJ_CONTEST_PERF_CEILING_INCREMENT
+        else:
+            return inf
 
     @cached_property
     def ended(self):
@@ -489,6 +506,7 @@ class Contest(models.Model):
             ('change_contest_visibility', _('Change contest visibility')),
             ('contest_problem_label', _('Edit contest problem label script')),
             ('lock_contest', _('Change lock status of contest')),
+            ('override_performance_ceiling', _('Override performance ceiling of contest')),
         )
         verbose_name = _('contest')
         verbose_name_plural = _('contests')
