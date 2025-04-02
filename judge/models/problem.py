@@ -394,8 +394,8 @@ class Problem(models.Model):
         return self.submission_source_visibility_mode
 
     def update_stats(self):
-        all_queryset = self.submission_set.filter(user__is_unlisted=False)
-        ac_queryset = all_queryset.filter(points__gte=self.points, result='AC')
+        all_queryset = self.submission_set.filter(user__is_unlisted=False, is_archived=False)
+        ac_queryset = all_queryset.filter(result='AC', case_points__gte=F('case_total'))
         self.user_count = ac_queryset.values('user').distinct().count()
         submissions = all_queryset.count()
         if submissions:
@@ -466,7 +466,8 @@ class Problem(models.Model):
 
     def is_solved_by(self, user):
         # Return true if a full AC submission to the problem from the user exists.
-        return self.submission_set.filter(user=user.profile, result='AC', points__gte=F('problem__points')).exists()
+        return self.submission_set.filter(
+            user=user.profile, is_archived=False, result='AC', case_points__gte=F('case_total')).exists()
 
     def vote_permission_for_user(self, user):
         if not user.is_authenticated:

@@ -224,7 +224,7 @@ class Profile(models.Model):
 
     @cached_property
     def has_any_solves(self):
-        return self.submission_set.filter(result='AC', case_points__gte=F('case_total')).exists()
+        return self.submission_set.filter(is_archived=False, result='AC', case_points__gte=F('case_total')).exists()
 
     @cached_property
     def resolved_ace_theme(self):
@@ -243,7 +243,8 @@ class Profile(models.Model):
         from judge.models import Problem
         public_problems = Problem.get_public_problems()
         data = (
-            public_problems.filter(submission__user=self, submission__points__isnull=False)
+            public_problems.filter(submission__user=self, submission__is_archived=False,
+                                   submission__points__isnull=False)
                            .annotate(max_points=Max('submission__points')).order_by('-max_points')
                            .values_list('max_points', flat=True).filter(max_points__gt=0)
         )
@@ -251,7 +252,7 @@ class Profile(models.Model):
         points = sum(data)
         entries = min(len(data), len(table))
         problems = (
-            public_problems.filter(submission__user=self, submission__result='AC',
+            public_problems.filter(submission__user=self, submission__is_archived=False, submission__result='AC',
                                    submission__case_points__gte=F('submission__case_total'))
             .values('id').distinct().count()
         )

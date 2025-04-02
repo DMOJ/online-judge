@@ -37,6 +37,7 @@ def get_pp_breakdown(user, start=0, end=settings.DMOJ_PP_ENTRIES):
                 INNER JOIN judge_submission ON (judge_problem.id = judge_submission.problem_id)
                 WHERE (judge_problem.is_public AND
                        NOT judge_problem.is_organization_private AND
+                       NOT judge_submission.is_archived AND
                        judge_submission.points IS NOT NULL AND
                        judge_submission.user_id = %s)
                 GROUP BY judge_problem.id
@@ -44,6 +45,7 @@ def get_pp_breakdown(user, start=0, end=settings.DMOJ_PP_ENTRIES):
             ) AS max_points_table
             {join_type} judge_submission ON (
                 judge_submission.problem_id = max_points_table.problem_id AND
+                NOT judge_submission.is_archived AND
                 judge_submission.points = max_points_table.max_points AND
                 judge_submission.user_id = %s
             )
