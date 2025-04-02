@@ -82,7 +82,7 @@ def recalculate_ratings(ranking, old_mean, times_ranked, historical_p, perf_ceil
     new_p = [0.] * n
     new_mean = [0.] * n
 
-    updated_bounds = VALID_RANGE[:]
+    updated_bounds = list(VALID_RANGE)
     if perf_ceiling is not None:
         updated_bounds[1] = min(updated_bounds[1], perf_ceiling)
 
