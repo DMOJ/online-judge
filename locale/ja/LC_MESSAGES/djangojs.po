@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2023-01-24 00:51\n"
+"PO-Revision-Date: 2024-12-01 01:08\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Language: ja_JP\n"
@@ -30,48 +30,48 @@ msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr ""
+msgstr "課題の得点を投票"
 
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr ""
+msgstr "投票を削除できません: %s"
 
 #: resources/problem-vote.js:28
 #, javascript-format
 msgid "Edit points vote (%s)"
-msgstr ""
+msgstr "得点の投票を編集（%s）"
 
 #: resources/problem-vote.js:34
 #, javascript-format
 msgid "Unable to cast vote: %s"
-msgstr ""
+msgstr "投票できません: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
-msgstr ""
+msgstr "この得点に対する得票数"
 
 #: resources/user_profile.js:47
 msgid "past year"
-msgstr ""
+msgstr "過去1年"
 
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
-msgstr[0] ""
+msgstr[0] "総提出数 %(cnt)d"
 
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
-msgstr[0] ""
+msgstr[0] "過去1年の提出数 %(cnt)d"
 
 #: resources/user_profile.js:74
 msgid "%(cnt)d submission in %(year)d"
 msgid_plural "%(cnt)d submissions in %(year)d"
-msgstr[0] ""
+msgstr[0] "%(year)d 年の提出数 %(cnt)d"
 
 #: resources/user_profile.js:88
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
-msgstr[0] ""
+msgstr[0] "%(date)s の提出数 %(cnt)d"
 
