@@ -148,6 +148,12 @@
                             {% endfor %}
                         </select>
                     </div>
+                    <div class="control-group">
+                        <label>
+                            {{ _('Archive locked submissions:') }}
+                            <input id="by-archive-locked-check" type="checkbox" name="archive_locked" checked>
+                        </label>
+                    </div>
                     <a id="rejudge-selected" class="unselectable button full" href="#">
                         {{ _('Rejudge selected submissions') }}
                     </a>

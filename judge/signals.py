@@ -127,6 +127,16 @@ def submission_delete(sender, instance, **kwargs):
     instance.problem.update_stats()
 
 
+@receiver(post_save, sender=Submission)
+def submission_update(sender, instance, update_fields, **kwargs):
+    if update_fields and 'is_archived' in update_fields:
+        finished_submission(instance)
+        instance.user._updating_stats_only = True
+        instance.user.calculate_points()
+        instance.problem._updating_stats_only = True
+        instance.problem.update_stats()
+
+
 @receiver(post_delete, sender=ContestSubmission)
 def contest_submission_delete(sender, instance, **kwargs):
     participation = instance.participation
