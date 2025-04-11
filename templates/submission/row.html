@@ -35,6 +35,9 @@
                     <i title="{{ submission.contest_object.name }}" class="fa fa-dot-circle-o"></i>
                 </a>
             {% endif %}
+            {% if submission.is_archived %}
+                <i class="fa fa-archive"></i>
+            {% endif %}
         </div>
     </div>
 

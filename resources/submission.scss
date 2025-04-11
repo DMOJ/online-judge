@@ -29,6 +29,14 @@
         border-top: none;
     }
 
+    &.submission-archived {
+        opacity: 0.6;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
     > div {
         padding: 7px 5px;
         vertical-align: middle;

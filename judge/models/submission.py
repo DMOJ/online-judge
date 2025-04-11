@@ -88,6 +88,7 @@ class Submission(models.Model):
     contest_object = models.ForeignKey('Contest', verbose_name=_('contest'), null=True, blank=True,
                                        on_delete=models.SET_NULL, related_name='+', db_index=False)
     locked_after = models.DateTimeField(verbose_name=_('submission lock'), null=True, blank=True)
+    is_archived = models.BooleanField(verbose_name=_('is archived'), default=False)
 
     @classmethod
     def result_class_from_code(cls, result, case_points, case_total):
@@ -131,6 +132,12 @@ class Submission(models.Model):
             judge_submission(self, *args, rejudge=rejudge, **kwargs)
 
     judge.alters_data = True
+
+    def archive(self):
+        self.is_archived = True
+        self.save(update_fields=['is_archived'])
+
+    archive.alters_data = True
 
     def abort(self):
         abort_submission(self)
@@ -227,6 +234,7 @@ class Submission(models.Model):
             ('view_all_submission', _('View all submission')),
             ('resubmit_other', _("Resubmit others' submission")),
             ('lock_submission', _('Change lock status of submission')),
+            ('archive_submission', _('Archive any submission')),
         )
         verbose_name = _('submission')
         verbose_name_plural = _('submissions')

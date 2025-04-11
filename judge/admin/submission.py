@@ -120,8 +120,8 @@ class SubmissionSourceInline(admin.StackedInline):
 
 class SubmissionAdmin(VersionAdmin):
     readonly_fields = ('user', 'problem', 'date', 'judged_date')
-    fields = ('user', 'problem', 'date', 'judged_date', 'locked_after', 'time', 'memory', 'points', 'language',
-              'status', 'result', 'case_points', 'case_total', 'judged_on', 'error')
+    fields = ('user', 'problem', 'date', 'judged_date', 'locked_after', 'is_archived', 'time', 'memory', 'points',
+              'language', 'status', 'result', 'case_points', 'case_total', 'judged_on', 'error')
     actions = ('judge', 'recalculate_score')
     list_display = ('id', 'problem_code', 'problem_name', 'user_column', 'execution_time', 'pretty_memory',
                     'points', 'language_column', 'status', 'result', 'judge_column')
@@ -135,6 +135,8 @@ class SubmissionAdmin(VersionAdmin):
         fields = self.readonly_fields
         if not request.user.has_perm('judge.lock_submission'):
             fields += ('locked_after',)
+        if not request.user.has_perm('judge.archive_submission'):
+            fields += ('is_archived',)
         return fields
 
     def get_queryset(self, request):
