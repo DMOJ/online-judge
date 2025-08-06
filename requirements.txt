@@ -1,4 +1,4 @@
-Django>=5.0,<5.1
+Django==5.2
 django_compressor>=3
 django-mptt>=0.13
 django-registration-redux>=2.10
