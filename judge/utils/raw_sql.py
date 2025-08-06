@@ -22,7 +22,7 @@ class FakeJoinField:
         self.joining_columns = joining_columns
         self.related_model = related_model
 
-    def get_joining_columns(self):
+    def get_joining_fields(self):
         return self.joining_columns
 
     def get_extra_restriction(self, alias, remote_alias):
