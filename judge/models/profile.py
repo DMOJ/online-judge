@@ -137,12 +137,19 @@ class Class(models.Model):
     def _url_args(self):
         return self.organization.id, self.organization.slug, self.id, self.slug
 
+    def clean(self):
+        super().clean()
+        if self.is_active and Class.objects.filter(name=self.name, is_active=True).exclude(pk=self.pk).exists():
+            raise ValidationError("Active class name must be unique.")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
     class Meta:
         ordering = ['organization', 'name']
         verbose_name = _('class')
         verbose_name_plural = _('classes')
-        constraints = [UniqueConstraint(fields=['name'], condition=Q(is_active=True), name='unique_active_name')]
-
 
 class Profile(models.Model):
     user = models.OneToOneField(User, verbose_name=_('user associated'), on_delete=models.CASCADE)
