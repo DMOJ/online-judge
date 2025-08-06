@@ -275,8 +275,8 @@ class ProblemPointsVoteAdmin(admin.ModelAdmin):
             return request.user.has_perm('judge.edit_own_problem')
         return obj.problem.is_editable_by(request.user)
 
-    def lookup_allowed(self, key, value):
-        return super().lookup_allowed(key, value) or key in ('problem__code',)
+    def lookup_allowed(self, request, lookup, value):
+        return super().lookup_allowed(request, lookup, value) or lookup in ('problem__code',)
 
     @admin.display(description=_('problem'), ordering='problem__name')
     def linked_problem(self, obj):

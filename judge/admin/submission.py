@@ -158,8 +158,8 @@ class SubmissionAdmin(VersionAdmin):
             return True
         return obj.problem.is_editor(request.profile)
 
-    def lookup_allowed(self, key, value):
-        return super(SubmissionAdmin, self).lookup_allowed(key, value) or key in ('problem__code',)
+    def lookup_allowed(self, request, lookup, value):
+        return super(SubmissionAdmin, self).lookup_allowed(request, lookup, value) or lookup in ('problem__code',)
 
     @admin.display(description=_('Rejudge the selected submissions'))
     def judge(self, request, queryset):
