@@ -1,12 +1,47 @@
+# IDE and Editor
 .idea
 .vscode
-.sass-cache
-*.sqlite3
-*.py[co]
-*.mo
-*~
 *.swp
+*~
+
+# Python
+*.py[co]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.Python
+
+# Virtual Environments
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django
+*.sqlite3
+*.mo
 dmoj/local_settings.py
+db.sqlite3
+media/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+.tox/
+.hypothesis/
+
+# Claude Code
+.claude/*
+
+# Project Specific
+.sass-cache
 resources/ace-dmoj.css
 resources/dark
 resources/featherlight.css

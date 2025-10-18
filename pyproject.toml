@@ -1,0 +1,101 @@
+[tool.poetry]
+name = "dmoj"
+version = "0.1.0"
+description = "DMOJ Online Judge"
+authors = ["DMOJ Team"]
+readme = "README.md"
+packages = [
+    { include = "dmoj" },
+    { include = "judge" },
+    { include = "django_ace" },
+    { include = "martor" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+# Note: Production dependencies should be installed from requirements.txt
+# This pyproject.toml is primarily for development and testing purposes
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^6.0.0"
+pytest-mock = "^3.14.0"
+
+[tool.poetry.scripts]
+test = "pytest:main"
+tests = "pytest:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+# Test discovery patterns
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+testpaths = ["tests"]
+
+# Output formatting
+addopts = [
+    "-v",                              # Verbose output
+    "--strict-markers",                # Strict marker enforcement
+    "--tb=short",                      # Shorter traceback format
+    "--cov=dmoj",                      # Coverage for dmoj package
+    "--cov=judge",                     # Coverage for judge package
+    "--cov=django_ace",                # Coverage for django_ace package
+    "--cov=martor",                    # Coverage for martor package
+    "--cov-report=html",               # HTML coverage report
+    "--cov-report=xml",                # XML coverage report for CI
+    "--cov-report=term-missing",       # Terminal report with missing lines
+    "--cov-fail-under=80",             # Fail if coverage below 80%
+]
+
+# Custom markers
+markers = [
+    "unit: Unit tests that test individual components in isolation",
+    "integration: Integration tests that test multiple components together",
+    "slow: Tests that take a long time to run",
+    "django: Tests that require Django to be installed and configured",
+]
+
+# Ignore warnings from dependencies
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.coverage.run]
+source = ["dmoj", "judge", "django_ace", "martor"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/env/*",
+    "*/.venv/*",
+    "*/site-packages/*",
+    "manage.py",
+    "dmoj_*.py",
+]
+branch = true
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
