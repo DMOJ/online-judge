@@ -15,3 +15,4 @@ resources/select2-dmoj.css
 resources/style.css
 resources/vars.scss
 sass_processed
+*.csv
