@@ -150,6 +150,10 @@
         <hr>
         <div><a href="{{ url('problem_editorial', problem.code) }}">{{ _('Read editorial') }}</a></div>
     {% endif %}
+    {% if problem.view_tester %}
+        <hr>
+        <div><a href="{{ url('problem_download_tester', problem.code) }}">{{ _('Download Tester') }}</a></div>
+    {% endif %}
     {% if can_edit_problem %}
         <hr>
         <div>
@@ -325,26 +329,3 @@
     {% endif %}
 {% endblock %}
 
-{% block comments %}
-    {% if contest_problem and contest_problem.contest.use_clarifications %}
-        <div class="clarifications-area">
-            <h2><i class="fa fa-question-circle"></i> {{ _('Clarifications') }}</h2>
-            {% if has_clarifications %}
-                {% for clarification in clarifications %}
-                    <div class="problem-clarification">
-                        <div class="time">{{ relative_time(clarification.date) }}</div>
-                        <span class="body">
-                            {{ clarification.description|markdown('problem', MATH_ENGINE)|reference }}
-                        </span>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="no-comments-message">{{ _('No clarifications have been made at this time.') }}</p>
-            {% endif %}
-        </div>
-    {% elif enable_comments %}
-        {% with comment_warn_code=true %}
-            {% include "comments/list.html" %}
-        {% endwith %}
-    {% endif %}
-{% endblock %}

@@ -186,6 +186,14 @@ class SubmissionStatus(SubmissionDetailBase):
             pass
         else:
             context['time_limit'] = lang_limit.time_limit
+
+
+        # Get the first failed test case ID for download button
+        context['first_failed_case_id'] = None
+        first_failed = submission.test_cases.exclude(status='AC').exclude(status='SC').order_by('case').first()
+        if first_failed:
+            context['first_failed_case_id'] = first_failed.case
+
         return context
 
 

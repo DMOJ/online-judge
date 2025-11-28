@@ -190,7 +190,9 @@ form.contest-join-pseudotab {
 #ranking-table {
     .user-name {
         min-width: 20em;
-        position: relative;
+        position: sticky;
+        background: #fff;
+        left: 0;
     }
 
     .userinfo a, .user-name a, .user-name form {

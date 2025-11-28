@@ -302,6 +302,7 @@
                         {% endif %}
                     </table>
                 </div>
+            </div>
                 {% if form.organizations %}
                     <div class="pane">
                         <div style="padding-bottom:0.3em; margin-top:0.3em" class="block-header grayed">
@@ -330,18 +331,8 @@
                             </label>
                         </td></tr>
                         <tr><td>
-                            <a href="https://www.gravatar.com/" target="_blank" class="inline-header" rel="noopener">
-                                {{ _('Change your avatar') }}
-                            </a>
-                        </td></tr>
-                        <tr><td>
                             <a href="{{ url('password_change') }}" class="inline-header">
                                 {{ _('Change your password') }}
-                            </a>
-                        </td></tr>
-                        <tr><td>
-                            <a href="{{ url('email_change') }}" class="inline-header">
-                                {{ _('Change your email') }}
                             </a>
                         </td></tr>
                         {% if can_download_data %}
@@ -351,22 +342,6 @@
                                 </a>
                             </td></tr>
                         {% endif %}
-                        <tr><td>
-                            <span id="api-token-td" class="inline-header grayed">
-                                {{ _('API token:') }}
-                                {% if profile.api_token %}
-                                    <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
-                                        class="button inline-button">{{ _('Regenerate') }}</a>
-                                    <a id="remove-api-token-button" href="{{ url('remove_api_token') }}"
-                                        class="button inline-button ml-5">{{ _('Remove') }}</a>
-                                    <div class="api-token" id="api-token">{{ _('Hidden') }}</div>
-                                {% else %}
-                                    <a id="generate-api-token-button" href="{{ url('generate_api_token') }}"
-                                        class="button inline-button">{{ _('Generate') }}</a>
-                                    <div class="api-token" id="api-token"></div>
-                                {% endif %}
-                            </span>
-                        </td></tr>
                     </table>
                 </div>
                 <div class="pane">

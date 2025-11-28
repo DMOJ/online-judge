@@ -153,3 +153,4 @@ def misc_config_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=ContestSubmission)
 def contest_submission_update(sender, instance, **kwargs):
     Submission.objects.filter(id=instance.submission_id).update(contest_object_id=instance.participation.contest_id)
+    instance.participation.recompute_results()

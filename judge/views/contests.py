@@ -69,7 +69,7 @@ class ContestList(QueryStringSortMixin, DiggPaginatorMixin, TitleMixin, ContestL
     model = Contest
     paginate_by = 20
     template_name = 'contest/list.html'
-    title = gettext_lazy('Contests')
+    title = gettext_lazy('Assignments')
     context_object_name = 'past_contests'
     all_sorts = frozenset(('name', 'user_count', 'start_time'))
     default_desc = frozenset(('name', 'user_count'))
@@ -396,6 +396,9 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View):
 
         requires_access_code = (not self.can_edit and contest.access_code and access_code != contest.access_code)
         if contest.ended:
+            #return generic_message(request,
+                #_('Virtual participation disabled'),
+                #_('Virtual participation is disabled for now.'))
             if requires_access_code:
                 raise ContestAccessDenied()
 

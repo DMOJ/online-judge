@@ -91,6 +91,14 @@
                 {% if not batch.id %}
                     <td>({{ case.points|floatformat(0) }}/{{ case.total|floatformat(0) }})</td>
                 {% endif %}
+		<td>
+		    {% if submission.problem.view_test_cases and first_failed_case_id == case.case %}
+			&nbsp;&nbsp;&nbsp;
+			<a href="{{ url('submission_test_case_download', submission.id, case.case, 'in') }}" title="{{ _('Download Input') }}" onclick="event.stopPropagation()"><i class="fa fa-download" style="transform: none;"></i> In</a>
+			&nbsp;&nbsp;&nbsp;
+			<a href="{{ url('submission_test_case_download', submission.id, case.case, 'out') }}" title="{{ _('Download Output') }}" onclick="event.stopPropagation()"><i class="fa fa-download" style="transform: none;"></i> Out</a>
+		    {% endif %}
+		</td>
             </tr>
 
             {% if print_case_output or case.extended_feedback %}

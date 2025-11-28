@@ -144,11 +144,11 @@
 {% block body %}
     <div class="content-description">
         {% if active_participations %}
-            <h4>{{ _('Active contests') }}</h4>
+            <h4>{{ _('Active assignment') }}</h4>
             <table class="contest-list table striped">
                 <thead>
                 <tr>
-                    <th style="width:90%">{{ _('Contest') }}</th>
+                    <th style="width:90%">{{ _('Assignment') }}</th>
                     <th>{{ _('Users') }}</th>
                     {% if not request.in_contest %}
                         <th style="width:15%"></th>
@@ -186,11 +186,11 @@
         {% endif %}
 
         {% if current_contests %}
-            <h4>{{ _('Ongoing contests') }}</h4>
+            <h4>{{ _('Ongoing Assignments') }}</h4>
             <table class="contest-list table striped">
                 <thead>
                 <tr>
-                    <th style="width:90%">{{ _('Contest') }}</th>
+                    <th style="width:90%">{{ _('Assignment') }}</th>
                     <th>{{ _('Users') }}</th>
                     {% if not request.in_contest %}
                         <th style="width:15%"></th>
@@ -223,12 +223,12 @@
             <br>
         {% endif %}
 
-        <h4>{{ _('Upcoming contests') }}</h4>
+        <h4>{{ _('Upcoming Assignments') }}</h4>
         {% if future_contests %}
             <table class="contest-list table striped">
                 <thead>
                 <tr>
-                    <th>{{ _('Contest') }}</th>
+                    <th>{{ _('Assignment') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -251,12 +251,12 @@
                 </tbody>
             </table>
         {% else %}
-            <i>{{ _('There are no scheduled contests at this time.') }}</i>
+            <i>{{ _('There are no scheduled assignment at this time.') }}</i>
             <br>
         {% endif %}
         <br>
 
-        <h4 id="past-contests">{{ _('Past contests') }}</h4>
+        <h4 id="past-contests">{{ _('Past Assignments') }}</h4>
         {% if page_obj or search_query %}
             <div class="top-pagination-bar">
                 {% include "list-pages.html" %}
@@ -296,7 +296,7 @@
                             {{ user_count(contest, request.user) }}
                         </td>
                         {% if not request.in_contest %}
-                            <td><form action="{{ url('contest_join', contest.key) }}" method="post">
+			                            <td><form action="{{ url('contest_join', contest.key) }}" method="post">
                                     {% csrf_token %}
                                     <input type="submit" class="unselectable button full participate-button"
                                            value="{{ _('Virtual join') }}">
@@ -310,7 +310,7 @@
                 <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
             {% endif %}
         {% else %}
-            <i>{{ _('There are no past contests.') }}</i>
+            <i>{{ _('There are no past assignment.') }}</i>
             <br>
         {% endif %}
     </div>

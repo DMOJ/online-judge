@@ -50,6 +50,7 @@
 {% endblock %}
 
 {% block body %}
+{% if request.user.is_authenticated %}
     {% if page_obj and page_obj.has_other_pages() %}
         <div class="top-pagination-bar">
             {% include "list-pages.html" %}
@@ -74,4 +75,9 @@
     {% if page_obj and page_obj.has_other_pages() %}
         <div class="bottom-pagination-bar">{% include "list-pages.html" %}</div>
     {% endif %}
+{% else %}
+    <div>
+	    Please Login
+    </div>
+{% endif %}
 {% endblock %}

@@ -20,7 +20,10 @@ def problem_directory_file(data, filename):
 
 
 CHECKERS = (
+    ('allac', _('AllAC')),
     ('standard', _('Standard')),
+    ('easy', _('Easy')),
+    ('easyline',_('Easy Line-by-line')),
     ('floats', _('Floats')),
     ('floatsabs', _('Floats (absolute)')),
     ('floatsrel', _('Floats (relative)')),
@@ -28,6 +31,7 @@ CHECKERS = (
     ('sorted', _('Sorted')),
     ('identical', _('Byte identical')),
     ('linecount', _('Line-by-line')),
+    ('llm', _('LLM')),
 )
 
 

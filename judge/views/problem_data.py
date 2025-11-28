@@ -270,3 +270,84 @@ def problem_init_view(request, problem):
             format_html('<a href="{1}">{0}</a>', problem.name,
                         reverse('problem_detail', args=[problem.code])))),
     })
+
+@login_required
+def download_test_case(request, submission, case, type):
+    submission = get_object_or_404(Submission, id=int(submission))
+    if not submission.problem.view_test_cases:
+        raise Http404()
+
+    if not submission.can_see_detail(request.user):
+        raise Http404()
+
+    case = get_object_or_404(ProblemTestCase, dataset=submission.problem, order=int(case))
+
+    first_failed = submission.test_cases.exclude(status='AC').exclude(status='SC').order_by('case').first()
+
+    if not first_failed:
+        raise Http404()
+
+    if first_failed.case != case.order:
+        raise Http404()
+
+    if type == 'in':
+        filename = case.input_file
+    elif type == 'out':
+        filename = case.output_file
+    else:
+        raise Http404()
+
+    if not filename:
+        raise Http404()
+
+    response = HttpResponse()
+    problem_code = submission.problem.code
+
+    # First, try to access the file directly from storage
+    file_path = os.path.join(problem_code, filename)
+    if problem_data_storage.exists(file_path):
+        try:
+            add_file_response(request, response, None, file_path, problem_data_storage)
+            response['Content-Type'] = 'application/octet-stream'
+            response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(filename)
+            return response
+        except IOError:
+            pass
+
+    # If not found directly, try to extract from zipfile
+    try:
+        problem_data = ProblemData.objects.get(problem=submission.problem)
+        if problem_data.zipfile:
+            with ZipFile(problem_data.zipfile.path, 'r') as zip_file:
+                if filename in zip_file.namelist():
+                    response.content = zip_file.read(filename)
+                    response['Content-Type'] = 'application/octet-stream'
+                    response['Content-Disposition'] = 'attachment; filename="%s"' % os.path.basename(filename)
+                    return response
+    except (ProblemData.DoesNotExist, IOError, BadZipfile):
+        pass
+    raise Http404()
+
+@login_required
+def download_tester(request, problem):
+    problem = get_object_or_404(Problem, code=problem)
+    if not problem.view_tester:
+        raise Http404()
+    
+    # Check if MainTest.java exists
+    filename = 'MainTest.java'
+    path = os.path.join(problem.code, filename)
+    
+    if not problem_data_storage.exists(path):
+        raise Http404()
+
+    response = HttpResponse()
+    try:
+        add_file_response(request, response, None, path, problem_data_storage)
+    except IOError:
+        raise Http404()
+
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+    return response
+

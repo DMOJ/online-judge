@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block body %}
+{% if request.user.is_authenticated %}
     <table id="organization-table" class="table striped">
         <thead>
         <tr>
@@ -32,4 +33,7 @@
         {% endfor %}
         </tbody>
     </table>
+{% else %}
+	<div>Please Login</div>
+{% endif %}
 {% endblock %}

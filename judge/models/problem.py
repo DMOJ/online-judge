@@ -173,6 +173,9 @@ class Problem(models.Model):
                                                          default=SubmissionSourceAccess.FOLLOW,
                                                          choices=SUBMISSION_SOURCE_ACCESS)
 
+    view_test_cases = models.BooleanField(verbose_name=_('allow downloading failed test case'), default=False)
+    view_tester = models.BooleanField(verbose_name=_('allow downloading tester file'), default=False)
+
     objects = TranslatedProblemQuerySet.as_manager()
     tickets = GenericRelation('Ticket')
 

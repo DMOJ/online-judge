@@ -20,7 +20,11 @@
         <tr id="user-{{ user.user.username }}" {% block row_extra scoped %}{% endblock %}>
             <td>{{ rank }}</td>
             {% block after_rank scoped %}{% endblock %}
-            <td class="user-name">{{ link_user(user) }} {% block user_data scoped %}{% endblock %}</td>
+	    {% if request.user.is_authenticated %}
+	    <td class="user-name">{{ link_user(user) }} - ({{ (user.user.first_name) }} {{ (user.user.last_name) }})</td>
+	    {% else %}
+	    <td class="user-name">someone</td>
+	    {% endif %}
             {% block before_point scoped %}{% endblock %}
             {% block point scoped %}
                 <td title="{{ user.performance_points|floatformat(2) }}" class="user-points">
