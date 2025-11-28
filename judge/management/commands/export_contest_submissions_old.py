@@ -33,7 +33,6 @@ The command will report how many submissions were archived and
 create the specified ZIP file on disk.
 """
 
-import os
 import zipfile
 from pathlib import Path
 

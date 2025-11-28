@@ -23,7 +23,7 @@ CHECKERS = (
     ('allac', _('AllAC')),
     ('standard', _('Standard')),
     ('easy', _('Easy')),
-    ('easyline',_('Easy Line-by-line')),
+    ('easyline', _('Easy Line-by-line')),
     ('floats', _('Floats')),
     ('floatsabs', _('Floats (absolute)')),
     ('floatsrel', _('Floats (relative)')),

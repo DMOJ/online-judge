@@ -36,7 +36,6 @@ import csv
 from pathlib import Path
 
 from django.core.management.base import BaseCommand, CommandError
-from django.db.models import Prefetch
 
 from judge.models.contest import Contest, ContestParticipation
 

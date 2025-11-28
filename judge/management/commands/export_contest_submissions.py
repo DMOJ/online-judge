@@ -14,10 +14,9 @@ Details:
 - Files are written as: <username>/<problem_code>-<submission_id>.txt
 """
 
-import io
 import zipfile
 from pathlib import Path
-from typing import Dict, Tuple, Set
+from typing import Tuple, Set
 
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Prefetch
@@ -110,9 +109,7 @@ class Command(BaseCommand):
                 sub: Submission = cs.submission
                 prof_user = sub.user.user
                 username = prof_user.username or f"user{prof_user.id}"
-                problem_code = (sub.problem.code
-                                or cs.problem.problem.code
-                                or f"prob{cs.problem_id}")
+                problem_code = (sub.problem.code or cs.problem.problem.code or f"prob{cs.problem_id}")
 
                 # latest-only: keep newest per (user, problem)
                 if latest_only:
@@ -140,8 +137,7 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Created '{zip_path}': wrote {written} file(s)"
-                + (f", skipped {skipped_no_source} lacking source." if skipped_no_source else ".")
+                f"Created '{zip_path}': wrote {written} file(s)" +
+                (f", skipped {skipped_no_source} lacking source." if skipped_no_source else ".")
             )
         )
-

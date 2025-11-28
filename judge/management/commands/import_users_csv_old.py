@@ -9,9 +9,11 @@ from django.contrib.auth.models import User
 # DMOJ models
 from judge.models import Profile
 
+
 class DryRunRollback(Exception):
     """Internal sentinel to trigger atomic() rollback without counting as an error."""
     pass
+
 
 class Command(BaseCommand):
     help = (
@@ -118,7 +120,7 @@ class Command(BaseCommand):
             except Exception as e:
                 errors += 1
                 self.stderr.write(self.style.ERROR(
-                    f"[Row {i}] Error processing username='{row.get('username','')}' : {e}"
+                    f"[Row {i}] Error processing username='{row.get('username', '')}' : {e}"
                 ))
 
         self.stdout.write("")
@@ -168,8 +170,8 @@ class Command(BaseCommand):
     def _upsert_user(self, row, opts):
         username = row["username"]
         first_name = row.get("first_name", "")
-        last_name  = row.get("last_name", "")
-        email      = row.get("email", "")
+        last_name = row.get("last_name", "")
+        email = row.get("email", "")
         default_pw = opts["password"]
 
         try:
@@ -177,13 +179,17 @@ class Command(BaseCommand):
             if opts["update_existing"]:
                 changed = False
                 if first_name and user.first_name != first_name:
-                    user.first_name = first_name; changed = True
+                    user.first_name = first_name
+                    changed = True
                 if last_name and user.last_name != last_name:
-                    user.last_name = last_name; changed = True
+                    user.last_name = last_name
+                    changed = True
                 if email and user.email != email:
-                    user.email = email; changed = True
+                    user.email = email
+                    changed = True
                 if opts["activate"] and not user.is_active:
-                    user.is_active = True; changed = True
+                    user.is_active = True
+                    changed = True
                 if changed:
                     user.save()
                 self._ensure_profile(user)
@@ -201,7 +207,7 @@ class Command(BaseCommand):
                 password=default_pw,
             )
             user.first_name = first_name or ""
-            user.last_name  = last_name or ""
+            user.last_name = last_name or ""
             if opts["activate"]:
                 user.is_active = True
             user.save()
@@ -336,4 +342,3 @@ class Command(BaseCommand):
                 "please adjust _add_user_to_org to your schema."
             ))
         return linked
-

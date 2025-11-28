@@ -18,6 +18,9 @@ per-file-ignores =
     ./judge/management/commands/runmoss.py:F403,F405
     # E501: line too long, ignore in migrations
     ./judge/migrations/*.py:E501
+    # E265 block comment should start with '# '
+    # E117 over-indented (comment)
+    ./judge/views/contests.py:E265,E117
 exclude =
     # belongs to the user
     ./dmoj/local_settings.py,

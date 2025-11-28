@@ -117,10 +117,12 @@ class ProblemTranslationInline(admin.StackedInline):
 
     has_add_permission = has_change_permission = has_delete_permission = has_permission_full_markup
 
+
 class ProblemTemplateInline(admin.StackedInline):
     model = ProblemTemplate
     fields = ('language', 'code')
     extra = 0
+
 
 class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     fieldsets = (
@@ -143,7 +145,8 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     list_display = ['code', 'name', 'show_authors', 'points', 'is_public', 'show_public']
     ordering = ['code']
     search_fields = ('code', 'name', 'authors__user__username', 'curators__user__username')
-    inlines = [LanguageLimitInline, ProblemClarificationInline, ProblemSolutionInline, ProblemTranslationInline, ProblemTemplateInline]
+    inlines = [LanguageLimitInline, ProblemClarificationInline, ProblemSolutionInline,
+               ProblemTranslationInline, ProblemTemplateInline]
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True

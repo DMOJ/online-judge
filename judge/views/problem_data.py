@@ -271,6 +271,7 @@ def problem_init_view(request, problem):
                         reverse('problem_detail', args=[problem.code])))),
     })
 
+
 @login_required
 def download_test_case(request, submission, case, type):
     submission = get_object_or_404(Submission, id=int(submission))
@@ -328,16 +329,17 @@ def download_test_case(request, submission, case, type):
         pass
     raise Http404()
 
+
 @login_required
 def download_tester(request, problem):
     problem = get_object_or_404(Problem, code=problem)
     if not problem.view_tester:
         raise Http404()
-    
+
     # Check if MainTest.java exists
     filename = 'MainTest.java'
     path = os.path.join(problem.code, filename)
-    
+
     if not problem_data_storage.exists(path):
         raise Http404()
 
@@ -350,4 +352,3 @@ def download_tester(request, problem):
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment; filename="%s"' % filename
     return response
-
