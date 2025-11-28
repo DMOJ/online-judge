@@ -15,7 +15,7 @@ from judge.views import TitledTemplateView, api, blog, comment, contests, langua
     preview, problem, problem_manage, ranked_submission, register, stats, status, submission, tasks, ticket, \
     two_factor, user, widgets
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
-    problem_data_file, problem_init_view, download_test_case, download_tester
+    download_test_case, download_tester, problem_data_file, problem_init_view
 from judge.views.register import ActivationView, RegistrationView
 from judge.views.select2 import AssigneeSelect2View, ClassSelect2View, CommentSelect2View, ContestSelect2View, \
     ContestUserSearchSelect2View, OrganizationSelect2View, ProblemSelect2View, TicketUserSelect2View, \

@@ -2,9 +2,9 @@
 import csv
 from pathlib import Path
 
-from django.core.management.base import BaseCommand, CommandError
-from django.db import transaction, IntegrityError
 from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand, CommandError
+from django.db import IntegrityError, transaction
 
 # DMOJ models
 from judge.models import Profile

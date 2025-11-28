@@ -40,8 +40,8 @@ from django.core.management.base import BaseCommand, CommandError
 
 from judge.models.contest import (
     Contest,
-    ContestSubmission,
     ContestParticipation,
+    ContestSubmission,
 )
 
 

@@ -28,9 +28,8 @@ from reversion import revisions
 
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemPointsVoteForm, ProblemSubmitForm
-from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVote, \
-    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, ProblemTemplate, \
-    ContestProblem
+from judge.models import ContestProblem, ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVote, \
+    ProblemTemplate, ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.pdfoid import PDF_RENDERING_ENABLED, render_pdf

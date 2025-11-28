@@ -33,12 +33,12 @@ exposed on `Organization` via the `members` reverse relation【940562129592725�
 import csv
 from pathlib import Path
 
-from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
+from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.utils import IntegrityError
 
-from judge.models import Profile, Organization
+from judge.models import Organization, Profile
 
 
 class DryRunRollback(Exception):
@@ -47,105 +47,105 @@ class DryRunRollback(Exception):
 
 class Command(BaseCommand):
     help = (
-        "Import users from a CSV (username,first_name,last_name,email) and"
-        " optionally attach them to a single Organization by slug."
+        'Import users from a CSV (username,first_name,last_name,email) and'
+        ' optionally attach them to a single Organization by slug.'
     )
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "csv_path",
+            'csv_path',
             type=str,
-            help="Path to the CSV file containing user data.",
+            help='Path to the CSV file containing user data.',
         )
         parser.add_argument(
-            "--password",
-            default="123456",
-            help="Default password for newly created users (default: 123456).",
+            '--password',
+            default='123456',
+            help='Default password for newly created users (default: 123456).',
         )
         parser.add_argument(
-            "--org-slug",
-            help="Slug of the organization to add all users to.",
+            '--org-slug',
+            help='Slug of the organization to add all users to.',
         )
         parser.add_argument(
-            "--org-name",
-            help="Name of the organization to add users to (used when creating).",
+            '--org-name',
+            help='Name of the organization to add users to (used when creating).',
         )
         parser.add_argument(
-            "--create-org-if-missing",
-            action="store_true",
+            '--create-org-if-missing',
+            action='store_true',
             help=(
-                "Create the organization if it does not exist. If using this flag,"
-                " you should provide at least --org-slug and optionally --org-name."
+                'Create the organization if it does not exist. If using this flag,'
+                ' you should provide at least --org-slug and optionally --org-name.'
             ),
         )
         parser.add_argument(
-            "--update-existing",
-            action="store_true",
+            '--update-existing',
+            action='store_true',
             help=(
-                "If a username already exists, update the user’s first name, last name"
-                " and email. Passwords are never changed for existing users."
+                'If a username already exists, update the user’s first name, last name'
+                ' and email. Passwords are never changed for existing users.'
             ),
         )
         parser.add_argument(
-            "--activate",
-            action="store_true",
-            help="Force `is_active=True` on created/updated users.",
+            '--activate',
+            action='store_true',
+            help='Force `is_active=True` on created/updated users.',
         )
         parser.add_argument(
-            "--dry-run",
-            action="store_true",
-            help="Parse and validate but do not commit any changes to the database.",
+            '--dry-run',
+            action='store_true',
+            help='Parse and validate but do not commit any changes to the database.',
         )
 
     def handle(self, *args, **opts):
-        csv_path = Path(opts["csv_path"]).expanduser().resolve()
+        csv_path = Path(opts['csv_path']).expanduser().resolve()
         if not csv_path.exists():
-            raise CommandError(f"CSV not found: {csv_path}")
+            raise CommandError(f'CSV not found: {csv_path}')
 
         # Resolve (or create) the target organization once up front.
         org = None
-        slug = opts.get("org_slug")
+        slug = opts.get('org_slug')
         if slug:
             org = self._resolve_organization(
                 slug=slug,
-                name=opts.get("org_name"),
-                create_if_missing=opts.get("create_org_if_missing", False),
+                name=opts.get('org_name'),
+                create_if_missing=opts.get('create_org_if_missing', False),
             )
             if org is None:
                 raise CommandError(
-                    "Organization not found. Provide a valid --org-slug/--org-name"
-                    " or use --create-org-if-missing."
+                    'Organization not found. Provide a valid --org-slug/--org-name'
+                    ' or use --create-org-if-missing.',
                 )
 
         rows = self._read_csv(csv_path)
         if not rows:
-            self.stdout.write(self.style.WARNING("No rows found in CSV. Nothing to do."))
+            self.stdout.write(self.style.WARNING('No rows found in CSV. Nothing to do.'))
             return
 
         created = updated = skipped = errors = org_linked = 0
 
         self.stdout.write(
             self.style.NOTICE(
-                f"Importing {len(rows)} users from {csv_path}"
-                f" (dry-run={opts['dry_run']}, update-existing={opts['update_existing']})"
-            )
+                f'Importing {len(rows)} users from {csv_path}'
+                f" (dry-run={opts['dry_run']}, update-existing={opts['update_existing']})",
+            ),
         )
         if org:
             self.stdout.write(
                 self.style.NOTICE(
-                    f"Target organization: {org.slug} ({org.name})"
-                )
+                    f'Target organization: {org.slug} ({org.name})',
+                ),
             )
 
         for i, row in enumerate(rows, start=1):
             try:
                 with transaction.atomic():
                     result, user = self._upsert_user(row, opts)
-                    if result == "created":
+                    if result == 'created':
                         created += 1
-                    elif result == "updated":
+                    elif result == 'updated':
                         updated += 1
-                    elif result == "skipped":
+                    elif result == 'skipped':
                         skipped += 1
 
                     if org and user:
@@ -153,7 +153,7 @@ class Command(BaseCommand):
                         if self._add_user_to_org(user, org):
                             org_linked += 1
 
-                    if opts["dry_run"]:
+                    if opts['dry_run']:
                         # Trigger rollback for this iteration only; not counted as an error.
                         raise DryRunRollback()
 
@@ -163,35 +163,35 @@ class Command(BaseCommand):
                 errors += 1
                 self.stderr.write(
                     self.style.ERROR(
-                        f"[Row {i}] Error processing username='{row.get('username', '')}': {exc}"
-                    )
+                        f"[Row {i}] Error processing username='{row.get('username', '')}': {exc}",
+                    ),
                 )
 
         # Summary
-        self.stdout.write("")
+        self.stdout.write('')
         self.stdout.write(
             self.style.SUCCESS(
-                f"Done. Created: {created}, Updated: {updated}, "
-                f"Skipped: {skipped}, Org-linked: {org_linked}, Errors: {errors}"
-            )
+                f'Done. Created: {created}, Updated: {updated}, '
+                f'Skipped: {skipped}, Org-linked: {org_linked}, Errors: {errors}',
+            ),
         )
 
     # --- helpers ---
     def _read_csv(self, path: Path):
         """Load CSV rows into a list of dictionaries and trim whitespace."""
         rows = []
-        with path.open("r", newline="", encoding="utf-8-sig") as f:
+        with path.open('r', newline='', encoding='utf-8-sig') as f:
             reader = csv.DictReader(f)
-            required = {"username", "first_name", "last_name", "email"}
+            required = {'username', 'first_name', 'last_name', 'email'}
             headers = {h.strip() for h in (reader.fieldnames or [])}
             missing = required - headers
             if missing:
                 raise CommandError(
-                    f"CSV missing required headers: {', '.join(sorted(missing))}"
+                    f"CSV missing required headers: {', '.join(sorted(missing))}",
                 )
             for raw in reader:
-                row = {k.strip(): (v or "").strip() for k, v in raw.items()}
-                if not row.get("username"):
+                row = {k.strip(): (v or '').strip() for k, v in raw.items()}
+                if not row.get('username'):
                     continue
                 rows.append(row)
         return rows
@@ -207,18 +207,18 @@ class Command(BaseCommand):
         except Organization.DoesNotExist:
             if create_if_missing:
                 # Provide fallbacks for fields required by the model: name and short_name.
-                name = name or slug.replace("-", " ").title()
+                name = name or slug.replace('-', ' ').title()
                 short_name = slug[:20]
                 org = Organization.objects.create(
                     slug=slug,
                     name=name,
                     short_name=short_name,
-                    about="",
+                    about='',
                 )
                 self.stdout.write(
                     self.style.SUCCESS(
-                        f"Created organization '{org.slug}' ({org.name})"
-                    )
+                        f"Created organization '{org.slug}' ({org.name})",
+                    ),
                 )
                 return org
             return None
@@ -230,36 +230,36 @@ class Command(BaseCommand):
 
     def _upsert_user(self, row: dict, opts):
         """Create or update a User based on CSV row data."""
-        username = row.get("username")
-        first_name = row.get("first_name", "")
-        last_name = row.get("last_name", "")
-        email = row.get("email", "")
-        default_pw = opts.get("password")
+        username = row.get('username')
+        first_name = row.get('first_name', '')
+        last_name = row.get('last_name', '')
+        email = row.get('email', '')
+        default_pw = opts.get('password')
 
         try:
             user = User.objects.get(username=username)
             # Optionally update existing user’s names and email
-            if opts.get("update_existing"):
+            if opts.get('update_existing'):
                 updated_fields = []
                 if first_name and user.first_name != first_name:
                     user.first_name = first_name
-                    updated_fields.append("first_name")
+                    updated_fields.append('first_name')
                 if last_name and user.last_name != last_name:
                     user.last_name = last_name
-                    updated_fields.append("last_name")
+                    updated_fields.append('last_name')
                 if email and user.email != email:
                     user.email = email
-                    updated_fields.append("email")
-                if opts.get("activate") and not user.is_active:
+                    updated_fields.append('email')
+                if opts.get('activate') and not user.is_active:
                     user.is_active = True
-                    updated_fields.append("is_active")
+                    updated_fields.append('is_active')
                 if updated_fields:
                     user.save(update_fields=updated_fields)
                 # Ensure profile exists, even if nothing changed
                 self._ensure_profile(user)
-                return "updated", user
+                return 'updated', user
             else:
-                return "skipped", user
+                return 'skipped', user
         except User.DoesNotExist:
             pass
 
@@ -267,19 +267,19 @@ class Command(BaseCommand):
         try:
             user = User.objects.create_user(
                 username=username,
-                email=email or "",
+                email=email or '',
                 password=default_pw,
             )
             # Set names after creation to avoid uniqueness issues on username
-            user.first_name = first_name or ""
-            user.last_name = last_name or ""
-            if opts.get("activate"):
+            user.first_name = first_name or ''
+            user.last_name = last_name or ''
+            if opts.get('activate'):
                 user.is_active = True
             user.save()
             # Ensure profile exists
             self._ensure_profile(user)
             self.stdout.write(self.style.SUCCESS(f"Created user '{username}'"))
-            return "created", user
+            return 'created', user
         except IntegrityError as exc:
             raise CommandError(f"IntegrityError for '{username}': {exc}")
 

@@ -21,6 +21,10 @@ per-file-ignores =
     # E265 block comment should start with '# '
     # E117 over-indented (comment)
     ./judge/views/contests.py:E265,E117
+    # Q000 Double quotes found but single quotes preferred
+    # C812 missing trailing comma
+    ./judge/management/commands/import_users_csv_old.py:Q000,C812
+    ./judge/management/commands/export_contest_submissions_old.py:Q000,C812
 exclude =
     # belongs to the user
     ./dmoj/local_settings.py,

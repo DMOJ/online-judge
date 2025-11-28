@@ -16,7 +16,7 @@ Details:
 
 import zipfile
 from pathlib import Path
-from typing import Tuple, Set
+from typing import Set, Tuple
 
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Prefetch
@@ -27,36 +27,36 @@ from judge.models.submission import Submission, SubmissionSource
 
 class Command(BaseCommand):
     help = (
-        "Export contest submissions into a ZIP archive. By default includes all "
-        "in-contest submissions from live, non-disqualified participations. "
-        "Use --latest-only to keep only the most recent submission per user+problem."
+        'Export contest submissions into a ZIP archive. By default includes all '
+        'in-contest submissions from live, non-disqualified participations. '
+        'Use --latest-only to keep only the most recent submission per user+problem.'
     )
 
     def add_arguments(self, parser):
-        parser.add_argument("contest_key", type=str, help="Contest key (slug).")
-        parser.add_argument("zip_path", type=str, help="Output ZIP path.")
+        parser.add_argument('contest_key', type=str, help='Contest key (slug).')
+        parser.add_argument('zip_path', type=str, help='Output ZIP path.')
         parser.add_argument(
-            "--include-disqualified",
-            action="store_true",
-            help="Include disqualified participations.",
+            '--include-disqualified',
+            action='store_true',
+            help='Include disqualified participations.',
         )
         parser.add_argument(
-            "--include-virtual",
-            action="store_true",
-            help="Include virtual/spectator participations.",
+            '--include-virtual',
+            action='store_true',
+            help='Include virtual/spectator participations.',
         )
         parser.add_argument(
-            "--latest-only",
-            action="store_true",
-            help="Export only the latest submission per (user, problem).",
+            '--latest-only',
+            action='store_true',
+            help='Export only the latest submission per (user, problem).',
         )
 
     def handle(self, *args, **opts):
-        contest_key = opts["contest_key"]
-        zip_path = Path(opts["zip_path"]).expanduser().resolve()
-        include_disqualified = opts["include_disqualified"]
-        include_virtual = opts["include_virtual"]
-        latest_only = opts["latest_only"]
+        contest_key = opts['contest_key']
+        zip_path = Path(opts['zip_path']).expanduser().resolve()
+        include_disqualified = opts['include_disqualified']
+        include_virtual = opts['include_virtual']
+        latest_only = opts['latest_only']
 
         # 1) Load contest
         try:
@@ -75,41 +75,41 @@ class Command(BaseCommand):
 
         # Avoid N+1: pull username, problem code, and source
         qs = qs.select_related(
-            "participation__user__user",   # -> auth.User for names/usernames
-            "submission__user__user",      # redundant but safe
-            "submission__problem",         # problem.code
-            "problem__problem",            # contest problem -> problem
-            "submission__language",        # optional if you want to use lang
+            'participation__user__user',   # -> auth.User for names/usernames
+            'submission__user__user',      # redundant but safe
+            'submission__problem',         # problem.code
+            'problem__problem',            # contest problem -> problem
+            'submission__language',        # optional if you want to use lang
         ).prefetch_related(
-            Prefetch("submission__source", queryset=SubmissionSource.objects.all())
+            Prefetch('submission__source', queryset=SubmissionSource.objects.all()),
         )
 
         # 3) If exporting only latest per (user, problem), sort newest-first and keep first seen.
         #    Otherwise, export all (just sort by username, problem, then submission id).
         if latest_only:
             qs = qs.order_by(
-                "submission__user_id",
-                "submission__problem_id",
-                "-submission__date",
-                "-submission__id",
+                'submission__user_id',
+                'submission__problem_id',
+                '-submission__date',
+                '-submission__id',
             )
         else:
             qs = qs.order_by(
-                "submission__user__user__username",
-                "submission__problem__code",
-                "submission__id",
+                'submission__user__user__username',
+                'submission__problem__code',
+                'submission__id',
             )
 
         written = 0
         skipped_no_source = 0
         seen_pairs: Set[Tuple[int, int]] = set()  # (user_id, problem_id)
 
-        with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as zf:
             for cs in qs.iterator():
                 sub: Submission = cs.submission
                 prof_user = sub.user.user
-                username = prof_user.username or f"user{prof_user.id}"
-                problem_code = (sub.problem.code or cs.problem.problem.code or f"prob{cs.problem_id}")
+                username = prof_user.username or f'user{prof_user.id}'
+                problem_code = (sub.problem.code or cs.problem.problem.code or f'prob{cs.problem_id}')
 
                 # latest-only: keep newest per (user, problem)
                 if latest_only:
@@ -128,7 +128,7 @@ class Command(BaseCommand):
                     continue
 
                 # Build archive path: username/problem-subid.txt
-                fname = f"{username}/{problem_code}-{sub.id}.txt"
+                fname = f'{username}/{problem_code}-{sub.id}.txt'
                 data = source_obj.source
 
                 # Write as UTF-8 text file
@@ -138,6 +138,6 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(
                 f"Created '{zip_path}': wrote {written} file(s)" +
-                (f", skipped {skipped_no_source} lacking source." if skipped_no_source else ".")
-            )
+                (f', skipped {skipped_no_source} lacking source.' if skipped_no_source else '.'),
+            ),
         )
