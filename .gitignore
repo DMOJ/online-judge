@@ -17,3 +17,6 @@ resources/vars.scss
 sass_processed
 *.csv
 bridge_logs
+*.png
+*.jpg
+node_modules
