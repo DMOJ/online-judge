@@ -242,7 +242,7 @@
 
 	    {% if next_contest_problem or prev_contest_problem %}
     <span class="spacer"></span>
-    <div style="float: right;">
+    <div style="float: right; /* table-layout: auto; */ display: flex; justify-content: flex-end; gap: .5rem; flex-wrap: wrap; align-items: center;">
         {% if prev_contest_problem %}
         <a href="{{ url('problem_detail', prev_contest_problem.problem.code) }}" class="button"
             title="{{ prev_contest_problem.problem.name }}">
@@ -477,19 +477,6 @@
         {% endif %}
     {% endwith %}
 {% endblock %}
-
-{% block post_description_end %}
-    {% if request.user.is_authenticated and not request.profile.mute %}
-        <a href="{{ url('new_problem_ticket', problem.code) }}" class="button clarify">
-            {%- if contest_problem and contest_problem.contest.use_clarifications and request.profile.current_contest.live -%}
-                {{ _('Request clarification') }}
-            {%- else -%}
-                {{ _('Report an issue') }}
-            {%- endif -%}
-        </a>
-    {% endif %}
-{% endblock %}
-
 
 {% block submission_area %}
 {% if form %}
