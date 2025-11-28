@@ -29,7 +29,8 @@ from reversion import revisions
 from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemPointsVoteForm, ProblemSubmitForm
 from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVote, \
-    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource
+    ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource, ProblemTemplate, \
+    ContestProblem
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.pdfoid import PDF_RENDERING_ENABLED, render_pdf
@@ -212,6 +213,28 @@ class ProblemDetail(ProblemMixin, SolvedProblemMixin, CommentedDetailView):
                 context['vote'] = None
         else:
             context['vote'] = None
+
+        if contest_problem:
+            cp_qs = ContestProblem.objects.filter(contest=contest_problem.contest)
+            context['next_contest_problem'] = cp_qs.filter(order__gt=contest_problem.order).order_by('order').first()
+            context['prev_contest_problem'] = cp_qs.filter(order__lt=contest_problem.order).order_by('-order').first()
+
+        if self.request.user.is_authenticated:
+            form = ProblemSubmitForm(initial={'language': self.request.profile.language},
+                                     instance=Submission(user=self.request.profile, problem=self.object))
+            if self.object.is_editable_by(self.request.user):
+                form.fields['judge'].choices = tuple(
+                    Judge.objects.filter(online=True, problems=self.object).values_list('name', 'name'),
+                )
+            form.fields['language'].queryset = (
+                self.object.usable_languages.order_by('name', 'key')
+                .prefetch_related(Prefetch('runtimeversion_set', RuntimeVersion.objects.order_by('priority')))
+            )
+            form.fields['source'].widget.theme = self.request.profile.resolved_ace_theme
+            if self.request.profile.language:
+                form.fields['source'].widget.mode = self.request.profile.language.ace
+            context['form'] = form
+            context['ACE_URL'] = settings.ACE_URL
 
         return context
 
@@ -593,6 +616,15 @@ class LanguageTemplateAjax(View):
             language = get_object_or_404(Language, id=int(request.GET.get('id', 0)))
         except ValueError:
             raise Http404()
+
+        problem_id = request.GET.get('problem_id')
+        if problem_id:
+            try:
+                template = ProblemTemplate.objects.get(problem_id=problem_id, language=language).code
+                return HttpResponse(template, content_type='text/plain')
+            except (ProblemTemplate.DoesNotExist, ValueError):
+                pass
+
         return HttpResponse(language.template, content_type='text/plain')
 
 

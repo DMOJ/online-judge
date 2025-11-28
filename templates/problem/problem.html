@@ -51,6 +51,149 @@
         <script src="{{ static('libs/chart.js/Chart.js') }}" type="text/javascript"></script>
         <script src="{{ static('problem-vote.js') }}" type="text/javascript"></script>
     {% endif %}
+
+
+
+{% if form %}
+<script type="text/javascript" src="{{ ACE_URL }}/ace.js"></script>
+{{ form.media.js }}
+{% compress js %}
+<script type="text/javascript">
+    $(function () {
+        function format(state) {
+            if (!state.id) return state.text; // optgroup
+            return state.text;
+        }
+
+        window.previous_template = '';
+
+        function update_language_template(editor) {
+            if (!editor && window.ace_source) editor = window.ace_source;
+            if (!editor) return;
+
+            var source = $('textarea#id_source');
+            if (source.val() == window.previous_template.replace(/\r/g, '') || source.val() == '') {
+                var lang_id = $('#id_language').val();
+                var code = localStorage.getItem('submit:{{ problem.id }}:' + $('#id_language').val());
+
+                function update_submit_area(code) {
+                    window.previous_template = code;
+                    source.val(code);
+                    editor.getSession().setValue(code);
+                }
+
+                if (code != null) {
+                    update_submit_area(code);
+                } else {
+                    $.get('{{ url('language_template_ajax') }}', {
+                        id: lang_id,
+                        problem_id: {{ problem.id }}
+            }).done(function (template) {
+                update_submit_area(template);
+            });
+                            }
+                        }
+                    }
+
+    function makeDisplayData(data) {
+        var site_data = data.attr('data-info');
+        var judge_data = data.attr('data-judge-info');
+        var display_data = site_data || judge_data;
+        return display_data;
+    }
+
+    function formatSelection(state) {
+        if (!state.id) return state.text; // optgroup
+        var data = makeDisplayData($("option[data-id=" + state.id + "]"));
+        return $('<span>').append($('<b>').text(state.text), ' (', data, ')');
+    }
+
+    // Terrible hack, adapted from https://github.com/select2/select2/issues/4436
+    $.fn.select2.amd.define('select2/data/customAdapter', ['select2/results', 'select2/utils'], function (Result, Utils) {
+        RefPresenter = function ($element, options, dataAdapter) {
+            RefPresenter.__super__.constructor.call(this, $element, options, dataAdapter);
+        };
+        Utils.Extend(RefPresenter, Result);
+        RefPresenter.prototype.bind = function (container, $container) {
+            container.on('results:focus', function (params) {
+                var data = makeDisplayData($("option[data-id=" + params.data.id + "]"));
+                $("#result-version-info").text(data);
+            });
+            RefPresenter.__super__.bind.call(this, container, $container);
+        };
+        return RefPresenter;
+    });
+
+    var customAdapter = $.fn.select2.amd.require('select2/data/customAdapter');
+
+    $("#id_language").select2({
+        theme: '{{ DMOJ_SELECT2_THEME }}',
+        templateResult: format,
+        templateSelection: formatSelection,
+        resultsAdapter: customAdapter
+    });
+
+    $('#id_language').on('select2:open', function (evt) {
+        var dropdown = $('.select2-dropdown');
+        if (!$('#result-version-info').length)
+            dropdown.append($("<span id=\"result-version-info\">"));
+        dropdown.attr('id', 'language-select2');
+    });
+
+    $('#id_judge').on('select2:open', function (evt) {
+        var dropdown = $('.select2-dropdown');
+        $('#result-version-info').remove();
+        dropdown.attr('id', 'judge-select2');
+    });
+
+    $('#id_language').change(function () {
+        var lang = $("#id_language").find("option:selected").attr('data-ace');
+        if (window.ace_source) {
+            window.ace_source.getSession().setMode("ace/mode/" + lang);
+        }
+        update_language_template();
+    });
+
+    function init_editor(editor) {
+        update_language_template(editor);
+        editor.commands.addCommand({
+            name: 'save',
+            bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+            exec: function () {
+                localStorage.setItem('submit:{{ problem.id }}:' + $('#id_language').val(), editor.getSession().getValue());
+            }
+        });
+        editor.getSession().setUseWrapMode(true);
+        editor.setFontSize(14);
+        editor.setPrintMarginColumn(100);
+        // editor.focus(); // Don't focus automatically on problem page
+    }
+
+    if (window.ace_source) {
+        init_editor(window.ace_source);
+    } else {
+        $('#ace_source').on('ace_load', function (e, editor) {
+            init_editor(editor);
+        });
+    }
+
+    $(window).resize(function () {
+        $('#ace_source').height(Math.max($(window).height() - 353, 100));
+    }).resize();
+
+    $('#problem_submit').submit(function (event) {
+        if ($('#id_source').val().length > 65536) {
+            alert({{ _('Your source code must contain at most 65536 characters.')| htmltojs }});
+    event.preventDefault();
+    $('#problem_submit').find(':submit').attr('disabled', false);
+                        }
+                    });
+                });
+</script>
+{% endcompress %}
+{% endif %}
+
+
 {% endblock %}
 
 {% block title_row %}
@@ -96,6 +239,24 @@
                 {{ _('View as PDF') }}
             </a>
         {% endif %}
+
+	    {% if next_contest_problem or prev_contest_problem %}
+    <span class="spacer"></span>
+    <div style="float: right;">
+        {% if prev_contest_problem %}
+        <a href="{{ url('problem_detail', prev_contest_problem.problem.code) }}" class="button"
+            title="{{ prev_contest_problem.problem.name }}">
+            <i class="fa fa-chevron-left"></i> {{ _('Previous') }}
+        </a>
+        {% endif %}
+        {% if next_contest_problem %}
+        <a href="{{ url('problem_detail', next_contest_problem.problem.code) }}" class="button"
+            title="{{ next_contest_problem.problem.name }}">
+            {{ _('Next') }} <i class="fa fa-chevron-right"></i>
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
     </div>
 {% endblock %}
 
@@ -329,3 +490,69 @@
     {% endif %}
 {% endblock %}
 
+
+{% block submission_area %}
+{% if form %}
+<hr>
+<div id="submission-area">
+    <h3>{{ _('Submit solution') }}</h3>
+    {% if not no_judges %}
+    {% if request.in_contest and submission_limit %}
+    {% if submissions_left > 0 %}
+    <div class="alert alert-warning alert-dismissable">
+        <a class="close">x</a>
+        {% trans left=submissions_left -%}
+        You have {{ left }} submission left
+        {%- pluralize -%}
+        You have {{ left }} submissions left
+        {%- endtrans %}
+    </div>
+    {% else %}
+    <div class="alert alert-warning alert-dismissable">
+        <a class="close">x</a>
+        {{ _('You have 0 submissions left') }}
+    </div>
+    {% endif %}
+    {% endif %}
+    {% endif %}
+
+    <form id="problem_submit" action="{{ url('problem_submit', problem.code) }}" method="post" class="form-area">
+        {% csrf_token %}
+        {{ form.non_field_errors() }}
+        <div id="submit-wrapper">
+            <div id="editor">
+                {{ form.source.errors }}
+                {{ form.source }}
+            </div>
+            {% if not no_judges %}
+            <div id="language">
+                {{ form.language.errors }}
+                <div id="language-select">
+                    <select id="id_language" name="language">
+                        {% for lang in form.fields.language.queryset %}
+                        <option value="{{ lang.id }}" data-id="{{ lang.id }}" data-name="{{ lang.name }}"
+                            data-info="{{ lang.info }}" data-ace="{{ lang.ace }}"
+                            data-judge-info="{{ runtime_versions(lang.runtime_versions()) }}" {% if
+                            lang.id==form.initial.language.id %} selected {% endif %}>{{ lang.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        {% if no_judges %}
+        <span style="color: red">{{ _('No judge is available for this problem.') }}</span>
+        {% else %}
+        <div class="submit-bar">
+            {{ form.judge }}
+            <input type="submit" value="{{ _('Submit!') }}" class="button" {% if request.in_contest and submission_limit
+                and not submissions_left %} disabled {% endif %}>
+        </div>
+        {% endif %}
+    </form>
+</div>
+{% endif %}
+{% endblock %}

@@ -16,3 +16,4 @@ resources/style.css
 resources/vars.scss
 sass_processed
 *.csv
+bridge_logs
