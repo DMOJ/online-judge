@@ -147,7 +147,7 @@ class ProblemAdmin(NoBatchDeleteMixin, VersionAdmin):
     list_max_show_all = 1000
     actions_on_top = True
     actions_on_bottom = True
-    list_filter = ('is_public', ProblemCreatorListFilter)
+    list_filter = ('is_public', 'group', 'types', ProblemCreatorListFilter)
     form = ProblemForm
     date_hierarchy = 'date'
 
