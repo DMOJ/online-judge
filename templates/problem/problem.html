@@ -30,8 +30,7 @@
         }
 
         #content-right {
-            max-width: 12.5em;
-            min-width: 12.5em;
+            display: none; /* Hide sidebar on problem page */
         }
 
         #problem-types, #allowed-langs, #available-judges {
@@ -418,6 +417,105 @@
         {% endif %}
     </div>
     {% endif %}
+    </div>
+
+    {# Action buttons bar #}
+    <div id="problem-actions-bar">
+        {% if request.user.is_authenticated and request.in_contest and submission_limit %}
+            {% if submissions_left > 0 %}
+                <a href="{{ url('problem_submit', problem.code) }}" class="action-button primary">
+                    <i class="fa fa-upload"></i> {{ _('Submit solution') }}
+                </a>
+                <span class="submissions-left-inline">
+                    {% trans trimmed counter=submissions_left %}
+                        ({{ counter }} submission left)
+                        {% pluralize %}
+                        ({{ counter }} submissions left)
+                    {% endtrans %}
+                </span>
+            {% else %}
+                <a class="action-button disabled">
+                    <i class="fa fa-upload"></i> {{ _('Submit solution') }}
+                </a>
+                <span class="submissions-left-inline no-submissions">{{ _('(0 submissions left)') }}</span>
+            {% endif %}
+        {% else %}
+            <a href="{{ url('problem_submit', problem.code) }}" class="action-button primary">
+                <i class="fa fa-upload"></i> {{ _('Submit solution') }}
+            </a>
+        {% endif %}
+
+        {% if request.user.is_authenticated and has_submissions %}
+            <a href="{{ url('user_submissions', problem.code, request.user.username) }}" class="action-button">
+                <i class="fa fa-list"></i> {{ _('My submissions') }}
+            </a>
+        {% endif %}
+        <a href="{{ url('chronological_submissions', problem.code) }}" class="action-button">
+            <i class="fa fa-list-alt"></i> {{ _('All submissions') }}
+        </a>
+        <a href="{{ url('ranked_submissions', problem.code) }}" class="action-button">
+            <i class="fa fa-trophy"></i> {{ _('Best submissions') }}
+        </a>
+
+        {% if vote_perm.can_view() %}
+            {% if vote_perm.can_vote() %}
+                <a href="#" data-featherlight="{{ url('problem_vote', problem.code) }}" id="problem-vote-button" class="action-button">
+                    <i class="fa fa-bar-chart"></i>
+                    {%- if vote is none -%}
+                        {{ _('Vote') }}
+                    {%- else -%}
+                        {{ _('Edit vote') }}
+                    {%- endif -%}
+                </a>
+            {% endif %}
+            <a href="#" data-featherlight="{{ url('problem_vote_stats', problem.code) }}" class="action-button">
+                <i class="fa fa-pie-chart"></i> {{ _('Stats') }}
+            </a>
+        {% endif %}
+
+        {% if (editorial and editorial.is_accessible_by(request.user)) and not request.in_contest %}
+            <a href="{{ url('problem_editorial', problem.code) }}" class="action-button">
+                <i class="fa fa-book"></i> {{ _('Editorial') }}
+            </a>
+        {% endif %}
+
+        {% if problem.view_tester %}
+            <a href="{{ url('problem_download_tester', problem.code) }}" class="action-button">
+                <i class="fa fa-download"></i> {{ _('Tester') }}
+            </a>
+        {% endif %}
+
+        {% if can_edit_problem %}
+            <a href="{{ url('problem_ticket_list', problem.code) }}" class="action-button">
+                <i class="fa fa-ticket"></i> {{ _('Tickets') }}
+                {% if num_open_tickets %}<span class="badge">{{ num_open_tickets }}</span>{% endif %}
+            </a>
+            <a href="{{ url('admin:judge_problem_change', problem.id) }}" class="action-button">
+                <i class="fa fa-edit"></i> {{ _('Edit') }}
+            </a>
+            {% if not problem.is_manually_managed %}
+                <a href="{{ url('problem_data', problem.code) }}" class="action-button">
+                    <i class="fa fa-database"></i> {{ _('Test data') }}
+                </a>
+            {% endif %}
+        {% elif request.user.is_authenticated and has_tickets %}
+            <a href="{{ url('problem_ticket_list', problem.code) }}" class="action-button">
+                <i class="fa fa-ticket"></i> {{ _('My tickets') }}
+                {% if num_open_tickets %}<span class="badge">{{ num_open_tickets }}</span>{% endif %}
+            </a>
+        {% endif %}
+
+        {% if problem.is_subs_manageable_by(request.user) %}
+            <a href="{{ url('problem_manage_submissions', problem.code) }}" class="action-button">
+                <i class="fa fa-cog"></i> {{ _('Manage') }}
+            </a>
+        {% endif %}
+
+        {% if perms.judge.clone_problem %}
+            <a href="{{ url('problem_clone', problem.code) }}" class="action-button">
+                <i class="fa fa-copy"></i> {{ _('Clone') }}
+            </a>
+        {% endif %}
     </div>
 {% endblock %}
 
