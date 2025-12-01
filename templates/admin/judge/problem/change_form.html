@@ -6,6 +6,7 @@
         django.jQuery(function ($) {
             $('.submissions-link').appendTo('div#bottombar').show();
             $('.problem-votes-link').appendTo('div#bottombar').show();
+            $('.test-data-link').appendTo('div#bottombar').show();
         });
     </script>
 {% endblock extrahead %}
@@ -22,5 +23,12 @@
            <i class="fa fa-lg fa-envelope"></i>
            <span class="text">{{ _('View problem votes') }}</span>
         </a>
+        {% if not original.is_manually_managed %}
+        <a style="display: none" title="{{ _('Edit test data') }}" class="button test-data-link"
+           href="{% url 'problem_data' original.code %}" target="_blank">
+           <i class="fa fa-lg fa-database"></i>
+           <span class="text">{{ _('Edit test data') }}</span>
+        </a>
+        {% endif %}
     {% endif %}
 {% endblock %}
