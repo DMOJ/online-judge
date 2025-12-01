@@ -176,9 +176,21 @@
         });
     }
 
-    $(window).resize(function () {
-        $('#ace_source').height(Math.max($(window).height() - 353, 100));
-    }).resize();
+	function resizeProblemLayout() {
+		var $container = $('#problem-split-container');
+		if (!$container.length) return;
+		var topOffset = $container.offset().top - $(window).scrollTop();
+		var footerH = $('footer').outerHeight() || 0;
+		var available = Math.max(window.innerHeight - topOffset - footerH - 16, 400);
+		$container.css('height', available + 'px');
+
+		if (window.ace_source) {
+			setTimeout(function () { window.ace_source.resize(); }, 0);
+		}
+	}
+
+	$(window).on('resize scroll', resizeProblemLayout);
+	resizeProblemLayout();
 
     $('#problem_submit').submit(function (event) {
         if ($('#id_source').val().length > 65536) {
@@ -421,29 +433,7 @@
 
     {# Action buttons bar #}
     <div id="problem-actions-bar">
-        {% if request.user.is_authenticated and request.in_contest and submission_limit %}
-            {% if submissions_left > 0 %}
-                <a href="{{ url('problem_submit', problem.code) }}" class="action-button primary">
-                    <i class="fa fa-upload"></i> {{ _('Submit solution') }}
-                </a>
-                <span class="submissions-left-inline">
-                    {% trans trimmed counter=submissions_left %}
-                        ({{ counter }} submission left)
-                        {% pluralize %}
-                        ({{ counter }} submissions left)
-                    {% endtrans %}
-                </span>
-            {% else %}
-                <a class="action-button disabled">
-                    <i class="fa fa-upload"></i> {{ _('Submit solution') }}
-                </a>
-                <span class="submissions-left-inline no-submissions">{{ _('(0 submissions left)') }}</span>
-            {% endif %}
-        {% else %}
-            <a href="{{ url('problem_submit', problem.code) }}" class="action-button primary">
-                <i class="fa fa-upload"></i> {{ _('Submit solution') }}
-            </a>
-        {% endif %}
+        {# Top-level "Submit solution" button removed intentionally to reduce confusion #}
 
         {% if request.user.is_authenticated and has_submissions %}
             <a href="{{ url('user_submissions', problem.code, request.user.username) }}" class="action-button">

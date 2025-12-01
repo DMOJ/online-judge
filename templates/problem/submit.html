@@ -109,9 +109,20 @@
                     editor.focus();
                 });
 
-                $(window).resize(function () {
-                    $('#ace_source').height(Math.max($(window).height() - 353, 100));
-                }).resize();
+                function resizeSubmitEditor() {
+                    var $ace = $('#ace_source');
+                    if (!$ace.length) return;
+                    var topOffset = $ace.offset().top - $(window).scrollTop();
+                    var footerH = $('footer').outerHeight() || 0;
+                    var available = Math.max(window.innerHeight - topOffset - footerH - 16, 200);
+                    $ace.height(available);
+                    if (window.ace_source) {
+                        setTimeout(function () { window.ace_source.resize(); }, 0);
+                    }
+                }
+
+                $(window).on('resize scroll', resizeSubmitEditor);
+                resizeSubmitEditor();
 
                 $('#problem_submit').submit(function (event) {
                     if ($('#id_source').val().length > 65536) {
