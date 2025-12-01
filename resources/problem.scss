@@ -1,15 +1,24 @@
 @use "vars" as *;
 
 #problem-table {
-    td, th {
+
+    td,
+    th {
+
         // Text columns are left-aligned
-        &.problem, &.category, &.types {
+        &.problem,
+        &.category,
+        &.types {
             text-align: left;
             padding: 0 1rem;
         }
-        
+
         // Numeric columns are center-aligned
-        &.solved, &.points, &.ac-rate, &.editorial, &.users {
+        &.solved,
+        &.points,
+        &.ac-rate,
+        &.editorial,
+        &.users {
             padding: 0 10px;
         }
 
@@ -17,7 +26,7 @@
             width: 100%; // Fill up all spare space with problem titles
         }
     }
-    
+
     th a {
         color: inherit;
     }
@@ -75,7 +84,8 @@
     height: 2.3em;
 }
 
-label[for="category"], label[for="type"] {
+label[for="category"],
+label[for="type"] {
     padding-bottom: 0.25em;
     display: block;
 }
@@ -111,7 +121,8 @@ ul.problem-list {
     content: " ";
 }
 
-.authors-value, .judges-value {
+.authors-value,
+.judges-value {
     padding-left: 1.5em;
 }
 
@@ -225,7 +236,8 @@ ul.problem-list {
     #submit-wrapper {
         margin-top: 0.7em;
 
-        #editor, #language {
+        #editor,
+        #language {
             margin-top: 4px;
         }
 
@@ -307,7 +319,8 @@ ul.problem-list {
     }
 }
 
-#category, #types {
+#category,
+#types {
     visibility: hidden;
 }
 
@@ -326,7 +339,8 @@ ul.problem-list {
         left: -8px;
     }
 
-    .noUi-handle:before, .noUi-handle:after {
+    .noUi-handle:before,
+    .noUi-handle:after {
         top: 3px;
         height: 12px;
     }
@@ -456,6 +470,7 @@ ul.problem-list {
         height: 100%;
         display: flex;
         flex-direction: column;
+        flex: 1;
 
         #problem_submit {
             flex: 1;
@@ -474,7 +489,8 @@ ul.problem-list {
                     min-height: 0;
                     position: relative;
 
-                    textarea, .ace_editor {
+                    textarea,
+                    .ace_editor {
                         position: absolute !important;
                         top: 0;
                         bottom: 0;
