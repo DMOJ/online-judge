@@ -346,3 +346,163 @@ ul.problem-list {
         font-size: 13px;
     }
 }
+
+// Resizable split layout for problem page
+@media (min-width: 1000px) {
+    #problem-split-container {
+        display: flex;
+        gap: 0;
+        width: 100%;
+        position: relative;
+    }
+
+    #problem-description-column {
+        flex: 0 0 60%; // Default 60%, but adjustable via JS
+        overflow-y: auto;
+        padding-right: 1rem;
+    }
+
+    #problem-submission-column {
+        flex: 1;
+        padding-left: 1rem;
+        overflow-y: auto;
+    }
+
+    .sticky-submission {
+        position: sticky;
+        top: 70px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+
+    #split-resize-handle {
+        width: 8px;
+        cursor: col-resize;
+        background: transparent;
+        position: relative;
+        flex-shrink: 0;
+        user-select: none;
+
+        &:hover .resize-handle-line {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .resize-handle-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            margin-left: -1px;
+            background: rgba(0, 0, 0, 0.1);
+            transition: background 0.2s;
+        }
+    }
+
+    // Info header as horizontal panel
+    #problem-info-header {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 0.5rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .info-item {
+            white-space: nowrap;
+
+            i {
+                margin-right: 0.3rem;
+                opacity: 0.7;
+            }
+
+            strong {
+                margin-right: 0.3rem;
+            }
+
+            a {
+                margin: 0 0.2rem;
+            }
+        }
+
+        .problem-lang-limits-compact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+
+            .lang-limit-item {
+                font-size: 0.9rem;
+                color: #666;
+            }
+        }
+    }
+}
+
+// Mobile: stack vertically
+@media (max-width: 999px) {
+    #problem-split-container {
+        display: block;
+    }
+
+    #split-resize-handle {
+        display: none;
+    }
+
+    #problem-submission-column {
+        margin-top: 2rem;
+    }
+
+    #problem-info-header {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 0.8rem;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+        .info-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.4rem;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        .info-item {
+            font-size: 0.85rem;
+
+            i {
+                margin-right: 0.2rem;
+            }
+
+            strong {
+                margin-right: 0.2rem;
+            }
+        }
+
+        .problem-lang-limits-compact {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+
+            .lang-limit-item {
+                font-size: 0.8rem;
+            }
+        }
+    }
+}

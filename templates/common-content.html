@@ -62,6 +62,7 @@
             <div class="info-float">{% block info_float %}{% endblock %}</div>
         </div>
         <div id="content-left" class="split-common-content">
+            {% block before_description %}{% endblock %}
             <div class="content-description screen">
                 {% block description %}{% endblock %}
                 {% block description_end %}

@@ -189,11 +189,172 @@
                         }
                     });
                 });
+
+    // Resizable split pane functionality
+    $(function() {
+        var container = $('#problem-split-container');
+        var handle = $('#split-resize-handle');
+        var leftCol = $('#problem-description-column');
+        var rightCol = $('#problem-submission-column');
+
+        if (container.length && $(window).width() >= 1000) {
+            // Load saved preference
+            var savedWidth = localStorage.getItem('problem-split-width');
+            if (savedWidth) {
+                leftCol.css('flex-basis', savedWidth);
+            }
+
+            var isResizing = false;
+            var startX, startWidth;
+
+            handle.on('mousedown', function(e) {
+                isResizing = true;
+                startX = e.pageX;
+                startWidth = leftCol.width();
+                $('body').css('cursor', 'col-resize');
+                $('body').css('user-select', 'none');
+                e.preventDefault();
+            });
+
+            $(document).on('mousemove', function(e) {
+                if (!isResizing) return;
+
+                var containerWidth = container.width();
+                var deltaX = e.pageX - startX;
+                var newWidth = startWidth + deltaX;
+                var percentage = (newWidth / containerWidth) * 100;
+
+                // Limit between 30% and 80%
+                percentage = Math.max(30, Math.min(80, percentage));
+
+                leftCol.css('flex-basis', percentage + '%');
+            });
+
+            $(document).on('mouseup', function() {
+                if (isResizing) {
+                    isResizing = false;
+                    $('body').css('cursor', '');
+                    $('body').css('user-select', '');
+
+                    // Save preference
+                    var percentage = (leftCol.width() / container.width()) * 100;
+                    localStorage.setItem('problem-split-width', percentage + '%');
+                }
+            });
+        }
+    });
 </script>
 {% endcompress %}
 {% endif %}
 
 
+{% endblock %}
+
+{% block before_description %}
+<div id="problem-split-container">
+    <div id="problem-description-column">
+        <div id="problem-info-header">
+            <div class="info-row">
+                <span class="info-item">
+                    <i class="fa fa-check fa-fw"></i><strong>{{ _('Points:') }}</strong>
+                    {% if contest_problem %}
+                        {{ contest_problem.points }}{% if contest_problem.partial %} {{ _('(partial)') }}{% endif %}
+                    {% else %}
+                        {{ problem.points|floatformat }}{% if problem.partial %} {{ _('(partial)') }}{% endif %}
+                    {% endif %}
+                </span>
+                <span class="info-item">
+                    <i class="fa fa-clock-o fa-fw"></i><strong>{{ _('Time limit:') }}</strong> {{ problem.time_limit }}s
+                </span>
+                <span class="info-item">
+                    <i class="fa fa-server fa-fw"></i><strong>{{ _('Memory limit:') }}</strong> {{ problem.memory_limit|kbsimpleformat }}
+                </span>
+            </div>
+            {% if problem.language_time_limit or problem.language_memory_limit %}
+            <div class="info-row">
+                <div class="problem-lang-limits-compact">
+                    {% for name, limit in problem.language_time_limit %}
+                        <span class="lang-limit-item">{{ name }}: {{ limit }}s</span>
+                    {% endfor %}
+                    {% for name, limit in problem.language_memory_limit %}
+                        <span class="lang-limit-item">{{ name }}: {{ limit|kbsimpleformat }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% if not contest_problem or not contest_problem.contest.hide_problem_authors %}
+                {% cache 86400 'problem_authors' problem.id LANGUAGE_CODE %}
+                    {% with authors=problem.authors.all() %}
+                        {% if authors %}
+                        <div class="info-row">
+                            <span class="info-item">
+                                <i class="fa fa-pencil-square-o fa-fw"></i><strong>{% trans trimmed count=authors|length %}
+                                    Author:
+                                    {% pluralize count %}
+                                    Authors:
+                                {% endtrans %}</strong>
+                                {{ link_users(authors) }}
+                            </span>
+                        </div>
+                        {% endif %}
+                    {% endwith %}
+                {% endcache %}
+            {% endif %}
+            {% if not contest_problem or not contest_problem.contest.hide_problem_tags %}
+                {% with types=problem.types_list %}
+                    {% if types %}
+                    <div class="info-row">
+                        <span class="info-item">
+                            <i class="fa fa-tag fa-fw"></i><strong>{% trans trimmed count=types|length %}
+                                Type:
+                                {% pluralize count %}
+                                Types:
+                            {% endtrans %}</strong>
+                            {{ types|join(", ") }}
+                        </span>
+                    </div>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+            {% if show_languages %}
+                {% with usable=problem.usable_common_names, langs=problem.languages_list() %}
+                    {% if langs %}
+                    <div class="info-row">
+                        <span class="info-item">
+                            <i class="fa fa-code fa-fw"></i><strong>{{ _('Allowed languages:') }}</strong>
+                            {% for lang in langs %}
+                                {%- if lang in usable -%}
+                                    {{ lang }}
+                                {%- else -%}
+                                    <s title="{{ _('No %(lang)s judge online', lang=lang) }}">{{ lang }}</s>
+                                {%- endif -%}
+                                {% if not loop.last %}, {% endif -%}
+                            {% endfor %}
+                        </span>
+                    </div>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+            {% if problem.is_editable_by(request.user) and available_judges %}
+                <div class="info-row">
+                    <span class="info-item">
+                        <i class="fa fa-database fa-fw"></i><strong>{% trans trimmed count=available_judges|length %}
+                            Judge:
+                            {% pluralize count %}
+                            Judges:
+                        {% endtrans %}</strong>
+                        {% if perms.judge.change_judge %}
+                            {% for judge in available_judges %}
+                                <a href="{{ url('admin:judge_judge_change', judge.id) }}">{{ judge.name }}</a>
+                                {%- if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {{ available_judges|join(", ") }}
+                        {% endif %}
+                    </span>
+                </div>
+            {% endif %}
+        </div>
 {% endblock %}
 
 {% block title_row %}
@@ -346,122 +507,6 @@
             <a href="{{ url('problem_clone', problem.code) }}">{{ _('Clone problem') }}</a>
         </div>
     {% endif %}
-
-    <hr style="padding-top: 0.3em">
-
-    <div class="problem-info-entry">
-        <i class="fa fa-check fa-fw"></i><span class="pi-name">{{ _('Points:') }}</span>
-        <span class="pi-value">
-            {% if contest_problem %}
-                {{ contest_problem.points }}{% if contest_problem.partial %} {{ _('(partial)') }}{% endif %}
-            {% else %}
-                {{ problem.points|floatformat }}{% if problem.partial %} {{ _('(partial)') }}{% endif %}
-            {% endif %}
-        </span>
-    </div>
-    <div class="problem-info-entry">
-        <i class="fa fa-clock-o fa-fw"></i><span class="pi-name">{{ _('Time limit:') }}</span>
-        <span class="pi-value">{{ problem.time_limit }}s</span>
-    </div>
-    <div class="problem-lang-limits">
-        {% for name, limit in problem.language_time_limit %}
-            <div class="lang-limit">
-                <span class="lang-name">{{ name }}</span>
-                <span class="lang-tl">{{ limit }}s</span>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="problem-info-entry">
-        <i class="fa fa-server fa-fw"></i><span class="pi-name">{{ _('Memory limit:') }}</span>
-        <span class="pi-value">{{ problem.memory_limit|kbsimpleformat }}</span>
-    </div>
-    <div class="problem-lang-limits">
-        {% for name, limit in problem.language_memory_limit %}
-            <div class="lang-limit">
-                <span class="lang-name">{{ name }}</span>
-                <span class="lang-ml">{{ limit|kbsimpleformat }}</span>
-            </div>
-        {% endfor %}
-    </div>
-
-    <hr style="padding-top: 0.7em">
-
-    {% if not contest_problem or not contest_problem.contest.hide_problem_authors %}
-        {% cache 86400 'problem_authors' problem.id LANGUAGE_CODE %}
-            {% with authors=problem.authors.all() %}
-                {% if authors %}
-                    <div class="problem-info-entry">
-                        <i class="fa fa-pencil-square-o fa-fw"></i><span
-                            class="pi-name">{% trans trimmed count=authors|length %}
-                        Author:
-                        {% pluralize count %}
-                        Authors:
-                    {% endtrans %}</span>
-                        <div class="pi-value authors-value">{{ link_users(authors) }}</div>
-                    </div>
-                {% endif %}
-            {% endwith %}
-        {% endcache %}
-    {% endif %}
-
-    {% if not contest_problem or not contest_problem.contest.hide_problem_tags %}
-        <div id="problem-types">
-            {% with types=problem.types_list %}
-                <div class="toggle closed unselectable">
-                    <i class="fa fa-chevron-right fa-fw"></i>{% trans trimmed count=problem.types_list|length %}
-                    Problem type
-                    {% pluralize count %}
-                    Problem types
-                {% endtrans %}
-                </div>
-                <div style="display:none" class="toggled">{{ problem.types_list|join(", ") }}</div>
-            {% endwith %}
-        </div>
-    {% endif %}
-    {% if show_languages %}
-        <div id="allowed-langs">
-            <div class="toggle open unselectable">
-                <i class="fa fa-chevron-right fa-fw"></i>{{ _('Allowed languages') }}
-            </div>
-            <div class="toggled">
-                {% with usable=problem.usable_common_names, langs=problem.languages_list() %}
-                    {% for lang in langs %}
-                        {%- if lang in usable -%}
-                            {{ lang }}
-                        {%- else -%}
-                            <s title="{{ _('No %(lang)s judge online', lang=lang) }}">{{ lang }}</s>
-                        {%- endif -%}
-                        {% if not loop.last %}, {% endif -%}
-                    {% endfor %}
-                {% endwith %}
-            </div>
-        </div>
-    {% endif %}
-    {% if problem.is_editable_by(request.user) %}
-        <div id="available-judges">
-            <i class="fa fa-database fa-fw"></i><span
-                class="pi-name">{% trans trimmed count=available_judges|length %}
-                Judge:
-                {% pluralize count %}
-                Judges:
-            {% endtrans %}
-            </span>
-            <div class="pi-value judges-value">
-                {% if available_judges %}
-                    {% if perms.judge.change_judge %}
-                        {% for judge in available_judges %}
-                            <a href="{{ url('admin:judge_judge_change', judge.id) }}">{{ judge.name }}</a>
-                            {%- if not loop.last %}, {% endif %}
-                        {% endfor %}
-                    {% else %}
-                        {{ available_judges|join(", ") }}
-                    {% endif %}
-                {% else %}
-                    <i>{{ _('none available') }}</i>
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
 {% endblock %}
 
 {% block description %}
@@ -479,67 +524,75 @@
 {% endblock %}
 
 {% block submission_area %}
-{% if form %}
-<hr>
-<div id="submission-area">
-    <h3>{{ _('Submit solution') }}</h3>
-    {% if not no_judges %}
-    {% if request.in_contest and submission_limit %}
-    {% if submissions_left > 0 %}
-    <div class="alert alert-warning alert-dismissable">
-        <a class="close">x</a>
-        {% trans left=submissions_left -%}
-        You have {{ left }} submission left
-        {%- pluralize -%}
-        You have {{ left }} submissions left
-        {%- endtrans %}
-    </div>
-    {% else %}
-    <div class="alert alert-warning alert-dismissable">
-        <a class="close">x</a>
-        {{ _('You have 0 submissions left') }}
-    </div>
-    {% endif %}
-    {% endif %}
-    {% endif %}
+    </div> {# Close problem-description-column #}
 
-    <form id="problem_submit" action="{{ url('problem_submit', problem.code) }}" method="post" class="form-area">
-        {% csrf_token %}
-        {{ form.non_field_errors() }}
-        <div id="submit-wrapper">
-            <div id="editor">
-                {{ form.source.errors }}
-                {{ form.source }}
-            </div>
+    <div id="split-resize-handle" class="resize-handle">
+        <div class="resize-handle-line"></div>
+    </div>
+
+    <div id="problem-submission-column">
+        {% if form %}
+        <div id="submission-area" class="sticky-submission">
+            <h3>{{ _('Submit solution') }}</h3>
             {% if not no_judges %}
-            <div id="language">
-                {{ form.language.errors }}
-                <div id="language-select">
-                    <select id="id_language" name="language">
-                        {% for lang in form.fields.language.queryset %}
-                        <option value="{{ lang.id }}" data-id="{{ lang.id }}" data-name="{{ lang.name }}"
-                            data-info="{{ lang.info }}" data-ace="{{ lang.ace }}"
-                            data-judge-info="{{ runtime_versions(lang.runtime_versions()) }}" {% if
-                            lang.id==form.initial.language.id %} selected {% endif %}>{{ lang.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+            {% if request.in_contest and submission_limit %}
+            {% if submissions_left > 0 %}
+            <div class="alert alert-warning alert-dismissable">
+                <a class="close">x</a>
+                {% trans left=submissions_left -%}
+                You have {{ left }} submission left
+                {%- pluralize -%}
+                You have {{ left }} submissions left
+                {%- endtrans %}
+            </div>
+            {% else %}
+            <div class="alert alert-warning alert-dismissable">
+                <a class="close">x</a>
+                {{ _('You have 0 submissions left') }}
             </div>
             {% endif %}
-        </div>
+            {% endif %}
+            {% endif %}
 
-        <hr>
+            <form id="problem_submit" action="{{ url('problem_submit', problem.code) }}" method="post" class="form-area">
+                {% csrf_token %}
+                {{ form.non_field_errors() }}
+                <div id="submit-wrapper">
+                    <div id="editor">
+                        {{ form.source.errors }}
+                        {{ form.source }}
+                    </div>
+                    {% if not no_judges %}
+                    <div id="language">
+                        {{ form.language.errors }}
+                        <div id="language-select">
+                            <select id="id_language" name="language">
+                                {% for lang in form.fields.language.queryset %}
+                                <option value="{{ lang.id }}" data-id="{{ lang.id }}" data-name="{{ lang.name }}"
+                                    data-info="{{ lang.info }}" data-ace="{{ lang.ace }}"
+                                    data-judge-info="{{ runtime_versions(lang.runtime_versions()) }}" {% if
+                                    lang.id==form.initial.language.id %} selected {% endif %}>{{ lang.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
 
-        {% if no_judges %}
-        <span style="color: red">{{ _('No judge is available for this problem.') }}</span>
-        {% else %}
-        <div class="submit-bar">
-            {{ form.judge }}
-            <input type="submit" value="{{ _('Submit!') }}" class="button" {% if request.in_contest and submission_limit
-                and not submissions_left %} disabled {% endif %}>
+                <hr>
+
+                {% if no_judges %}
+                <span style="color: red">{{ _('No judge is available for this problem.') }}</span>
+                {% else %}
+                <div class="submit-bar">
+                    {{ form.judge }}
+                    <input type="submit" value="{{ _('Submit!') }}" class="button" {% if request.in_contest and submission_limit
+                        and not submissions_left %} disabled {% endif %}>
+                </div>
+                {% endif %}
+            </form>
         </div>
         {% endif %}
-    </form>
-</div>
-{% endif %}
+    </div>
+</div> {# Close problem-split-container #}
 {% endblock %}
