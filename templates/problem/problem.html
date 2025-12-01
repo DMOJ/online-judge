@@ -38,17 +38,70 @@
     #allowed-langs,
     #available-judges {
         padding-top: 1em;
-    }
 
-    .problem-info-entry {
-        padding-top: 0.5em;
-    }
+        .problem-info-entry {
+            padding-top: 0.5em;
+        }
 
-    @media (min-width: 1000px) {
+        @media (min-width: 1000px) {
 
-        html,
-        body {
-            overflow: hidden;
+            html,
+            body {
+                height: 100%;
+                overflow: hidden;
+            }
+
+            body {
+                display: flex;
+                flex-direction: column;
+            }
+
+            #page-container {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+                overflow: hidden;
+            }
+
+            #content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+                overflow: hidden;
+            }
+
+            #content-body {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+                overflow: hidden;
+            }
+
+            #common-content {
+                flex: 1;
+                display: flex;
+                min-height: 0;
+                overflow: hidden;
+            }
+
+            #content-left {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-height: 0;
+                overflow: hidden;
+            }
+
+            #problem-split-container {
+                flex: 1;
+                min-height: 0 !important;
+                /* Override JS/CSS min-height */
+                height: auto !important;
+                /* Override JS height */
+            }
         }
     }
 </style>
@@ -187,29 +240,17 @@
         });
     }
 
-    function resizeProblemLayout() {
-        var $container = $('#problem-split-container');
-        if (!$container.length) return;
-        var topOffset = $container.offset().top - $(window).scrollTop();
-        var footerH = $('footer').outerHeight() || 0;
-        var available = Math.max(window.innerHeight - topOffset - footerH - 16, 400);
-        $container.css('height', available + 'px');
-
-        if (window.ace_source) {
-            setTimeout(function () { window.ace_source.resize(); }, 0);
-        }
-    }
-
-    $(window).on('resize scroll', resizeProblemLayout);
-    resizeProblemLayout();
+    // JS resizing removed in favor of CSS flex layout
+    // $(window).on('resize scroll', resizeProblemLayout);
+    // resizeProblemLayout();
 
     $('#problem_submit').submit(function (event) {
         if ($('#id_source').val().length > 65536) {
             alert({ _('Your source code must contain at most 65536 characters.')| htmltojs });
     event.preventDefault();
     $('#problem_submit').find(':submit').attr('disabled', false);
-                        }
-                    });
+        }
+    });
                 });
 
     // Resizable split pane functionality
