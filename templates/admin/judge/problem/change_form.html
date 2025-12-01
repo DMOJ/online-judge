@@ -7,6 +7,7 @@
             $('.submissions-link').appendTo('div#bottombar').show();
             $('.problem-votes-link').appendTo('div#bottombar').show();
             $('.test-data-link').appendTo('div#bottombar').show();
+            $('.clone-problem-link').appendTo('div#bottombar').show();
         });
     </script>
 {% endblock extrahead %}
@@ -30,5 +31,10 @@
            <span class="text">{{ _('Edit test data') }}</span>
         </a>
         {% endif %}
+        <a style="display: none" title="{{ _('Clone problem') }}" class="button clone-problem-link"
+           href="{% url 'problem_clone' original.code %}">
+           <i class="fa fa-lg fa-copy"></i>
+           <span class="text">{{ _('Clone problem') }}</span>
+        </a>
     {% endif %}
 {% endblock %}
