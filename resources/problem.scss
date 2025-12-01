@@ -448,6 +448,7 @@ ul.problem-list {
         height: 100%; // Full height
         display: flex;
         flex-direction: column;
+        overflow: hidden;
     }
 
     .sticky-submission {
@@ -471,10 +472,16 @@ ul.problem-list {
                     display: flex;
                     flex-direction: column;
                     min-height: 0;
+                    position: relative;
 
                     textarea, .ace_editor {
-                        flex: 1 !important;
-                        height: 100% !important;
+                        position: absolute !important;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        height: auto !important;
+                        width: 100% !important;
                     }
                 }
             }
