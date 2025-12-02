@@ -346,3 +346,22 @@ ul.problem-list {
         font-size: 13px;
     }
 }
+
+#content-middle {
+    #submission-area {
+        h3 {
+            margin-top: 0;
+            margin-bottom: 1em;
+        }
+    }
+
+    #problem_submit {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #ace_source {
+        height: 400px;
+        min-height: 300px;
+    }
+}

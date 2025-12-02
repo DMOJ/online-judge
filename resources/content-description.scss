@@ -12,18 +12,21 @@
     margin-right: auto;
 }
 
-@media (min-width: 700px) {
+@media (min-width: 1025px) {
+    // Wide screen: Three columns side by side (3:2:1 ratio)
     #common-content {
         display: flex;
         flex-direction: row-reverse;
+        gap: 1.5em;
     }
 
     #content-left {
-        flex: 5;
+        flex: 3;
         width: 100%;
+        min-width: 0;
 
         &.split-common-content {
-            width: 70%;
+            width: auto;
         }
 
         .content-description {
@@ -31,10 +34,20 @@
         }
     }
 
+    #content-middle {
+        flex: 2;
+        min-width: 300px;
+        max-width: 600px;
+
+        .submission-float {
+            position: sticky;
+            top: 70px;
+        }
+    }
+
     #content-right {
         flex: 1;
         max-width: 12.5em;
-        padding-left: 1.5em;
         padding-top: 1em;
 
         .info-float {
@@ -47,12 +60,58 @@
     }
 }
 
+@media (min-width: 700px) and (max-width: 1024px) {
+    // Tablet: Stack submission below description, sidebar on right
+    #common-content {
+        display: flex;
+        flex-direction: row-reverse;
+        flex-wrap: wrap;
+        gap: 1.5em;
+    }
+
+    #content-left {
+        flex: 1 1 100%;
+        order: 1;
+    }
+
+    #content-middle {
+        flex: 1 1 calc(100% - 13.5em);
+        order: 3;
+        max-width: none;
+
+        .submission-float {
+            position: static;
+        }
+    }
+
+    #content-right {
+        flex: 0 0 12.5em;
+        order: 2;
+        padding-top: 1em;
+
+        .info-float {
+            position: sticky;
+            top: 70px;
+        }
+    }
+}
+
 @media not all and (min-width: 700px) {
+    // Mobile: Stack all columns vertically
     #content-right .info-float {
         float: none;
         width: 100% !important;
         position: static !important;
         box-sizing: border-box;
+    }
+
+    #content-middle {
+        width: 100%;
+        margin-top: 1em;
+
+        .submission-float {
+            position: static;
+        }
     }
 }
 

@@ -22,6 +22,18 @@
                     }
                 }
 
+                var submission_float = $('.submission-float');
+                if (submission_float.length) {
+                    var middle_container = $('#content-middle');
+                    if (!featureTest('position', 'sticky')) {
+                        fix_div(submission_float, 55);
+                        $(window).resize(function () {
+                            submission_float.width(middle_container.width());
+                        });
+                        submission_float.width(middle_container.width());
+                    }
+                }
+
                 window.add_code_copy_buttons = function ($container) {
                     $container.find('pre code').each(function () {
                         var copyButton;
@@ -61,6 +73,11 @@
         <div id="content-right">
             <div class="info-float">{% block info_float %}{% endblock %}</div>
         </div>
+        <div id="content-middle">
+            <div class="submission-float">
+                {% block submission_area %}{% endblock %}
+            </div>
+        </div>
         <div id="content-left" class="split-common-content">
             <div class="content-description screen">
                 {% block description %}{% endblock %}
@@ -69,7 +86,6 @@
                 {% endblock %}
                 {% block post_description_end %}{% endblock %}
             </div>
-	    {% block submission_area %}{% endblock %}
             {% block comments %}{% endblock %}
         </div>
     </div>

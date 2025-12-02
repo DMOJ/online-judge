@@ -178,7 +178,11 @@
     }
 
     $(window).resize(function () {
-        $('#ace_source').height(Math.max($(window).height() - 353, 100));
+        var headerHeight = 70;
+        var formControlsHeight = 150;
+        var paddingBuffer = 100;
+        var availableHeight = $(window).height() - headerHeight - formControlsHeight - paddingBuffer;
+        $('#ace_source').height(Math.max(availableHeight, 300));
     }).resize();
 
     $('#problem_submit').submit(function (event) {
@@ -261,28 +265,6 @@
 {% endblock %}
 
 {% block info_float %}
-    {% if request.user.is_authenticated and request.in_contest and submission_limit %}
-        {% if submissions_left > 0 %}
-            <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
-                {{ _('Submit solution') }}
-            </a>
-            <div class="submissions-left">
-                {% trans trimmed counter=submissions_left %}
-                    {{ counter }} submission left
-                    {% pluralize %}
-                    {{ counter }} submissions left
-                {% endtrans %}
-            </div>
-        {% else %}
-            <a class="unselectable button full disabled">{{ _('Submit solution') }}</a>
-            <div class="no-submissions-left submissions-left">{{ _('0 submissions left') }}</div>
-        {% endif %}
-    {% else %}
-        <a href="{{ url('problem_submit', problem.code) }}" class="unselectable button full">
-            {{ _('Submit solution') }}
-        </a>
-    {% endif %}
-
     <hr style="padding-bottom: 0.3em">
 
     {% if request.user.is_authenticated and has_submissions %}
