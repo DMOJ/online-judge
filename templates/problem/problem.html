@@ -74,10 +74,18 @@
 
         window.previous_template = '';
         var editorInitialized = false;
+        var templateLoadInProgress = false;
+        var pageShowFired = false;
 
         function update_language_template(editor, force) {
             if (!editor && window.ace_source) editor = window.ace_source;
             if (!editor) return;
+
+            // Prevent duplicate simultaneous loads
+            if (templateLoadInProgress) {
+                return;
+            }
+            templateLoadInProgress = true;
 
             var source = $('textarea#id_source');
             var lang_id = $('#id_language').val();
@@ -90,13 +98,20 @@
 
             $.ajax({
                 url: '{{ url('language_template_ajax') }}',
-                data: { id: lang_id, problem_id: {{ problem.id }}, _: Date.now() },
-                cache: false
+                data: { id: lang_id, problem_id: {{ problem.id }}, _: Date.now() + Math.random() },
+                cache: false,
+                headers: {
+                    'Cache-Control': 'no-cache, no-store, must-revalidate',
+                    'Pragma': 'no-cache',
+                    'Expires': '0'
+                }
             }).done(function (template) {
                 update_submit_area(template);
             }).fail(function() {
                 // Fallback to empty if AJAX fails
                 console.warn('Failed to load template for language', lang_id);
+            }).always(function() {
+                templateLoadInProgress = false;
             });
         }
 
@@ -209,7 +224,7 @@
     }
 
     // Ensure initial template load happens after editor is ready
-    $(function() {
+    function loadInitialTemplate() {
         var maxAttempts = 100; // 5 seconds max
         var attempt = 0;
 
@@ -242,12 +257,28 @@
         $('#ace_source').on('ace_load', function (e, editor) {
             init_editor(editor);
         });
+    }
+
+    $(function() {
+        // Only load if pageshow hasn't fired yet
+        if (!pageShowFired) {
+            loadInitialTemplate();
+        }
     });
 
+    // Handle both DOMContentLoaded and pageshow to cover all browser behaviors
     window.addEventListener('pageshow', function(event) {
-        // Handle back/forward cache
-        if (event.persisted && window.ace_source) {
-             update_language_template(window.ace_source, true);
+        pageShowFired = true;
+
+        // Always reload template on pageshow - this handles both:
+        // 1. Initial page load (some browsers fire pageshow on initial load)
+        // 2. Back/forward cache restoration (event.persisted === true)
+        if (window.ace_source) {
+            // Immediately reload template
+            update_language_template(window.ace_source, true);
+        } else {
+            // Editor not ready yet, poll for it
+            loadInitialTemplate();
         }
     });
 
@@ -528,7 +559,6 @@
 
 {% block submission_area %}
 {% if form %}
-<hr>
 <div id="submission-area">
     <h3>{{ _('Submit solution') }}</h3>
     {% if not no_judges %}
