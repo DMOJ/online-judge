@@ -73,34 +73,42 @@
         }
 
         window.previous_template = '';
+        var editorInitialized = false;
+        var userHasEdited = false;
+        var suppressChangeEvent = false;
 
         function update_language_template(editor) {
             if (!editor && window.ace_source) editor = window.ace_source;
             if (!editor) return;
 
             var source = $('textarea#id_source');
-            var currentValue = source.val();
+            var currentValue = (source.val() || '');
 
             // Load template if: empty, matches previous template, or user hasn't modified it yet
-            var shouldLoadTemplate = currentValue == '' ||
-                                    currentValue == window.previous_template.replace(/\r/g, '');
+            var normalizedCurrent = currentValue.replace(/\r/g, '').trim();
+            var normalizedPrev = (window.previous_template || '').replace(/\r/g, '').trim();
+            var shouldLoadTemplate = !userHasEdited || normalizedCurrent === '' || normalizedCurrent === normalizedPrev;
 
             if (shouldLoadTemplate) {
                 var lang_id = $('#id_language').val();
                 var code = localStorage.getItem('submit:{{ problem.id }}:' + lang_id);
 
                 function update_submit_area(code) {
-                    window.previous_template = code;
-                    source.val(code);
-                    editor.getSession().setValue(code);
+                    window.previous_template = code || '';
+                    suppressChangeEvent = true;
+                    source.val(code || '');
+                    editor.getSession().setValue(code || '');
+                    // allow change events again after programmatic set
+                    setTimeout(function() { suppressChangeEvent = false; userHasEdited = false; }, 0);
                 }
 
                 if (code != null && code != '') {
                     update_submit_area(code);
                 } else {
-                    $.get('{{ url('language_template_ajax') }}', {
-                        id: lang_id,
-                        problem_id: {{ problem.id }}
+                    $.ajax({
+                        url: '{{ url('language_template_ajax') }}',
+                        data: { id: lang_id, problem_id: {{ problem.id }} },
+                        cache: false
                     }).done(function (template) {
                         update_submit_area(template);
                     }).fail(function() {
@@ -171,6 +179,12 @@
     });
 
     function init_editor(editor) {
+        if (editorInitialized) return;
+        editorInitialized = true;
+        // Track user modifications
+        editor.getSession().on('change', function () {
+            if (!suppressChangeEvent) userHasEdited = true;
+        });
         update_language_template(editor);
         editor.commands.addCommand({
             name: 'save',
@@ -191,6 +205,13 @@
         $('#ace_source').on('ace_load', function (e, editor) {
             init_editor(editor);
         });
+        // Fallback: poll briefly in case ace_load fired before binding
+        (function waitForAce(attempts){
+            if (editorInitialized) return;
+            if (window.ace_source) { init_editor(window.ace_source); return; }
+            if (attempts > 60) return; // ~3s max
+            setTimeout(function(){ waitForAce(attempts + 1); }, 50);
+        })(0);
     }
 
     function resizeEditor() {
@@ -221,13 +242,12 @@
         });
     }
 
-    // Ensure initial template load happens after editor is ready
+    // Ensure initial template load happens after editor is ready and on bfcache restore
     $(document).ready(function() {
-        setTimeout(function() {
-            if (window.ace_source && $('#id_source').val() == '') {
-                update_language_template(window.ace_source);
-            }
-        }, 100);
+        if (window.ace_source) update_language_template(window.ace_source);
+    });
+    window.addEventListener('pageshow', function() {
+        if (window.ace_source) update_language_template(window.ace_source);
     });
 
     $('#problem_submit').submit(function (event) {

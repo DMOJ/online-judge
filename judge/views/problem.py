@@ -620,12 +620,17 @@ class LanguageTemplateAjax(View):
         if problem_id:
             try:
                 template = ProblemTemplate.objects.get(problem_id=problem_id, language=language).code
-                return HttpResponse(template, content_type='text/plain')
+                resp = HttpResponse(template, content_type='text/plain')
+                resp['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+                resp['Pragma'] = 'no-cache'
+                return resp
             except (ProblemTemplate.DoesNotExist, ValueError):
                 pass
 
-        return HttpResponse(language.template, content_type='text/plain')
-
+        resp = HttpResponse(language.template, content_type='text/plain')
+        resp['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        resp['Pragma'] = 'no-cache'
+        return resp
 
 class RandomProblem(ProblemList):
     def get(self, request, *args, **kwargs):
