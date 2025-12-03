@@ -91,7 +91,10 @@
 
             if (shouldLoadTemplate) {
                 var lang_id = $('#id_language').val();
-                var code = localStorage.getItem('submit:{{ problem.id }}:' + lang_id);
+                var codeKey = 'submit:{{ problem.id }}:' + lang_id;
+                var savedFlagKey = 'submit-saved:{{ problem.id }}:' + lang_id;
+                var code = localStorage.getItem(codeKey);
+                var hasExplicitSave = localStorage.getItem(savedFlagKey) === '1';
 
                 function update_submit_area(code) {
                     window.previous_template = code || '';
@@ -102,7 +105,7 @@
                     setTimeout(function() { suppressChangeEvent = false; userHasEdited = false; }, 0);
                 }
 
-                if (code != null && code != '') {
+                if (hasExplicitSave && code != null && code !== '') {
                     update_submit_area(code);
                 } else {
                     $.ajax({
@@ -190,7 +193,9 @@
             name: 'save',
             bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
             exec: function () {
-                localStorage.setItem('submit:{{ problem.id }}:' + $('#id_language').val(), editor.getSession().getValue());
+                var lang_id = $('#id_language').val();
+                localStorage.setItem('submit:{{ problem.id }}:' + lang_id, editor.getSession().getValue());
+                localStorage.setItem('submit-saved:{{ problem.id }}:' + lang_id, '1');
             }
         });
         editor.getSession().setUseWrapMode(true);

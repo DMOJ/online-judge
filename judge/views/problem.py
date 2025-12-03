@@ -632,6 +632,7 @@ class LanguageTemplateAjax(View):
         resp['Pragma'] = 'no-cache'
         return resp
 
+
 class RandomProblem(ProblemList):
     def get(self, request, *args, **kwargs):
         self.setup_problem_list(request)
