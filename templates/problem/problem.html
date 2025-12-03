@@ -77,7 +77,7 @@
         var userHasEdited = false;
         var suppressChangeEvent = false;
 
-        function update_language_template(editor) {
+        function update_language_template(editor, force) {
             if (!editor && window.ace_source) editor = window.ace_source;
             if (!editor) return;
 
@@ -87,7 +87,7 @@
             // Load template if: empty, matches previous template, or user hasn't modified it yet
             var normalizedCurrent = currentValue.replace(/\r/g, '').trim();
             var normalizedPrev = (window.previous_template || '').replace(/\r/g, '').trim();
-            var shouldLoadTemplate = !userHasEdited || normalizedCurrent === '' || normalizedCurrent === normalizedPrev;
+            var shouldLoadTemplate = force || !userHasEdited || normalizedCurrent === '' || normalizedCurrent === normalizedPrev;
 
             if (shouldLoadTemplate) {
                 var lang_id = $('#id_language').val();
@@ -110,7 +110,7 @@
                 } else {
                     $.ajax({
                         url: '{{ url('language_template_ajax') }}',
-                        data: { id: lang_id, problem_id: {{ problem.id }} },
+                        data: { id: lang_id, problem_id: {{ problem.id }}, _: Date.now() },
                         cache: false
                     }).done(function (template) {
                         update_submit_area(template);
@@ -184,11 +184,12 @@
     function init_editor(editor) {
         if (editorInitialized) return;
         editorInitialized = true;
-        // Track user modifications
+        // Initial template fetch should ignore preserved form state
+        update_language_template(editor, true);
+        // Track user modifications after initial load
         editor.getSession().on('change', function () {
             if (!suppressChangeEvent) userHasEdited = true;
         });
-        update_language_template(editor);
         editor.commands.addCommand({
             name: 'save',
             bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
@@ -249,10 +250,10 @@
 
     // Ensure initial template load happens after editor is ready and on bfcache restore
     $(document).ready(function() {
-        if (window.ace_source) update_language_template(window.ace_source);
+        if (window.ace_source) update_language_template(window.ace_source, true);
     });
     window.addEventListener('pageshow', function() {
-        if (window.ace_source) update_language_template(window.ace_source);
+        if (window.ace_source) update_language_template(window.ace_source, true);
     });
 
     $('#problem_submit').submit(function (event) {
