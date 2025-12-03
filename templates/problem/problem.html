@@ -221,9 +221,14 @@
         });
     }
 
-    // Ensure initial template load happens after editor is ready and on bfcache restore
+    // Ensure initial template load happens after editor is ready, on window load, and on bfcache restore
     $(document).ready(function() {
         if (window.ace_source) update_language_template(window.ace_source, true);
+    });
+    window.addEventListener('load', function() {
+        // Overwrite any preserved state after full load
+        setTimeout(function(){ if (window.ace_source) update_language_template(window.ace_source, true); }, 100);
+        setTimeout(function(){ if (window.ace_source) update_language_template(window.ace_source, true); }, 600);
     });
     window.addEventListener('pageshow', function() {
         if (window.ace_source) update_language_template(window.ace_source, true);
