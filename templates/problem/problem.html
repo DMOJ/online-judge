@@ -178,20 +178,7 @@
         // editor.focus(); // Don't focus automatically on problem page
     }
 
-    if (window.ace_source) {
-        init_editor(window.ace_source);
-    } else {
-        $('#ace_source').on('ace_load', function (e, editor) {
-            init_editor(editor);
-        });
-        // Fallback: poll briefly in case ace_load fired before binding
-        (function waitForAce(attempts){
-            if (editorInitialized) return;
-            if (window.ace_source) { init_editor(window.ace_source); return; }
-            if (attempts > 60) return; // ~3s max
-            setTimeout(function(){ waitForAce(attempts + 1); }, 50);
-        })(0);
-    }
+    // Initialization handled by ensureEditorReady below
 
     function resizeEditor() {
         var $editor = $('#ace_source');
@@ -221,17 +208,47 @@
         });
     }
 
-    // Ensure initial template load happens after editor is ready, on window load, and on bfcache restore
-    $(document).ready(function() {
-        if (window.ace_source) update_language_template(window.ace_source, true);
+    // Ensure initial template load happens after editor is ready
+    $(function() {
+        var maxAttempts = 100; // 5 seconds max
+        var attempt = 0;
+
+        function ensureEditorReady() {
+            if (window.ace_source) {
+                if (!editorInitialized) {
+                    init_editor(window.ace_source);
+                } else {
+                    // Even if initialized, check if we need to load template (e.g. if empty)
+                    var currentVal = window.ace_source.getSession().getValue();
+                    if (!currentVal || currentVal.trim() === '') {
+                        update_language_template(window.ace_source, true);
+                    }
+                }
+                return;
+            }
+
+            attempt++;
+            if (attempt < maxAttempts) {
+                setTimeout(ensureEditorReady, 50);
+            } else {
+                console.warn('ACE editor failed to load after 5 seconds');
+            }
+        }
+
+        // Start polling
+        ensureEditorReady();
+
+        // Also hook into ace_load if it happens later
+        $('#ace_source').on('ace_load', function (e, editor) {
+            init_editor(editor);
+        });
     });
-    window.addEventListener('load', function() {
-        // Overwrite any preserved state after full load
-        setTimeout(function(){ if (window.ace_source) update_language_template(window.ace_source, true); }, 100);
-        setTimeout(function(){ if (window.ace_source) update_language_template(window.ace_source, true); }, 600);
-    });
-    window.addEventListener('pageshow', function() {
-        if (window.ace_source) update_language_template(window.ace_source, true);
+
+    window.addEventListener('pageshow', function(event) {
+        // Handle back/forward cache
+        if (event.persisted && window.ace_source) {
+             update_language_template(window.ace_source, true);
+        }
     });
 
     $('#problem_submit').submit(function (event) {
