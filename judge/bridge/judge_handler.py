@@ -230,7 +230,10 @@ class JudgeHandler(ZlibPacketHandler):
         data = self.get_related_submission_data(id)
         self._working = id
         self._no_response_job = threading.Timer(20, self._kill_if_no_response)
-        self.send({
+
+        # Check if this is an IDE submission
+        is_ide = problem == 'idepractice'
+        packet = {
             'name': 'submission-request',
             'submission-id': id,
             'problem-id': problem,
@@ -245,7 +248,22 @@ class JudgeHandler(ZlibPacketHandler):
                 'attempt-no': data.attempt_no,
                 'user': data.user_id,
             },
-        })
+        }
+
+        # Override settings for IDE submissions
+        if is_ide:
+            from django.core.cache import cache
+            ide_metadata = cache.get(f'ide_metadata:{id}')
+            if ide_metadata:
+                packet['time-limit'] = ide_metadata.get('time_limit', 2.0)
+                packet['memory-limit'] = ide_metadata.get('memory_limit', 65536)
+                # Pass custom input - write it to the meta field for judge server to use
+                custom_input = ide_metadata.get('custom_input', '')
+                packet['meta']['custom_input'] = custom_input
+                # Mark as IDE submission so judge server can handle it specially
+                packet['meta']['is_ide'] = True
+
+        self.send(packet)
 
     def _kill_if_no_response(self):
         logger.error('Judge failed to acknowledge submission: %s: %s', self.name, self._working)

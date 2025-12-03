@@ -78,34 +78,28 @@ def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=No
 
     SubmissionTestCase.objects.filter(submission_id=submission.id).delete()
 
-    # Check if this is an IDE submission
+    # Check if this is an IDE submission and store metadata in cache for bridge to use
     is_ide_submission = submission.problem.code == 'idepractice'
-    custom_input = None
 
     if is_ide_submission:
         from django.core.cache import cache
-        custom_input = cache.get(f'ide_input:{submission.id}', '')
-
-    # Build submission packet
-    packet = {
-        'name': 'submission-request',
-        'submission-id': submission.id,
-        'problem-id': submission.problem.code,
-        'language': submission.language.key,
-        'source': submission.source.source,
-        'judge-id': judge_id,
-        'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else (REJUDGE_PRIORITY if rejudge else priority),
-    }
-
-    # Add IDE-specific metadata
-    if is_ide_submission:
-        packet['time-limit'] = 2.0  # 2 seconds for IDE
-        packet['memory-limit'] = 65536  # 64 MB for IDE
-        packet['custom-input'] = custom_input
-        packet['output-limit'] = 10240  # 10 KB output limit
+        # Store IDE metadata in cache for judge bridge to retrieve
+        cache.set(f'ide_metadata:{submission.id}', {
+            'custom_input': cache.get(f'ide_input:{submission.id}', ''),
+            'time_limit': 2.0,  # 2 seconds for IDE
+            'memory_limit': 65536,  # 64 MB for IDE
+        }, timeout=600)  # 10 minutes
 
     try:
-        response = judge_request(packet)
+        response = judge_request({
+            'name': 'submission-request',
+            'submission-id': submission.id,
+            'problem-id': submission.problem.code,
+            'language': submission.language.key,
+            'source': submission.source.source,
+            'judge-id': judge_id,
+            'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else (REJUDGE_PRIORITY if rejudge else priority),
+        })
     except BaseException:
         logger.exception('Failed to send request to judge')
         Submission.objects.filter(id=submission.id).update(status='IE', result='IE')
