@@ -61,23 +61,27 @@
 }
 
 @media (min-width: 700px) and (max-width: 1024px) {
-    // Tablet: Stack submission below description, sidebar on right
+    // Tablet: 2 columns - Left (description + submission stacked), Right (info)
     #common-content {
         display: flex;
-        flex-direction: row-reverse;
-        flex-wrap: wrap;
+        flex-direction: row;          // Left to right (not row-reverse)
+        flex-wrap: wrap;              // Allow wrapping to stack description and submission
         gap: 1.5em;
+        align-items: flex-start;
     }
 
     #content-left {
-        flex: 1 1 100%;
-        order: 1;
+        flex: 1 1 calc(100% - 14em);  // Width to fit next to sidebar (12.5em + 1.5em gap)
+        max-width: calc(100% - 14em); // Prevent growing beyond this
+        min-width: 300px;
+        order: 1;                     // First item (left column)
     }
 
     #content-middle {
-        flex: 1 1 calc(100% - 13.5em);
-        order: 3;
-        max-width: none;
+        flex: 1 1 calc(100% - 14em);  // Same width as description to align properly
+        max-width: calc(100% - 14em); // Prevent growing beyond this
+        min-width: 300px;
+        order: 3;                     // Third item (wraps below left column)
 
         .submission-float {
             position: static;
@@ -85,8 +89,8 @@
     }
 
     #content-right {
-        flex: 0 0 12.5em;
-        order: 2;
+        flex: 0 0 12.5em;             // Fixed width sidebar
+        order: 2;                     // Second item (right column)
         padding-top: 1em;
 
         .info-float {
@@ -97,15 +101,29 @@
 }
 
 @media not all and (min-width: 700px) {
-    // Mobile: Stack all columns vertically
-    #content-right .info-float {
-        float: none;
-        width: 100% !important;
-        position: static !important;
-        box-sizing: border-box;
+    // Mobile: Stack vertically - info, then description, then submission
+    #common-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #content-right {
+        order: 1;  // Info first
+
+        .info-float {
+            float: none;
+            width: 100% !important;
+            position: static !important;
+            box-sizing: border-box;
+        }
+    }
+
+    #content-left {
+        order: 2;  // Description second
     }
 
     #content-middle {
+        order: 3;  // Submission third
         width: 100%;
         margin-top: 1em;
 

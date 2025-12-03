@@ -1,6 +1,8 @@
 {% extends "common-content.html" %}
 {% block content_media %}
     {% include "comments/media-css.html" %}
+    {# Ensure ACE/editor CSS is available on problem page too #}
+    {% if form %}{{ form.media.css }}{% endif %}
     <style>
         .title-state {
             font-size: 2em;
@@ -41,6 +43,11 @@
         .problem-info-entry {
             padding-top: 0.5em;
         }
+
+        /* Make fullscreen editor overlay everything on problem page */
+        .django-ace-editor-fullscreen {
+            z-index: 200000 !important;
+        }
     </style>
 {% endblock %}
 
@@ -72,9 +79,15 @@
             if (!editor) return;
 
             var source = $('textarea#id_source');
-            if (source.val() == window.previous_template.replace(/\r/g, '') || source.val() == '') {
+            var currentValue = source.val();
+
+            // Load template if: empty, matches previous template, or user hasn't modified it yet
+            var shouldLoadTemplate = currentValue == '' ||
+                                    currentValue == window.previous_template.replace(/\r/g, '');
+
+            if (shouldLoadTemplate) {
                 var lang_id = $('#id_language').val();
-                var code = localStorage.getItem('submit:{{ problem.id }}:' + $('#id_language').val());
+                var code = localStorage.getItem('submit:{{ problem.id }}:' + lang_id);
 
                 function update_submit_area(code) {
                     window.previous_template = code;
@@ -82,18 +95,21 @@
                     editor.getSession().setValue(code);
                 }
 
-                if (code != null) {
+                if (code != null && code != '') {
                     update_submit_area(code);
                 } else {
                     $.get('{{ url('language_template_ajax') }}', {
                         id: lang_id,
                         problem_id: {{ problem.id }}
-            }).done(function (template) {
-                update_submit_area(template);
-            });
-                            }
-                        }
-                    }
+                    }).done(function (template) {
+                        update_submit_area(template);
+                    }).fail(function() {
+                        // Fallback to empty if AJAX fails
+                        console.warn('Failed to load template for language', lang_id);
+                    });
+                }
+            }
+        }
 
     function makeDisplayData(data) {
         var site_data = data.attr('data-info');
@@ -177,13 +193,42 @@
         });
     }
 
-    $(window).resize(function () {
-        var headerHeight = 70;
-        var formControlsHeight = 150;
-        var paddingBuffer = 100;
-        var availableHeight = $(window).height() - headerHeight - formControlsHeight - paddingBuffer;
-        $('#ace_source').height(Math.max(availableHeight, 300));
-    }).resize();
+    function resizeEditor() {
+        var $editor = $('#ace_source');
+        if (!$editor.length) return;
+
+        var windowHeight = $(window).height();
+        var editorTop = $editor.offset().top;
+        var formControlsHeight = 200; // Language selector + submit button + margins
+        var paddingBottom = 50;
+
+        var availableHeight = windowHeight - editorTop - formControlsHeight - paddingBottom;
+        $editor.height(Math.max(availableHeight, 300));
+
+        if (window.ace_source) {
+            window.ace_source.resize();
+        }
+    }
+
+    $(window).resize(resizeEditor);
+
+    // Call after ACE editor loads
+    if (window.ace_source) {
+        resizeEditor();
+    } else {
+        $('#ace_source').on('ace_load', function () {
+            resizeEditor();
+        });
+    }
+
+    // Ensure initial template load happens after editor is ready
+    $(document).ready(function() {
+        setTimeout(function() {
+            if (window.ace_source && $('#id_source').val() == '') {
+                update_language_template(window.ace_source);
+            }
+        }, 100);
+    });
 
     $('#problem_submit').submit(function (event) {
         if ($('#id_source').val().length > 65536) {

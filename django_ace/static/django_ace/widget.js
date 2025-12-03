@@ -46,22 +46,51 @@
     }
 
     function minimizeMaximize(widget, main_block, editor) {
-        if (window.fullscreen == true) {
+        // Move the fullscreen container to <body> to escape any stacking contexts
+        // created by ancestors (e.g., sticky/transform) and ensure it overlays header/footer.
+        if (window.fullscreen === true) {
+            // Exit fullscreen
             main_block.className = 'django-ace-editor';
 
-            widget.style.width = window.ace_widget.width + 'px';
-            widget.style.height = window.ace_widget.height + 'px';
+            // Restore dimensions
+            if (window.ace_widget) {
+                widget.style.width = window.ace_widget.width + 'px';
+                widget.style.height = window.ace_widget.height + 'px';
+            }
+
+            // Restore element to its original place in DOM
+            if (main_block.__ace_placeholder && main_block.__ace_return_parent) {
+                try {
+                    main_block.__ace_return_parent.insertBefore(main_block, main_block.__ace_placeholder);
+                    main_block.__ace_placeholder.parentNode && main_block.__ace_placeholder.parentNode.removeChild(main_block.__ace_placeholder);
+                } catch (e) {
+                    // no-op; best effort to restore
+                }
+            }
+            main_block.__ace_placeholder = null;
+            main_block.__ace_return_parent = null;
+
             window.fullscreen = false;
-        }
-        else {
+        } else {
+            // Enter fullscreen
             window.ace_widget = {
                 'width': widget.offsetWidth,
                 'height': widget.offsetHeight
             };
 
+            // Insert a placeholder to remember original position
+            var placeholder = document.createElement('span');
+            placeholder.style.display = 'none';
+            main_block.parentNode.insertBefore(placeholder, main_block);
+            main_block.__ace_placeholder = placeholder;
+            main_block.__ace_return_parent = placeholder.parentNode;
+
+            // Move the block to body and apply fullscreen class
+            document.body.appendChild(main_block);
             main_block.className = 'django-ace-editor-fullscreen';
 
-            widget.style.height = getDocHeight() + 'px';
+            // Size to viewport
+            widget.style.height = getDocHeight() - 30 + 'px';
             widget.style.width = getDocWidth() + 'px';
 
             window.scrollTo(0, 0);
