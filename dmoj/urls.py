@@ -11,9 +11,9 @@ from django.views.generic import RedirectView
 
 from judge.feed import AtomBlogFeed, AtomCommentFeed, AtomProblemFeed, BlogFeed, CommentFeed, ProblemFeed
 from judge.sitemap import sitemaps
-from judge.views import TitledTemplateView, api, blog, comment, contests, language, license, mailgun, organization, \
-    preview, problem, problem_manage, ranked_submission, register, stats, status, submission, tasks, ticket, \
-    two_factor, user, widgets
+from judge.views import TitledTemplateView, api, blog, comment, contests, ide, language, license, mailgun, \
+    organization, preview, problem, problem_manage, ranked_submission, register, stats, status, submission, tasks, \
+    ticket, two_factor, user, widgets
 from judge.views.problem_data import ProblemDataView, ProblemSubmissionDiff, \
     download_test_case, download_tester, problem_data_file, problem_init_view
 from judge.views.register import ActivationView, RegistrationView
@@ -260,6 +260,12 @@ urlpatterns = [
     path('runtimes/', language.LanguageList.as_view(), name='runtime_list'),
     path('runtimes/matrix/', status.version_matrix, name='version_matrix'),
     path('status/', status.status_all, name='status_all'),
+
+    path('ide/', include([
+        path('', ide.IDEView.as_view(), name='ide'),
+        path('submit', ide.IDESubmitView.as_view(), name='ide_submit'),
+        path('status/<int:submission>', ide.IDESubmissionStatus.as_view(), name='ide_submission_status'),
+    ])),
 
     path('api/v2/', include([
         path('contests', api.api_v2.APIContestList.as_view()),
