@@ -69,6 +69,7 @@
     bottom: 0;
     right: 0;
     z-index: 1000;
+    overflow: auto;
 
     .django-ace-max_min {
         background-image: url($path_to_root + '/ace/img/contract.png');
