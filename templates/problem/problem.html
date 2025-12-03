@@ -75,17 +75,29 @@
         window.previous_template = '';
         var editorInitialized = false;
         var templateLoadInProgress = false;
-        var pageShowFired = false;
+        var templateLoadAttempted = false;
 
         function update_language_template(editor, force) {
             if (!editor && window.ace_source) editor = window.ace_source;
-            if (!editor) return;
+            if (!editor) {
+                console.log('Editor not ready for template load');
+                return;
+            }
 
             // Prevent duplicate simultaneous loads
             if (templateLoadInProgress) {
+                console.log('Template load already in progress');
                 return;
             }
+
+            // If already loaded successfully and not forced, skip
+            if (!force && templateLoadAttempted && window.previous_template) {
+                console.log('Template already loaded, skipping');
+                return;
+            }
+
             templateLoadInProgress = true;
+            console.log('Loading template...');
 
             var source = $('textarea#id_source');
             var lang_id = $('#id_language').val();
@@ -94,6 +106,8 @@
                 window.previous_template = code || '';
                 source.val(code || '');
                 editor.getSession().setValue(code || '');
+                templateLoadAttempted = true;
+                console.log('Template loaded successfully');
             }
 
             $.ajax({
@@ -110,6 +124,7 @@
             }).fail(function() {
                 // Fallback to empty if AJAX fails
                 console.warn('Failed to load template for language', lang_id);
+                templateLoadAttempted = true;
             }).always(function() {
                 templateLoadInProgress = false;
             });
@@ -228,25 +243,32 @@
         var maxAttempts = 100; // 5 seconds max
         var attempt = 0;
 
+        console.log('loadInitialTemplate called');
+
         function ensureEditorReady() {
+            console.log('ensureEditorReady attempt', attempt, 'editor exists:', !!window.ace_source);
+
             if (window.ace_source) {
                 if (!editorInitialized) {
+                    console.log('Initializing editor for first time');
                     init_editor(window.ace_source);
                 } else {
-                    // Even if initialized, check if we need to load template (e.g. if empty)
-                    var currentVal = window.ace_source.getSession().getValue();
-                    if (!currentVal || currentVal.trim() === '') {
-                        update_language_template(window.ace_source, true);
+                    // Even if initialized, try to load template if not loaded yet
+                    console.log('Editor already initialized, checking template status');
+                    if (!templateLoadAttempted) {
+                        update_language_template(window.ace_source, false);
                     }
                 }
-                return;
+                return true;
             }
 
             attempt++;
             if (attempt < maxAttempts) {
                 setTimeout(ensureEditorReady, 50);
+                return false;
             } else {
                 console.warn('ACE editor failed to load after 5 seconds');
+                return false;
             }
         }
 
@@ -255,31 +277,62 @@
 
         // Also hook into ace_load if it happens later
         $('#ace_source').on('ace_load', function (e, editor) {
+            console.log('ace_load event fired');
             init_editor(editor);
         });
     }
 
+    // Try multiple initialization paths for maximum browser compatibility
+
+    // Path 1: jQuery ready (most reliable for DOM manipulation)
     $(function() {
-        // Only load if pageshow hasn't fired yet
-        if (!pageShowFired) {
-            loadInitialTemplate();
-        }
+        console.log('jQuery ready fired');
+        loadInitialTemplate();
     });
 
-    // Handle both DOMContentLoaded and pageshow to cover all browser behaviors
-    window.addEventListener('pageshow', function(event) {
-        pageShowFired = true;
+    // Path 2: DOMContentLoaded (fires before jQuery ready in some cases)
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded fired');
+        setTimeout(function() {
+            if (window.ace_source && !templateLoadAttempted) {
+                console.log('DOMContentLoaded: trying to load template');
+                if (!editorInitialized) {
+                    init_editor(window.ace_source);
+                } else {
+                    update_language_template(window.ace_source, false);
+                }
+            }
+        }, 100);
+    });
 
-        // Always reload template on pageshow - this handles both:
-        // 1. Initial page load (some browsers fire pageshow on initial load)
-        // 2. Back/forward cache restoration (event.persisted === true)
-        if (window.ace_source) {
-            // Immediately reload template
-            update_language_template(window.ace_source, true);
-        } else {
-            // Editor not ready yet, poll for it
-            loadInitialTemplate();
-        }
+    // Path 3: pageshow (handles bfcache restoration)
+    window.addEventListener('pageshow', function(event) {
+        console.log('pageshow fired, persisted:', event.persisted);
+
+        setTimeout(function() {
+            if (window.ace_source) {
+                // Force reload on bfcache restoration, otherwise load if not attempted
+                var shouldForce = event.persisted;
+                if (shouldForce || !templateLoadAttempted) {
+                    console.log('pageshow: loading template, force:', shouldForce);
+                    update_language_template(window.ace_source, shouldForce);
+                }
+            } else {
+                console.log('pageshow: editor not ready, calling loadInitialTemplate');
+                loadInitialTemplate();
+            }
+        }, event.persisted ? 0 : 100);
+    });
+
+    // Path 4: window.load (last resort, everything should be ready)
+    window.addEventListener('load', function() {
+        console.log('window.load fired');
+        setTimeout(function() {
+            if (window.ace_source && !templateLoadAttempted) {
+                console.log('window.load: trying to load template');
+                update_language_template(window.ace_source, false);
+            }
+        }, 100);
     });
 
     $('#problem_submit').submit(function (event) {
