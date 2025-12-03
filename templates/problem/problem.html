@@ -77,9 +77,15 @@
         var templateLoadInProgress = false;
         var templateLoadAttempted = false;
 
+        function isEditorReady(editor) {
+            return editor &&
+                   typeof editor.getSession === 'function' &&
+                   typeof editor.getSession().setValue === 'function';
+        }
+
         function update_language_template(editor, force) {
             if (!editor && window.ace_source) editor = window.ace_source;
-            if (!editor) {
+            if (!isEditorReady(editor)) {
                 console.log('Editor not ready for template load');
                 return;
             }
@@ -222,7 +228,7 @@
         var availableHeight = windowHeight - editorTop - formControlsHeight - paddingBottom;
         $editor.height(Math.max(availableHeight, 300));
 
-        if (window.ace_source) {
+        if (window.ace_source && typeof window.ace_source.resize === 'function') {
             window.ace_source.resize();
         }
     }
@@ -246,9 +252,9 @@
         console.log('loadInitialTemplate called');
 
         function ensureEditorReady() {
-            console.log('ensureEditorReady attempt', attempt, 'editor exists:', !!window.ace_source);
+            console.log('ensureEditorReady attempt', attempt, 'editor exists:', !!window.ace_source, 'editor ready:', isEditorReady(window.ace_source));
 
-            if (window.ace_source) {
+            if (isEditorReady(window.ace_source)) {
                 if (!editorInitialized) {
                     console.log('Initializing editor for first time');
                     init_editor(window.ace_source);
@@ -278,7 +284,9 @@
         // Also hook into ace_load if it happens later
         $('#ace_source').on('ace_load', function (e, editor) {
             console.log('ace_load event fired');
-            init_editor(editor);
+            if (isEditorReady(editor)) {
+                init_editor(editor);
+            }
         });
     }
 
@@ -294,7 +302,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOMContentLoaded fired');
         setTimeout(function() {
-            if (window.ace_source && !templateLoadAttempted) {
+            if (isEditorReady(window.ace_source) && !templateLoadAttempted) {
                 console.log('DOMContentLoaded: trying to load template');
                 if (!editorInitialized) {
                     init_editor(window.ace_source);
@@ -310,7 +318,7 @@
         console.log('pageshow fired, persisted:', event.persisted);
 
         setTimeout(function() {
-            if (window.ace_source) {
+            if (isEditorReady(window.ace_source)) {
                 // Force reload on bfcache restoration, otherwise load if not attempted
                 var shouldForce = event.persisted;
                 if (shouldForce || !templateLoadAttempted) {
@@ -328,7 +336,7 @@
     window.addEventListener('load', function() {
         console.log('window.load fired');
         setTimeout(function() {
-            if (window.ace_source && !templateLoadAttempted) {
+            if (isEditorReady(window.ace_source) && !templateLoadAttempted) {
                 console.log('window.load: trying to load template');
                 update_language_template(window.ace_source, false);
             }
