@@ -226,13 +226,14 @@ class JudgeHandler(ZlibPacketHandler):
         else:
             self.send({'name': 'disconnect'})
 
-    def submit(self, id, problem, language, source):
+    def submit(self, id, problem, language, source, ide_custom_input=None):
         data = self.get_related_submission_data(id)
         self._working = id
         self._no_response_job = threading.Timer(20, self._kill_if_no_response)
 
         # Check if this is an IDE submission
         is_ide = problem == 'idepractice'
+        logger.error(f"BRIDGE DEBUG: submit() called with ide_custom_input='{ide_custom_input}'")
         packet = {
             'name': 'submission-request',
             'submission-id': id,
@@ -252,16 +253,15 @@ class JudgeHandler(ZlibPacketHandler):
 
         # Override settings for IDE submissions
         if is_ide:
-            from django.core.cache import cache
-            ide_metadata = cache.get(f'ide_metadata:{id}')
-            if ide_metadata:
-                packet['time-limit'] = ide_metadata.get('time_limit', 2.0)
-                packet['memory-limit'] = ide_metadata.get('memory_limit', 65536)
-                # Pass custom input - write it to the meta field for judge server to use
-                custom_input = ide_metadata.get('custom_input', '')
-                packet['meta']['custom_input'] = custom_input
-                # Mark as IDE submission so judge server can handle it specially
-                packet['meta']['is_ide'] = True
+            # ALWAYS set is_ide flag
+            packet['meta']['is_ide'] = True
+            packet['time-limit'] = 2.0
+            packet['memory-limit'] = 65536
+
+            # Use custom input passed directly from judgeapi
+            custom_input = ide_custom_input if ide_custom_input is not None else ''
+            packet['meta']['custom_input'] = custom_input
+            logger.error(f"BRIDGE DEBUG: Set custom_input in meta: '{custom_input}' (len={len(custom_input)})")
 
         self.send(packet)
 

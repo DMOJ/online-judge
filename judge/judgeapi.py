@@ -81,25 +81,26 @@ def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=No
     # Check if this is an IDE submission and store metadata in cache for bridge to use
     is_ide_submission = submission.problem.code == 'idepractice'
 
+    # Build submission packet
+    packet = {
+        'name': 'submission-request',
+        'submission-id': submission.id,
+        'problem-id': submission.problem.code,
+        'language': submission.language.key,
+        'source': submission.source.source,
+        'judge-id': judge_id,
+        'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else (REJUDGE_PRIORITY if rejudge else priority),
+    }
+
+    # For IDE submissions, add custom input directly to packet
     if is_ide_submission:
         from django.core.cache import cache
-        # Store IDE metadata in cache for judge bridge to retrieve
-        cache.set(f'ide_metadata:{submission.id}', {
-            'custom_input': cache.get(f'ide_input:{submission.id}', ''),
-            'time_limit': 2.0,  # 2 seconds for IDE
-            'memory_limit': 65536,  # 64 MB for IDE
-        }, timeout=600)  # 10 minutes
+        custom_input = cache.get(f'ide_input:{submission.id}', '')
+        packet['ide-custom-input'] = custom_input
+        logger.info(f'IDE submission {submission.id}: custom_input length = {len(custom_input)}')
 
     try:
-        response = judge_request({
-            'name': 'submission-request',
-            'submission-id': submission.id,
-            'problem-id': submission.problem.code,
-            'language': submission.language.key,
-            'source': submission.source.source,
-            'judge-id': judge_id,
-            'priority': BATCH_REJUDGE_PRIORITY if batch_rejudge else (REJUDGE_PRIORITY if rejudge else priority),
-        })
+        response = judge_request(packet)
     except BaseException:
         logger.exception('Failed to send request to judge')
         Submission.objects.filter(id=submission.id).update(status='IE', result='IE')

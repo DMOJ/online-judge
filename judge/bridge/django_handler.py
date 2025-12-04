@@ -42,9 +42,10 @@ class DjangoHandler(ZlibPacketHandler):
         source = data['source']
         judge_id = data['judge-id']
         priority = data['priority']
+        ide_custom_input = data.get('ide-custom-input', None)  # Extract custom input for IDE
         if not self.judges.check_priority(priority):
             return {'name': 'bad-request'}
-        self.judges.judge(id, problem, language, source, judge_id, priority)
+        self.judges.judge(id, problem, language, source, judge_id, priority, ide_custom_input)
         return {'name': 'submission-received', 'submission-id': id}
 
     def on_termination(self, data):
