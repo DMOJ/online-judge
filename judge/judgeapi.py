@@ -97,7 +97,6 @@ def judge_submission(submission, rejudge=False, batch_rejudge=False, judge_id=No
         from django.core.cache import cache
         custom_input = cache.get(f'ide_input:{submission.id}', '')
         packet['ide-custom-input'] = custom_input
-        logger.info(f'IDE submission {submission.id}: custom_input length = {len(custom_input)}')
 
     try:
         response = judge_request(packet)

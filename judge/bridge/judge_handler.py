@@ -233,7 +233,6 @@ class JudgeHandler(ZlibPacketHandler):
 
         # Check if this is an IDE submission
         is_ide = problem == 'idepractice'
-        logger.error(f"BRIDGE DEBUG: submit() called with ide_custom_input='{ide_custom_input}'")
         packet = {
             'name': 'submission-request',
             'submission-id': id,
@@ -261,7 +260,6 @@ class JudgeHandler(ZlibPacketHandler):
             # Use custom input passed directly from judgeapi
             custom_input = ide_custom_input if ide_custom_input is not None else ''
             packet['meta']['custom_input'] = custom_input
-            logger.error(f"BRIDGE DEBUG: Set custom_input in meta: '{custom_input}' (len={len(custom_input)})")
 
         self.send(packet)
 

@@ -37,7 +37,7 @@ class IDEView(LoginRequiredMixin, TitleMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['languages'] = Language.objects.filter(
-            judges__online=True
+            judges__online=True,
         ).distinct().order_by('name', 'key')
         context['ACE_URL'] = settings.ACE_URL
         context['default_lang'] = self.request.profile.language
@@ -59,7 +59,8 @@ class IDESubmitView(LoginRequiredMixin, View):
 
         if current_count >= IDE_RATE_LIMIT_COUNT:
             return JsonResponse({
-                'error': f'Rate limit exceeded. Maximum {IDE_RATE_LIMIT_COUNT} runs per {IDE_RATE_LIMIT_WINDOW} minute(s).'
+                'error':
+                f'Rate limit exceeded. Maximum {IDE_RATE_LIMIT_COUNT} runs per {IDE_RATE_LIMIT_WINDOW} minute(s).',
             }, status=429)
 
         # Parse request
@@ -70,19 +71,19 @@ class IDESubmitView(LoginRequiredMixin, View):
         # Validation
         if not source_code or len(source_code) > 65536:
             return JsonResponse({
-                'error': 'Source code must be between 1 and 65536 characters.'
+                'error': 'Source code must be between 1 and 65536 characters.',
             }, status=400)
 
         if len(custom_input) > 65536:
             return JsonResponse({
-                'error': 'Input must be at most 65536 characters.'
+                'error': 'Input must be at most 65536 characters.',
             }, status=400)
 
         try:
             language = Language.objects.get(id=language_id, judges__online=True)
         except Language.DoesNotExist:
             return JsonResponse({
-                'error': 'Invalid or unavailable language.'
+                'error': 'Invalid or unavailable language.',
             }, status=400)
 
         # Get IDE problem
@@ -90,7 +91,7 @@ class IDESubmitView(LoginRequiredMixin, View):
             ide_problem = Problem.objects.get(code=IDE_PROBLEM_CODE)
         except Problem.DoesNotExist:
             return JsonResponse({
-                'error': 'IDE feature not configured. Contact administrator.'
+                'error': 'IDE feature not configured. Contact administrator.',
             }, status=500)
 
         # Check global submission limit (reuse existing spam check)
@@ -99,7 +100,7 @@ class IDESubmitView(LoginRequiredMixin, View):
                               .exclude(status__in=['D', 'IE', 'CE', 'AB'])
                               .count() >= settings.DMOJ_SUBMISSION_LIMIT):
             return JsonResponse({
-                'error': 'You have too many submissions in queue. Please wait.'
+                'error': 'You have too many submissions in queue. Please wait.',
             }, status=429)
 
         # Create submission
@@ -113,7 +114,7 @@ class IDESubmitView(LoginRequiredMixin, View):
 
             source = SubmissionSource(
                 submission=submission,
-                source=source_code
+                source=source_code,
             )
             source.save()
             submission.source = source
@@ -133,7 +134,7 @@ class IDESubmitView(LoginRequiredMixin, View):
         return JsonResponse({
             'success': True,
             'submission_id': submission.id,
-            'submission_url': reverse('ide_submission_status', args=[submission.id])
+            'submission_url': reverse('ide_submission_status', args=[submission.id]),
         })
 
 
