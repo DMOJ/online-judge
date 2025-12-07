@@ -70,6 +70,16 @@
             main_block.__ace_placeholder = null;
             main_block.__ace_return_parent = null;
 
+            // Clear any inline fullscreen styles
+            try {
+                main_block.style.position = '';
+                main_block.style.top = '';
+                main_block.style.left = '';
+                main_block.style.right = '';
+                main_block.style.bottom = '';
+                main_block.style.zIndex = '';
+            } catch (e) {}
+
             window.fullscreen = false;
         } else {
             // Enter fullscreen
@@ -88,6 +98,17 @@
             // Move the block to body and apply fullscreen class
             document.body.appendChild(main_block);
             main_block.className = 'django-ace-editor-fullscreen';
+
+            // Explicitly set inline styles to avoid stacking quirks in Edge/Windows
+            // Ensures the editor overlays nav/footer/MathJax regardless of external CSS.
+            try {
+                main_block.style.position = 'fixed';
+                main_block.style.top = '0';
+                main_block.style.left = '0';
+                main_block.style.right = '0';
+                main_block.style.bottom = '0';
+                main_block.style.zIndex = '2147483000';
+            } catch (e) {}
 
             // Size to viewport
             widget.style.height = getDocHeight() - 30 + 'px';
