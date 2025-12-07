@@ -76,3 +76,16 @@
         @include vars-img;
     }
 }
+
+/* While Ace fullscreen is active, hide site chrome/content to avoid any
+   browser-specific stacking quirks (Edge/Windows) overlapping the editor. */
+body.ace-fullscreen-active {
+    overflow: hidden; /* prevent background scroll */
+}
+
+body.ace-fullscreen-active nav#navigation,
+body.ace-fullscreen-active footer,
+body.ace-fullscreen-active #announcement,
+body.ace-fullscreen-active #page-container {
+    visibility: hidden !important; /* keep layout stable but hide visuals */
+}

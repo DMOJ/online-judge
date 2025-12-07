@@ -80,6 +80,12 @@
                 main_block.style.zIndex = '';
             } catch (e) {}
 
+            try {
+                document.body.classList.remove('ace-fullscreen-active');
+                document.documentElement.classList.remove('ace-fullscreen-active');
+                document.body.style.overflow = '';
+            } catch (e) {}
+
             window.fullscreen = false;
         } else {
             // Enter fullscreen
@@ -116,6 +122,13 @@
 
             window.scrollTo(0, 0);
             window.fullscreen = true;
+
+            // Mark body/html so global chrome can be hidden by CSS during fullscreen
+            try {
+                document.body.classList.add('ace-fullscreen-active');
+                document.documentElement.classList.add('ace-fullscreen-active');
+                document.body.style.overflow = 'hidden';
+            } catch (e) {}
         }
         editor.resize();
     }
