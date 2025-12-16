@@ -592,7 +592,7 @@ class JudgeHandler(ZlibPacketHandler):
             })
             self._post_update_submission(id, state='test-case')
 
-        SubmissionTestCase.objects.bulk_create(bulk_test_case_updates)
+        SubmissionTestCase.objects.bulk_create(bulk_test_case_updates, batch_size=100)
 
     def on_malformed(self, packet):
         logger.error('%s: Malformed packet: %s', self.name, packet)
