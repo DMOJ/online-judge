@@ -226,11 +226,14 @@ class JudgeHandler(ZlibPacketHandler):
         else:
             self.send({'name': 'disconnect'})
 
-    def submit(self, id, problem, language, source):
+    def submit(self, id, problem, language, source, ide_custom_input=None):
         data = self.get_related_submission_data(id)
         self._working = id
         self._no_response_job = threading.Timer(20, self._kill_if_no_response)
-        self.send({
+
+        # Check if this is an IDE submission
+        is_ide = problem == 'idepractice'
+        packet = {
             'name': 'submission-request',
             'submission-id': id,
             'problem-id': problem,
@@ -245,7 +248,20 @@ class JudgeHandler(ZlibPacketHandler):
                 'attempt-no': data.attempt_no,
                 'user': data.user_id,
             },
-        })
+        }
+
+        # Override settings for IDE submissions
+        if is_ide:
+            # ALWAYS set is_ide flag
+            packet['meta']['is_ide'] = True
+            packet['time-limit'] = 2.0
+            packet['memory-limit'] = 65536
+
+            # Use custom input passed directly from judgeapi
+            custom_input = ide_custom_input if ide_custom_input is not None else ''
+            packet['meta']['custom_input'] = custom_input
+
+        self.send(packet)
 
     def _kill_if_no_response(self):
         logger.error('Judge failed to acknowledge submission: %s: %s', self.name, self._working)
@@ -576,7 +592,7 @@ class JudgeHandler(ZlibPacketHandler):
             })
             self._post_update_submission(id, state='test-case')
 
-        SubmissionTestCase.objects.bulk_create(bulk_test_case_updates)
+        SubmissionTestCase.objects.bulk_create(bulk_test_case_updates, batch_size=100)
 
     def on_malformed(self, packet):
         logger.error('%s: Malformed packet: %s', self.name, packet)

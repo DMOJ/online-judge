@@ -54,7 +54,9 @@
                 <div class="batch-cases">
             {% endif %}
         <table class="submissions-status-table">{% for case in batch.cases %}
-            {% set print_case_output = case.status != 'AC' and case.output and (prefix_length is none or prefix_length > 0) %}
+	    {% set is_ide_submission = submission.problem.code ==
+ 'idepractice' %}
+            {% set print_case_output = (is_ide_submission or case.status != 'AC') and case.output and (prefix_length is none or prefix_length > 0) %}
             <tr id="{{ case.id }}" class="case-row toggle closed">
                 <td>
                     {%- if print_case_output or case.extended_feedback -%}

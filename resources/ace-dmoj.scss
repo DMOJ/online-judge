@@ -68,11 +68,24 @@
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 2147483000;
     overflow: auto;
 
     .django-ace-max_min {
         background-image: url($path_to_root + '/ace/img/contract.png');
         @include vars-img;
     }
+}
+
+/* While Ace fullscreen is active, hide site chrome/content to avoid any
+   browser-specific stacking quirks (Edge/Windows) overlapping the editor. */
+body.ace-fullscreen-active {
+    overflow: hidden; /* prevent background scroll */
+}
+
+body.ace-fullscreen-active nav#navigation,
+body.ace-fullscreen-active footer,
+body.ace-fullscreen-active #announcement,
+body.ace-fullscreen-active #page-container {
+    visibility: hidden !important; /* keep layout stable but hide visuals */
 }

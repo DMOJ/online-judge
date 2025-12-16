@@ -70,6 +70,22 @@
             main_block.__ace_placeholder = null;
             main_block.__ace_return_parent = null;
 
+            // Clear any inline fullscreen styles
+            try {
+                main_block.style.position = '';
+                main_block.style.top = '';
+                main_block.style.left = '';
+                main_block.style.right = '';
+                main_block.style.bottom = '';
+                main_block.style.zIndex = '';
+            } catch (e) {}
+
+            try {
+                document.body.classList.remove('ace-fullscreen-active');
+                document.documentElement.classList.remove('ace-fullscreen-active');
+                document.body.style.overflow = '';
+            } catch (e) {}
+
             window.fullscreen = false;
         } else {
             // Enter fullscreen
@@ -89,12 +105,30 @@
             document.body.appendChild(main_block);
             main_block.className = 'django-ace-editor-fullscreen';
 
+            // Explicitly set inline styles to avoid stacking quirks in Edge/Windows
+            // Ensures the editor overlays nav/footer/MathJax regardless of external CSS.
+            try {
+                main_block.style.position = 'fixed';
+                main_block.style.top = '0';
+                main_block.style.left = '0';
+                main_block.style.right = '0';
+                main_block.style.bottom = '0';
+                main_block.style.zIndex = '2147483000';
+            } catch (e) {}
+
             // Size to viewport
             widget.style.height = getDocHeight() - 30 + 'px';
             widget.style.width = getDocWidth() + 'px';
 
             window.scrollTo(0, 0);
             window.fullscreen = true;
+
+            // Mark body/html so global chrome can be hidden by CSS during fullscreen
+            try {
+                document.body.classList.add('ace-fullscreen-active');
+                document.documentElement.classList.add('ace-fullscreen-active');
+                document.body.style.overflow = 'hidden';
+            } catch (e) {}
         }
         editor.resize();
     }
