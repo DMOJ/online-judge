@@ -27,7 +27,6 @@ A dedicated coding environment (`/ide/`) that allows users to practice and test 
 The problem view has been redesigned for better usability:
 *   **Split-View Interface**: Resizable panes for the problem description and code editor.
 *   **Fullscreen Mode**: A distraction-free coding experience.
-*   **State Persistence**: Editor content is preserved across reloads and navigation using local storage and bfcache integration.
 
 ### Administrative Tools
 New commands and UI enhancements to simplify management:
@@ -57,9 +56,10 @@ New commands and UI enhancements to simplify management:
 ## Todo / Roadmap
 
 - [ ] **Frontend Custom Grader Config**: Allow teachers to configure custom graders directly from the frontend without backend server access.
-- [ ]  **Comprehensive Contest Export**: Generate a PDF export containing all problem content, student scores, and source code.
-- [ ]  **Frontend Student Import**: Add a user-friendly frontend interface for the `import_users_csv` command.
-- [ ]  **Enhanced Multi-Choice Support**: Improve configuration options for multi-choice problems.
+- [ ] **Comprehensive Contest Export**: Generate a PDF export containing all problem content, CSV for student scores, and zip for source code.
+- [ ] **Frontend Student Import**: Add a user-friendly frontend interface for the `import_users_csv` command.
+- [ ] **Enhanced Multi-Choice Support**: Improve configuration options for multi-choice problems.
+- [ ] **Auto Indexing**: Automatically index problems and contests when creating new ones.
 
 ## Installation
 
