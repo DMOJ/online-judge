@@ -1,14 +1,7 @@
-<h1 align="center">
-  DMOJ: Modern Online Judge (Custom Fork)
-</h1>
-<p align="center">
-  <a href="https://github.com/binghan1227/dmoj-web/actions?query=workflow%3Abuild">
-    <img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/binghan1227/dmoj-web/build.yml?branch=customize"/>
-  </a>
-  <a href="LICENSE.md">
-    <img alt="License" src="https://img.shields.io/github/license/binghan1227/dmoj-web"/>
-  </a>
-</p>
+# DMOJ: Modern Online Judge (Custom Fork)
+
+![](https://img.shields.io/github/actions/workflow/status/binghan1227/dmoj-web/build.yml?branch=customize)
+![](https://img.shields.io/github/license/binghan1227/dmoj-web)
 
 This is a customized fork of the [DMOJ: Modern Online Judge](https://dmoj.ca/), tailored with specific features for course management and enhanced user experience.
 
@@ -43,8 +36,6 @@ New commands and UI enhancements to simplify management:
 *   **Problem Templates**: Define starting code templates for specific languages to guide students.
 *   **Test Case Access**: Configurable permissions to allow users to download failed test cases or tester files for debugging.
 
----
-
 ## Original DMOJ Features
 
 *   **Multi-Language Support**: Run code in over 60 languages including C++, Java, Python, and Rust.
@@ -60,6 +51,10 @@ New commands and UI enhancements to simplify management:
 - [ ] **Frontend Student Import**: Add a user-friendly frontend interface for the `import_users_csv` command.
 - [ ] **Enhanced Multi-Choice Support**: Improve configuration options for multi-choice problems.
 - [ ] **Auto Indexing**: Automatically index problems and contests when creating new ones.
+- [ ] **Disable Virtual Participation**: Disable virtual participation for some contests.
+- [ ] **Test Cases Editing**: Allow teachers to edit test cases directly from the frontend.
+- [ ] **Auto Rejudging**: Automatically rejudge submissions when a problem is pretested during the contest.
+- [ ] **NetID Login**: Let student login the website using their NetID.
 
 ## Installation
 
