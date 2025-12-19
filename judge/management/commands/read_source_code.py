@@ -33,7 +33,7 @@ class Command(BaseCommand):
             sources_by_id = dict(
                 SubmissionSource.objects
                 .filter(submission_id__in=batch_ids)
-                .values_list('submission_id', 'source')
+                .values_list('submission_id', 'source'),
             )
 
             for sid in batch_ids:
