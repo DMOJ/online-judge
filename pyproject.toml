@@ -1,0 +1,11 @@
+[tool.ruff]
+line-length = 120
+force-exclude = true
+exclude = [
+  "dmoj/local_settings.py",
+  ".ci.settings.py",
+]
+
+[tool.ruff.format]
+quote-style = "single"
+

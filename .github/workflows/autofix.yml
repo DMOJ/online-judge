@@ -1,0 +1,41 @@
+name: autofix.ci
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install fixers
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ruff zimports
+
+      # Fix import order to satisfy flake8-import-order (pycharm style)
+      # zimports will read your setup.cfg [flake8] by default.
+      - name: Fix imports
+        run: |
+          zimports dmoj judge django_ace martor manage.py
+
+      # Fix trailing commas etc. (keep this narrow to avoid surprising changes)
+      - name: Fix lint (safe autofixes only)
+        run: |
+          ruff check --fix-only --select COM812 dmoj judge django_ace martor manage.py
+
+      # Format (quotes, wrapping, etc.)
+      - name: Format
+        run: |
+          ruff format dmoj judge django_ace martor manage.py
+
+      - uses: autofix-ci/action@635ffb0c9798bd160680f18fd73371e355b85f27
+
