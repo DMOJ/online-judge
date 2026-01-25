@@ -20,7 +20,10 @@ json_log = logging.getLogger('judge.json.bridge')
 
 UPDATE_RATE_LIMIT = 5
 UPDATE_RATE_TIME = 0.5
-SubmissionData = namedtuple('SubmissionData', 'time memory short_circuit pretests_only contest_no attempt_no user_id')
+SubmissionData = namedtuple(
+    'SubmissionData',
+    'time memory short_circuit pretests_only contest_no attempt_no user_id user_notes',
+)
 
 
 def _ensure_connection():
@@ -187,11 +190,12 @@ class JudgeHandler(ZlibPacketHandler):
         _ensure_connection()
 
         try:
-            pid, time, memory, short_circuit, lid, is_pretested, sub_date, uid, part_virtual, part_id = (
+            pid, time, memory, short_circuit, lid, is_pretested, sub_date, uid, part_virtual, part_id, user_notes = (
                 Submission.objects.filter(id=submission)
                           .values_list('problem__id', 'problem__time_limit', 'problem__memory_limit',
                                        'problem__short_circuit', 'language__id', 'is_pretested', 'date', 'user__id',
-                                       'contest__participation__virtual', 'contest__participation__id')).get()
+                                       'contest__participation__virtual', 'contest__participation__id',
+                                       'user__notes')).get()
         except Submission.DoesNotExist:
             logger.error('Submission vanished: %s', submission)
             json_log.error(self._make_json_log(
@@ -217,6 +221,7 @@ class JudgeHandler(ZlibPacketHandler):
             contest_no=part_virtual,
             attempt_no=attempt_no,
             user_id=uid,
+            user_notes=user_notes,
         )
 
     def disconnect(self, force=False):
@@ -244,6 +249,7 @@ class JudgeHandler(ZlibPacketHandler):
                 'in-contest': data.contest_no,
                 'attempt-no': data.attempt_no,
                 'user': data.user_id,
+                'user-notes': data.user_notes,
             },
         })
 
