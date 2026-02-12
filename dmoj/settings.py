@@ -76,6 +76,10 @@ DMOJ_EMAIL_THROTTLING = (10, 60)
 DMOJ_SUBMISSION_LIMIT = 2
 DMOJ_SUBMISSIONS_REJUDGE_LIMIT = 10
 
+# Rate limit submissions to prevent abuse
+DMOJ_SUBMISSION_RATELIMIT_TIMEFRAME = datetime.timedelta(days=1)
+DMOJ_SUBMISSION_RATELIMIT = 500
+
 # Whether to allow users to view source code: 'all' | 'all-solved' | 'only-own'
 DMOJ_SUBMISSION_SOURCE_VISIBILITY = 'all-solved'
 DMOJ_BLOG_NEW_PROBLEM_COUNT = 7
