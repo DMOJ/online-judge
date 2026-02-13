@@ -1,7 +1,8 @@
+import datetime
 import json
 from calendar import Calendar, SUNDAY
 from collections import defaultdict, namedtuple
-from datetime import date, datetime, time, timedelta
+from datetime import date, time, timedelta
 from functools import partial
 from itertools import chain
 from operator import attrgetter, itemgetter
@@ -514,8 +515,8 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
 
     def get_table(self):
         calendar = Calendar(self.firstweekday).monthdatescalendar(self.year, self.month)
-        starts, ends, oneday = self.get_contest_data(make_aware(datetime.combine(calendar[0][0], time.min)),
-                                                     make_aware(datetime.combine(calendar[-1][-1], time.min)))
+        starts, ends, oneday = self.get_contest_data(make_aware(datetime.datetime.combine(calendar[0][0], time.min)),
+                                                     make_aware(datetime.datetime.combine(calendar[-1][-1], time.min)))
         return [[ContestDay(
             date=date, is_pad=date.month != self.month,
             is_today=date == self.today, starts=starts[date], ends=ends[date], oneday=oneday[date],
@@ -566,15 +567,15 @@ class ContestICal(TitleMixin, ContestListMixin, BaseListView):
         cal.add('prodid', '-//DMOJ//NONSGML Contests Calendar//')
         cal.add('version', '2.0')
 
-        now = timezone.now().astimezone(timezone.utc)
+        now = timezone.now().astimezone(datetime.timezone.utc)
         domain = self.request.get_host()
         for contest in self.get_queryset():
             event = Event()
             event.add('uid', f'contest-{contest.key}@{domain}')
             event.add('summary', contest.name)
             event.add('location', self.request.build_absolute_uri(contest.get_absolute_url()))
-            event.add('dtstart', contest.start_time.astimezone(timezone.utc))
-            event.add('dtend', contest.end_time.astimezone(timezone.utc))
+            event.add('dtstart', contest.start_time.astimezone(datetime.timezone.utc))
+            event.add('dtend', contest.end_time.astimezone(datetime.timezone.utc))
             event.add('dtstamp', now)
             cal.add_component(event)
         return cal.to_ical()
