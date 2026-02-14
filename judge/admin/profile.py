@@ -100,7 +100,7 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
     def get_actions(self, request):
         actions = super(ProfileAdmin, self).get_actions(request)
 
-        for action in ('recalculate_points'):
+        for action in ('recalculate_points', 'mute_users'):
             func, name, desc = self.get_action(action)
             actions[name] = (func, name, desc)
 
@@ -155,6 +155,13 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
             count += 1
         self.message_user(request, ngettext('%d user was banned.',
                                             '%d users were banned.',
+                                            count) % count)
+
+    @admin.display(description=_('Mute users'))
+    def mute_users(self, request, queryset):
+        count = queryset.update(mute=True)
+        self.message_user(request, ngettext('%d user was muted.',
+                                            '%d users were muted.',
                                             count) % count)
 
     def get_form(self, request, obj=None, **kwargs):
