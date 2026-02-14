@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth.admin import UserAdmin as OldUserAdmin
 from django.forms import ModelForm
 from django.urls import reverse_lazy
@@ -63,7 +63,6 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
     ordering = ('user__username',)
     search_fields = ('user__username', 'ip', 'user__email')
     list_filter = ('language', TimezoneFilter)
-    actions = ('recalculate_points',)
     actions_on_top = True
     actions_on_bottom = True
     form = ProfileForm
@@ -98,6 +97,20 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
             fields += ('is_totp_enabled',)
         return fields
 
+    def get_actions(self, request):
+        actions = super(ProfileAdmin, self).get_actions(request)
+
+        for action in ('recalculate_points'):
+            func, name, desc = self.get_action(action)
+            actions[name] = (func, name, desc)
+
+        if request.user.has_perm('judge.deactivate_users') or \
+                request.user.has_perm('auth.change_user'):
+            func, name, desc = self.get_action('deactivate_users')
+            actions[name] = (func, name, desc)
+
+        return actions
+
     @admin.display(description='')
     def show_public(self, obj):
         return format_html('<a href="{0}" style="white-space:nowrap;">{1}</a>',
@@ -127,6 +140,21 @@ class ProfileAdmin(NoBatchDeleteMixin, VersionAdmin):
             count += 1
         self.message_user(request, ngettext('%d user had scores recalculated.',
                                             '%d users had scores recalculated.',
+                                            count) % count)
+
+    @admin.display(description=_('Deactivate users'))
+    def deactivate_users(self, request, queryset):
+        if not request.user.has_perm('judge.deactivate_users') and not request.user.has_perm('auth.change_user'):
+            self.message_user(request, gettext('You do not have permission to deactivate users.'), level=messages.ERROR)
+            return
+
+        count = 0
+        for profile in queryset.select_related('user'):
+            profile.user.is_active = False
+            profile.user.save()
+            count += 1
+        self.message_user(request, ngettext('%d user was banned.',
+                                            '%d users were banned.',
                                             count) % count)
 
     def get_form(self, request, obj=None, **kwargs):

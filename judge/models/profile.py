@@ -335,6 +335,7 @@ class Profile(models.Model):
         permissions = (
             ('test_site', _('Shows in-progress development stuff')),
             ('totp', _('Edit TOTP settings')),
+            ('deactivate_users', _('Deactivate users')),
         )
         verbose_name = _('user profile')
         verbose_name_plural = _('user profiles')
