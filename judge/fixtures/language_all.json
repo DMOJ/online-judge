@@ -340,7 +340,7 @@
     "pk": 27,
     "fields": {
         "key": "V8JS",
-        "name": "V8 JavaScript",
+        "name": "JavaScript (V8)",
         "short_name": null,
         "common_name": "JS",
         "ace": "javascript",
@@ -941,6 +941,22 @@
         "info": "",
         "description": "",
         "extension": "cpp"
+    }
+},
+{
+    "model": "judge.language",
+    "pk": 77,
+    "fields": {
+        "key": "NODEJS",
+        "name": "JavaScript (Node.js)",
+        "short_name": null,
+        "common_name": "JS",
+        "ace": "javascript",
+        "pygments": "javascript",
+        "template": "",
+        "info": "",
+        "description": "",
+        "extension": "js"
     }
 }
 ]
