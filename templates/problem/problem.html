@@ -41,6 +41,19 @@
         .problem-info-entry {
             padding-top: 0.5em;
         }
+
+        .authorship {
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .authorship a {            
+            font-weight: normal;
+        }
+
+        .authorship hr {
+            margin-bottom: 10px;       
+        }
     </style>
 {% endblock %}
 
@@ -303,6 +316,22 @@
     {% cache 86400 'problem_html' problem.id MATH_ENGINE LANGUAGE_CODE %}
         {{ description|markdown(problem.markdown_style, MATH_ENGINE)|reference|str|safe }}
     {% endcache %}
+
+    {% if problem.authorship_name %}
+        <span class="authorship">
+            <hr>
+            {% trans trimmed %} Authorship: {% endtrans %}          
+            
+            {% if problem.authorship_uri %}
+                <a href="{{ problem.authorship_uri }}">
+                    {{ problem.authorship_name }}
+                </a>
+            {% else %}
+                {{ problem.authorship_name }}
+            {% endif %}
+        </span>
+        <br />
+    {% endif %}
 
     {% with license=problem.license %}
         {% if license %}
