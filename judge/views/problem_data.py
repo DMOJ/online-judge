@@ -63,7 +63,7 @@ class ProblemDataForm(ModelForm):
 
     class Meta:
         model = ProblemData
-        fields = ['zipfile', 'generator', 'unicode', 'nobigmath', 'output_limit', 'output_prefix',
+        fields = ['zipfile', 'generator', 'infer_from_zip', 'unicode', 'nobigmath', 'output_limit', 'output_prefix',
                   'checker', 'checker_args']
         widgets = {
             'checker_args': HiddenInput,
@@ -75,8 +75,9 @@ class ProblemCaseForm(ModelForm):
 
     class Meta:
         model = ProblemTestCase
-        fields = ('order', 'type', 'input_file', 'output_file', 'points', 'is_pretest', 'output_limit',
-                  'output_prefix', 'checker', 'checker_args', 'generator_args', 'batch_dependencies')
+        fields = ('order', 'type', 'input_file', 'output_file', 'explanation_file', 'points', 'is_pretest',
+                  'is_private', 'output_limit', 'output_prefix', 'checker', 'checker_args', 'generator_args',
+                  'batch_dependencies')
         widgets = {
             'generator_args': HiddenInput,
             'batch_dependencies': HiddenInput,
@@ -210,17 +211,68 @@ class ProblemDataView(TitleMixin, ProblemManagerMixin):
             data_form.zip_valid = False
 
         cases_formset = self.get_case_formset(valid_files, post=True)
+
+        # This options only appears when file are found in the file-system but no test-case exists in the BBDD.
+        infer_from_zip = request.POST.get('perform_infer_test_cases', 0) != 0
+        rebuild_from_yml = request.POST.get('perform_rebuild_test_cases', 0) != 0
+
         if data_form.is_valid() and cases_formset.is_valid():
             data = data_form.save()
-            for case in cases_formset.save(commit=False):
-                case.dataset_id = problem.id
-                case.save()
-            for case in cases_formset.deleted_objects:
-                case.delete()
+
+            if infer_from_zip:
+                self.infer_test_cases_from_zip(data)
+
+            elif rebuild_from_yml:
+                for case in data.reload_test_cases_from_yml():
+                    case.save()
+
+            if infer_from_zip or rebuild_from_yml:
+                # The data.zipfile property has been loaded from the file system
+                valid_files = sorted(ZipFile(data.zipfile).namelist())
+                cases_formset = self.get_case_formset(valid_files, post=True)
+                data.save()
+
+            else:
+                for case in cases_formset.save(commit=False):
+                    case.dataset_id = problem.id
+                    case.save()
+
+                for case in cases_formset.deleted_objects:
+                    case.delete()
+
+                if data.infer_from_zip:
+                    if not data.zipfile:
+                        # Removing all entries to keep consistency (infering from no zip)
+                        for case in ProblemTestCase.objects.filter(dataset_id=self.object.pk):
+                            case.delete()
+                    else:
+                        self.infer_test_cases_from_zip(data)
+
+            # Enabling the 'display test cases' option for the problem should display the test cases after
+            # the problem statement. Otherwise, the problem data must be saved additionally to display the
+            # data for the first time. So, to avoid this additional step, the problem is the one which
+            # calls to setup the test-cases within problem data. Also, the update is needed to refresh the
+            # cache so must be called from here anyways.
+            data.problem.save()
+
             ProblemDataCompiler.generate(problem, data, problem.cases.order_by('order'), valid_files)
             return HttpResponseRedirect(request.get_full_path())
+
         return self.render_to_response(self.get_context_data(data_form=data_form, cases_formset=cases_formset,
                                                              valid_files=valid_files))
+
+    def infer_test_cases_from_zip(self, data):
+        old = ProblemTestCase.objects.filter(dataset_id=self.object.pk)
+        infer = data.infer_test_cases_from_zip()
+
+        # When inferinf test-cases, new ones can be created but also existing
+        # ones can be reused. Only the old-ones should be removed.
+        for case in old:
+            if case not in infer:
+                case.delete()
+
+        for case in infer:
+            case.save()
 
     put = post
 
