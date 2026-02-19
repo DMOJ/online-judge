@@ -143,7 +143,7 @@ class DownloadDataForm(Form):
 
 
 class ProblemSubmitForm(ModelForm):
-    source = CharField(max_length=65536, widget=AceWidget(theme='twilight', no_ace_media=True))
+    source = CharField(max_length=65536, widget=AceWidget(theme='twilight', no_ace_media=True), strip=False)
     judge = ChoiceField(choices=(), widget=forms.HiddenInput(), required=False)
 
     def __init__(self, *args, judge_choices=(), **kwargs):
