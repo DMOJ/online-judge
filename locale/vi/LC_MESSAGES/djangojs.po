@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2024-05-05 00:45\n"
+"PO-Revision-Date: 2025-04-28 01:02\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
@@ -35,7 +35,7 @@ msgstr "Bình chọn điểm của bài tập"
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr "Không thể sửa điểm: %s"
+msgstr "Không thể xoá vote: %s"
 
 #: resources/problem-vote.js:28
 #, javascript-format
@@ -63,7 +63,7 @@ msgstr[0] "%(cnt)d tổng số bài đã gửi"
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
-msgstr[0] "%(cnt)d bài gửi trong một năm trước"
+msgstr[0] "%(cnt)d bài đã gửi trong một năm trước"
 
 #: resources/user_profile.js:74
 msgid "%(cnt)d submission in %(year)d"

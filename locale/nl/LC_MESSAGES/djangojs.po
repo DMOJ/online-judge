@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2023-01-24 00:51\n"
+"PO-Revision-Date: 2025-05-18 01:08\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -54,7 +54,7 @@ msgstr ""
 
 #: resources/user_profile.js:47
 msgid "past year"
-msgstr ""
+msgstr "afgelopen jaar"
 
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
