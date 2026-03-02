@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2023-01-24 00:51\n"
+"PO-Revision-Date: 2025-05-30 01:03\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Language: ko_KR\n"
@@ -35,7 +35,7 @@ msgstr ""
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr ""
+msgstr "투표: %s 를 삭제할 수 없습니다."
 
 #: resources/problem-vote.js:28
 #, javascript-format
@@ -53,25 +53,25 @@ msgstr ""
 
 #: resources/user_profile.js:47
 msgid "past year"
-msgstr ""
+msgstr "지난 해"
 
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
-msgstr[0] ""
+msgstr[0] "총 제출 수 : %(cnt)d"
 
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
-msgstr[0] ""
+msgstr[0] "지난 해 총 제출 수 : %(cnt)d"
 
 #: resources/user_profile.js:74
 msgid "%(cnt)d submission in %(year)d"
 msgid_plural "%(cnt)d submissions in %(year)d"
-msgstr[0] ""
+msgstr[0] "%(year)d년의 총 제출 수 : %(cnt)d"
 
 #: resources/user_profile.js:88
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
-msgstr[0] ""
+msgstr[0] "%(date)s의 총 제출 수 : %(cnt)d"
 
