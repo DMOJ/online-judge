@@ -100,9 +100,9 @@ The DMOJ admin interface is highly versatile, and can be efficiently used for an
 Check out [**DMOJ/judge-server**](https://github.com/DMOJ/judge-server) for more judging backend details.
 
 Supported languages include:
-* C++ 11/14/17/20 (GCC and Clang)
+* C++ 11/14/17/20/23 (GCC and Clang)
 * C 99/11
-* Java 8-22
+* Java 8-25
 * Python 2/3
 * PyPy 2/3
 * Pascal
@@ -121,8 +121,9 @@ The judge can also grade in the languages listed below:
 * Groovy
 * GAS x86/x64/ARM
 * Haskell
-* INTERCAL
+* JavaScript (Node.js and V8)
 * Kotlin
+* Lean
 * Lua
 * LLVM IR
 * NASM x86/x64
@@ -142,6 +143,5 @@ The judge can also grade in the languages listed below:
 * Swift
 * Tcl
 * Turing
-* V8 JavaScript
 * Brain\*\*\*\*
 * Zig
