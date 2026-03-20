@@ -79,6 +79,14 @@ class UserSearchSelect2View(BaseListView):
 
     def get_queryset(self):
         return _get_user_queryset(self.term).filter(is_unlisted=False)
+    
+    def get_rank_class(self, display_rank):
+        if display_rank == 'admin':
+            return 'admin'
+        elif display_rank == 'setter':
+            return 'setter'
+        else:
+            return 'user rate-none'
 
     def get(self, request, *args, **kwargs):
         self.request = request
@@ -99,6 +107,7 @@ class UserSearchSelect2View(BaseListView):
                     'id': username,
                     'gravatar_url': gravatar(email, self.gravatar_size, self.gravatar_default),
                     'display_rank': display_rank,
+                    'rank_class': self.get_rank_class(display_rank),
                 } for pk, username, email, display_rank, username_override in context['object_list']],
             'more': context['page_obj'].has_next(),
         })
