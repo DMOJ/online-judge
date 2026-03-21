@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: dmoj\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-23 05:23+0000\n"
-"PO-Revision-Date: 2023-01-24 00:52\n"
+"PO-Revision-Date: 2026-03-21 01:18\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese, Brazilian\n"
 "Language: pt_BR\n"
@@ -21,62 +21,62 @@ msgstr ""
 msgctxt "time format with day"
 msgid "%d day %h:%m:%s"
 msgid_plural "%d days %h:%m:%s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%d dia %h:%m:%s"
+msgstr[1] "%d dias %h:%m:%s"
 
 #: resources/common.js:197
 msgctxt "time format without day"
 msgid "%h:%m:%s"
-msgstr ""
+msgstr "%h:%m:%s"
 
 #: resources/problem-vote.js:11
 msgid "Vote on problem points"
-msgstr ""
+msgstr "Votar em pontuação de problema"
 
 #: resources/problem-vote.js:16
 #, javascript-format
 msgid "Unable to delete vote: %s"
-msgstr ""
+msgstr "Não é possível excluir voto: %s"
 
 #: resources/problem-vote.js:28
 #, javascript-format
 msgid "Edit points vote (%s)"
-msgstr ""
+msgstr "Editar voto de pontos (%s)"
 
 #: resources/problem-vote.js:34
 #, javascript-format
 msgid "Unable to cast vote: %s"
-msgstr ""
+msgstr "Não foi possível transmitir o voto: %s"
 
 #: resources/problem-vote.js:63
 msgid "Number of votes for this point value"
-msgstr ""
+msgstr "Número de votos para este valor de ponto"
 
 #: resources/user_profile.js:47
 msgid "past year"
-msgstr ""
+msgstr "último ano"
 
 #: resources/user_profile.js:64
 msgid "%(cnt)d total submission"
 msgid_plural "%(cnt)d total submissions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cnt)d submissão no total"
+msgstr[1] "%(cnt)d submissões no total"
 
 #: resources/user_profile.js:69
 msgid "%(cnt)d submission in the last year"
 msgid_plural "%(cnt)d submissions in the last year"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cnt)d submissão no último ano"
+msgstr[1] "%(cnt)d submissões no último ano"
 
 #: resources/user_profile.js:74
 msgid "%(cnt)d submission in %(year)d"
 msgid_plural "%(cnt)d submissions in %(year)d"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cnt)d submissão em %(year)d"
+msgstr[1] "%(cnt)d submissões em %(year)d"
 
 #: resources/user_profile.js:88
 msgid "%(cnt)d submission on %(date)s"
 msgid_plural "%(cnt)d submissions on %(date)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(cnt)d submissão em %(date)s"
+msgstr[1] "%(cnt)d submissões em %(date)s"
 
