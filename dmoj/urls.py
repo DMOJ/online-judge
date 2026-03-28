@@ -181,6 +181,7 @@ urlpatterns = [
     path('comments/upvote/', comment.upvote_comment, name='comment_upvote'),
     path('comments/downvote/', comment.downvote_comment, name='comment_downvote'),
     path('comments/hide/', comment.comment_hide, name='comment_hide'),
+    path('comments/pin/', comment.comment_pin, name='comment_pin'),
     path('comments/<int:id>/', include([
         path('edit', comment.CommentEdit.as_view(), name='comment_edit'),
         path('history/ajax', comment.CommentRevisionAjax.as_view(), name='comment_revision_ajax'),

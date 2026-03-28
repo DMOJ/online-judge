@@ -21,7 +21,7 @@
                 <li id="comment-{{ node.id }}" data-revision="{{ node.revisions - 1 }}"
                     data-max-revision="{{ node.revisions - 1 }}"
                     data-revision-ajax="{{ url('comment_revision_ajax', node.id) }}" class="comment">
-                    <div class="comment-display{% if node.score <= vote_hide_threshold %} bad-comment{% endif %}">
+                    <div class="comment-display{% if node.score <= vote_hide_threshold and not node.is_pinned %} bad-comment{% endif %}{% if node.is_pinned %} pinned-comment{% endif %}">
                         <div class="info">
                             <div class="vote">
                                 {% if logged_in %}
@@ -57,6 +57,9 @@
                                     {% endwith %}
                                     {{ link_user(node.author) }}&nbsp;
                                 </span>
+                                {% if node.is_pinned %}
+                                    <span class="pinned-indicator"><i class="fa fa-thumb-tack"></i> {{ _('Pinned') }}</span>
+                                {% endif %}
                                 {% with abs=_('commented on {time}'), rel=_('commented {time}') %}
                                     {{ relative_time(node.time, abs=abs, rel=rel) }}
                                 {% endwith %}
@@ -106,14 +109,20 @@
                                                    class="edit-link"><i class="fa fa-pencil fa-fw"></i></a>
                                             {% endif %}
                                         {% endif %}
+                                        {% if perms.judge.pin_comment %}
+                                            <a href="javascript:void(0)" title="{{ _('Unpin') if node.is_pinned else _('Pin') }}"
+                                               data-id="{{ node.id }}" class="pin-comment">
+                                                <i class="fa fa-thumb-tack fa-fw{% if node.is_pinned %} pinned{% endif %}"></i>
+                                            </a>
+                                        {% endif %}
                                     {% endif %}
                             </span>
                             </div>
                             <div class="content content-description">
-                                <div class="comment-body"{% if node.score <= vote_hide_threshold %} style="display:none"{% endif %}>
+                                <div class="comment-body"{% if node.score <= vote_hide_threshold and not node.is_pinned %} style="display:none"{% endif %}>
                                     {{ node.body|markdown('comment', MATH_ENGINE, True)|reference|str|safe }}
                                 </div>
-                                {% if node.score <= vote_hide_threshold %}
+                                {% if node.score <= vote_hide_threshold and not node.is_pinned %}
                                     <div class="comment-body bad-comment-body">
                                         <p>
                                             {{ _('This comment is hidden due to too much negative feedback.') }}

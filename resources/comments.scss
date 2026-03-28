@@ -179,3 +179,12 @@ a {
         transform: translatez(0);
     }
 }
+
+.pinned-indicator {
+    color: $color_primary75;
+    font-size: 0.85em;
+}
+
+.pin-comment .fa.pinned {
+    color: $highlight_blue;
+}

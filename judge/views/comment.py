@@ -20,7 +20,7 @@ from judge.utils.views import TitleMixin
 from judge.widgets import MartorWidget
 
 __all__ = ['upvote_comment', 'downvote_comment', 'CommentEditAjax', 'CommentContent',
-           'CommentEdit']
+           'CommentEdit', 'comment_pin']
 
 
 @login_required
@@ -193,4 +193,19 @@ def comment_hide(request):
 
     comment = get_object_or_404(Comment, id=comment_id)
     comment.get_descendants(include_self=True).update(hidden=True)
+    return HttpResponse('ok')
+
+
+@require_POST
+def comment_pin(request):
+    if not request.user.has_perm('judge.pin_comment'):
+        raise PermissionDenied()
+    try:
+        comment_id = int(request.POST['id'])
+    except ValueError:
+        return HttpResponseBadRequest()
+
+    comment = get_object_or_404(Comment, id=comment_id)
+    comment.is_pinned = not comment.is_pinned
+    comment.save(update_fields=['is_pinned'])
     return HttpResponse('ok')

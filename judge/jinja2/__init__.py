@@ -19,7 +19,22 @@ registry.filter('highlight', highlight_code)
 registry.filter('urlquote', quote)
 registry.filter('roundfloat', round)
 registry.function('inlinei18n', inlinei18n)
-registry.function('mptt_tree', get_cached_trees)
+def _pinned_first_trees(queryset):
+    trees = get_cached_trees(queryset)
+    trees.sort(key=lambda c: (not getattr(c, 'is_pinned', False)))
+    _sort_pinned(trees)
+    return trees
+
+
+def _sort_pinned(nodes):
+    for node in nodes:
+        children = getattr(node, '_cached_children', [])
+        if children:
+            children.sort(key=lambda c: (not getattr(c, 'is_pinned', False)))
+            _sort_pinned(children)
+
+
+registry.function('mptt_tree', _pinned_first_trees)
 registry.function('user_trans', gettext)
 
 

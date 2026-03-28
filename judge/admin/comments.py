@@ -21,13 +21,13 @@ class CommentForm(ModelForm):
 
 class CommentAdmin(VersionAdmin):
     fieldsets = (
-        (None, {'fields': ('author', 'page', 'parent', 'time', 'score', 'hidden')}),
+        (None, {'fields': ('author', 'page', 'parent', 'time', 'score', 'hidden', 'is_pinned')}),
         (_('Content'), {'fields': ('body',)}),
     )
-    list_display = ['author', 'linked_page', 'time', 'score', 'hidden']
+    list_display = ['author', 'linked_page', 'time', 'score', 'hidden', 'is_pinned']
     search_fields = ['author__user__username', 'page', 'body']
-    actions = ['hide_comment', 'unhide_comment']
-    list_filter = ['hidden']
+    actions = ['hide_comment', 'unhide_comment', 'pin_comment', 'unpin_comment']
+    list_filter = ['hidden', 'is_pinned']
     readonly_fields = ['time', 'score']
     actions_on_top = True
     actions_on_bottom = True
@@ -49,6 +49,20 @@ class CommentAdmin(VersionAdmin):
         count = queryset.update(hidden=False)
         self.message_user(request, ngettext('%d comment successfully unhidden.',
                                             '%d comments successfully unhidden.',
+                                            count) % count)
+
+    @admin.display(description=_('Pin comments'))
+    def pin_comment(self, request, queryset):
+        count = queryset.update(is_pinned=True)
+        self.message_user(request, ngettext('%d comment successfully pinned.',
+                                            '%d comments successfully pinned.',
+                                            count) % count)
+
+    @admin.display(description=_('Unpin comments'))
+    def unpin_comment(self, request, queryset):
+        count = queryset.update(is_pinned=False)
+        self.message_user(request, ngettext('%d comment successfully unpinned.',
+                                            '%d comments successfully unpinned.',
                                             count) % count)
 
     @admin.display(description=_('associated page'), ordering='page')

@@ -161,6 +161,19 @@
                 });
             });
 
+            $comments.find('a.pin-comment').click(function (e) {
+                e.preventDefault();
+                var $this = $(this);
+                var id = $this.attr('data-id');
+                $.post('{{ url('comment_pin') }}', {id: id}).then(function () {
+                    var $icon = $this.find('i');
+                    $icon.toggleClass('pinned');
+                    $this.attr('title', $icon.hasClass('pinned') ? {{ _('Unpin')|htmltojs }} : {{ _('Pin')|htmltojs }});
+                }).catch(function () {
+                    alert({{ _('Could not pin/unpin comment.')|htmltojs }});
+                });
+            });
+
             $comments.find('a.edit-link').featherlight({
                 afterOpen: function () {
                     var $widget = $('.featherlight #comment-form-body');

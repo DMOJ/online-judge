@@ -31,6 +31,7 @@ class Comment(MPTTModel):
     score = models.IntegerField(verbose_name=_('votes'), default=0)
     body = models.TextField(verbose_name=_('body of comment'), max_length=8192)
     hidden = models.BooleanField(verbose_name=_('hidden'), default=0)
+    is_pinned = models.BooleanField(verbose_name=_('pinned'), default=False)
     parent = TreeForeignKey('self', verbose_name=_('parent'), null=True, blank=True, related_name='replies',
                             on_delete=CASCADE)
     revisions = models.IntegerField(verbose_name=_('revisions'), default=1)
@@ -38,6 +39,9 @@ class Comment(MPTTModel):
     class Meta:
         verbose_name = _('comment')
         verbose_name_plural = _('comments')
+        permissions = (
+            ('pin_comment', _('Pin comments')),
+        )
 
     class MPTTMeta:
         order_insertion_by = ['-time']
