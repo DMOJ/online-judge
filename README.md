@@ -122,6 +122,7 @@ The judge can also grade in the languages listed below:
 * GAS x86/x64/ARM
 * Haskell
 * INTERCAL
+* JavaScript (Node.js and V8)
 * Kotlin
 * Lua
 * LLVM IR
@@ -142,6 +143,5 @@ The judge can also grade in the languages listed below:
 * Swift
 * Tcl
 * Turing
-* V8 JavaScript
 * Brain\*\*\*\*
 * Zig
