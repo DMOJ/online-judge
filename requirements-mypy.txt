@@ -1,0 +1,2 @@
+django-stubs
+git+https://github.com/lxml/lxml-stubs.git
