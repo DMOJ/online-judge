@@ -358,6 +358,10 @@ class SubmissionsListBase(DiggPaginatorMixin, TitleMixin, ListView):
         if check is not None:
             return check
 
+        # Block all page > 1 for non-authenticated users. Page = 1 is not specified at all.
+        if not request.user.is_authenticated and 'page' in kwargs:
+            raise PermissionDenied()
+
         self.selected_languages = set(request.GET.getlist('language'))
         self.selected_statuses = set(request.GET.getlist('status'))
 
