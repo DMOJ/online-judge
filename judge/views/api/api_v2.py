@@ -556,6 +556,7 @@ class APIUserDetail(APIDetailView):
         return {
             'id': profile.id,
             'username': profile.user.username,
+            'about': profile.about,
             'points': profile.points,
             'performance_points': profile.performance_points,
             'problem_count': profile.problem_count,
