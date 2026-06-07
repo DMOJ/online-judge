@@ -1,6 +1,8 @@
 import errno
 import os
 
+from django.conf import settings
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -39,7 +41,8 @@ class ProblemData(models.Model):
     generator = models.FileField(verbose_name=_('generator file'), storage=problem_data_storage, null=True, blank=True,
                                  upload_to=problem_directory_file)
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
-    output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
+    output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True,
+                                       validators=[MaxValueValidator(settings.DMOJ_PROBLEM_MAX_OUTPUT_LIMIT)])
     feedback = models.TextField(verbose_name=_('init.yml generation feedback'), blank=True)
     checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
     unicode = models.BooleanField(verbose_name=_('enable unicode'), null=True, blank=True)
@@ -90,7 +93,8 @@ class ProblemTestCase(models.Model):
     points = models.IntegerField(verbose_name=_('point value'), blank=True, null=True)
     is_pretest = models.BooleanField(verbose_name=_('case is pretest?'))
     output_prefix = models.IntegerField(verbose_name=_('output prefix length'), blank=True, null=True)
-    output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True)
+    output_limit = models.IntegerField(verbose_name=_('output limit length'), blank=True, null=True,
+                                       validators=[MaxValueValidator(settings.DMOJ_PROBLEM_MAX_OUTPUT_LIMIT)])
     checker = models.CharField(max_length=10, verbose_name=_('checker'), choices=CHECKERS, blank=True)
     checker_args = models.TextField(verbose_name=_('checker arguments'), blank=True,
                                     help_text=_('checker arguments as a JSON object'))
