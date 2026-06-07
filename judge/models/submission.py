@@ -176,6 +176,20 @@ class Submission(models.Model):
 
         return False
 
+    def can_abort(self, user):
+        if not user.is_authenticated:
+            return False
+        if user.has_perm('judge.abort_any_submission'):
+            return True
+        # If this is a rejudged submission, or this is not the user's submission, deny the abort
+        if self.rejudged_date is not None or user.profile != self.user:
+            return False
+        # If the submission is the user's and is made in a live contest, deny the abort
+        if hasattr(self, 'contest') and not self.contest.participation.live:
+            return False
+
+        return True
+
     def update_contest(self):
         try:
             contest = self.contest
