@@ -1,25 +1,25 @@
-Django>=4.2,<5
-django_compressor>=3
-django-mptt>=0.13
-django-registration-redux>=2.10
-django-reversion>=5
-django-social-share
-django-sortedm2m>=3.1.0
-django-impersonate
+Django>=5.2,<6
+django_compressor>=4.6
+django-mptt>=0.18
+django-registration-redux>=2.13
+django-reversion>=6.2
+django-social-share>=2.3
+django-sortedm2m>=4
+django-impersonate>=1.9.5
 dmoj-wpadmin @ git+https://github.com/DMOJ/dmoj-wpadmin.git
 lxml
 lxml_html_clean
 Pygments
 mistune<2
-social-auth-core==4.3.0
-social-auth-app-django==5.0.0
+social-auth-core>=4.8.3,<5
+social-auth-app-django>=5.9,<6
 pytz
-django-statici18n
+django-statici18n>=2.7.1
 pika
 ua-parser
 pyyaml
 jinja2
-django_jinja>=2.5.0
+django_jinja>=2.11
 llist
 requests
 django-fernet-fields @ git+https://github.com/DMOJ/django-fernet-fields.git
@@ -35,7 +35,7 @@ lupa
 netaddr
 webauthn<1
 bleach[css]
-django-admin-sortable2
+django-admin-sortable2>=2.3.1
 icalendar
 # This is a celery dependency whose latest major version is breaking everything.
 importlib-metadata<5
