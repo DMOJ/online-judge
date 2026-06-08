@@ -9,7 +9,27 @@ class RawSQLJoin(Join):
     def __init__(self, subquery, subquery_params, parent_alias, table_alias, join_type, join_field, nullable,
                  filtered_relation=None):
         self.subquery_params = subquery_params
-        super().__init__(subquery, parent_alias, table_alias, join_type, join_field, nullable, filtered_relation)
+        self.table_name = subquery
+        self.parent_alias = parent_alias
+        self.table_alias = table_alias
+        self.join_type = join_type
+        self.join_cols = join_field.get_joining_columns()
+        self.join_fields = None
+        self.join_field = join_field
+        self.nullable = nullable
+        self.filtered_relation = filtered_relation
+
+    def relabeled_clone(self, change_map):
+        new_parent_alias = change_map.get(self.parent_alias, self.parent_alias)
+        new_table_alias = change_map.get(self.table_alias, self.table_alias)
+        if self.filtered_relation is not None:
+            filtered_relation = self.filtered_relation.relabeled_clone(change_map)
+        else:
+            filtered_relation = None
+        return self.__class__(
+            self.table_name, self.subquery_params, new_parent_alias, new_table_alias, self.join_type, self.join_field,
+            self.nullable, filtered_relation=filtered_relation,
+        )
 
     def as_sql(self, compiler, connection):
         compiler.quote_cache[self.table_name] = '(%s)' % self.table_name
