@@ -5,7 +5,19 @@
     <script type="text/javascript" src="{{ static('libs/featherlight/featherlight.min.js') }}"></script>
     <script type="text/javascript">
         window.valid_files = {{ valid_files_json }};
-        $(function () {
+        $(function () {            
+            $('#perform_infer_test_cases').on('click', function(){
+                var $form = $('form')[1];
+                var $input = $('<input>').attr({type:'hidden',id:'perform_infer_test_cases',name:'perform_infer_test_cases',value:'1'}).appendTo($form);
+                $form.submit();
+            });
+
+            $('#perform_rebuild_test_cases').on('click', function(){
+                var $form = $('form')[1];
+                var $input = $('<input>').attr({type:'hidden',id:'perform_rebuild_test_cases',name:'perform_rebuild_test_cases',value:'1'}).appendTo($form);
+                $form.submit();
+            });
+
             function autofill_if_exists($select, file) {
                 if (!$select.val() && ~window.valid_files.indexOf(file))
                     $select.val(file).trigger('change');
@@ -167,7 +179,7 @@
                 $table.trigger('add-row', [$(this)]);
             });
 
-            $('form').submit(function () {
+            $('form').submit(function () {                
                 $table.find('tbody:first').find('tr').each(function () {
                     var filled = false;
                     $(this).find('input, select').each(function () {
@@ -336,6 +348,11 @@
             padding-bottom: 1em;
             background: #e99;
         }
+
+        ul.errorlist a{
+            cursor: pointer;
+        }
+
     </style>
 {% endblock %}
 
@@ -350,7 +367,7 @@
 {% block body %}
     {% if data_form.instance.feedback %}
         <ul class="errorlist">
-            <li>{{ data_form.instance.feedback }}</li>
+            <li>{{ data_form.instance.feedback|safe }}</li>
         </ul>
     {% endif %}
     <form action="" method="POST" enctype="multipart/form-data">
@@ -387,8 +404,10 @@
                 <th class="type-column">{{ _('Type') }}</th>
                 <th>{{ _('Input file') }}</th>
                 <th>{{ _('Output file') }}</th>
+                <th>{{ _('Explanation file') }}</th>
                 <th>{{ _('Points') }}</th>
                 <th>{{ _('Pretest?') }}</th>
+                <th>{{ _('Private?') }}</th>
                 <th class="output-prefix">{{ _('Output prefix') }}</th>
                 <th class="output-limit">{{ _('Output limit') }}</th>
                 <th class="checker">{{ _('Checker') }}</th>
@@ -421,8 +440,13 @@
                                   form['output_file'].value() in valid_files) %} class="bad-file"{% endif %}>
                         {{ form.output_file.errors }}{{ form.output_file }}
                     </td>
+                    <td{% if not (form.empty_permitted or form['type'].value() != 'C' or form['explanation_file'].value() == '' or 
+                                    form['explanation_file'].value() in valid_files) %} class="bad-file"{% endif %}>
+                        {{ form.explanation_file.errors }}{{ form.explanation_file }}
+                    </td>
                     <td>{{ form.points.errors }}{{ form.points }}</td>
                     <td>{{ form.is_pretest.errors }}{{ form.is_pretest }}</td>
+                    <td>{{ form.is_private.errors }}{{ form.is_private }}</td>
                     <td class="output-prefix">{{ form.output_prefix.errors }}{{ form.output_prefix }}</td>
                     <td class="output-limit">{{ form.output_limit.errors }}{{ form.output_limit }}</td>
                     <td class="checker">
