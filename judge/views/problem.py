@@ -10,7 +10,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
-from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Prefetch, Q, When
+from django.db.models import BooleanField, Case, CharField, Count, F, FilteredRelation, Func, Prefetch, Q, When
 from django.db.models.functions import Coalesce
 from django.db.utils import ProgrammingError
 from django.http import Http404, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
@@ -30,6 +30,7 @@ from judge.comments import CommentedDetailView
 from judge.forms import ProblemCloneForm, ProblemPointsVoteForm, ProblemSubmitForm
 from judge.models import ContestSubmission, Judge, Language, Problem, ProblemGroup, ProblemPointsVote, \
     ProblemTranslation, ProblemType, RuntimeVersion, Solution, Submission, SubmissionSource
+from judge.user_translations import gettext as user_gettext
 from judge.utils.diggpaginator import DiggPaginator
 from judge.utils.opengraph import generate_opengraph
 from judge.utils.pdfoid import PDF_RENDERING_ENABLED, render_pdf
@@ -411,6 +412,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
         queryset = self.profile.current_contest.contest.contest_problems.select_related('problem__group') \
             .defer('problem__description').order_by('problem__code') \
             .annotate(user_count=Count('submission__participation', distinct=True)) \
+            .annotate(types_list=Func(F('problem__types__full_name'), function='GROUP_CONCAT',
+                      template='%(function)s(%(expressions)s%(ordering)s)',
+                      ordering=' ORDER BY judge_problemtype.full_name ASC')) \
             .annotate(i18n_translation=FilteredRelation(
                 'problem__translations', condition=Q(problem__translations__language=self.request.LANGUAGE_CODE),
             )).annotate(i18n_name=Coalesce(
@@ -425,8 +429,9 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
             'points': p['points'],
             'partial': p['partial'],
             'user_count': p['user_count'],
+            'types_list': list(map(user_gettext, p['types_list'].split(','))),
         } for p in queryset.values('problem_id', 'problem__code', 'problem__name', 'i18n_name',
-                                   'problem__group__full_name', 'points', 'partial', 'user_count')]
+                                   'problem__group__full_name', 'points', 'partial', 'user_count', 'types_list')]
 
     @staticmethod
     def apply_full_text(queryset, query):
@@ -491,7 +496,7 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
     def get_context_data(self, **kwargs):
         context = super(ProblemList, self).get_context_data(**kwargs)
         context['hide_solved'] = 0 if self.in_contest else int(self.hide_solved)
-        context['show_types'] = 0 if self.in_contest else int(self.show_types)
+        context['show_types'] = int(self.show_types)
         context['has_public_editorial'] = 0 if self.in_contest else int(self.has_public_editorial)
         context['full_text'] = 0 if self.in_contest else int(self.full_text)
         context['category'] = self.category
@@ -546,7 +551,11 @@ class ProblemList(QueryStringSortMixin, TitleMixin, SolvedProblemMixin, ListView
 
     def setup_problem_list(self, request):
         self.hide_solved = self.GET_with_session(request, 'hide_solved')
-        self.show_types = self.GET_with_session(request, 'show_types')
+        if self.in_contest:
+            self.show_types = int(not self.contest.hide_problem_tags)
+        else:
+            self.show_types = self.GET_with_session(request, 'show_types')
+
         self.full_text = self.GET_with_session(request, 'full_text')
         self.has_public_editorial = self.GET_with_session(request, 'has_public_editorial')
 
