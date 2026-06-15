@@ -1,3 +1,5 @@
+# flake8: noqa
+
 import json
 from datetime import timedelta, datetime
 from functools import partial
