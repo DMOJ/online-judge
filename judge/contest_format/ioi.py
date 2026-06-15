@@ -1,9 +1,11 @@
-from django.db import connection
+from collections import defaultdict
+
+from django.db.models import Case, CharField, F, Min, Value, When, Window
+from django.db.models.functions import Cast, Concat, RowNumber
 from django.utils.translation import gettext as _, gettext_lazy
 
 from judge.contest_format.legacy_ioi import LegacyIOIContestFormat
 from judge.contest_format.registry import register_contest_format
-from judge.timezone import from_database_time
 
 
 @register_contest_format('ioi16')
@@ -19,72 +21,90 @@ class IOIContestFormat(LegacyIOIContestFormat):
         score = 0
         format_data = {}
 
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                SELECT q.prob,
-                       MIN(q.date) as `date`,
-                       q.batch_points
-                FROM (
-                         SELECT cp.id          as `prob`,
-                                sub.id         as `subid`,
-                                sub.date       as `date`,
-                                tc.points      as `points`,
-                                tc.batch       as `batch`,
-                                MIN(tc.points) as `batch_points`
-                         FROM judge_contestproblem cp
-                                  INNER JOIN
-                              judge_contestsubmission cs
-                              ON (cs.problem_id = cp.id AND cs.participation_id = %s)
-                                  LEFT OUTER JOIN
-                              judge_submission sub
-                              ON (sub.id = cs.submission_id AND sub.status = 'D')
-                                  INNER JOIN judge_submissiontestcase tc
-                              ON sub.id = tc.submission_id
-                         GROUP BY cp.id, tc.batch, sub.id
-                     ) q
-                         INNER JOIN (
-                    SELECT prob, batch, MAX(r.batch_points) as max_batch_points
-                    FROM (
-                             SELECT cp.id          as `prob`,
-                                    tc.batch       as `batch`,
-                                    MIN(tc.points) as `batch_points`
-                             FROM judge_contestproblem cp
-                                      INNER JOIN
-                                  judge_contestsubmission cs
-                                  ON (cs.problem_id = cp.id AND cs.participation_id = %s)
-                                      LEFT OUTER JOIN
-                                  judge_submission sub
-                                  ON (sub.id = cs.submission_id AND sub.status = 'D')
-                                      INNER JOIN judge_submissiontestcase tc
-                                  ON sub.id = tc.submission_id
-                             GROUP BY cp.id, tc.batch, sub.id
-                         ) r
-                    GROUP BY prob, batch
-                ) p
-                ON p.prob = q.prob AND (p.batch = q.batch OR p.batch is NULL AND q.batch is NULL)
-                WHERE p.max_batch_points = q.batch_points
-                GROUP BY q.prob, q.batch
-            """, (participation.id, participation.id))
+        # Compute one row per submission/subtask. Batched cases are grouped by
+        # batch number; unbatched cases are intentionally grouped by case number
+        # so that NULL batches do not collapse into one fake subtask.
+        subtask_attempts = (
+            participation.submissions
+            .filter(
+                submission__status='D',
+                submission__test_cases__points__isnull=False,
+                submission__test_cases__total__gt=0,
+            )
+            .annotate(
+                subtask=Case(
+                    When(
+                        submission__test_cases__batch__isnull=True,
+                        then=Concat(
+                            Value('case:'),
+                            Cast('submission__test_cases__case', output_field=CharField()),
+                            output_field=CharField(),
+                        ),
+                    ),
+                    default=Concat(
+                        Value('batch:'),
+                        Cast('submission__test_cases__batch', output_field=CharField()),
+                        output_field=CharField(),
+                    ),
+                    output_field=CharField(),
+                ),
+            )
+            .values(
+                'problem_id',
+                'problem__points',
+                'submission_id',
+                'submission__date',
+                'subtask',
+            )
+            .annotate(
+                points=Min('submission__test_cases__points'),
+                total=Min('submission__test_cases__total'),
+            )
+            .annotate(
+                rank=Window(
+                    expression=RowNumber(),
+                    partition_by=[F('problem_id'), F('subtask')],
+                    order_by=[
+                        F('points').desc(),
+                        F('submission__date').asc(),
+                        F('submission_id').asc(),
+                    ],
+                ),
+            )
+            .filter(rank=1)
+            .order_by()
+        )
 
-            for problem_id, time, subtask_points in cursor.fetchall():
-                problem_id = str(problem_id)
-                time = from_database_time(time)
-                if self.config['cumtime']:
-                    dt = (time - participation.start).total_seconds()
-                else:
-                    dt = 0
+        problems = defaultdict(lambda: {
+            'raw_points': 0,
+            'raw_total': 0,
+            'contest_points': 0,
+            'time': 0,
+        })
 
-                if format_data.get(problem_id) is None:
-                    format_data[problem_id] = {'points': 0, 'time': 0}
-                format_data[problem_id]['points'] += subtask_points
-                format_data[problem_id]['time'] = max(dt, format_data[problem_id]['time'])
+        for subtask in subtask_attempts:
+            problem = problems[str(subtask['problem_id'])]
 
-            for problem_data in format_data.values():
-                penalty = problem_data['time']
-                points = problem_data['points']
-                if self.config['cumtime'] and points:
-                    cumtime += penalty
-                score += points
+            problem['contest_points'] = subtask['problem__points']
+            problem['raw_points'] += subtask['points'] or 0
+            problem['raw_total'] += subtask['total'] or 0
+
+            if self.config['cumtime'] and subtask['points']:
+                dt = (subtask['submission__date'] - participation.start).total_seconds()
+                problem['time'] = max(problem['time'], dt)
+
+        for problem_id, problem in problems.items():
+            if problem['raw_total']:
+                points = problem['raw_points'] / problem['raw_total'] * problem['contest_points']
+            else:
+                points = 0
+
+            penalty = max(problem['time'], 0) if points else 0
+            format_data[problem_id] = {'points': points, 'time': penalty}
+
+            if self.config['cumtime'] and points:
+                cumtime += penalty
+            score += points
 
         participation.cumtime = max(cumtime, 0)
         participation.score = round(score, self.contest.points_precision)
