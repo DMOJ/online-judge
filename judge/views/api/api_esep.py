@@ -1013,15 +1013,7 @@ class APIProblemTickets(View):
         )
 
         if not is_curator:
-            tickets_qs = tickets_qs.filter(user=profile)
-
-            since = request.GET.get('since')
-            if since:
-                from django.utils.dateparse import parse_datetime
-                since_dt = parse_datetime(since)
-                if since_dt:
-                    tickets_qs = tickets_qs.filter(time__gte=since_dt)
-
+            return JsonResponse({'error': 'Permission denied'}, status=403)
 
         tickets_qs = (
             tickets_qs
@@ -1314,14 +1306,7 @@ class APIProblemBroadcast(View):
         )
 
         if not is_curator:
-            tickets_qs = tickets_qs.filter(user=profile)
-
-            since = request.GET.get('since')
-            if since:
-                from django.utils.dateparse import parse_datetime
-                since_dt = parse_datetime(since)
-                if since_dt:
-                    tickets_qs = tickets_qs.filter(time__gte=since_dt)
+            return JsonResponse({'error': 'Permission denied'}, status=403)
 
         problem_ct = ContentType.objects.get_for_model(Problem)
         open_tickets = Ticket.objects.filter(
