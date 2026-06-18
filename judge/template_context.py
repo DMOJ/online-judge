@@ -50,16 +50,19 @@ def comet_location(request):
             'EVENT_DAEMON_POLL_LOCATION': poll}
 
 
-def __nav_tab(path):
-    result = list(NavigationBar.objects.extra(where=['%s REGEXP BINARY regex'], params=[path])[:1])
-    return result[0].get_ancestors(include_self=True).values_list('key', flat=True) if result else []
+def __nav_tab(path, user):
+    navbar_items = NavigationBar.for_user(user)
+    for item in navbar_items:
+        if item.pattern.match(path):
+            return item.get_ancestors(include_self=True).values_list('key', flat=True)
+    return []
 
 
 def general_info(request):
     path = request.get_full_path()
     return {
-        'nav_tab': FixedSimpleLazyObject(partial(__nav_tab, request.path)),
-        'nav_bar': NavigationBar.objects.all(),
+        'nav_tab': FixedSimpleLazyObject(partial(__nav_tab, request.path, request.user)),
+        'nav_bar': NavigationBar.for_user(request.user),
         'LOGIN_RETURN_PATH': '' if path.startswith('/accounts/') else path,
         'REGISTRATION_OPEN': settings.REGISTRATION_OPEN,
         'perms': PermWrapper(request.user),

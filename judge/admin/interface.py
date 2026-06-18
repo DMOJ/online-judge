@@ -11,15 +11,24 @@ from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import BlogPost, NavigationBar
-from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget
+from judge.widgets import (AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget,
+                           AdminSelect2Widget)
+
+
+class NavigationBarForm(ModelForm):
+    class Meta:
+        widgets = {
+            'permission': AdminSelect2Widget,
+        }
 
 
 class NavigationBarAdmin(DraggableMPTTAdmin):
     list_display = DraggableMPTTAdmin.list_display + ('key', 'linked_path')
-    fields = ('key', 'label', 'path', 'order', 'regex', 'parent')
+    fields = ('key', 'label', 'path', 'order', 'regex', 'parent', 'permission')
     list_editable = ()  # Bug in SortableModelAdmin: 500 without list_editable being set
     mptt_level_indent = 20
     sortable = 'order'
+    form = NavigationBarForm
 
     def __init__(self, *args, **kwargs):
         super(NavigationBarAdmin, self).__init__(*args, **kwargs)
