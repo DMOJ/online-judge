@@ -123,6 +123,10 @@ DMOJ_EMAIL_CHANGE_LIMIT_COUNT = 10
 # Number of minutes before an email change request activation key expires
 DMOJ_EMAIL_CHANGE_EXPIRY_MINUTES = 60
 
+# Number of username change requests per window (in minutes)
+DMOJ_USERNAME_CHANGE_LIMIT_WINDOW = 60
+DMOJ_USERNAME_CHANGE_LIMIT_COUNT = 10
+
 # At the bare minimum, dark and light theme CSS file locations must be declared
 DMOJ_THEME_CSS = {
     'light': 'style.css',

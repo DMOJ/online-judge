@@ -7,10 +7,15 @@ from django.utils.translation import gettext, gettext_lazy as _
 from reversion.admin import VersionAdmin
 
 from judge.models import Organization
+from judge.utils.replace_username import replace_username_with_id
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget
 
 
 class ClassForm(ModelForm):
+    def clean(self):
+        self.cleaned_data['description'] = replace_username_with_id(self.cleaned_data.get('description', ''))
+        return self.cleaned_data
+
     class Meta:
         widgets = {
             'admins': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),
@@ -60,6 +65,10 @@ class ClassAdmin(VersionAdmin):
 
 
 class OrganizationForm(ModelForm):
+    def clean(self):
+        self.cleaned_data['about'] = replace_username_with_id(self.cleaned_data.get('about', ''))
+        return self.cleaned_data
+
     class Meta:
         widgets = {
             'admins': AdminHeavySelect2MultipleWidget(data_view='profile_select2'),

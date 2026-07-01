@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
@@ -20,7 +22,11 @@ from reversion.models import Revision, Version
 
 from judge.dblock import LockModel
 from judge.models import Comment, CommentLock
+from judge.utils.replace_username import replace_username_with_id
 from judge.widgets import MartorWidget
+
+
+USERNAME_MENTION_RE = re.compile(r'\[(r?user):([\w-]+)\]')
 
 
 class CommentForm(ModelForm):
@@ -48,7 +54,9 @@ class CommentForm(ModelForm):
                 raise ValidationError(_('Your part is silent, little toad.'))
             elif not self.request.user.is_staff and not profile.has_any_solves:
                 raise ValidationError(_('You must solve at least one problem before your voice can be heard.'))
-        return super(CommentForm, self).clean()
+
+        self.cleaned_data['body'] = replace_username_with_id(self.cleaned_data.get('body', ''))
+        return self.cleaned_data
 
 
 class CommentedDetailView(TemplateResponseMixin, SingleObjectMixin, View):

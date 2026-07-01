@@ -11,6 +11,7 @@ from reversion.admin import VersionAdmin
 
 from judge.dblock import LockModel
 from judge.models import BlogPost, NavigationBar
+from judge.utils.replace_username import replace_username_with_id
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, AdminMartorWidget
 
 
@@ -58,6 +59,11 @@ class BlogPostForm(ModelForm):
         if 'authors' in self.fields:
             # self.fields['authors'] does not exist when the user has only view permission on the model.
             self.fields['authors'].widget.can_add_related = False
+
+    def clean(self):
+        self.cleaned_data['content'] = replace_username_with_id(self.cleaned_data.get('content', ''))
+        self.cleaned_data['summary'] = replace_username_with_id(self.cleaned_data.get('summary', ''))
+        return self.cleaned_data
 
     class Meta:
         widgets = {

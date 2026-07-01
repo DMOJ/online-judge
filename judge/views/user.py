@@ -31,8 +31,9 @@ from django.views.decorators.http import require_POST
 from django.views.generic import DetailView, FormView, ListView, TemplateView, View
 from reversion import revisions
 
-from judge.forms import CustomAuthenticationForm, DownloadDataForm, EmailChangeForm, ProfileForm, newsletter_id
-from judge.models import Profile, Submission
+from judge.forms import CustomAuthenticationForm, DownloadDataForm, EmailChangeForm, ProfileForm, UsernameChangeForm, \
+    newsletter_id
+from judge.models import Profile, Submission, UsernameHistory
 from judge.performance_points import get_pp_breakdown
 from judge.ratings import rating_class, rating_progress
 from judge.tasks import prepare_user_data
@@ -123,6 +124,9 @@ class UserPage(TitleMixin, UserMixin, DetailView):
             ).count() + 1
         context.update(self.object.ratings.aggregate(min_rating=Min('rating'), max_rating=Max('rating'),
                                                      contests=Count('contest')))
+        context['username_history'] = UsernameHistory.objects.filter(
+            user=self.object,
+        )[::-1]
         return context
 
     def get(self, request, *args, **kwargs):
@@ -497,6 +501,53 @@ class UserLogoutView(TitleMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         auth_logout(request)
         return HttpResponseRedirect(request.get_full_path())
+
+
+class UsernameChangeView(LoginRequiredMixin, TitleMixin, FormView):
+    class UsernameChangeFailedError(Exception):
+        pass
+
+    title = _('Change your username')
+    template_name = 'registration/username_change.html'
+    form_class = UsernameChangeForm
+
+    def form_valid(self, form):
+        try:
+            original_username = self.request.user.username
+            new_username = form.cleaned_data['username']
+            with revisions.create_revision(atomic=True):
+                if User.objects.filter(username=new_username).exists():
+                    raise self.UsernameChangeFailedError(
+                        _('The username you originally requested has since been registered by another user. '
+                          'Please try again with a new username.'),
+                    )
+                self.request.user.username = new_username
+                self.request.user.save()
+                revisions.set_user(self.request.user)
+                revisions.set_comment(_('Changed username from %s to %s') % (original_username, new_username))
+
+                UsernameHistory.objects.create(user=self.request.profile, old_username=original_username)
+        except self.UsernameChangeFailedError as e:
+            return generic_message(self.request, _('Username change failed'), str(e), status=403)
+        else:
+            return generic_message(
+                self.request,
+                _('Username successfully changed'),
+                _('The username attached to your account has been changed to %s.') % new_username,
+            )
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        key = f'usernamechange!{request.META["REMOTE_ADDR"]}'
+        cache.add(key, 0, timeout=settings.DMOJ_USERNAME_CHANGE_LIMIT_WINDOW * MINUTES_TO_SECONDS)
+        if cache.incr(key) > settings.DMOJ_USERNAME_CHANGE_LIMIT_COUNT:
+            return HttpResponse(_('You have sent too many username change requests. Please try again later.'),
+                                content_type='text/plain', status=429)
+        return super().post(request, *args, **kwargs)
 
 
 MINUTES_TO_SECONDS = 60

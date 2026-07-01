@@ -16,6 +16,7 @@ from reversion.admin import VersionAdmin
 
 from judge.models import Class, Contest, ContestProblem, ContestSubmission, Profile, Rating, Submission
 from judge.ratings import rate_contest
+from judge.utils.replace_username import replace_username_with_id
 from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminAceWidget, AdminHeavySelect2MultipleWidget, AdminHeavySelect2Widget, \
     AdminMartorWidget, AdminSelect2MultipleWidget, AdminSelect2Widget
@@ -92,7 +93,9 @@ class ContestForm(ModelForm):
 
     def clean(self):
         cleaned_data = super(ContestForm, self).clean()
+        cleaned_data['description'] = replace_username_with_id(cleaned_data.get('description', ''))
         cleaned_data['banned_users'].filter(current_contest__contest=self.instance).update(current_contest=None)
+        return cleaned_data
 
     class Meta:
         widgets = {

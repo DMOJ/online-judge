@@ -14,7 +14,7 @@ from judge.models import Contest, Problem, Profile
 from judge.ratings import rating_class, rating_progress
 from . import registry
 
-rereference = re.compile(r'\[(r?user):(\w+)\]')
+rereference = re.compile(r'\[(r?user):([\w-]+)\]')
 
 
 def get_user(username, data):
@@ -75,6 +75,10 @@ def process_reference(text):
         else:
             prev.append(text[last:piece.start()])
         prev = list(piece.groups())
+        if len(prev[1]) > 30:
+            profile = Profile.objects.filter(snowflake_id=prev[1]).first()
+            if profile is not None:
+                prev[1] = profile.user.username
         elements.append(prev)
         last = piece.end()
     if prev is not None:

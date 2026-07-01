@@ -3,6 +3,7 @@ import os
 from typing import Optional
 
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.core.cache.utils import make_template_fragment_key
 from django.db.models.signals import post_delete, post_save
@@ -48,6 +49,48 @@ def problem_update(sender, instance, **kwargs):
         cached_pdf_filename = get_pdf_path('%s.%s.pdf' % (instance.code, lang))
         if cached_pdf_filename is not None:
             unlink_if_exists(cached_pdf_filename)
+
+
+@receiver(post_save, sender=User)
+def user_update(sender, instance, **kwargs):
+    profile = instance.profile
+    cache.delete_many([make_template_fragment_key('user_about', (profile.id, engine))
+                       for engine in EFFECTIVE_MATH_ENGINES])
+    update_fields = kwargs.get('update_fields')
+    if update_fields is not None and 'username' not in update_fields:
+        return
+
+    problem_ids = list(Problem.objects.values_list('id', flat=True))
+    contest_ids = list(Contest.objects.values_list('id', flat=True))
+    post_ids = list(BlogPost.objects.values_list('id', flat=True))
+    organization_ids = list(Organization.objects.values_list('id', flat=True))
+    authored_problem_ids = list(profile.authored_problems.values_list('id', flat=True))
+
+    cache.delete_many([make_template_fragment_key('problem_html', (problem_id, engine, lang))
+                       for problem_id in problem_ids
+                       for lang, _ in settings.LANGUAGES
+                       for engine in EFFECTIVE_MATH_ENGINES])
+    cache.delete_many([make_template_fragment_key('contest_html', (contest_id, engine))
+                       for contest_id in contest_ids
+                       for engine in EFFECTIVE_MATH_ENGINES])
+    cache.delete_many([make_template_fragment_key('post_summary', (post_id,))
+                       for post_id in post_ids])
+    cache.delete_many([make_template_fragment_key('post_content', (post_id, engine))
+                       for post_id in post_ids
+                       for engine in EFFECTIVE_MATH_ENGINES])
+    cache.delete_many([make_template_fragment_key('organization_html', (organization_id, engine))
+                       for organization_id in organization_ids
+                       for engine in EFFECTIVE_MATH_ENGINES])
+    cache.delete_many([make_template_fragment_key('problem_authors', (problem_id, lang))
+                       for problem_id in authored_problem_ids
+                       for lang, _ in settings.LANGUAGES])
+    cache.delete_many(['problem_feed:%d' % problem_id for problem_id in problem_ids])
+    cache.delete_many(['blog_feed:%d' % post_id for post_id in post_ids])
+    cache.delete_many(['generated-meta-problem:%s:%d' % (lang, problem_id)
+                       for problem_id in problem_ids
+                       for lang, _ in settings.LANGUAGES])
+    cache.delete_many(['generated-meta-contest:%d' % contest_id for contest_id in contest_ids])
+    cache.delete_many(['generated-meta-blog:%d' % post_id for post_id in post_ids])
 
 
 @receiver(post_save, sender=Profile)
