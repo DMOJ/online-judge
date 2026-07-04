@@ -13,6 +13,7 @@ from reversion.admin import VersionAdmin
 
 from judge.models import LanguageLimit, Problem, ProblemClarification, ProblemPointsVote, ProblemTranslation, Profile, \
     Solution
+from judge.utils.replace_username import replace_username_with_id
 from judge.utils.views import NoBatchDeleteMixin
 from judge.widgets import AdminHeavySelect2MultipleWidget, AdminMartorWidget, AdminSelect2MultipleWidget, \
     AdminSelect2Widget, CheckboxSelectMultipleWithSelectAll
@@ -30,6 +31,10 @@ class ProblemForm(ModelForm):
         self.fields['change_message'].widget.attrs.update({
             'placeholder': gettext('Describe the changes you made (optional)'),
         })
+
+    def clean(self):
+        self.cleaned_data['description'] = replace_username_with_id(self.cleaned_data.get('description', ''))
+        return self.cleaned_data
 
     class Meta:
         widgets = {
@@ -84,6 +89,10 @@ class ProblemSolutionForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProblemSolutionForm, self).__init__(*args, **kwargs)
         self.fields['authors'].widget.can_add_related = False
+
+    def clean(self):
+        self.cleaned_data['content'] = replace_username_with_id(self.cleaned_data.get('content', ''))
+        return self.cleaned_data
 
     class Meta:
         widgets = {

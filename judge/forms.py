@@ -16,10 +16,12 @@ from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _, ngettext_lazy
 
 from judge.models import Contest, Language, Organization, Problem, ProblemPointsVote, Profile, Submission, \
-    WebAuthnCredential
+    UsernameHistory, WebAuthnCredential
 from judge.utils.mail import validate_email_domain
+from judge.utils.replace_username import replace_username_with_id
 from judge.utils.subscription import newsletter_id
 from judge.widgets import AceWidget, MartorWidget, Select2MultipleWidget, Select2Widget
+
 
 TOTP_CODE_LENGTH = 6
 
@@ -67,6 +69,7 @@ class ProfileForm(ModelForm):
     def clean_about(self):
         if 'about' in self.changed_data and not self.instance.has_any_solves:
             raise ValidationError(_('You must solve at least one problem before you can update your profile.'))
+        self.cleaned_data['about'] = replace_username_with_id(self.cleaned_data.get('about', ''))
         return self.cleaned_data['about']
 
     def clean(self):
@@ -92,9 +95,35 @@ class ProfileForm(ModelForm):
         self.fields['user_script'].widget = AceWidget(mode='javascript', theme=user.profile.resolved_ace_theme)
 
 
+class UsernameChangeForm(Form):
+    password = CharField(widget=forms.PasswordInput())
+    username = forms.RegexField(regex=r'^\w+$', max_length=30, label=_('New Username'),
+                                error_messages={'invalid': _('A username must contain letters, '
+                                                             'numbers, or underscores.')})
+
+    def __init__(self, *args, user, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+    def clean_username(self):
+        new_username = self.cleaned_data['username']
+        if User.objects.filter(username=new_username).exclude(pk=self.user.pk).exists():
+            raise ValidationError(_('This username is already taken.'))
+
+        if UsernameHistory.objects.filter(old_username=new_username).exclude(user=self.user.profile).exists():
+            raise ValidationError(_('This username is already taken.'))
+
+        return new_username
+
+    def clean_password(self):
+        if not self.user.check_password(self.cleaned_data['password']):
+            raise ValidationError(_('Invalid password'))
+        return self.cleaned_data['password']
+
+
 class EmailChangeForm(Form):
     password = CharField(widget=forms.PasswordInput())
-    email = forms.EmailField()
+    email = forms.EmailField(label=('New Email'))
 
     def __init__(self, *args, user, **kwargs):
         super().__init__(*args, **kwargs)

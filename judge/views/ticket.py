@@ -19,6 +19,7 @@ from django.views.generic.detail import SingleObjectMixin
 from judge import event_poster as event
 from judge.models import Problem, Profile, Ticket, TicketMessage
 from judge.utils.diggpaginator import DiggPaginator
+from judge.utils.replace_username import replace_username_with_id
 from judge.utils.tickets import filter_visible_tickets, own_ticket_filter
 from judge.utils.views import SingleObjectFormView, TitleMixin, paginate_query_context
 from judge.views.problem import ProblemMixin
@@ -47,7 +48,8 @@ class TicketForm(forms.Form):
                 raise ValidationError(_('Your part is silent, little toad.'))
             if not self.request.in_contest and not profile.has_any_solves:
                 raise ValidationError(_('You must solve at least one problem before you can create a ticket.'))
-        return super(TicketForm, self).clean()
+        self.cleaned_data['body'] = replace_username_with_id(self.cleaned_data.get('body', ''))
+        return self.cleaned_data
 
 
 class NewTicketView(LoginRequiredMixin, SingleObjectFormView):

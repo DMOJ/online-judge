@@ -44,6 +44,7 @@ register_patterns = [
          name='registration_disallowed'),
     path('login/', user.CustomLoginView.as_view(), name='auth_login'),
     path('logout/', user.UserLogoutView.as_view(), name='auth_logout'),
+    path('username/change/', user.UsernameChangeView.as_view(), name='username_change'),
     path('password/change/', user.CustomPasswordChangeView.as_view(), name='password_change'),
     path('password/change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='registration/password_change_done.html',

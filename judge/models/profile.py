@@ -3,6 +3,7 @@ import hmac
 import json
 import secrets
 import struct
+import uuid
 from operator import mul
 
 import pyotp
@@ -28,7 +29,7 @@ from judge.models.runtime import Language
 from judge.ratings import rating_class
 from judge.utils.two_factor import webauthn_decode
 
-__all__ = ['Class', 'Organization', 'Profile', 'OrganizationRequest', 'WebAuthnCredential']
+__all__ = ['Class', 'Organization', 'Profile', 'OrganizationRequest', 'UsernameHistory', 'WebAuthnCredential']
 
 
 class EncryptedNullCharField(EncryptedCharField):
@@ -145,6 +146,7 @@ class Class(models.Model):
 
 
 class Profile(models.Model):
+    snowflake_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     user = models.OneToOneField(User, verbose_name=_('user associated'), on_delete=models.CASCADE)
     about = models.TextField(verbose_name=_('self-description'), null=True, blank=True)
     timezone = models.CharField(max_length=50, verbose_name=_('time zone'), choices=TIMEZONE,
@@ -345,6 +347,12 @@ class Profile(models.Model):
             models.Index(fields=('is_unlisted', '-rating')),
             models.Index(fields=('is_unlisted', '-problem_count')),
         ]
+
+
+class UsernameHistory(models.Model):
+    user = models.ForeignKey(Profile, verbose_name=('user'), on_delete=models.CASCADE)
+    old_username = models.CharField(max_length=30)
+    changed_at = models.DateTimeField(verbose_name=('When the username was changed'), auto_now_add=True)
 
 
 class WebAuthnCredential(models.Model):

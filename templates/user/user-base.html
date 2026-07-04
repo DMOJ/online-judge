@@ -37,6 +37,24 @@
                 <a href="{{ url('all_user_submissions', user.user.username) }}">{{ _('View submissions') }}</a>
             </div>
 
+            {% if username_history %}
+                <br>
+                <div class="user-problem-group">
+                    <div class="unselectable toggle closed">
+                        <span class="fa fa-chevron-right fa-fw"></span><b class="semibold">{{ _('Past usernames') }}</b>
+                    </div>
+                    <table style="display: none; white-space: normal; word-break: break-word; overflow-wrap: anywhere; text-align: left;" class="table striped toggled">
+                        <tbody>
+                        {% for entry in username_history %}
+                            <tr>
+                                <td>{{ entry.old_username }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
             {% if ratings %}
                 <br>
                 <div><b>
@@ -54,6 +72,8 @@
                 <div><b class="semibold">{{ _('Max rating:') }}</b> {{ rating_number(max_rating) }}</div>
             {% endif %}
         </div>
+
         <div class="user-content">{% block user_content %}{% endblock %}</div>
+
     </div>
 {% endblock %}
