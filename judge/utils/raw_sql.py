@@ -1,4 +1,5 @@
 from django.db import connections
+from django.db.models import Field
 from django.db.models.sql.constants import INNER, LOUTER
 from django.db.models.sql.datastructures import Join
 
@@ -22,8 +23,13 @@ class FakeJoinField:
         self.joining_columns = joining_columns
         self.related_model = related_model
 
-    def get_joining_columns(self):
-        return self.joining_columns
+    def get_joining_fields(self):
+        def make_field(column):
+            field = Field()
+            field.column = column
+            return field
+
+        return [(make_field(lhs), make_field(rhs)) for lhs, rhs in self.joining_columns]
 
     def get_extra_restriction(self, alias, remote_alias):
         pass
@@ -35,10 +41,7 @@ def join_sql_subquery(
         parent_alias = parent_model._meta.db_table
     else:
         parent_alias = queryset.query.get_initial_alias()
-    if isinstance(queryset.query.external_aliases, dict):  # Django 3.x
-        queryset.query.external_aliases[alias] = True
-    else:
-        queryset.query.external_aliases.add(alias)
+    queryset.query.external_aliases[alias] = True
     join = RawSQLJoin(subquery, params, parent_alias, alias, join_type, FakeJoinField(join_fields, related_model),
                       join_type == LOUTER)
     queryset.query.join(join)
