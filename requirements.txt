@@ -13,7 +13,6 @@ Pygments
 mistune<2
 social-auth-core==4.3.0
 social-auth-app-django==5.0.0
-pytz
 django-statici18n
 pika
 ua-parser

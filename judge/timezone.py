@@ -1,4 +1,5 @@
-import pytz
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
 from django.conf import settings
 from django.db import connection
 from django.utils import timezone
@@ -13,7 +14,10 @@ class TimezoneMiddleware(object):
         tzname = settings.DEFAULT_USER_TIME_ZONE
         if request.profile:
             tzname = request.profile.timezone
-        return pytz.timezone(tzname)
+        try:
+            return ZoneInfo(tzname)
+        except (ValueError, ZoneInfoNotFoundError):
+            return ZoneInfo(settings.DEFAULT_USER_TIME_ZONE)
 
     def __call__(self, request):
         with timezone.override(self.get_timezone(request)):
