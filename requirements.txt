@@ -27,7 +27,8 @@ qrcode[pil]
 jsonfield @ git+https://github.com/DMOJ/jsonfield.git
 pymoss
 packaging<22
-celery
+# Celery 6.0 removes the legacy setting aliases (e.g. CELERY_RESULT_BACKEND) used by dmoj/celery.py.
+celery<6
 ansi2html @ git+https://github.com/DMOJ/ansi2html.git
 sqlparse
 lupa
