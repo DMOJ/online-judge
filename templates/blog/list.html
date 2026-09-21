@@ -117,7 +117,7 @@
             {% if current_contests %}
                 <div class="blog-sidebox sidebox">
                     <h3>{{ _('Ongoing contests') }} <i class="fa fa-trophy"></i></h3>
-                    <div class="sidebox-content sidebox-ongoing-contest">
+                    <div class="sidebox-content sidebox-contest-list">
                         {% for contest in current_contests %}
                             <div class="contest">
                                 <div class="contest-list-title">
@@ -135,7 +135,7 @@
             {% if future_contests %}
                 <div class="blog-sidebox sidebox">
                     <h3>{{ _('Upcoming contests') }} <i class="fa fa-trophy"></i></h3>
-                    <div class="sidebox-content">
+                    <div class="sidebox-content sidebox-contest-list">
                         {% for contest in future_contests %}
                             <div class="contest">
                                 <div class="contest-list-title">
