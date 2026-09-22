@@ -16,7 +16,7 @@ from django.views.decorators.http import require_POST
 from reversion.admin import VersionAdmin
 
 from judge.models import ContestParticipation, ContestProblem, ContestSubmission, Profile, Submission, \
-    SubmissionSource, SubmissionTestCase
+    SubmissionSource
 from judge.utils.raw_sql import use_straight_join
 from judge.widgets import AdminAceWidget
 
@@ -55,14 +55,6 @@ class SubmissionResultFilter(admin.SimpleListFilter):
             return queryset.exclude(result='AC')
         elif self.value() in self.__handles:
             return queryset.filter(result=self.value())
-
-
-class SubmissionTestCaseInline(admin.TabularInline):
-    fields = ('case', 'batch', 'status', 'time', 'memory', 'points', 'total')
-    readonly_fields = ('case', 'batch', 'total')
-    model = SubmissionTestCase
-    can_delete = False
-    max_num = 0
 
 
 class ContestSubmissionInline(admin.StackedInline):
@@ -129,7 +121,7 @@ class SubmissionAdmin(VersionAdmin):
     search_fields = ('problem__code', 'problem__name', 'user__user__username')
     actions_on_top = True
     actions_on_bottom = True
-    inlines = [SubmissionSourceInline, SubmissionTestCaseInline, ContestSubmissionInline]
+    inlines = [SubmissionSourceInline, ContestSubmissionInline]
 
     def get_readonly_fields(self, request, obj=None):
         fields = self.readonly_fields

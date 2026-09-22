@@ -67,8 +67,8 @@ class Submission(models.Model):
     user = models.ForeignKey(Profile, verbose_name=_('user'), on_delete=models.CASCADE, db_index=False)
     problem = models.ForeignKey(Problem, verbose_name=_('problem'), on_delete=models.CASCADE, db_index=False)
     date = models.DateTimeField(verbose_name=_('submission time'), auto_now_add=True, db_index=True)
-    time = models.FloatField(verbose_name=_('execution time'), null=True)
-    memory = models.FloatField(verbose_name=_('memory usage'), null=True)
+    time = models.FloatField(verbose_name=_('execution time'), null=True, blank=True)
+    memory = models.FloatField(verbose_name=_('memory usage'), null=True, blank=True)
     points = models.FloatField(verbose_name=_('points granted'), null=True)
     language = models.ForeignKey(Language, verbose_name=_('submission language'),
                                  on_delete=models.CASCADE, db_index=False)
