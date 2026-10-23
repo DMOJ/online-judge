@@ -15,7 +15,7 @@ from judge import contest_format
 from judge.models.problem import Problem
 from judge.models.profile import Class, Organization, Profile
 from judge.models.submission import Submission
-from judge.ratings import rate_contest
+from judge.ratings import RATING_INIT, rate_contest
 
 __all__ = ['Contest', 'ContestTag', 'ContestParticipation', 'ContestProblem', 'ContestSubmission', 'Rating']
 
@@ -125,6 +125,9 @@ class Contest(models.Model):
                                    default=False)
     rate_exclude = models.ManyToManyField(Profile, verbose_name=_('exclude from ratings'), blank=True,
                                           related_name='rate_exclude+')
+    ratable_users = models.ManyToManyField(Profile, verbose_name=_('ratable users'), blank=True,
+                                           related_name='ratable_contests+',
+                                           help_text=_('Users who are eligible to be rated in this contest.'))
     is_private = models.BooleanField(verbose_name=_('private to specific users'), default=False)
     private_contestants = models.ManyToManyField(Profile, blank=True, verbose_name=_('private contestants'),
                                                  help_text=_('If non-empty, only these users may see the contest.'),
@@ -336,6 +339,18 @@ class Contest(models.Model):
         self.save()
 
     update_user_count.alters_data = True
+
+    def is_ratable_for(self, profile):
+        if not self.is_rated:
+            return False
+        if self.pk and self.rate_exclude.filter(id=profile.id).exists():
+            return False
+        user_rating = profile.rating if profile.rating is not None else RATING_INIT
+        if self.rating_floor is not None and user_rating < self.rating_floor:
+            return False
+        if self.rating_ceiling is not None and user_rating > self.rating_ceiling:
+            return False
+        return True
 
     class Inaccessible(Exception):
         pass

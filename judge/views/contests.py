@@ -436,6 +436,8 @@ class ContestJoin(LoginRequiredMixin, ContestMixin, SingleObjectMixin, View):
                     contest=contest, user=profile, virtual=participation_type,
                     real_start=timezone.now(),
                 )
+                if participation.live and contest.is_ratable_for(profile):
+                    contest.ratable_users.add(profile)
             else:
                 if participation.ended:
                     participation = ContestParticipation.objects.get_or_create(

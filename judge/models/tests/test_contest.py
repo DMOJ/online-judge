@@ -1,8 +1,10 @@
+from unittest.mock import MagicMock, PropertyMock, patch
+
 from django.core.exceptions import ValidationError
 from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 
-from judge.models import Contest, ContestParticipation, ContestTag
+from judge.models import Contest, ContestParticipation, ContestTag, Profile
 from judge.models.contest import MinValueOrNoneValidator
 from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation, create_user
 
@@ -1048,3 +1050,58 @@ class MinValueOrNoneValidatorTestCase(SimpleTestCase):
 
         with self.assertRaises(ValidationError):
             MinValueOrNoneValidator(100)(0)
+
+
+class RatabilityLockingTestCase(SimpleTestCase):
+    def test_is_ratable_for_unrated_contest(self):
+        contest = Contest(is_rated=False)
+        profile = Profile(id=1, language_id=1, rating=1500)
+        self.assertFalse(contest.is_ratable_for(profile))
+
+    def test_is_ratable_for_within_bounds(self):
+        contest = Contest(is_rated=True, rating_floor=1400, rating_ceiling=1600)
+        profile = Profile(id=1, language_id=1, rating=1500)
+        self.assertTrue(contest.is_ratable_for(profile))
+
+    def test_is_ratable_for_above_ceiling(self):
+        contest = Contest(is_rated=True, rating_ceiling=1600)
+        profile = Profile(id=1, language_id=1, rating=1650)
+        self.assertFalse(contest.is_ratable_for(profile))
+
+    def test_is_ratable_for_below_floor(self):
+        contest = Contest(is_rated=True, rating_floor=1400)
+        profile = Profile(id=1, language_id=1, rating=1350)
+        self.assertFalse(contest.is_ratable_for(profile))
+
+    def test_is_ratable_for_newcomer_default_rating(self):
+        # Unrated users have profile.rating is None, effective rating is RATING_INIT (1200)
+        contest_div1 = Contest(is_rated=True, rating_floor=1400)
+        newcomer = Profile(id=2, language_id=1, rating=None)
+        self.assertFalse(contest_div1.is_ratable_for(newcomer))
+
+        contest_div2 = Contest(is_rated=True, rating_ceiling=1600)
+        self.assertTrue(contest_div2.is_ratable_for(newcomer))
+
+    def test_is_ratable_for_rate_exclude(self):
+        contest = Contest(id=1, is_rated=True)
+        profile = Profile(id=42, language_id=1, rating=1500)
+        with patch.object(Contest, 'rate_exclude', new_callable=PropertyMock) as mock_exclude:
+            mock_exclude.return_value.filter.return_value.exists.return_value = True
+            self.assertFalse(contest.is_ratable_for(profile))
+
+    def test_join_contest_ratability_logic(self):
+        contest = Contest(is_rated=True, rating_ceiling=1600)
+        eligible_user = Profile(id=10, language_id=1, rating=1550)
+        ineligible_user = Profile(id=11, language_id=1, rating=1650)
+        self.assertTrue(contest.is_ratable_for(eligible_user))
+        self.assertFalse(contest.is_ratable_for(ineligible_user))
+
+    def test_rate_contest_locked_ratability_property(self):
+        contest = Contest(id=1, is_rated=True, rating_ceiling=1600)
+        mock_ratable = MagicMock()
+        mock_ratable.exists.return_value = True
+        mock_ratable.all.return_value = [10, 20]
+        with patch.object(Contest, 'ratable_users', new_callable=PropertyMock) as mock_prop:
+            mock_prop.return_value = mock_ratable
+            self.assertTrue(contest.ratable_users.exists())
+            self.assertEqual(list(contest.ratable_users.all()), [10, 20])
