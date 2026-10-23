@@ -123,7 +123,7 @@ class ContestAdmin(NoBatchDeleteMixin, SortableAdminBase, VersionAdmin):
         (_('Details'), {'fields': ('description', 'og_image', 'logo_override_image', 'tags', 'summary')}),
         (_('Format'), {'fields': ('format_name', 'format_config', 'problem_label_script')}),
         (_('Rating'), {'fields': ('is_rated', 'rate_all', 'rating_floor', 'rating_ceiling',
-                                  'performance_ceiling_override', 'rate_exclude')}),
+                                  'performance_ceiling_override', 'rate_exclude', 'ratable_users')}),
         (_('Access'), {'fields': ('access_code', 'private_contestants', 'organizations', 'classes',
                                   'join_organizations', 'view_contest_scoreboard', 'view_contest_submissions')}),
         (_('Justice'), {'fields': ('banned_users',)}),
@@ -136,7 +136,7 @@ class ContestAdmin(NoBatchDeleteMixin, SortableAdminBase, VersionAdmin):
     actions_on_bottom = True
     form = ContestForm
     change_list_template = 'admin/judge/contest/change_list.html'
-    filter_horizontal = ['rate_exclude']
+    filter_horizontal = ['rate_exclude', 'ratable_users']
     date_hierarchy = 'start_time'
 
     def get_actions(self, request):
@@ -163,7 +163,7 @@ class ContestAdmin(NoBatchDeleteMixin, SortableAdminBase, VersionAdmin):
     def get_readonly_fields(self, request, obj=None):
         readonly = []
         if not request.user.has_perm('judge.contest_rating'):
-            readonly += ['is_rated', 'rate_all', 'rate_exclude']
+            readonly += ['is_rated', 'rate_all', 'rate_exclude', 'ratable_users']
         if not request.user.has_perm('judge.lock_contest'):
             readonly += ['locked_after']
         if not request.user.has_perm('judge.contest_access_code'):

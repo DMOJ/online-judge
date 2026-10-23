@@ -160,10 +160,13 @@ def rate_contest(contest):
                                   'last_rating', 'last_mean', 'times')
     if not contest.rate_all:
         users = users.filter(submissions__gt=0)
-    if contest.rating_floor is not None:
-        users = users.exclude(last_rating__lt=contest.rating_floor)
-    if contest.rating_ceiling is not None:
-        users = users.exclude(last_rating__gt=contest.rating_ceiling)
+    if contest.ratable_users.exists():
+        users = users.filter(user_id__in=contest.ratable_users.all())
+    else:
+        if contest.rating_floor is not None:
+            users = users.exclude(last_rating__lt=contest.rating_floor)
+        if contest.rating_ceiling is not None:
+            users = users.exclude(last_rating__gt=contest.rating_ceiling)
 
     users = list(users)
     participation_ids = list(map(itemgetter('id'), users))

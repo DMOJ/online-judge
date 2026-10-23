@@ -194,6 +194,7 @@ class CreateContest(CreateModel):
         'problems': (Problem, 'code'),
         'view_contest_scoreboard': (Profile, 'user__username'),
         'rate_exclude': (Profile, 'user__username'),
+        'ratable_users': (Profile, 'user__username'),
         'private_contestants': (Profile, 'user__username'),
         'organizations': (Organization, 'name'),
         'join_organizations': (Organization, 'name'),
