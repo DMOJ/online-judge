@@ -485,10 +485,12 @@ class Contest(models.Model):
 
     def rate(self):
         with transaction.atomic():
-            Rating.objects.filter(contest__end_time__range=(self.end_time, self._now)).delete()
-            for contest in Contest.objects.filter(
+            contests = list(Contest.objects.filter(
+                Q(id=self.id) | Q(ratings__isnull=False),
                 is_rated=True, end_time__range=(self.end_time, self._now),
-            ).order_by('end_time'):
+            ).order_by('end_time').distinct())
+            Rating.objects.filter(contest__in=contests).delete()
+            for contest in contests:
                 rate_contest(contest)
 
     class Meta:

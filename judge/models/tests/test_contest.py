@@ -1,4 +1,7 @@
+from unittest.mock import MagicMock, patch
+
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
 
@@ -1048,3 +1051,39 @@ class MinValueOrNoneValidatorTestCase(SimpleTestCase):
 
         with self.assertRaises(ValidationError):
             MinValueOrNoneValidator(100)(0)
+
+
+class ContestRateTestCase(SimpleTestCase):
+    def test_rate_filter_q_expression(self):
+        contest = Contest(id=42)
+        q_expr = Q(id=contest.id) | Q(ratings__isnull=False)
+        self.assertEqual(q_expr.children, [('id', 42), ('ratings__isnull', False)])
+        self.assertEqual(q_expr.connector, Q.OR)
+
+    def test_rate_only_rates_self_and_already_rated_contests(self):
+        c1 = Contest(id=1, key='c1', is_rated=True, end_time=timezone.now() - timezone.timedelta(days=2))
+        c2 = Contest(id=2, key='c2', is_rated=True, end_time=timezone.now() - timezone.timedelta(days=1))
+
+        with patch('judge.models.contest.transaction.atomic'), \
+                patch('judge.models.contest.Contest.objects.filter') as mock_filter, \
+                patch('judge.models.contest.Rating.objects.filter') as mock_rating_filter, \
+                patch('judge.models.contest.rate_contest') as mock_rate_contest:
+            mock_qs = MagicMock()
+            mock_filter.return_value = mock_qs
+            mock_qs.order_by.return_value = mock_qs
+            mock_qs.distinct.return_value = [c1, c2]
+
+            c1.rate()
+
+            mock_filter.assert_called_once_with(
+                Q(id=c1.id) | Q(ratings__isnull=False),
+                is_rated=True,
+                end_time__range=(c1.end_time, c1._now),
+            )
+            mock_qs.order_by.assert_called_once_with('end_time')
+            mock_qs.distinct.assert_called_once()
+            mock_rating_filter.assert_called_once_with(contest__in=[c1, c2])
+            mock_rating_filter.return_value.delete.assert_called_once()
+            self.assertEqual(mock_rate_contest.call_count, 2)
+            mock_rate_contest.assert_any_call(c1)
+            mock_rate_contest.assert_any_call(c2)
