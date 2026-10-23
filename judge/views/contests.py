@@ -513,10 +513,18 @@ class ContestCalendar(TitleMixin, ContestListMixin, TemplateView):
                 ends[end_date].append(contest)
         return starts, ends, oneday
 
+    @classmethod
+    def _make_aware(cls, dt):
+        tz = timezone.get_current_timezone()
+        if hasattr(tz, 'localize'):
+            return tz.localize(dt, is_dst=False)
+        return make_aware(dt)
+
     def get_table(self):
         calendar = Calendar(self.firstweekday).monthdatescalendar(self.year, self.month)
-        starts, ends, oneday = self.get_contest_data(make_aware(datetime.datetime.combine(calendar[0][0], time.min)),
-                                                     make_aware(datetime.datetime.combine(calendar[-1][-1], time.min)))
+        start = self._make_aware(datetime.datetime.combine(calendar[0][0], time.min))
+        end = self._make_aware(datetime.datetime.combine(calendar[-1][-1], time.min))
+        starts, ends, oneday = self.get_contest_data(start, end)
         return [[ContestDay(
             date=date, is_pad=date.month != self.month,
             is_today=date == self.today, starts=starts[date], ends=ends[date], oneday=oneday[date],

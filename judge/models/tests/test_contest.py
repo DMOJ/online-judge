@@ -1,3 +1,7 @@
+import datetime
+from collections import defaultdict
+
+import pytz
 from django.core.exceptions import ValidationError
 from django.test import SimpleTestCase, TestCase
 from django.utils import timezone
@@ -5,6 +9,7 @@ from django.utils import timezone
 from judge.models import Contest, ContestParticipation, ContestTag
 from judge.models.contest import MinValueOrNoneValidator
 from judge.models.tests.util import CommonDataMixin, create_contest, create_contest_participation, create_user
+from judge.views.contests import ContestCalendar
 
 
 class ContestTestCase(CommonDataMixin, TestCase):
@@ -1048,3 +1053,28 @@ class MinValueOrNoneValidatorTestCase(SimpleTestCase):
 
         with self.assertRaises(ValidationError):
             MinValueOrNoneValidator(100)(0)
+
+
+class ContestCalendarTestCase(SimpleTestCase):
+    def test_make_aware_ambiguous_dst(self):
+        tz = pytz.timezone('America/Havana')
+        with timezone.override(tz):
+            dt = datetime.datetime(2026, 11, 1, 0, 0, 0)
+            aware_dt = ContestCalendar._make_aware(dt)
+            self.assertTrue(timezone.is_aware(aware_dt))
+            self.assertEqual(aware_dt.tzinfo.zone, 'America/Havana')
+
+    def test_get_table_ambiguous_dst(self):
+        tz = pytz.timezone('America/Havana')
+        with timezone.override(tz):
+            for year in (2026, 2020):
+                calendar_view = ContestCalendar()
+                calendar_view.year = year
+                calendar_view.month = 11
+                calendar_view.today = datetime.date(year, 11, 1)
+                calendar_view.get_contest_data = lambda start, end: (
+                    defaultdict(list), defaultdict(list), defaultdict(list),
+                )
+                table = calendar_view.get_table()
+                self.assertEqual(len(table), 5)
+                self.assertEqual(table[0][0].date, datetime.date(year, 11, 1))
